@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Windows Desktop
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CheckBook", "CheckBook\CheckBook.vbproj", "{4FD83DDC-A8F7-44E1-87B4-C12366D6468D}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CheckBookLib", "CheckBookLib\CheckBookLib.vbproj", "{73A968C7-281A-45DC-8360-2E44B3C9510B}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "UnitTests", "UnitTests\UnitTests.vbproj", "{95760BD6-36BF-4F48-99AB-0AADEF68FD91}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4FD83DDC-A8F7-44E1-87B4-C12366D6468D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FD83DDC-A8F7-44E1-87B4-C12366D6468D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FD83DDC-A8F7-44E1-87B4-C12366D6468D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FD83DDC-A8F7-44E1-87B4-C12366D6468D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73A968C7-281A-45DC-8360-2E44B3C9510B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73A968C7-281A-45DC-8360-2E44B3C9510B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73A968C7-281A-45DC-8360-2E44B3C9510B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73A968C7-281A-45DC-8360-2E44B3C9510B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95760BD6-36BF-4F48-99AB-0AADEF68FD91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95760BD6-36BF-4F48-99AB-0AADEF68FD91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95760BD6-36BF-4F48-99AB-0AADEF68FD91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95760BD6-36BF-4F48-99AB-0AADEF68FD91}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

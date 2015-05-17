@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{73A968C7-281A-45DC-8360-2E44B3C9510B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>CheckBookLib</RootNamespace>
+    <AssemblyName>CheckBookLib</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>Windows</MyType>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionCompare>Binary</OptionCompare>
+    <OptionStrict>Off</OptionStrict>
+    <OptionInfer>On</OptionInfer>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>CheckBookLib.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>CheckBookLib.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic.Compatibility">
+      <Name>Microsoft.VisualBasic.Compatibility</Name>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.XML">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="Microsoft.VisualBasic.Compatibility" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Account.vb" />
+    <Compile Include="CheckBookUtils.vb" />
+    <Compile Include="ErrorHandling.vb" />
+    <Compile Include="Logging\EventLog.vb" />
+    <Compile Include="Everything.vb" />
+    <Compile Include="Logging\ILogAction.vb" />
+    <Compile Include="Logging\ILogAdd.vb" />
+    <Compile Include="Logging\ILogChange.vb" />
+    <Compile Include="Logging\ILogDelete.vb" />
+    <Compile Include="Logging\ILogger.vb" />
+    <Compile Include="Logging\ILogGroupEnd.vb" />
+    <Compile Include="Logging\ILogGroupStart.vb" />
+    <Compile Include="TrxGen\ITrxGenerator.vb" />
+    <Compile Include="Register\LoadedRegister.vb" />
+    <Compile Include="Logging\LogAction.vb" />
+    <Compile Include="Logging\LogAdd.vb" />
+    <Compile Include="Logging\LogChange.vb" />
+    <Compile Include="Logging\LogDelete.vb" />
+    <Compile Include="Logging\LogGroupEnd.vb" />
+    <Compile Include="Logging\LogGroupStart.vb" />
+    <Compile Include="Logging\LogMove.vb" />
+    <Compile Include="Logging\LogSave.vb" />
+    <Compile Include="Logging\LogStatus.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Register\RegCursor.vb" />
+    <Compile Include="Register\Register.vb" />
+    <Compile Include="Register\RegisterLoader.vb" />
+    <Compile Include="Register\RegisterSaver.vb" />
+    <Compile Include="Security.vb" />
+    <Compile Include="TrxGen\SequencedTrx.vb" />
+    <Compile Include="SharedDefs.vb" />
+    <Compile Include="Trx\Split.vb" />
+    <Compile Include="Trx\SplitData.vb" />
+    <Compile Include="StringTranslator.vb" />
+    <Compile Include="TransferManager.vb" />
+    <Compile Include="Trx\Trx.vb" />
+    <Compile Include="TrxGen\TrxGenerator.vb" />
+    <Compile Include="TrxGen\TrxGeneratorLoader.vb" />
+    <Compile Include="TrxGen\TrxGenInterpolate.vb" />
+    <Compile Include="TrxGen\TrxGenList.vb" />
+    <Compile Include="TrxGen\TrxGenPeriod.vb" />
+    <Compile Include="TrxGen\TrxGenRepeat.vb" />
+    <Compile Include="VB6Xml\VB6XmlDocument.vb" />
+    <Compile Include="VB6Xml\VB6XmlElement.vb" />
+    <Compile Include="VB6Xml\VB6XmlNode.vb" />
+    <Compile Include="VB6Xml\VB6XmlNodeList.vb" />
+    <Compile Include="VB6Xml\VB6XmlParseError.vb" />
+    <Compile Include="VB6Xml\VB6XmlText.vb" />
+    <Compile Include="XMLMisc.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

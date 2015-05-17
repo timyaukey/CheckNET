@@ -1,0 +1,467 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4FD83DDC-A8F7-44E1-87B4-C12366D6468D}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <AssemblyName>CheckBook</AssemblyName>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>CheckBook.CBMainForm</StartupObject>
+    <AssemblyMajorVersion>1</AssemblyMajorVersion>
+    <AssemblyMinorVersion>19</AssemblyMinorVersion>
+    <AssemblyRevisionNumber>1</AssemblyRevisionNumber>
+    <GenerateRevisionNumber>True</GenerateRevisionNumber>
+    <AssemblyCompanyName>Willow Creek Software</AssemblyCompanyName>
+    <StartWithIE>False</StartWithIE>
+    <ApplicationIcon>CheckBook.ico</ApplicationIcon>
+    <RootNamespace>CheckBook</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>.\bin\</OutputPath>
+    <DocumentationFile>CheckBook.xml</DocumentationFile>
+    <DebugSymbols>True</DebugSymbols>
+    <DefineDebug>True</DefineDebug>
+    <DefineTrace>True</DefineTrace>
+    <DefineConstants>Win32=True</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
+    <NoWarn>42016,42017,42018,42019,42032,42353,42354,42355</NoWarn>
+    <DebugType>full</DebugType>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>.\bin\</OutputPath>
+    <DocumentationFile>CheckBook.xml</DocumentationFile>
+    <DebugSymbols>False</DebugSymbols>
+    <DefineDebug>False</DefineDebug>
+    <DefineTrace>True</DefineTrace>
+    <DefineConstants>Win32=True</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
+    <NoWarn>42016,42017,42018,42019,42032,42353,42354,42355</NoWarn>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic.Compatibility">
+      <Name>Microsoft.VisualBasic.Compatibility</Name>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.XML">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="Microsoft.VisualBasic.Compatibility" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdjustBudgetsToCashForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>AdjustBudgetsToCashForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AdjustBudgetsToCashForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.vb" />
+    <Compile Include="Imports\BankImportAcctSelectForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>BankImportAcctSelectForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\BankImportAcctSelectForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Imports\BankImportForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>BankImportForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\BankImportForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\CashFlow\CashFlowPeriod.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reports\CashFlow\CashFlowPeriodBudget.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reports\CashFlow\CashFlowPeriodCategory.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reports\CashFlow\CashFlowPeriodColumn.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reports\CashFlow\CashFlowPeriodRegister.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reports\CashFlow\CashFlowSummary.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reports\CategorySummary\CatSumRptForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>CatSumRptForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\CategorySummary\CatSumRptForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CBMain.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CBMainForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>CBMainForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CBMainForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Search\ChangeCategoryForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>ChangeCategoryForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Search\ChangeCategoryForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TrxEdit\CheckPrinting.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CommonDialogControlForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>CommonDialogControlForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CommonDialogControlForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TrxEdit\ExportForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>ExportForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TrxEdit\ExportForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Imports\ImportBankDownloadOFX.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Imports\ImportBankDownloadQIF.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Imports\ImportByPayee.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Imports\ImportInvoices.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Imports\ImportUtilities.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Imports\ITrxImport.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ListEditorForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>ListEditorForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ListEditorForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListViewSorter.vb" />
+    <Compile Include="LiveBudgetListForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>LiveBudgetListForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="LiveBudgetListForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoginForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>LoginForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="LoginForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Search\MoveDstForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>MoveDstForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Search\MoveDstForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PayeeListForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>PayeeListForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="PayeeListForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TrxEdit\PayeeMatchForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>PayeeMatchForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TrxEdit\PayeeMatchForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PublicTypes.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReconAcctSelectForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>ReconAcctSelectForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ReconAcctSelectForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReconcileForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>ReconcileForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ReconcileForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegisterForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>RegisterForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="RegisterForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegPropertiesForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>RegPropertiesForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="RegPropertiesForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TrxEdit\RepeatSeqInfoForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>RepeatSeqInfoForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TrxEdit\RepeatSeqInfoForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\RptScanSplitsForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>RptScanSplitsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\RptScanSplitsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Search\SearchForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>SearchForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Search\SearchForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ShowRegisterForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>ShowRegisterForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ShowRegisterForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StartupForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>StartupForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="StartupForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TrxEdit\TrxForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>TrxForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TrxEdit\TrxForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TrxTypeListForm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>TrxTypeListForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TrxTypeListForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <EmbeddedResource Include="AdjustBudgetsToCashForm.resX">
+      <DependentUpon>AdjustBudgetsToCashForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Imports\BankImportAcctSelectForm.resX">
+      <DependentUpon>BankImportAcctSelectForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Imports\BankImportForm.resX">
+      <DependentUpon>BankImportForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\CategorySummary\CatSumRptForm.resX">
+      <DependentUpon>CatSumRptForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CBMainForm.resX">
+      <DependentUpon>CBMainForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Search\ChangeCategoryForm.resX">
+      <DependentUpon>ChangeCategoryForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CommonDialogControlForm.resX">
+      <DependentUpon>CommonDialogControlForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TrxEdit\ExportForm.resX">
+      <DependentUpon>ExportForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ListEditorForm.resX">
+      <DependentUpon>ListEditorForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LiveBudgetListForm.resX">
+      <DependentUpon>LiveBudgetListForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoginForm.resX">
+      <DependentUpon>LoginForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Search\MoveDstForm.resX">
+      <DependentUpon>MoveDstForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PayeeListForm.resX">
+      <DependentUpon>PayeeListForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TrxEdit\PayeeMatchForm.resX">
+      <DependentUpon>PayeeMatchForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReconAcctSelectForm.resX">
+      <DependentUpon>ReconAcctSelectForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReconcileForm.resX">
+      <DependentUpon>ReconcileForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RegisterForm.resX">
+      <DependentUpon>RegisterForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RegPropertiesForm.resX">
+      <DependentUpon>RegPropertiesForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TrxEdit\RepeatSeqInfoForm.resX">
+      <DependentUpon>RepeatSeqInfoForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\RptScanSplitsForm.resX">
+      <DependentUpon>RptScanSplitsForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Search\SearchForm.resX">
+      <DependentUpon>SearchForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ShowRegisterForm.resX">
+      <DependentUpon>ShowRegisterForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StartupForm.resX">
+      <DependentUpon>StartupForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TrxEdit\TrxForm.resX">
+      <DependentUpon>TrxForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TrxTypeListForm.resX">
+      <DependentUpon>TrxTypeListForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Content Include="CheckBook.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
+      <Project>{73A968C7-281A-45DC-8360-2E44B3C9510B}</Project>
+      <Name>CheckBookLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="My Project\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
