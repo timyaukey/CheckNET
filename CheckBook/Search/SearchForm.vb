@@ -529,7 +529,7 @@ ErrorHandler:
         Dim objSplit As Split_Renamed
         Dim strCatKey As String
         Dim lngChgCount As Integer
-        Dim objStartLogger As _ILogGroupStart
+        Dim objStartLogger As ILogGroupStart
 
         frmArgs = New ChangeCategoryForm
         If Not frmArgs.blnGetCategories(strOldCatKey, strNewCatKey) Then
@@ -607,7 +607,7 @@ ErrorHandler:
         Dim objOldSplit As Split_Renamed
         Dim lngTrxIndex As Integer
         Dim frmTrx As TrxForm
-        Dim objStartLogger As _ILogGroupStart
+        Dim objStartLogger As ILogGroupStart
         Dim datToday As Date
         Dim datResult As Date
 
@@ -733,7 +733,7 @@ ErrorHandler:
 
         mblnIgnoreTrxUpdates = True
 
-        Dim objStartLogger As _ILogGroupStart
+        Dim objStartLogger As ILogGroupStart
         objStartLogger = mobjReg.objLogGroupStart("SearchForm.Move")
         For Each objTrxSrc In colTrx
             lngTrxIndex = mobjReg.lngTrxIndex(objTrxSrc)

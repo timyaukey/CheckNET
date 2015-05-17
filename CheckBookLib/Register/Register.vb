@@ -148,7 +148,7 @@ Public Class Register
     '$Param objNew Trx object to add. This actual object instance will
     '   become the register entry, rather than making a copy of it.
 
-    Public Sub NewAddEnd(ByVal objNew As Trx, ByVal objAddLogger As _ILogAdd, ByVal strTitle As String)
+    Public Sub NewAddEnd(ByVal objNew As Trx, ByVal objAddLogger As ILogAdd, ByVal strTitle As String)
 
         Dim lngIndex As Integer
 
@@ -281,7 +281,7 @@ Public Class Register
     '   Is optimized for the case where position in the sort order is not changed much.
     '$Param lngIndex The index of the Trx object in the register to move.
 
-    Public Sub UpdateEnd(ByVal lngOldIndex As Integer, ByVal objChangeLogger As _ILogChange, ByVal strTitle As String, ByVal objOldTrx As Trx)
+    Public Sub UpdateEnd(ByVal lngOldIndex As Integer, ByVal objChangeLogger As ILogChange, ByVal strTitle As String, ByVal objOldTrx As Trx)
 
         Dim lngNewIndex As Integer
         Dim objTrx As Trx
@@ -381,7 +381,7 @@ ErrorHandler:
     '$Param lngIndex The index of the Trx to change.
     '$Param lngStatus The new status.
 
-    Public Sub SetTrxStatus(ByVal lngIndex As Integer, ByVal lngStatus As Trx.TrxStatus, ByVal objAddLogger As _ILogAdd, ByVal strTitle As String)
+    Public Sub SetTrxStatus(ByVal lngIndex As Integer, ByVal lngStatus As Trx.TrxStatus, ByVal objAddLogger As ILogAdd, ByVal strTitle As String)
 
         Dim objStatusTrx As Trx
         objStatusTrx = maobjTrx(lngIndex)
@@ -397,7 +397,7 @@ ErrorHandler:
     '$Description Delete a transaction from the register.
     '$Param lngIndex The index of the Trx to delete.
 
-    Public Sub Delete(ByVal lngIndex As Integer, ByVal objDeleteLogger As _ILogDelete, ByVal strTitle As String)
+    Public Sub Delete(ByVal lngIndex As Integer, ByVal objDeleteLogger As ILogDelete, ByVal strTitle As String)
         Dim lngMoveIndex As Integer
         Dim objTrxOld As Trx
         If lngIndex < 1 Or lngIndex > mlngTrxUsed Then
@@ -1245,14 +1245,14 @@ NoneSuch:
         mobjLog.AddILogAction(New LogSave, "Register.Save")
     End Sub
 
-    Public Function objLogGroupStart(ByVal strTitle As String) As _ILogGroupStart
-        Dim objStartLogger As _ILogGroupStart
+    Public Function objLogGroupStart(ByVal strTitle As String) As ILogGroupStart
+        Dim objStartLogger As ILogGroupStart
         objStartLogger = New LogGroupStart
         mobjLog.AddILogGroupStart(objStartLogger, strTitle)
         objLogGroupStart = objStartLogger
     End Function
 
-    Public Sub LogGroupEnd(ByVal objStartLogger As _ILogGroupStart)
+    Public Sub LogGroupEnd(ByVal objStartLogger As ILogGroupStart)
         'UPGRADE_WARNING: Couldn't resolve default property of object New (LogGroupEnd). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         mobjLog.AddILogGroupEnd(New LogGroupEnd, objStartLogger)
     End Sub

@@ -1571,7 +1571,7 @@ ErrorHandler:
         Dim intSplit As Short
         Dim intOldTrxSplitCount As Short
         Dim intNewTrxSplitCount As Short
-        Dim objStartLogger As _ILogGroupStart
+        Dim objStartLogger As ILogGroupStart
 
         On Error GoTo ErrorHandler
 

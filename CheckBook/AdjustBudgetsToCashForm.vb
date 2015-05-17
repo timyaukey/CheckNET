@@ -91,7 +91,7 @@ ErrorHandler:
         Dim lngStartIndex As Integer
         Dim lngIndex As Integer
         Dim datMatch As Date
-        Dim objStartLogger As _ILogGroupStart
+        Dim objStartLogger As ILogGroupStart
 
         On Error GoTo ErrorHandler
 

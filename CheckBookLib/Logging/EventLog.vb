@@ -34,7 +34,7 @@ Public Class EventLog
     End Sub
 
     Public Sub WriteAll(ByVal strAccountTitle As String, ByVal objRepeats As StringTranslator)
-        Dim objLogger As _ILogger
+        Dim objLogger As ILogger
         Dim objParseError As VB6XmlParseError
         Dim strLogFolder As String
         Dim strLogFile As String
@@ -79,34 +79,34 @@ Public Class EventLog
         mdomOutput.Save(strLogFile)
     End Sub
 
-    Public Sub AddILogAction(ByVal objActionLogger As _ILogAction, ByVal strTitle As String)
+    Public Sub AddILogAction(ByVal objActionLogger As ILogAction, ByVal strTitle As String)
         objActionLogger.Init(strTitle)
         mcolLoggers.Add(objActionLogger)
     End Sub
 
-    Public Sub AddILogAdd(ByVal objAddLogger As _ILogAdd, ByVal strTitle As String, ByVal objNewTrx As Trx)
+    Public Sub AddILogAdd(ByVal objAddLogger As ILogAdd, ByVal strTitle As String, ByVal objNewTrx As Trx)
         objAddLogger.Init(strTitle, objNewTrx.objClone(Nothing))
         mcolLoggers.Add(objAddLogger)
     End Sub
 
-    Public Sub AddILogChange(ByVal objChangeLogger As _ILogChange, ByVal strTitle As String, ByVal objNewTrx As Trx, ByVal objOldTrx As Trx)
+    Public Sub AddILogChange(ByVal objChangeLogger As ILogChange, ByVal strTitle As String, ByVal objNewTrx As Trx, ByVal objOldTrx As Trx)
         objChangeLogger.Init(strTitle, objNewTrx.objClone(Nothing), objOldTrx.objClone(Nothing))
         mcolLoggers.Add(objChangeLogger)
     End Sub
 
-    Public Sub AddILogDelete(ByVal objDeleteLogger As _ILogDelete, ByVal strTitle As String, ByVal objOldTrx As Trx)
+    Public Sub AddILogDelete(ByVal objDeleteLogger As ILogDelete, ByVal strTitle As String, ByVal objOldTrx As Trx)
         objDeleteLogger.Init(strTitle, objOldTrx.objClone(Nothing))
         mcolLoggers.Add(objDeleteLogger)
     End Sub
 
-    Public Sub AddILogGroupStart(ByVal objStartLogger As _ILogGroupStart, ByVal strTitle As String)
+    Public Sub AddILogGroupStart(ByVal objStartLogger As ILogGroupStart, ByVal strTitle As String)
         objStartLogger.Init(strTitle)
         mcolLoggers.Add(objStartLogger)
         mcolGroups.Add(objStartLogger)
     End Sub
 
-    Public Sub AddILogGroupEnd(ByVal objEndLogger As _ILogGroupEnd, ByVal objStartLogger As _ILogGroupStart)
-        Dim objTopGroup As _ILogGroupStart
+    Public Sub AddILogGroupEnd(ByVal objEndLogger As ILogGroupEnd, ByVal objStartLogger As ILogGroupStart)
+        Dim objTopGroup As ILogGroupStart
         objTopGroup = mcolGroups.Item(mcolGroups.Count())
         If Not objTopGroup Is objStartLogger Then
             gRaiseError("Invalid log group nesting")
