@@ -12,6 +12,7 @@ Module CheckPrinting
     Private mdblMarginLeft As Double
     Private mdblMarginTop As Double
 
+
     Public Function gdomGetCheckFormat() As VB6XmlDocument
         Dim domCheckFormat As VB6XmlDocument
         Dim strCheckFormatFile As String
