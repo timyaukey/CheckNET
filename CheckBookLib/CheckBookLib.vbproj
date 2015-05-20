@@ -87,6 +87,7 @@
     <Compile Include="Logging\ILogger.vb" />
     <Compile Include="Logging\ILogGroupEnd.vb" />
     <Compile Include="Logging\ILogGroupStart.vb" />
+    <Compile Include="RepeatSummarizer.vb" />
     <Compile Include="TrxGen\ITrxGenerator.vb" />
     <Compile Include="Register\LoadedRegister.vb" />
     <Compile Include="Logging\LogAction.vb" />

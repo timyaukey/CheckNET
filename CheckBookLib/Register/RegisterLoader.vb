@@ -9,6 +9,7 @@ Public Class RegisterLoader
     Private mstrLine As String
     Private mlngLinesRead As Integer
     Private mobjReg As Register
+    Private mobjRepeatSummarizer As RepeatSummarizer
 
     'Transaction data.
     Private mstrDescription As String
@@ -65,11 +66,12 @@ Public Class RegisterLoader
     '   of lines previously read, on exit is incremented to include lines read by
     '   this method.
 
-    Public Sub LoadFile(ByVal objReg As Register, ByVal intFile As Short, ByVal blnFake As Boolean, ByVal datRptEndMax_ As Date, ByRef lngLinesRead As Integer)
+    Public Sub LoadFile(ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer, _
+            ByVal intFile As Short, ByVal blnFake As Boolean, ByVal datRptEndMax_ As Date, ByRef lngLinesRead As Integer)
 
         On Error GoTo ErrorHandler
 
-        LoadInit(objReg, blnFake, datRptEndMax_, lngLinesRead)
+        LoadInit(objReg, objRepeatSummarizer, blnFake, datRptEndMax_, lngLinesRead)
 
         Do
             If EOF(intFile) Then
@@ -89,20 +91,21 @@ ErrorHandler:
     '$Description Used only for unit tests, because in .NET file numbers are local
     '   to the assembly that opens them.
 
-    Public Sub LoadFileUT(ByVal objReg As Register, ByVal strFile As String, ByVal blnFake As Boolean, ByVal datRptEndMax_ As Date, ByRef lngLinesRead As Integer)
+    Public Sub LoadFileUT(ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer, ByVal strFile As String, ByVal blnFake As Boolean, ByVal datRptEndMax_ As Date, ByRef lngLinesRead As Integer)
 
         Dim intFile As Short
 
         intFile = FreeFile()
         FileOpen(intFile, strFile, OpenMode.Input)
-        LoadFile(objReg, intFile, False, #1/1/1980#, lngLinesRead)
+        LoadFile(objReg, objRepeatSummarizer, intFile, False, #1/1/1980#, lngLinesRead)
         FileClose(intFile)
 
     End Sub
 
-    Private Sub LoadInit(ByVal objReg As Register, ByVal blnFake As Boolean, ByVal datRptEndMax_ As Date, ByRef lngLinesRead As Integer)
+    Private Sub LoadInit(ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer, ByVal blnFake As Boolean, ByVal datRptEndMax_ As Date, ByRef lngLinesRead As Integer)
 
         mobjReg = objReg
+        mobjRepeatSummarizer = objRepeatSummarizer
         mblnFake = blnFake
         mdatRptEndMax = datRptEndMax_
         mlngLinesRead = lngLinesRead
@@ -382,6 +385,10 @@ ErrorHandler:
         intRepeatKey = Val(mstrRepeatKey)
         If intRepeatKey > 0 And gblnAssignRepeatSeq Then
             mintRepeatSeq = objTargetReg.intGetNextRepeatSeq(intRepeatKey)
+        End If
+
+        If mintRepeatSeq > 0 Then
+            mobjRepeatSummarizer.Define(mstrRepeatKey, mstrDescription, False)
         End If
 
         Select Case mlngType

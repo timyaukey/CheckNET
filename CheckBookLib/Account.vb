@@ -11,8 +11,9 @@ Public Class Account
     Private mstrTitle As String
     'Repeat key list for account.
     Private mobjRepeats As StringTranslator
+    Private mobjRepeatSummarizer As RepeatSummarizer
     'File mobjRepeats was loaded from.
-    Private mstrRepeatsFile As String
+    'Private mstrRepeatsFile As String
     'All LoadedRegister objects for account, whether or not
     'displayed in any UI.
     Private mcolLoadedRegisters As Collection
@@ -52,7 +53,6 @@ Public Class Account
         End Get
     End Property
 
-
     Public Property strTitle() As String
         Get
             If Len(mstrTitle) Then
@@ -79,11 +79,17 @@ Public Class Account
         End Get
     End Property
 
-    Public ReadOnly Property strRepeatsFile() As String
+    Public ReadOnly Property objRepeatSummarizer() As RepeatSummarizer
         Get
-            strRepeatsFile = mstrRepeatsFile
+            objRepeatSummarizer = mobjRepeatSummarizer
         End Get
     End Property
+
+    'Public ReadOnly Property strRepeatsFile() As String
+    '    Get
+    '        strRepeatsFile = mstrRepeatsFile
+    '    End Get
+    'End Property
 
     Public ReadOnly Property blnUnsavedChanges() As Boolean
         Get
@@ -133,9 +139,10 @@ Public Class Account
                 gRaiseError("Invalid header line")
             End If
 
-            mobjRepeats = New StringTranslator
-            mstrRepeatsFile = gstrAccountPath() & "\" & Replace(LCase(strAcctFile), ".act", ".rep")
-            mobjRepeats.LoadFile(mstrRepeatsFile)
+            'mobjRepeats = New StringTranslator()
+            mobjRepeatSummarizer = New RepeatSummarizer()
+            'mstrRepeatsFile = gstrAccountPath() & "\" & Replace(LCase(strAcctFile), ".act", ".rep")
+            'mobjRepeats.LoadFile(mstrRepeatsFile)
 
             Do
                 strLine = LineInput(intFile)
@@ -184,6 +191,10 @@ Public Class Account
             For Each objLoaded In mcolLoadedRegisters
                 gCreateGeneratedTrx(Me, objLoaded.objReg, datRegisterEndDate)
             Next objLoaded
+
+            'Construct repeat key StringTranslator from actual transaction
+            'data and info in .GEN files.
+            mobjRepeats = mobjRepeatSummarizer.BuildStringTranslator()
 
             'Call LoadPostProcessing after everything has been loaded.
             RaiseEvent LoadStatus("Load postprocessing")
@@ -279,7 +290,7 @@ Public Class Account
             gRaiseError("Register key " & strSearchRegKey & " not found in " & Left(strLine, 2) & " line")
         Else
             mobjLoader = New RegisterLoader
-            mobjLoader.LoadFile(objLoaded.objReg, intFile, blnFake, datRptEndMax, lngLinesRead)
+            mobjLoader.LoadFile(objLoaded.objReg, mobjRepeatSummarizer, intFile, blnFake, datRptEndMax, lngLinesRead)
             'UPGRADE_NOTE: Object mobjLoader may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
             mobjLoader = Nothing
         End If

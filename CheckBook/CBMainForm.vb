@@ -302,16 +302,16 @@ ErrorHandler:
 
         On Error GoTo ErrorHandler
 
-        If Not TypeOf Me.ActiveMdiChild Is RegisterForm Then
-            MsgBox("Please click on a register window for the account you wish edit repeat keys for.", MsgBoxStyle.Critical)
-            Exit Sub
-        End If
-        frmReg = Me.ActiveMdiChild
-        objAccount = frmReg.objAccount
-        frmList = New ListEditorForm
-        With objAccount
-            frmList.ShowMe(ListEditorForm.ListType.glngLIST_TYPE_REPEAT, .strRepeatsFile, .objRepeats, "Repeated Transaction Keys", objAccount)
-        End With
+        'If Not TypeOf Me.ActiveMdiChild Is RegisterForm Then
+        '    MsgBox("Please click on a register window for the account you wish edit repeat keys for.", MsgBoxStyle.Critical)
+        '    Exit Sub
+        'End If
+        'frmReg = Me.ActiveMdiChild
+        'objAccount = frmReg.objAccount
+        'frmList = New ListEditorForm
+        'With objAccount
+        '    frmList.ShowMe(ListEditorForm.ListType.glngLIST_TYPE_REPEAT, .strRepeatsFile, .objRepeats, "Repeated Transaction Keys", objAccount)
+        'End With
 
         Exit Sub
 ErrorHandler:

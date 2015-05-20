@@ -45,33 +45,33 @@
 	'It can be modified using the Windows Form Designer.
 	'Do not modify it using the code editor.
 	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CBMainForm))
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.MainMenu1 = New System.Windows.Forms.MenuStrip
-        Me.mnuFile = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuFileShowReg = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuFileSave = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuFileExit = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuAct = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuActRecon = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuActDepImport = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuActInvImport = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuBankImportOFX = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuActBankImportQIF = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuAccount = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuActAdjBudget = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuActFindLiveBudget = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuActRepeatKeys = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuList = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuListPayees = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuListCategories = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuListBudgets = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuListTrxTypes = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuRpt = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuRptCategory = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuRptPayables = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuWindows = New System.Windows.Forms.ToolStripMenuItem
+        Me.MainMenu1 = New System.Windows.Forms.MenuStrip()
+        Me.mnuFile = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuFileShowReg = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuFileSave = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuFileExit = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuAct = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuActRecon = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuActDepImport = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuActInvImport = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuBankImportOFX = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuActBankImportQIF = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuAccount = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuActAdjBudget = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuActFindLiveBudget = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuActRepeatKeys = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuList = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuListPayees = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuListCategories = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuListBudgets = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuListTrxTypes = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuRpt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuRptCategory = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuRptPayables = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuWindows = New System.Windows.Forms.ToolStripMenuItem()
         Me.MainMenu1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -175,6 +175,7 @@
         Me.mnuActRepeatKeys.Name = "mnuActRepeatKeys"
         Me.mnuActRepeatKeys.Size = New System.Drawing.Size(223, 22)
         Me.mnuActRepeatKeys.Text = "Repeat Key List"
+        Me.mnuActRepeatKeys.Visible = False
         '
         'mnuList
         '
