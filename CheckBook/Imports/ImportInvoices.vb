@@ -1,20 +1,26 @@
 Option Strict Off
 Option Explicit On
 
+Imports System.IO
 Imports CheckBookLib
 
 Public Class ImportInvoices
     Implements _ITrxImport
 
-
+    Private mobjInput As TextReader
+    Private mstrFile As String
     Private mastrLines() As String
     Private mintNextIndex As Short
+
+    Public Sub New(ByVal objInput As TextReader, ByVal strFile As String)
+        mobjInput = objInput
+        mstrFile = strFile
+    End Sub
 
     Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements _ITrxImport.blnOpenSource
         Dim strData As String
 
-        'UPGRADE_ISSUE: Clipboard method Clipboard.GetText was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="076C26E5-B7A9-4E77-B69C-B4448DF39E58"'
-        strData = Trim(My.Computer.Clipboard.GetText())
+        strData = mobjInput.ReadToEnd()
         mastrLines = gaSplit(strData, vbNewLine)
         mintNextIndex = LBound(mastrLines)
         ITrxImport_blnOpenSource = True
@@ -90,7 +96,7 @@ Public Class ImportInvoices
 
     Private ReadOnly Property ITrxImport_strSource() As String Implements _ITrxImport.strSource
         Get
-            ITrxImport_strSource = "(clipboard)"
+            ITrxImport_strSource = mstrFile
         End Get
     End Property
 End Class

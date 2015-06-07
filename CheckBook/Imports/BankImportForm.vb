@@ -811,9 +811,8 @@ EventExitSub:
     End Sub
 
     Private Sub BankImportForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        'ScaleWidth and ScaleHeight from the IDE.
-        Me.Width = VB6.TwipsToPixelsX(12495 + (VB6.PixelsToTwipsX(Me.Width) - VB6.PixelsToTwipsX(Me.ClientRectangle.Width)))
-        Me.Height = VB6.TwipsToPixelsY(7680 + (VB6.PixelsToTwipsY(Me.Height) - VB6.PixelsToTwipsY(Me.ClientRectangle.Height)))
+        Me.Width = 849
+        Me.Height = 551
     End Sub
 
     Private Sub lvwTrx_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles lvwTrx.Click

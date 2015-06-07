@@ -119,6 +119,8 @@
     <Compile Include="Imports\BankImportForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Imports\ImportChecks.vb" />
+    <Compile Include="Imports\ImportChecksSpec.vb" />
     <Compile Include="Reports\CashFlow\CashFlowPeriod.vb">
       <SubType>Code</SubType>
     </Compile>

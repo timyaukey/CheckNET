@@ -1,6 +1,7 @@
 Option Strict Off
 Option Explicit On
 
+Imports System.IO
 Imports CheckBookLib
 
 Public Class ImportBankDownloadOFX
@@ -15,14 +16,18 @@ Public Class ImportBankDownloadOFX
     'information will be added for them.
 
 
-    Private mintFile As Short
+    Private mobjFile As TextReader
     Private mstrFile As String
     Private mstrInputLine As String
     Private mblnInputEOF As Boolean
     Private mobjUtil As ImportUtilities
 
+    Public Sub New(ByVal objFile As TextReader, ByVal strFile As String)
+        mobjFile = objFile
+        mstrFile = strFile
+    End Sub
+
     Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements _ITrxImport.blnOpenSource
-        Dim frm As CommonDialogControlForm
         Dim strPath As String
         Dim strHeaderLine As String
 
@@ -32,59 +37,28 @@ Public Class ImportBankDownloadOFX
         mobjUtil.Init(objAccount_)
         mobjUtil.LoadTrxTypeTable()
 
-        frm = New CommonDialogControlForm
-
-        'UPGRADE_WARNING: CommonDialog variable was not upgraded Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="671167DC-EA81-475D-B690-7A40C7BF4A23"'
-        With frm.ctlDialogOpen 'CType(frm.Controls("ctlDialog"), Object)
-            .Title = "Select Bank Download OFX File To Import"
-            'UPGRADE_WARNING: Filter has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            .Filter = "OFX files|*.ofx|All files (*.*)|*.*"
-            .FilterIndex = 1
-            'UPGRADE_WARNING: FileOpenConstants constant FileOpenConstants.cdlOFNHideReadOnly was upgraded to OpenFileDialog.ShowReadOnly which has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="DFCDE711-9694-47D7-9C50-45A99CD8E91E"'
-            'UPGRADE_WARNING: MSComDlg.CommonDialog property frm!ctlDialog.Flags was upgraded to frm!ctlDialogOpen.ShowReadOnly which has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="DFCDE711-9694-47D7-9C50-45A99CD8E91E"'
-            'UPGRADE_WARNING: FileOpenConstants constant FileOpenConstants.cdlOFNHideReadOnly was upgraded to OpenFileDialog.ShowReadOnly which has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="DFCDE711-9694-47D7-9C50-45A99CD8E91E"'
-            .ShowReadOnly = False
-            'UPGRADE_WARNING: MSComDlg.CommonDialog property frm!ctlDialog.Flags was upgraded to frm!ctlDialogOpen.CheckFileExists which has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="DFCDE711-9694-47D7-9C50-45A99CD8E91E"'
-            .CheckFileExists = True
-            .CheckPathExists = True
-            strPath = GetSetting(gstrREG_APP, gstrREG_KEY_GENERAL, "BankOFXPath", "")
-            .InitialDirectory = strPath
-            .ShowDialog()
-            mstrFile = .FileName
-        End With
-        frm.Close()
-        If mstrFile = "" Then
-            Exit Function
-        End If
-        strPath = Left(mstrFile, InStrRev(mstrFile, "\"))
-        If Right(strPath, 1) = "\" Then
-            strPath = Left(strPath, Len(strPath) - 1)
-        End If
-        SaveSetting(gstrREG_APP, gstrREG_KEY_GENERAL, "BankOFXPath", strPath)
-        mintFile = FreeFile()
-        FileOpen(mintFile, mstrFile, OpenMode.Input)
-        strHeaderLine = LineInput(mintFile)
+        strHeaderLine = mobjFile.ReadLine()
         If strHeaderLine = "OFXHEADER:100" Then
             mobjUtil.blnMakeFakeTrx = False
         Else
             MsgBox("File is not an OFX file.", MsgBoxStyle.Critical)
-            FileClose(mintFile)
+            mobjFile.Close()
             Exit Function
         End If
-        strHeaderLine = LineInput(mintFile)
-        strHeaderLine = LineInput(mintFile)
+        mobjFile.ReadLine()
+        strHeaderLine = mobjFile.ReadLine()
         If strHeaderLine <> "VERSION:102" Then
             MsgBox("File is not correct OFX version.", MsgBoxStyle.Critical)
-            FileClose(mintFile)
+            mobjFile.Close()
             Exit Function
         End If
         Do
-            If EOF(mintFile) Then
+            strHeaderLine = mobjFile.ReadLine()
+            If strHeaderLine Is Nothing Then
                 MsgBox("Unexpected EOF in header section of OFX file.", MsgBoxStyle.Critical)
-                FileClose(mintFile)
+                mobjFile.Close()
                 Exit Function
             End If
-            strHeaderLine = LineInput(mintFile)
             If strHeaderLine = "" Then
                 Exit Do
             End If
@@ -96,16 +70,13 @@ Public Class ImportBankDownloadOFX
 
         Exit Function
 ErrorHandler:
-        If Not frm Is Nothing Then
-            frm.Close()
-        End If
         NestedError("ITrxImport_blnOpenSource")
     End Function
 
     Private Sub ITrxImport_CloseSource() Implements _ITrxImport.CloseSource
-        If mintFile Then
-            FileClose(mintFile)
-            mintFile = 0
+        If Not mobjFile Is Nothing Then
+            mobjFile.Close()
+            mobjFile = Nothing
         End If
     End Sub
 
@@ -186,12 +157,12 @@ ErrorHandler:
         Dim intEndPos As Short
         mstrInputLine = Trim(mstrInputLine)
         If mstrInputLine = "" Then
-            If EOF(mintFile) Then
+            mstrInputLine = mobjFile.ReadLine()
+            If mstrInputLine Is Nothing Then
                 strGetToken = ""
                 mblnInputEOF = True
                 Exit Function
             End If
-            mstrInputLine = LineInput(mintFile)
         End If
         If Left(mstrInputLine, 1) = "<" Then
             intEndPos = InStr(mstrInputLine, ">")

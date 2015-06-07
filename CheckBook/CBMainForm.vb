@@ -1,6 +1,7 @@
 Option Strict Off
 Option Explicit On
 
+Imports System.IO
 Imports VB = Microsoft.VisualBasic
 Imports CheckBookLib
 
@@ -170,15 +171,28 @@ ErrorHandler:
     Public Sub mnuActBankImportQIF_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActBankImportQIF.Click
         Dim frm As BankImportAcctSelectForm
         Dim objImport As _ITrxImport
+        Dim strFile As String
+        Dim objFile As TextReader
 
         On Error GoTo ErrorHandler
 
         If blnImportFormAlreadyOpen() Then
             Exit Sub
         End If
-        frm = New BankImportAcctSelectForm
-        objImport = New ImportBankDownloadQIF
-        frm.ShowMe("Import QIF File From Bank", objImport, CBMain.ImportStatusSearch.glngIMPSTATSRCH_BANK, CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_BANK, CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK, CBMain.ImportBatchUpdateType.glngIMPBATUPTP_BANK, False)
+
+        strFile = CommonDialogControlForm.strChooseFile("Select Bank Download QIF File To Import", "QIF", "BankQIFPath")
+        If strFile <> "" Then
+            objFile = New StreamReader(strFile)
+            frm = New BankImportAcctSelectForm
+            objImport = New ImportBankDownloadQIF(objFile, strFile)
+            frm.ShowMe("Import QIF File From Bank", objImport, _
+                CBMain.ImportStatusSearch.glngIMPSTATSRCH_BANK, _
+                CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, _
+                CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, _
+                CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_BANK, _
+                CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK, _
+                CBMain.ImportBatchUpdateType.glngIMPBATUPTP_BANK, False)
+        End If
 
         Exit Sub
 ErrorHandler:
@@ -188,15 +202,28 @@ ErrorHandler:
     Public Sub mnuBankImportOFX_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuBankImportOFX.Click
         Dim frm As BankImportAcctSelectForm
         Dim objImport As _ITrxImport
+        Dim strFile As String
+        Dim objFile As TextReader
 
         On Error GoTo ErrorHandler
 
         If blnImportFormAlreadyOpen() Then
             Exit Sub
         End If
-        frm = New BankImportAcctSelectForm
-        objImport = New ImportBankDownloadOFX
-        frm.ShowMe("Import OFX File From Bank", objImport, CBMain.ImportStatusSearch.glngIMPSTATSRCH_BANK, CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_BANK, CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK, CBMain.ImportBatchUpdateType.glngIMPBATUPTP_BANK, False)
+
+        strFile = CommonDialogControlForm.strChooseFile("Select Bank Download OFX File To Import", "OFX", "BankOFXPath")
+        If strFile <> "" Then
+            objFile = New StreamReader(strFile)
+            frm = New BankImportAcctSelectForm
+            objImport = New ImportBankDownloadOFX(objFile, strFile)
+            frm.ShowMe("Import OFX File From Bank", objImport, _
+                CBMain.ImportStatusSearch.glngIMPSTATSRCH_BANK, _
+                CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, _
+                CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, _
+                CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_BANK, _
+                CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK, _
+                CBMain.ImportBatchUpdateType.glngIMPBATUPTP_BANK, False)
+        End If
 
         Exit Sub
 ErrorHandler:
@@ -213,8 +240,14 @@ ErrorHandler:
             Exit Sub
         End If
         frm = New BankImportAcctSelectForm
-        objImport = New ImportByPayee
-        frm.ShowMe("Import Deposit Amounts", objImport, CBMain.ImportStatusSearch.glngIMPSTATSRCH_PAYNONGEN, CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_PAYEE, CBMain.ImportBatchNewSearch.glngIMPBATNWSR_NONE, CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_AMOUNT, CBMain.ImportIndividualSearchType.glngIMPINDSRTP_PAYEE, CBMain.ImportBatchUpdateType.glngIMPBATUPTP_AMOUNT, False)
+        objImport = New ImportByPayee(gobjClipboardReader(), "(clipboard)")
+        frm.ShowMe("Import Deposit Amounts", objImport, _
+            CBMain.ImportStatusSearch.glngIMPSTATSRCH_PAYNONGEN, _
+            CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_PAYEE, _
+            CBMain.ImportBatchNewSearch.glngIMPBATNWSR_NONE, _
+            CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_AMOUNT, _
+            CBMain.ImportIndividualSearchType.glngIMPINDSRTP_PAYEE, _
+            CBMain.ImportBatchUpdateType.glngIMPBATUPTP_AMOUNT, False)
 
         Exit Sub
 ErrorHandler:
@@ -231,12 +264,45 @@ ErrorHandler:
             Exit Sub
         End If
         frm = New BankImportAcctSelectForm
-        objImport = New ImportInvoices
-        frm.ShowMe("Import Invoices", objImport, CBMain.ImportStatusSearch.glngIMPSTATSRCH_VENINV, CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_NONE, CBMain.ImportBatchNewSearch.glngIMPBATNWSR_VENINV, CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_NONE, CBMain.ImportIndividualSearchType.glngIMPINDSRTP_VENINV, CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NONE, False)
+        objImport = New ImportInvoices(gobjClipboardReader(), "(clipboard)")
+        frm.ShowMe("Import Invoices", objImport, _
+            CBMain.ImportStatusSearch.glngIMPSTATSRCH_VENINV, _
+            CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_NONE, _
+            CBMain.ImportBatchNewSearch.glngIMPBATNWSR_VENINV, _
+            CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_NONE, _
+            CBMain.ImportIndividualSearchType.glngIMPINDSRTP_VENINV, _
+            CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NONE, False)
 
         Exit Sub
 ErrorHandler:
         TopError("mnuActInvImport_Click")
+    End Sub
+
+    Private Sub mnuActCompuPayImport_Click(sender As Object, e As EventArgs) Handles mnuActCompuPayImport.Click
+        Dim frm As BankImportAcctSelectForm
+        Dim objImport As _ITrxImport
+        Dim objSpecs As ImportChecksSpec
+
+        On Error GoTo ErrorHandler
+
+        If blnImportFormAlreadyOpen() Then
+            Exit Sub
+        End If
+        frm = New BankImportAcctSelectForm
+
+        objSpecs = New ImportChecksSpec(0, 5, 9, 12, -1)
+        objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
+        frm.ShowMe("Import CompuPay Checks", objImport, _
+            CBMain.ImportStatusSearch.glngIMPSTATSRCH_BANK, _
+            CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, _
+            CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, _
+            CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_BANK, _
+            CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK, _
+            CBMain.ImportBatchUpdateType.glngIMPBATUPTP_BANK, False)
+
+        Exit Sub
+ErrorHandler:
+        TopError("mnuActCompuPayImport_Click")
     End Sub
 
     Private Function blnImportFormAlreadyOpen() As Boolean

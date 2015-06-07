@@ -1,5 +1,7 @@
 Option Strict Off
 Option Explicit On
+
+Imports System.IO
 Imports VB = Microsoft.VisualBasic
 Public Module SharedDefs
 
@@ -623,6 +625,12 @@ ErrorHandler:
             End If
         End If
         gblnValidAmount = True
+    End Function
+
+    Public Function gobjClipboardReader() As TextReader
+        Dim strData As String
+        strData = Trim(My.Computer.Clipboard.GetText())
+        gobjClipboardReader = New StringReader(strData)
     End Function
 
     Private Sub TopError(ByVal strRoutine As String)

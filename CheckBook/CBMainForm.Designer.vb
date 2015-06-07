@@ -72,6 +72,7 @@
         Me.mnuRptCategory = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuRptPayables = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuWindows = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuActCompuPayImport = New System.Windows.Forms.ToolStripMenuItem()
         Me.MainMenu1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -113,7 +114,7 @@
         '
         'mnuAct
         '
-        Me.mnuAct.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuActRecon, Me.mnuActDepImport, Me.mnuActInvImport, Me.mnuBankImportOFX, Me.mnuActBankImportQIF})
+        Me.mnuAct.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuActRecon, Me.mnuActDepImport, Me.mnuActInvImport, Me.mnuBankImportOFX, Me.mnuActBankImportQIF, Me.mnuActCompuPayImport})
         Me.mnuAct.MergeAction = System.Windows.Forms.MergeAction.Remove
         Me.mnuAct.Name = "mnuAct"
         Me.mnuAct.Size = New System.Drawing.Size(67, 20)
@@ -122,31 +123,31 @@
         'mnuActRecon
         '
         Me.mnuActRecon.Name = "mnuActRecon"
-        Me.mnuActRecon.Size = New System.Drawing.Size(205, 22)
+        Me.mnuActRecon.Size = New System.Drawing.Size(244, 22)
         Me.mnuActRecon.Text = "Reconcile"
         '
         'mnuActDepImport
         '
         Me.mnuActDepImport.Name = "mnuActDepImport"
-        Me.mnuActDepImport.Size = New System.Drawing.Size(205, 22)
+        Me.mnuActDepImport.Size = New System.Drawing.Size(244, 22)
         Me.mnuActDepImport.Text = "Import Deposit Amounts"
         '
         'mnuActInvImport
         '
         Me.mnuActInvImport.Name = "mnuActInvImport"
-        Me.mnuActInvImport.Size = New System.Drawing.Size(205, 22)
+        Me.mnuActInvImport.Size = New System.Drawing.Size(244, 22)
         Me.mnuActInvImport.Text = "Import Invoices"
         '
         'mnuBankImportOFX
         '
         Me.mnuBankImportOFX.Name = "mnuBankImportOFX"
-        Me.mnuBankImportOFX.Size = New System.Drawing.Size(205, 22)
+        Me.mnuBankImportOFX.Size = New System.Drawing.Size(244, 22)
         Me.mnuBankImportOFX.Text = "Import OFX From Bank"
         '
         'mnuActBankImportQIF
         '
         Me.mnuActBankImportQIF.Name = "mnuActBankImportQIF"
-        Me.mnuActBankImportQIF.Size = New System.Drawing.Size(205, 22)
+        Me.mnuActBankImportQIF.Size = New System.Drawing.Size(244, 22)
         Me.mnuActBankImportQIF.Text = "Import QIF From Bank"
         '
         'mnuAccount
@@ -236,6 +237,12 @@
         Me.mnuWindows.Size = New System.Drawing.Size(68, 20)
         Me.mnuWindows.Text = "Windows"
         '
+        'mnuActCompuPayImport
+        '
+        Me.mnuActCompuPayImport.Name = "mnuActCompuPayImport"
+        Me.mnuActCompuPayImport.Size = New System.Drawing.Size(244, 22)
+        Me.mnuActCompuPayImport.Text = "Import Checks From Compupay"
+        '
         'CBMainForm
         '
         Me.BackColor = System.Drawing.SystemColors.AppWorkspace
@@ -256,5 +263,6 @@
         Me.PerformLayout()
 
     End Sub
+    Friend WithEvents mnuActCompuPayImport As System.Windows.Forms.ToolStripMenuItem
 #End Region 
 End Class
