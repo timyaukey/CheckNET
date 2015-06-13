@@ -1,7 +1,7 @@
 Option Strict Off
 Option Explicit On
 Public Class TrxGenList
-    Implements _ITrxGenerator
+    Implements ITrxGenerator
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
 
@@ -9,15 +9,15 @@ Public Class TrxGenList
     Private mblnEnabled As Boolean
     Private mstrRepeatKey As String
     Private mintStartRepeatSeq As Short
-    Private maudtTrx() As ITrxGenerator.TrxToCreate
+    Private maudtTrx() As TrxToCreate
 
-    Public Function ITrxGenerator_strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String Implements _ITrxGenerator.strLoad
+    Public Function ITrxGenerator_strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String Implements ITrxGenerator.strLoad
 
         Dim strError As String
         Dim nodeTrx As VB6XmlNode
         Dim elmTrx As VB6XmlElement
         'UPGRADE_WARNING: Arrays in structure udtTrx may need to be initialized before they can be used. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        Dim udtTrx As ITrxGenerator.TrxToCreate
+        Dim udtTrx As TrxToCreate
         Dim datDate As Date
         Dim curAmount As Decimal
         Dim intCount As Short
@@ -110,25 +110,25 @@ Public Class TrxGenList
         curAmount = CDec(vntAttrib)
     End Function
 
-    Public ReadOnly Property ITrxGenerator_strDescription() As String Implements _ITrxGenerator.strDescription
+    Public ReadOnly Property ITrxGenerator_strDescription() As String Implements ITrxGenerator.strDescription
         Get
             ITrxGenerator_strDescription = mstrDescription
         End Get
     End Property
 
-    Public ReadOnly Property ITrxGenerator_blnEnabled() As Boolean Implements _ITrxGenerator.blnEnabled
+    Public ReadOnly Property ITrxGenerator_blnEnabled() As Boolean Implements ITrxGenerator.blnEnabled
         Get
             ITrxGenerator_blnEnabled = mblnEnabled
         End Get
     End Property
 
-    Public ReadOnly Property ITrxGenerator_strRepeatKey() As String Implements _ITrxGenerator.strRepeatKey
+    Public ReadOnly Property ITrxGenerator_strRepeatKey() As String Implements ITrxGenerator.strRepeatKey
         Get
             ITrxGenerator_strRepeatKey = mstrRepeatKey
         End Get
     End Property
 
-    Public Function ITrxGenerator_colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As Collection Implements _ITrxGenerator.colCreateTrx
+    Public Function ITrxGenerator_colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As Collection Implements ITrxGenerator.colCreateTrx
 
         Dim colResults As Collection
         Dim lngIndex As Integer

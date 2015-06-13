@@ -5,7 +5,7 @@ Imports System.IO
 Imports CheckBookLib
 
 Public Class ImportChecks
-    Implements _ITrxImport
+    Implements ITrxImport
 
     Private mobjFile As TextReader
     Private mstrFile As String
@@ -18,7 +18,7 @@ Public Class ImportChecks
         mobjSpecs = objSpecs
     End Sub
 
-    Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements _ITrxImport.blnOpenSource
+    Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements ITrxImport.blnOpenSource
         Dim strFirstLine As String
 
         On Error GoTo ErrorHandler
@@ -34,14 +34,14 @@ ErrorHandler:
         NestedError("ITrxImport_blnOpenSource")
     End Function
 
-    Private Sub ITrxImport_CloseSource() Implements _ITrxImport.CloseSource
+    Private Sub ITrxImport_CloseSource() Implements ITrxImport.CloseSource
         If Not mobjFile Is Nothing Then
             mobjFile.Close()
             mobjFile = Nothing
         End If
     End Sub
 
-    Private Function ITrxImport_objNextTrx() As Trx Implements _ITrxImport.objNextTrx
+    Private Function ITrxImport_objNextTrx() As Trx Implements ITrxImport.objNextTrx
         Dim strLine As String
         Dim astrParts() As String
 
@@ -73,7 +73,7 @@ ErrorHandler:
         NestedError("ITrxImport_objNextTrx")
     End Function
 
-    Private ReadOnly Property ITrxImport_strSource() As String Implements _ITrxImport.strSource
+    Private ReadOnly Property ITrxImport_strSource() As String Implements ITrxImport.strSource
         Get
             ITrxImport_strSource = mstrFile
         End Get

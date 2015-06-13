@@ -9,7 +9,7 @@ Friend Class BankImportForm
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     Private WithEvents mobjAccount As Account
-    Private mobjTrxImport As _ITrxImport
+    Private mobjTrxImport As ITrxImport
     Private mlngStatusSearchType As CBMain.ImportStatusSearch
     Private mlngUpdateSearchType As CBMain.ImportBatchUpdateSearch
     Private mlngNewSearchType As CBMain.ImportBatchNewSearch
@@ -78,7 +78,7 @@ Friend Class BankImportForm
         gNestedErrorTrap("BankImportForm." & strRoutine)
     End Function
 
-    Public Sub ShowMe(ByVal strTitle As String, ByVal objAccount As Account, ByVal objTrxImport As _ITrxImport, ByVal lngStatusSearchType As CBMain.ImportStatusSearch, ByVal lngUpdateSearchType As CBMain.ImportBatchUpdateSearch, ByVal lngNewSearchType As CBMain.ImportBatchNewSearch, ByVal lngIndividualUpdateType As CBMain.ImportIndividualUpdateType, ByVal lngIndividualSearchType As CBMain.ImportIndividualSearchType, ByVal lngBatchUpdateType As CBMain.ImportBatchUpdateType, ByVal blnFake As Boolean)
+    Public Sub ShowMe(ByVal strTitle As String, ByVal objAccount As Account, ByVal objTrxImport As ITrxImport, ByVal lngStatusSearchType As CBMain.ImportStatusSearch, ByVal lngUpdateSearchType As CBMain.ImportBatchUpdateSearch, ByVal lngNewSearchType As CBMain.ImportBatchNewSearch, ByVal lngIndividualUpdateType As CBMain.ImportIndividualUpdateType, ByVal lngIndividualSearchType As CBMain.ImportIndividualSearchType, ByVal lngBatchUpdateType As CBMain.ImportBatchUpdateType, ByVal blnFake As Boolean)
 
         On Error GoTo ErrorHandler
 

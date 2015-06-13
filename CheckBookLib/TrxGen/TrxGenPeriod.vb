@@ -1,7 +1,7 @@
 Option Strict Off
 Option Explicit On
 Public Class TrxGenPeriod
-    Implements _ITrxGenerator
+    Implements ITrxGenerator
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
 
@@ -11,13 +11,13 @@ Public Class TrxGenPeriod
     Private mdatPeriodEndings() As SequencedTrx
     Private mdblDefaultPercentIncrease As Double
     'UPGRADE_WARNING: Arrays in structure mdatTrxTemplate may need to be initialized before they can be used. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-    Private mdatTrxTemplate As ITrxGenerator.TrxToCreate
+    Private mdatTrxTemplate As TrxToCreate
     Private mstrRepeatKey As String
     Private mintStartRepeatSeq As Short
     'UPGRADE_WARNING: Lower bound of array mdblDOWUsage was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
     Private mdblDOWUsage(7) As Double 'vbSunday to vbSaturday
 
-    Public Function ITrxGenerator_strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String Implements _ITrxGenerator.strLoad
+    Public Function ITrxGenerator_strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String Implements ITrxGenerator.strLoad
 
         Dim strError As String
         Dim elmFirst As VB6XmlElement
@@ -166,25 +166,25 @@ Public Class TrxGenPeriod
         dblGetWeight = dblResult
     End Function
 
-    Public ReadOnly Property ITrxGenerator_strDescription() As String Implements _ITrxGenerator.strDescription
+    Public ReadOnly Property ITrxGenerator_strDescription() As String Implements ITrxGenerator.strDescription
         Get
             ITrxGenerator_strDescription = mstrDescription
         End Get
     End Property
 
-    Public ReadOnly Property ITrxGenerator_blnEnabled() As Boolean Implements _ITrxGenerator.blnEnabled
+    Public ReadOnly Property ITrxGenerator_blnEnabled() As Boolean Implements ITrxGenerator.blnEnabled
         Get
             ITrxGenerator_blnEnabled = mblnEnabled
         End Get
     End Property
 
-    Public ReadOnly Property ITrxGenerator_strRepeatKey() As String Implements _ITrxGenerator.strRepeatKey
+    Public ReadOnly Property ITrxGenerator_strRepeatKey() As String Implements ITrxGenerator.strRepeatKey
         Get
             ITrxGenerator_strRepeatKey = mdatTrxTemplate.strRepeatKey
         End Get
     End Property
 
-    Public Function ITrxGenerator_colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As Collection Implements _ITrxGenerator.colCreateTrx
+    Public Function ITrxGenerator_colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As Collection Implements ITrxGenerator.colCreateTrx
 
         Dim datNewTrx() As SequencedTrx
         Dim intLongestOutputPeriod As Short

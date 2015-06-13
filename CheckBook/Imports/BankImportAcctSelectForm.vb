@@ -6,10 +6,10 @@ Imports CheckBookLib
 Friend Class BankImportAcctSelectForm
     Inherits System.Windows.Forms.Form
 
-    Private mobjTrxImport As _ITrxImport
+    Private mobjTrxImport As ITrxImport
     Private mobjAccount As Account
 
-    Public Sub ShowMe(ByVal strTitle As String, ByVal objTrxImport As _ITrxImport, ByVal lngStatusSearchType As CBMain.ImportStatusSearch, ByVal lngUpdateSearchType As CBMain.ImportBatchUpdateSearch, ByVal lngNewSearchType As CBMain.ImportBatchNewSearch, ByVal lngIndividualUpdateType As CBMain.ImportIndividualUpdateType, ByVal lngIndividualSearchType As CBMain.ImportIndividualSearchType, ByVal lngBatchUpdateType As CBMain.ImportBatchUpdateType, ByVal blnFake As Boolean)
+    Public Sub ShowMe(ByVal strTitle As String, ByVal objTrxImport As ITrxImport, ByVal lngStatusSearchType As CBMain.ImportStatusSearch, ByVal lngUpdateSearchType As CBMain.ImportBatchUpdateSearch, ByVal lngNewSearchType As CBMain.ImportBatchNewSearch, ByVal lngIndividualUpdateType As CBMain.ImportIndividualUpdateType, ByVal lngIndividualSearchType As CBMain.ImportIndividualSearchType, ByVal lngBatchUpdateType As CBMain.ImportBatchUpdateType, ByVal blnFake As Boolean)
 
         Dim frm As BankImportForm
         On Error GoTo ErrorHandler

@@ -5,7 +5,7 @@ Imports System.IO
 Imports CheckBookLib
 
 Public Class ImportByPayee
-    Implements _ITrxImport
+    Implements ITrxImport
 
     'An ITrxImport that reads from the clipboard.
     'Each line of text is one Trx.
@@ -21,7 +21,7 @@ Public Class ImportByPayee
         mstrFile = strFile
     End Sub
 
-    Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements _ITrxImport.blnOpenSource
+    Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements ITrxImport.blnOpenSource
         Dim strData As String
 
         strData = mobjInput.ReadToEnd()
@@ -30,11 +30,11 @@ Public Class ImportByPayee
         ITrxImport_blnOpenSource = True
     End Function
 
-    Private Sub ITrxImport_CloseSource() Implements _ITrxImport.CloseSource
+    Private Sub ITrxImport_CloseSource() Implements ITrxImport.CloseSource
 
     End Sub
 
-    Private Function ITrxImport_objNextTrx() As Trx Implements _ITrxImport.objNextTrx
+    Private Function ITrxImport_objNextTrx() As Trx Implements ITrxImport.objNextTrx
         Dim objTrx As Trx
         Dim strLine As String
         Dim astrParts() As String
@@ -71,7 +71,7 @@ Public Class ImportByPayee
         ITrxImport_objNextTrx = objTrx
     End Function
 
-    Private ReadOnly Property ITrxImport_strSource() As String Implements _ITrxImport.strSource
+    Private ReadOnly Property ITrxImport_strSource() As String Implements ITrxImport.strSource
         Get
             ITrxImport_strSource = mstrFile
         End Get

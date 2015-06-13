@@ -170,7 +170,7 @@ ErrorHandler:
 
     Public Sub mnuActBankImportQIF_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActBankImportQIF.Click
         Dim frm As BankImportAcctSelectForm
-        Dim objImport As _ITrxImport
+        Dim objImport As ITrxImport
         Dim strFile As String
         Dim objFile As TextReader
 
@@ -201,7 +201,7 @@ ErrorHandler:
 
     Public Sub mnuBankImportOFX_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuBankImportOFX.Click
         Dim frm As BankImportAcctSelectForm
-        Dim objImport As _ITrxImport
+        Dim objImport As ITrxImport
         Dim strFile As String
         Dim objFile As TextReader
 
@@ -232,7 +232,7 @@ ErrorHandler:
 
     Public Sub mnuActDepImport_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActDepImport.Click
         Dim frm As BankImportAcctSelectForm
-        Dim objImport As _ITrxImport
+        Dim objImport As ITrxImport
 
         On Error GoTo ErrorHandler
 
@@ -256,7 +256,7 @@ ErrorHandler:
 
     Public Sub mnuActInvImport_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActInvImport.Click
         Dim frm As BankImportAcctSelectForm
-        Dim objImport As _ITrxImport
+        Dim objImport As ITrxImport
 
         On Error GoTo ErrorHandler
 
@@ -280,7 +280,7 @@ ErrorHandler:
 
     Private Sub mnuActCompuPayImport_Click(sender As Object, e As EventArgs) Handles mnuActCompuPayImport.Click
         Dim frm As BankImportAcctSelectForm
-        Dim objImport As _ITrxImport
+        Dim objImport As ITrxImport
         Dim objSpecs As ImportChecksSpec
 
         On Error GoTo ErrorHandler

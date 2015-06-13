@@ -6,17 +6,17 @@ Module TrxGeneratorLoader
 	'Routines related to creating ITrxGenerator objects from XML files.
 	
 	'UPGRADE_WARNING: Arrays in structure mdatNullTrxToCreate may need to be initialized before they can be used. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-	Private mdatNullTrxToCreate As ITrxGenerator.TrxToCreate
+    Private mdatNullTrxToCreate As TrxToCreate
 	
 	'$Description Create the ITrxGenerator for the specified XML document, and call
 	'   Load() for it. Displays a diagnostic error if bad or missing data in XML document.
 	'$Returns The ITrxGenerator created if successful, or Nothing.
 	
-    Private Function objCreateTrxGenerator(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As _ITrxGenerator
+    Private Function objCreateTrxGenerator(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As ITrxGenerator
 
         Dim vntClassName As Object
         Dim strClassName As String
-        Dim objGenerator As _ITrxGenerator
+        Dim objGenerator As ITrxGenerator
         Dim strError As String
 
         If domDoc.DocumentElement.Name <> "generator" Then
@@ -65,7 +65,7 @@ Module TrxGeneratorLoader
         Dim strFullXMLFile As String
         Dim domDoc As VB6XmlDocument
         Dim objParseError As VB6XmlParseError
-        Dim objGenerator As _ITrxGenerator
+        Dim objGenerator As ITrxGenerator
         Dim colResults As Collection
         Dim strRepeatKeysUsed As String
         Dim strThisRepeatKey As String
@@ -252,7 +252,7 @@ Module TrxGeneratorLoader
     '$Returns A non-empty error message if bad or missing data was encountered,
     '   else an empty string.
 
-    Public Function gstrGetDateSequenceParams(ByVal elmParent As VB6XmlElement, ByVal strChildName As String, ByRef elmChild As VB6XmlElement, ByRef datParams As ITrxGenerator.DateSequenceParams) As String
+    Public Function gstrGetDateSequenceParams(ByVal elmParent As VB6XmlElement, ByVal strChildName As String, ByRef elmChild As VB6XmlElement, ByRef datParams As DateSequenceParams) As String
 
         Dim vntAttrib As Object
 
@@ -544,7 +544,7 @@ Module TrxGeneratorLoader
     '$Returns A non-empty error message if bad or missing data was encountered,
     '   else an empty string.
 
-    Public Function gstrGetTrxGenTemplate(ByRef domDoc As VB6XmlDocument, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As ITrxGenerator.TrxToCreate) As String
+    Public Function gstrGetTrxGenTemplate(ByRef domDoc As VB6XmlDocument, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim elmTrxTpt As VB6XmlElement
 
@@ -579,7 +579,7 @@ Module TrxGeneratorLoader
     '$Description Set fields of a TrxToCreate structure that are used by a transfer Trx,
     '   from the arguments passed in.
 
-    Public Function gstrGetTrxGenTemplateTransfer(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As ITrxGenerator.TrxToCreate) As String
+    Public Function gstrGetTrxGenTemplateTransfer(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim vntAttrib As Object
 
@@ -607,7 +607,7 @@ Module TrxGeneratorLoader
     '$Description Set fields of a TrxToCreate structure that are used by a budget Trx,
     '   from the arguments passed in.
 
-    Public Function gstrGetTrxGenTemplateBudget(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As ITrxGenerator.TrxToCreate) As String
+    Public Function gstrGetTrxGenTemplateBudget(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim vntAttrib As Object
 
@@ -670,57 +670,42 @@ Module TrxGeneratorLoader
     '$Description Set fields of a TrxToCreate structure that are used by a normal Trx,
     '   from the arguments passed in.
 
-    Public Function gstrGetTrxGenTemplateNormal(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As ITrxGenerator.TrxToCreate) As String
+    Public Function gstrGetTrxGenTemplateNormal(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim vntAttrib As Object
-        Dim datSplit As ITrxGenerator.SplitToCreate
+        Dim datSplit As SplitToCreate
 
         datTrxTemplate.lngType = Trx.TrxType.glngTRXTYP_NORMAL
         datTrxTemplate.lngStatus = Trx.TrxStatus.glngTRXSTS_UNREC
         'Transaction number.
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxTpt.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmTrxTpt.GetAttribute("number")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             gstrGetTrxGenTemplateNormal = "Missing [number] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         If InStr("|pmt|ord|inv|dep|xfr|eft|crm|card|", "|" & LCase(vntAttrib) & "|") = 0 Then
             gstrGetTrxGenTemplateNormal = "Invalid [number] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         datTrxTemplate.strNumber = CStr(vntAttrib) '
         'Category key.
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxTpt.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmTrxTpt.GetAttribute("catkey")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             gstrGetTrxGenTemplateNormal = "Missing [catkey] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         If gobjCategories.intLookupKey(vntAttrib) = 0 Then
             gstrGetTrxGenTemplateNormal = "Invalid [catkey] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         datSplit.strCategoryKey = CStr(vntAttrib)
         'Budget key.
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxTpt.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmTrxTpt.GetAttribute("budgetkey")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If Not gblnXmlAttributeMissing(vntAttrib) Then
-            'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             If gobjBudgets.intLookupKey(vntAttrib) = 0 Then
                 gstrGetTrxGenTemplateNormal = "Invalid [budgetkey] attribute"
                 Exit Function
             End If
-            'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             datSplit.strBudgetKey = CStr(vntAttrib)
         End If
         'Amount.
@@ -730,9 +715,7 @@ Module TrxGeneratorLoader
         datSplit.datDueDate = System.DateTime.FromOADate(0)
         'Add to splits collection.
         datTrxTemplate.intSplits = 1
-        'UPGRADE_WARNING: Lower bound of array datTrxTemplate.adatSplits was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim datTrxTemplate.adatSplits(1)
-        'UPGRADE_WARNING: Couldn't resolve default property of object datTrxTemplate.adatSplits(1). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         datTrxTemplate.adatSplits(1) = datSplit
 
         'Set shared fields.
@@ -743,7 +726,7 @@ Module TrxGeneratorLoader
     '$Description Set fields of a TrxToCreate structure that are common to all Trx
     '   types, from the arguments passed in.
 
-    Public Function gstrGetTrxGenTemplateShared(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByRef datTrxTemplate As ITrxGenerator.TrxToCreate) As String
+    Public Function gstrGetTrxGenTemplateShared(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim vntAttrib As Object
 
@@ -778,13 +761,13 @@ Module TrxGeneratorLoader
 
     End Function
 	
-	Public Function gdatCopyTrxToCreate(ByRef datInput As ITrxGenerator.TrxToCreate) As ITrxGenerator.TrxToCreate
-		'UPGRADE_WARNING: Couldn't resolve default property of object gdatCopyTrxToCreate. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		gdatCopyTrxToCreate = datInput
-		'Necessary for .NET compatibility, because .NET adatSplits is an object
-		'and the code converter doesn't notice so all copies share the same array.
-		'By doing it explicitly the code converter treats the copy with value semantics
-		'instead of reference semantics.
-		gdatCopyTrxToCreate.adatSplits = VB6.CopyArray(datInput.adatSplits)
-	End Function
+    Public Function gdatCopyTrxToCreate(ByRef datInput As TrxToCreate) As TrxToCreate
+        'UPGRADE_WARNING: Couldn't resolve default property of object gdatCopyTrxToCreate. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+        gdatCopyTrxToCreate = datInput
+        'Necessary for .NET compatibility, because .NET adatSplits is an object
+        'and the code converter doesn't notice so all copies share the same array.
+        'By doing it explicitly the code converter treats the copy with value semantics
+        'instead of reference semantics.
+        gdatCopyTrxToCreate.adatSplits = VB6.CopyArray(datInput.adatSplits)
+    End Function
 End Module
