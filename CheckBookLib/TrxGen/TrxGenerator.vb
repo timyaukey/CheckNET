@@ -32,6 +32,7 @@ Module TrxGenerator
 		colGenerators = gcolCreateTrxGenerators(objAccount, objReg)
 		For	Each objGenerator In colGenerators
             If objGenerator.blnEnabled Then
+                objAccount.RaiseLoadStatus("Generate " + objGenerator.strDescription)
                 objAccount.objRepeatSummarizer.Define(objGenerator.strRepeatKey, objGenerator.strDescription, True)
                 Try
                     colTrx = objGenerator.colCreateTrx(objReg, datRptEndMax)

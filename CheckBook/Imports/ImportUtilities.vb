@@ -12,6 +12,7 @@ Public Class ImportUtilities
 
     Private mobjAccount As Account
     Private mblnMakeFakeTrx As Boolean
+    Private mblnNoImportKey As Boolean
 
     'Data saved from current transaction in input file.
     Private mstrTrxDate As String
@@ -52,6 +53,12 @@ ErrorHandler:
     Public WriteOnly Property blnMakeFakeTrx() As Boolean
         Set(ByVal Value As Boolean)
             mblnMakeFakeTrx = Value
+        End Set
+    End Property
+
+    Public WriteOnly Property blnNoImportKey() As Boolean
+        Set(value As Boolean)
+            mblnNoImportKey = value
         End Set
     End Property
 
@@ -148,7 +155,7 @@ ErrorHandler:
                 strBudKey = .strKey(intBudIndex)
             End If
         End With
-        If mblnMakeFakeTrx Then
+        If mblnMakeFakeTrx Or mblnNoImportKey Then
             strImportKey = ""
         Else
             If mstrTrxUniqueKey <> "" Then

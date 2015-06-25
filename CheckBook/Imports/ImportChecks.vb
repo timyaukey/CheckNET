@@ -26,6 +26,8 @@ Public Class ImportChecks
         mobjUtil = New ImportUtilities
         mobjUtil.Init(objAccount_)
         mobjUtil.LoadTrxTypeTable()
+        mobjUtil.blnMakeFakeTrx = False
+        mobjUtil.blnNoImportKey = True
 
         ITrxImport_blnOpenSource = True
 

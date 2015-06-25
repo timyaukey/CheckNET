@@ -296,9 +296,9 @@ ErrorHandler:
             CBMain.ImportStatusSearch.glngIMPSTATSRCH_BANK, _
             CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, _
             CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, _
-            CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_BANK, _
+            CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_NONE, _
             CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK, _
-            CBMain.ImportBatchUpdateType.glngIMPBATUPTP_BANK, False)
+            CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NONE, False)
 
         Exit Sub
 ErrorHandler:

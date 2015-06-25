@@ -279,13 +279,7 @@ ErrorHandler:
     Private Sub RegisterForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         On Error GoTo ErrorHandler
 
-        'Force the window to the size specified in the IDE, because MDI child windows
-        'are not initially sized the same as in the IDE.
-        Me.Width = VB6.TwipsToPixelsX(10000)
-        Me.Height = VB6.TwipsToPixelsY(6000)
-
         mblnLoadComplete = True
-
         Me.Text = mobjReg.strTitle
         ConfigGrid()
         LoadGrid()

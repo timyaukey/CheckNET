@@ -335,6 +335,9 @@ ErrorHandler:
 
         On Error GoTo ErrorHandler
 
+        Me.Width = 540
+        Me.Height = 450
+
         Erase maudtElement
         mintElements = 0
         lstRegisters.Items.Clear()
@@ -387,6 +390,7 @@ ErrorHandler:
         cmdRegen.Enabled = Not blnRegisterSelected
         cmdShowRegister.Enabled = blnRegisterSelected
         cmdDeleteRegister.Enabled = blnRegisterSelected
+        cmdEditGenerators.Enabled = blnRegisterSelected
         cmdNewRegister.Enabled = Not blnRegisterSelected
         cmdRegProperties.Enabled = blnRegisterSelected
 
@@ -397,5 +401,15 @@ ErrorHandler:
 
     Private Sub lstRegisters_DoubleClick(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles lstRegisters.DoubleClick
         cmdShowRegister_Click(cmdShowRegister, New System.EventArgs())
+    End Sub
+
+    Private Sub cmdEditGenerators_Click(sender As Object, e As EventArgs) Handles cmdEditGenerators.Click
+        With maudtElement(lstRegisters.SelectedIndex)
+
+            Using frm As New FileListEditorForm
+                frm.ShowDialogForPath("Transaction Generators", gstrGeneratorPath(.objAccount, .objReg), _
+                    "gen", New TrxGenFilePersister())
+            End Using
+        End With
     End Sub
 End Class

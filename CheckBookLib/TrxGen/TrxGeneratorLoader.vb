@@ -1,17 +1,18 @@
 Option Strict Off
 Option Explicit On
-Module TrxGeneratorLoader
-	'2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
-	
-	'Routines related to creating ITrxGenerator objects from XML files.
-	
-	'UPGRADE_WARNING: Arrays in structure mdatNullTrxToCreate may need to be initialized before they can be used. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
+
+Public Module TrxGeneratorLoader
+    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
+
+    'Routines related to creating ITrxGenerator objects from XML files.
+
+    'UPGRADE_WARNING: Arrays in structure mdatNullTrxToCreate may need to be initialized before they can be used. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
     Private mdatNullTrxToCreate As TrxToCreate
-	
-	'$Description Create the ITrxGenerator for the specified XML document, and call
-	'   Load() for it. Displays a diagnostic error if bad or missing data in XML document.
-	'$Returns The ITrxGenerator created if successful, or Nothing.
-	
+
+    '$Description Create the ITrxGenerator for the specified XML document, and call
+    '   Load() for it. Displays a diagnostic error if bad or missing data in XML document.
+    '$Returns The ITrxGenerator created if successful, or Nothing.
+
     Private Function objCreateTrxGenerator(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As ITrxGenerator
 
         Dim vntClassName As Object
@@ -71,8 +72,7 @@ Module TrxGeneratorLoader
         Dim strThisRepeatKey As String
 
         colResults = New Collection
-        strPath = gstrAccountPath() & "\" & objAccount.strFileLoaded & ".gen\" & objReg.strRegisterKey
-        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+        strPath = gstrGeneratorPath(objAccount, objReg)
         strXMLFile = Dir(strPath & "\*.gen")
         While strXMLFile <> ""
             domDoc = New VB6XmlDocument
@@ -106,6 +106,13 @@ Module TrxGeneratorLoader
 
     End Function
 
+    '$Description Path to folder with *.gen (transaction generators) for specified 
+    '   register in specified account.
+
+    Public Function gstrGeneratorPath(ByVal objAccount As Account, ByVal objReg As Register) As String
+        gstrGeneratorPath = gstrAccountPath() & "\" & objAccount.strFileLoaded & ".gen\" & objReg.strRegisterKey
+    End Function
+
     '$Description Report an error detected while loading a transaction generator file.
 
     Public Sub gShowTrxGenLoadError(ByVal domDoc As VB6XmlDocument, ByVal strError As String)
@@ -129,7 +136,7 @@ Module TrxGeneratorLoader
     End Sub
 
     Public Sub ShowTrxGenLoadError(ByVal strDescription As String, ByVal strError As String)
-        MsgBox("Error loading transaction generator [" & strDescription & "]:" & vbCrLf & strError, MsgBoxStyle.OKOnly + MsgBoxStyle.Critical, "Checkbook")
+        MsgBox("Error loading transaction generator [" & strDescription & "]:" & vbCrLf & strError, MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Checkbook")
     End Sub
 
     Public Function gdatIncrementDate(ByVal datStart As Date, ByVal lngUnit As Trx.RepeatUnit, ByVal intNumber As Short) As Date
@@ -477,7 +484,7 @@ Module TrxGeneratorLoader
                     intLongestOutputPeriod = intSecondHalfDays
                 End If
                 'Compute ending date of first new sub-period.
-                datNewEndDate = System.Date.FromOADate(datPeriodStarts.ToOADate + intFirstHalfDays - 1)
+                datNewEndDate = System.DateTime.FromOADate(datPeriodStarts.ToOADate + intFirstHalfDays - 1)
                 'Compute new sub-period amounts.
                 'First divide the amount of the old period proportionally
                 'to the number of days in each sub-period.
@@ -525,7 +532,7 @@ Module TrxGeneratorLoader
                 intOutIndex = intOutIndex + 1
             End If
             'Prepare for next iteration.
-            datPeriodStarts = System.Date.FromOADate(datPeriodEndings(intInIndex).datDate.ToOADate + 1)
+            datPeriodStarts = System.DateTime.FromOADate(datPeriodEndings(intInIndex).datDate.ToOADate + 1)
         Next
 
         ReDim Preserve datResults(intOutIndex - 1)
@@ -760,7 +767,7 @@ Module TrxGeneratorLoader
         datTrxTemplate.strRepeatKey = strRepeatKey
 
     End Function
-	
+
     Public Function gdatCopyTrxToCreate(ByRef datInput As TrxToCreate) As TrxToCreate
         'UPGRADE_WARNING: Couldn't resolve default property of object gdatCopyTrxToCreate. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         gdatCopyTrxToCreate = datInput

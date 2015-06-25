@@ -76,8 +76,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.vb" />
+    <Compile Include="BooleanStringTypeConverter.vb" />
     <Compile Include="CheckBookUtils.vb" />
     <Compile Include="ErrorHandling.vb" />
+    <Compile Include="IFilePersister.vb" />
+    <Compile Include="IFilePersistable.vb" />
     <Compile Include="Logging\EventLog.vb" />
     <Compile Include="Everything.vb" />
     <Compile Include="Logging\ILogAction.vb" />
@@ -88,6 +91,9 @@
     <Compile Include="Logging\ILogGroupEnd.vb" />
     <Compile Include="Logging\ILogGroupStart.vb" />
     <Compile Include="RepeatSummarizer.vb" />
+    <Compile Include="RepeatUnitTypeConverter.vb" />
+    <Compile Include="TrxGen\TGEBudgetTrx.vb" />
+    <Compile Include="TrxGen\TGEGeneratorInterpolate.vb" />
     <Compile Include="TrxGen\ITrxGenerator.vb" />
     <Compile Include="Register\LoadedRegister.vb" />
     <Compile Include="Logging\LogAction.vb" />
@@ -119,8 +125,17 @@
     <Compile Include="Register\RegisterLoader.vb" />
     <Compile Include="Register\RegisterSaver.vb" />
     <Compile Include="Security.vb" />
+    <Compile Include="TrxGen\TGERepeat.vb" />
+    <Compile Include="TrxGen\TGESample.vb" />
+    <Compile Include="TrxGen\TGESchedule.vb" />
     <Compile Include="TrxGen\SequencedTrx.vb" />
     <Compile Include="SharedDefs.vb" />
+    <Compile Include="TrxGen\TGEGeneratorBase.vb" />
+    <Compile Include="TrxGen\TGEBase.vb" />
+    <Compile Include="TrxGen\TrxGenFilePersister.vb" />
+    <Compile Include="TrxGen\TGENormalTrx.vb" />
+    <Compile Include="TrxGen\TGEGeneratorRepeat.vb" />
+    <Compile Include="TrxGen\TGETemplateBase.vb" />
     <Compile Include="Trx\Split.vb" />
     <Compile Include="Trx\SplitData.vb" />
     <Compile Include="StringTranslator.vb" />
@@ -132,6 +147,10 @@
     <Compile Include="TrxGen\TrxGenList.vb" />
     <Compile Include="TrxGen\TrxGenPeriod.vb" />
     <Compile Include="TrxGen\TrxGenRepeat.vb" />
+    <Compile Include="UITypeEditors\DateConverter.vb" />
+    <Compile Include="UITypeEditors\StringTranslatorUIEditor.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="VB6Xml\VB6XmlDocument.vb" />
     <Compile Include="VB6Xml\VB6XmlElement.vb" />
     <Compile Include="VB6Xml\VB6XmlNode.vb" />

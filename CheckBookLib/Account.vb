@@ -97,6 +97,10 @@ Public Class Account
         End Get
     End Property
 
+    Public Sub RaiseLoadStatus(ByVal strMessage As String)
+        RaiseEvent LoadStatus(strMessage)
+    End Sub
+
     Public Sub Teardown()
         'UPGRADE_NOTE: Object mobjEverything may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         mobjEverything = Nothing
