@@ -170,11 +170,11 @@ ErrorHandler:
                 'in the download file. I believe the actual safe characters to use is
                 '20, based on the max blanks it inserts, but 16 is nice and pessimistic
                 'and ought to be enough to recognize the payee.
-                strUniqueKey = strNumber & "|" & Left(mstrTrxPayeeTrimmed, 16) & "|" & VB6.Format(curAmount, gstrFORMAT_CURRENCY)
+                strUniqueKey = strNumber & "|" & Left(mstrTrxPayeeTrimmed, 16) & "|" & gstrVB6Format(curAmount, gstrFORMAT_CURRENCY)
             End If
             'NOTE: Date must stay in the same place, because statement reconciliation
             'parses it out to show.
-            strImportKey = strSqueezeInput("|" & VB6.Format(datDate, gstrFORMAT_DATE) & "|" & strUniqueKey)
+            strImportKey = strSqueezeInput("|" & gstrVB6Format(datDate, gstrFORMAT_DATE) & "|" & strUniqueKey)
         End If
 
         objTrx = New Trx

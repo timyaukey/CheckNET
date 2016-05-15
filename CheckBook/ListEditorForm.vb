@@ -143,7 +143,7 @@ ErrorHandler:
             MsgBox("Please select the list entry to change.", MsgBoxStyle.Critical)
             Exit Sub
         End If
-        strOldElement = VB6.GetItemString(lstElements, intIndex)
+        strOldElement = gstrVB6GetItemString(lstElements, intIndex)
         strNewElement = InputBox("Edit list entry name:", , strOldElement)
         If strNewElement = "" Or strNewElement = strOldElement Then
             Exit Sub
@@ -167,9 +167,9 @@ ErrorHandler:
         Do
             blnFoundChild = False
             For intIndex = 0 To lstElements.Items.Count - 1
-                If UCase(VB.Left(VB6.GetItemString(lstElements, intIndex), intMatchLen)) = strChildMatchPrefix Then
+                If UCase(VB.Left(gstrVB6GetItemString(lstElements, intIndex), intMatchLen)) = strChildMatchPrefix Then
                     intKey = VB6.GetItemData(lstElements, intIndex)
-                    strNewChildElement = strNewElement & ":" & Mid(VB6.GetItemString(lstElements, intIndex), intMatchLen + 1)
+                    strNewChildElement = strNewElement & ":" & Mid(gstrVB6GetItemString(lstElements, intIndex), intMatchLen + 1)
                     DeleteElement(intIndex)
                     If blnInsertElement(strNewChildElement, intKey, False, strError) Then
                         gRaiseError("Unexpected error renaming children: " & strError)
@@ -200,7 +200,7 @@ ErrorHandler:
             MsgBox("Please select the list entry to delete.", MsgBoxStyle.Critical)
             Exit Sub
         End If
-        strElement = VB6.GetItemString(lstElements, intIndex)
+        strElement = gstrVB6GetItemString(lstElements, intIndex)
         If InStr(strElement, ":") = 0 Then
             If Not blnFirstLevelChangesAllowed Then
                 MsgBox("You may not delete top level entries in this list.", MsgBoxStyle.Critical)
@@ -209,7 +209,7 @@ ErrorHandler:
         End If
         If blnMultipleLevelsAllowed Then
             If intIndex < (lstElements.Items.Count - 1) Then
-                If UCase(strElement & ":") = UCase(VB.Left(VB6.GetItemString(lstElements, intIndex + 1), Len(strElement) + 1)) Then
+                If UCase(strElement & ":") = UCase(VB.Left(gstrVB6GetItemString(lstElements, intIndex + 1), Len(strElement) + 1)) Then
                     MsgBox("You may not delete a list entry with child entries.", MsgBoxStyle.Critical)
                     Exit Sub
                 End If
@@ -305,7 +305,7 @@ ErrorHandler:
             'Iterate one more than the number of elements.
             For intIndex = 0 To .Items.Count
                 If intIndex < .Items.Count Then
-                    strExistingElementUCS = strNormalizeElement(VB6.GetItemString(lstElements, intIndex))
+                    strExistingElementUCS = strNormalizeElement(gstrVB6GetItemString(lstElements, intIndex))
                     If strExistingElementUCS = strNewElementUCS Then
                         strError = """" & strNewElement & """ is already in this list."
                         Exit Function
@@ -317,7 +317,7 @@ ErrorHandler:
                     If intIndex = 0 Then
                         strPrecedingUCS = ""
                     Else
-                        strPrecedingUCS = strNormalizeElement(VB6.GetItemString(lstElements, intIndex - 1))
+                        strPrecedingUCS = strNormalizeElement(gstrVB6GetItemString(lstElements, intIndex - 1))
                     End If
                     If strNewParentUCS <> "" Then
                         If Not ((strNewParentUCS = strPrecedingUCS) Or ((strNewParentUCS & ":") = VB.Left(strPrecedingUCS, Len(strNewParentUCS) + 1))) Then
@@ -375,7 +375,7 @@ ErrorHandler:
 
         mobjList.Init()
         For intIndex = 0 To lstElements.Items.Count - 1
-            strName1 = VB6.GetItemString(lstElements, intIndex)
+            strName1 = gstrVB6GetItemString(lstElements, intIndex)
             strKey = strMakeKey(VB6.GetItemData(lstElements, intIndex))
             If blnMultipleLevelsAllowed Then
                 intColonPos = 0
@@ -566,9 +566,9 @@ ErrorHandler:
             strMakeKey = ""
         Else
             If mlngListType = ListType.glngLIST_TYPE_CATEGORY Or intKey > 99 Then
-                strMakeKey = VB6.Format(intKey, "000")
+                strMakeKey = gstrVB6Format(intKey, "000")
             Else
-                strMakeKey = VB6.Format(intKey, "00")
+                strMakeKey = gstrVB6Format(intKey, "00")
             End If
         End If
     End Function

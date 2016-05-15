@@ -103,9 +103,9 @@ ErrorHandler:
             Next
         Next objLoadedReg
 
-        txtStartingBalance.Text = VB6.Format(curStartingBalance, gstrFORMAT_CURRENCY)
+        txtStartingBalance.Text = gstrVB6Format(curStartingBalance, gstrFORMAT_CURRENCY)
         mcurClearedBalance = curStartingBalance + curSelectedTotal
-        txtClearedBalance.Text = VB6.Format(mcurClearedBalance, gstrFORMAT_CURRENCY)
+        txtClearedBalance.Text = gstrVB6Format(mcurClearedBalance, gstrFORMAT_CURRENCY)
         gSetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_NUMBER)
 
     End Sub
@@ -119,9 +119,9 @@ ErrorHandler:
         With objItem
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > mintCOL_DATE Then
-                objItem.SubItems(mintCOL_DATE).Text = VB6.Format(objTrx.datDate, gstrFORMAT_DATE)
+                objItem.SubItems(mintCOL_DATE).Text = gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE)
             Else
-                objItem.SubItems.Insert(mintCOL_DATE, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, VB6.Format(objTrx.datDate, gstrFORMAT_DATE)))
+                objItem.SubItems.Insert(mintCOL_DATE, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE)))
             End If
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > mintCOL_NUMBER Then
@@ -137,9 +137,9 @@ ErrorHandler:
             End If
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > mintCOL_AMOUNT Then
-                objItem.SubItems(mintCOL_AMOUNT).Text = VB6.Format(objTrx.curAmount, gstrFORMAT_CURRENCY)
+                objItem.SubItems(mintCOL_AMOUNT).Text = gstrVB6Format(objTrx.curAmount, gstrFORMAT_CURRENCY)
             Else
-                objItem.SubItems.Insert(mintCOL_AMOUNT, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, VB6.Format(objTrx.curAmount, gstrFORMAT_CURRENCY)))
+                objItem.SubItems.Insert(mintCOL_AMOUNT, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrVB6Format(objTrx.curAmount, gstrFORMAT_CURRENCY)))
             End If
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > mintCOL_IMPORTED Then
@@ -161,9 +161,9 @@ ErrorHandler:
             End If
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > mintCOL_SORTABLE_DATE Then
-                objItem.SubItems(mintCOL_SORTABLE_DATE).Text = VB6.Format(objTrx.datDate, "yyyymmdd")
+                objItem.SubItems(mintCOL_SORTABLE_DATE).Text = gstrVB6Format(objTrx.datDate, "yyyymmdd")
             Else
-                objItem.SubItems.Insert(mintCOL_SORTABLE_DATE, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, VB6.Format(objTrx.datDate, "yyyymmdd")))
+                objItem.SubItems.Insert(mintCOL_SORTABLE_DATE, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrVB6Format(objTrx.datDate, "yyyymmdd")))
             End If
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > mintCOL_SORTABLE_NUMBER Then
@@ -223,7 +223,7 @@ ErrorHandler:
                 .blnSelected = False
             End If
         End With
-        txtClearedBalance.Text = VB6.Format(mcurClearedBalance, gstrFORMAT_CURRENCY)
+        txtClearedBalance.Text = gstrVB6Format(mcurClearedBalance, gstrFORMAT_CURRENCY)
 
         Exit Sub
 ErrorHandler:

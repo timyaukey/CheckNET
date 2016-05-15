@@ -372,9 +372,9 @@ Public Class UTRegister
             For lngIndex = lngStartIndex To lngEndIndex2
                 objTrx = .objTrx(lngIndex)
                 With objTrx
-                    strLine = VB6.Format(lngIndex, "000") & ". " & VB6.Format(.datDate, "mm/dd/yy") & " " & Left(.strNumber & Space(6), 6) & " " & VB6.Format(.curAmount, "000000.00 ;000000.00-") & " " & VB6.Format(.curBalance, "000000.00 ;000000.00-") & " "
+                    strLine = gstrVB6Format(lngIndex, "000") & ". " & gstrVB6Format(.datDate, "mm/dd/yy") & " " & Left(.strNumber & Space(6), 6) & " " & gstrVB6Format(.curAmount, "000000.00 ;000000.00-") & " " & gstrVB6Format(.curBalance, "000000.00 ;000000.00-") & " "
                     If .lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
-                        strLine = strLine & "BUD " & "End=" & VB6.Format(.datBudgetEnds, "mm/dd/yy") & " " & "Lim=" & VB6.Format(.curBudgetLimit, "####0.00") & " " & "Apl=" & VB6.Format(.curBudgetApplied, "####0.00") & " " & "Key=" & .strBudgetKey
+                        strLine = strLine & "BUD " & "End=" & gstrVB6Format(.datBudgetEnds, "mm/dd/yy") & " " & "Lim=" & gstrVB6Format(.curBudgetLimit, "####0.00") & " " & "Apl=" & gstrVB6Format(.curBudgetApplied, "####0.00") & " " & "Key=" & .strBudgetKey
                     ElseIf .lngType = Trx.TrxType.glngTRXTYP_TRANSFER Then
                         strLine = strLine & "XFR " & "Key=" & .strTransferKey
                     Else

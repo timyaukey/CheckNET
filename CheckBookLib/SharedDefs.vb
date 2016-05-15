@@ -350,12 +350,12 @@ Public Module SharedDefs
                 If datInvoiceDate = System.DateTime.FromOADate(0) Then
                     strInvoiceDate = ""
                 Else
-                    strInvoiceDate = VB6.Format(datInvoiceDate, gstrFORMAT_DATE)
+                    strInvoiceDate = gstrVB6Format(datInvoiceDate, gstrFORMAT_DATE)
                 End If
                 If datDueDate = System.DateTime.FromOADate(0) Then
                     strDueDate = ""
                 Else
-                    strDueDate = VB6.Format(datDueDate, gstrFORMAT_DATE)
+                    strDueDate = gstrVB6Format(datDueDate, gstrFORMAT_DATE)
                 End If
                 strTerms = strTerms2
                 strBudget = gstrTranslateBudgetKey(strBudgetKey)
@@ -625,6 +625,14 @@ ErrorHandler:
             End If
         End If
         gblnValidAmount = True
+    End Function
+
+    Public Function gstrVB6Format(input As Object, style As String) As String
+        gstrVB6Format = VB6.Format(input, style)
+    End Function
+
+    Public Function gstrVB6GetItemString(ctl As System.Windows.Forms.Control, intIndex As Integer) As String
+        gstrVB6GetItemString = VB6.GetItemString(ctl, intIndex)
     End Function
 
     Public Function gobjClipboardReader() As TextReader

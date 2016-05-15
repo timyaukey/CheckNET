@@ -99,14 +99,14 @@ Friend Class RegisterForm
                 Exit Sub
             End If
             If .strRepeatKey <> "" Then
-                MsgBox("You may not delete a transaction that has a repeat key, " & "because the software will usually just recreate it." & vbCrLf & vbCrLf & "If you don't want to use this transaction it is much better " & "to change the amount to zero than to delete it. If you really " & "need to delete it, first save it without a repeat key or " & "repeat sequence number.", MsgBoxStyle.Critical)
-                Exit Sub
+                MsgBox("You can delete this transaction, but it has a repeat key " & "so the software will probably just recreate it." & vbCrLf & _
+                       "If you don't want to use this transaction it is much better " & "to change the amount to zero than to delete it.", MsgBoxStyle.Critical)
             End If
-            If MsgBox("Do you really want to delete the transaction dated " & VB6.Format(.datDate, gstrFORMAT_DATE) & " for $" & VB6.Format(.curAmount, gstrFORMAT_CURRENCY) & " made out to " & .strDescription & "?", MsgBoxStyle.Question + MsgBoxStyle.OKCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.OK Then
+            If MsgBox("Do you really want to delete the transaction dated " & gstrVB6Format(.datDate, gstrFORMAT_DATE) & " for $" & gstrVB6Format(.curAmount, gstrFORMAT_CURRENCY) & " made out to " & .strDescription & "?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
                 Exit Sub
             End If
             If .lngStatus = Trx.TrxStatus.glngTRXSTS_RECON Then
-                If MsgBox("This transaction has been reconciled to a bank statement. " & "Are you sure you want to delete it?", MsgBoxStyle.Question + MsgBoxStyle.OKCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.OK Then
+                If MsgBox("This transaction has been reconciled to a bank statement. " & "Are you sure you want to delete it?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
             End If
@@ -656,7 +656,7 @@ ErrorHandler:
     End Sub
 
     Private Function strTrxSummaryForMsg(ByVal objTrx As Trx) As String
-        strTrxSummaryForMsg = VB6.Format(objTrx.datDate, gstrFORMAT_DATE) & " " & objTrx.strDescription & " $" & VB6.Format(objTrx.curAmount, gstrFORMAT_CURRENCY)
+        strTrxSummaryForMsg = gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE) & " " & objTrx.strDescription & " $" & gstrVB6Format(objTrx.curAmount, gstrFORMAT_CURRENCY)
     End Function
 
     Private Sub DiagnosticValidate()

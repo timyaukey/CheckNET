@@ -57,7 +57,7 @@ Public Class RegisterSaver
                 SaveLine("KI" & .strImportKey)
             End If
             If .curNormalMatchRange <> 0 Then
-                SaveLine("MR" & VB6.Format(.curNormalMatchRange, gstrFORMAT_CURRENCY))
+                SaveLine("MR" & gstrVB6Format(.curNormalMatchRange, gstrFORMAT_CURRENCY))
             End If
             For Each objSplit In .colSplits
                 With objSplit
@@ -72,10 +72,10 @@ Public Class RegisterSaver
                         SaveLine("SN" & .strInvoiceNum)
                     End If
                     If .datInvoiceDate <> System.DateTime.FromOADate(0) Then
-                        SaveLine("SI" & VB6.Format(.datInvoiceDate, gstrFORMAT_DATE))
+                        SaveLine("SI" & gstrVB6Format(.datInvoiceDate, gstrFORMAT_DATE))
                     End If
                     If .datDueDate <> System.DateTime.FromOADate(0) Then
-                        SaveLine("SD" & VB6.Format(.datDueDate, gstrFORMAT_DATE))
+                        SaveLine("SD" & gstrVB6Format(.datDueDate, gstrFORMAT_DATE))
                     End If
                     If Len(.strTerms) Then
                         SaveLine("ST" & .strTerms)
@@ -83,7 +83,7 @@ Public Class RegisterSaver
                     If Len(.strBudgetKey) Then
                         SaveLine("SB" & .strBudgetKey)
                     End If
-                    SaveLine("SA" & VB6.Format(.curAmount, gstrFORMAT_CURRENCY))
+                    SaveLine("SA" & gstrVB6Format(.curAmount, gstrFORMAT_CURRENCY))
                     If Len(.strImageFiles) Then
                         SaveLine("SF" & .strImageFiles)
                     End If
@@ -100,10 +100,10 @@ Public Class RegisterSaver
                 SaveLine("BU" & strConvertRepeatUnit(.lngBudgetPeriodUnit))
                 SaveLine("BN" & .intBudgetPeriodNumber)
             Else
-                SaveLine("BE" & VB6.Format(.datBudgetEnds, gstrFORMAT_DATE))
+                SaveLine("BE" & gstrVB6Format(.datBudgetEnds, gstrFORMAT_DATE))
             End If
             SaveLine("KB" & .strBudgetKey)
-            SaveLine("A$" & VB6.Format(.curBudgetLimit, gstrFORMAT_CURRENCY))
+            SaveLine("A$" & gstrVB6Format(.curBudgetLimit, gstrFORMAT_CURRENCY))
         End With
     End Sub
 
@@ -111,14 +111,14 @@ Public Class RegisterSaver
         SaveTrxShared("TT")
         With mobjTrx
             SaveLine("KT" & .strTransferKey)
-            SaveLine("A$" & VB6.Format(.curTransferAmount, gstrFORMAT_CURRENCY))
+            SaveLine("A$" & gstrVB6Format(.curTransferAmount, gstrFORMAT_CURRENCY))
         End With
     End Sub
 
     Private Sub SaveTrxShared(ByVal strFirstCmd As String)
         With mobjTrx
             SaveLine(strFirstCmd & Mid("URNS", .lngStatus, 1) & .strDescription)
-            SaveLine("DT" & VB6.Format(.datDate, gstrFORMAT_DATE))
+            SaveLine("DT" & gstrVB6Format(.datDate, gstrFORMAT_DATE))
             If Len(.strMemo) Then
                 SaveLine("ME" & .strMemo)
             End If
@@ -134,7 +134,7 @@ Public Class RegisterSaver
             If mblnForGenerating Then
                 SaveLine("GU" & strConvertRepeatUnit(.lngRptUnit))
                 SaveLine("GN" & .intRptNumber)
-                SaveLine("GE" & VB6.Format(.datRptEnd, gstrFORMAT_DATE))
+                SaveLine("GE" & gstrVB6Format(.datRptEnd, gstrFORMAT_DATE))
             End If
         End With
     End Sub

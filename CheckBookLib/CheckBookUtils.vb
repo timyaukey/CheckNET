@@ -151,22 +151,22 @@ ErrorHandler:
 
         If intBracketSize < 0 Then
             If intBracketSize = -1 Then
-                gstrMakeDateBracket = VB6.Format(datInputDate, "yyyy/mm/01")
+                gstrMakeDateBracket = gstrVB6Format(datInputDate, "yyyy/mm/01")
             ElseIf intBracketSize = -2 Then
                 intMonthPart = Int((VB.Day(datInputDate) - 1) / 15)
                 If intMonthPart > 1 Then
                     intMonthPart = 1
                 End If
-                gstrMakeDateBracket = VB6.Format(datInputDate, "yyyy/mm/") & VB6.Format(1 + intMonthPart * 15, "0#")
+                gstrMakeDateBracket = gstrVB6Format(datInputDate, "yyyy/mm/") & gstrVB6Format(1 + intMonthPart * 15, "0#")
             ElseIf intBracketSize = -4 Then
                 intMonthPart = Int((VB.Day(datInputDate) - 1) / 8)
-                gstrMakeDateBracket = VB6.Format(datInputDate, "yyyy/mm/") & VB6.Format(1 + intMonthPart * 8, "0#")
+                gstrMakeDateBracket = gstrVB6Format(datInputDate, "yyyy/mm/") & gstrVB6Format(1 + intMonthPart * 8, "0#")
             End If
         Else
             'UPGRADE_WARNING: DateDiff behavior may be different. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6B38EC3F-686D-4B2E-B5A5-9E8E7A762E32"'
             intOffsetDays = DateDiff(Microsoft.VisualBasic.DateInterval.Day, datBaseDate, datInputDate)
             datBracketDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, Int(intOffsetDays / intBracketSize) * intBracketSize, datBaseDate)
-            gstrMakeDateBracket = VB6.Format(datBracketDate, "yyyy/mm/dd")
+            gstrMakeDateBracket = gstrVB6Format(datBracketDate, "yyyy/mm/dd")
         End If
 
     End Function
@@ -184,11 +184,11 @@ ErrorHandler:
     End Function
 
     Public Function gstrAgingBracketFuture(ByVal intStartingAge As Short, ByVal intEndingAge As Short) As String
-        gstrAgingBracketFuture = "Due In " & VB6.Format(-intEndingAge, "000") & "-" & VB6.Format(-intStartingAge, "000") & " Days"
+        gstrAgingBracketFuture = "Due In " & gstrVB6Format(-intEndingAge, "000") & "-" & gstrVB6Format(-intStartingAge, "000") & " Days"
     End Function
 
     Public Function gstrAgingBracketPastDue(ByVal intStartingAge As Short, ByVal intEndingAge As Short) As String
-        gstrAgingBracketPastDue = "Due " & VB6.Format(intStartingAge, "000") & "-" & VB6.Format(intEndingAge, "000") & " Days Ago"
+        gstrAgingBracketPastDue = "Due " & gstrVB6Format(intStartingAge, "000") & "-" & gstrVB6Format(intEndingAge, "000") & " Days Ago"
     End Function
 
     Private Sub NestedError(ByVal strRoutine As String)

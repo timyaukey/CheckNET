@@ -40,7 +40,7 @@ Friend Class LiveBudgetListForm
                 If .lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
                     If .datDate <= datTarget And .datBudgetEnds >= datTarget Then
                         objItem = gobjListViewAdd(lvwMatches)
-                        objItem.Text = VB6.Format(.datDate, gstrFORMAT_DATE)
+                        objItem.Text = gstrVB6Format(.datDate, gstrFORMAT_DATE)
                         'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                         If objItem.SubItems.Count > 1 Then
                             objItem.SubItems(1).Text = .strDescription
@@ -55,21 +55,21 @@ Friend Class LiveBudgetListForm
                         End If
                         'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                         If objItem.SubItems.Count > 3 Then
-                            objItem.SubItems(3).Text = VB6.Format(.curBudgetLimit, gstrFORMAT_CURRENCY)
+                            objItem.SubItems(3).Text = gstrVB6Format(.curBudgetLimit, gstrFORMAT_CURRENCY)
                         Else
-                            objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, VB6.Format(.curBudgetLimit, gstrFORMAT_CURRENCY)))
+                            objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrVB6Format(.curBudgetLimit, gstrFORMAT_CURRENCY)))
                         End If
                         'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                         If objItem.SubItems.Count > 4 Then
-                            objItem.SubItems(4).Text = VB6.Format(.curBudgetApplied, gstrFORMAT_CURRENCY)
+                            objItem.SubItems(4).Text = gstrVB6Format(.curBudgetApplied, gstrFORMAT_CURRENCY)
                         Else
-                            objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, VB6.Format(.curBudgetApplied, gstrFORMAT_CURRENCY)))
+                            objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrVB6Format(.curBudgetApplied, gstrFORMAT_CURRENCY)))
                         End If
                         'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                         If objItem.SubItems.Count > 5 Then
-                            objItem.SubItems(5).Text = VB6.Format(.curAmount, gstrFORMAT_CURRENCY)
+                            objItem.SubItems(5).Text = gstrVB6Format(.curAmount, gstrFORMAT_CURRENCY)
                         Else
-                            objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, VB6.Format(.curAmount, gstrFORMAT_CURRENCY)))
+                            objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrVB6Format(.curAmount, gstrFORMAT_CURRENCY)))
                         End If
                     End If
                 End If

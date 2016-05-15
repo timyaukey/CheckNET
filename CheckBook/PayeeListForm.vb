@@ -278,7 +278,7 @@ ErrorHandler:
         Dim intIndex As Short
 
         For intIndex = 0 To cbo.Items.Count - 1
-            If strValue = VB6.GetItemString(cbo, intIndex) Then
+            If strValue = gstrVB6GetItemString(cbo, intIndex) Then
                 cbo.SelectedIndex = intIndex
                 Exit Sub
             End If

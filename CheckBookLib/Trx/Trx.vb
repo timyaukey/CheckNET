@@ -848,7 +848,7 @@ Public Class Trx
             objFirstSplit = mcolSplits.Item(1)
             strInvNum = objFirstSplit.strInvoiceNum
         End If
-        mstrSortKey = VB6.Format(mdatDate, "yyyymmdd") & IIf(mcurAmount > 0, "C", "D") & Mid("ZYX", mlngType + 1, 1) & Left(mstrNumber & "          ", 10) & Left(mstrDescription & "                    ", 20) & Left(strInvNum & "                ", 16)
+        mstrSortKey = gstrVB6Format(mdatDate, "yyyymmdd") & IIf(mcurAmount > 0, "C", "D") & Mid("ZYX", mlngType + 1, 1) & Left(mstrNumber & "          ", 10) & Left(mstrDescription & "                    ", 20) & Left(strInvNum & "                ", 16)
     End Sub
 
     '$Description Set mcurAmount for a budget Trx. Called whenever
@@ -1116,7 +1116,7 @@ Public Class Trx
             Case TrxSearchField.glngTRXSFL_NUMBER
                 strTrxData = mstrNumber
             Case TrxSearchField.glngTRXSFL_AMOUNT
-                strTrxData = VB6.Format(mcurAmount, gstrFORMAT_CURRENCY)
+                strTrxData = gstrVB6Format(mcurAmount, gstrFORMAT_CURRENCY)
             Case TrxSearchField.glngTRXSFL_MEMO
                 strTrxData = mstrMemo
             Case Else

@@ -78,7 +78,15 @@ Friend Class BankImportForm
         gNestedErrorTrap("BankImportForm." & strRoutine)
     End Function
 
-    Public Sub ShowMe(ByVal strTitle As String, ByVal objAccount As Account, ByVal objTrxImport As ITrxImport, ByVal lngStatusSearchType As CBMain.ImportStatusSearch, ByVal lngUpdateSearchType As CBMain.ImportBatchUpdateSearch, ByVal lngNewSearchType As CBMain.ImportBatchNewSearch, ByVal lngIndividualUpdateType As CBMain.ImportIndividualUpdateType, ByVal lngIndividualSearchType As CBMain.ImportIndividualSearchType, ByVal lngBatchUpdateType As CBMain.ImportBatchUpdateType, ByVal blnFake As Boolean)
+    Public Sub ShowMe(ByVal strTitle As String, ByVal objAccount As Account, _
+                      ByVal objTrxImport As ITrxImport, _
+                      ByVal lngStatusSearchType As CBMain.ImportStatusSearch, _
+                      ByVal lngUpdateSearchType As CBMain.ImportBatchUpdateSearch, _
+                      ByVal lngNewSearchType As CBMain.ImportBatchNewSearch, _
+                      ByVal lngIndividualUpdateType As CBMain.ImportIndividualUpdateType, _
+                      ByVal lngIndividualSearchType As CBMain.ImportIndividualSearchType, _
+                      ByVal lngBatchUpdateType As CBMain.ImportBatchUpdateType, _
+                      ByVal blnFake As Boolean)
 
         On Error GoTo ErrorHandler
 
@@ -150,17 +158,15 @@ ErrorHandler:
         Dim objItem As System.Windows.Forms.ListViewItem
         Dim intItemIndex As Short
         Dim intFoundCount As Short
-        Dim objMatchedReg As Register 'The register where an exact match was found
-        Dim objMatchedTrx As Trx 'The exact match in objMatchedReg.
-        Dim lngMatchedRegIndex As Integer 'The index of objMatchedTrx in objMatchedReg.
-        Dim strFailReason As String
+        Dim strFailReason As String = ""
 
+        ClearUpdateMatches()
         intFoundCount = 0
         For Each objItem In lvwTrx.Items
             objItem.Checked = False
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
-            If blnValidForAutoUpdate(intItemIndex, False, objMatchedReg, objMatchedTrx, lngMatchedRegIndex, strFailReason) Then
+            If blnValidForAutoUpdate(intItemIndex, False, strFailReason) Then
                 objItem.Checked = True
                 intFoundCount = intFoundCount + 1
                 'UPGRADE_ISSUE: MSComctlLib.ListItem property objItem.ToolTipText was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
@@ -184,34 +190,22 @@ ErrorHandler:
         Dim objItem As System.Windows.Forms.ListViewItem
         Dim intItemIndex As Short
         Dim intExactCount As Short 'Number of registers where an exact match was found
-        Dim objMatchedReg As Register 'The register where an exact match was found
-        Dim objMatchedTrx As Trx 'The exact match in objMatchedReg.
-        Dim lngMatchedRegIndex As Integer 'The index of objMatchedTrx in objMatchedReg.
-        Dim strFailReason As String
+        Dim strFailReason As String = ""
         Dim intUpdateCount As Short
         Dim datNull As Date
         Dim strSummaryExplanation As String
 
+        ClearUpdateMatches()
         For Each objItem In lvwTrx.Items
             If objItem.Checked Then
                 'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                 intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
-                If blnValidForAutoUpdate(intItemIndex, True, objMatchedReg, objMatchedTrx, lngMatchedRegIndex, strFailReason) Then
-                    With maudtItem(intItemIndex)
-                        .objMatchedReg = objMatchedReg
-                        .objMatchedTrx = objMatchedTrx
-                        .lngMatchedRegIndex = lngMatchedRegIndex
-                    End With
-                Else
+                If Not blnValidForAutoUpdate(intItemIndex, True, strFailReason) Then
                     objItem.Checked = False
                     MsgBox("Skipping and unchecking " & strDescribeItem(intItemIndex) & " because: " & strFailReason & ".")
                 End If
             End If
         Next objItem
-        'UPGRADE_NOTE: Object objMatchedReg may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        objMatchedReg = Nothing
-        'UPGRADE_NOTE: Object objMatchedTrx may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        objMatchedTrx = Nothing
 
         BeginProgress()
         intUpdateCount = 0
@@ -263,17 +257,30 @@ ErrorHandler:
         TopError("cmdBatchUpdates_Click")
     End Sub
 
-    Private Function blnValidForAutoUpdate(ByRef intItemIndex As Short, ByVal blnAllowNonExact As Boolean, ByRef objMatchedReg As Register, ByRef objMatchedTrx As Trx, ByRef lngMatchedRegIndex As Integer, ByRef strFailReason As String) As Boolean
+    Private Sub ClearUpdateMatches()
+        Dim intIndex As Integer
+        For intIndex = 1 To mintItems
+            maudtItem(intIndex).objMatchedReg = Nothing
+            maudtItem(intIndex).objMatchedTrx = Nothing
+            maudtItem(intIndex).lngMatchedRegIndex = 0
+        Next
+    End Sub
+
+    Private Function blnValidForAutoUpdate(ByRef intItemIndex As Short, ByVal blnAllowNonExact As Boolean, ByRef strFailReason As String) As Boolean
 
         Dim objTrx As Trx
         Dim objLoaded As LoadedRegister
         Dim objReg As Register
-        Dim colMatches As Collection
+        Dim colMatches As Collection = Nothing
+        Dim colUnusedMatches As Collection
+        Dim intCheckIndex As Integer
+        Dim blnAlreadyMatched As Boolean
         Dim blnExactMatch As Boolean
         Dim intExactCount As Short
         Dim lngNumber As Integer
         Dim objPossibleMatchTrx As Trx
         Dim lngPossibleIndex As Integer
+        Dim vlngPossibleIndex As Object
         Dim blnNonExactConfirmed As Boolean
 
         blnValidForAutoUpdate = False
@@ -303,7 +310,23 @@ ErrorHandler:
                         'Should not be possible
                         gRaiseError("Invalid batch update search type")
                 End Select
-                If colMatches.Count() = 1 Then
+                'Filter out trx that are already matched to something in maudtItem().
+                colUnusedMatches = New Collection
+                For Each vlngPossibleIndex In colMatches
+                    objPossibleMatchTrx = objReg.objTrx(vlngPossibleIndex)
+                    blnAlreadyMatched = False
+                    For intCheckIndex = 1 To mintItems
+                        If maudtItem(intCheckIndex).objMatchedTrx Is objPossibleMatchTrx Then
+                            blnAlreadyMatched = True
+                            Exit For
+                        End If
+                    Next
+                    If Not blnAlreadyMatched Then
+                        colUnusedMatches.Add(vlngPossibleIndex)
+                    End If
+                Next
+                'If we have one match that wasn't matched by a previous import item.
+                If colUnusedMatches.Count() = 1 Then
                     blnNonExactConfirmed = False
                     If blnAllowNonExact And Not blnExactMatch Then
                         If MsgBox(strDescribeItem(intItemIndex) & " is only a partial match. " & "Update it anyway?", MsgBoxStyle.YesNo + MsgBoxStyle.DefaultButton1, "Confirm") = MsgBoxResult.Yes Then
@@ -311,13 +334,13 @@ ErrorHandler:
                         End If
                     End If
                     If (blnExactMatch Or blnNonExactConfirmed) Then
-                        'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        lngPossibleIndex = colMatches.Item(1)
+                        'UPGRADE_WARNING: Couldn't resolve default property of object colUnusedMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        lngPossibleIndex = colUnusedMatches.Item(1)
                         objPossibleMatchTrx = objReg.objTrx(lngPossibleIndex)
                         If objPossibleMatchTrx.strImportKey = "" Then
-                            objMatchedTrx = objPossibleMatchTrx
-                            objMatchedReg = objReg
-                            lngMatchedRegIndex = lngPossibleIndex
+                            .objMatchedTrx = objPossibleMatchTrx
+                            .objMatchedReg = objReg
+                            .lngMatchedRegIndex = lngPossibleIndex
                             intExactCount = intExactCount + 1
                         End If
                     End If
@@ -344,7 +367,7 @@ ErrorHandler:
         Dim objItem As System.Windows.Forms.ListViewItem
         Dim intItemIndex As Short
         Dim intFoundCount As Short
-        Dim strFailReason As String
+        Dim strFailReason As String = ""
 
         intFoundCount = 0
         For Each objItem In lvwTrx.Items
@@ -379,14 +402,14 @@ ErrorHandler:
         Dim datDummy As Date
         Dim objImportedTrx As Trx
         Dim objImportedSplit As Split_Renamed
-        Dim colPOMatches As Collection
+        Dim colPOMatches As Collection = Nothing
         Dim blnItemImported As Boolean
         Dim vlngMatchedTrxIndex As Object
         Dim objMatchedTrx As Trx
         Dim objMatchedSplit As Split_Renamed
         Dim strPONumber As String
         Dim blnAllowBankNonCard As Boolean
-        Dim strFailReason As String
+        Dim strFailReason As String = ""
 
         If mobjSelectedRegister Is Nothing Then
             MsgBox("First select the register to create the transactions in.", MsgBoxStyle.Critical)
@@ -646,7 +669,7 @@ ErrorHandler:
 
         On Error GoTo ErrorHandler
 
-        ClearMatches()
+        ClearCurrentItemMatches()
         blnShowCompleted = (chkHideCompleted.CheckState <> System.Windows.Forms.CheckState.Checked)
         If Not lvwTrx.FocusedItem Is Nothing Then
             intOldSelectedIndex = intSelectedItemIndex()
@@ -788,7 +811,7 @@ EventExitSub:
             'UPGRADE_WARNING: Lower bound of collection lvwTrx.ListItems() has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             intItemArrayIndex = CShort(lvwTrx.Items.Item(intListItemIndex).SubItems(mintITMCOL_INDEX).Text)
             With maudtItem(intItemArrayIndex).objImportedTrx
-                If StrComp(.strNumber, mstrImportSearchText, CompareMethod.Text) = 0 Or VB6.Format(.curAmount, gstrFORMAT_CURRENCY) = mstrImportSearchText Or InStr(1, .strDescription, mstrImportSearchText, CompareMethod.Text) > 0 Then
+                If StrComp(.strNumber, mstrImportSearchText, CompareMethod.Text) = 0 Or gstrVB6Format(.curAmount, gstrFORMAT_CURRENCY) = mstrImportSearchText Or InStr(1, .strDescription, mstrImportSearchText, CompareMethod.Text) > 0 Then
                     'UPGRADE_WARNING: Lower bound of collection lvwTrx.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                     lvwTrx.FocusedItem = lvwTrx.Items.Item(intListItemIndex)
                     'UPGRADE_WARNING: MSComctlLib.IListItem method lvwTrx.SelectedItem.EnsureVisible has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
@@ -830,12 +853,20 @@ ErrorHandler:
     Private Sub cmdRepeatSearch_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRepeatSearch.Click
         On Error GoTo ErrorHandler
 
+        'Did they select anything?
+        If lvwTrx.FocusedItem Is Nothing Then
+            MsgBox("Select an item in the top list first.", MsgBoxStyle.Critical)
+            Exit Sub
+        End If
         SearchForMatches()
 
         Exit Sub
 ErrorHandler:
         TopError("cmdRepeatSearch_Click")
     End Sub
+
+    'Search for matches to the import item currently selected in the top list.
+    'Redisplays the import item with current status if that import item has already been imported.
 
     Private Sub SearchForMatches()
         Dim objTrx As Trx
@@ -851,13 +882,8 @@ ErrorHandler:
 
         On Error GoTo ErrorHandler
 
-        ClearMatches()
+        ClearCurrentItemMatches()
 
-        'Did they select anything?
-        If lvwTrx.FocusedItem Is Nothing Then
-            MsgBox("Select an item in the top list first.", MsgBoxStyle.Critical)
-            Exit Sub
-        End If
         'Has the selected item already been processed?
         intItemIndex = intSelectedItemIndex()
         If maudtItem(intItemIndex).lngStatus <> ImportStatus.mlngIMPSTS_UNRESOLVED Then
@@ -867,6 +893,10 @@ ErrorHandler:
         'This is the import item they selected.
         objTrx = maudtItem(intItemIndex).objImportedTrx
 
+        'Not usually possible to match here, because the item would have been matched
+        'when loaded and detected a few lines above where it checks the import status.
+        'Probably means the matching trx was changed since the imports were loaded,
+        'and it only matches now.
         If blnMatchImport(intItemIndex) Then
             RedisplaySelectedItem()
             Exit Sub
@@ -922,6 +952,9 @@ ErrorHandler:
 ErrorHandler:
         NestedError("SearchForMatches")
     End Sub
+
+    'Look for an existing transaction that matches the specified import item.
+    'This sets the import status of the import item.
 
     Private Function blnMatchImport(ByVal intItemIndex As Short) As Boolean
         Dim objTrx As Trx
@@ -992,7 +1025,7 @@ ErrorHandler:
         Next objItem
     End Sub
 
-    Private Sub ClearMatches()
+    Private Sub ClearCurrentItemMatches()
         lvwMatches.Items.Clear()
         mintMatches = 0
         Erase maudtMatch
@@ -1014,7 +1047,7 @@ ErrorHandler:
 
         Dim strRegTitle As String
         With objItem
-            .Text = VB6.Format(objTrx.datDate, gstrFORMAT_DATE)
+            .Text = gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE)
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > 1 Then
                 objItem.SubItems(1).Text = objTrx.strNumber
@@ -1029,9 +1062,9 @@ ErrorHandler:
             End If
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > 3 Then
-                objItem.SubItems(3).Text = VB6.Format(objTrx.curAmount, gstrFORMAT_CURRENCY)
+                objItem.SubItems(3).Text = gstrVB6Format(objTrx.curAmount, gstrFORMAT_CURRENCY)
             Else
-                objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, VB6.Format(objTrx.curAmount, gstrFORMAT_CURRENCY)))
+                objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrVB6Format(objTrx.curAmount, gstrFORMAT_CURRENCY)))
             End If
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > 4 Then
@@ -1259,7 +1292,7 @@ ErrorHandler:
         On Error GoTo ErrorHandler
         'Because MatchItem.lngRegIndex may have changed for any matches.
         'Also, this clears the list after "Create New" or "Update Existing".
-        ClearMatches()
+        ClearCurrentItemMatches()
         Exit Sub
 ErrorHandler:
         TopError("mobjAccount_ChangeMade")
@@ -1270,6 +1303,6 @@ ErrorHandler:
     End Function
 
     Private Function strDescribeTrx(ByRef objTrx As Trx) As String
-        strDescribeTrx = "[ " & VB6.Format(objTrx.datDate, gstrFORMAT_DATE) & " " & objTrx.strDescription & " $" & VB6.Format(objTrx.curAmount, gstrFORMAT_CURRENCY) & " ]"
+        strDescribeTrx = "[ " & gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE) & " " & objTrx.strDescription & " $" & gstrVB6Format(objTrx.curAmount, gstrFORMAT_CURRENCY) & " ]"
     End Function
 End Class
