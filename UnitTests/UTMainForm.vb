@@ -545,7 +545,7 @@ ErrorHandler:
 
     Private Sub TestMatchNormal()
         Dim objUTReg As UTRegister
-        Dim colMatches As Collection
+        Dim colMatches As Collection = Nothing
         Dim blnExactMatch As Boolean
 
         gUTSetTestTitle("Test MatchNormal")
@@ -639,7 +639,7 @@ ErrorHandler:
 
     Private Function strConcatMatchResults(ByVal colMatches As Collection) As String
         Dim vntElement As Object
-        Dim strResult As String
+        Dim strResult As String = ""
         For Each vntElement In colMatches
             'UPGRADE_WARNING: Couldn't resolve default property of object vntElement. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             strResult = strResult & ";" & vntElement
@@ -722,7 +722,7 @@ ErrorHandler:
 
     Private Sub TestMatchPayee()
         Dim objUTReg As UTRegister
-        Dim colMatches As Collection
+        Dim colMatches As Collection = Nothing
         Dim blnExactMatch As Boolean
         Dim objTrx As Trx
 
@@ -762,7 +762,7 @@ ErrorHandler:
 
     Private Sub TestMatchInvoice()
         Dim objUTReg As UTRegister
-        Dim colMatches As Collection
+        Dim colMatches As Collection = Nothing
 
         gUTSetTestTitle("Test MatchInvoice")
 
@@ -799,7 +799,7 @@ ErrorHandler:
 
     Private Sub TestMatchPONumber()
         Dim objUTReg As UTRegister
-        Dim colMatches As Collection
+        Dim colMatches As Collection = Nothing
 
         gUTSetTestTitle("Test MatchPONumber")
 

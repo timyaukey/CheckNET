@@ -59,6 +59,7 @@
         Me.mnuActInvImport = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuBankImportOFX = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuActBankImportQIF = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuActCompuPayImport = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuAccount = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuActAdjBudget = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuActFindLiveBudget = New System.Windows.Forms.ToolStripMenuItem()
@@ -72,7 +73,7 @@
         Me.mnuRptCategory = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuRptPayables = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuWindows = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuActCompuPayImport = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuActOSUImport = New System.Windows.Forms.ToolStripMenuItem()
         Me.MainMenu1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -114,7 +115,7 @@
         '
         'mnuAct
         '
-        Me.mnuAct.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuActRecon, Me.mnuActDepImport, Me.mnuActInvImport, Me.mnuBankImportOFX, Me.mnuActBankImportQIF, Me.mnuActCompuPayImport})
+        Me.mnuAct.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuActRecon, Me.mnuActDepImport, Me.mnuActInvImport, Me.mnuBankImportOFX, Me.mnuActBankImportQIF, Me.mnuActCompuPayImport, Me.mnuActOSUImport})
         Me.mnuAct.MergeAction = System.Windows.Forms.MergeAction.Remove
         Me.mnuAct.Name = "mnuAct"
         Me.mnuAct.Size = New System.Drawing.Size(67, 20)
@@ -123,32 +124,38 @@
         'mnuActRecon
         '
         Me.mnuActRecon.Name = "mnuActRecon"
-        Me.mnuActRecon.Size = New System.Drawing.Size(244, 22)
+        Me.mnuActRecon.Size = New System.Drawing.Size(324, 22)
         Me.mnuActRecon.Text = "Reconcile"
         '
         'mnuActDepImport
         '
         Me.mnuActDepImport.Name = "mnuActDepImport"
-        Me.mnuActDepImport.Size = New System.Drawing.Size(244, 22)
+        Me.mnuActDepImport.Size = New System.Drawing.Size(324, 22)
         Me.mnuActDepImport.Text = "Import Deposit Amounts"
         '
         'mnuActInvImport
         '
         Me.mnuActInvImport.Name = "mnuActInvImport"
-        Me.mnuActInvImport.Size = New System.Drawing.Size(244, 22)
+        Me.mnuActInvImport.Size = New System.Drawing.Size(324, 22)
         Me.mnuActInvImport.Text = "Import Invoices"
         '
         'mnuBankImportOFX
         '
         Me.mnuBankImportOFX.Name = "mnuBankImportOFX"
-        Me.mnuBankImportOFX.Size = New System.Drawing.Size(244, 22)
+        Me.mnuBankImportOFX.Size = New System.Drawing.Size(324, 22)
         Me.mnuBankImportOFX.Text = "Import OFX From Bank"
         '
         'mnuActBankImportQIF
         '
         Me.mnuActBankImportQIF.Name = "mnuActBankImportQIF"
-        Me.mnuActBankImportQIF.Size = New System.Drawing.Size(244, 22)
+        Me.mnuActBankImportQIF.Size = New System.Drawing.Size(324, 22)
         Me.mnuActBankImportQIF.Text = "Import QIF From Bank"
+        '
+        'mnuActCompuPayImport
+        '
+        Me.mnuActCompuPayImport.Name = "mnuActCompuPayImport"
+        Me.mnuActCompuPayImport.Size = New System.Drawing.Size(324, 22)
+        Me.mnuActCompuPayImport.Text = "Import Checks From Compupay"
         '
         'mnuAccount
         '
@@ -162,19 +169,19 @@
         'mnuActAdjBudget
         '
         Me.mnuActAdjBudget.Name = "mnuActAdjBudget"
-        Me.mnuActAdjBudget.Size = New System.Drawing.Size(223, 22)
+        Me.mnuActAdjBudget.Size = New System.Drawing.Size(222, 22)
         Me.mnuActAdjBudget.Text = "Adjust Budgets To Cashflow"
         '
         'mnuActFindLiveBudget
         '
         Me.mnuActFindLiveBudget.Name = "mnuActFindLiveBudget"
-        Me.mnuActFindLiveBudget.Size = New System.Drawing.Size(223, 22)
+        Me.mnuActFindLiveBudget.Size = New System.Drawing.Size(222, 22)
         Me.mnuActFindLiveBudget.Text = "Find Live Budgets"
         '
         'mnuActRepeatKeys
         '
         Me.mnuActRepeatKeys.Name = "mnuActRepeatKeys"
-        Me.mnuActRepeatKeys.Size = New System.Drawing.Size(223, 22)
+        Me.mnuActRepeatKeys.Size = New System.Drawing.Size(222, 22)
         Me.mnuActRepeatKeys.Text = "Repeat Key List"
         Me.mnuActRepeatKeys.Visible = False
         '
@@ -189,25 +196,25 @@
         'mnuListPayees
         '
         Me.mnuListPayees.Name = "mnuListPayees"
-        Me.mnuListPayees.Size = New System.Drawing.Size(209, 22)
+        Me.mnuListPayees.Size = New System.Drawing.Size(207, 22)
         Me.mnuListPayees.Text = "Memorized Transactions"
         '
         'mnuListCategories
         '
         Me.mnuListCategories.Name = "mnuListCategories"
-        Me.mnuListCategories.Size = New System.Drawing.Size(209, 22)
+        Me.mnuListCategories.Size = New System.Drawing.Size(207, 22)
         Me.mnuListCategories.Text = "Categories"
         '
         'mnuListBudgets
         '
         Me.mnuListBudgets.Name = "mnuListBudgets"
-        Me.mnuListBudgets.Size = New System.Drawing.Size(209, 22)
+        Me.mnuListBudgets.Size = New System.Drawing.Size(207, 22)
         Me.mnuListBudgets.Text = "Budgets"
         '
         'mnuListTrxTypes
         '
         Me.mnuListTrxTypes.Name = "mnuListTrxTypes"
-        Me.mnuListTrxTypes.Size = New System.Drawing.Size(209, 22)
+        Me.mnuListTrxTypes.Size = New System.Drawing.Size(207, 22)
         Me.mnuListTrxTypes.Text = "Transaction Import Types"
         '
         'mnuRpt
@@ -221,13 +228,13 @@
         'mnuRptCategory
         '
         Me.mnuRptCategory.Name = "mnuRptCategory"
-        Me.mnuRptCategory.Size = New System.Drawing.Size(173, 22)
+        Me.mnuRptCategory.Size = New System.Drawing.Size(172, 22)
         Me.mnuRptCategory.Text = "Totals By Category"
         '
         'mnuRptPayables
         '
         Me.mnuRptPayables.Name = "mnuRptPayables"
-        Me.mnuRptPayables.Size = New System.Drawing.Size(173, 22)
+        Me.mnuRptPayables.Size = New System.Drawing.Size(172, 22)
         Me.mnuRptPayables.Text = "Accounts Payable"
         '
         'mnuWindows
@@ -237,11 +244,11 @@
         Me.mnuWindows.Size = New System.Drawing.Size(68, 20)
         Me.mnuWindows.Text = "Windows"
         '
-        'mnuActCompuPayImport
+        'mnuActOSUImport
         '
-        Me.mnuActCompuPayImport.Name = "mnuActCompuPayImport"
-        Me.mnuActCompuPayImport.Size = New System.Drawing.Size(244, 22)
-        Me.mnuActCompuPayImport.Text = "Import Checks From Compupay"
+        Me.mnuActOSUImport.Name = "mnuActOSUImport"
+        Me.mnuActOSUImport.Size = New System.Drawing.Size(324, 22)
+        Me.mnuActOSUImport.Text = "Import Checks From Oregon State Credit Union"
         '
         'CBMainForm
         '
@@ -264,5 +271,6 @@
 
     End Sub
     Friend WithEvents mnuActCompuPayImport As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents mnuActOSUImport As System.Windows.Forms.ToolStripMenuItem
 #End Region 
 End Class

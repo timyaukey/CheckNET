@@ -193,7 +193,7 @@ ErrorHandler:
         Dim strFailReason As String = ""
         Dim intUpdateCount As Short
         Dim datNull As Date
-        Dim strSummaryExplanation As String
+        Dim strSummaryExplanation As String = ""
 
         ClearUpdateMatches()
         For Each objItem In lvwTrx.Items
@@ -223,6 +223,9 @@ ErrorHandler:
                         Case CBMain.ImportBatchUpdateType.glngIMPBATUPTP_AMOUNT
                             .objMatchedReg.ImportUpdateAmount(.lngMatchedRegIndex, mblnFake, .objImportedTrx.curAmount)
 
+                        Case CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NUMAMT
+                            .objMatchedReg.ImportUpdateNumAmt(.lngMatchedRegIndex, .objImportedTrx.strNumber, mblnFake, .objImportedTrx.curAmount)
+
                         Case Else
                             'Should not be possible.
                             gRaiseError("Invalid batch update type")
@@ -244,6 +247,8 @@ ErrorHandler:
                 strSummaryExplanation = "without changing transaction numbers, or transaction dates."
             Case CBMain.ImportBatchUpdateType.glngIMPBATUPTP_AMOUNT
                 strSummaryExplanation = "updating transaction amounts only."
+            Case CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NUMAMT
+                strSummaryExplanation = "updating transaction numbers and amounts."
             Case Else
                 'Should not be possible.
                 gRaiseError("Invalid batch update type")
@@ -664,8 +669,8 @@ ErrorHandler:
         Dim intIndex As Short
         Dim blnShowCompleted As Boolean
         Dim intOldSelectedIndex As Short
-        Dim objNewItem As System.Windows.Forms.ListViewItem
-        Dim objNewSelectedItem As System.Windows.Forms.ListViewItem
+        Dim objNewItem As System.Windows.Forms.ListViewItem = Nothing
+        Dim objNewSelectedItem As System.Windows.Forms.ListViewItem = Nothing
 
         On Error GoTo ErrorHandler
 
@@ -875,7 +880,8 @@ ErrorHandler:
         Dim lngImportMatch As Integer
         Dim intItemIndex As Short
         Dim lngNumber As Integer
-        Dim colMatches As Collection
+        Dim colMatches As Collection = Nothing
+        Dim colExactMatches As Collection = Nothing
         Dim blnExactMatch As Boolean
         Dim vlngRegIndex As Object
         Dim objMatchedTrx As Trx
@@ -913,7 +919,9 @@ ErrorHandler:
 
             Select Case mlngIndividualSearchType
                 Case CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK
-                    objReg.MatchNormal(lngNumber, objTrx.datDate, 60, objTrx.strDescription, objTrx.curAmount, chkLooseMatch.CheckState = System.Windows.Forms.CheckState.Checked, colMatches, blnExactMatch)
+                    objReg.MatchCore(lngNumber, objTrx.datDate, 60, objTrx.strDescription, objTrx.curAmount, _
+                                     chkLooseMatch.CheckState = System.Windows.Forms.CheckState.Checked, colMatches, colExactMatches, blnExactMatch)
+                    objReg.PruneToNonImportedExactMatches(colExactMatches, objTrx.datDate, colMatches, blnExactMatch)
                 Case CBMain.ImportIndividualSearchType.glngIMPINDSRTP_PAYEE
                     objReg.MatchPayee(objTrx.datDate, 7, objTrx.strDescription, False, colMatches, blnExactMatch)
                 Case CBMain.ImportIndividualSearchType.glngIMPINDSRTP_VENINV
@@ -960,15 +968,21 @@ ErrorHandler:
         Dim objTrx As Trx
         Dim objLoaded As LoadedRegister
         Dim objReg As Register
-        Dim colMatches As Collection
+        Dim colMatches As Collection = Nothing
         Dim blnExactMatch As Boolean
         Dim lngIndex As Integer
         Dim lngImportMatch As Integer
+        Dim lngNumber As Integer
 
         On Error GoTo ErrorHandler
 
         'This is the import item they selected.
         objTrx = maudtItem(intItemIndex).objImportedTrx
+        If IsNumeric(objTrx.strNumber) Then
+            lngNumber = CInt(objTrx.strNumber)
+        Else
+            lngNumber = 0
+        End If
 
         'Look for an import match in ALL registers, not just the selected register.
         'If found, update maudtItem() and redisplay it with the match info.
@@ -976,20 +990,22 @@ ErrorHandler:
             objReg = objLoaded.objReg
             lngImportMatch = 0
             Select Case mlngStatusSearchType
-                Case CBMain.ImportStatusSearch.glngIMPSTATSRCH_BANK
+                Case CBMain.ImportStatusSearch.Bank
                     If objTrx.strImportKey <> "" Then
                         lngImportMatch = objReg.lngMatchImportKey(objTrx.strImportKey)
                     End If
-                Case CBMain.ImportStatusSearch.glngIMPSTATSRCH_PAYNONGEN
+                Case ImportStatusSearch.BillPayment
+                    lngImportMatch = objReg.lngMatchPaymentDetails(objTrx.strNumber, objTrx.datDate, 10, objTrx.strDescription, objTrx.curAmount)
+                Case CBMain.ImportStatusSearch.PayeeNonGenerated
                     objReg.MatchPayee(objTrx.datDate, 7, objTrx.strDescription, True, colMatches, blnExactMatch)
-                    If colMatches.Count() > 0 Then
+                    If colMatches.Count > 0 Then
                         'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         lngIndex = colMatches.Item(1)
                         If Not objReg.objTrx(lngIndex).blnAutoGenerated Then
                             lngImportMatch = lngIndex
                         End If
                     End If
-                Case CBMain.ImportStatusSearch.glngIMPSTATSRCH_VENINV
+                Case CBMain.ImportStatusSearch.VendorInvoice
                     'UPGRADE_WARNING: Couldn't resolve default property of object objTrx.colSplits().strInvoiceNum. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     objReg.MatchInvoice(objTrx.datDate, 120, objTrx.strDescription, objTrx.colSplits.Item(1).strInvoiceNum, colMatches)
                     If colMatches.Count() > 0 Then
@@ -1218,6 +1234,9 @@ ErrorHandler:
 
                     Case CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_AMOUNT
                         objMatchedReg.ImportUpdateAmount(lngMatchedRegIndex, mblnFake, .curAmount)
+
+                    Case CBMain.ImportIndividualUpdateType.glntIMPINDUPTP_NUMAMT
+                        objMatchedReg.ImportUpdateNumAmt(lngMatchedRegIndex, .strNumber, mblnFake, .curAmount)
 
                     Case Else
                         'Should not be possible

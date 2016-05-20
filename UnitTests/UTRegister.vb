@@ -360,7 +360,7 @@ Public Class UTRegister
         Dim lngEndIndex2 As Integer
         Dim objTrx As Trx
         Dim strLine As String
-        Dim strResult As String
+        Dim strResult As String = ""
         Dim objSplit As Split_Renamed
         Dim intSplit As Short
         With mobjReg

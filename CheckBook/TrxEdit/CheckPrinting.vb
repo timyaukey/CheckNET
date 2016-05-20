@@ -39,15 +39,15 @@ Module CheckPrinting
 
         Dim colPayees As VB6XmlNodeList
         Dim objPayee As VB6XmlElement
-        Dim strMailName As String
-        Dim strMailAddr As String
-        Dim strMailAddr2 As String
-        Dim strMailAddrLine As String
-        Dim strMailCityStateZip As String
-        Dim strAccountNumber As String
+        Dim strMailName As String = ""
+        Dim strMailAddr As String = ""
+        Dim strMailAddr2 As String = ""
+        Dim strMailAddrLine As String = ""
+        Dim strMailCityStateZip As String = ""
+        Dim strAccountNumber As String = ""
         Dim intPayeeIndex As Short
         Dim intSemiPos As Short
-        Dim elmItem As VB6XmlElement
+        Dim elmItem As VB6XmlElement = Nothing
         Dim dblX As Double
         Dim dblY As Double
         Dim dblLineHeight As Double

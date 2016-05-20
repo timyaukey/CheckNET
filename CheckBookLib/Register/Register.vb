@@ -573,13 +573,47 @@ ErrorHandler:
             With maobjTrx(lngIndex)
                 If .lngType = Trx.TrxType.glngTRXTYP_NORMAL And Not .blnFake Then
                     If .strImportKey = strImportKey Then
-                        lngMatchImportKey = lngIndex
-                        Exit Function
+                        Return lngIndex
                     End If
                 End If
             End With
         Next
-        lngMatchImportKey = 0
+        Return 0
+    End Function
+
+    '$Description Find Trx object already in register matching all the arguments.
+    '   Used to determine if a transaction has already been imported. Will only
+    '   search real and normal Trx objects, because all imported Trx are real and
+    '   normal. The usual procedure for importing a Trx is to first call this method
+    '   to determine if it has already been imported, and if not then follow the
+    '   normal procedure for adding a Trx. See MatchNormal() for notes on the
+    '   procedure for adding a Trx.
+    '$Returns The index of the matching Trx, or zero if there is no match.
+
+    Public Function lngMatchPaymentDetails(ByVal strNumber As String, ByVal datDate As Date, ByVal intDateRange As Short, _
+                                           ByVal strDescription As String, ByVal curAmount As Decimal) As Integer
+        Dim lngIndex As Integer
+        Dim datEarliestMatch As Date
+        Dim datLatestMatch As Date
+        datEarliestMatch = DateAdd(DateInterval.Day, -(intDateRange - 1), datDate)
+        datLatestMatch = DateAdd(DateInterval.Day, intDateRange - 1, datDate)
+        For lngIndex = mlngTrxUsed To 1 Step -1
+            With maobjTrx(lngIndex)
+                If .datDate < datEarliestMatch Then
+                    Exit For
+                End If
+                If .datDate <= datLatestMatch Then
+                    If .lngType = Trx.TrxType.glngTRXTYP_NORMAL And Not .blnFake Then
+                        If .strNumber = strNumber And .curAmount = curAmount Then
+                            If Left(.strDescription, 10).ToLower() = Left(strDescription, 10).ToLower() Then
+                                Return lngIndex
+                            End If
+                        End If
+                    End If
+                End If
+            End With
+        Next
+        Return 0
     End Function
 
     '$Description Update an existing Trx with information from a bank import. Only for
@@ -593,7 +627,7 @@ ErrorHandler:
         Dim objOldTrx As Trx
 
         If lngOldIndex < 1 Or lngOldIndex > mlngTrxUsed Then
-            gRaiseError("Invalid index " & lngOldIndex & " passed to Register.BankImportUpdate")
+            gRaiseError("Invalid index " & lngOldIndex & " passed to Register.ImportUpdateBank")
         End If
         objTrx = maobjTrx(lngOldIndex)
         objOldTrx = objTrx.objClone(Nothing)
@@ -602,7 +636,29 @@ ErrorHandler:
             .ImportUpdateBank(strNumber, blnFake, curAmount, strImportKey)
         End With
         'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        UpdateEnd(lngOldIndex, New LogChange, "BankImportUpdate", objOldTrx)
+        UpdateEnd(lngOldIndex, New LogChange, "ImportUpdateBank", objOldTrx)
+    End Sub
+
+    '$Description Update an existing Trx with number and amount. Only for
+    '   updating an existing Trx. Use the normal steps for adding a new Trx if not
+    '   updating an existing Trx.
+
+    Public Sub ImportUpdateNumAmt(ByVal lngOldIndex As Integer, ByVal strNumber As String, ByVal blnFake As Boolean, ByVal curAmount As Decimal)
+
+        Dim objTrx As Trx
+        Dim objOldTrx As Trx
+
+        If lngOldIndex < 1 Or lngOldIndex > mlngTrxUsed Then
+            gRaiseError("Invalid index " & lngOldIndex & " passed to Register.ImportUpdateNumAmt")
+        End If
+        objTrx = maobjTrx(lngOldIndex)
+        objOldTrx = objTrx.objClone(Nothing)
+        With objTrx
+            .UnApplyFromBudgets(Me)
+            .ImportUpdateNumAmt(strNumber, blnFake, curAmount)
+        End With
+        'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+        UpdateEnd(lngOldIndex, New LogChange, "ImportUpdateNumAmt", objOldTrx)
     End Sub
 
     '$Description Update an existing fake Trx with new amount and make it non-generated.
@@ -679,7 +735,18 @@ ErrorHandler:
     '   indices of all possible (or a single exact) matching Trx objects.
     '$Param blnExactMatch True iff there is exactly one very reliable match in colMatches.
 
-    Public Sub MatchNormal(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDateRange As Short, ByVal strDescription As String, ByVal curAmount As Decimal, ByVal blnLooseMatch As Boolean, ByRef colMatches As Collection, ByRef blnExactMatch As Boolean)
+    Public Sub MatchNormal(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDateRange As Short, _
+                           ByVal strDescription As String, ByVal curAmount As Decimal, ByVal blnLooseMatch As Boolean, _
+                           ByRef colMatches As Collection, ByRef blnExactMatch As Boolean)
+        Dim colExactMatches As Collection = Nothing
+        MatchCore(lngNumber, datDate, intDateRange, strDescription, curAmount, blnLooseMatch, colMatches, colExactMatches, blnExactMatch)
+        PruneToExactMatches(colExactMatches, datDate, colMatches, blnExactMatch)
+    End Sub
+
+    Public Sub MatchCore(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDateRange As Short, _
+                         ByVal strDescription As String, ByVal curAmount As Decimal, _
+                         ByVal blnLooseMatch As Boolean, ByRef colMatches As Collection, _
+                         ByRef colExactMatches As Collection, ByRef blnExactMatch As Boolean)
 
         Dim lngIndex As Integer
         Dim datEnd As Date
@@ -689,10 +756,7 @@ ErrorHandler:
         Dim curAmountRange As Decimal
         Dim blnDescrMatches As Boolean
         Dim blnDateMatches As Boolean
-        Dim colExactMatches As Collection
         Dim intDescrMatchLen As Short
-        Dim lngPerfectMatchIndex As Integer
-        Dim vlngMatchIndex As Object
 
         colMatches = New Collection
         blnExactMatch = False
@@ -744,20 +808,27 @@ ErrorHandler:
             lngIndex = lngIndex + 1
         Loop
 
+    End Sub
+
+    Delegate Function PruneMatchesTrx(ByVal objTrx As Trx) As Boolean
+
+    Public Sub PruneSearchMatches(ByVal colExactMatches As Collection, ByRef colMatches As Collection, _
+                                  ByRef blnExactMatch As Boolean, ByVal blnTrxPruner As PruneMatchesTrx)
+        Dim lngIndex As Integer
+        Dim lngPerfectMatchIndex As Integer
+        Dim vlngMatchIndex As Object
+
         'If we have multiple exact matches, see if we have one with
         'a perfect date match and if so use that one alone as the
         'list of exact matches.
         If colExactMatches.Count() > 1 Then
             lngPerfectMatchIndex = -1
             For Each vlngMatchIndex In colExactMatches
-                'UPGRADE_WARNING: Couldn't resolve default property of object vlngMatchIndex. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 lngIndex = vlngMatchIndex
-                With maobjTrx(lngIndex)
-                    If .datDate = datDate Then
-                        lngPerfectMatchIndex = lngIndex
-                        Exit For
-                    End If
-                End With
+                If blnTrxPruner(maobjTrx(lngIndex)) Then
+                    lngPerfectMatchIndex = lngIndex
+                    Exit For
+                End If
             Next vlngMatchIndex
             If lngPerfectMatchIndex <> -1 Then
                 colExactMatches = New Collection
@@ -765,12 +836,37 @@ ErrorHandler:
             End If
         End If
 
-        'If we have one exact match, return that only.
-        If colExactMatches.Count() = 1 Then
+        'If have exact matches, return them only.
+        If colExactMatches.Count > 0 Then
             colMatches = colExactMatches
-            blnExactMatch = True
+            'If we have one exact match, say we have only one.
+            If colExactMatches.Count = 1 Then
+                blnExactMatch = True
+            End If
         End If
 
+    End Sub
+
+    Public Sub PruneToExactMatches(ByVal colExactMatches As Collection, ByVal datDate As Date, ByRef colMatches As Collection, ByRef blnExactMatch As Boolean)
+
+        PruneSearchMatches(colExactMatches, colMatches, blnExactMatch, Function(objTrx As Trx) objTrx.datDate = datDate)
+
+    End Sub
+
+    Public Sub PruneToNonImportedExactMatches(ByVal colExactMatches As Collection, ByVal datDate As Date, ByRef colMatches As Collection, ByRef blnExactMatch As Boolean)
+
+        PruneSearchMatches(colExactMatches, colMatches, blnExactMatch, _
+                           Function(objTrx As Trx) As Boolean
+                               If objTrx.datDate = datDate Then
+                                   If objTrx.strImportKey = Nothing Then
+                                       Return True
+                                   End If
+                                   If objTrx.strImportKey.Length = 0 Then
+                                       Return True
+                                   End If
+                               End If
+                               Return False
+                           End Function)
     End Sub
 
     '$Description Find all normal Trx objects which are an exact match to the description

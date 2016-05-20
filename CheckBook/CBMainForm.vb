@@ -186,7 +186,7 @@ ErrorHandler:
             frm = New BankImportAcctSelectForm
             objImport = New ImportBankDownloadQIF(objFile, strFile)
             frm.ShowMe("Import QIF File From Bank", objImport, _
-                CBMain.ImportStatusSearch.glngIMPSTATSRCH_BANK, _
+                CBMain.ImportStatusSearch.Bank, _
                 CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, _
                 CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, _
                 CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_BANK, _
@@ -217,7 +217,7 @@ ErrorHandler:
             frm = New BankImportAcctSelectForm
             objImport = New ImportBankDownloadOFX(objFile, strFile)
             frm.ShowMe("Import OFX File From Bank", objImport, _
-                CBMain.ImportStatusSearch.glngIMPSTATSRCH_BANK, _
+                CBMain.ImportStatusSearch.Bank, _
                 CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, _
                 CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, _
                 CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_BANK, _
@@ -242,7 +242,7 @@ ErrorHandler:
         frm = New BankImportAcctSelectForm
         objImport = New ImportByPayee(gobjClipboardReader(), "(clipboard)")
         frm.ShowMe("Import Deposit Amounts", objImport, _
-            CBMain.ImportStatusSearch.glngIMPSTATSRCH_PAYNONGEN, _
+            CBMain.ImportStatusSearch.PayeeNonGenerated, _
             CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_PAYEE, _
             CBMain.ImportBatchNewSearch.glngIMPBATNWSR_NONE, _
             CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_AMOUNT, _
@@ -266,7 +266,7 @@ ErrorHandler:
         frm = New BankImportAcctSelectForm
         objImport = New ImportInvoices(gobjClipboardReader(), "(clipboard)")
         frm.ShowMe("Import Invoices", objImport, _
-            CBMain.ImportStatusSearch.glngIMPSTATSRCH_VENINV, _
+            CBMain.ImportStatusSearch.VendorInvoice, _
             CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_NONE, _
             CBMain.ImportBatchNewSearch.glngIMPBATNWSR_VENINV, _
             CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_NONE, _
@@ -293,16 +293,43 @@ ErrorHandler:
         objSpecs = New ImportChecksSpec(0, 5, 9, 12, -1)
         objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
         frm.ShowMe("Import CompuPay Checks", objImport, _
-            CBMain.ImportStatusSearch.glngIMPSTATSRCH_BANK, _
+            CBMain.ImportStatusSearch.BillPayment, _
             CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, _
             CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, _
-            CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_NONE, _
+            CBMain.ImportIndividualUpdateType.glntIMPINDUPTP_NUMAMT, _
             CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK, _
-            CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NONE, False)
+            CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NUMAMT, False)
 
         Exit Sub
 ErrorHandler:
         TopError("mnuActCompuPayImport_Click")
+    End Sub
+
+    Private Sub mnuActOSUImport_Click(sender As Object, e As EventArgs) Handles mnuActOSUImport.Click
+        Dim frm As BankImportAcctSelectForm
+        Dim objImport As ITrxImport
+        Dim objSpecs As ImportChecksSpec
+
+        On Error GoTo ErrorHandler
+
+        If blnImportFormAlreadyOpen() Then
+            Exit Sub
+        End If
+        frm = New BankImportAcctSelectForm
+
+        objSpecs = New ImportChecksSpec(6, 0, 1, 2, -1)
+        objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
+        frm.ShowMe("Import Oregon State Credit Union Checks", objImport, _
+            CBMain.ImportStatusSearch.BillPayment, _
+            CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, _
+            CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, _
+            CBMain.ImportIndividualUpdateType.glntIMPINDUPTP_NUMAMT, _
+            CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK, _
+            CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NUMAMT, False)
+
+        Exit Sub
+ErrorHandler:
+        TopError("mnuActOSUImport_Click")
     End Sub
 
     Private Function blnImportFormAlreadyOpen() As Boolean

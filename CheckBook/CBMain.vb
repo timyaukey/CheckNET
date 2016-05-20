@@ -23,9 +23,10 @@ Public Module CBMain
 
     'Type of search used to recognize trx that have already been imported.
     Public Enum ImportStatusSearch
-        glngIMPSTATSRCH_BANK = 1 'Bank import key.
-        glngIMPSTATSRCH_PAYNONGEN = 2 'Payee name and non-generated trx.
-        glngIMPSTATSRCH_VENINV = 3 'Vendor name and invoice number.
+        Bank = 1 'Bank import key.
+        PayeeNonGenerated = 2 'Payee name and non-generated trx.
+        VendorInvoice = 3 'Vendor name and invoice number.
+        BillPayment = 4 'Check number, or close match on payee, date and amount
     End Enum
 
     'Type of search used to find Trx matches for batch updates during import.
@@ -47,6 +48,7 @@ Public Module CBMain
         glngIMPBATUPTP_NONE = 1 'Do not allow batch updates during import.
         glngIMPBATUPTP_BANK = 2 'Bank import key ONLY.
         glngIMPBATUPTP_AMOUNT = 3 'Amount only.
+        glngIMPBATUPTP_NUMAMT = 4 'Number and amount.
     End Enum
 
     'Type of search used when user clicks on an imported trx.
@@ -61,6 +63,7 @@ Public Module CBMain
         glngIMPINDUPTP_NONE = 1 'None.
         glngIMPINDUPTP_BANK = 2 'Bank import key, number, amount.
         glngIMPINDUPTP_AMOUNT = 3 'Amount only.
+        glntIMPINDUPTP_NUMAMT = 4 'Number and amount.
     End Enum
 
     'UPGRADE_WARNING: Application will terminate when Sub Main() finishes. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E08DDC71-66BA-424F-A612-80AF11498FF8"'

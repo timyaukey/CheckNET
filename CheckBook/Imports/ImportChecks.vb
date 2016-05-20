@@ -50,24 +50,30 @@ ErrorHandler:
         On Error GoTo ErrorHandler
 
         ITrxImport_objNextTrx = Nothing
-        mobjUtil.ClearSavedTrxData()
+        Do
+            mobjUtil.ClearSavedTrxData()
 
-        strLine = mobjFile.ReadLine()
-        If strLine Is Nothing Then
-            Exit Function
-        End If
-        astrParts = gaSplit(Trim(strLine), vbTab)
-        mobjUtil.strTrxNumber = astrParts(mobjSpecs.NumberColumn)
-        mobjUtil.strTrxDate = astrParts(mobjSpecs.DateColumn)
-        mobjUtil.strTrxPayee = astrParts(mobjSpecs.DescrColumn)
-        If (mobjSpecs.MemoColumn >= 0) Then
-            mobjUtil.strTrxMemo = astrParts(mobjSpecs.MemoColumn)
-        End If
-        If astrParts(mobjSpecs.AmountColumn).StartsWith("-") Then
-            mobjUtil.strTrxAmount = astrParts(mobjSpecs.AmountColumn)
-        Else
-            mobjUtil.strTrxAmount = "-" + astrParts(mobjSpecs.AmountColumn)
-        End If
+            strLine = mobjFile.ReadLine()
+            If strLine Is Nothing Then
+                Exit Function
+            End If
+            astrParts = gaSplit(Trim(strLine), vbTab)
+            mobjUtil.strTrxNumber = mobjSpecs.strConvertTrxNum(astrParts(mobjSpecs.NumberColumn))
+            mobjUtil.strTrxDate = astrParts(mobjSpecs.DateColumn)
+            mobjUtil.strTrxPayee = astrParts(mobjSpecs.DescrColumn)
+            If (mobjSpecs.MemoColumn >= 0) Then
+                mobjUtil.strTrxMemo = astrParts(mobjSpecs.MemoColumn)
+            End If
+            If astrParts(mobjSpecs.AmountColumn).StartsWith("-") Then
+                mobjUtil.strTrxAmount = astrParts(mobjSpecs.AmountColumn)
+            Else
+                mobjUtil.strTrxAmount = "-" + astrParts(mobjSpecs.AmountColumn)
+            End If
+            If Not mobjSpecs.blnSkipRecord(mobjUtil) Then
+                Exit Do
+            End If
+        Loop
+
         ITrxImport_objNextTrx = mobjUtil.objMakeTrx()
 
         Exit Function

@@ -58,10 +58,8 @@ Friend Class SearchForm
     End Sub
 
     Private Sub SearchForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-
-        'Scale dimensions (client area) plus frame thickness.
-        Me.Width = VB6.TwipsToPixelsX(14910 + (VB6.PixelsToTwipsX(Me.Width) - VB6.PixelsToTwipsX(Me.ClientRectangle.Width)))
-        Me.Height = VB6.TwipsToPixelsY(7125 + (VB6.PixelsToTwipsY(Me.Height) - VB6.PixelsToTwipsY(Me.ClientRectangle.Height)))
+        Me.Width = 1011
+        Me.Height = 547
     End Sub
 
     Private Sub SearchForm_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
