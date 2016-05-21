@@ -757,6 +757,7 @@ ErrorHandler:
         Dim blnDescrMatches As Boolean
         Dim blnDateMatches As Boolean
         Dim intDescrMatchLen As Short
+        Dim objTrx As Trx
 
         colMatches = New Collection
         blnExactMatch = False
@@ -770,7 +771,8 @@ ErrorHandler:
             If lngIndex > mlngTrxUsed Then
                 Exit Do
             End If
-            With maobjTrx(lngIndex)
+            objTrx = maobjTrx(lngIndex)
+            With objTrx
                 If .datDate > datEnd Then
                     Exit Do
                 End If
@@ -792,10 +794,10 @@ ErrorHandler:
                     blnDescrMatches = (Left(LCase(.strDescription), intDescrMatchLen) = strDescrLC)
                     'UPGRADE_WARNING: DateDiff behavior may be different. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6B38EC3F-686D-4B2E-B5A5-9E8E7A762E32"'
                     blnDateMatches = (System.Math.Abs(DateDiff(Microsoft.VisualBasic.DateInterval.Day, .datDate, datDate)) < 6)
-                    If (IIf(System.Math.Abs(.curAmount - curAmount) <= curAmountRange, 1, 0) + IIf(blnDescrMatches, 1, 0) + IIf(blnDateMatches, 1, 0)) >= IIf(blnLooseMatch, 1, 2) Then
+                    If (IIf(System.Math.Abs(.curAmount - curAmount) <= curAmountRange, 1, 0) + IIf(blnDateMatches, 1, 0)) >= IIf(blnLooseMatch, 1, 2) Then
                         blnMatched = True
                     End If
-                    If blnMatched Then
+                    If blnMatched Or blnDescrMatches Then
                         colMatches.Add(lngIndex)
                     End If
                     If .curAmount = curAmount Then
@@ -812,25 +814,54 @@ ErrorHandler:
 
     Delegate Function PruneMatchesTrx(ByVal objTrx As Trx) As Boolean
 
+    ''' <summary>
+    ''' Narrow down the results to one or more Trx in colExactMatches if 
+    ''' there is anything in colExactMatches.
+    ''' </summary>
+    ''' <param name="colExactMatches"></param>
+    ''' <param name="colMatches"></param>
+    ''' <param name="blnExactMatch"></param>
+    ''' <param name="blnTrxPruner"></param>
+    ''' <remarks></remarks>
     Public Sub PruneSearchMatches(ByVal colExactMatches As Collection, ByRef colMatches As Collection, _
                                   ByRef blnExactMatch As Boolean, ByVal blnTrxPruner As PruneMatchesTrx)
         Dim lngIndex As Integer
         Dim lngPerfectMatchIndex As Integer
         Dim vlngMatchIndex As Object
+        Dim datFirstMatch As DateTime
+        Dim datLastMatch As DateTime
+        Dim blnFirstIteration As Boolean
+        Dim objTrx As Trx
 
-        'If we have multiple exact matches, see if we have one with
-        'a perfect date match and if so use that one alone as the
+        'If we have multiple exact matches, see if all are within a range of 5 days
+        'and one passes the test of blnTrxPruner(). If so use that one alone as the
         'list of exact matches.
         If colExactMatches.Count() > 1 Then
             lngPerfectMatchIndex = -1
+            blnFirstIteration = True
             For Each vlngMatchIndex In colExactMatches
                 lngIndex = vlngMatchIndex
-                If blnTrxPruner(maobjTrx(lngIndex)) Then
-                    lngPerfectMatchIndex = lngIndex
+                objTrx = maobjTrx(lngIndex)
+                If blnFirstIteration Then
+                    datFirstMatch = objTrx.datDate
+                    datLastMatch = objTrx.datDate
+                    blnFirstIteration = False
+                Else
+                    If objTrx.datDate < datFirstMatch Then
+                        datFirstMatch = objTrx.datDate
+                    End If
+                    If objTrx.datDate > datLastMatch Then
+                        datLastMatch = objTrx.datDate
+                    End If
+                End If
+                If blnTrxPruner(objTrx) Then
+                    If lngPerfectMatchIndex = -1 Then
+                        lngPerfectMatchIndex = lngIndex
+                    End If
                     Exit For
                 End If
             Next vlngMatchIndex
-            If lngPerfectMatchIndex <> -1 Then
+            If lngPerfectMatchIndex <> -1 And datLastMatch.Subtract(datFirstMatch).TotalDays <= 2D Then
                 colExactMatches = New Collection
                 colExactMatches.Add(lngPerfectMatchIndex)
             End If
