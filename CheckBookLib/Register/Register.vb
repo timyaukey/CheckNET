@@ -889,11 +889,10 @@ ErrorHandler:
         PruneSearchMatches(colExactMatches, colMatches, blnExactMatch, _
                            Function(objTrx As Trx) As Boolean
                                If objTrx.datDate = datDate Then
-                                   If objTrx.strImportKey = Nothing Then
-                                       Return True
-                                   End If
-                                   If objTrx.strImportKey.Length = 0 Then
-                                       Return True
+                                   If objTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
+                                       If String.IsNullOrEmpty(objTrx.strImportKey) Then
+                                           Return True
+                                       End If
                                    End If
                                End If
                                Return False

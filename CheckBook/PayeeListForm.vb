@@ -27,6 +27,7 @@ Friend Class PayeeListForm
         LoadSharedDocument()
         gLoadComboFromStringTranslator(cboCategory, gobjCategories, True)
         gLoadComboFromStringTranslator(cboBudget, gobjBudgets, True)
+        gLoadMatchNarrowingMethods(cboNarrowMethod)
         Me.ShowDialog()
 
         Exit Sub
@@ -200,6 +201,7 @@ ErrorHandler:
             txtMemo.Text = ""
             cboCategory.SelectedIndex = -1
             cboBudget.SelectedIndex = -1
+            cboNarrowMethod.SelectedIndex = -1
         End If
 
         Exit Sub
@@ -242,6 +244,7 @@ ErrorHandler:
         txtMemo.Text = strPayeeChild("Memo")
         SetComboBox(cboCategory, strPayeeChild("Cat"))
         SetComboBox(cboBudget, strPayeeChild("Budget"))
+        SetComboBox(cboNarrowMethod, strPayeeChild("NarrowMethod"))
 
         Exit Sub
 ErrorHandler:
@@ -417,6 +420,7 @@ ErrorHandler:
             End If
         End If
         SaveChildElement(cboBudget.Text, "Budget")
+        SaveChildElement(cboNarrowMethod.Text, "NarrowMethod")
 
         gSortPayeeListByName(lvwPayees)
 

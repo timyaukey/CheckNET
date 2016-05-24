@@ -28,6 +28,8 @@ Public Class ImportUtilities
     Private mstrTrxCategory As String
     'Budget to use.
     Private mstrTrxBudget As String
+    'Narrowing method to use.
+    Private mlngNarrowMethod As ImportMatchNarrowMethod
 
     'Table with trx type translation information.
     Private mdomTrxTypes As VB6XmlDocument
@@ -109,6 +111,7 @@ ErrorHandler:
         mstrTrxUniqueKey = ""
         mstrTrxCategory = ""
         mstrTrxBudget = ""
+        mlngNarrowMethod = ImportMatchNarrowMethod.None
     End Sub
 
     '$Description Create a new Trx object.
@@ -117,21 +120,21 @@ ErrorHandler:
         Dim objTrx As Trx
         Dim datDate As Date
         Dim strImportKey As String
-        Dim strCatKey As String
+        Dim strCatKey As String = ""
         Dim intCatIndex As Short
-        Dim strBudKey As String
+        Dim strBudKey As String = ""
         Dim intBudIndex As Short
-        Dim strDescription As String
-        Dim strMemo As String
-        Dim strNumber As String
-        Dim strSplitPONumber As String
-        Dim strSplitInvoiceNum As String
+        Dim strDescription As String = ""
+        Dim strMemo As String = ""
+        Dim strNumber As String = ""
+        Dim strSplitPONumber As String = ""
+        Dim strSplitInvoiceNum As String = ""
         Dim datSplitInvoiceDate As Date
         Dim datSplitDueDate As Date
-        Dim strSplitTerms As String
-        Dim strSplitImageFiles As String
+        Dim strSplitTerms As String = ""
+        Dim strSplitImageFiles As String = ""
         Dim curAmount As Decimal
-        Dim strUniqueKey As String
+        Dim strUniqueKey As String = ""
 
         On Error GoTo ErrorHandler
 
@@ -178,7 +181,8 @@ ErrorHandler:
         End If
 
         objTrx = New Trx
-        objTrx.NewStartNormal(Nothing, strNumber, datDate, strDescription, strMemo, Trx.TrxStatus.glngTRXSTS_UNREC, mblnMakeFakeTrx, 0.0#, False, False, 0, strImportKey, "")
+        objTrx.NewStartNormal(Nothing, strNumber, datDate, strDescription, strMemo, Trx.TrxStatus.glngTRXSTS_UNREC, _
+                              mblnMakeFakeTrx, 0.0#, False, False, 0, strImportKey, "", mlngNarrowMethod)
         objTrx.AddSplit("", strCatKey, strSplitPONumber, strSplitInvoiceNum, datSplitInvoiceDate, datSplitDueDate, strSplitTerms, strBudKey, curAmount, strSplitImageFiles)
         objMakeTrx = objTrx
 
@@ -357,6 +361,7 @@ ErrorHandler:
         Dim objPayees As VB6XmlNodeList
         Dim elmCategory As VB6XmlElement
         Dim elmBudget As VB6XmlElement
+        Dim elmNarrowMethod As VB6XmlElement
         Dim elmPayee As VB6XmlElement
         Dim elmTrxNum As VB6XmlElement
         Dim blnMatch As Boolean
@@ -387,6 +392,19 @@ ErrorHandler:
                     elmBudget = elmPayee.SelectSingleNode("Budget")
                     If Not elmBudget Is Nothing Then
                         mstrTrxBudget = elmBudget.Text
+                    End If
+                    elmNarrowMethod = elmPayee.SelectSingleNode("NarrowMethod")
+                    If Not elmNarrowMethod Is Nothing Then
+                        Select Case elmNarrowMethod.Text.ToLower()
+                            Case "none", ""
+                                mlngNarrowMethod = ImportMatchNarrowMethod.None
+                            Case "earliest date"
+                                mlngNarrowMethod = ImportMatchNarrowMethod.EarliestDate
+                            Case "closest date"
+                                mlngNarrowMethod = ImportMatchNarrowMethod.ClosestDate
+                            Case Else
+                                gRaiseError("Unrecognized narrow method")
+                        End Select
                     End If
                     If mstrTrxNumber = "" Then
                         elmTrxNum = elmPayee.SelectSingleNode("Num")

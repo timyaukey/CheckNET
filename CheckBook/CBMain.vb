@@ -579,10 +579,10 @@ ErrorHandler:
         With cbo
             .Items.Clear()
             If blnAddEmpty Then
-                .Items.Add(New VB6.ListBoxItem("", 0))
+                .Items.Add(gobjCreateListBoxItem("", 0))
             End If
             For intIndex = 1 To objList.intElements
-                .Items.Add(New VB6.ListBoxItem(objList.strValue1(intIndex), intIndex))
+                .Items.Add(gobjCreateListBoxItem(objList.strValue1(intIndex), intIndex))
             Next
         End With
 
@@ -590,6 +590,17 @@ ErrorHandler:
 ErrorHandler:
         NestedError("gLoadComboFromStringTranslator")
     End Sub
+
+    Public Sub gLoadMatchNarrowingMethods(ByVal cbo As ComboBox)
+        cbo.Items.Clear()
+        cbo.Items.Add(gobjCreateListBoxItem("None", ImportMatchNarrowMethod.None))
+        cbo.Items.Add(gobjCreateListBoxItem("Closest Date", ImportMatchNarrowMethod.ClosestDate))
+        cbo.Items.Add(gobjCreateListBoxItem("Earliest Date", ImportMatchNarrowMethod.EarliestDate))
+    End Sub
+
+    Public Function gobjCreateListBoxItem(ByVal strName As String, ByVal intValue As Integer) As Object
+        Return New VB6.ListBoxItem(strName, intValue)
+    End Function
 
     Public Sub gGetSplitDates(ByVal objTrx As Trx, ByVal objSplit As Split_Renamed, ByRef datInvoiceDate As Date, ByRef datDueDate As Date)
 

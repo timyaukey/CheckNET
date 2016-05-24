@@ -3,6 +3,14 @@ Option Explicit On
 
 Imports System.IO
 Imports VB = Microsoft.VisualBasic
+
+'Ways to narrow down Trx search results during import.
+Public Enum ImportMatchNarrowMethod
+    None = 1
+    ClosestDate = 2
+    EarliestDate = 3
+End Enum
+
 Public Module SharedDefs
 
     'Document types

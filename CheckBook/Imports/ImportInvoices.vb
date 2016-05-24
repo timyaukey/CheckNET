@@ -88,7 +88,7 @@ Public Class ImportInvoices
 
         objTrx = New Trx
 
-        objTrx.NewStartNormal(Nothing, strTrxNum, datDate, strDescription, "", Trx.TrxStatus.glngTRXSTS_UNREC, True, 0.0#, False, False, 0, "", "")
+        objTrx.NewStartNormal(Nothing, strTrxNum, datDate, strDescription, "", Trx.TrxStatus.glngTRXSTS_UNREC, TrxGenImportData.NewFake(True))
         objTrx.AddSplit("", strCatKey, strPONumber, strInvNumber, datInvDate, datDueDate, strTerms, "", curAmount, "")
 
         ITrxImport_objNextTrx = objTrx

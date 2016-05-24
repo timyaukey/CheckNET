@@ -65,7 +65,7 @@ Public Class ImportByPayee
 
         objTrx = New Trx
 
-        objTrx.NewStartNormal(Nothing, "", datDate, strDescription, "", Trx.TrxStatus.glngTRXSTS_UNREC, False, 0.0#, False, False, 0, "", "")
+        objTrx.NewStartNormal(Nothing, "", datDate, strDescription, "", Trx.TrxStatus.glngTRXSTS_UNREC, New TrxGenImportData())
         objTrx.AddSplit("", "", "", "", datNull, datNull, "", "", curAmount, "")
 
         ITrxImport_objNextTrx = objTrx

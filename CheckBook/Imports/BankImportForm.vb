@@ -277,15 +277,13 @@ ErrorHandler:
         Dim objLoaded As LoadedRegister
         Dim objReg As Register
         Dim colMatches As Collection = Nothing
-        Dim colUnusedMatches As Collection
-        Dim intCheckIndex As Integer
-        Dim blnAlreadyMatched As Boolean
+        Dim colExactMatches As Collection = Nothing
+        Dim colUnusedMatches As Collection = Nothing
         Dim blnExactMatch As Boolean
         Dim intExactCount As Short
-        Dim lngNumber As Integer
-        Dim objPossibleMatchTrx As Trx
         Dim lngPossibleIndex As Integer
-        Dim vlngPossibleIndex As Object
+        Dim objPossibleMatchTrx As Trx
+        Dim lngNumber As Integer
         Dim blnNonExactConfirmed As Boolean
 
         blnValidForAutoUpdate = False
@@ -308,28 +306,17 @@ ErrorHandler:
 
                 Select Case mlngUpdateSearchType
                     Case CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK
-                        objReg.MatchNormal(lngNumber, objTrx.datDate, 60, objTrx.strDescription, objTrx.curAmount, False, colMatches, blnExactMatch)
+                        objReg.MatchCore(lngNumber, objTrx.datDate, 60, objTrx.strDescription, objTrx.curAmount, False, colMatches, colExactMatches, blnExactMatch)
+                        'objReg.PruneToExactMatches(colExactMatches, objTrx.datDate, colMatches, blnExactMatch)
+                        colUnusedMatches = colRemoveAlreadyMatched(objReg, colMatches)
+                        colUnusedMatches = colApplyNarrowMethodForBank(objReg, objTrx, colMatches, blnExactMatch)
                     Case CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_PAYEE
                         objReg.MatchPayee(objTrx.datDate, 7, objTrx.strDescription, False, colMatches, blnExactMatch)
+                        colUnusedMatches = colRemoveAlreadyMatched(objReg, colMatches)
                     Case Else
                         'Should not be possible
                         gRaiseError("Invalid batch update search type")
                 End Select
-                'Filter out trx that are already matched to something in maudtItem().
-                colUnusedMatches = New Collection
-                For Each vlngPossibleIndex In colMatches
-                    objPossibleMatchTrx = objReg.objTrx(vlngPossibleIndex)
-                    blnAlreadyMatched = False
-                    For intCheckIndex = 1 To mintItems
-                        If maudtItem(intCheckIndex).objMatchedTrx Is objPossibleMatchTrx Then
-                            blnAlreadyMatched = True
-                            Exit For
-                        End If
-                    Next
-                    If Not blnAlreadyMatched Then
-                        colUnusedMatches.Add(vlngPossibleIndex)
-                    End If
-                Next
                 'If we have one match that wasn't matched by a previous import item.
                 If colUnusedMatches.Count() = 1 Then
                     blnNonExactConfirmed = False
@@ -363,6 +350,76 @@ ErrorHandler:
 
         End With
         blnValidForAutoUpdate = True
+
+    End Function
+
+    'Filter out trx that are already matched to something in maudtItem().
+    Private Function colRemoveAlreadyMatched(ByVal objReg As Register, ByVal colMatches As Collection) As Collection
+        Dim colUnusedMatches As Collection
+        Dim intCheckIndex As Integer
+        Dim blnAlreadyMatched As Boolean
+        Dim objPossibleMatchTrx As Trx
+        Dim vlngPossibleIndex As Object
+
+        colUnusedMatches = New Collection
+        For Each vlngPossibleIndex In colMatches
+            objPossibleMatchTrx = objReg.objTrx(vlngPossibleIndex)
+            blnAlreadyMatched = False
+            For intCheckIndex = 1 To mintItems
+                If maudtItem(intCheckIndex).objMatchedTrx Is objPossibleMatchTrx Then
+                    blnAlreadyMatched = True
+                    Exit For
+                End If
+            Next
+            If Not blnAlreadyMatched Then
+                colUnusedMatches.Add(vlngPossibleIndex)
+            End If
+        Next
+        Return colUnusedMatches
+    End Function
+
+    Private Function colApplyNarrowMethodForBank(ByVal objReg As Register, ByVal objTrx As Trx, ByVal colUnusedMatches As Collection, _
+                                                 ByRef blnExactMatch As Boolean) As Collection
+        Dim colResult As Collection
+        Dim objPossibleMatchTrx As Trx
+        Dim vlngPossibleIndex As Object
+        Dim datTargetDate As Date
+        Dim dblBestDistance As Double
+        Dim dblCurrentDistance As Double
+        Dim lngBestMatch As Integer
+        Dim blnHaveFirstMatch As Boolean
+
+        If colUnusedMatches.Count = 0 Then
+            Return colUnusedMatches
+        End If
+
+        Select Case objTrx.lngNarrowMethod
+            Case ImportMatchNarrowMethod.EarliestDate
+                datTargetDate = #1/1/1980#
+            Case ImportMatchNarrowMethod.ClosestDate
+                datTargetDate = objTrx.datDate
+            Case ImportMatchNarrowMethod.None
+                Return colUnusedMatches
+            Case Else
+                gRaiseError("Unrecognized narrowing method")
+        End Select
+
+        blnHaveFirstMatch = False
+        For Each vlngPossibleIndex In colUnusedMatches
+            objPossibleMatchTrx = objReg.objTrx(vlngPossibleIndex)
+            If String.IsNullOrEmpty(objPossibleMatchTrx.strImportKey) And (objPossibleMatchTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON) Then
+                dblCurrentDistance = Math.Abs(objPossibleMatchTrx.datDate.Subtract(datTargetDate).TotalDays)
+                If (Not blnHaveFirstMatch) Or (dblCurrentDistance < dblBestDistance) Then
+                    dblBestDistance = dblCurrentDistance
+                    lngBestMatch = vlngPossibleIndex
+                    blnHaveFirstMatch = True
+                End If
+            End If
+        Next
+        blnExactMatch = True
+        colResult = New Collection
+        colResult.Add(lngBestMatch)
+        Return colResult
 
     End Function
 
@@ -518,7 +575,8 @@ ErrorHandler:
         Dim strTrxNum As String
         Dim objSplit As Split_Renamed
         Dim lngNumber As Integer
-        Dim colMatches As Collection
+        Dim colMatches As Collection = Nothing
+        Dim colExactMatches As Collection = Nothing
         Dim blnExactMatch As Boolean
         Dim lngCatIdx As Integer
         Dim strDefaultCatKey As String
@@ -577,7 +635,8 @@ ErrorHandler:
 
             Select Case mlngNewSearchType
                 Case CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK
-                    objReg.MatchNormal(lngNumber, objTrx.datDate, 60, objTrx.strDescription, objTrx.curAmount, False, colMatches, blnExactMatch)
+                    objReg.MatchCore(lngNumber, objTrx.datDate, 8, objTrx.strDescription, objTrx.curAmount, False, colMatches, colExactMatches, blnExactMatch)
+                    'objReg.PruneToExactMatches(colExactMatches, objTrx.datDate, colMatches, blnExactMatch)
                 Case CBMain.ImportBatchNewSearch.glngIMPBATNWSR_VENINV
                     objReg.MatchInvoice(objTrx.datDate, 120, objTrx.strDescription, objSplit.strInvoiceNum, colMatches)
                     blnExactMatch = True
@@ -586,8 +645,8 @@ ErrorHandler:
                     gRaiseError("Invalid batch new search type")
             End Select
 
-            If colMatches.Count() > 0 And blnExactMatch Then
-                strFailReason = "An identical or very similar transaction already exists"
+            If colMatches.Count() > 0 Then
+                strFailReason = "A similar transaction already exists"
                 Exit Function
             End If
         Next objLoaded
@@ -761,7 +820,7 @@ ErrorHandler:
             intIndex = 0
             For Each objLoaded In mobjAccount.colLoadedRegisters
                 intIndex = intIndex + 1
-                .Items.Add(New VB6.ListBoxItem(objLoaded.objReg.strTitle, intIndex))
+                .Items.Add(gobjCreateListBoxItem(objLoaded.objReg.strTitle, intIndex))
             Next objLoaded
         End With
     End Sub
@@ -939,7 +998,7 @@ ErrorHandler:
                 'or we're importing a fake trx. We allow fake trx to be imported
                 'so we can import document information for them - we don't save
                 'their amount or trx number if matched to a real trx.
-                If Len(objMatchedTrx.strImportKey) = 0 Or objTrx.blnFake Then
+                If (Len(objMatchedTrx.strImportKey) = 0 Or objTrx.blnFake) And objMatchedTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
                     mintMatches = mintMatches + 1
                     'UPGRADE_WARNING: Lower bound of array maudtMatch was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
                     ReDim Preserve maudtMatch(mintMatches)

@@ -20,10 +20,10 @@ Friend Class MoveDstForm
         mblnSuccess = False
         mcolLoadedRegisters = colLoadedRegisters
         mobjOldReg = objOldReg
-        cboRegister.Items.Add(New VB6.ListBoxItem("", -1))
+        cboRegister.Items.Add(gobjCreateListBoxItem("", -1))
         For intRegIdx = 1 To mcolLoadedRegisters.Count()
             objLoadedReg = mcolLoadedRegisters.Item(intRegIdx)
-            cboRegister.Items.Add(New VB6.ListBoxItem(objLoadedReg.objReg.strTitle, intRegIdx))
+            cboRegister.Items.Add(gobjCreateListBoxItem(objLoadedReg.objReg.strTitle, intRegIdx))
         Next
         cboRegister.SelectedIndex = 0
         Me.ShowDialog()

@@ -147,6 +147,7 @@
     <Compile Include="TrxGen\TrxGenList.vb" />
     <Compile Include="TrxGen\TrxGenPeriod.vb" />
     <Compile Include="TrxGen\TrxGenRepeat.vb" />
+    <Compile Include="Trx\TrxGenImportData.vb" />
     <Compile Include="UITypeEditors\DateConverter.vb" />
     <Compile Include="UITypeEditors\StringTranslatorUIEditor.vb">
       <SubType>Component</SubType>
