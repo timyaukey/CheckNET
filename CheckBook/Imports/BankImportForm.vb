@@ -307,7 +307,7 @@ ErrorHandler:
                 Select Case mlngUpdateSearchType
                     Case CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK
                         objReg.MatchCore(lngNumber, objTrx.datDate, 60, objTrx.strDescription, objTrx.curAmount, False, colMatches, colExactMatches, blnExactMatch)
-                        'objReg.PruneToExactMatches(colExactMatches, objTrx.datDate, colMatches, blnExactMatch)
+                        objReg.PruneToExactMatches(colExactMatches, objTrx.datDate, colMatches, blnExactMatch)
                         colUnusedMatches = colRemoveAlreadyMatched(objReg, colMatches)
                         colUnusedMatches = colApplyNarrowMethodForBank(objReg, objTrx, colMatches, blnExactMatch)
                     Case CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_PAYEE
