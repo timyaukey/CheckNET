@@ -635,8 +635,8 @@ ErrorHandler:
 
             Select Case mlngNewSearchType
                 Case CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK
-                    objReg.MatchCore(lngNumber, objTrx.datDate, 8, objTrx.strDescription, objTrx.curAmount, False, colMatches, colExactMatches, blnExactMatch)
-                    'objReg.PruneToExactMatches(colExactMatches, objTrx.datDate, colMatches, blnExactMatch)
+                    objReg.MatchCore(lngNumber, objTrx.datDate, 60, objTrx.strDescription, objTrx.curAmount, False, colMatches, colExactMatches, blnExactMatch)
+                    objReg.PruneToExactMatches(colExactMatches, objTrx.datDate, colMatches, blnExactMatch)
                 Case CBMain.ImportBatchNewSearch.glngIMPBATNWSR_VENINV
                     objReg.MatchInvoice(objTrx.datDate, 120, objTrx.strDescription, objSplit.strInvoiceNum, colMatches)
                     blnExactMatch = True
@@ -645,8 +645,8 @@ ErrorHandler:
                     gRaiseError("Invalid batch new search type")
             End Select
 
-            If colMatches.Count() > 0 Then
-                strFailReason = "A similar transaction already exists"
+            If colMatches.Count() > 0 And blnExactMatch Then
+                strFailReason = "An identical or very similar transaction already exists"
                 Exit Function
             End If
         Next objLoaded

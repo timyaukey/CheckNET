@@ -829,7 +829,8 @@ Public Class Trx
 
     '$Description Adjust split amounts to add up to a new total amount
     '   but retain the same proportions relative to each other. Does nothing
-    '   if the Trx amount doesn't change, or either new or old amount is zero.
+    '   if the Trx amount doesn't change, and assigns the entire amount to one
+    '   split if either new or old amount is zero.
     '   Sets Trx amount to curNewAmount.
 
     Private Sub AdjustSplitsProportionally(ByVal curNewAmount As Decimal)
@@ -842,9 +843,24 @@ Public Class Trx
         If mlngType <> TrxType.glngTRXTYP_NORMAL Then
             gRaiseError("AdjustSplitsProportionally used for wrong transaction type")
         End If
-        If curNewAmount = mcurAmount Or curNewAmount = 0 Or mcurAmount = 0 Then
+        If curNewAmount = mcurAmount Then
             Exit Sub
         End If
+        'The proportional distribution algorithm breaks if either amount is zero.
+        If curNewAmount = 0 Or mcurAmount = 0 Then
+            lngSplit = 0
+            For Each objSplit In mcolSplits
+                lngSplit = lngSplit + 1
+                If lngSplit = mcolSplits.Count() Then
+                    objSplit.AdjustAmount(curNewAmount)
+                    mcurAmount = curNewAmount
+                Else
+                    objSplit.AdjustAmount(0D)
+                End If
+            Next
+            Exit Sub
+        End If
+        'Use proportional distribution.
         dblRatio = curNewAmount / mcurAmount
         curRemainder = curNewAmount
         lngSplit = 0
