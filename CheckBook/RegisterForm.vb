@@ -388,8 +388,8 @@ ErrorHandler:
 		Dim datSelectDate As Date
 		'The date of the current Trx.
 		Dim datCurrentDate As Date
-		Dim strMonthYear As String
-		Dim strNewMonthYear As String
+        Dim strMonthYear As String = ""
+        Dim strNewMonthYear As String = ""
 		
         If mobjReg.lngTrxCount > 0 Then
             grdReg.RowCount = mobjReg.lngTrxCount
@@ -495,8 +495,10 @@ ErrorHandler:
 			Case Trx.RepeatUnit.glngRPTUNT_WEEK
 				strRepeatUnit = "Weeks"
 			Case Trx.RepeatUnit.glngRPTUNT_MONTH
-				strRepeatUnit = "Months"
-		End Select
+                strRepeatUnit = "Months"
+            Case Else
+                strRepeatUnit = ""
+        End Select
 	End Function
 	
 	Private Sub DisplayTrxStatus(ByVal objTrx As Trx)
@@ -640,7 +642,7 @@ ErrorHandler:
 
     Private Sub mobjReg_ValidationError(ByVal lngIndex As Integer, ByVal strMsg As String) Handles mobjReg.ValidationError
         Dim objTrx As Trx
-        Dim strTrxSummary As String
+        Dim strTrxSummary As String = ""
 
         On Error GoTo ErrorHandler
 

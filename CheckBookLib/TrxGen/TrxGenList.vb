@@ -17,7 +17,7 @@ Public Class TrxGenList
         Dim nodeTrx As VB6XmlNode
         Dim elmTrx As VB6XmlElement
         'UPGRADE_WARNING: Arrays in structure udtTrx may need to be initialized before they can be used. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
-        Dim udtTrx As TrxToCreate
+        Dim udtTrx As TrxToCreate = New TrxToCreate()
         Dim datDate As Date
         Dim curAmount As Decimal
         Dim intCount As Short
@@ -77,6 +77,7 @@ Public Class TrxGenList
 
         Dim vntAttrib As Object
 
+        strGetCommonFields = ""
         'UPGRADE_WARNING: Couldn't resolve default property of object elmTrx.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmTrx.GetAttribute("date")

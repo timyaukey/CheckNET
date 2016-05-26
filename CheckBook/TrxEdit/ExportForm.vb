@@ -113,7 +113,7 @@ ErrorHandler:
     End Function
 
     Public Sub OpenOutput()
-        Dim strExtraFields As String
+        Dim strExtraFields As String = ""
         'The order of these extra fields must match the order they
         'are added in WriteSplit().
         If mblnIncludeAging Then
@@ -137,8 +137,8 @@ ErrorHandler:
         Dim strLine As String
         Dim datInvToUse As Date
         Dim datDueToUse As Date
-        Dim strInvDate As String
-        Dim strDueDate As String
+        Dim strInvDate As String = ""
+        Dim strDueDate As String = ""
         Dim strBracket As String
 
         On Error GoTo ErrorHandler
@@ -151,7 +151,10 @@ ErrorHandler:
             strDueDate = gstrVB6Format(objSplit.datDueDate, gstrFORMAT_DATE)
         End If
 
-        strLine = gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE) & "," & objTrx.strNumber & ",""" & objTrx.strDescription & """," & gstrVB6Format(objSplit.curAmount, gstrFORMAT_CURRENCY) & ",""" & gobjCategories.strKeyToValue1(objSplit.strCategoryKey) & """," & strDueDate & "," & gstrVB6Format(datDueToUse, gstrFORMAT_DATE) & "," & strInvDate & "," & gstrVB6Format(datInvToUse, gstrFORMAT_DATE) & ",""" & objSplit.strPONumber & """,""" & objSplit.strInvoiceNum & """,""" & objSplit.strTerms & """"
+        strLine = gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE) & "," & objTrx.strNumber & ",""" & objTrx.strDescription & """," _
+            & gstrVB6Format(objSplit.curAmount, gstrFORMAT_CURRENCY) & ",""" & gobjCategories.strKeyToValue1(objSplit.strCategoryKey) _
+            & """," & strDueDate & "," & gstrVB6Format(datDueToUse, gstrFORMAT_DATE) & "," & strInvDate & "," _
+            & gstrVB6Format(datInvToUse, gstrFORMAT_DATE) & ",""" & objSplit.strPONumber & """,""" & objSplit.strInvoiceNum & """,""" & objSplit.strTerms & """"
 
         'The order of these extra fields must match the order they
         'are added in OpenOutput().

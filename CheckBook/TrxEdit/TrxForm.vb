@@ -460,10 +460,9 @@ ErrorHandler:
     End Sub
 
     Private Sub ShowFrame(ByVal ctlFrame As System.Windows.Forms.GroupBox)
-        ctlFrame.Left = VB6.TwipsToPixelsX(VB6.PixelsToTwipsX(frmNormal.Left))
-        ctlFrame.Top = VB6.TwipsToPixelsY(VB6.PixelsToTwipsY(frmNormal.Top))
+        ctlFrame.Left = frmNormal.Left
+        ctlFrame.Top = frmNormal.Top
         ctlFrame.Visible = True
-        'ctlFrame.BorderStyle = 0
     End Sub
 
     Private Sub EnableStatus()
@@ -2117,7 +2116,7 @@ EventExitSub:
         If cbo.SelectedIndex = -1 Then
             strGetStringTranslatorKeyFromCombo = ""
         Else
-            lngItemData = VB6.GetItemData(cbo, cbo.SelectedIndex)
+            lngItemData = gintVB6GetItemData(cbo, cbo.SelectedIndex)
             If lngItemData = 0 Then
                 strGetStringTranslatorKeyFromCombo = ""
             Else

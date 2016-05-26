@@ -551,6 +551,8 @@ Public Class Trx
                     strStatus = "Selected"
                 Case TrxStatus.glngTRXSTS_RECON
                     strStatus = "Reconciled"
+                Case Else
+                    strStatus = ""
             End Select
         End Get
     End Property
@@ -919,13 +921,14 @@ Public Class Trx
     End Sub
 
     Public Sub SetSortKey()
-        Dim strInvNum As String
+        Dim strInvNum As String = ""
         Dim objFirstSplit As Split_Renamed
         If mlngType = TrxType.glngTRXTYP_NORMAL Then
             objFirstSplit = mcolSplits.Item(1)
             strInvNum = objFirstSplit.strInvoiceNum
         End If
-        mstrSortKey = gstrVB6Format(mdatDate, "yyyymmdd") & IIf(mcurAmount > 0, "C", "D") & Mid("ZYX", mlngType + 1, 1) & Left(mstrNumber & "          ", 10) & Left(mstrDescription & "                    ", 20) & Left(strInvNum & "                ", 16)
+        mstrSortKey = gstrVB6Format(mdatDate, "yyyymmdd") & IIf(mcurAmount > 0, "C", "D") & Mid("ZYX", mlngType + 1, 1) & _
+            Left(mstrNumber & "          ", 10) & Left(mstrDescription & "                    ", 20) & Left(strInvNum & "                ", 16)
     End Sub
 
     '$Description Set mcurAmount for a budget Trx. Called whenever
@@ -1117,7 +1120,7 @@ Public Class Trx
     Public Function blnIsSearchMatch(ByVal lngSearchField As TrxSearchField, ByVal strSearchFor As String, ByVal lngSearchType As TrxSearchType, ByRef curMatchAmount As Decimal) As Boolean
 
         Dim objSplit As Split_Renamed
-        Dim strTrxData As String
+        Dim strTrxData As String = ""
         Dim blnAnySplitsMatch As Boolean
         Dim blnThisSplitMatches As Boolean
         Dim strCatName As String

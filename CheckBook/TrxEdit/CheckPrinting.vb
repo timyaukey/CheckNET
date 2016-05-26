@@ -1,7 +1,6 @@
 Option Strict Off
 Option Explicit On
 
-Imports Microsoft.VisualBasic.PowerPacks.Printing.Compatibility.VB6
 Imports CheckBookLib
 
 Module CheckPrinting
@@ -227,7 +226,7 @@ Module CheckPrinting
 
     Private Sub PrintCheckText(ByVal domCheckFormat As VB6XmlDocument, ByVal strItemName As String, ByVal strValue As String)
 
-        Dim elmItem As VB6XmlElement
+        Dim elmItem As VB6XmlElement = Nothing
         Dim dblX As Double
         Dim dblY As Double
 

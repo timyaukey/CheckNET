@@ -326,7 +326,6 @@ ErrorHandler:
     Private Function lngUpdateMove(ByVal lngOldIndex As Integer) As Integer
         Dim objTrx As Trx
         Dim strNewSortKey As String
-        Dim lngNewIndex As Integer
 
         objTrx = maobjTrx(lngOldIndex)
         objTrx.SetSortKey()

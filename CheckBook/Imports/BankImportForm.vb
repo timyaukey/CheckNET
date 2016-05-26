@@ -70,13 +70,13 @@ Friend Class BankImportForm
     Private mstrImportSearchText As String
     Private mintNextImportToSearch As Short
 
-    Private Function TopError(ByVal strRoutine As String) As Object
+    Private Sub TopError(ByVal strRoutine As String)
         gTopErrorTrap("BankImportForm." & strRoutine)
-    End Function
+    End Sub
 
-    Private Function NestedError(ByVal strRoutine As String) As Object
+    Private Sub NestedError(ByVal strRoutine As String)
         gNestedErrorTrap("BankImportForm." & strRoutine)
-    End Function
+    End Sub
 
     Public Sub ShowMe(ByVal strTitle As String, ByVal objAccount As Account, _
                       ByVal objTrxImport As ITrxImport, _
@@ -599,7 +599,7 @@ ErrorHandler:
         objSplit = objTrx.colSplits.Item(1)
         If objSplit.strCategoryKey = "" And blnSetMissingCategory Then
             If cboDefaultCategory.SelectedIndex <> -1 Then
-                lngCatIdx = VB6.GetItemData(cboDefaultCategory, cboDefaultCategory.SelectedIndex)
+                lngCatIdx = gintVB6GetItemData(cboDefaultCategory, cboDefaultCategory.SelectedIndex)
                 If lngCatIdx > 0 Then
                     strDefaultCatKey = gobjCategories.strKey(lngCatIdx)
                     objSplit.strCategoryKey = strDefaultCatKey
@@ -777,7 +777,7 @@ ErrorHandler:
     Private Sub DisplayOneImportItem(ByVal objItem As System.Windows.Forms.ListViewItem, ByVal intIndex As Short)
 
         Dim objTrx As Trx
-        Dim strStatus As String
+        Dim strStatus As String = ""
 
         On Error GoTo ErrorHandler
 
@@ -1357,7 +1357,7 @@ ErrorHandler:
                 mobjSelectedRegister = Nothing
             Else
                 'UPGRADE_WARNING: Couldn't resolve default property of object mobjAccount.colLoadedRegisters.Item().objReg. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                mobjSelectedRegister = mobjAccount.colLoadedRegisters.Item(VB6.GetItemData(cboRegister, .SelectedIndex)).objReg
+                mobjSelectedRegister = mobjAccount.colLoadedRegisters.Item(gintVB6GetItemData(cboRegister, .SelectedIndex)).objReg
             End If
         End With
 

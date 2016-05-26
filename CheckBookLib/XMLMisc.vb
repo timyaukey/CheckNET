@@ -21,6 +21,7 @@ Public Module XMLMisc
         Dim objChild As VB6XmlElement
         objChild = objParent.SelectSingleNode(strChild)
         If objChild Is Nothing Then
+            gstrGetXMLChildText = Nothing
             Exit Function
         End If
         gstrGetXMLChildText = objChild.Text

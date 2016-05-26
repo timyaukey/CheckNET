@@ -55,7 +55,7 @@ Friend Class MoveDstForm
             End If
         End If
         If cboRegister.SelectedIndex > 0 Then
-            objNewLoadedReg = mcolLoadedRegisters.Item(VB6.GetItemData(cboRegister, cboRegister.SelectedIndex))
+            objNewLoadedReg = mcolLoadedRegisters.Item(gintVB6GetItemData(cboRegister, cboRegister.SelectedIndex))
             objNewReg = objNewLoadedReg.objReg
             If objNewReg Is mobjOldReg Then
                 MsgBox("You may not choose the same register (select no register " & "to leave in the same register.")

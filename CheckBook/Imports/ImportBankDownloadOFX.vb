@@ -88,6 +88,7 @@ ErrorHandler:
 
         On Error GoTo ErrorHandler
 
+        ITrxImport_objNextTrx = Nothing
         mobjUtil.ClearSavedTrxData()
         strCheckNum = ""
         Do

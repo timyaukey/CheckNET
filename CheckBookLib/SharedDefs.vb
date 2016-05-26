@@ -523,6 +523,7 @@ Public Module SharedDefs
             Case 7 : strWordMultipliedByTen = "seventy"
             Case 8 : strWordMultipliedByTen = "eighty"
             Case 9 : strWordMultipliedByTen = "ninety"
+            Case Else : strWordMultipliedByTen = ""
         End Select
     End Function
 
@@ -638,11 +639,19 @@ ErrorHandler:
     End Function
 
     Public Function gstrVB6Format(input As Object, style As String) As String
-        gstrVB6Format = VB6.Format(input, style)
+        Return VB6.Format(input, style)
     End Function
 
     Public Function gstrVB6GetItemString(ctl As System.Windows.Forms.Control, intIndex As Integer) As String
-        gstrVB6GetItemString = VB6.GetItemString(ctl, intIndex)
+        Return VB6.GetItemString(ctl, intIndex)
+    End Function
+
+    Public Sub gVB6SetItemData(ctl As System.Windows.Forms.Control, intIndex As Integer, intItemData As Integer)
+        VB6.SetItemData(ctl, intIndex, intItemData)
+    End Sub
+
+    Public Function gintVB6GetItemData(ctl As System.Windows.Forms.Control, intIndex As Integer) As Integer
+        Return VB6.GetItemData(ctl, intIndex)
     End Function
 
     Public Function gobjClipboardReader() As TextReader

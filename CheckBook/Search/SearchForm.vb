@@ -101,14 +101,14 @@ Friend Class SearchForm
 
         gLoadComboFromStringTranslator(cbo, objList, False)
         With cbo
-            .Left = VB6.TwipsToPixelsX(VB6.PixelsToTwipsX(txtSearchFor.Left))
-            .Top = VB6.TwipsToPixelsY(VB6.PixelsToTwipsY(txtSearchFor.Top))
+            .Left = txtSearchFor.Left
+            .Top = txtSearchFor.Top
         End With
     End Sub
 
     'UPGRADE_WARNING: Event cboSearchIn.SelectedIndexChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
     Private Sub cboSearchIn_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboSearchIn.SelectedIndexChanged
-        Select Case VB6.GetItemData(cboSearchIn, cboSearchIn.SelectedIndex)
+        Select Case gintVB6GetItemData(cboSearchIn, cboSearchIn.SelectedIndex)
             Case Trx.TrxSearchField.glngTRXSFL_CATKEY
                 txtSearchFor.Visible = False
                 cboSearchCats.Visible = True
@@ -126,8 +126,8 @@ Friend Class SearchForm
 
         On Error GoTo ErrorHandler
 
-        lngSearchType = VB6.GetItemData(cboSearchType, cboSearchType.SelectedIndex)
-        lngSearchField = VB6.GetItemData(cboSearchIn, cboSearchIn.SelectedIndex)
+        lngSearchType = gintVB6GetItemData(cboSearchType, cboSearchType.SelectedIndex)
+        lngSearchField = gintVB6GetItemData(cboSearchIn, cboSearchIn.SelectedIndex)
         Select Case lngSearchField
             Case Trx.TrxSearchField.glngTRXSFL_CATKEY
                 If lngSearchType <> Trx.TrxSearchType.glngTRXSTP_EQUAL And lngSearchType <> Trx.TrxSearchType.glngTRXSTP_STARTS Then
@@ -138,7 +138,7 @@ Friend Class SearchForm
                     MsgBox("Please select a category to search for.", MsgBoxStyle.Critical)
                     Exit Sub
                 Else
-                    lngItemData = VB6.GetItemData(cboSearchCats, cboSearchCats.SelectedIndex)
+                    lngItemData = gintVB6GetItemData(cboSearchCats, cboSearchCats.SelectedIndex)
                     strSearchFor = gobjCategories.strKey(lngItemData)
                     If lngSearchType = Trx.TrxSearchType.glngTRXSTP_STARTS Then
                         strSearchFor = gobjCategories.strKeyToValue1(strSearchFor)
@@ -516,8 +516,8 @@ ErrorHandler:
         On Error GoTo ErrorHandler
 
         Dim frmArgs As ChangeCategoryForm
-        Dim strOldCatKey As String
-        Dim strNewCatKey As String
+        Dim strOldCatKey As String = ""
+        Dim strNewCatKey As String = ""
         Dim colTrx As Collection
         Dim objItem As System.Windows.Forms.ListViewItem
         Dim lngTrxIndex As Integer
@@ -679,12 +679,12 @@ ErrorHandler:
         Dim objTrxSrc As Trx
         Dim objTrxOld As Trx
         Dim objTrxNew As Trx
-        Dim objTrxFirst As Trx
+        Dim objTrxFirst As Trx = Nothing
         Dim colTrx As Collection
         Dim colSplits As Collection
         Dim objSplit As Split_Renamed
-        Dim strNewDate As String
-        Dim objNewReg As Register
+        Dim strNewDate As String = ""
+        Dim objNewReg As Register = Nothing
         Dim datExplicitDate As Date
         Dim blnUseDayOffset As Boolean
         Dim intDayOffset As Short

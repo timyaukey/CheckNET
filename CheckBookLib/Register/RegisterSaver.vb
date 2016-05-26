@@ -140,6 +140,7 @@ Public Class RegisterSaver
     End Sub
 
     Private Function strConvertRepeatUnit(ByVal lngUnit As Trx.RepeatUnit) As String
+        strConvertRepeatUnit = ""
         Select Case lngUnit
             Case Trx.RepeatUnit.glngRPTUNT_DAY
                 strConvertRepeatUnit = "DAY"

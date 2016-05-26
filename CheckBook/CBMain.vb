@@ -358,6 +358,7 @@ ErrorHandler:
     Public Function gobjGetSelectedAccountAndUnload(ByVal lst As System.Windows.Forms.ListBox, ByVal frm As System.Windows.Forms.Form) As Account
 
         If lst.SelectedIndex = -1 Then
+            gobjGetSelectedAccountAndUnload = Nothing
             Exit Function
         End If
         gobjGetSelectedAccountAndUnload = gcolAccounts.Item(lst.SelectedIndex + 1)

@@ -43,10 +43,10 @@ Friend Class ChangeCategoryForm
 			Exit Sub
 		End If
 		
-		lngItemData = VB6.GetItemData(cboOldCategory, cboOldCategory.SelectedIndex)
+        lngItemData = gintVB6GetItemData(cboOldCategory, cboOldCategory.SelectedIndex)
 		mstrOldCatKey = gobjCategories.strKey(lngItemData)
 		
-		lngItemData = VB6.GetItemData(cboNewCategory, cboNewCategory.SelectedIndex)
+        lngItemData = gintVB6GetItemData(cboNewCategory, cboNewCategory.SelectedIndex)
 		mstrNewCatKey = gobjCategories.strKey(lngItemData)
 		
 		mblnSuccess = True

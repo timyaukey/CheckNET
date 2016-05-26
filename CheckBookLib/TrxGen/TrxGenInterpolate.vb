@@ -17,7 +17,7 @@ Public Class TrxGenInterpolate
     Public Function ITrxGenerator_strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String Implements ITrxGenerator.strLoad
 
         Dim strError As String
-        Dim elmRepeat As VB6XmlElement
+        Dim elmRepeat As VB6XmlElement = Nothing
 
         strError = gstrLoadTrxGeneratorCore(domDoc, mblnEnabled, mstrRepeatKey, mintStartRepeatSeq, mstrDescription, objAccount)
         If strError <> "" Then

@@ -99,7 +99,7 @@ ErrorHandler:
         Dim strElement As String
         Dim intKey As Short
         Dim strKey As String
-        Dim strError As String
+        Dim strError As String = ""
 
         On Error GoTo ErrorHandler
 
@@ -129,7 +129,7 @@ ErrorHandler:
         Dim strNewElement As String
         Dim intIndex As Short
         Dim intKey As Short
-        Dim strError As String
+        Dim strError As String = ""
         Dim blnFoundChild As Boolean
         Dim strChildMatchPrefix As String
         Dim intMatchLen As Short
@@ -150,13 +150,13 @@ ErrorHandler:
         End If
 
         'Delete the old element, and insert the new one with the same key.
-        intKey = VB6.GetItemData(lstElements, intIndex)
+        intKey = gintVB6GetItemData(lstElements, intIndex)
         'Always delete first, so insert isn't confused by finding the old entry.
         DeleteElement(intIndex)
         If blnInsertElement(strNewElement, intKey, False, strError) Then
             'Insert failed, so put back the entry we just deleted.
             lstElements.Items.Insert(intIndex, strOldElement)
-            VB6.SetItemData(lstElements, intIndex, intKey)
+            gVB6SetItemData(lstElements, intIndex, intKey)
             MsgBox(strError, MsgBoxStyle.Critical)
             Exit Sub
         End If
@@ -168,7 +168,7 @@ ErrorHandler:
             blnFoundChild = False
             For intIndex = 0 To lstElements.Items.Count - 1
                 If UCase(VB.Left(gstrVB6GetItemString(lstElements, intIndex), intMatchLen)) = strChildMatchPrefix Then
-                    intKey = VB6.GetItemData(lstElements, intIndex)
+                    intKey = gintVB6GetItemData(lstElements, intIndex)
                     strNewChildElement = strNewElement & ":" & Mid(gstrVB6GetItemString(lstElements, intIndex), intMatchLen + 1)
                     DeleteElement(intIndex)
                     If blnInsertElement(strNewChildElement, intKey, False, strError) Then
@@ -233,7 +233,7 @@ ErrorHandler:
 
     Private Sub LoadList()
         Dim intIndex As Short
-        Dim strError As String
+        Dim strError As String = ""
 
         On Error GoTo ErrorHandler
 
@@ -326,7 +326,7 @@ ErrorHandler:
                         End If
                     End If
                     .Items.Insert(intIndex, strNewElement)
-                    VB6.SetItemData(lstElements, intIndex, intKey)
+                    gVB6SetItemData(lstElements, intIndex, intKey)
                     Exit For
                 End If
             Next
@@ -376,7 +376,7 @@ ErrorHandler:
         mobjList.Init()
         For intIndex = 0 To lstElements.Items.Count - 1
             strName1 = gstrVB6GetItemString(lstElements, intIndex)
-            strKey = strMakeKey(VB6.GetItemData(lstElements, intIndex))
+            strKey = strMakeKey(gintVB6GetItemData(lstElements, intIndex))
             If blnMultipleLevelsAllowed Then
                 intColonPos = 0
                 intIndent = 0
@@ -439,7 +439,7 @@ ErrorHandler:
 
         On Error GoTo ErrorHandler
 
-        strKey = strMakeKey(VB6.GetItemData(lstElements, intListIndex))
+        strKey = strMakeKey(gintVB6GetItemData(lstElements, intListIndex))
         If mobjAccount Is Nothing Then
             For Each objAccount In gcolAccounts
                 If blnElementIsUsedInAccount(objAccount, strKey) Then
@@ -542,7 +542,7 @@ ErrorHandler:
         Do
             blnFound = False
             For intIndex = 0 To intMax
-                If VB6.GetItemData(lstElements, intIndex) = intKey Then
+                If gintVB6GetItemData(lstElements, intIndex) = intKey Then
                     blnFound = True
                     Exit For
                 End If

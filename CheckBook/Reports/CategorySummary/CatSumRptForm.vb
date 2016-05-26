@@ -163,7 +163,7 @@ ErrorHandler:
 	
 	Private Function curProcessChildren(ByRef intCatIndex As Short, ByVal intNestingLevel As Short, ByVal strLabel As String, ByVal curParentAmount As Decimal) As Decimal
 		
-		Dim strCatName As String
+        Dim strCatName As String = ""
 		Dim curAmount As Decimal
 		Dim curChildTotal As Decimal
 		
@@ -243,7 +243,7 @@ ErrorHandler:
 		On Error GoTo ErrorHandler
 		
 		Dim intIndex As Short
-		Dim strResult As String
+        Dim strResult As String = ""
 		Dim strCatCode As String
 		Dim strCatName As String
 		Dim strLine As String

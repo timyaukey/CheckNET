@@ -17,10 +17,10 @@ Friend Class CBMainForm
         Dim objAccount As Account
         Dim objLoaded As LoadedRegister
         Dim objReg As Register
-        Dim astrFiles() As String
+        Dim astrFiles() As String = Nothing
         Dim intFiles As Short
         Dim vstrFile As Object
-        Dim strSecurityOption As String
+        Dim strSecurityOption As String = ""
 
         Try
 

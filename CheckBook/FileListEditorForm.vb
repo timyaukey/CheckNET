@@ -69,7 +69,6 @@ Public Class FileListEditorForm
     End Sub
 
     Private Function GetCurrentFile() As String
-        Dim objItem As ListViewItem
         If lvwFiles.SelectedItems.Count = 0 Then
             GetCurrentFile = Nothing
         Else

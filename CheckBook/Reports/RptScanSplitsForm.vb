@@ -154,7 +154,7 @@ ErrorHandler:
                 'MsgBox "You must select a category.", vbCritical
                 'Exit Function
             Else
-                mstrCatKey = gobjCategories.strKey(VB6.GetItemData(cboCategory, cboCategory.SelectedIndex))
+                mstrCatKey = gobjCategories.strKey(gintVB6GetItemData(cboCategory, cboCategory.SelectedIndex))
             End If
         End If
 

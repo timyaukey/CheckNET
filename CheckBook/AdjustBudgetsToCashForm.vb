@@ -514,7 +514,7 @@ ErrorHandler:
         If cbo.SelectedIndex = -1 Then
             strGetStringTranslatorKeyFromCombo = ""
         Else
-            lngItemData = VB6.GetItemData(cbo, cbo.SelectedIndex)
+            lngItemData = gintVB6GetItemData(cbo, cbo.SelectedIndex)
             If lngItemData = 0 Then
                 strGetStringTranslatorKeyFromCombo = ""
             Else
