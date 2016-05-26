@@ -21,7 +21,6 @@ Public Class TrxGenPeriod
 
         Dim strError As String
         Dim elmFirst As VB6XmlElement
-        Dim elmRepeat As VB6XmlElement
         Dim elmDOWUsage As VB6XmlElement
         Dim elmScaling As VB6XmlElement
         Dim dblTotalDOWWeights As Double

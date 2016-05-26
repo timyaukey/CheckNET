@@ -149,6 +149,7 @@ ErrorHandler:
         Dim intMonthPart As Short
         Dim datBracketDate As Date
 
+        gstrMakeDateBracket = ""
         If intBracketSize < 0 Then
             If intBracketSize = -1 Then
                 gstrMakeDateBracket = gstrVB6Format(datInputDate, "yyyy/mm/01")

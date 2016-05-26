@@ -114,8 +114,8 @@ Public Class Account
         Dim intFile As Short
         Dim strLine As String
         Dim lngLinesRead As Integer
-        Dim strRegKey As String
-        Dim strRegTitle As String
+        Dim strRegKey As String = ""
+        Dim strRegTitle As String = ""
         Dim blnRegShow As Boolean
         Dim blnRegNonBank As Boolean
         Dim objLoaded As LoadedRegister
@@ -321,6 +321,7 @@ Public Class Account
                 Exit Function
             End If
         Next objLoaded
+        objFindReg = Nothing
     End Function
 
     Public Function objRegisterList() As StringTranslator
