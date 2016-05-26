@@ -127,6 +127,8 @@ ErrorHandler:
         Dim strPassword As String
         Dim frmLogin As LoginForm
 
+        strLogin = ""
+        strPassword = ""
         frmLogin = New LoginForm
         If Not frmLogin.blnGetCredentials(strLogin, strPassword) Then
             Exit Function

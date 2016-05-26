@@ -397,6 +397,7 @@ Public Module SharedDefs
 
     Public Function gstrTranslateBudgetKey(ByVal strKey As String) As String
         Dim strName As String
+        gstrTranslateBudgetKey = ""
         If strKey <> "" Then
             strName = gobjBudgets.strKeyToValue1(strKey)
             If strName = "" Then
@@ -508,6 +509,7 @@ Public Module SharedDefs
             Case 17 : strWordLessThan20 = "seventeen"
             Case 18 : strWordLessThan20 = "eighteen"
             Case 19 : strWordLessThan20 = "nineteen"
+            Case Else : strWordLessThan20 = ""
         End Select
     End Function
 
