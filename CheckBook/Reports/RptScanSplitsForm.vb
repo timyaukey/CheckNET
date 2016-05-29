@@ -54,8 +54,8 @@ ErrorHandler:
     End Sub
 
     Private Sub RptScanSplitsForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        Me.Width = VB6.TwipsToPixelsX(5130)
-        Me.Height = VB6.TwipsToPixelsY(6480)
+        Me.Width = 350
+        Me.Height = 450
     End Sub
 
     Private Sub CustomizeForm()

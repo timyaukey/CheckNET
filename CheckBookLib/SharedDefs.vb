@@ -146,7 +146,8 @@ Public Module SharedDefs
             astrResults(lngOutIndex) = vstrPart
             lngOutIndex = lngOutIndex + 1
         Next vstrPart
-        gaSplit = VB6.CopyArray(astrResults)
+        'gaSplit = VB6.CopyArray(astrResults)
+        gaSplit = astrResults.Clone()
     End Function
 
     Public Sub gSetAccountChanged(ByVal objAccount As Account)

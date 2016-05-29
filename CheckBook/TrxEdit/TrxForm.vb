@@ -669,6 +669,7 @@ ErrorHandler:
         Dim strSplitAmount As String
         Dim intControlIndex As Short
 
+        ReDim intPlaceholderIndexes(1)
         'Scan splits to find placeholders, and add up non-placeholders.
         For intSplitIndex = 1 To mintSplits
             If maudtSplits(intSplitIndex).strBudgetKey = gstrPlaceholderBudgetKey Then
@@ -845,7 +846,7 @@ ErrorHandler:
 
     Private Sub cmdCopyInvoiceNumbers_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCopyInvoiceNumbers.Click
         Dim intSplit As Short
-        Dim strNumbers As String
+        Dim strNumbers As String = ""
 
         For intSplit = 1 To mintSplits
             If blnSplitUsed(intSplit) Then
@@ -860,7 +861,7 @@ ErrorHandler:
     End Sub
 
     Private Sub cmdCopyAmount_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCopyAmount.Click
-        Dim strAmount As String
+        Dim strAmount As String = ""
         If mlngType = Trx.TrxType.glngTRXTYP_NORMAL Then
             strAmount = txtSplitTotal.Text
         ElseIf mlngType = Trx.TrxType.glngTRXTYP_BUDGET Then
@@ -926,7 +927,7 @@ ErrorHandler:
     '$Returns True iff there were no errors and the Trx was saved.
 
     Private Function blnValidateAndSave() As Boolean
-        Dim strOtherRegisterKey As String
+        Dim strOtherRegisterKey As String = ""
         If blnValidateShared() Then
             Exit Function
         End If
@@ -1324,7 +1325,7 @@ ErrorHandler:
 
     Private Sub SaveNormal()
         Dim objTrx As Trx
-        Dim objTrxOld As Trx
+        Dim objTrxOld As Trx = Nothing
         If mblnEditMode Then
             objTrx = objUpdateStartNormal(objTrxOld)
             AddSplits(objTrx)
@@ -1570,7 +1571,7 @@ ErrorHandler:
 
     Private Sub cmdDivideTrx_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdDivideTrx.Click
         Dim objTrx As Trx
-        Dim objTrxOld As Trx
+        Dim objTrxOld As Trx = Nothing
         Dim intSplit As Short
         Dim intOldTrxSplitCount As Short
         Dim intNewTrxSplitCount As Short
@@ -1681,12 +1682,12 @@ EventExitSub:
 
     Private Sub txtDescription_KeyPress(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.KeyPressEventArgs) Handles txtDescription.KeyPress
         Dim KeyAscii As Short = Asc(eventArgs.KeyChar)
-        Dim strPayee As String
-        Dim strCategory As String
-        Dim strNumber As String
-        Dim strAmount As String
-        Dim strBudget As String
-        Dim strMemo As String
+        Dim strPayee As String = ""
+        Dim strCategory As String = ""
+        Dim strNumber As String = ""
+        Dim strAmount As String = ""
+        Dim strBudget As String = ""
+        Dim strMemo As String = ""
 
         On Error GoTo ErrorHandler
 

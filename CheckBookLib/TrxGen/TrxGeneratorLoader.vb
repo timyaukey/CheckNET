@@ -20,6 +20,7 @@ Public Module TrxGeneratorLoader
         Dim objGenerator As ITrxGenerator
         Dim strError As String
 
+        objCreateTrxGenerator = Nothing
         If domDoc.DocumentElement.Name <> "generator" Then
             gShowTrxGenLoadError(domDoc, "Document element is not <generator>")
             Exit Function
@@ -68,7 +69,7 @@ Public Module TrxGeneratorLoader
         Dim objParseError As VB6XmlParseError
         Dim objGenerator As ITrxGenerator
         Dim colResults As Collection
-        Dim strRepeatKeysUsed As String
+        Dim strRepeatKeysUsed As String = ""
         Dim strThisRepeatKey As String
 
         colResults = New Collection
@@ -188,6 +189,7 @@ Public Module TrxGeneratorLoader
 
         Dim vntAttrib As Object
 
+        gstrLoadTrxGeneratorCore = ""
         'UPGRADE_WARNING: Couldn't resolve default property of object domDoc.documentElement.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = domDoc.DocumentElement.GetAttribute("enabled")
@@ -263,6 +265,8 @@ Public Module TrxGeneratorLoader
 
         Dim vntAttrib As Object
 
+        gstrGetDateSequenceParams = ""
+
         elmChild = elmParent.SelectSingleNode(strChildName)
         If elmChild Is Nothing Then
             gstrGetDateSequenceParams = "Could not find <" & strChildName & "> element"
@@ -337,6 +341,7 @@ Public Module TrxGeneratorLoader
         Dim strErrorEnding As String
         Dim intRepeatSeq As Short
 
+        ReDim gdatLoadSequencedTrx(0)
         strError = ""
         intRepeatSeq = intStartRepeatSeq
         colSeq = elmParent.SelectNodes(strChildName)
@@ -363,7 +368,7 @@ Public Module TrxGeneratorLoader
             intResultIndex = intResultIndex + 1
         Next elmSeq
 
-        gdatLoadSequencedTrx = VB6.CopyArray(datResults)
+        gdatLoadSequencedTrx = datResults.Clone()
 
     End Function
 
@@ -377,6 +382,7 @@ Public Module TrxGeneratorLoader
         Dim datTrxDate As Date
         Dim objSeq As SequencedTrx
 
+        gdatCreateOneSequencedTrx = Nothing
         'UPGRADE_WARNING: Couldn't resolve default property of object elmSeq.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmSeq.GetAttribute("date")
@@ -537,7 +543,8 @@ Public Module TrxGeneratorLoader
 
         ReDim Preserve datResults(intOutIndex - 1)
 
-        gdatSplitSequencedTrx = VB6.CopyArray(datResults)
+        'gdatSplitSequencedTrx = VB6.CopyArray(datResults)
+        gdatSplitSequencedTrx = datResults.Clone()
 
     End Function
 
@@ -680,7 +687,7 @@ Public Module TrxGeneratorLoader
     Public Function gstrGetTrxGenTemplateNormal(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim vntAttrib As Object
-        Dim datSplit As SplitToCreate
+        Dim datSplit As SplitToCreate = Nothing
 
         datTrxTemplate.lngType = Trx.TrxType.glngTRXTYP_NORMAL
         datTrxTemplate.lngStatus = Trx.TrxStatus.glngTRXSTS_UNREC
@@ -737,6 +744,7 @@ Public Module TrxGeneratorLoader
 
         Dim vntAttrib As Object
 
+        gstrGetTrxGenTemplateShared = ""
         'Description.
         'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxTpt.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -775,6 +783,11 @@ Public Module TrxGeneratorLoader
         'and the code converter doesn't notice so all copies share the same array.
         'By doing it explicitly the code converter treats the copy with value semantics
         'instead of reference semantics.
-        gdatCopyTrxToCreate.adatSplits = VB6.CopyArray(datInput.adatSplits)
+        'gdatCopyTrxToCreate.adatSplits = VB6.CopyArray(datInput.adatSplits)
+        If datInput.adatSplits Is Nothing Then
+            gdatCopyTrxToCreate.adatSplits = Nothing
+        Else
+            gdatCopyTrxToCreate.adatSplits = datInput.adatSplits.Clone()
+        End If
     End Function
 End Module

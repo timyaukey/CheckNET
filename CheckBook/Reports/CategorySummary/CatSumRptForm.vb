@@ -24,7 +24,8 @@ Friend Class CatSumRptForm
 	
 	Public Sub ShowMe(ByRef audtCatTotals() As PublicTypes.CategoryInfo, ByVal colSelectedAccounts As Collection, ByVal objCats As StringTranslator, ByVal datStart As Date, ByVal datEnd As Date, ByVal blnIncludeFake As Boolean, ByVal blnIncludeGenerated As Boolean)
 		
-		maudtCatTotals = VB6.CopyArray(audtCatTotals)
+        'maudtCatTotals = VB6.CopyArray(audtCatTotals)
+        maudtCatTotals = audtCatTotals.Clone()
 		mcolSelectedAccounts = colSelectedAccounts
 		mobjCats = objCats
 		mdatStart = datStart
@@ -49,8 +50,8 @@ Friend Class CatSumRptForm
 		
 		'Force the window to the size specified in the IDE, because MDI child windows
 		'are not initially sized the same as in the IDE.
-		Me.Width = VB6.TwipsToPixelsX(6240)
-		Me.Height = VB6.TwipsToPixelsY(7220)
+        Me.Width = 435
+        Me.Height = 550
 		
         mblnLoadComplete = True
 		

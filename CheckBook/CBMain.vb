@@ -503,12 +503,12 @@ ErrorHandler:
     Public Sub gInitPayeeList(ByVal lvwPayees As System.Windows.Forms.ListView)
         With lvwPayees
             .Columns.Clear()
-            .Columns.Add("", "Number", CInt(VB6.TwipsToPixelsX(800)))
-            .Columns.Add("", "Name/Description", CInt(VB6.TwipsToPixelsX(3500)))
-            .Columns.Add("", "Category", CInt(VB6.TwipsToPixelsX(3500)))
-            .Columns.Add("", "Amount", CInt(VB6.TwipsToPixelsX(1000)))
-            .Columns.Add("", "Budget", CInt(VB6.TwipsToPixelsX(2000)))
-            .Columns.Add("", "Memo", CInt(VB6.TwipsToPixelsX(3000)))
+            .Columns.Add("", "Number", 55)
+            .Columns.Add("", "Name/Description", 235)
+            .Columns.Add("", "Category", 235)
+            .Columns.Add("", "Amount", 65)
+            .Columns.Add("", "Budget", 130)
+            .Columns.Add("", "Memo", 200)
             .View = System.Windows.Forms.View.Details
             .FullRowSelect = True
             .HideSelection = False

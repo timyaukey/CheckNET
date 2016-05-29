@@ -19,7 +19,7 @@ Module TrxGenerator
 		Dim vntTrxToCreate As Object
 		'UPGRADE_WARNING: Arrays in structure datTrxToCreate may need to be initialized before they can be used. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
         Dim datTrxToCreate As TrxToCreate
-		Dim intSplitIndex As Short
+        'Dim intSplitIndex As Short
 		Dim strError As String
 		Dim objLoaded As LoadedRegister
 		Dim colReg As Collection
@@ -70,7 +70,7 @@ Module TrxGenerator
         Dim objCompareReg As Register
         Dim objTrx As Trx
         Dim objTransferMgr As TransferManager
-        Dim vntSplit As Object
+        'Dim vntSplit As Object
         Dim intSplitIndex As Short
 
         gstrCreateOneTrx = ""
@@ -201,8 +201,9 @@ Module TrxGenerator
 			datResults(intIndex) = objSeqTrx
 			intIndex = intIndex + 1
 		Next objSeqTrx
-		gdatGenerateSeqTrxForDates = VB6.CopyArray(datResults)
-		
+        'gdatGenerateSeqTrxForDates = VB6.CopyArray(datResults)
+        gdatGenerateSeqTrxForDates = datResults.Clone()
+
 	End Function
 	
 	'$Description Set the .curAmount values of an array of SequencedTrx

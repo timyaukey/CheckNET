@@ -199,7 +199,8 @@ Public Class TrxGenPeriod
 
         'Subdivide periods and totals using a distribution which approximates
         'a smooth curve, and repeat until all periods are one day in length.
-        datNewTrx = VB6.CopyArray(mdatPeriodEndings)
+        'datNewTrx = VB6.CopyArray(mdatPeriodEndings)
+        datNewTrx = mdatPeriodEndings.Clone()
         Do
             datNewTrx = gdatSplitSequencedTrx(mdatFirstPeriodStarts, datNewTrx, intLongestOutputPeriod)
             If intLongestOutputPeriod = 1 Then
