@@ -32,6 +32,18 @@ Friend Class TrxForm
     Private mstrOldRepeatKey As String
     Private mintOldRepeatSeq As Short
 
+    Private cboSplitCategory() As ComboBox
+    Private cboSplitBudget() As ComboBox
+    Private lblSplitNumber() As Label
+    Private chkChoose() As CheckBox
+    Private txtSplitAmount() As TextBox
+    Private txtSplitDueDate() As TextBox
+    Private txtSplitInvoiceDate() As TextBox
+    Private txtSplitInvoiceNum() As TextBox
+    Private txtSplitMemo() As TextBox
+    Private txtSplitPONum() As TextBox
+    Private txtSplitTerms() As TextBox
+
     'Dim (gintLBOUND1 to mintSplits).
     Private maudtSplits() As SplitData
     Private mintSplits As Short
@@ -445,6 +457,18 @@ ErrorHandler:
 
     Private Sub Init(ByVal objAccount_ As Account, ByVal objReg_ As Register, ByVal blnEditMode_ As Boolean, ByVal lngIndex_ As Integer, ByVal lngType_ As Trx.TrxType, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String)
 
+        cboSplitCategory = {_cboSplitCategory_0, _cboSplitCategory_1, _cboSplitCategory_2, _cboSplitCategory_3, _cboSplitCategory_4, _cboSplitCategory_5, _cboSplitCategory_6, _cboSplitCategory_7, _cboSplitCategory_8, _cboSplitCategory_9}
+        cboSplitBudget = {_cboSplitBudget_0, _cboSplitBudget_1, _cboSplitBudget_2, _cboSplitBudget_3, _cboSplitBudget_4, _cboSplitBudget_5, _cboSplitBudget_6, _cboSplitBudget_7, _cboSplitBudget_8, _cboSplitBudget_9}
+        lblSplitNumber = {_lblSplitNumber_0, _lblSplitNumber_1, _lblSplitNumber_2, _lblSplitNumber_3, _lblSplitNumber_4, _lblSplitNumber_5, _lblSplitNumber_6, _lblSplitNumber_7, _lblSplitNumber_8, _lblSplitNumber_9}
+        chkChoose = {_chkChoose_0, _chkChoose_1, _chkChoose_2, _chkChoose_3, _chkChoose_4, _chkChoose_5, _chkChoose_6, _chkChoose_7, _chkChoose_8, _chkChoose_9}
+        txtSplitAmount = {_txtSplitAmount_0, _txtSplitAmount_1, _txtSplitAmount_2, _txtSplitAmount_3, _txtSplitAmount_4, _txtSplitAmount_5, _txtSplitAmount_6, _txtSplitAmount_7, _txtSplitAmount_8, _txtSplitAmount_9}
+        txtSplitDueDate = {_txtSplitDueDate_0, _txtSplitDueDate_1, _txtSplitDueDate_2, _txtSplitDueDate_3, _txtSplitDueDate_4, _txtSplitDueDate_5, _txtSplitDueDate_6, _txtSplitDueDate_7, _txtSplitDueDate_8, _txtSplitDueDate_9}
+        txtSplitInvoiceDate = {_txtSplitInvoiceDate_0, _txtSplitInvoiceDate_1, _txtSplitInvoiceDate_2, _txtSplitInvoiceDate_3, _txtSplitInvoiceDate_4, _txtSplitInvoiceDate_5, _txtSplitInvoiceDate_6, _txtSplitInvoiceDate_7, _txtSplitInvoiceDate_8, _txtSplitInvoiceDate_9}
+        txtSplitInvoiceNum = {_txtSplitInvoiceNum_0, _txtSplitInvoiceNum_1, _txtSplitInvoiceNum_2, _txtSplitInvoiceNum_3, _txtSplitInvoiceNum_4, _txtSplitInvoiceNum_5, _txtSplitInvoiceNum_6, _txtSplitInvoiceNum_7, _txtSplitInvoiceNum_8, _txtSplitInvoiceNum_9}
+        txtSplitMemo = {_txtSplitMemo_0, _txtSplitMemo_1, _txtSplitMemo_2, _txtSplitMemo_3, _txtSplitMemo_4, _txtSplitMemo_5, _txtSplitMemo_6, _txtSplitMemo_7, _txtSplitMemo_8, _txtSplitMemo_9}
+        txtSplitPONum = {_txtSplitPONum_0, _txtSplitPONum_1, _txtSplitPONum_2, _txtSplitPONum_3, _txtSplitPONum_4, _txtSplitPONum_5, _txtSplitPONum_6, _txtSplitPONum_7, _txtSplitPONum_8, _txtSplitPONum_9}
+        txtSplitTerms = {_txtSplitTerms_0, _txtSplitTerms_1, _txtSplitTerms_2, _txtSplitTerms_3, _txtSplitTerms_4, _txtSplitTerms_5, _txtSplitTerms_6, _txtSplitTerms_7, _txtSplitTerms_8, _txtSplitTerms_9}
+
         mobjAccount = objAccount_
         mobjReg = objReg_
         mblnEditMode = blnEditMode_
@@ -731,71 +755,6 @@ ErrorHandler:
     'Private Sub cboRepeatKey_KeyDown(KeyCode As Integer, Shift As Integer)
     '    mintRepeatKeyCode = KeyCode
     'End Sub
-
-    'UPGRADE_WARNING: Event cboSplitBudget.TextChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-    'UPGRADE_WARNING: ComboBox event cboSplitBudget.Change was upgraded to cboSplitBudget.TextChanged which has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="DFCDE711-9694-47D7-9C50-45A99CD8E91E"'
-    Private Sub cboSplitBudget_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboSplitBudget.TextChanged
-        Dim index As Short = cboSplitBudget.GetIndex(eventSender)
-        On Error GoTo ErrorHandler
-        If Not mblnInDisplaySplits Then
-            SearchInComboBoxChange(cboSplitBudget(index), mintSplitBudgetKeyCode)
-        End If
-        Exit Sub
-ErrorHandler:
-        TopError("cboSplitBudget_Change")
-    End Sub
-
-    'UPGRADE_WARNING: Event cboSplitBudget.SelectedIndexChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-    Private Sub cboSplitBudget_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboSplitBudget.SelectedIndexChanged
-        Dim index As Short = cboSplitBudget.GetIndex(eventSender)
-        On Error GoTo ErrorHandler
-        If Not mblnInDisplaySplits Then
-            maudtSplits(index + 1 + mintSplitOffset).strBudgetKey = strGetStringTranslatorKeyFromCombo(cboSplitBudget(index), gobjBudgets)
-            CheckForPlaceholderBudget()
-        End If
-        Exit Sub
-ErrorHandler:
-        TopError("cboSplitBudget_Click")
-    End Sub
-
-    Private Sub cboSplitBudget_KeyDown(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.KeyEventArgs) Handles cboSplitBudget.KeyDown
-        Dim KeyCode As Short = eventArgs.KeyCode
-        Dim Shift As Short = eventArgs.KeyData \ &H10000
-        Dim index As Short = cboSplitBudget.GetIndex(eventSender)
-        mintSplitBudgetKeyCode = KeyCode
-    End Sub
-
-    'UPGRADE_WARNING: Event cboSplitCategory.TextChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-    'UPGRADE_WARNING: ComboBox event cboSplitCategory.Change was upgraded to cboSplitCategory.TextChanged which has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="DFCDE711-9694-47D7-9C50-45A99CD8E91E"'
-    Private Sub cboSplitCategory_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboSplitCategory.TextChanged
-        Dim index As Short = cboSplitCategory.GetIndex(eventSender)
-        On Error GoTo ErrorHandler
-        If Not mblnInDisplaySplits Then
-            SearchInComboBoxChange(cboSplitCategory(index), mintSplitCatKeyCode)
-        End If
-        Exit Sub
-ErrorHandler:
-        TopError("cboSplitCategory_Change")
-    End Sub
-
-    'UPGRADE_WARNING: Event cboSplitCategory.SelectedIndexChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-    Private Sub cboSplitCategory_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboSplitCategory.SelectedIndexChanged
-        Dim index As Short = cboSplitCategory.GetIndex(eventSender)
-        On Error GoTo ErrorHandler
-        If Not mblnInDisplaySplits Then
-            maudtSplits(index + 1 + mintSplitOffset).strCategoryKey = strGetStringTranslatorKeyFromCombo(cboSplitCategory(index), gobjCategories)
-        End If
-        Exit Sub
-ErrorHandler:
-        TopError("cboSplitCategory_Click")
-    End Sub
-
-    Private Sub cboSplitCategory_KeyDown(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.KeyEventArgs) Handles cboSplitCategory.KeyDown
-        Dim KeyCode As Short = eventArgs.KeyCode
-        Dim Shift As Short = eventArgs.KeyData \ &H10000
-        Dim index As Short = cboSplitCategory.GetIndex(eventSender)
-        mintSplitCatKeyCode = KeyCode
-    End Sub
 
     Private Sub SearchInComboBoxChange(ByVal cbo As System.Windows.Forms.ComboBox, ByVal intKeyCode As Short)
 
@@ -1857,45 +1816,94 @@ EventExitSub:
         frm.ShowMe(mobjReg, strRepeatKey())
     End Sub
 
-    'UPGRADE_WARNING: Event txtSplitPONum.TextChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-    Private Sub txtSplitPONum_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtSplitPONum.TextChanged
-        Dim index As Short = txtSplitPONum.GetIndex(eventSender)
+    Private Sub txtSplitPONum_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
+        _txtSplitPONum_0.TextChanged, _
+        _txtSplitPONum_1.TextChanged, _
+        _txtSplitPONum_2.TextChanged, _
+        _txtSplitPONum_3.TextChanged, _
+        _txtSplitPONum_4.TextChanged, _
+        _txtSplitPONum_5.TextChanged, _
+        _txtSplitPONum_6.TextChanged, _
+        _txtSplitPONum_7.TextChanged, _
+        _txtSplitPONum_8.TextChanged, _
+        _txtSplitPONum_9.TextChanged
+        Dim index As Short = CShort(CType(eventSender, TextBox).Tag)
         maudtSplits(index + 1 + mintSplitOffset).strPONumber = txtSplitPONum(index).Text
     End Sub
 
-    'UPGRADE_WARNING: Event txtSplitInvoiceNum.TextChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-    Private Sub txtSplitInvoiceNum_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtSplitInvoiceNum.TextChanged
-        Dim index As Short = txtSplitInvoiceNum.GetIndex(eventSender)
+    Private Sub txtSplitInvoiceNum_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
+        _txtSplitInvoiceNum_0.TextChanged, _
+        _txtSplitInvoiceNum_1.TextChanged, _
+        _txtSplitInvoiceNum_2.TextChanged, _
+        _txtSplitInvoiceNum_3.TextChanged, _
+        _txtSplitInvoiceNum_4.TextChanged, _
+        _txtSplitInvoiceNum_5.TextChanged, _
+        _txtSplitInvoiceNum_6.TextChanged, _
+        _txtSplitInvoiceNum_7.TextChanged, _
+        _txtSplitInvoiceNum_8.TextChanged, _
+        _txtSplitInvoiceNum_9.TextChanged
+        Dim index As Short = CShort(CType(eventSender, TextBox).Tag)
         maudtSplits(index + 1 + mintSplitOffset).strInvoiceNum = txtSplitInvoiceNum(index).Text
     End Sub
 
-    'UPGRADE_WARNING: Event txtSplitInvoiceDate.TextChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-    Private Sub txtSplitInvoiceDate_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtSplitInvoiceDate.TextChanged
-        Dim index As Short = txtSplitInvoiceDate.GetIndex(eventSender)
+    Private Sub txtSplitInvoiceDate_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
+        _txtSplitInvoiceDate_0.TextChanged, _
+        _txtSplitInvoiceDate_1.TextChanged, _
+        _txtSplitInvoiceDate_2.TextChanged, _
+        _txtSplitInvoiceDate_3.TextChanged, _
+        _txtSplitInvoiceDate_4.TextChanged, _
+        _txtSplitInvoiceDate_5.TextChanged, _
+        _txtSplitInvoiceDate_6.TextChanged, _
+        _txtSplitInvoiceDate_7.TextChanged, _
+        _txtSplitInvoiceDate_8.TextChanged, _
+        _txtSplitInvoiceDate_9.TextChanged
+        Dim index As Short = CShort(CType(eventSender, TextBox).Tag)
         maudtSplits(index + 1 + mintSplitOffset).strInvoiceDate = txtSplitInvoiceDate(index).Text
     End Sub
 
-    'UPGRADE_WARNING: Event txtSplitDueDate.TextChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-    Private Sub txtSplitDueDate_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtSplitDueDate.TextChanged
-        Dim index As Short = txtSplitDueDate.GetIndex(eventSender)
+    Private Sub txtSplitDueDate_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
+        _txtSplitDueDate_0.TextChanged, _
+        _txtSplitDueDate_1.TextChanged, _
+        _txtSplitDueDate_2.TextChanged, _
+        _txtSplitDueDate_3.TextChanged, _
+        _txtSplitDueDate_4.TextChanged, _
+        _txtSplitDueDate_5.TextChanged, _
+        _txtSplitDueDate_6.TextChanged, _
+        _txtSplitDueDate_7.TextChanged, _
+        _txtSplitDueDate_8.TextChanged, _
+        _txtSplitDueDate_9.TextChanged
+        Dim index As Short = CShort(CType(eventSender, TextBox).Tag)
         maudtSplits(index + 1 + mintSplitOffset).strDueDate = txtSplitDueDate(index).Text
     End Sub
 
-    'UPGRADE_WARNING: Event txtSplitTerms.TextChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-    Private Sub txtSplitTerms_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtSplitTerms.TextChanged
-        Dim index As Short = txtSplitTerms.GetIndex(eventSender)
+    Private Sub txtSplitTerms_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
+        _txtSplitTerms_0.TextChanged, _
+        _txtSplitTerms_1.TextChanged, _
+        _txtSplitTerms_2.TextChanged, _
+        _txtSplitTerms_3.TextChanged, _
+        _txtSplitTerms_4.TextChanged, _
+        _txtSplitTerms_5.TextChanged, _
+        _txtSplitTerms_6.TextChanged, _
+        _txtSplitTerms_7.TextChanged, _
+        _txtSplitTerms_8.TextChanged, _
+        _txtSplitTerms_9.TextChanged
+        Dim index As Short = CShort(CType(eventSender, TextBox).Tag)
         maudtSplits(index + 1 + mintSplitOffset).strTerms = txtSplitTerms(index).Text
     End Sub
 
-    'UPGRADE_WARNING: Event chkChoose.CheckStateChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-    Private Sub chkChoose_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkChoose.CheckStateChanged
-        Dim index As Short = chkChoose.GetIndex(eventSender)
-        maudtSplits(index + 1 + mintSplitOffset).blnChoose = (chkChoose(index).CheckState = System.Windows.Forms.CheckState.Checked)
-    End Sub
-
-    Private Sub txtSplitAmount_KeyPress(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.KeyPressEventArgs) Handles txtSplitAmount.KeyPress
+    Private Sub txtSplitAmount_KeyPress(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.KeyPressEventArgs) Handles _
+        _txtSplitAmount_0.KeyPress, _
+        _txtSplitAmount_1.KeyPress, _
+        _txtSplitAmount_2.KeyPress, _
+        _txtSplitAmount_3.KeyPress, _
+        _txtSplitAmount_4.KeyPress, _
+        _txtSplitAmount_5.KeyPress, _
+        _txtSplitAmount_6.KeyPress, _
+        _txtSplitAmount_7.KeyPress, _
+        _txtSplitAmount_8.KeyPress, _
+        _txtSplitAmount_9.KeyPress
         Dim KeyAscii As Short = Asc(eventArgs.KeyChar)
-        Dim index As Short = txtSplitAmount.GetIndex(eventSender)
+        Dim index As Short = CShort(CType(eventSender, TextBox).Tag)
         On Error GoTo ErrorHandler
 
         '^D (for divide split)
@@ -2002,9 +2010,18 @@ EventExitSub:
         End If
     End Sub
 
-    'UPGRADE_WARNING: Event txtSplitAmount.TextChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-    Private Sub txtSplitAmount_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtSplitAmount.TextChanged
-        Dim index As Short = txtSplitAmount.GetIndex(eventSender)
+    Private Sub txtSplitAmount_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
+        _txtSplitAmount_0.TextChanged, _
+        _txtSplitAmount_1.TextChanged, _
+        _txtSplitAmount_2.TextChanged, _
+        _txtSplitAmount_3.TextChanged, _
+        _txtSplitAmount_4.TextChanged, _
+        _txtSplitAmount_5.TextChanged, _
+        _txtSplitAmount_6.TextChanged, _
+        _txtSplitAmount_7.TextChanged, _
+        _txtSplitAmount_8.TextChanged, _
+        _txtSplitAmount_9.TextChanged
+        Dim index As Short = CShort(CType(eventSender, TextBox).Tag)
         Dim intSplitIndex As Short
         If Not (mblnSuppressPlaceholderAdjustment Or mblnInDisplaySplits) Then
             intSplitIndex = intGetSplitIndex(index)
@@ -2022,9 +2039,18 @@ EventExitSub:
         intGetSplitIndex = intControlIndex + mintSplitOffset + 1
     End Function
 
-    'UPGRADE_WARNING: Event txtSplitMemo.TextChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-    Private Sub txtSplitMemo_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtSplitMemo.TextChanged
-        Dim index As Short = txtSplitMemo.GetIndex(eventSender)
+    Private Sub txtSplitMemo_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
+        _txtSplitMemo_0.TextChanged, _
+        _txtSplitMemo_1.TextChanged, _
+        _txtSplitMemo_2.TextChanged, _
+        _txtSplitMemo_3.TextChanged, _
+        _txtSplitMemo_4.TextChanged, _
+        _txtSplitMemo_5.TextChanged, _
+        _txtSplitMemo_6.TextChanged, _
+        _txtSplitMemo_7.TextChanged, _
+        _txtSplitMemo_8.TextChanged, _
+        _txtSplitMemo_9.TextChanged
+        Dim index As Short = CShort(CType(eventSender, TextBox).Tag)
         maudtSplits(index + 1 + mintSplitOffset).strMemo = txtSplitMemo(index).Text
     End Sub
 
@@ -2132,5 +2158,154 @@ EventExitSub:
 
     Private Sub NestedError(ByVal strRoutine As String)
         gNestedErrorTrap("TrxForm." & strRoutine)
+    End Sub
+
+    Private Sub chkChoose_CheckStateChanged(sender As Object, e As EventArgs) Handles _
+        _chkChoose_0.CheckStateChanged, _
+        _chkChoose_1.CheckStateChanged, _
+        _chkChoose_2.CheckStateChanged, _
+        _chkChoose_3.CheckStateChanged, _
+        _chkChoose_4.CheckStateChanged, _
+        _chkChoose_5.CheckStateChanged, _
+        _chkChoose_6.CheckStateChanged, _
+        _chkChoose_7.CheckStateChanged, _
+        _chkChoose_8.CheckStateChanged, _
+        _chkChoose_9.CheckStateChanged
+
+        Dim index As Short = CShort(CType(sender, CheckBox).Tag)
+        maudtSplits(index + 1 + mintSplitOffset).blnChoose = (chkChoose(index).CheckState = System.Windows.Forms.CheckState.Checked)
+    End Sub
+
+    Private Sub cboSplitCategory_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles _
+        _cboSplitCategory_0.TextChanged, _
+        _cboSplitCategory_1.TextChanged, _
+        _cboSplitCategory_2.TextChanged, _
+        _cboSplitCategory_3.TextChanged, _
+        _cboSplitCategory_4.TextChanged, _
+        _cboSplitCategory_5.TextChanged, _
+        _cboSplitCategory_6.TextChanged, _
+        _cboSplitCategory_7.TextChanged, _
+        _cboSplitCategory_8.TextChanged, _
+        _cboSplitCategory_9.TextChanged
+
+        On Error GoTo ErrorHandler
+        Dim index As Short = CShort(CType(sender, ComboBox).Tag)
+        If Not cboSplitCategory Is Nothing Then
+            If Not mblnInDisplaySplits Then
+                SearchInComboBoxChange(cboSplitCategory(index), mintSplitCatKeyCode)
+            End If
+        End If
+        Exit Sub
+ErrorHandler:
+        TopError("cboSplitCategory_TextChanged")
+    End Sub
+
+    Private Sub cboSplitCategory_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles _
+        _cboSplitCategory_0.KeyDown, _
+        _cboSplitCategory_1.KeyDown, _
+        _cboSplitCategory_2.KeyDown, _
+        _cboSplitCategory_3.KeyDown, _
+        _cboSplitCategory_4.KeyDown, _
+        _cboSplitCategory_5.KeyDown, _
+        _cboSplitCategory_6.KeyDown, _
+        _cboSplitCategory_7.KeyDown, _
+        _cboSplitCategory_8.KeyDown, _
+        _cboSplitCategory_9.KeyDown
+
+        Dim KeyCode As Short = e.KeyCode
+        If Not cboSplitCategory Is Nothing Then
+            mintSplitCatKeyCode = KeyCode
+        End If
+    End Sub
+
+    Private Sub cboSplitCategory_SelectedIndexChanged(ByVal sender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
+        _cboSplitCategory_0.SelectedIndexChanged, _
+        _cboSplitCategory_1.SelectedIndexChanged, _
+        _cboSplitCategory_2.SelectedIndexChanged, _
+        _cboSplitCategory_3.SelectedIndexChanged, _
+        _cboSplitCategory_4.SelectedIndexChanged, _
+        _cboSplitCategory_5.SelectedIndexChanged, _
+        _cboSplitCategory_6.SelectedIndexChanged, _
+        _cboSplitCategory_7.SelectedIndexChanged, _
+        _cboSplitCategory_8.SelectedIndexChanged, _
+        _cboSplitCategory_9.SelectedIndexChanged
+
+        On Error GoTo ErrorHandler
+        Dim index As Short = CShort(CType(sender, ComboBox).Tag)
+        If Not cboSplitCategory Is Nothing Then
+            If Not mblnInDisplaySplits Then
+                maudtSplits(index + 1 + mintSplitOffset).strCategoryKey = strGetStringTranslatorKeyFromCombo(cboSplitCategory(index), gobjCategories)
+            End If
+        End If
+        Exit Sub
+ErrorHandler:
+        TopError("cboSplitCategory_SelectedIndexChanged")
+    End Sub
+
+    Private Sub cboSplitBudget_TextChanged(sender As Object, e As EventArgs) Handles _
+        _cboSplitBudget_0.TextChanged, _
+        _cboSplitBudget_1.TextChanged, _
+        _cboSplitBudget_2.TextChanged, _
+        _cboSplitBudget_3.TextChanged, _
+        _cboSplitBudget_4.TextChanged, _
+        _cboSplitBudget_5.TextChanged, _
+        _cboSplitBudget_6.TextChanged, _
+        _cboSplitBudget_7.TextChanged, _
+        _cboSplitBudget_8.TextChanged, _
+        _cboSplitBudget_9.TextChanged
+
+        On Error GoTo ErrorHandler
+        Dim index As Short = CShort(CType(sender, ComboBox).Tag)
+        If Not cboSplitBudget Is Nothing Then
+            If Not mblnInDisplaySplits Then
+                SearchInComboBoxChange(cboSplitBudget(index), mintSplitBudgetKeyCode)
+            End If
+        End If
+        Exit Sub
+ErrorHandler:
+        TopError("cboSplitBudget_TextChanged")
+    End Sub
+
+    Private Sub cboSplitBudget_KeyDown(sender As Object, e As KeyEventArgs) Handles _
+        _cboSplitBudget_0.KeyDown, _
+        _cboSplitBudget_1.KeyDown, _
+        _cboSplitBudget_2.KeyDown, _
+        _cboSplitBudget_3.KeyDown, _
+        _cboSplitBudget_4.KeyDown, _
+        _cboSplitBudget_5.KeyDown, _
+        _cboSplitBudget_6.KeyDown, _
+        _cboSplitBudget_7.KeyDown, _
+        _cboSplitBudget_8.KeyDown, _
+        _cboSplitBudget_9.KeyDown
+
+        Dim KeyCode As Short = e.KeyCode
+        If Not cboSplitBudget Is Nothing Then
+            mintSplitBudgetKeyCode = KeyCode
+        End If
+    End Sub
+
+    Private Sub cboSplitBudget_SelectedIndexChanged(sender As Object, e As EventArgs) Handles _
+        _cboSplitBudget_0.SelectedIndexChanged, _
+        _cboSplitBudget_1.SelectedIndexChanged, _
+        _cboSplitBudget_2.SelectedIndexChanged, _
+        _cboSplitBudget_3.SelectedIndexChanged, _
+        _cboSplitBudget_4.SelectedIndexChanged, _
+        _cboSplitBudget_5.SelectedIndexChanged, _
+        _cboSplitBudget_6.SelectedIndexChanged, _
+        _cboSplitBudget_7.SelectedIndexChanged, _
+        _cboSplitBudget_8.SelectedIndexChanged, _
+        _cboSplitBudget_9.SelectedIndexChanged
+
+        On Error GoTo ErrorHandler
+        Dim index As Short = CShort(CType(sender, ComboBox).Tag)
+        If Not cboSplitBudget Is Nothing Then
+            If Not mblnInDisplaySplits Then
+                maudtSplits(index + 1 + mintSplitOffset).strBudgetKey = strGetStringTranslatorKeyFromCombo(cboSplitBudget(index), gobjBudgets)
+                CheckForPlaceholderBudget()
+            End If
+        End If
+        Exit Sub
+ErrorHandler:
+        TopError("cboSplitBudget_SelectedIndexChanged")
     End Sub
 End Class

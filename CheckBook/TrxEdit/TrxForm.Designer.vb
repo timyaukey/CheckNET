@@ -197,229 +197,196 @@
 	Public WithEvents lblDescription As System.Windows.Forms.Label
 	Public WithEvents lblNumber As System.Windows.Forms.Label
 	Public WithEvents lblDate As System.Windows.Forms.Label
-	Public WithEvents cboSplitBudget As Microsoft.VisualBasic.Compatibility.VB6.ComboBoxArray
-	Public WithEvents cboSplitCategory As Microsoft.VisualBasic.Compatibility.VB6.ComboBoxArray
-	Public WithEvents chkChoose As Microsoft.VisualBasic.Compatibility.VB6.CheckBoxArray
-	Public WithEvents lblSplitNumber As Microsoft.VisualBasic.Compatibility.VB6.LabelArray
-	Public WithEvents txtSplitAmount As Microsoft.VisualBasic.Compatibility.VB6.TextBoxArray
-	Public WithEvents txtSplitDueDate As Microsoft.VisualBasic.Compatibility.VB6.TextBoxArray
-	Public WithEvents txtSplitInvoiceDate As Microsoft.VisualBasic.Compatibility.VB6.TextBoxArray
-	Public WithEvents txtSplitInvoiceNum As Microsoft.VisualBasic.Compatibility.VB6.TextBoxArray
-	Public WithEvents txtSplitMemo As Microsoft.VisualBasic.Compatibility.VB6.TextBoxArray
-	Public WithEvents txtSplitPONum As Microsoft.VisualBasic.Compatibility.VB6.TextBoxArray
-	Public WithEvents txtSplitTerms As Microsoft.VisualBasic.Compatibility.VB6.TextBoxArray
-	'NOTE: The following procedure is required by the Windows Form Designer
-	'It can be modified using the Windows Form Designer.
-	'Do not modify it using the code editor.
+    'NOTE: The following procedure is required by the Windows Form Designer
+    'It can be modified using the Windows Form Designer.
+    'Do not modify it using the code editor.
 	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TrxForm))
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.frmNormal = New System.Windows.Forms.GroupBox
-        Me._txtSplitPONum_9 = New System.Windows.Forms.TextBox
-        Me._txtSplitPONum_8 = New System.Windows.Forms.TextBox
-        Me._txtSplitPONum_7 = New System.Windows.Forms.TextBox
-        Me._txtSplitPONum_6 = New System.Windows.Forms.TextBox
-        Me._txtSplitPONum_5 = New System.Windows.Forms.TextBox
-        Me._txtSplitPONum_4 = New System.Windows.Forms.TextBox
-        Me._txtSplitPONum_3 = New System.Windows.Forms.TextBox
-        Me._txtSplitPONum_2 = New System.Windows.Forms.TextBox
-        Me._txtSplitPONum_1 = New System.Windows.Forms.TextBox
-        Me._txtSplitPONum_0 = New System.Windows.Forms.TextBox
-        Me.cmdDivideTrx = New System.Windows.Forms.Button
-        Me.cmdDelSplits = New System.Windows.Forms.Button
-        Me._chkChoose_9 = New System.Windows.Forms.CheckBox
-        Me._chkChoose_8 = New System.Windows.Forms.CheckBox
-        Me._chkChoose_7 = New System.Windows.Forms.CheckBox
-        Me._chkChoose_6 = New System.Windows.Forms.CheckBox
-        Me._chkChoose_5 = New System.Windows.Forms.CheckBox
-        Me._chkChoose_4 = New System.Windows.Forms.CheckBox
-        Me._chkChoose_3 = New System.Windows.Forms.CheckBox
-        Me._chkChoose_2 = New System.Windows.Forms.CheckBox
-        Me._chkChoose_1 = New System.Windows.Forms.CheckBox
-        Me._chkChoose_0 = New System.Windows.Forms.CheckBox
-        Me._txtSplitAmount_9 = New System.Windows.Forms.TextBox
-        Me._txtSplitMemo_9 = New System.Windows.Forms.TextBox
-        Me._cboSplitBudget_9 = New System.Windows.Forms.ComboBox
-        Me._cboSplitCategory_9 = New System.Windows.Forms.ComboBox
-        Me._txtSplitInvoiceNum_9 = New System.Windows.Forms.TextBox
-        Me._txtSplitInvoiceDate_9 = New System.Windows.Forms.TextBox
-        Me._txtSplitDueDate_9 = New System.Windows.Forms.TextBox
-        Me._txtSplitTerms_9 = New System.Windows.Forms.TextBox
-        Me._txtSplitAmount_8 = New System.Windows.Forms.TextBox
-        Me._txtSplitMemo_8 = New System.Windows.Forms.TextBox
-        Me._cboSplitBudget_8 = New System.Windows.Forms.ComboBox
-        Me._cboSplitCategory_8 = New System.Windows.Forms.ComboBox
-        Me._txtSplitInvoiceNum_8 = New System.Windows.Forms.TextBox
-        Me._txtSplitInvoiceDate_8 = New System.Windows.Forms.TextBox
-        Me._txtSplitDueDate_8 = New System.Windows.Forms.TextBox
-        Me._txtSplitTerms_8 = New System.Windows.Forms.TextBox
-        Me._txtSplitAmount_7 = New System.Windows.Forms.TextBox
-        Me._txtSplitMemo_7 = New System.Windows.Forms.TextBox
-        Me._cboSplitBudget_7 = New System.Windows.Forms.ComboBox
-        Me._cboSplitCategory_7 = New System.Windows.Forms.ComboBox
-        Me._txtSplitInvoiceNum_7 = New System.Windows.Forms.TextBox
-        Me._txtSplitInvoiceDate_7 = New System.Windows.Forms.TextBox
-        Me._txtSplitDueDate_7 = New System.Windows.Forms.TextBox
-        Me._txtSplitTerms_7 = New System.Windows.Forms.TextBox
-        Me._txtSplitAmount_6 = New System.Windows.Forms.TextBox
-        Me._txtSplitMemo_6 = New System.Windows.Forms.TextBox
-        Me._cboSplitBudget_6 = New System.Windows.Forms.ComboBox
-        Me._cboSplitCategory_6 = New System.Windows.Forms.ComboBox
-        Me._txtSplitInvoiceNum_6 = New System.Windows.Forms.TextBox
-        Me._txtSplitInvoiceDate_6 = New System.Windows.Forms.TextBox
-        Me._txtSplitDueDate_6 = New System.Windows.Forms.TextBox
-        Me._txtSplitTerms_6 = New System.Windows.Forms.TextBox
-        Me._txtSplitAmount_5 = New System.Windows.Forms.TextBox
-        Me._txtSplitMemo_5 = New System.Windows.Forms.TextBox
-        Me._cboSplitBudget_5 = New System.Windows.Forms.ComboBox
-        Me._cboSplitCategory_5 = New System.Windows.Forms.ComboBox
-        Me._txtSplitInvoiceNum_5 = New System.Windows.Forms.TextBox
-        Me._txtSplitInvoiceDate_5 = New System.Windows.Forms.TextBox
-        Me._txtSplitDueDate_5 = New System.Windows.Forms.TextBox
-        Me._txtSplitTerms_5 = New System.Windows.Forms.TextBox
-        Me._txtSplitTerms_1 = New System.Windows.Forms.TextBox
-        Me._txtSplitTerms_0 = New System.Windows.Forms.TextBox
-        Me._txtSplitTerms_2 = New System.Windows.Forms.TextBox
-        Me._txtSplitTerms_3 = New System.Windows.Forms.TextBox
-        Me._txtSplitTerms_4 = New System.Windows.Forms.TextBox
-        Me._txtSplitDueDate_4 = New System.Windows.Forms.TextBox
-        Me._txtSplitDueDate_3 = New System.Windows.Forms.TextBox
-        Me._txtSplitDueDate_2 = New System.Windows.Forms.TextBox
-        Me._txtSplitDueDate_0 = New System.Windows.Forms.TextBox
-        Me._txtSplitDueDate_1 = New System.Windows.Forms.TextBox
-        Me._txtSplitInvoiceDate_4 = New System.Windows.Forms.TextBox
-        Me._txtSplitInvoiceDate_3 = New System.Windows.Forms.TextBox
-        Me._txtSplitInvoiceDate_2 = New System.Windows.Forms.TextBox
-        Me._txtSplitInvoiceDate_0 = New System.Windows.Forms.TextBox
-        Me._txtSplitInvoiceDate_1 = New System.Windows.Forms.TextBox
-        Me._txtSplitInvoiceNum_1 = New System.Windows.Forms.TextBox
-        Me._txtSplitInvoiceNum_0 = New System.Windows.Forms.TextBox
-        Me._txtSplitInvoiceNum_2 = New System.Windows.Forms.TextBox
-        Me._txtSplitInvoiceNum_3 = New System.Windows.Forms.TextBox
-        Me._txtSplitInvoiceNum_4 = New System.Windows.Forms.TextBox
-        Me.cmdSplitScrollDown = New System.Windows.Forms.Button
-        Me.cmdSplitScrollUp = New System.Windows.Forms.Button
-        Me._cboSplitCategory_4 = New System.Windows.Forms.ComboBox
-        Me._cboSplitBudget_4 = New System.Windows.Forms.ComboBox
-        Me._txtSplitMemo_4 = New System.Windows.Forms.TextBox
-        Me._txtSplitAmount_4 = New System.Windows.Forms.TextBox
-        Me._cboSplitCategory_3 = New System.Windows.Forms.ComboBox
-        Me._cboSplitBudget_3 = New System.Windows.Forms.ComboBox
-        Me._txtSplitMemo_3 = New System.Windows.Forms.TextBox
-        Me._txtSplitAmount_3 = New System.Windows.Forms.TextBox
-        Me._cboSplitCategory_2 = New System.Windows.Forms.ComboBox
-        Me._cboSplitBudget_2 = New System.Windows.Forms.ComboBox
-        Me._txtSplitMemo_2 = New System.Windows.Forms.TextBox
-        Me._txtSplitAmount_2 = New System.Windows.Forms.TextBox
-        Me._cboSplitCategory_0 = New System.Windows.Forms.ComboBox
-        Me._cboSplitBudget_0 = New System.Windows.Forms.ComboBox
-        Me._txtSplitMemo_0 = New System.Windows.Forms.TextBox
-        Me._txtSplitAmount_0 = New System.Windows.Forms.TextBox
-        Me._txtSplitAmount_1 = New System.Windows.Forms.TextBox
-        Me._txtSplitMemo_1 = New System.Windows.Forms.TextBox
-        Me._cboSplitBudget_1 = New System.Windows.Forms.ComboBox
-        Me._cboSplitCategory_1 = New System.Windows.Forms.ComboBox
-        Me.txtSplitTotal = New System.Windows.Forms.TextBox
-        Me.chkImported = New System.Windows.Forms.CheckBox
-        Me.txtMatchRange = New System.Windows.Forms.TextBox
-        Me.lblSplitPONumber = New System.Windows.Forms.Label
-        Me.lblDivideSplit = New System.Windows.Forms.Label
-        Me._lblSplitNumber_9 = New System.Windows.Forms.Label
-        Me._lblSplitNumber_8 = New System.Windows.Forms.Label
-        Me._lblSplitNumber_7 = New System.Windows.Forms.Label
-        Me._lblSplitNumber_6 = New System.Windows.Forms.Label
-        Me._lblSplitNumber_5 = New System.Windows.Forms.Label
-        Me.lblSplitTerms = New System.Windows.Forms.Label
-        Me.lblSplitDueDate = New System.Windows.Forms.Label
-        Me.lblSplitInvoiceDate = New System.Windows.Forms.Label
-        Me.lblSplitInvoiceNum = New System.Windows.Forms.Label
-        Me._lblSplitNumber_4 = New System.Windows.Forms.Label
-        Me._lblSplitNumber_3 = New System.Windows.Forms.Label
-        Me._lblSplitNumber_2 = New System.Windows.Forms.Label
-        Me._lblSplitNumber_0 = New System.Windows.Forms.Label
-        Me.lblSplitAmount = New System.Windows.Forms.Label
-        Me.lblSplitBudget = New System.Windows.Forms.Label
-        Me.lblSplitMemo = New System.Windows.Forms.Label
-        Me.lblSplitCategory = New System.Windows.Forms.Label
-        Me._lblSplitNumber_1 = New System.Windows.Forms.Label
-        Me.lblSplitTotal = New System.Windows.Forms.Label
-        Me.lblImportKey = New System.Windows.Forms.Label
-        Me.lblMatchRange = New System.Windows.Forms.Label
-        Me.frmTransfer = New System.Windows.Forms.GroupBox
-        Me.cboTransferTo = New System.Windows.Forms.ComboBox
-        Me.txtTransferAmount = New System.Windows.Forms.TextBox
-        Me.lblTransferTo = New System.Windows.Forms.Label
-        Me.lblTransferAmount = New System.Windows.Forms.Label
-        Me.frmBudget = New System.Windows.Forms.GroupBox
-        Me.lvwAppliedTo = New System.Windows.Forms.ListView
-        Me._lvwAppliedTo_ColumnHeader_1 = New System.Windows.Forms.ColumnHeader
-        Me._lvwAppliedTo_ColumnHeader_2 = New System.Windows.Forms.ColumnHeader
-        Me._lvwAppliedTo_ColumnHeader_3 = New System.Windows.Forms.ColumnHeader
-        Me._lvwAppliedTo_ColumnHeader_4 = New System.Windows.Forms.ColumnHeader
-        Me._lvwAppliedTo_ColumnHeader_5 = New System.Windows.Forms.ColumnHeader
-        Me._lvwAppliedTo_ColumnHeader_6 = New System.Windows.Forms.ColumnHeader
-        Me._lvwAppliedTo_ColumnHeader_7 = New System.Windows.Forms.ColumnHeader
-        Me.txtBudgetApplied = New System.Windows.Forms.TextBox
-        Me.cboBudgetName = New System.Windows.Forms.ComboBox
-        Me.txtBudgetEnds = New System.Windows.Forms.TextBox
-        Me.txtBudgetLimit = New System.Windows.Forms.TextBox
-        Me.lblOriginallyApplied = New System.Windows.Forms.Label
-        Me.lblBudgetApplied = New System.Windows.Forms.Label
-        Me.lblBudgetName = New System.Windows.Forms.Label
-        Me.lblBudgetEnds = New System.Windows.Forms.Label
-        Me.lblBudgetLimit = New System.Windows.Forms.Label
-        Me.cmdCopyInvoiceNumbers = New System.Windows.Forms.Button
-        Me.cmdPrintCheck = New System.Windows.Forms.Button
-        Me.cmdRptInfo = New System.Windows.Forms.Button
-        Me.cmdMailingAddress = New System.Windows.Forms.Button
-        Me.cmdCopyDate = New System.Windows.Forms.Button
-        Me.cmdCopyAmount = New System.Windows.Forms.Button
-        Me.txtRepeatSeq = New System.Windows.Forms.TextBox
-        Me.cmdCancel = New System.Windows.Forms.Button
-        Me.cmdOkay = New System.Windows.Forms.Button
-        Me.cboRepeatKey = New System.Windows.Forms.ComboBox
-        Me.cboStatus = New System.Windows.Forms.ComboBox
-        Me.chkAutoGenerated = New System.Windows.Forms.CheckBox
-        Me.chkAwaitingReview = New System.Windows.Forms.CheckBox
-        Me.chkFake = New System.Windows.Forms.CheckBox
-        Me.txtMemo = New System.Windows.Forms.TextBox
-        Me.txtDescription = New System.Windows.Forms.TextBox
-        Me.txtNumber = New System.Windows.Forms.TextBox
-        Me.txtDate = New System.Windows.Forms.TextBox
-        Me.lblRepeatSeq = New System.Windows.Forms.Label
-        Me.lblSearchMemorized = New System.Windows.Forms.Label
-        Me.lblRepeatKey = New System.Windows.Forms.Label
-        Me.lblStatus = New System.Windows.Forms.Label
-        Me.lblMemo = New System.Windows.Forms.Label
-        Me.lblDescription = New System.Windows.Forms.Label
-        Me.lblNumber = New System.Windows.Forms.Label
-        Me.lblDate = New System.Windows.Forms.Label
-        Me.cboSplitBudget = New Microsoft.VisualBasic.Compatibility.VB6.ComboBoxArray(Me.components)
-        Me.cboSplitCategory = New Microsoft.VisualBasic.Compatibility.VB6.ComboBoxArray(Me.components)
-        Me.chkChoose = New Microsoft.VisualBasic.Compatibility.VB6.CheckBoxArray(Me.components)
-        Me.lblSplitNumber = New Microsoft.VisualBasic.Compatibility.VB6.LabelArray(Me.components)
-        Me.txtSplitAmount = New Microsoft.VisualBasic.Compatibility.VB6.TextBoxArray(Me.components)
-        Me.txtSplitDueDate = New Microsoft.VisualBasic.Compatibility.VB6.TextBoxArray(Me.components)
-        Me.txtSplitInvoiceDate = New Microsoft.VisualBasic.Compatibility.VB6.TextBoxArray(Me.components)
-        Me.txtSplitInvoiceNum = New Microsoft.VisualBasic.Compatibility.VB6.TextBoxArray(Me.components)
-        Me.txtSplitMemo = New Microsoft.VisualBasic.Compatibility.VB6.TextBoxArray(Me.components)
-        Me.txtSplitPONum = New Microsoft.VisualBasic.Compatibility.VB6.TextBoxArray(Me.components)
-        Me.txtSplitTerms = New Microsoft.VisualBasic.Compatibility.VB6.TextBoxArray(Me.components)
+        Me.frmNormal = New System.Windows.Forms.GroupBox()
+        Me._txtSplitPONum_9 = New System.Windows.Forms.TextBox()
+        Me._txtSplitPONum_8 = New System.Windows.Forms.TextBox()
+        Me._txtSplitPONum_7 = New System.Windows.Forms.TextBox()
+        Me._txtSplitPONum_6 = New System.Windows.Forms.TextBox()
+        Me._txtSplitPONum_5 = New System.Windows.Forms.TextBox()
+        Me._txtSplitPONum_4 = New System.Windows.Forms.TextBox()
+        Me._txtSplitPONum_3 = New System.Windows.Forms.TextBox()
+        Me._txtSplitPONum_2 = New System.Windows.Forms.TextBox()
+        Me._txtSplitPONum_1 = New System.Windows.Forms.TextBox()
+        Me._txtSplitPONum_0 = New System.Windows.Forms.TextBox()
+        Me.cmdDivideTrx = New System.Windows.Forms.Button()
+        Me.cmdDelSplits = New System.Windows.Forms.Button()
+        Me._chkChoose_9 = New System.Windows.Forms.CheckBox()
+        Me._chkChoose_8 = New System.Windows.Forms.CheckBox()
+        Me._chkChoose_7 = New System.Windows.Forms.CheckBox()
+        Me._chkChoose_6 = New System.Windows.Forms.CheckBox()
+        Me._chkChoose_5 = New System.Windows.Forms.CheckBox()
+        Me._chkChoose_4 = New System.Windows.Forms.CheckBox()
+        Me._chkChoose_3 = New System.Windows.Forms.CheckBox()
+        Me._chkChoose_2 = New System.Windows.Forms.CheckBox()
+        Me._chkChoose_1 = New System.Windows.Forms.CheckBox()
+        Me._chkChoose_0 = New System.Windows.Forms.CheckBox()
+        Me._txtSplitAmount_9 = New System.Windows.Forms.TextBox()
+        Me._txtSplitMemo_9 = New System.Windows.Forms.TextBox()
+        Me._cboSplitBudget_9 = New System.Windows.Forms.ComboBox()
+        Me._cboSplitCategory_9 = New System.Windows.Forms.ComboBox()
+        Me._txtSplitInvoiceNum_9 = New System.Windows.Forms.TextBox()
+        Me._txtSplitInvoiceDate_9 = New System.Windows.Forms.TextBox()
+        Me._txtSplitDueDate_9 = New System.Windows.Forms.TextBox()
+        Me._txtSplitTerms_9 = New System.Windows.Forms.TextBox()
+        Me._txtSplitAmount_8 = New System.Windows.Forms.TextBox()
+        Me._txtSplitMemo_8 = New System.Windows.Forms.TextBox()
+        Me._cboSplitBudget_8 = New System.Windows.Forms.ComboBox()
+        Me._cboSplitCategory_8 = New System.Windows.Forms.ComboBox()
+        Me._txtSplitInvoiceNum_8 = New System.Windows.Forms.TextBox()
+        Me._txtSplitInvoiceDate_8 = New System.Windows.Forms.TextBox()
+        Me._txtSplitDueDate_8 = New System.Windows.Forms.TextBox()
+        Me._txtSplitTerms_8 = New System.Windows.Forms.TextBox()
+        Me._txtSplitAmount_7 = New System.Windows.Forms.TextBox()
+        Me._txtSplitMemo_7 = New System.Windows.Forms.TextBox()
+        Me._cboSplitBudget_7 = New System.Windows.Forms.ComboBox()
+        Me._cboSplitCategory_7 = New System.Windows.Forms.ComboBox()
+        Me._txtSplitInvoiceNum_7 = New System.Windows.Forms.TextBox()
+        Me._txtSplitInvoiceDate_7 = New System.Windows.Forms.TextBox()
+        Me._txtSplitDueDate_7 = New System.Windows.Forms.TextBox()
+        Me._txtSplitTerms_7 = New System.Windows.Forms.TextBox()
+        Me._txtSplitAmount_6 = New System.Windows.Forms.TextBox()
+        Me._txtSplitMemo_6 = New System.Windows.Forms.TextBox()
+        Me._cboSplitBudget_6 = New System.Windows.Forms.ComboBox()
+        Me._cboSplitCategory_6 = New System.Windows.Forms.ComboBox()
+        Me._txtSplitInvoiceNum_6 = New System.Windows.Forms.TextBox()
+        Me._txtSplitInvoiceDate_6 = New System.Windows.Forms.TextBox()
+        Me._txtSplitDueDate_6 = New System.Windows.Forms.TextBox()
+        Me._txtSplitTerms_6 = New System.Windows.Forms.TextBox()
+        Me._txtSplitAmount_5 = New System.Windows.Forms.TextBox()
+        Me._txtSplitMemo_5 = New System.Windows.Forms.TextBox()
+        Me._cboSplitBudget_5 = New System.Windows.Forms.ComboBox()
+        Me._cboSplitCategory_5 = New System.Windows.Forms.ComboBox()
+        Me._txtSplitInvoiceNum_5 = New System.Windows.Forms.TextBox()
+        Me._txtSplitInvoiceDate_5 = New System.Windows.Forms.TextBox()
+        Me._txtSplitDueDate_5 = New System.Windows.Forms.TextBox()
+        Me._txtSplitTerms_5 = New System.Windows.Forms.TextBox()
+        Me._txtSplitTerms_1 = New System.Windows.Forms.TextBox()
+        Me._txtSplitTerms_0 = New System.Windows.Forms.TextBox()
+        Me._txtSplitTerms_2 = New System.Windows.Forms.TextBox()
+        Me._txtSplitTerms_3 = New System.Windows.Forms.TextBox()
+        Me._txtSplitTerms_4 = New System.Windows.Forms.TextBox()
+        Me._txtSplitDueDate_4 = New System.Windows.Forms.TextBox()
+        Me._txtSplitDueDate_3 = New System.Windows.Forms.TextBox()
+        Me._txtSplitDueDate_2 = New System.Windows.Forms.TextBox()
+        Me._txtSplitDueDate_0 = New System.Windows.Forms.TextBox()
+        Me._txtSplitDueDate_1 = New System.Windows.Forms.TextBox()
+        Me._txtSplitInvoiceDate_4 = New System.Windows.Forms.TextBox()
+        Me._txtSplitInvoiceDate_3 = New System.Windows.Forms.TextBox()
+        Me._txtSplitInvoiceDate_2 = New System.Windows.Forms.TextBox()
+        Me._txtSplitInvoiceDate_0 = New System.Windows.Forms.TextBox()
+        Me._txtSplitInvoiceDate_1 = New System.Windows.Forms.TextBox()
+        Me._txtSplitInvoiceNum_1 = New System.Windows.Forms.TextBox()
+        Me._txtSplitInvoiceNum_0 = New System.Windows.Forms.TextBox()
+        Me._txtSplitInvoiceNum_2 = New System.Windows.Forms.TextBox()
+        Me._txtSplitInvoiceNum_3 = New System.Windows.Forms.TextBox()
+        Me._txtSplitInvoiceNum_4 = New System.Windows.Forms.TextBox()
+        Me.cmdSplitScrollDown = New System.Windows.Forms.Button()
+        Me.cmdSplitScrollUp = New System.Windows.Forms.Button()
+        Me._cboSplitCategory_4 = New System.Windows.Forms.ComboBox()
+        Me._cboSplitBudget_4 = New System.Windows.Forms.ComboBox()
+        Me._txtSplitMemo_4 = New System.Windows.Forms.TextBox()
+        Me._txtSplitAmount_4 = New System.Windows.Forms.TextBox()
+        Me._cboSplitCategory_3 = New System.Windows.Forms.ComboBox()
+        Me._cboSplitBudget_3 = New System.Windows.Forms.ComboBox()
+        Me._txtSplitMemo_3 = New System.Windows.Forms.TextBox()
+        Me._txtSplitAmount_3 = New System.Windows.Forms.TextBox()
+        Me._cboSplitCategory_2 = New System.Windows.Forms.ComboBox()
+        Me._cboSplitBudget_2 = New System.Windows.Forms.ComboBox()
+        Me._txtSplitMemo_2 = New System.Windows.Forms.TextBox()
+        Me._txtSplitAmount_2 = New System.Windows.Forms.TextBox()
+        Me._cboSplitCategory_0 = New System.Windows.Forms.ComboBox()
+        Me._cboSplitBudget_0 = New System.Windows.Forms.ComboBox()
+        Me._txtSplitMemo_0 = New System.Windows.Forms.TextBox()
+        Me._txtSplitAmount_0 = New System.Windows.Forms.TextBox()
+        Me._txtSplitAmount_1 = New System.Windows.Forms.TextBox()
+        Me._txtSplitMemo_1 = New System.Windows.Forms.TextBox()
+        Me._cboSplitBudget_1 = New System.Windows.Forms.ComboBox()
+        Me._cboSplitCategory_1 = New System.Windows.Forms.ComboBox()
+        Me.txtSplitTotal = New System.Windows.Forms.TextBox()
+        Me.chkImported = New System.Windows.Forms.CheckBox()
+        Me.txtMatchRange = New System.Windows.Forms.TextBox()
+        Me.lblSplitPONumber = New System.Windows.Forms.Label()
+        Me.lblDivideSplit = New System.Windows.Forms.Label()
+        Me._lblSplitNumber_9 = New System.Windows.Forms.Label()
+        Me._lblSplitNumber_8 = New System.Windows.Forms.Label()
+        Me._lblSplitNumber_7 = New System.Windows.Forms.Label()
+        Me._lblSplitNumber_6 = New System.Windows.Forms.Label()
+        Me._lblSplitNumber_5 = New System.Windows.Forms.Label()
+        Me.lblSplitTerms = New System.Windows.Forms.Label()
+        Me.lblSplitDueDate = New System.Windows.Forms.Label()
+        Me.lblSplitInvoiceDate = New System.Windows.Forms.Label()
+        Me.lblSplitInvoiceNum = New System.Windows.Forms.Label()
+        Me._lblSplitNumber_4 = New System.Windows.Forms.Label()
+        Me._lblSplitNumber_3 = New System.Windows.Forms.Label()
+        Me._lblSplitNumber_2 = New System.Windows.Forms.Label()
+        Me._lblSplitNumber_0 = New System.Windows.Forms.Label()
+        Me.lblSplitAmount = New System.Windows.Forms.Label()
+        Me.lblSplitBudget = New System.Windows.Forms.Label()
+        Me.lblSplitMemo = New System.Windows.Forms.Label()
+        Me.lblSplitCategory = New System.Windows.Forms.Label()
+        Me._lblSplitNumber_1 = New System.Windows.Forms.Label()
+        Me.lblSplitTotal = New System.Windows.Forms.Label()
+        Me.lblImportKey = New System.Windows.Forms.Label()
+        Me.lblMatchRange = New System.Windows.Forms.Label()
+        Me.frmTransfer = New System.Windows.Forms.GroupBox()
+        Me.cboTransferTo = New System.Windows.Forms.ComboBox()
+        Me.txtTransferAmount = New System.Windows.Forms.TextBox()
+        Me.lblTransferTo = New System.Windows.Forms.Label()
+        Me.lblTransferAmount = New System.Windows.Forms.Label()
+        Me.frmBudget = New System.Windows.Forms.GroupBox()
+        Me.lvwAppliedTo = New System.Windows.Forms.ListView()
+        Me._lvwAppliedTo_ColumnHeader_1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwAppliedTo_ColumnHeader_2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwAppliedTo_ColumnHeader_3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwAppliedTo_ColumnHeader_4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwAppliedTo_ColumnHeader_5 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwAppliedTo_ColumnHeader_6 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwAppliedTo_ColumnHeader_7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.txtBudgetApplied = New System.Windows.Forms.TextBox()
+        Me.cboBudgetName = New System.Windows.Forms.ComboBox()
+        Me.txtBudgetEnds = New System.Windows.Forms.TextBox()
+        Me.txtBudgetLimit = New System.Windows.Forms.TextBox()
+        Me.lblOriginallyApplied = New System.Windows.Forms.Label()
+        Me.lblBudgetApplied = New System.Windows.Forms.Label()
+        Me.lblBudgetName = New System.Windows.Forms.Label()
+        Me.lblBudgetEnds = New System.Windows.Forms.Label()
+        Me.lblBudgetLimit = New System.Windows.Forms.Label()
+        Me.cmdCopyInvoiceNumbers = New System.Windows.Forms.Button()
+        Me.cmdPrintCheck = New System.Windows.Forms.Button()
+        Me.cmdRptInfo = New System.Windows.Forms.Button()
+        Me.cmdMailingAddress = New System.Windows.Forms.Button()
+        Me.cmdCopyDate = New System.Windows.Forms.Button()
+        Me.cmdCopyAmount = New System.Windows.Forms.Button()
+        Me.txtRepeatSeq = New System.Windows.Forms.TextBox()
+        Me.cmdCancel = New System.Windows.Forms.Button()
+        Me.cmdOkay = New System.Windows.Forms.Button()
+        Me.cboRepeatKey = New System.Windows.Forms.ComboBox()
+        Me.cboStatus = New System.Windows.Forms.ComboBox()
+        Me.chkAutoGenerated = New System.Windows.Forms.CheckBox()
+        Me.chkAwaitingReview = New System.Windows.Forms.CheckBox()
+        Me.chkFake = New System.Windows.Forms.CheckBox()
+        Me.txtMemo = New System.Windows.Forms.TextBox()
+        Me.txtDescription = New System.Windows.Forms.TextBox()
+        Me.txtNumber = New System.Windows.Forms.TextBox()
+        Me.txtDate = New System.Windows.Forms.TextBox()
+        Me.lblRepeatSeq = New System.Windows.Forms.Label()
+        Me.lblSearchMemorized = New System.Windows.Forms.Label()
+        Me.lblRepeatKey = New System.Windows.Forms.Label()
+        Me.lblStatus = New System.Windows.Forms.Label()
+        Me.lblMemo = New System.Windows.Forms.Label()
+        Me.lblDescription = New System.Windows.Forms.Label()
+        Me.lblNumber = New System.Windows.Forms.Label()
+        Me.lblDate = New System.Windows.Forms.Label()
         Me.frmNormal.SuspendLayout()
         Me.frmTransfer.SuspendLayout()
         Me.frmBudget.SuspendLayout()
-        CType(Me.cboSplitBudget, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.cboSplitCategory, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.chkChoose, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.lblSplitNumber, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.txtSplitAmount, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.txtSplitDueDate, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.txtSplitInvoiceDate, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.txtSplitInvoiceNum, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.txtSplitMemo, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.txtSplitPONum, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.txtSplitTerms, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'frmNormal
@@ -573,13 +540,13 @@
         Me._txtSplitPONum_9.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitPONum_9.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitPONum_9.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitPONum.SetIndex(Me._txtSplitPONum_9, CType(9, Short))
         Me._txtSplitPONum_9.Location = New System.Drawing.Point(204, 258)
         Me._txtSplitPONum_9.MaxLength = 0
         Me._txtSplitPONum_9.Name = "_txtSplitPONum_9"
         Me._txtSplitPONum_9.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitPONum_9.Size = New System.Drawing.Size(119, 20)
         Me._txtSplitPONum_9.TabIndex = 134
+        Me._txtSplitPONum_9.Tag = "9"
         '
         '_txtSplitPONum_8
         '
@@ -588,13 +555,13 @@
         Me._txtSplitPONum_8.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitPONum_8.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitPONum_8.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitPONum.SetIndex(Me._txtSplitPONum_8, CType(8, Short))
         Me._txtSplitPONum_8.Location = New System.Drawing.Point(204, 236)
         Me._txtSplitPONum_8.MaxLength = 0
         Me._txtSplitPONum_8.Name = "_txtSplitPONum_8"
         Me._txtSplitPONum_8.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitPONum_8.Size = New System.Drawing.Size(119, 20)
         Me._txtSplitPONum_8.TabIndex = 123
+        Me._txtSplitPONum_8.Tag = "8"
         '
         '_txtSplitPONum_7
         '
@@ -603,13 +570,13 @@
         Me._txtSplitPONum_7.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitPONum_7.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitPONum_7.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitPONum.SetIndex(Me._txtSplitPONum_7, CType(7, Short))
         Me._txtSplitPONum_7.Location = New System.Drawing.Point(204, 214)
         Me._txtSplitPONum_7.MaxLength = 0
         Me._txtSplitPONum_7.Name = "_txtSplitPONum_7"
         Me._txtSplitPONum_7.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitPONum_7.Size = New System.Drawing.Size(119, 20)
         Me._txtSplitPONum_7.TabIndex = 112
+        Me._txtSplitPONum_7.Tag = "7"
         '
         '_txtSplitPONum_6
         '
@@ -618,13 +585,13 @@
         Me._txtSplitPONum_6.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitPONum_6.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitPONum_6.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitPONum.SetIndex(Me._txtSplitPONum_6, CType(6, Short))
         Me._txtSplitPONum_6.Location = New System.Drawing.Point(204, 192)
         Me._txtSplitPONum_6.MaxLength = 0
         Me._txtSplitPONum_6.Name = "_txtSplitPONum_6"
         Me._txtSplitPONum_6.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitPONum_6.Size = New System.Drawing.Size(119, 20)
         Me._txtSplitPONum_6.TabIndex = 101
+        Me._txtSplitPONum_6.Tag = "6"
         '
         '_txtSplitPONum_5
         '
@@ -633,13 +600,13 @@
         Me._txtSplitPONum_5.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitPONum_5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitPONum_5.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitPONum.SetIndex(Me._txtSplitPONum_5, CType(5, Short))
         Me._txtSplitPONum_5.Location = New System.Drawing.Point(204, 170)
         Me._txtSplitPONum_5.MaxLength = 0
         Me._txtSplitPONum_5.Name = "_txtSplitPONum_5"
         Me._txtSplitPONum_5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitPONum_5.Size = New System.Drawing.Size(119, 20)
         Me._txtSplitPONum_5.TabIndex = 90
+        Me._txtSplitPONum_5.Tag = "5"
         '
         '_txtSplitPONum_4
         '
@@ -648,13 +615,13 @@
         Me._txtSplitPONum_4.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitPONum_4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitPONum_4.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitPONum.SetIndex(Me._txtSplitPONum_4, CType(4, Short))
         Me._txtSplitPONum_4.Location = New System.Drawing.Point(204, 148)
         Me._txtSplitPONum_4.MaxLength = 0
         Me._txtSplitPONum_4.Name = "_txtSplitPONum_4"
         Me._txtSplitPONum_4.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitPONum_4.Size = New System.Drawing.Size(119, 20)
         Me._txtSplitPONum_4.TabIndex = 79
+        Me._txtSplitPONum_4.Tag = "4"
         '
         '_txtSplitPONum_3
         '
@@ -663,13 +630,13 @@
         Me._txtSplitPONum_3.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitPONum_3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitPONum_3.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitPONum.SetIndex(Me._txtSplitPONum_3, CType(3, Short))
         Me._txtSplitPONum_3.Location = New System.Drawing.Point(204, 126)
         Me._txtSplitPONum_3.MaxLength = 0
         Me._txtSplitPONum_3.Name = "_txtSplitPONum_3"
         Me._txtSplitPONum_3.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitPONum_3.Size = New System.Drawing.Size(119, 20)
         Me._txtSplitPONum_3.TabIndex = 68
+        Me._txtSplitPONum_3.Tag = "3"
         '
         '_txtSplitPONum_2
         '
@@ -678,13 +645,13 @@
         Me._txtSplitPONum_2.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitPONum_2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitPONum_2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitPONum.SetIndex(Me._txtSplitPONum_2, CType(2, Short))
         Me._txtSplitPONum_2.Location = New System.Drawing.Point(204, 104)
         Me._txtSplitPONum_2.MaxLength = 0
         Me._txtSplitPONum_2.Name = "_txtSplitPONum_2"
         Me._txtSplitPONum_2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitPONum_2.Size = New System.Drawing.Size(119, 20)
         Me._txtSplitPONum_2.TabIndex = 57
+        Me._txtSplitPONum_2.Tag = "2"
         '
         '_txtSplitPONum_1
         '
@@ -693,13 +660,13 @@
         Me._txtSplitPONum_1.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitPONum_1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitPONum_1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitPONum.SetIndex(Me._txtSplitPONum_1, CType(1, Short))
         Me._txtSplitPONum_1.Location = New System.Drawing.Point(204, 82)
         Me._txtSplitPONum_1.MaxLength = 0
         Me._txtSplitPONum_1.Name = "_txtSplitPONum_1"
         Me._txtSplitPONum_1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitPONum_1.Size = New System.Drawing.Size(119, 20)
         Me._txtSplitPONum_1.TabIndex = 46
+        Me._txtSplitPONum_1.Tag = "1"
         '
         '_txtSplitPONum_0
         '
@@ -708,13 +675,13 @@
         Me._txtSplitPONum_0.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitPONum_0.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitPONum_0.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitPONum.SetIndex(Me._txtSplitPONum_0, CType(0, Short))
         Me._txtSplitPONum_0.Location = New System.Drawing.Point(204, 60)
         Me._txtSplitPONum_0.MaxLength = 0
         Me._txtSplitPONum_0.Name = "_txtSplitPONum_0"
         Me._txtSplitPONum_0.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitPONum_0.Size = New System.Drawing.Size(119, 20)
         Me._txtSplitPONum_0.TabIndex = 35
+        Me._txtSplitPONum_0.Tag = "0"
         '
         'cmdDivideTrx
         '
@@ -752,13 +719,13 @@
         Me._chkChoose_9.Cursor = System.Windows.Forms.Cursors.Default
         Me._chkChoose_9.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._chkChoose_9.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkChoose.SetIndex(Me._chkChoose_9, CType(9, Short))
         Me._chkChoose_9.Location = New System.Drawing.Point(954, 258)
         Me._chkChoose_9.Name = "_chkChoose_9"
         Me._chkChoose_9.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._chkChoose_9.Size = New System.Drawing.Size(16, 17)
         Me._chkChoose_9.TabIndex = 142
         Me._chkChoose_9.TabStop = False
+        Me._chkChoose_9.Tag = "9"
         Me._chkChoose_9.UseVisualStyleBackColor = False
         '
         '_chkChoose_8
@@ -767,13 +734,13 @@
         Me._chkChoose_8.Cursor = System.Windows.Forms.Cursors.Default
         Me._chkChoose_8.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._chkChoose_8.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkChoose.SetIndex(Me._chkChoose_8, CType(8, Short))
         Me._chkChoose_8.Location = New System.Drawing.Point(954, 236)
         Me._chkChoose_8.Name = "_chkChoose_8"
         Me._chkChoose_8.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._chkChoose_8.Size = New System.Drawing.Size(16, 17)
         Me._chkChoose_8.TabIndex = 131
         Me._chkChoose_8.TabStop = False
+        Me._chkChoose_8.Tag = "8"
         Me._chkChoose_8.UseVisualStyleBackColor = False
         '
         '_chkChoose_7
@@ -782,13 +749,13 @@
         Me._chkChoose_7.Cursor = System.Windows.Forms.Cursors.Default
         Me._chkChoose_7.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._chkChoose_7.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkChoose.SetIndex(Me._chkChoose_7, CType(7, Short))
         Me._chkChoose_7.Location = New System.Drawing.Point(954, 214)
         Me._chkChoose_7.Name = "_chkChoose_7"
         Me._chkChoose_7.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._chkChoose_7.Size = New System.Drawing.Size(16, 17)
         Me._chkChoose_7.TabIndex = 120
         Me._chkChoose_7.TabStop = False
+        Me._chkChoose_7.Tag = "7"
         Me._chkChoose_7.UseVisualStyleBackColor = False
         '
         '_chkChoose_6
@@ -797,13 +764,13 @@
         Me._chkChoose_6.Cursor = System.Windows.Forms.Cursors.Default
         Me._chkChoose_6.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._chkChoose_6.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkChoose.SetIndex(Me._chkChoose_6, CType(6, Short))
         Me._chkChoose_6.Location = New System.Drawing.Point(954, 192)
         Me._chkChoose_6.Name = "_chkChoose_6"
         Me._chkChoose_6.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._chkChoose_6.Size = New System.Drawing.Size(16, 17)
         Me._chkChoose_6.TabIndex = 109
         Me._chkChoose_6.TabStop = False
+        Me._chkChoose_6.Tag = "6"
         Me._chkChoose_6.UseVisualStyleBackColor = False
         '
         '_chkChoose_5
@@ -812,13 +779,13 @@
         Me._chkChoose_5.Cursor = System.Windows.Forms.Cursors.Default
         Me._chkChoose_5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._chkChoose_5.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkChoose.SetIndex(Me._chkChoose_5, CType(5, Short))
         Me._chkChoose_5.Location = New System.Drawing.Point(954, 170)
         Me._chkChoose_5.Name = "_chkChoose_5"
         Me._chkChoose_5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._chkChoose_5.Size = New System.Drawing.Size(16, 17)
         Me._chkChoose_5.TabIndex = 98
         Me._chkChoose_5.TabStop = False
+        Me._chkChoose_5.Tag = "5"
         Me._chkChoose_5.UseVisualStyleBackColor = False
         '
         '_chkChoose_4
@@ -827,13 +794,13 @@
         Me._chkChoose_4.Cursor = System.Windows.Forms.Cursors.Default
         Me._chkChoose_4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._chkChoose_4.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkChoose.SetIndex(Me._chkChoose_4, CType(4, Short))
         Me._chkChoose_4.Location = New System.Drawing.Point(954, 148)
         Me._chkChoose_4.Name = "_chkChoose_4"
         Me._chkChoose_4.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._chkChoose_4.Size = New System.Drawing.Size(16, 17)
         Me._chkChoose_4.TabIndex = 87
         Me._chkChoose_4.TabStop = False
+        Me._chkChoose_4.Tag = "4"
         Me._chkChoose_4.UseVisualStyleBackColor = False
         '
         '_chkChoose_3
@@ -842,13 +809,13 @@
         Me._chkChoose_3.Cursor = System.Windows.Forms.Cursors.Default
         Me._chkChoose_3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._chkChoose_3.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkChoose.SetIndex(Me._chkChoose_3, CType(3, Short))
         Me._chkChoose_3.Location = New System.Drawing.Point(954, 126)
         Me._chkChoose_3.Name = "_chkChoose_3"
         Me._chkChoose_3.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._chkChoose_3.Size = New System.Drawing.Size(16, 17)
         Me._chkChoose_3.TabIndex = 76
         Me._chkChoose_3.TabStop = False
+        Me._chkChoose_3.Tag = "3"
         Me._chkChoose_3.UseVisualStyleBackColor = False
         '
         '_chkChoose_2
@@ -857,13 +824,13 @@
         Me._chkChoose_2.Cursor = System.Windows.Forms.Cursors.Default
         Me._chkChoose_2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._chkChoose_2.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkChoose.SetIndex(Me._chkChoose_2, CType(2, Short))
         Me._chkChoose_2.Location = New System.Drawing.Point(954, 104)
         Me._chkChoose_2.Name = "_chkChoose_2"
         Me._chkChoose_2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._chkChoose_2.Size = New System.Drawing.Size(16, 17)
         Me._chkChoose_2.TabIndex = 65
         Me._chkChoose_2.TabStop = False
+        Me._chkChoose_2.Tag = "2"
         Me._chkChoose_2.UseVisualStyleBackColor = False
         '
         '_chkChoose_1
@@ -872,13 +839,13 @@
         Me._chkChoose_1.Cursor = System.Windows.Forms.Cursors.Default
         Me._chkChoose_1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._chkChoose_1.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkChoose.SetIndex(Me._chkChoose_1, CType(1, Short))
         Me._chkChoose_1.Location = New System.Drawing.Point(954, 82)
         Me._chkChoose_1.Name = "_chkChoose_1"
         Me._chkChoose_1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._chkChoose_1.Size = New System.Drawing.Size(16, 17)
         Me._chkChoose_1.TabIndex = 54
         Me._chkChoose_1.TabStop = False
+        Me._chkChoose_1.Tag = "1"
         Me._chkChoose_1.UseVisualStyleBackColor = False
         '
         '_chkChoose_0
@@ -887,13 +854,13 @@
         Me._chkChoose_0.Cursor = System.Windows.Forms.Cursors.Default
         Me._chkChoose_0.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._chkChoose_0.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkChoose.SetIndex(Me._chkChoose_0, CType(0, Short))
         Me._chkChoose_0.Location = New System.Drawing.Point(954, 60)
         Me._chkChoose_0.Name = "_chkChoose_0"
         Me._chkChoose_0.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._chkChoose_0.Size = New System.Drawing.Size(16, 17)
         Me._chkChoose_0.TabIndex = 43
         Me._chkChoose_0.TabStop = False
+        Me._chkChoose_0.Tag = "0"
         Me._chkChoose_0.UseVisualStyleBackColor = False
         '
         '_txtSplitAmount_9
@@ -903,13 +870,13 @@
         Me._txtSplitAmount_9.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitAmount_9.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitAmount_9.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitAmount.SetIndex(Me._txtSplitAmount_9, CType(9, Short))
         Me._txtSplitAmount_9.Location = New System.Drawing.Point(888, 258)
         Me._txtSplitAmount_9.MaxLength = 0
         Me._txtSplitAmount_9.Name = "_txtSplitAmount_9"
         Me._txtSplitAmount_9.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitAmount_9.Size = New System.Drawing.Size(64, 20)
         Me._txtSplitAmount_9.TabIndex = 141
+        Me._txtSplitAmount_9.Tag = "9"
         Me._txtSplitAmount_9.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         '_txtSplitMemo_9
@@ -919,13 +886,13 @@
         Me._txtSplitMemo_9.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitMemo_9.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitMemo_9.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitMemo.SetIndex(Me._txtSplitMemo_9, CType(9, Short))
         Me._txtSplitMemo_9.Location = New System.Drawing.Point(638, 258)
         Me._txtSplitMemo_9.MaxLength = 0
         Me._txtSplitMemo_9.Name = "_txtSplitMemo_9"
         Me._txtSplitMemo_9.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitMemo_9.Size = New System.Drawing.Size(133, 20)
         Me._txtSplitMemo_9.TabIndex = 139
+        Me._txtSplitMemo_9.Tag = "9"
         '
         '_cboSplitBudget_9
         '
@@ -933,12 +900,12 @@
         Me._cboSplitBudget_9.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitBudget_9.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitBudget_9.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitBudget.SetIndex(Me._cboSplitBudget_9, CType(9, Short))
         Me._cboSplitBudget_9.Location = New System.Drawing.Point(774, 258)
         Me._cboSplitBudget_9.Name = "_cboSplitBudget_9"
         Me._cboSplitBudget_9.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitBudget_9.Size = New System.Drawing.Size(111, 22)
         Me._cboSplitBudget_9.TabIndex = 140
+        Me._cboSplitBudget_9.Tag = "9"
         Me._cboSplitBudget_9.Text = "cboSplitBudget"
         '
         '_cboSplitCategory_9
@@ -947,12 +914,12 @@
         Me._cboSplitCategory_9.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitCategory_9.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitCategory_9.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitCategory.SetIndex(Me._cboSplitCategory_9, CType(9, Short))
         Me._cboSplitCategory_9.Location = New System.Drawing.Point(24, 258)
         Me._cboSplitCategory_9.Name = "_cboSplitCategory_9"
         Me._cboSplitCategory_9.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitCategory_9.Size = New System.Drawing.Size(179, 22)
         Me._cboSplitCategory_9.TabIndex = 133
+        Me._cboSplitCategory_9.Tag = "9"
         Me._cboSplitCategory_9.Text = "cboSplitCategory"
         '
         '_txtSplitInvoiceNum_9
@@ -962,13 +929,13 @@
         Me._txtSplitInvoiceNum_9.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceNum_9.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceNum_9.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceNum.SetIndex(Me._txtSplitInvoiceNum_9, CType(9, Short))
         Me._txtSplitInvoiceNum_9.Location = New System.Drawing.Point(326, 258)
         Me._txtSplitInvoiceNum_9.MaxLength = 0
         Me._txtSplitInvoiceNum_9.Name = "_txtSplitInvoiceNum_9"
         Me._txtSplitInvoiceNum_9.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceNum_9.Size = New System.Drawing.Size(114, 20)
         Me._txtSplitInvoiceNum_9.TabIndex = 135
+        Me._txtSplitInvoiceNum_9.Tag = "9"
         '
         '_txtSplitInvoiceDate_9
         '
@@ -977,13 +944,13 @@
         Me._txtSplitInvoiceDate_9.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceDate_9.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceDate_9.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceDate.SetIndex(Me._txtSplitInvoiceDate_9, CType(9, Short))
         Me._txtSplitInvoiceDate_9.Location = New System.Drawing.Point(442, 258)
         Me._txtSplitInvoiceDate_9.MaxLength = 0
         Me._txtSplitInvoiceDate_9.Name = "_txtSplitInvoiceDate_9"
         Me._txtSplitInvoiceDate_9.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceDate_9.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitInvoiceDate_9.TabIndex = 136
+        Me._txtSplitInvoiceDate_9.Tag = "9"
         '
         '_txtSplitDueDate_9
         '
@@ -992,13 +959,13 @@
         Me._txtSplitDueDate_9.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitDueDate_9.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitDueDate_9.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitDueDate.SetIndex(Me._txtSplitDueDate_9, CType(9, Short))
         Me._txtSplitDueDate_9.Location = New System.Drawing.Point(508, 258)
         Me._txtSplitDueDate_9.MaxLength = 0
         Me._txtSplitDueDate_9.Name = "_txtSplitDueDate_9"
         Me._txtSplitDueDate_9.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitDueDate_9.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitDueDate_9.TabIndex = 137
+        Me._txtSplitDueDate_9.Tag = "9"
         '
         '_txtSplitTerms_9
         '
@@ -1007,13 +974,13 @@
         Me._txtSplitTerms_9.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitTerms_9.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitTerms_9.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitTerms.SetIndex(Me._txtSplitTerms_9, CType(9, Short))
         Me._txtSplitTerms_9.Location = New System.Drawing.Point(574, 258)
         Me._txtSplitTerms_9.MaxLength = 0
         Me._txtSplitTerms_9.Name = "_txtSplitTerms_9"
         Me._txtSplitTerms_9.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitTerms_9.Size = New System.Drawing.Size(61, 20)
         Me._txtSplitTerms_9.TabIndex = 138
+        Me._txtSplitTerms_9.Tag = "9"
         '
         '_txtSplitAmount_8
         '
@@ -1022,13 +989,13 @@
         Me._txtSplitAmount_8.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitAmount_8.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitAmount_8.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitAmount.SetIndex(Me._txtSplitAmount_8, CType(8, Short))
         Me._txtSplitAmount_8.Location = New System.Drawing.Point(888, 236)
         Me._txtSplitAmount_8.MaxLength = 0
         Me._txtSplitAmount_8.Name = "_txtSplitAmount_8"
         Me._txtSplitAmount_8.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitAmount_8.Size = New System.Drawing.Size(64, 20)
         Me._txtSplitAmount_8.TabIndex = 130
+        Me._txtSplitAmount_8.Tag = "8"
         Me._txtSplitAmount_8.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         '_txtSplitMemo_8
@@ -1038,13 +1005,13 @@
         Me._txtSplitMemo_8.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitMemo_8.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitMemo_8.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitMemo.SetIndex(Me._txtSplitMemo_8, CType(8, Short))
         Me._txtSplitMemo_8.Location = New System.Drawing.Point(638, 236)
         Me._txtSplitMemo_8.MaxLength = 0
         Me._txtSplitMemo_8.Name = "_txtSplitMemo_8"
         Me._txtSplitMemo_8.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitMemo_8.Size = New System.Drawing.Size(133, 20)
         Me._txtSplitMemo_8.TabIndex = 128
+        Me._txtSplitMemo_8.Tag = "8"
         '
         '_cboSplitBudget_8
         '
@@ -1052,12 +1019,12 @@
         Me._cboSplitBudget_8.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitBudget_8.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitBudget_8.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitBudget.SetIndex(Me._cboSplitBudget_8, CType(8, Short))
         Me._cboSplitBudget_8.Location = New System.Drawing.Point(774, 236)
         Me._cboSplitBudget_8.Name = "_cboSplitBudget_8"
         Me._cboSplitBudget_8.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitBudget_8.Size = New System.Drawing.Size(111, 22)
         Me._cboSplitBudget_8.TabIndex = 129
+        Me._cboSplitBudget_8.Tag = "8"
         Me._cboSplitBudget_8.Text = "cboSplitBudget"
         '
         '_cboSplitCategory_8
@@ -1066,12 +1033,12 @@
         Me._cboSplitCategory_8.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitCategory_8.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitCategory_8.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitCategory.SetIndex(Me._cboSplitCategory_8, CType(8, Short))
         Me._cboSplitCategory_8.Location = New System.Drawing.Point(24, 236)
         Me._cboSplitCategory_8.Name = "_cboSplitCategory_8"
         Me._cboSplitCategory_8.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitCategory_8.Size = New System.Drawing.Size(179, 22)
         Me._cboSplitCategory_8.TabIndex = 122
+        Me._cboSplitCategory_8.Tag = "8"
         Me._cboSplitCategory_8.Text = "cboSplitCategory"
         '
         '_txtSplitInvoiceNum_8
@@ -1081,13 +1048,13 @@
         Me._txtSplitInvoiceNum_8.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceNum_8.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceNum_8.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceNum.SetIndex(Me._txtSplitInvoiceNum_8, CType(8, Short))
         Me._txtSplitInvoiceNum_8.Location = New System.Drawing.Point(326, 236)
         Me._txtSplitInvoiceNum_8.MaxLength = 0
         Me._txtSplitInvoiceNum_8.Name = "_txtSplitInvoiceNum_8"
         Me._txtSplitInvoiceNum_8.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceNum_8.Size = New System.Drawing.Size(114, 20)
         Me._txtSplitInvoiceNum_8.TabIndex = 124
+        Me._txtSplitInvoiceNum_8.Tag = "8"
         '
         '_txtSplitInvoiceDate_8
         '
@@ -1096,13 +1063,13 @@
         Me._txtSplitInvoiceDate_8.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceDate_8.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceDate_8.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceDate.SetIndex(Me._txtSplitInvoiceDate_8, CType(8, Short))
         Me._txtSplitInvoiceDate_8.Location = New System.Drawing.Point(442, 236)
         Me._txtSplitInvoiceDate_8.MaxLength = 0
         Me._txtSplitInvoiceDate_8.Name = "_txtSplitInvoiceDate_8"
         Me._txtSplitInvoiceDate_8.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceDate_8.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitInvoiceDate_8.TabIndex = 125
+        Me._txtSplitInvoiceDate_8.Tag = "8"
         '
         '_txtSplitDueDate_8
         '
@@ -1111,13 +1078,13 @@
         Me._txtSplitDueDate_8.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitDueDate_8.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitDueDate_8.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitDueDate.SetIndex(Me._txtSplitDueDate_8, CType(8, Short))
         Me._txtSplitDueDate_8.Location = New System.Drawing.Point(508, 236)
         Me._txtSplitDueDate_8.MaxLength = 0
         Me._txtSplitDueDate_8.Name = "_txtSplitDueDate_8"
         Me._txtSplitDueDate_8.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitDueDate_8.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitDueDate_8.TabIndex = 126
+        Me._txtSplitDueDate_8.Tag = "8"
         '
         '_txtSplitTerms_8
         '
@@ -1126,13 +1093,13 @@
         Me._txtSplitTerms_8.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitTerms_8.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitTerms_8.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitTerms.SetIndex(Me._txtSplitTerms_8, CType(8, Short))
         Me._txtSplitTerms_8.Location = New System.Drawing.Point(574, 236)
         Me._txtSplitTerms_8.MaxLength = 0
         Me._txtSplitTerms_8.Name = "_txtSplitTerms_8"
         Me._txtSplitTerms_8.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitTerms_8.Size = New System.Drawing.Size(61, 20)
         Me._txtSplitTerms_8.TabIndex = 127
+        Me._txtSplitTerms_8.Tag = "8"
         '
         '_txtSplitAmount_7
         '
@@ -1141,13 +1108,13 @@
         Me._txtSplitAmount_7.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitAmount_7.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitAmount_7.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitAmount.SetIndex(Me._txtSplitAmount_7, CType(7, Short))
         Me._txtSplitAmount_7.Location = New System.Drawing.Point(888, 214)
         Me._txtSplitAmount_7.MaxLength = 0
         Me._txtSplitAmount_7.Name = "_txtSplitAmount_7"
         Me._txtSplitAmount_7.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitAmount_7.Size = New System.Drawing.Size(64, 20)
         Me._txtSplitAmount_7.TabIndex = 119
+        Me._txtSplitAmount_7.Tag = "7"
         Me._txtSplitAmount_7.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         '_txtSplitMemo_7
@@ -1157,13 +1124,13 @@
         Me._txtSplitMemo_7.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitMemo_7.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitMemo_7.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitMemo.SetIndex(Me._txtSplitMemo_7, CType(7, Short))
         Me._txtSplitMemo_7.Location = New System.Drawing.Point(638, 214)
         Me._txtSplitMemo_7.MaxLength = 0
         Me._txtSplitMemo_7.Name = "_txtSplitMemo_7"
         Me._txtSplitMemo_7.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitMemo_7.Size = New System.Drawing.Size(133, 20)
         Me._txtSplitMemo_7.TabIndex = 117
+        Me._txtSplitMemo_7.Tag = "7"
         '
         '_cboSplitBudget_7
         '
@@ -1171,12 +1138,12 @@
         Me._cboSplitBudget_7.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitBudget_7.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitBudget_7.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitBudget.SetIndex(Me._cboSplitBudget_7, CType(7, Short))
         Me._cboSplitBudget_7.Location = New System.Drawing.Point(774, 214)
         Me._cboSplitBudget_7.Name = "_cboSplitBudget_7"
         Me._cboSplitBudget_7.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitBudget_7.Size = New System.Drawing.Size(111, 22)
         Me._cboSplitBudget_7.TabIndex = 118
+        Me._cboSplitBudget_7.Tag = "7"
         Me._cboSplitBudget_7.Text = "cboSplitBudget"
         '
         '_cboSplitCategory_7
@@ -1185,12 +1152,12 @@
         Me._cboSplitCategory_7.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitCategory_7.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitCategory_7.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitCategory.SetIndex(Me._cboSplitCategory_7, CType(7, Short))
         Me._cboSplitCategory_7.Location = New System.Drawing.Point(24, 214)
         Me._cboSplitCategory_7.Name = "_cboSplitCategory_7"
         Me._cboSplitCategory_7.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitCategory_7.Size = New System.Drawing.Size(179, 22)
         Me._cboSplitCategory_7.TabIndex = 111
+        Me._cboSplitCategory_7.Tag = "7"
         Me._cboSplitCategory_7.Text = "cboSplitCategory"
         '
         '_txtSplitInvoiceNum_7
@@ -1200,13 +1167,13 @@
         Me._txtSplitInvoiceNum_7.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceNum_7.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceNum_7.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceNum.SetIndex(Me._txtSplitInvoiceNum_7, CType(7, Short))
         Me._txtSplitInvoiceNum_7.Location = New System.Drawing.Point(326, 214)
         Me._txtSplitInvoiceNum_7.MaxLength = 0
         Me._txtSplitInvoiceNum_7.Name = "_txtSplitInvoiceNum_7"
         Me._txtSplitInvoiceNum_7.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceNum_7.Size = New System.Drawing.Size(114, 20)
         Me._txtSplitInvoiceNum_7.TabIndex = 113
+        Me._txtSplitInvoiceNum_7.Tag = "7"
         '
         '_txtSplitInvoiceDate_7
         '
@@ -1215,13 +1182,13 @@
         Me._txtSplitInvoiceDate_7.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceDate_7.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceDate_7.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceDate.SetIndex(Me._txtSplitInvoiceDate_7, CType(7, Short))
         Me._txtSplitInvoiceDate_7.Location = New System.Drawing.Point(442, 214)
         Me._txtSplitInvoiceDate_7.MaxLength = 0
         Me._txtSplitInvoiceDate_7.Name = "_txtSplitInvoiceDate_7"
         Me._txtSplitInvoiceDate_7.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceDate_7.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitInvoiceDate_7.TabIndex = 114
+        Me._txtSplitInvoiceDate_7.Tag = "7"
         '
         '_txtSplitDueDate_7
         '
@@ -1230,13 +1197,13 @@
         Me._txtSplitDueDate_7.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitDueDate_7.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitDueDate_7.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitDueDate.SetIndex(Me._txtSplitDueDate_7, CType(7, Short))
         Me._txtSplitDueDate_7.Location = New System.Drawing.Point(508, 214)
         Me._txtSplitDueDate_7.MaxLength = 0
         Me._txtSplitDueDate_7.Name = "_txtSplitDueDate_7"
         Me._txtSplitDueDate_7.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitDueDate_7.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitDueDate_7.TabIndex = 115
+        Me._txtSplitDueDate_7.Tag = "7"
         '
         '_txtSplitTerms_7
         '
@@ -1245,13 +1212,13 @@
         Me._txtSplitTerms_7.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitTerms_7.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitTerms_7.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitTerms.SetIndex(Me._txtSplitTerms_7, CType(7, Short))
         Me._txtSplitTerms_7.Location = New System.Drawing.Point(574, 214)
         Me._txtSplitTerms_7.MaxLength = 0
         Me._txtSplitTerms_7.Name = "_txtSplitTerms_7"
         Me._txtSplitTerms_7.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitTerms_7.Size = New System.Drawing.Size(61, 20)
         Me._txtSplitTerms_7.TabIndex = 116
+        Me._txtSplitTerms_7.Tag = "7"
         '
         '_txtSplitAmount_6
         '
@@ -1260,13 +1227,13 @@
         Me._txtSplitAmount_6.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitAmount_6.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitAmount_6.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitAmount.SetIndex(Me._txtSplitAmount_6, CType(6, Short))
         Me._txtSplitAmount_6.Location = New System.Drawing.Point(888, 192)
         Me._txtSplitAmount_6.MaxLength = 0
         Me._txtSplitAmount_6.Name = "_txtSplitAmount_6"
         Me._txtSplitAmount_6.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitAmount_6.Size = New System.Drawing.Size(64, 20)
         Me._txtSplitAmount_6.TabIndex = 108
+        Me._txtSplitAmount_6.Tag = "6"
         Me._txtSplitAmount_6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         '_txtSplitMemo_6
@@ -1276,13 +1243,13 @@
         Me._txtSplitMemo_6.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitMemo_6.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitMemo_6.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitMemo.SetIndex(Me._txtSplitMemo_6, CType(6, Short))
         Me._txtSplitMemo_6.Location = New System.Drawing.Point(638, 192)
         Me._txtSplitMemo_6.MaxLength = 0
         Me._txtSplitMemo_6.Name = "_txtSplitMemo_6"
         Me._txtSplitMemo_6.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitMemo_6.Size = New System.Drawing.Size(133, 20)
         Me._txtSplitMemo_6.TabIndex = 106
+        Me._txtSplitMemo_6.Tag = "6"
         '
         '_cboSplitBudget_6
         '
@@ -1290,12 +1257,12 @@
         Me._cboSplitBudget_6.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitBudget_6.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitBudget_6.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitBudget.SetIndex(Me._cboSplitBudget_6, CType(6, Short))
         Me._cboSplitBudget_6.Location = New System.Drawing.Point(774, 192)
         Me._cboSplitBudget_6.Name = "_cboSplitBudget_6"
         Me._cboSplitBudget_6.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitBudget_6.Size = New System.Drawing.Size(111, 22)
         Me._cboSplitBudget_6.TabIndex = 107
+        Me._cboSplitBudget_6.Tag = "6"
         Me._cboSplitBudget_6.Text = "cboSplitBudget"
         '
         '_cboSplitCategory_6
@@ -1304,12 +1271,12 @@
         Me._cboSplitCategory_6.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitCategory_6.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitCategory_6.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitCategory.SetIndex(Me._cboSplitCategory_6, CType(6, Short))
         Me._cboSplitCategory_6.Location = New System.Drawing.Point(24, 192)
         Me._cboSplitCategory_6.Name = "_cboSplitCategory_6"
         Me._cboSplitCategory_6.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitCategory_6.Size = New System.Drawing.Size(179, 22)
         Me._cboSplitCategory_6.TabIndex = 100
+        Me._cboSplitCategory_6.Tag = "6"
         Me._cboSplitCategory_6.Text = "cboSplitCategory"
         '
         '_txtSplitInvoiceNum_6
@@ -1319,13 +1286,13 @@
         Me._txtSplitInvoiceNum_6.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceNum_6.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceNum_6.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceNum.SetIndex(Me._txtSplitInvoiceNum_6, CType(6, Short))
         Me._txtSplitInvoiceNum_6.Location = New System.Drawing.Point(326, 192)
         Me._txtSplitInvoiceNum_6.MaxLength = 0
         Me._txtSplitInvoiceNum_6.Name = "_txtSplitInvoiceNum_6"
         Me._txtSplitInvoiceNum_6.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceNum_6.Size = New System.Drawing.Size(114, 20)
         Me._txtSplitInvoiceNum_6.TabIndex = 102
+        Me._txtSplitInvoiceNum_6.Tag = "6"
         '
         '_txtSplitInvoiceDate_6
         '
@@ -1334,13 +1301,13 @@
         Me._txtSplitInvoiceDate_6.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceDate_6.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceDate_6.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceDate.SetIndex(Me._txtSplitInvoiceDate_6, CType(6, Short))
         Me._txtSplitInvoiceDate_6.Location = New System.Drawing.Point(442, 192)
         Me._txtSplitInvoiceDate_6.MaxLength = 0
         Me._txtSplitInvoiceDate_6.Name = "_txtSplitInvoiceDate_6"
         Me._txtSplitInvoiceDate_6.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceDate_6.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitInvoiceDate_6.TabIndex = 103
+        Me._txtSplitInvoiceDate_6.Tag = "6"
         '
         '_txtSplitDueDate_6
         '
@@ -1349,13 +1316,13 @@
         Me._txtSplitDueDate_6.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitDueDate_6.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitDueDate_6.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitDueDate.SetIndex(Me._txtSplitDueDate_6, CType(6, Short))
         Me._txtSplitDueDate_6.Location = New System.Drawing.Point(508, 192)
         Me._txtSplitDueDate_6.MaxLength = 0
         Me._txtSplitDueDate_6.Name = "_txtSplitDueDate_6"
         Me._txtSplitDueDate_6.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitDueDate_6.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitDueDate_6.TabIndex = 104
+        Me._txtSplitDueDate_6.Tag = "6"
         '
         '_txtSplitTerms_6
         '
@@ -1364,13 +1331,13 @@
         Me._txtSplitTerms_6.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitTerms_6.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitTerms_6.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitTerms.SetIndex(Me._txtSplitTerms_6, CType(6, Short))
         Me._txtSplitTerms_6.Location = New System.Drawing.Point(574, 192)
         Me._txtSplitTerms_6.MaxLength = 0
         Me._txtSplitTerms_6.Name = "_txtSplitTerms_6"
         Me._txtSplitTerms_6.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitTerms_6.Size = New System.Drawing.Size(61, 20)
         Me._txtSplitTerms_6.TabIndex = 105
+        Me._txtSplitTerms_6.Tag = "6"
         '
         '_txtSplitAmount_5
         '
@@ -1379,13 +1346,13 @@
         Me._txtSplitAmount_5.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitAmount_5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitAmount_5.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitAmount.SetIndex(Me._txtSplitAmount_5, CType(5, Short))
         Me._txtSplitAmount_5.Location = New System.Drawing.Point(888, 170)
         Me._txtSplitAmount_5.MaxLength = 0
         Me._txtSplitAmount_5.Name = "_txtSplitAmount_5"
         Me._txtSplitAmount_5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitAmount_5.Size = New System.Drawing.Size(64, 20)
         Me._txtSplitAmount_5.TabIndex = 97
+        Me._txtSplitAmount_5.Tag = "5"
         Me._txtSplitAmount_5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         '_txtSplitMemo_5
@@ -1395,13 +1362,13 @@
         Me._txtSplitMemo_5.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitMemo_5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitMemo_5.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitMemo.SetIndex(Me._txtSplitMemo_5, CType(5, Short))
         Me._txtSplitMemo_5.Location = New System.Drawing.Point(638, 170)
         Me._txtSplitMemo_5.MaxLength = 0
         Me._txtSplitMemo_5.Name = "_txtSplitMemo_5"
         Me._txtSplitMemo_5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitMemo_5.Size = New System.Drawing.Size(133, 20)
         Me._txtSplitMemo_5.TabIndex = 95
+        Me._txtSplitMemo_5.Tag = "5"
         '
         '_cboSplitBudget_5
         '
@@ -1409,12 +1376,12 @@
         Me._cboSplitBudget_5.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitBudget_5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitBudget_5.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitBudget.SetIndex(Me._cboSplitBudget_5, CType(5, Short))
         Me._cboSplitBudget_5.Location = New System.Drawing.Point(774, 170)
         Me._cboSplitBudget_5.Name = "_cboSplitBudget_5"
         Me._cboSplitBudget_5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitBudget_5.Size = New System.Drawing.Size(111, 22)
         Me._cboSplitBudget_5.TabIndex = 96
+        Me._cboSplitBudget_5.Tag = "5"
         Me._cboSplitBudget_5.Text = "cboSplitBudget"
         '
         '_cboSplitCategory_5
@@ -1423,12 +1390,12 @@
         Me._cboSplitCategory_5.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitCategory_5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitCategory_5.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitCategory.SetIndex(Me._cboSplitCategory_5, CType(5, Short))
         Me._cboSplitCategory_5.Location = New System.Drawing.Point(24, 170)
         Me._cboSplitCategory_5.Name = "_cboSplitCategory_5"
         Me._cboSplitCategory_5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitCategory_5.Size = New System.Drawing.Size(179, 22)
         Me._cboSplitCategory_5.TabIndex = 89
+        Me._cboSplitCategory_5.Tag = "5"
         Me._cboSplitCategory_5.Text = "cboSplitCategory"
         '
         '_txtSplitInvoiceNum_5
@@ -1438,13 +1405,13 @@
         Me._txtSplitInvoiceNum_5.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceNum_5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceNum_5.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceNum.SetIndex(Me._txtSplitInvoiceNum_5, CType(5, Short))
         Me._txtSplitInvoiceNum_5.Location = New System.Drawing.Point(326, 170)
         Me._txtSplitInvoiceNum_5.MaxLength = 0
         Me._txtSplitInvoiceNum_5.Name = "_txtSplitInvoiceNum_5"
         Me._txtSplitInvoiceNum_5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceNum_5.Size = New System.Drawing.Size(114, 20)
         Me._txtSplitInvoiceNum_5.TabIndex = 91
+        Me._txtSplitInvoiceNum_5.Tag = "5"
         '
         '_txtSplitInvoiceDate_5
         '
@@ -1453,13 +1420,13 @@
         Me._txtSplitInvoiceDate_5.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceDate_5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceDate_5.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceDate.SetIndex(Me._txtSplitInvoiceDate_5, CType(5, Short))
         Me._txtSplitInvoiceDate_5.Location = New System.Drawing.Point(442, 170)
         Me._txtSplitInvoiceDate_5.MaxLength = 0
         Me._txtSplitInvoiceDate_5.Name = "_txtSplitInvoiceDate_5"
         Me._txtSplitInvoiceDate_5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceDate_5.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitInvoiceDate_5.TabIndex = 92
+        Me._txtSplitInvoiceDate_5.Tag = "5"
         '
         '_txtSplitDueDate_5
         '
@@ -1468,13 +1435,13 @@
         Me._txtSplitDueDate_5.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitDueDate_5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitDueDate_5.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitDueDate.SetIndex(Me._txtSplitDueDate_5, CType(5, Short))
         Me._txtSplitDueDate_5.Location = New System.Drawing.Point(508, 170)
         Me._txtSplitDueDate_5.MaxLength = 0
         Me._txtSplitDueDate_5.Name = "_txtSplitDueDate_5"
         Me._txtSplitDueDate_5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitDueDate_5.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitDueDate_5.TabIndex = 93
+        Me._txtSplitDueDate_5.Tag = "5"
         '
         '_txtSplitTerms_5
         '
@@ -1483,13 +1450,13 @@
         Me._txtSplitTerms_5.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitTerms_5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitTerms_5.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitTerms.SetIndex(Me._txtSplitTerms_5, CType(5, Short))
         Me._txtSplitTerms_5.Location = New System.Drawing.Point(574, 170)
         Me._txtSplitTerms_5.MaxLength = 0
         Me._txtSplitTerms_5.Name = "_txtSplitTerms_5"
         Me._txtSplitTerms_5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitTerms_5.Size = New System.Drawing.Size(61, 20)
         Me._txtSplitTerms_5.TabIndex = 94
+        Me._txtSplitTerms_5.Tag = "5"
         '
         '_txtSplitTerms_1
         '
@@ -1498,13 +1465,13 @@
         Me._txtSplitTerms_1.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitTerms_1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitTerms_1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitTerms.SetIndex(Me._txtSplitTerms_1, CType(1, Short))
         Me._txtSplitTerms_1.Location = New System.Drawing.Point(574, 82)
         Me._txtSplitTerms_1.MaxLength = 0
         Me._txtSplitTerms_1.Name = "_txtSplitTerms_1"
         Me._txtSplitTerms_1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitTerms_1.Size = New System.Drawing.Size(61, 20)
         Me._txtSplitTerms_1.TabIndex = 50
+        Me._txtSplitTerms_1.Tag = "1"
         '
         '_txtSplitTerms_0
         '
@@ -1513,13 +1480,13 @@
         Me._txtSplitTerms_0.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitTerms_0.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitTerms_0.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitTerms.SetIndex(Me._txtSplitTerms_0, CType(0, Short))
         Me._txtSplitTerms_0.Location = New System.Drawing.Point(574, 60)
         Me._txtSplitTerms_0.MaxLength = 0
         Me._txtSplitTerms_0.Name = "_txtSplitTerms_0"
         Me._txtSplitTerms_0.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitTerms_0.Size = New System.Drawing.Size(61, 20)
         Me._txtSplitTerms_0.TabIndex = 39
+        Me._txtSplitTerms_0.Tag = "0"
         '
         '_txtSplitTerms_2
         '
@@ -1528,13 +1495,13 @@
         Me._txtSplitTerms_2.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitTerms_2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitTerms_2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitTerms.SetIndex(Me._txtSplitTerms_2, CType(2, Short))
         Me._txtSplitTerms_2.Location = New System.Drawing.Point(574, 104)
         Me._txtSplitTerms_2.MaxLength = 0
         Me._txtSplitTerms_2.Name = "_txtSplitTerms_2"
         Me._txtSplitTerms_2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitTerms_2.Size = New System.Drawing.Size(61, 20)
         Me._txtSplitTerms_2.TabIndex = 61
+        Me._txtSplitTerms_2.Tag = "2"
         '
         '_txtSplitTerms_3
         '
@@ -1543,13 +1510,13 @@
         Me._txtSplitTerms_3.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitTerms_3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitTerms_3.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitTerms.SetIndex(Me._txtSplitTerms_3, CType(3, Short))
         Me._txtSplitTerms_3.Location = New System.Drawing.Point(574, 126)
         Me._txtSplitTerms_3.MaxLength = 0
         Me._txtSplitTerms_3.Name = "_txtSplitTerms_3"
         Me._txtSplitTerms_3.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitTerms_3.Size = New System.Drawing.Size(61, 20)
         Me._txtSplitTerms_3.TabIndex = 72
+        Me._txtSplitTerms_3.Tag = "3"
         '
         '_txtSplitTerms_4
         '
@@ -1558,13 +1525,13 @@
         Me._txtSplitTerms_4.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitTerms_4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitTerms_4.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitTerms.SetIndex(Me._txtSplitTerms_4, CType(4, Short))
         Me._txtSplitTerms_4.Location = New System.Drawing.Point(574, 148)
         Me._txtSplitTerms_4.MaxLength = 0
         Me._txtSplitTerms_4.Name = "_txtSplitTerms_4"
         Me._txtSplitTerms_4.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitTerms_4.Size = New System.Drawing.Size(61, 20)
         Me._txtSplitTerms_4.TabIndex = 83
+        Me._txtSplitTerms_4.Tag = "4"
         '
         '_txtSplitDueDate_4
         '
@@ -1573,13 +1540,13 @@
         Me._txtSplitDueDate_4.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitDueDate_4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitDueDate_4.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitDueDate.SetIndex(Me._txtSplitDueDate_4, CType(4, Short))
         Me._txtSplitDueDate_4.Location = New System.Drawing.Point(508, 148)
         Me._txtSplitDueDate_4.MaxLength = 0
         Me._txtSplitDueDate_4.Name = "_txtSplitDueDate_4"
         Me._txtSplitDueDate_4.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitDueDate_4.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitDueDate_4.TabIndex = 82
+        Me._txtSplitDueDate_4.Tag = "4"
         '
         '_txtSplitDueDate_3
         '
@@ -1588,13 +1555,13 @@
         Me._txtSplitDueDate_3.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitDueDate_3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitDueDate_3.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitDueDate.SetIndex(Me._txtSplitDueDate_3, CType(3, Short))
         Me._txtSplitDueDate_3.Location = New System.Drawing.Point(508, 126)
         Me._txtSplitDueDate_3.MaxLength = 0
         Me._txtSplitDueDate_3.Name = "_txtSplitDueDate_3"
         Me._txtSplitDueDate_3.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitDueDate_3.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitDueDate_3.TabIndex = 71
+        Me._txtSplitDueDate_3.Tag = "3"
         '
         '_txtSplitDueDate_2
         '
@@ -1603,13 +1570,13 @@
         Me._txtSplitDueDate_2.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitDueDate_2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitDueDate_2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitDueDate.SetIndex(Me._txtSplitDueDate_2, CType(2, Short))
         Me._txtSplitDueDate_2.Location = New System.Drawing.Point(508, 104)
         Me._txtSplitDueDate_2.MaxLength = 0
         Me._txtSplitDueDate_2.Name = "_txtSplitDueDate_2"
         Me._txtSplitDueDate_2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitDueDate_2.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitDueDate_2.TabIndex = 60
+        Me._txtSplitDueDate_2.Tag = "2"
         '
         '_txtSplitDueDate_0
         '
@@ -1618,13 +1585,13 @@
         Me._txtSplitDueDate_0.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitDueDate_0.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitDueDate_0.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitDueDate.SetIndex(Me._txtSplitDueDate_0, CType(0, Short))
         Me._txtSplitDueDate_0.Location = New System.Drawing.Point(508, 60)
         Me._txtSplitDueDate_0.MaxLength = 0
         Me._txtSplitDueDate_0.Name = "_txtSplitDueDate_0"
         Me._txtSplitDueDate_0.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitDueDate_0.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitDueDate_0.TabIndex = 38
+        Me._txtSplitDueDate_0.Tag = "0"
         '
         '_txtSplitDueDate_1
         '
@@ -1633,13 +1600,13 @@
         Me._txtSplitDueDate_1.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitDueDate_1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitDueDate_1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitDueDate.SetIndex(Me._txtSplitDueDate_1, CType(1, Short))
         Me._txtSplitDueDate_1.Location = New System.Drawing.Point(508, 82)
         Me._txtSplitDueDate_1.MaxLength = 0
         Me._txtSplitDueDate_1.Name = "_txtSplitDueDate_1"
         Me._txtSplitDueDate_1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitDueDate_1.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitDueDate_1.TabIndex = 49
+        Me._txtSplitDueDate_1.Tag = "1"
         '
         '_txtSplitInvoiceDate_4
         '
@@ -1648,13 +1615,13 @@
         Me._txtSplitInvoiceDate_4.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceDate_4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceDate_4.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceDate.SetIndex(Me._txtSplitInvoiceDate_4, CType(4, Short))
         Me._txtSplitInvoiceDate_4.Location = New System.Drawing.Point(442, 148)
         Me._txtSplitInvoiceDate_4.MaxLength = 0
         Me._txtSplitInvoiceDate_4.Name = "_txtSplitInvoiceDate_4"
         Me._txtSplitInvoiceDate_4.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceDate_4.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitInvoiceDate_4.TabIndex = 81
+        Me._txtSplitInvoiceDate_4.Tag = "4"
         '
         '_txtSplitInvoiceDate_3
         '
@@ -1663,13 +1630,13 @@
         Me._txtSplitInvoiceDate_3.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceDate_3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceDate_3.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceDate.SetIndex(Me._txtSplitInvoiceDate_3, CType(3, Short))
         Me._txtSplitInvoiceDate_3.Location = New System.Drawing.Point(442, 126)
         Me._txtSplitInvoiceDate_3.MaxLength = 0
         Me._txtSplitInvoiceDate_3.Name = "_txtSplitInvoiceDate_3"
         Me._txtSplitInvoiceDate_3.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceDate_3.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitInvoiceDate_3.TabIndex = 70
+        Me._txtSplitInvoiceDate_3.Tag = "3"
         '
         '_txtSplitInvoiceDate_2
         '
@@ -1678,13 +1645,13 @@
         Me._txtSplitInvoiceDate_2.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceDate_2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceDate_2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceDate.SetIndex(Me._txtSplitInvoiceDate_2, CType(2, Short))
         Me._txtSplitInvoiceDate_2.Location = New System.Drawing.Point(442, 104)
         Me._txtSplitInvoiceDate_2.MaxLength = 0
         Me._txtSplitInvoiceDate_2.Name = "_txtSplitInvoiceDate_2"
         Me._txtSplitInvoiceDate_2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceDate_2.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitInvoiceDate_2.TabIndex = 59
+        Me._txtSplitInvoiceDate_2.Tag = "2"
         '
         '_txtSplitInvoiceDate_0
         '
@@ -1693,13 +1660,13 @@
         Me._txtSplitInvoiceDate_0.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceDate_0.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceDate_0.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceDate.SetIndex(Me._txtSplitInvoiceDate_0, CType(0, Short))
         Me._txtSplitInvoiceDate_0.Location = New System.Drawing.Point(442, 60)
         Me._txtSplitInvoiceDate_0.MaxLength = 0
         Me._txtSplitInvoiceDate_0.Name = "_txtSplitInvoiceDate_0"
         Me._txtSplitInvoiceDate_0.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceDate_0.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitInvoiceDate_0.TabIndex = 37
+        Me._txtSplitInvoiceDate_0.Tag = "0"
         '
         '_txtSplitInvoiceDate_1
         '
@@ -1708,13 +1675,13 @@
         Me._txtSplitInvoiceDate_1.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceDate_1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceDate_1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceDate.SetIndex(Me._txtSplitInvoiceDate_1, CType(1, Short))
         Me._txtSplitInvoiceDate_1.Location = New System.Drawing.Point(442, 82)
         Me._txtSplitInvoiceDate_1.MaxLength = 0
         Me._txtSplitInvoiceDate_1.Name = "_txtSplitInvoiceDate_1"
         Me._txtSplitInvoiceDate_1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceDate_1.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitInvoiceDate_1.TabIndex = 48
+        Me._txtSplitInvoiceDate_1.Tag = "1"
         '
         '_txtSplitInvoiceNum_1
         '
@@ -1723,13 +1690,13 @@
         Me._txtSplitInvoiceNum_1.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceNum_1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceNum_1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceNum.SetIndex(Me._txtSplitInvoiceNum_1, CType(1, Short))
         Me._txtSplitInvoiceNum_1.Location = New System.Drawing.Point(326, 82)
         Me._txtSplitInvoiceNum_1.MaxLength = 0
         Me._txtSplitInvoiceNum_1.Name = "_txtSplitInvoiceNum_1"
         Me._txtSplitInvoiceNum_1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceNum_1.Size = New System.Drawing.Size(114, 20)
         Me._txtSplitInvoiceNum_1.TabIndex = 47
+        Me._txtSplitInvoiceNum_1.Tag = "1"
         '
         '_txtSplitInvoiceNum_0
         '
@@ -1738,13 +1705,13 @@
         Me._txtSplitInvoiceNum_0.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceNum_0.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceNum_0.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceNum.SetIndex(Me._txtSplitInvoiceNum_0, CType(0, Short))
         Me._txtSplitInvoiceNum_0.Location = New System.Drawing.Point(326, 60)
         Me._txtSplitInvoiceNum_0.MaxLength = 0
         Me._txtSplitInvoiceNum_0.Name = "_txtSplitInvoiceNum_0"
         Me._txtSplitInvoiceNum_0.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceNum_0.Size = New System.Drawing.Size(114, 20)
         Me._txtSplitInvoiceNum_0.TabIndex = 36
+        Me._txtSplitInvoiceNum_0.Tag = "0"
         '
         '_txtSplitInvoiceNum_2
         '
@@ -1753,13 +1720,13 @@
         Me._txtSplitInvoiceNum_2.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceNum_2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceNum_2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceNum.SetIndex(Me._txtSplitInvoiceNum_2, CType(2, Short))
         Me._txtSplitInvoiceNum_2.Location = New System.Drawing.Point(326, 104)
         Me._txtSplitInvoiceNum_2.MaxLength = 0
         Me._txtSplitInvoiceNum_2.Name = "_txtSplitInvoiceNum_2"
         Me._txtSplitInvoiceNum_2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceNum_2.Size = New System.Drawing.Size(114, 20)
         Me._txtSplitInvoiceNum_2.TabIndex = 58
+        Me._txtSplitInvoiceNum_2.Tag = "2"
         '
         '_txtSplitInvoiceNum_3
         '
@@ -1768,13 +1735,13 @@
         Me._txtSplitInvoiceNum_3.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceNum_3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceNum_3.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceNum.SetIndex(Me._txtSplitInvoiceNum_3, CType(3, Short))
         Me._txtSplitInvoiceNum_3.Location = New System.Drawing.Point(326, 126)
         Me._txtSplitInvoiceNum_3.MaxLength = 0
         Me._txtSplitInvoiceNum_3.Name = "_txtSplitInvoiceNum_3"
         Me._txtSplitInvoiceNum_3.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceNum_3.Size = New System.Drawing.Size(114, 20)
         Me._txtSplitInvoiceNum_3.TabIndex = 69
+        Me._txtSplitInvoiceNum_3.Tag = "3"
         '
         '_txtSplitInvoiceNum_4
         '
@@ -1783,13 +1750,13 @@
         Me._txtSplitInvoiceNum_4.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitInvoiceNum_4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitInvoiceNum_4.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitInvoiceNum.SetIndex(Me._txtSplitInvoiceNum_4, CType(4, Short))
         Me._txtSplitInvoiceNum_4.Location = New System.Drawing.Point(326, 148)
         Me._txtSplitInvoiceNum_4.MaxLength = 0
         Me._txtSplitInvoiceNum_4.Name = "_txtSplitInvoiceNum_4"
         Me._txtSplitInvoiceNum_4.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitInvoiceNum_4.Size = New System.Drawing.Size(114, 20)
         Me._txtSplitInvoiceNum_4.TabIndex = 80
+        Me._txtSplitInvoiceNum_4.Tag = "4"
         '
         'cmdSplitScrollDown
         '
@@ -1827,12 +1794,12 @@
         Me._cboSplitCategory_4.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitCategory_4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitCategory_4.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitCategory.SetIndex(Me._cboSplitCategory_4, CType(4, Short))
         Me._cboSplitCategory_4.Location = New System.Drawing.Point(24, 148)
         Me._cboSplitCategory_4.Name = "_cboSplitCategory_4"
         Me._cboSplitCategory_4.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitCategory_4.Size = New System.Drawing.Size(179, 22)
         Me._cboSplitCategory_4.TabIndex = 78
+        Me._cboSplitCategory_4.Tag = "4"
         Me._cboSplitCategory_4.Text = "cboSplitCategory"
         '
         '_cboSplitBudget_4
@@ -1841,12 +1808,12 @@
         Me._cboSplitBudget_4.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitBudget_4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitBudget_4.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitBudget.SetIndex(Me._cboSplitBudget_4, CType(4, Short))
         Me._cboSplitBudget_4.Location = New System.Drawing.Point(774, 148)
         Me._cboSplitBudget_4.Name = "_cboSplitBudget_4"
         Me._cboSplitBudget_4.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitBudget_4.Size = New System.Drawing.Size(111, 22)
         Me._cboSplitBudget_4.TabIndex = 85
+        Me._cboSplitBudget_4.Tag = "4"
         Me._cboSplitBudget_4.Text = "cboSplitBudget"
         '
         '_txtSplitMemo_4
@@ -1856,13 +1823,13 @@
         Me._txtSplitMemo_4.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitMemo_4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitMemo_4.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitMemo.SetIndex(Me._txtSplitMemo_4, CType(4, Short))
         Me._txtSplitMemo_4.Location = New System.Drawing.Point(638, 148)
         Me._txtSplitMemo_4.MaxLength = 0
         Me._txtSplitMemo_4.Name = "_txtSplitMemo_4"
         Me._txtSplitMemo_4.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitMemo_4.Size = New System.Drawing.Size(133, 20)
         Me._txtSplitMemo_4.TabIndex = 84
+        Me._txtSplitMemo_4.Tag = "4"
         '
         '_txtSplitAmount_4
         '
@@ -1871,13 +1838,13 @@
         Me._txtSplitAmount_4.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitAmount_4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitAmount_4.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitAmount.SetIndex(Me._txtSplitAmount_4, CType(4, Short))
         Me._txtSplitAmount_4.Location = New System.Drawing.Point(888, 148)
         Me._txtSplitAmount_4.MaxLength = 0
         Me._txtSplitAmount_4.Name = "_txtSplitAmount_4"
         Me._txtSplitAmount_4.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitAmount_4.Size = New System.Drawing.Size(64, 20)
         Me._txtSplitAmount_4.TabIndex = 86
+        Me._txtSplitAmount_4.Tag = "4"
         Me._txtSplitAmount_4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         '_cboSplitCategory_3
@@ -1886,12 +1853,12 @@
         Me._cboSplitCategory_3.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitCategory_3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitCategory_3.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitCategory.SetIndex(Me._cboSplitCategory_3, CType(3, Short))
         Me._cboSplitCategory_3.Location = New System.Drawing.Point(24, 126)
         Me._cboSplitCategory_3.Name = "_cboSplitCategory_3"
         Me._cboSplitCategory_3.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitCategory_3.Size = New System.Drawing.Size(179, 22)
         Me._cboSplitCategory_3.TabIndex = 67
+        Me._cboSplitCategory_3.Tag = "3"
         Me._cboSplitCategory_3.Text = "cboSplitCategory"
         '
         '_cboSplitBudget_3
@@ -1900,12 +1867,12 @@
         Me._cboSplitBudget_3.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitBudget_3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitBudget_3.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitBudget.SetIndex(Me._cboSplitBudget_3, CType(3, Short))
         Me._cboSplitBudget_3.Location = New System.Drawing.Point(774, 126)
         Me._cboSplitBudget_3.Name = "_cboSplitBudget_3"
         Me._cboSplitBudget_3.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitBudget_3.Size = New System.Drawing.Size(111, 22)
         Me._cboSplitBudget_3.TabIndex = 74
+        Me._cboSplitBudget_3.Tag = "3"
         Me._cboSplitBudget_3.Text = "cboSplitBudget"
         '
         '_txtSplitMemo_3
@@ -1915,13 +1882,13 @@
         Me._txtSplitMemo_3.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitMemo_3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitMemo_3.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitMemo.SetIndex(Me._txtSplitMemo_3, CType(3, Short))
         Me._txtSplitMemo_3.Location = New System.Drawing.Point(638, 126)
         Me._txtSplitMemo_3.MaxLength = 0
         Me._txtSplitMemo_3.Name = "_txtSplitMemo_3"
         Me._txtSplitMemo_3.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitMemo_3.Size = New System.Drawing.Size(133, 20)
         Me._txtSplitMemo_3.TabIndex = 73
+        Me._txtSplitMemo_3.Tag = "3"
         '
         '_txtSplitAmount_3
         '
@@ -1930,13 +1897,13 @@
         Me._txtSplitAmount_3.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitAmount_3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitAmount_3.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitAmount.SetIndex(Me._txtSplitAmount_3, CType(3, Short))
         Me._txtSplitAmount_3.Location = New System.Drawing.Point(888, 126)
         Me._txtSplitAmount_3.MaxLength = 0
         Me._txtSplitAmount_3.Name = "_txtSplitAmount_3"
         Me._txtSplitAmount_3.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitAmount_3.Size = New System.Drawing.Size(64, 20)
         Me._txtSplitAmount_3.TabIndex = 75
+        Me._txtSplitAmount_3.Tag = "3"
         Me._txtSplitAmount_3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         '_cboSplitCategory_2
@@ -1945,12 +1912,12 @@
         Me._cboSplitCategory_2.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitCategory_2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitCategory_2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitCategory.SetIndex(Me._cboSplitCategory_2, CType(2, Short))
         Me._cboSplitCategory_2.Location = New System.Drawing.Point(24, 104)
         Me._cboSplitCategory_2.Name = "_cboSplitCategory_2"
         Me._cboSplitCategory_2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitCategory_2.Size = New System.Drawing.Size(179, 22)
         Me._cboSplitCategory_2.TabIndex = 56
+        Me._cboSplitCategory_2.Tag = "2"
         Me._cboSplitCategory_2.Text = "cboSplitCategory"
         '
         '_cboSplitBudget_2
@@ -1959,12 +1926,12 @@
         Me._cboSplitBudget_2.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitBudget_2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitBudget_2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitBudget.SetIndex(Me._cboSplitBudget_2, CType(2, Short))
         Me._cboSplitBudget_2.Location = New System.Drawing.Point(774, 104)
         Me._cboSplitBudget_2.Name = "_cboSplitBudget_2"
         Me._cboSplitBudget_2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitBudget_2.Size = New System.Drawing.Size(111, 22)
         Me._cboSplitBudget_2.TabIndex = 63
+        Me._cboSplitBudget_2.Tag = "2"
         Me._cboSplitBudget_2.Text = "cboSplitBudget"
         '
         '_txtSplitMemo_2
@@ -1974,13 +1941,13 @@
         Me._txtSplitMemo_2.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitMemo_2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitMemo_2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitMemo.SetIndex(Me._txtSplitMemo_2, CType(2, Short))
         Me._txtSplitMemo_2.Location = New System.Drawing.Point(638, 104)
         Me._txtSplitMemo_2.MaxLength = 0
         Me._txtSplitMemo_2.Name = "_txtSplitMemo_2"
         Me._txtSplitMemo_2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitMemo_2.Size = New System.Drawing.Size(133, 20)
         Me._txtSplitMemo_2.TabIndex = 62
+        Me._txtSplitMemo_2.Tag = "2"
         '
         '_txtSplitAmount_2
         '
@@ -1989,13 +1956,13 @@
         Me._txtSplitAmount_2.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitAmount_2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitAmount_2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitAmount.SetIndex(Me._txtSplitAmount_2, CType(2, Short))
         Me._txtSplitAmount_2.Location = New System.Drawing.Point(888, 104)
         Me._txtSplitAmount_2.MaxLength = 0
         Me._txtSplitAmount_2.Name = "_txtSplitAmount_2"
         Me._txtSplitAmount_2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitAmount_2.Size = New System.Drawing.Size(64, 20)
         Me._txtSplitAmount_2.TabIndex = 64
+        Me._txtSplitAmount_2.Tag = "2"
         Me._txtSplitAmount_2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         '_cboSplitCategory_0
@@ -2004,12 +1971,12 @@
         Me._cboSplitCategory_0.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitCategory_0.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitCategory_0.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitCategory.SetIndex(Me._cboSplitCategory_0, CType(0, Short))
         Me._cboSplitCategory_0.Location = New System.Drawing.Point(24, 60)
         Me._cboSplitCategory_0.Name = "_cboSplitCategory_0"
         Me._cboSplitCategory_0.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitCategory_0.Size = New System.Drawing.Size(179, 22)
         Me._cboSplitCategory_0.TabIndex = 34
+        Me._cboSplitCategory_0.Tag = "0"
         Me._cboSplitCategory_0.Text = "cboSplitCategory"
         '
         '_cboSplitBudget_0
@@ -2018,12 +1985,12 @@
         Me._cboSplitBudget_0.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitBudget_0.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitBudget_0.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitBudget.SetIndex(Me._cboSplitBudget_0, CType(0, Short))
         Me._cboSplitBudget_0.Location = New System.Drawing.Point(774, 60)
         Me._cboSplitBudget_0.Name = "_cboSplitBudget_0"
         Me._cboSplitBudget_0.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitBudget_0.Size = New System.Drawing.Size(111, 22)
         Me._cboSplitBudget_0.TabIndex = 41
+        Me._cboSplitBudget_0.Tag = "0"
         Me._cboSplitBudget_0.Text = "cboSplitBudget"
         '
         '_txtSplitMemo_0
@@ -2033,13 +2000,13 @@
         Me._txtSplitMemo_0.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitMemo_0.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitMemo_0.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitMemo.SetIndex(Me._txtSplitMemo_0, CType(0, Short))
         Me._txtSplitMemo_0.Location = New System.Drawing.Point(638, 60)
         Me._txtSplitMemo_0.MaxLength = 0
         Me._txtSplitMemo_0.Name = "_txtSplitMemo_0"
         Me._txtSplitMemo_0.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitMemo_0.Size = New System.Drawing.Size(133, 20)
         Me._txtSplitMemo_0.TabIndex = 40
+        Me._txtSplitMemo_0.Tag = "0"
         '
         '_txtSplitAmount_0
         '
@@ -2048,13 +2015,13 @@
         Me._txtSplitAmount_0.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitAmount_0.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitAmount_0.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitAmount.SetIndex(Me._txtSplitAmount_0, CType(0, Short))
         Me._txtSplitAmount_0.Location = New System.Drawing.Point(888, 60)
         Me._txtSplitAmount_0.MaxLength = 0
         Me._txtSplitAmount_0.Name = "_txtSplitAmount_0"
         Me._txtSplitAmount_0.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitAmount_0.Size = New System.Drawing.Size(63, 20)
         Me._txtSplitAmount_0.TabIndex = 42
+        Me._txtSplitAmount_0.Tag = "0"
         Me._txtSplitAmount_0.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         '_txtSplitAmount_1
@@ -2064,13 +2031,13 @@
         Me._txtSplitAmount_1.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitAmount_1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitAmount_1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitAmount.SetIndex(Me._txtSplitAmount_1, CType(1, Short))
         Me._txtSplitAmount_1.Location = New System.Drawing.Point(888, 82)
         Me._txtSplitAmount_1.MaxLength = 0
         Me._txtSplitAmount_1.Name = "_txtSplitAmount_1"
         Me._txtSplitAmount_1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitAmount_1.Size = New System.Drawing.Size(64, 20)
         Me._txtSplitAmount_1.TabIndex = 53
+        Me._txtSplitAmount_1.Tag = "1"
         Me._txtSplitAmount_1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         '_txtSplitMemo_1
@@ -2080,13 +2047,13 @@
         Me._txtSplitMemo_1.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtSplitMemo_1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtSplitMemo_1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSplitMemo.SetIndex(Me._txtSplitMemo_1, CType(1, Short))
         Me._txtSplitMemo_1.Location = New System.Drawing.Point(638, 82)
         Me._txtSplitMemo_1.MaxLength = 0
         Me._txtSplitMemo_1.Name = "_txtSplitMemo_1"
         Me._txtSplitMemo_1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._txtSplitMemo_1.Size = New System.Drawing.Size(133, 20)
         Me._txtSplitMemo_1.TabIndex = 51
+        Me._txtSplitMemo_1.Tag = "1"
         '
         '_cboSplitBudget_1
         '
@@ -2094,12 +2061,12 @@
         Me._cboSplitBudget_1.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitBudget_1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitBudget_1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitBudget.SetIndex(Me._cboSplitBudget_1, CType(1, Short))
         Me._cboSplitBudget_1.Location = New System.Drawing.Point(774, 82)
         Me._cboSplitBudget_1.Name = "_cboSplitBudget_1"
         Me._cboSplitBudget_1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitBudget_1.Size = New System.Drawing.Size(111, 22)
         Me._cboSplitBudget_1.TabIndex = 52
+        Me._cboSplitBudget_1.Tag = "1"
         Me._cboSplitBudget_1.Text = "cboSplitBudget"
         '
         '_cboSplitCategory_1
@@ -2108,12 +2075,12 @@
         Me._cboSplitCategory_1.Cursor = System.Windows.Forms.Cursors.Default
         Me._cboSplitCategory_1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboSplitCategory_1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSplitCategory.SetIndex(Me._cboSplitCategory_1, CType(1, Short))
         Me._cboSplitCategory_1.Location = New System.Drawing.Point(24, 82)
         Me._cboSplitCategory_1.Name = "_cboSplitCategory_1"
         Me._cboSplitCategory_1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboSplitCategory_1.Size = New System.Drawing.Size(179, 22)
         Me._cboSplitCategory_1.TabIndex = 45
+        Me._cboSplitCategory_1.Tag = "1"
         Me._cboSplitCategory_1.Text = "cboSplitCategory"
         '
         'txtSplitTotal
@@ -2196,7 +2163,6 @@
         Me._lblSplitNumber_9.Cursor = System.Windows.Forms.Cursors.Default
         Me._lblSplitNumber_9.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._lblSplitNumber_9.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSplitNumber.SetIndex(Me._lblSplitNumber_9, CType(9, Short))
         Me._lblSplitNumber_9.Location = New System.Drawing.Point(6, 262)
         Me._lblSplitNumber_9.Name = "_lblSplitNumber_9"
         Me._lblSplitNumber_9.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -2210,7 +2176,6 @@
         Me._lblSplitNumber_8.Cursor = System.Windows.Forms.Cursors.Default
         Me._lblSplitNumber_8.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._lblSplitNumber_8.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSplitNumber.SetIndex(Me._lblSplitNumber_8, CType(8, Short))
         Me._lblSplitNumber_8.Location = New System.Drawing.Point(6, 240)
         Me._lblSplitNumber_8.Name = "_lblSplitNumber_8"
         Me._lblSplitNumber_8.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -2224,7 +2189,6 @@
         Me._lblSplitNumber_7.Cursor = System.Windows.Forms.Cursors.Default
         Me._lblSplitNumber_7.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._lblSplitNumber_7.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSplitNumber.SetIndex(Me._lblSplitNumber_7, CType(7, Short))
         Me._lblSplitNumber_7.Location = New System.Drawing.Point(6, 218)
         Me._lblSplitNumber_7.Name = "_lblSplitNumber_7"
         Me._lblSplitNumber_7.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -2238,7 +2202,6 @@
         Me._lblSplitNumber_6.Cursor = System.Windows.Forms.Cursors.Default
         Me._lblSplitNumber_6.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._lblSplitNumber_6.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSplitNumber.SetIndex(Me._lblSplitNumber_6, CType(6, Short))
         Me._lblSplitNumber_6.Location = New System.Drawing.Point(6, 196)
         Me._lblSplitNumber_6.Name = "_lblSplitNumber_6"
         Me._lblSplitNumber_6.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -2252,7 +2215,6 @@
         Me._lblSplitNumber_5.Cursor = System.Windows.Forms.Cursors.Default
         Me._lblSplitNumber_5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._lblSplitNumber_5.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSplitNumber.SetIndex(Me._lblSplitNumber_5, CType(5, Short))
         Me._lblSplitNumber_5.Location = New System.Drawing.Point(6, 174)
         Me._lblSplitNumber_5.Name = "_lblSplitNumber_5"
         Me._lblSplitNumber_5.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -2318,7 +2280,6 @@
         Me._lblSplitNumber_4.Cursor = System.Windows.Forms.Cursors.Default
         Me._lblSplitNumber_4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._lblSplitNumber_4.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSplitNumber.SetIndex(Me._lblSplitNumber_4, CType(4, Short))
         Me._lblSplitNumber_4.Location = New System.Drawing.Point(6, 152)
         Me._lblSplitNumber_4.Name = "_lblSplitNumber_4"
         Me._lblSplitNumber_4.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -2332,7 +2293,6 @@
         Me._lblSplitNumber_3.Cursor = System.Windows.Forms.Cursors.Default
         Me._lblSplitNumber_3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._lblSplitNumber_3.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSplitNumber.SetIndex(Me._lblSplitNumber_3, CType(3, Short))
         Me._lblSplitNumber_3.Location = New System.Drawing.Point(6, 130)
         Me._lblSplitNumber_3.Name = "_lblSplitNumber_3"
         Me._lblSplitNumber_3.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -2346,7 +2306,6 @@
         Me._lblSplitNumber_2.Cursor = System.Windows.Forms.Cursors.Default
         Me._lblSplitNumber_2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._lblSplitNumber_2.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSplitNumber.SetIndex(Me._lblSplitNumber_2, CType(2, Short))
         Me._lblSplitNumber_2.Location = New System.Drawing.Point(6, 108)
         Me._lblSplitNumber_2.Name = "_lblSplitNumber_2"
         Me._lblSplitNumber_2.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -2360,7 +2319,6 @@
         Me._lblSplitNumber_0.Cursor = System.Windows.Forms.Cursors.Default
         Me._lblSplitNumber_0.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._lblSplitNumber_0.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSplitNumber.SetIndex(Me._lblSplitNumber_0, CType(0, Short))
         Me._lblSplitNumber_0.Location = New System.Drawing.Point(6, 64)
         Me._lblSplitNumber_0.Name = "_lblSplitNumber_0"
         Me._lblSplitNumber_0.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -2426,7 +2384,6 @@
         Me._lblSplitNumber_1.Cursor = System.Windows.Forms.Cursors.Default
         Me._lblSplitNumber_1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._lblSplitNumber_1.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSplitNumber.SetIndex(Me._lblSplitNumber_1, CType(1, Short))
         Me._lblSplitNumber_1.Location = New System.Drawing.Point(6, 86)
         Me._lblSplitNumber_1.Name = "_lblSplitNumber_1"
         Me._lblSplitNumber_1.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -3110,36 +3067,6 @@
         Me.lblDate.TabIndex = 0
         Me.lblDate.Text = "Date:"
         '
-        'cboSplitBudget
-        '
-        '
-        'cboSplitCategory
-        '
-        '
-        'chkChoose
-        '
-        '
-        'txtSplitAmount
-        '
-        '
-        'txtSplitDueDate
-        '
-        '
-        'txtSplitInvoiceDate
-        '
-        '
-        'txtSplitInvoiceNum
-        '
-        '
-        'txtSplitMemo
-        '
-        '
-        'txtSplitPONum
-        '
-        '
-        'txtSplitTerms
-        '
-        '
         'TrxForm
         '
         Me.AcceptButton = Me.cmdOkay
@@ -3190,20 +3117,13 @@
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Transaction"
         Me.frmNormal.ResumeLayout(False)
+        Me.frmNormal.PerformLayout()
         Me.frmTransfer.ResumeLayout(False)
+        Me.frmTransfer.PerformLayout()
         Me.frmBudget.ResumeLayout(False)
-        CType(Me.cboSplitBudget, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.cboSplitCategory, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.chkChoose, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.lblSplitNumber, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.txtSplitAmount, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.txtSplitDueDate, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.txtSplitInvoiceDate, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.txtSplitInvoiceNum, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.txtSplitMemo, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.txtSplitPONum, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.txtSplitTerms, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.frmBudget.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 #End Region 
