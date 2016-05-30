@@ -19,6 +19,8 @@ Friend Class AdjustBudgetsToCashForm
 
     Private Const mintNUM_BUDGETS As Short = 5
 
+    Private cboBudget(mintNUM_BUDGETS) As ComboBox
+    Private txtPercent(mintNUM_BUDGETS) As TextBox
     'Register index of budget Trx with budget in cboBudget(i).
     'UPGRADE_WARNING: Lower bound of array malngRegIndex was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
     Private malngRegIndex(mintNUM_BUDGETS) As Integer
@@ -40,6 +42,16 @@ Friend Class AdjustBudgetsToCashForm
     Public Sub ShowModal(ByVal objReg_ As Register, ByVal objBudgets_ As StringTranslator)
         On Error GoTo ErrorHandler
 
+        cboBudget(1) = _cboBudget_1
+        cboBudget(2) = _cboBudget_2
+        cboBudget(3) = _cboBudget_3
+        cboBudget(4) = _cboBudget_4
+        cboBudget(5) = _cboBudget_5
+        txtPercent(1) = _txtPercent_1
+        txtPercent(2) = _txtPercent_2
+        txtPercent(3) = _txtPercent_3
+        txtPercent(4) = _txtPercent_4
+        txtPercent(5) = _txtPercent_5
         mobjReg = objReg_
         mobjBudgets = objBudgets_
         Me.Text = "Adjust Budgets For " & objReg_.strTitle
