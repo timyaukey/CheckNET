@@ -278,6 +278,33 @@ ErrorHandler:
         TopError("mnuActInvImport_Click")
     End Sub
 
+    Private Sub mnuActCheckImport_Click(sender As Object, e As EventArgs) Handles mnuActCheckImport.Click
+        Dim frm As BankImportAcctSelectForm
+        Dim objImport As ITrxImport
+        Dim objSpecs As ImportChecksSpec
+
+        On Error GoTo ErrorHandler
+
+        If blnImportFormAlreadyOpen() Then
+            Exit Sub
+        End If
+        frm = New BankImportAcctSelectForm
+
+        objSpecs = New ImportChecksSpec(1, 0, 2, 3, -1)
+        objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
+        frm.ShowMe("Import Checks", objImport, _
+            CBMain.ImportStatusSearch.BillPayment, _
+            CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, _
+            CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, _
+            CBMain.ImportIndividualUpdateType.glntIMPINDUPTP_NUMAMT, _
+            CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK, _
+            CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NUMAMT, False)
+
+        Exit Sub
+ErrorHandler:
+        TopError("mnuActCheckImport_Click")
+    End Sub
+
     Private Sub mnuActCompuPayImport_Click(sender As Object, e As EventArgs) Handles mnuActCompuPayImport.Click
         Dim frm As BankImportAcctSelectForm
         Dim objImport As ITrxImport

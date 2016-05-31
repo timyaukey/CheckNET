@@ -60,6 +60,7 @@
         Me.mnuBankImportOFX = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuActBankImportQIF = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuActCompuPayImport = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuActOSUImport = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuAccount = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuActAdjBudget = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuActFindLiveBudget = New System.Windows.Forms.ToolStripMenuItem()
@@ -73,7 +74,7 @@
         Me.mnuRptCategory = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuRptPayables = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuWindows = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuActOSUImport = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuActCheckImport = New System.Windows.Forms.ToolStripMenuItem()
         Me.MainMenu1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -115,7 +116,7 @@
         '
         'mnuAct
         '
-        Me.mnuAct.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuActRecon, Me.mnuActDepImport, Me.mnuActInvImport, Me.mnuBankImportOFX, Me.mnuActBankImportQIF, Me.mnuActCompuPayImport, Me.mnuActOSUImport})
+        Me.mnuAct.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuActRecon, Me.mnuActDepImport, Me.mnuActInvImport, Me.mnuBankImportOFX, Me.mnuActBankImportQIF, Me.mnuActCheckImport, Me.mnuActCompuPayImport, Me.mnuActOSUImport})
         Me.mnuAct.MergeAction = System.Windows.Forms.MergeAction.Remove
         Me.mnuAct.Name = "mnuAct"
         Me.mnuAct.Size = New System.Drawing.Size(67, 20)
@@ -156,6 +157,12 @@
         Me.mnuActCompuPayImport.Name = "mnuActCompuPayImport"
         Me.mnuActCompuPayImport.Size = New System.Drawing.Size(324, 22)
         Me.mnuActCompuPayImport.Text = "Import Checks From Compupay"
+        '
+        'mnuActOSUImport
+        '
+        Me.mnuActOSUImport.Name = "mnuActOSUImport"
+        Me.mnuActOSUImport.Size = New System.Drawing.Size(324, 22)
+        Me.mnuActOSUImport.Text = "Import Checks From Oregon State Credit Union"
         '
         'mnuAccount
         '
@@ -244,11 +251,11 @@
         Me.mnuWindows.Size = New System.Drawing.Size(68, 20)
         Me.mnuWindows.Text = "Windows"
         '
-        'mnuActOSUImport
+        'mnuActCheckImport
         '
-        Me.mnuActOSUImport.Name = "mnuActOSUImport"
-        Me.mnuActOSUImport.Size = New System.Drawing.Size(324, 22)
-        Me.mnuActOSUImport.Text = "Import Checks From Oregon State Credit Union"
+        Me.mnuActCheckImport.Name = "mnuActCheckImport"
+        Me.mnuActCheckImport.Size = New System.Drawing.Size(324, 22)
+        Me.mnuActCheckImport.Text = "Import Checks"
         '
         'CBMainForm
         '
@@ -272,5 +279,6 @@
     End Sub
     Friend WithEvents mnuActCompuPayImport As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mnuActOSUImport As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents mnuActCheckImport As System.Windows.Forms.ToolStripMenuItem
 #End Region 
 End Class
