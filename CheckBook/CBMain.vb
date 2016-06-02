@@ -601,10 +601,6 @@ ErrorHandler:
         cbo.Items.Add(gobjCreateListBoxItem("Earliest Date", ImportMatchNarrowMethod.EarliestDate))
     End Sub
 
-    Public Function gobjCreateListBoxItem(ByVal strName As String, ByVal intValue As Integer) As Object
-        Return New VB6.ListBoxItem(strName, intValue)
-    End Function
-
     Public Sub gGetSplitDates(ByVal objTrx As Trx, ByVal objSplit As Split_Renamed, ByRef datInvoiceDate As Date, ByRef datDueDate As Date)
 
         datDueDate = objSplit.datDueDate

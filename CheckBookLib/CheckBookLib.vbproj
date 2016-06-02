@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Account.vb" />
     <Compile Include="BooleanStringTypeConverter.vb" />
+    <Compile Include="CBListBoxItem.vb" />
     <Compile Include="CheckBookUtils.vb" />
     <Compile Include="ErrorHandling.vb" />
     <Compile Include="IFilePersister.vb" />

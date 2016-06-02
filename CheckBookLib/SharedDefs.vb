@@ -643,16 +643,39 @@ ErrorHandler:
         Return VB6.Format(input, style)
     End Function
 
-    Public Function gstrVB6GetItemString(ctl As System.Windows.Forms.Control, intIndex As Integer) As String
-        Return VB6.GetItemString(ctl, intIndex)
+    Public Function gobjCreateListBoxItem(ByVal strName As String, ByVal intValue As Integer) As CBListBoxItem 'Object
+        'Return New VB6.ListBoxItem(strName, intValue)
+        Return New CBListBoxItem(strName, intValue)
     End Function
 
-    Public Sub gVB6SetItemData(ctl As System.Windows.Forms.Control, intIndex As Integer, intItemData As Integer)
-        VB6.SetItemData(ctl, intIndex, intItemData)
+    Public Function gstrVB6GetItemString(ctl As System.Windows.Forms.ListBox, intIndex As Integer) As String
+        'Return VB6.GetItemString(ctl, intIndex)
+        Return DirectCast(ctl.Items(intIndex), CBListBoxItem).strName
+    End Function
+
+    Public Function gstrVB6GetItemString(ctl As System.Windows.Forms.ComboBox, intIndex As Integer) As String
+        'Return VB6.GetItemString(ctl, intIndex)
+        Return DirectCast(ctl.Items(intIndex), CBListBoxItem).strName
+    End Function
+
+    Public Sub gVB6SetItemData(ctl As System.Windows.Forms.ListBox, intIndex As Integer, intItemData As Integer)
+        'VB6.SetItemData(ctl, intIndex, intItemData)
+        DirectCast(ctl.Items(intIndex), CBListBoxItem).intValue = intItemData
     End Sub
 
-    Public Function gintVB6GetItemData(ctl As System.Windows.Forms.Control, intIndex As Integer) As Integer
-        Return VB6.GetItemData(ctl, intIndex)
+    Public Sub gVB6SetItemData(ctl As System.Windows.Forms.ComboBox, intIndex As Integer, intItemData As Integer)
+        'VB6.SetItemData(ctl, intIndex, intItemData)
+        DirectCast(ctl.Items(intIndex), CBListBoxItem).intValue = intItemData
+    End Sub
+
+    Public Function gintVB6GetItemData(ctl As System.Windows.Forms.ListBox, intIndex As Integer) As Integer
+        'Return VB6.GetItemData(ctl, intIndex)
+        Return DirectCast(ctl.Items(intIndex), CBListBoxItem).intValue
+    End Function
+
+    Public Function gintVB6GetItemData(ctl As System.Windows.Forms.ComboBox, intIndex As Integer) As Integer
+        'Return VB6.GetItemData(ctl, intIndex)
+        Return DirectCast(ctl.Items(intIndex), CBListBoxItem).intValue
     End Function
 
     Public Function gobjClipboardReader() As TextReader
