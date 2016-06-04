@@ -51,6 +51,7 @@
     'Do not modify it using the code editor.
 	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AdjustBudgetsToCashForm))
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.cmdAdjust = New System.Windows.Forms.Button()
         Me.lvwResults = New System.Windows.Forms.ListView()
@@ -81,6 +82,7 @@
         Me.lblPercent = New System.Windows.Forms.Label()
         Me._lblBudgetNumber_5 = New System.Windows.Forms.Label()
         Me.lblBudget = New System.Windows.Forms.Label()
+        Me.lblExplanation = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'cmdAdjust
@@ -89,7 +91,7 @@
         Me.cmdAdjust.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdAdjust.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdAdjust.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdAdjust.Location = New System.Drawing.Point(12, 221)
+        Me.cmdAdjust.Location = New System.Drawing.Point(19, 239)
         Me.cmdAdjust.Name = "cmdAdjust"
         Me.cmdAdjust.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdAdjust.Size = New System.Drawing.Size(356, 25)
@@ -104,7 +106,7 @@
         Me.lvwResults.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lvwResults.ForeColor = System.Drawing.SystemColors.WindowText
         Me.lvwResults.HideSelection = False
-        Me.lvwResults.Location = New System.Drawing.Point(10, 252)
+        Me.lvwResults.Location = New System.Drawing.Point(17, 270)
         Me.lvwResults.Name = "lvwResults"
         Me.lvwResults.Size = New System.Drawing.Size(436, 222)
         Me.lvwResults.TabIndex = 24
@@ -138,7 +140,7 @@
         Me.txtPrefix.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtPrefix.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtPrefix.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtPrefix.Location = New System.Drawing.Point(224, 190)
+        Me.txtPrefix.Location = New System.Drawing.Point(231, 208)
         Me.txtPrefix.MaxLength = 0
         Me.txtPrefix.Name = "txtPrefix"
         Me.txtPrefix.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -152,7 +154,7 @@
         Me.txtMinBal.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtMinBal.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtMinBal.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtMinBal.Location = New System.Drawing.Point(224, 168)
+        Me.txtMinBal.Location = New System.Drawing.Point(231, 186)
         Me.txtMinBal.MaxLength = 0
         Me.txtMinBal.Name = "txtMinBal"
         Me.txtMinBal.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -166,7 +168,7 @@
         Me.txtStartingDate.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtStartingDate.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtStartingDate.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtStartingDate.Location = New System.Drawing.Point(224, 147)
+        Me.txtStartingDate.Location = New System.Drawing.Point(231, 165)
         Me.txtStartingDate.MaxLength = 0
         Me.txtStartingDate.Name = "txtStartingDate"
         Me.txtStartingDate.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -180,7 +182,7 @@
         Me._txtPercent_4.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtPercent_4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtPercent_4.ForeColor = System.Drawing.SystemColors.WindowText
-        Me._txtPercent_4.Location = New System.Drawing.Point(224, 92)
+        Me._txtPercent_4.Location = New System.Drawing.Point(231, 110)
         Me._txtPercent_4.MaxLength = 0
         Me._txtPercent_4.Name = "_txtPercent_4"
         Me._txtPercent_4.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -194,7 +196,7 @@
         Me._cboBudget_4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me._cboBudget_4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboBudget_4.ForeColor = System.Drawing.SystemColors.WindowText
-        Me._cboBudget_4.Location = New System.Drawing.Point(29, 92)
+        Me._cboBudget_4.Location = New System.Drawing.Point(36, 110)
         Me._cboBudget_4.Name = "_cboBudget_4"
         Me._cboBudget_4.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboBudget_4.Size = New System.Drawing.Size(172, 22)
@@ -207,7 +209,7 @@
         Me._txtPercent_3.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtPercent_3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtPercent_3.ForeColor = System.Drawing.SystemColors.WindowText
-        Me._txtPercent_3.Location = New System.Drawing.Point(224, 70)
+        Me._txtPercent_3.Location = New System.Drawing.Point(231, 88)
         Me._txtPercent_3.MaxLength = 0
         Me._txtPercent_3.Name = "_txtPercent_3"
         Me._txtPercent_3.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -221,7 +223,7 @@
         Me._cboBudget_3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me._cboBudget_3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboBudget_3.ForeColor = System.Drawing.SystemColors.WindowText
-        Me._cboBudget_3.Location = New System.Drawing.Point(29, 70)
+        Me._cboBudget_3.Location = New System.Drawing.Point(36, 88)
         Me._cboBudget_3.Name = "_cboBudget_3"
         Me._cboBudget_3.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboBudget_3.Size = New System.Drawing.Size(172, 22)
@@ -234,7 +236,7 @@
         Me._txtPercent_2.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtPercent_2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtPercent_2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me._txtPercent_2.Location = New System.Drawing.Point(224, 48)
+        Me._txtPercent_2.Location = New System.Drawing.Point(231, 66)
         Me._txtPercent_2.MaxLength = 0
         Me._txtPercent_2.Name = "_txtPercent_2"
         Me._txtPercent_2.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -248,7 +250,7 @@
         Me._cboBudget_2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me._cboBudget_2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboBudget_2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me._cboBudget_2.Location = New System.Drawing.Point(29, 48)
+        Me._cboBudget_2.Location = New System.Drawing.Point(36, 66)
         Me._cboBudget_2.Name = "_cboBudget_2"
         Me._cboBudget_2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboBudget_2.Size = New System.Drawing.Size(172, 22)
@@ -261,7 +263,7 @@
         Me._txtPercent_1.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtPercent_1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtPercent_1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me._txtPercent_1.Location = New System.Drawing.Point(224, 27)
+        Me._txtPercent_1.Location = New System.Drawing.Point(231, 45)
         Me._txtPercent_1.MaxLength = 0
         Me._txtPercent_1.Name = "_txtPercent_1"
         Me._txtPercent_1.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -275,7 +277,7 @@
         Me._cboBudget_1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me._cboBudget_1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboBudget_1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me._cboBudget_1.Location = New System.Drawing.Point(29, 27)
+        Me._cboBudget_1.Location = New System.Drawing.Point(36, 45)
         Me._cboBudget_1.Name = "_cboBudget_1"
         Me._cboBudget_1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboBudget_1.Size = New System.Drawing.Size(172, 22)
@@ -288,7 +290,7 @@
         Me._txtPercent_5.Cursor = System.Windows.Forms.Cursors.IBeam
         Me._txtPercent_5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._txtPercent_5.ForeColor = System.Drawing.SystemColors.WindowText
-        Me._txtPercent_5.Location = New System.Drawing.Point(224, 113)
+        Me._txtPercent_5.Location = New System.Drawing.Point(231, 131)
         Me._txtPercent_5.MaxLength = 0
         Me._txtPercent_5.Name = "_txtPercent_5"
         Me._txtPercent_5.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -302,7 +304,7 @@
         Me._cboBudget_5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me._cboBudget_5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._cboBudget_5.ForeColor = System.Drawing.SystemColors.WindowText
-        Me._cboBudget_5.Location = New System.Drawing.Point(29, 113)
+        Me._cboBudget_5.Location = New System.Drawing.Point(36, 131)
         Me._cboBudget_5.Name = "_cboBudget_5"
         Me._cboBudget_5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._cboBudget_5.Size = New System.Drawing.Size(172, 22)
@@ -314,7 +316,7 @@
         Me.lblPrefix.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblPrefix.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblPrefix.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblPrefix.Location = New System.Drawing.Point(84, 192)
+        Me.lblPrefix.Location = New System.Drawing.Point(91, 210)
         Me.lblPrefix.Name = "lblPrefix"
         Me.lblPrefix.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblPrefix.Size = New System.Drawing.Size(131, 18)
@@ -327,7 +329,7 @@
         Me.lblMinBal.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblMinBal.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblMinBal.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblMinBal.Location = New System.Drawing.Point(84, 171)
+        Me.lblMinBal.Location = New System.Drawing.Point(91, 189)
         Me.lblMinBal.Name = "lblMinBal"
         Me.lblMinBal.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblMinBal.Size = New System.Drawing.Size(136, 17)
@@ -340,12 +342,12 @@
         Me.lblStartingDate.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblStartingDate.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblStartingDate.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblStartingDate.Location = New System.Drawing.Point(84, 149)
+        Me.lblStartingDate.Location = New System.Drawing.Point(91, 167)
         Me.lblStartingDate.Name = "lblStartingDate"
         Me.lblStartingDate.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblStartingDate.Size = New System.Drawing.Size(136, 18)
         Me.lblStartingDate.TabIndex = 17
-        Me.lblStartingDate.Text = "Earliest Budget To Adjust:"
+        Me.lblStartingDate.Text = "Earliest Date To Adjust:"
         '
         '_lblBudgetNumber_4
         '
@@ -353,7 +355,7 @@
         Me._lblBudgetNumber_4.Cursor = System.Windows.Forms.Cursors.Default
         Me._lblBudgetNumber_4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._lblBudgetNumber_4.ForeColor = System.Drawing.SystemColors.ControlText
-        Me._lblBudgetNumber_4.Location = New System.Drawing.Point(10, 96)
+        Me._lblBudgetNumber_4.Location = New System.Drawing.Point(17, 114)
         Me._lblBudgetNumber_4.Name = "_lblBudgetNumber_4"
         Me._lblBudgetNumber_4.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._lblBudgetNumber_4.Size = New System.Drawing.Size(16, 16)
@@ -366,7 +368,7 @@
         Me._lblBudgetNumber_3.Cursor = System.Windows.Forms.Cursors.Default
         Me._lblBudgetNumber_3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._lblBudgetNumber_3.ForeColor = System.Drawing.SystemColors.ControlText
-        Me._lblBudgetNumber_3.Location = New System.Drawing.Point(10, 75)
+        Me._lblBudgetNumber_3.Location = New System.Drawing.Point(17, 93)
         Me._lblBudgetNumber_3.Name = "_lblBudgetNumber_3"
         Me._lblBudgetNumber_3.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._lblBudgetNumber_3.Size = New System.Drawing.Size(16, 16)
@@ -379,7 +381,7 @@
         Me._lblBudgetNumber_2.Cursor = System.Windows.Forms.Cursors.Default
         Me._lblBudgetNumber_2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._lblBudgetNumber_2.ForeColor = System.Drawing.SystemColors.ControlText
-        Me._lblBudgetNumber_2.Location = New System.Drawing.Point(10, 53)
+        Me._lblBudgetNumber_2.Location = New System.Drawing.Point(17, 71)
         Me._lblBudgetNumber_2.Name = "_lblBudgetNumber_2"
         Me._lblBudgetNumber_2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._lblBudgetNumber_2.Size = New System.Drawing.Size(16, 16)
@@ -392,7 +394,7 @@
         Me._lblBudgetNumber_1.Cursor = System.Windows.Forms.Cursors.Default
         Me._lblBudgetNumber_1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._lblBudgetNumber_1.ForeColor = System.Drawing.SystemColors.ControlText
-        Me._lblBudgetNumber_1.Location = New System.Drawing.Point(10, 32)
+        Me._lblBudgetNumber_1.Location = New System.Drawing.Point(17, 50)
         Me._lblBudgetNumber_1.Name = "_lblBudgetNumber_1"
         Me._lblBudgetNumber_1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._lblBudgetNumber_1.Size = New System.Drawing.Size(16, 16)
@@ -405,12 +407,12 @@
         Me.lblPercent.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblPercent.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblPercent.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblPercent.Location = New System.Drawing.Point(226, 10)
+        Me.lblPercent.Location = New System.Drawing.Point(233, 9)
         Me.lblPercent.Name = "lblPercent"
         Me.lblPercent.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblPercent.Size = New System.Drawing.Size(102, 16)
+        Me.lblPercent.Size = New System.Drawing.Size(105, 41)
         Me.lblPercent.TabIndex = 1
-        Me.lblPercent.Text = "% of Available Cash"
+        Me.lblPercent.Text = "% of Cash To Use For Each Budget"
         '
         '_lblBudgetNumber_5
         '
@@ -418,7 +420,7 @@
         Me._lblBudgetNumber_5.Cursor = System.Windows.Forms.Cursors.Default
         Me._lblBudgetNumber_5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me._lblBudgetNumber_5.ForeColor = System.Drawing.SystemColors.ControlText
-        Me._lblBudgetNumber_5.Location = New System.Drawing.Point(10, 118)
+        Me._lblBudgetNumber_5.Location = New System.Drawing.Point(17, 136)
         Me._lblBudgetNumber_5.Name = "_lblBudgetNumber_5"
         Me._lblBudgetNumber_5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me._lblBudgetNumber_5.Size = New System.Drawing.Size(16, 16)
@@ -431,19 +433,28 @@
         Me.lblBudget.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblBudget.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblBudget.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblBudget.Location = New System.Drawing.Point(32, 10)
+        Me.lblBudget.Location = New System.Drawing.Point(39, 28)
         Me.lblBudget.Name = "lblBudget"
         Me.lblBudget.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblBudget.Size = New System.Drawing.Size(109, 16)
         Me.lblBudget.TabIndex = 0
-        Me.lblBudget.Text = "Budget To Adjust"
+        Me.lblBudget.Text = "Budgets To Adjust"
+        '
+        'lblExplanation
+        '
+        Me.lblExplanation.Location = New System.Drawing.Point(332, 50)
+        Me.lblExplanation.Name = "lblExplanation"
+        Me.lblExplanation.Size = New System.Drawing.Size(213, 145)
+        Me.lblExplanation.TabIndex = 25
+        Me.lblExplanation.Text = resources.GetString("lblExplanation.Text")
         '
         'AdjustBudgetsToCashForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(457, 491)
+        Me.ClientSize = New System.Drawing.Size(557, 510)
+        Me.Controls.Add(Me.lblExplanation)
         Me.Controls.Add(Me.cmdAdjust)
         Me.Controls.Add(Me.lvwResults)
         Me.Controls.Add(Me.txtPrefix)
@@ -480,7 +491,9 @@
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Form1"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
+    Friend WithEvents lblExplanation As System.Windows.Forms.Label
 #End Region 
 End Class

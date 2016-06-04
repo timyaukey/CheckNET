@@ -177,6 +177,10 @@ ErrorHandler:
             MsgBox("Invalid starting date.", MsgBoxStyle.Critical)
             Exit Function
         End If
+        If Not gblnValidAmount(txtMinBal.Text) Then
+            MsgBox("Invalid minimum balance.", MsgBoxStyle.Critical)
+            Exit Function
+        End If
 
         If MsgBox("Do you really want to fix these budgets?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
             Exit Function
@@ -424,7 +428,7 @@ ErrorHandler:
             gRaiseError("Trx is at wrong index")
         End If
         With objTrx
-            .UpdateStartBudget(mobjReg, .datDate, .strDescription, .strMemo, .blnAwaitingReview, False, 0, .strRepeatKey, curLimit, .datBudgetEnds, .strBudgetKey)
+            .UpdateStartBudget(mobjReg, .datDate, .strDescription, .strMemo, .blnAwaitingReview, False, .intRepeatSeq, .strRepeatKey, curLimit, .datBudgetEnds, .strBudgetKey)
             'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             mobjReg.UpdateEnd(lngIndex, New LogChange, "AdjustBudgetsToCashForm.Update", objTrxOld)
         End With
@@ -484,10 +488,12 @@ ErrorHandler:
         Dim lngIndex As Integer
         Dim objTrx As Trx
 
-        If lngStartIndex <= 1 Then
+        If lngStartIndex < 1 Then
             curResult = 0
+        ElseIf lngStartIndex > mobjReg.lngTrxCount Then
+            curResult = mobjReg.objTrx(mobjReg.lngTrxCount).curBalance
         Else
-            curResult = mobjReg.objTrx(lngStartIndex - 1).curBalance
+            curResult = mobjReg.objTrx(lngStartIndex).curBalance
         End If
 
         For lngIndex = lngStartIndex To mobjReg.lngTrxCount

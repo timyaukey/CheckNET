@@ -35,7 +35,8 @@ Friend Class ReconcileForm
     Private Const mintCOL_BANK_DATE As Short = 6
     Private Const mintCOL_SORTABLE_DATE As Short = 7
     Private Const mintCOL_SORTABLE_NUMBER As Short = 8
-    Private Const mintCOL_ARRAY_INDEX As Short = 9
+    Private Const mintCOL_SORTABLE_BANK_DATE As Short = 9
+    Private Const mintCOL_ARRAY_INDEX As Short = 10
 
     Private Const mstrREG_ENDING_BAL As String = "Ending Balances"
 
@@ -113,72 +114,48 @@ ErrorHandler:
     Private Sub DisplayTrx(ByVal objTrx As Trx)
         Dim objItem As System.Windows.Forms.ListViewItem
         Dim intPipe2 As Short
+        Dim datBankDate As DateTime
         Dim strBankDate As String
+        Dim strSortableBankDate As String
+        Dim strSortableNumber As String
 
         objItem = gobjListViewAdd(lvwTrx)
         With objItem
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If objItem.SubItems.Count > mintCOL_DATE Then
-                objItem.SubItems(mintCOL_DATE).Text = gstrFormatDate(objTrx.datDate)
-            Else
-                objItem.SubItems.Insert(mintCOL_DATE, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatDate(objTrx.datDate)))
-            End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If objItem.SubItems.Count > mintCOL_NUMBER Then
-                objItem.SubItems(mintCOL_NUMBER).Text = objTrx.strNumber
-            Else
-                objItem.SubItems.Insert(mintCOL_NUMBER, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objTrx.strNumber))
-            End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If objItem.SubItems.Count > mintCOL_DESCRIPTION Then
-                objItem.SubItems(mintCOL_DESCRIPTION).Text = objTrx.strDescription
-            Else
-                objItem.SubItems.Insert(mintCOL_DESCRIPTION, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objTrx.strDescription))
-            End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If objItem.SubItems.Count > mintCOL_AMOUNT Then
-                objItem.SubItems(mintCOL_AMOUNT).Text = gstrFormatCurrency(objTrx.curAmount)
-            Else
-                objItem.SubItems.Insert(mintCOL_AMOUNT, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objTrx.curAmount)))
-            End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If objItem.SubItems.Count > mintCOL_IMPORTED Then
-                objItem.SubItems(mintCOL_IMPORTED).Text = IIf(objTrx.strImportKey = "", "", "Y")
-            Else
-                objItem.SubItems.Insert(mintCOL_IMPORTED, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, IIf(objTrx.strImportKey = "", "", "Y")))
-            End If
+            AddSubItem(objItem, mintCOL_DATE, gstrFormatDate(objTrx.datDate))
+            AddSubItem(objItem, mintCOL_NUMBER, objTrx.strNumber)
+            AddSubItem(objItem, mintCOL_DESCRIPTION, objTrx.strDescription)
+            AddSubItem(objItem, mintCOL_AMOUNT, gstrFormatCurrency(objTrx.curAmount))
+            AddSubItem(objItem, mintCOL_IMPORTED, IIf(objTrx.strImportKey = "", "", "Y"))
             intPipe2 = InStr(2, objTrx.strImportKey, "|")
+            strSortableBankDate = ""
             If intPipe2 > 0 Then
                 strBankDate = Mid(objTrx.strImportKey, 2, intPipe2 - 2)
+                If DateTime.TryParse(strBankDate, datBankDate) Then
+                    strSortableBankDate = gstrFormatDate(datBankDate)
+                End If
             Else
                 strBankDate = ""
             End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If objItem.SubItems.Count > mintCOL_BANK_DATE Then
-                objItem.SubItems(mintCOL_BANK_DATE).Text = strBankDate
+            AddSubItem(objItem, mintCOL_BANK_DATE, strBankDate)
+            AddSubItem(objItem, mintCOL_SORTABLE_DATE, objTrx.datDate.ToString("yyyyMMdd"))
+            If IsNumeric(objTrx.strNumber) Then
+                strSortableNumber = VB.Right("          " & objTrx.strNumber, 10)
             Else
-                objItem.SubItems.Insert(mintCOL_BANK_DATE, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strBankDate))
+                strSortableNumber = objTrx.strNumber.ToUpper()
             End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If objItem.SubItems.Count > mintCOL_SORTABLE_DATE Then
-                objItem.SubItems(mintCOL_SORTABLE_DATE).Text = objTrx.datDate.ToString("yyyyMMdd")
-            Else
-                objItem.SubItems.Insert(mintCOL_SORTABLE_DATE, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objTrx.datDate.ToString("yyyyMMdd")))
-            End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If objItem.SubItems.Count > mintCOL_SORTABLE_NUMBER Then
-                objItem.SubItems(mintCOL_SORTABLE_NUMBER).Text = VB.Right("          " & objTrx.strNumber, 10)
-            Else
-                objItem.SubItems.Insert(mintCOL_SORTABLE_NUMBER, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, VB.Right("          " & objTrx.strNumber, 10)))
-            End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If objItem.SubItems.Count > mintCOL_ARRAY_INDEX Then
-                objItem.SubItems(mintCOL_ARRAY_INDEX).Text = CStr(mlngTrxUsed)
-            Else
-                objItem.SubItems.Insert(mintCOL_ARRAY_INDEX, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, CStr(mlngTrxUsed)))
-            End If
+            AddSubItem(objItem, mintCOL_SORTABLE_NUMBER, strSortableNumber)
+            AddSubItem(objItem, mintcol_SORTABLE_BANK_DATE, strSortableBankDate)
+            AddSubItem(objItem, mintCOL_ARRAY_INDEX, CStr(mlngTrxUsed))
             .Checked = (objTrx.lngStatus = Trx.TrxStatus.glngTRXSTS_SELECTED)
         End With
+    End Sub
+
+    Private Sub AddSubItem(ByVal objItem As ListViewItem, ByVal intColIndex As Integer, ByVal strValue As String)
+        If objItem.SubItems.Count > intColIndex Then
+            objItem.SubItems(intColIndex).Text = strValue
+        Else
+            objItem.SubItems.Insert(intColIndex, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strValue))
+        End If
     End Sub
 
     Private Sub lvwTrx_ColumnClick(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.ColumnClickEventArgs) Handles lvwTrx.ColumnClick
@@ -195,6 +172,9 @@ ErrorHandler:
                     .Refresh()
                 Case mintCOL_DESCRIPTION
                     gSetListViewSortColumn(lvwTrx, mintCOL_DESCRIPTION)
+                    .Refresh()
+                Case mintCOL_BANK_DATE
+                    gSetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_BANK_DATE)
                     .Refresh()
             End Select
         End With
