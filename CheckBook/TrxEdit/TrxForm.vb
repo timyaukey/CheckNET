@@ -212,7 +212,7 @@ ErrorHandler:
     End Sub
 
     Private Sub ClearSharedControls()
-        txtDate.Text = gstrVB6Format(mdatDefaultDate, gstrFORMAT_DATE)
+        txtDate.Text = gstrFormatDate(mdatDefaultDate)
         txtDescription.Text = ""
         txtMemo.Text = ""
         cboRepeatKey.SelectedIndex = -1
@@ -223,7 +223,7 @@ ErrorHandler:
 
     Private Sub SetSharedControls(ByVal objTrx As Trx)
         With objTrx
-            txtDate.Text = gstrVB6Format(.datDate, gstrFORMAT_DATE)
+            txtDate.Text = gstrFormatDate(.datDate)
             txtDescription.Text = .strDescription
             txtMemo.Text = .strMemo
             SetComboFromStringTranslator(cboRepeatKey, mobjAccount.objRepeats, .strRepeatKey)
@@ -266,7 +266,7 @@ ErrorHandler:
             txtNumber.Text = .strNumber
             cboStatus.SelectedIndex = IIf(.lngStatus = Trx.TrxStatus.glngTRXSTS_UNREC, 0, IIf(.lngStatus = Trx.TrxStatus.glngTRXSTS_SELECTED, 1, 2))
             chkFake.CheckState = IIf(.blnFake, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
-            txtMatchRange.Text = gstrVB6Format(.curNormalMatchRange, gstrFORMAT_CURRENCY)
+            txtMatchRange.Text = gstrFormatCurrency(.curNormalMatchRange)
             mstrImportKey = .strImportKey
             SetImportKeyControls((mstrImportKey <> ""))
             chkImported.Enabled = (mstrImportKey <> "")
@@ -325,10 +325,10 @@ ErrorHandler:
 
     Private Sub SetBudgetControls(ByVal objTrx As Trx)
         With objTrx
-            txtBudgetLimit.Text = gstrVB6Format(.curBudgetLimit, gstrFORMAT_CURRENCY)
+            txtBudgetLimit.Text = gstrFormatCurrency(.curBudgetLimit)
             SetComboFromStringTranslator(cboBudgetName, gobjBudgets, .strBudgetKey)
-            txtBudgetApplied.Text = gstrVB6Format(.curBudgetApplied, gstrFORMAT_CURRENCY)
-            txtBudgetEnds.Text = gstrVB6Format(.datBudgetEnds, gstrFORMAT_DATE)
+            txtBudgetApplied.Text = gstrFormatCurrency(.curBudgetApplied)
+            txtBudgetEnds.Text = gstrFormatDate(.datBudgetEnds)
         End With
     End Sub
 
@@ -371,7 +371,7 @@ ErrorHandler:
                         'Show it.
                         With objCurrent
                             objItem = gobjListViewAdd(lvwAppliedTo)
-                            objItem.Text = gstrVB6Format(.datDate, gstrFORMAT_DATE)
+                            objItem.Text = gstrFormatDate(.datDate)
                             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                             If objItem.SubItems.Count > 1 Then
                                 objItem.SubItems(1).Text = .strNumber
@@ -398,9 +398,9 @@ ErrorHandler:
                             End If
                             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                             If objItem.SubItems.Count > 5 Then
-                                objItem.SubItems(5).Text = gstrVB6Format(objSplit.curAmount, gstrFORMAT_CURRENCY)
+                                objItem.SubItems(5).Text = gstrFormatCurrency(objSplit.curAmount)
                             Else
-                                objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrVB6Format(objSplit.curAmount, gstrFORMAT_CURRENCY)))
+                                objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objSplit.curAmount)))
                             End If
                             curTotalApplied = curTotalApplied + objSplit.curAmount
                             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
@@ -451,7 +451,7 @@ ErrorHandler:
         With objTrx
             chkFake.CheckState = IIf(.blnFake, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
             SetComboFromStringTranslator(cboTransferTo, mobjAccount.objRegisterList(), .strTransferKey)
-            txtTransferAmount.Text = gstrVB6Format(.curTransferAmount, gstrFORMAT_CURRENCY)
+            txtTransferAmount.Text = gstrFormatCurrency(.curTransferAmount)
         End With
     End Sub
 
@@ -549,16 +549,16 @@ ErrorHandler:
                 If objSplit.datInvoiceDate = System.DateTime.FromOADate(0) Then
                     .strInvoiceDate = ""
                 Else
-                    .strInvoiceDate = gstrVB6Format(objSplit.datInvoiceDate, gstrFORMAT_DATE)
+                    .strInvoiceDate = gstrFormatDate(objSplit.datInvoiceDate)
                 End If
                 If objSplit.datDueDate = System.DateTime.FromOADate(0) Then
                     .strDueDate = ""
                 Else
-                    .strDueDate = gstrVB6Format(objSplit.datDueDate, gstrFORMAT_DATE)
+                    .strDueDate = gstrFormatDate(objSplit.datDueDate)
                 End If
                 .strTerms = objSplit.strTerms
                 .strBudgetKey = objSplit.strBudgetKey
-                .strAmount = gstrVB6Format(objSplit.curAmount, gstrFORMAT_CURRENCY)
+                .strAmount = gstrFormatCurrency(objSplit.curAmount)
                 .strImageFiles = objSplit.strImageFiles
             End With
         Next objSplit
@@ -593,7 +593,7 @@ ErrorHandler:
         End If
         For intIndex = 0 To mintSPLIT_CTRL_ARRAY_SIZE - 1
             With maudtSplits(intIndex + mintSplitOffset + 1)
-                lblSplitNumber(intIndex).Text = gstrVB6Format(intIndex + 1 + mintSplitOffset, "##0") & "."
+                lblSplitNumber(intIndex).Text = gstrFormatInteger(intIndex + 1 + mintSplitOffset, "##0") & "."
                 SetComboFromStringTranslator(cboSplitCategory(intIndex), gobjCategories, .strCategoryKey)
                 txtSplitPONum(intIndex).Text = .strPONumber
                 txtSplitInvoiceNum(intIndex).Text = .strInvoiceNum
@@ -633,7 +633,7 @@ ErrorHandler:
             'Do NOT set mcurTotalAmount if cannot compute trx total.
             txtSplitTotal.Text = gstrUNABLE_TO_TRANSLATE
         Else
-            txtSplitTotal.Text = gstrVB6Format(curTotal, gstrFORMAT_CURRENCY)
+            txtSplitTotal.Text = gstrFormatCurrency(curTotal)
             mcurTotalAmount = curTotal
         End If
     End Sub
@@ -719,7 +719,7 @@ ErrorHandler:
             For intPlaceholderSelector = gintLBOUND1 To UBound(intPlaceholderIndexes)
                 intSplitIndex = intPlaceholderIndexes(intPlaceholderSelector)
                 If intPlaceholderSelector = gintLBOUND1 Then
-                    strSplitAmount = gstrVB6Format(mcurTotalAmount - curNonPlaceholderTotal, gstrFORMAT_CURRENCY)
+                    strSplitAmount = gstrFormatCurrency(mcurTotalAmount - curNonPlaceholderTotal)
                 Else
                     strSplitAmount = "0.00"
                 End If
@@ -829,12 +829,12 @@ ErrorHandler:
             strAmount = txtTransferAmount.Text
         End If
         My.Computer.Clipboard.Clear()
-        My.Computer.Clipboard.SetText(gstrVB6Format(System.Math.Abs(CDec(strAmount)), "##########.00"))
+        My.Computer.Clipboard.SetText(gstrFormatCurrency(System.Math.Abs(CDec(strAmount)), "##########.00"))
     End Sub
 
     Private Sub cmdCopyDate_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCopyDate.Click
         My.Computer.Clipboard.Clear()
-        My.Computer.Clipboard.SetText(gstrVB6Format(CDate(txtDate.Text), "mm/dd/yyyy"))
+        My.Computer.Clipboard.SetText(CDate(txtDate.Text).ToString("MM/dd/yyyy"))
     End Sub
 
     Private Sub cmdMailingAddress_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdMailingAddress.Click
@@ -1273,7 +1273,7 @@ ErrorHandler:
             blnDeclineInvalidDate = False
             Exit Function
         End If
-        strMsg = strCheckLabel & " " & gstrVB6Format(datCheck, gstrFORMAT_DATE) & " is more than " & intWeeks & " weeks " & strRelationship & " " & strAnchorLabel & "." & vbCrLf & vbCrLf & "Is this date correct?"
+        strMsg = strCheckLabel & " " & gstrFormatDate(datCheck) & " is more than " & intWeeks & " weeks " & strRelationship & " " & strAnchorLabel & "." & vbCrLf & vbCrLf & "Is this date correct?"
         blnDeclineInvalidDate = MsgBox(strMsg, MsgBoxStyle.YesNo + MsgBoxStyle.DefaultButton2, "Date Validation") <> MsgBoxResult.Yes
 
     End Function
@@ -1413,7 +1413,7 @@ ErrorHandler:
         End If
 
         txtNumber.Text = strNumber
-        txtDate.Text = gstrVB6Format(Today, gstrFORMAT_DATE)
+        txtDate.Text = gstrFormatDate(Today)
         chkFake.CheckState = System.Windows.Forms.CheckState.Unchecked
 
         If Not blnValidateAndSave() Then
@@ -1627,7 +1627,7 @@ ErrorHandler:
         If Not gblnValidDate(txtDate.Text) Then
             GoTo EventExitSub
         End If
-        txtDate.Text = gstrVB6Format(DateAdd(Microsoft.VisualBasic.DateInterval.Day, intIncrement, CDate(txtDate.Text)), gstrFORMAT_DATE)
+        txtDate.Text = gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, intIncrement, CDate(txtDate.Text)))
 
         GoTo EventExitSub
 ErrorHandler:
@@ -1982,7 +1982,7 @@ EventExitSub:
         'It must end in "(n)", where "n" the current date and time.
         strNewInvoice = objOldSplit.strInvoiceNum
         If strNewInvoice <> "" Then
-            strInvNumPostfix = "(" & gstrVB6Format(Now, "mm/dd/yy") & ")"
+            strInvNumPostfix = "(" & gstrFormatDate(Now, "MM/dd/yy") & ")"
             intParenPos = InStr(strNewInvoice, "(")
             If intParenPos > 0 Then
                 strNewInvoice = VB.Left(strNewInvoice, intParenPos - 1) & strInvNumPostfix
@@ -1994,8 +1994,8 @@ EventExitSub:
         objNewSplit.strMemo = objOldSplit.strMemo
         objNewSplit.strTerms = objOldSplit.strTerms
         objNewSplit.strImageFiles = objOldSplit.strImageFiles
-        objOldSplit.strAmount = gstrVB6Format(curSplitAmount - CDbl(curNewAmount), gstrFORMAT_CURRENCY)
-        objNewSplit.strAmount = gstrVB6Format(curNewAmount, gstrFORMAT_CURRENCY)
+        objOldSplit.strAmount = gstrFormatCurrency(curSplitAmount - CDbl(curNewAmount))
+        objNewSplit.strAmount = gstrFormatCurrency(curNewAmount)
 
         'Redisplay all the splits.
         DisplaySplits(mintSplitOffset)

@@ -307,7 +307,7 @@ ErrorHandler:
                 MsgBox("You must select an account, not a register.", MsgBoxStyle.Information)
                 Exit Sub
             End If
-            strRegisterEndDate = InputBox("Enter ending date to generate transactions through:", "Ending Date", gstrVB6Format(DateAdd(Microsoft.VisualBasic.DateInterval.Day, 90, Now), gstrFORMAT_DATE))
+            strRegisterEndDate = InputBox("Enter ending date to generate transactions through:", "Ending Date", gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, 90, Now)))
             If strRegisterEndDate <> "" Then
                 If gblnValidDate(strRegisterEndDate) Then
                     'UPGRADE_WARNING: Screen property Screen.MousePointer has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'

@@ -145,16 +145,16 @@ ErrorHandler:
 
         gGetSplitDates(objTrx, objSplit, datInvToUse, datDueToUse)
         If objSplit.datInvoiceDate > System.DateTime.FromOADate(0) Then
-            strInvDate = gstrVB6Format(objSplit.datInvoiceDate, gstrFORMAT_DATE)
+            strInvDate = gstrFormatDate(objSplit.datInvoiceDate)
         End If
         If objSplit.datDueDate > System.DateTime.FromOADate(0) Then
-            strDueDate = gstrVB6Format(objSplit.datDueDate, gstrFORMAT_DATE)
+            strDueDate = gstrFormatDate(objSplit.datDueDate)
         End If
 
-        strLine = gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE) & "," & objTrx.strNumber & ",""" & objTrx.strDescription & """," _
-            & gstrVB6Format(objSplit.curAmount, gstrFORMAT_CURRENCY) & ",""" & gobjCategories.strKeyToValue1(objSplit.strCategoryKey) _
-            & """," & strDueDate & "," & gstrVB6Format(datDueToUse, gstrFORMAT_DATE) & "," & strInvDate & "," _
-            & gstrVB6Format(datInvToUse, gstrFORMAT_DATE) & ",""" & objSplit.strPONumber & """,""" & objSplit.strInvoiceNum & """,""" & objSplit.strTerms & """"
+        strLine = gstrFormatDate(objTrx.datDate) & "," & objTrx.strNumber & ",""" & objTrx.strDescription & """," _
+            & gstrFormatCurrency(objSplit.curAmount) & ",""" & gobjCategories.strKeyToValue1(objSplit.strCategoryKey) _
+            & """," & strDueDate & "," & gstrFormatDate(datDueToUse) & "," & strInvDate & "," _
+            & gstrFormatDate(datInvToUse) & ",""" & objSplit.strPONumber & """,""" & objSplit.strInvoiceNum & """,""" & objSplit.strTerms & """"
 
         'The order of these extra fields must match the order they
         'are added in OpenOutput().

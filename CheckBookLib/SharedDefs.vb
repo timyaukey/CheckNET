@@ -359,12 +359,12 @@ Public Module SharedDefs
                 If datInvoiceDate = System.DateTime.FromOADate(0) Then
                     strInvoiceDate = ""
                 Else
-                    strInvoiceDate = gstrVB6Format(datInvoiceDate, gstrFORMAT_DATE)
+                    strInvoiceDate = gstrFormatDate(datInvoiceDate)
                 End If
                 If datDueDate = System.DateTime.FromOADate(0) Then
                     strDueDate = ""
                 Else
-                    strDueDate = gstrVB6Format(datDueDate, gstrFORMAT_DATE)
+                    strDueDate = gstrFormatDate(datDueDate)
                 End If
                 strTerms = strTerms2
                 strBudget = gstrTranslateBudgetKey(strBudgetKey)
@@ -639,8 +639,29 @@ ErrorHandler:
         gblnValidAmount = True
     End Function
 
-    Public Function gstrVB6Format(input As Object, style As String) As String
-        Return VB6.Format(input, style)
+    Public Function gstrFormatInteger(input As Integer, style As String) As String
+        Dim result As String = input.ToString(style)
+        Return result
+    End Function
+
+    Public Function gstrFormatCurrency(input As Decimal) As String
+        Dim result As String = input.ToString("#######0.00") ' VB6.Format(input, "" + gstrFORMAT_CURRENCY)
+        Return result
+    End Function
+
+    Public Function gstrFormatCurrency(input As Decimal, style As String) As String
+        Dim result As String = input.ToString(style)
+        Return result
+    End Function
+
+    Public Function gstrFormatDate(input As Date) As String
+        Dim result As String = input.ToString("MM/dd/yy") ' VB6.Format(input, "" + gstrFORMAT_DATE)
+        Return result
+    End Function
+
+    Public Function gstrFormatDate(input As Date, style As String) As String
+        Dim result As String = input.ToString(style)
+        Return result
     End Function
 
     Public Function gobjCreateListBoxItem(ByVal strName As String, ByVal intValue As Integer) As CBListBoxItem 'Object
@@ -660,7 +681,8 @@ ErrorHandler:
 
     Public Sub gVB6SetItemData(ctl As System.Windows.Forms.ListBox, intIndex As Integer, intItemData As Integer)
         'VB6.SetItemData(ctl, intIndex, intItemData)
-        DirectCast(ctl.Items(intIndex), CBListBoxItem).intValue = intItemData
+        Dim item As Object = ctl.Items(intIndex)
+        DirectCast(item, CBListBoxItem).intValue = intItemData
     End Sub
 
     Public Sub gVB6SetItemData(ctl As System.Windows.Forms.ComboBox, intIndex As Integer, intItemData As Integer)

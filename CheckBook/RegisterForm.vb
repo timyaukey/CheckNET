@@ -102,7 +102,7 @@ Friend Class RegisterForm
                 MsgBox("You can delete this transaction, but it has a repeat key " & "so the software will probably just recreate it." & vbCrLf & _
                        "If you don't want to use this transaction it is much better " & "to change the amount to zero than to delete it.", MsgBoxStyle.Critical)
             End If
-            If MsgBox("Do you really want to delete the transaction dated " & gstrVB6Format(.datDate, gstrFORMAT_DATE) & " for $" & gstrVB6Format(.curAmount, gstrFORMAT_CURRENCY) & " made out to " & .strDescription & "?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+            If MsgBox("Do you really want to delete the transaction dated " & gstrFormatDate(.datDate) & " for $" & gstrFormatCurrency(.curAmount) & " made out to " & .strDescription & "?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
                 Exit Sub
             End If
             If .lngStatus = Trx.TrxStatus.glngTRXSTS_RECON Then
@@ -379,51 +379,51 @@ ErrorHandler:
         intColCounter = intColCounter + 1
     End Sub
 
-	Private Sub LoadGrid()
-		Dim lngIndex As Integer
-		'Select the first Trx on the latest date on or before this.
-		Dim datTargetDate As Date
-		'The index and date of the Trx currently chosen to be selected.
-		Dim lngSelectIndex As Integer
-		Dim datSelectDate As Date
-		'The date of the current Trx.
-		Dim datCurrentDate As Date
+    Private Sub LoadGrid()
+        Dim lngIndex As Integer
+        'Select the first Trx on the latest date on or before this.
+        Dim datTargetDate As Date
+        'The index and date of the Trx currently chosen to be selected.
+        Dim lngSelectIndex As Integer
+        Dim datSelectDate As Date
+        'The date of the current Trx.
+        Dim datCurrentDate As Date
         Dim strMonthYear As String = ""
         Dim strNewMonthYear As String = ""
-		
+
         If mobjReg.lngTrxCount > 0 Then
             grdReg.RowCount = mobjReg.lngTrxCount
         Else
             grdReg.RowCount = 1
         End If
 
-		lngSelectIndex = 0
-		datSelectDate = System.Date.FromOADate(0)
-		datTargetDate = Today
-		For lngIndex = 1 To mobjReg.lngTrxCount
-			datCurrentDate = mobjReg.objTrx(lngIndex).datDate
-			strNewMonthYear = CStr(Year(datCurrentDate))
-			If strNewMonthYear <> strMonthYear Then
-				strMonthYear = strNewMonthYear
-				If Not mfrmStartup Is Nothing Then
-					mfrmStartup.ShowStatus("Formatting " & mobjReg.strTitle & " " & strMonthYear)
-				End If
-			End If
-			'AllocateGridRow lngIndex
-			If datCurrentDate <= datTargetDate Then
-				If datCurrentDate > datSelectDate Then
-					lngSelectIndex = lngIndex
-					datSelectDate = datCurrentDate
-				End If
-			End If
-		Next 
-		If lngSelectIndex > 0 Then
-			mobjReg.SetCurrent(lngSelectIndex)
-			mobjReg.ShowCurrent_Renamed()
-		End If
+        lngSelectIndex = 0
+        datSelectDate = System.Date.FromOADate(0)
+        datTargetDate = Today
+        For lngIndex = 1 To mobjReg.lngTrxCount
+            datCurrentDate = mobjReg.objTrx(lngIndex).datDate
+            strNewMonthYear = CStr(Year(datCurrentDate))
+            If strNewMonthYear <> strMonthYear Then
+                strMonthYear = strNewMonthYear
+                If Not mfrmStartup Is Nothing Then
+                    mfrmStartup.ShowStatus("Formatting " & mobjReg.strTitle & " " & strMonthYear)
+                End If
+            End If
+            'AllocateGridRow lngIndex
+            If datCurrentDate <= datTargetDate Then
+                If datCurrentDate > datSelectDate Then
+                    lngSelectIndex = lngIndex
+                    datSelectDate = datCurrentDate
+                End If
+            End If
+        Next
+        If lngSelectIndex > 0 Then
+            mobjReg.SetCurrent(lngSelectIndex)
+            mobjReg.ShowCurrent_Renamed()
+        End If
         RefreshPage()
         mobjReg.ValidateRegister()
-	End Sub
+    End Sub
 
     Private Sub grdReg_CellValueNeeded(ByVal sender As System.Object, _
         ByVal e As System.Windows.Forms.DataGridViewCellValueEventArgs) Handles grdReg.CellValueNeeded
@@ -453,67 +453,67 @@ ErrorHandler:
         End If
     End Sub
 
-	Private Sub DisplayTrx(ByVal lngIndex As Integer)
-		Dim objTrx As Trx
-		
-        objTrx = mobjReg.objTrx(lngIndex)
-		DisplayTrxShared(objTrx)
-		Select Case objTrx.lngType
-			Case Trx.TrxType.glngTRXTYP_NORMAL
-				DisplayTrxNormal(objTrx)
-			Case Trx.TrxType.glngTRXTYP_BUDGET
-				DisplayTrxBudget(objTrx)
-			Case Trx.TrxType.glngTRXTYP_TRANSFER
-				DisplayTrxTransfer(objTrx)
-			Case Else
-				gRaiseError("Invalid Trx type in DisplayTrx")
-		End Select
-	End Sub
+    Private Sub DisplayTrx(ByVal lngIndex As Integer)
+        Dim objTrx As Trx
 
-	Private Sub SelectTrx(ByVal lngIndex As Integer)
+        objTrx = mobjReg.objTrx(lngIndex)
+        DisplayTrxShared(objTrx)
+        Select Case objTrx.lngType
+            Case Trx.TrxType.glngTRXTYP_NORMAL
+                DisplayTrxNormal(objTrx)
+            Case Trx.TrxType.glngTRXTYP_BUDGET
+                DisplayTrxBudget(objTrx)
+            Case Trx.TrxType.glngTRXTYP_TRANSFER
+                DisplayTrxTransfer(objTrx)
+            Case Else
+                gRaiseError("Invalid Trx type in DisplayTrx")
+        End Select
+    End Sub
+
+    Private Sub SelectTrx(ByVal lngIndex As Integer)
         Dim lngGridRow As Integer
-		
+
         lngGridRow = lngIndexToGridRow(lngIndex)
         grdReg.CurrentCell = grdReg.Rows(lngGridRow - 1).Cells(0)
         HighlightCurrentRow()
-	End Sub
-	
-	Private Sub HighlightCurrentRow()
+    End Sub
+
+    Private Sub HighlightCurrentRow()
         With grdReg
             'TODO
         End With
-	End Sub
-	
-	Private Sub DisplayTrxShared(ByVal objTrx As Trx)
+    End Sub
+
+    Private Sub DisplayTrxShared(ByVal objTrx As Trx)
         grdReg.InvalidateRow(grdReg.CurrentRow.Index)
     End Sub
-	
-	Private Function strRepeatUnit(ByVal lngRepeatUnit As Trx.RepeatUnit) As String
-		Select Case lngRepeatUnit
-			Case Trx.RepeatUnit.glngRPTUNT_DAY
-				strRepeatUnit = "Days"
-			Case Trx.RepeatUnit.glngRPTUNT_WEEK
-				strRepeatUnit = "Weeks"
-			Case Trx.RepeatUnit.glngRPTUNT_MONTH
+
+    Private Function strRepeatUnit(ByVal lngRepeatUnit As Trx.RepeatUnit) As String
+        Select Case lngRepeatUnit
+            Case Trx.RepeatUnit.glngRPTUNT_DAY
+                strRepeatUnit = "Days"
+            Case Trx.RepeatUnit.glngRPTUNT_WEEK
+                strRepeatUnit = "Weeks"
+            Case Trx.RepeatUnit.glngRPTUNT_MONTH
                 strRepeatUnit = "Months"
             Case Else
                 strRepeatUnit = ""
         End Select
-	End Function
-	
-	Private Sub DisplayTrxStatus(ByVal objTrx As Trx)
+    End Function
+
+    Private Sub DisplayTrxStatus(ByVal objTrx As Trx)
         grdReg.InvalidateRow(grdReg.CurrentRow.Index)
     End Sub
-	
-	Private Sub DisplayTrxNormal(ByVal objTrx As Trx)
+
+    Private Sub DisplayTrxNormal(ByVal objTrx As Trx)
         grdReg.InvalidateRow(grdReg.CurrentRow.Index)
     End Sub
-	
-	Private Sub DisplayTrxBudget(ByVal objTrx As Trx)
+
+    Private Sub DisplayTrxBudget(ByVal objTrx As Trx)
         grdReg.InvalidateRow(grdReg.CurrentRow.Index)
     End Sub
-	
-	Private Sub DisplayTrxTransfer(ByVal objTrx As Trx)
+
+    Private Sub DisplayTrxTransfer(ByVal objTrx As Trx)
         grdReg.InvalidateRow(grdReg.CurrentRow.Index)
     End Sub
 
@@ -658,7 +658,7 @@ ErrorHandler:
     End Sub
 
     Private Function strTrxSummaryForMsg(ByVal objTrx As Trx) As String
-        strTrxSummaryForMsg = gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE) & " " & objTrx.strDescription & " $" & gstrVB6Format(objTrx.curAmount, gstrFORMAT_CURRENCY)
+        strTrxSummaryForMsg = gstrFormatDate(objTrx.datDate) & " " & objTrx.strDescription & " $" & gstrFormatCurrency(objTrx.curAmount)
     End Function
 
     Private Sub DiagnosticValidate()

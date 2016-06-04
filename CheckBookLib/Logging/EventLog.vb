@@ -53,7 +53,7 @@ Public Class EventLog
         End If
 
         mdomOutput = New VB6XmlDocument
-        mdomOutput.LoadXml("<Activity Login=""" & mstrLogin & """ SessionStart=""" & gstrVB6Format(mdatStart, "General Date") & """></Activity>")
+        mdomOutput.LoadXml("<Activity Login=""" & mstrLogin & """ SessionStart=""" & gstrFormatDate(mdatStart, "G") & """></Activity>")
         objParseError = mdomOutput.ParseError
         If Not objParseError Is Nothing Then
             ShowTrxGenLoadError("", gstrXMLParseErrorText(objParseError))
@@ -70,12 +70,12 @@ Public Class EventLog
         If Dir(strLogFolder, FileAttribute.Directory) = "" Then
             MkDir(strLogFolder)
         End If
-        strLogFolder = strLogFolder & "\" & gstrVB6Format(Today, "yyyy-mmm")
+        strLogFolder = strLogFolder & "\" & gstrFormatDate(Today, "yyyy-MMM")
         'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
         If Dir(strLogFolder, FileAttribute.Directory) = "" Then
             MkDir(strLogFolder)
         End If
-        strLogFile = strLogFolder & "\" & strAccountTitle & "_R" & mobjReg.strRegisterKey & "_" & gstrVB6Format(mdatStart, "yyyy-mmm-dd-hh-nn-ss") & ".xml"
+        strLogFile = strLogFolder & "\" & strAccountTitle & "_R" & mobjReg.strRegisterKey & "_" & gstrFormatDate(mdatStart, "yyyy-MMM-dd-HH-mm-ss") & ".xml"
         mdomOutput.Save(strLogFile)
     End Sub
 
@@ -119,7 +119,7 @@ Public Class EventLog
     Public Sub EventStart(ByVal strTitle As String, ByVal datTimestamp As Date)
         melmEvent = mdomOutput.CreateElement("Event")
         melmEvent.SetAttribute("Title", strTitle)
-        melmEvent.SetAttribute("When", gstrVB6Format(datTimestamp, "General Date"))
+        melmEvent.SetAttribute("When", gstrFormatDate(datTimestamp, "G"))
         'UPGRADE_WARNING: Couldn't resolve default property of object melmEvent. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         melmEventContainer.AppendChild(melmEvent)
     End Sub
@@ -144,10 +144,10 @@ Public Class EventLog
         'UPGRADE_WARNING: Couldn't resolve default property of object elmTrx. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         melmEvent.AppendChild(elmTrx)
         With elmTrx
-            .SetAttribute("Date", gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE))
+            .SetAttribute("Date", gstrFormatDate(objTrx.datDate))
             .SetAttribute("Number", objTrx.strNumber)
             .SetAttribute("Payee", objTrx.strDescription)
-            .SetAttribute("Amount", gstrVB6Format(objTrx.curAmount, gstrFORMAT_CURRENCY))
+            .SetAttribute("Amount", gstrFormatCurrency(objTrx.curAmount))
             .SetAttribute("FakeStatus", objTrx.strFakeStatus)
             If objTrx.strMemo <> "" Then
                 .SetAttribute("TrxMemo", objTrx.strMemo)
@@ -169,7 +169,7 @@ Public Class EventLog
                         With elmSplitParent
                             .SetAttribute("CatName", gobjCategories.strKeyToValue1(objSplit.strCategoryKey))
                             If objTrx.lngSplits > 1 Then
-                                .SetAttribute("Amount", gstrVB6Format(objSplit.curAmount, gstrFORMAT_CURRENCY))
+                                .SetAttribute("Amount", gstrFormatCurrency(objSplit.curAmount))
                             End If
                             If objSplit.strPONumber <> "" Then
                                 .SetAttribute("PONum", objSplit.strPONumber)
@@ -178,10 +178,10 @@ Public Class EventLog
                                 .SetAttribute("InvNum", objSplit.strInvoiceNum)
                             End If
                             If objSplit.datInvoiceDate <> System.DateTime.FromOADate(0) Then
-                                .SetAttribute("InvDate", gstrVB6Format(objSplit.datInvoiceDate, gstrFORMAT_DATE))
+                                .SetAttribute("InvDate", gstrFormatDate(objSplit.datInvoiceDate))
                             End If
                             If objSplit.datDueDate <> System.DateTime.FromOADate(0) Then
-                                .SetAttribute("DueDate", gstrVB6Format(objSplit.datDueDate, gstrFORMAT_DATE))
+                                .SetAttribute("DueDate", gstrFormatDate(objSplit.datDueDate))
                             End If
                             If objSplit.strTerms <> "" Then
                                 .SetAttribute("Terms", objSplit.strTerms)
@@ -193,7 +193,7 @@ Public Class EventLog
                     Next objSplit
                 Case Trx.TrxType.glngTRXTYP_BUDGET
                     .SetAttribute("Type", "Budget")
-                    .SetAttribute("BudgetLimit", gstrVB6Format(objTrx.curBudgetLimit, gstrFORMAT_CURRENCY))
+                    .SetAttribute("BudgetLimit", gstrFormatCurrency(objTrx.curBudgetLimit))
                     .SetAttribute("BudgetName", gobjBudgets.strKeyToValue1(objTrx.strBudgetKey))
                 Case Trx.TrxType.glngTRXTYP_TRANSFER
                     .SetAttribute("Type", "Transfer")

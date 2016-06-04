@@ -92,9 +92,9 @@ Module CheckPrinting
         Loop
 
         'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        PrintCheckText(domCheckFormat, "Date", gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE))
+        PrintCheckText(domCheckFormat, "Date", gstrFormatDate(objTrx.datDate))
         'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        PrintCheckText(domCheckFormat, "ShortAmount", gstrVB6Format(curAmount, gstrFORMAT_CURRENCY))
+        PrintCheckText(domCheckFormat, "ShortAmount", gstrFormatCurrency(curAmount))
         'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         PrintCheckText(domCheckFormat, "Payee", objTrx.strDescription)
         Dim intPennies As Short
@@ -103,7 +103,7 @@ Module CheckPrinting
         strDollars = gstrAmountToWords(curAmount)
         strDollars = UCase(Left(strDollars, 1)) & Mid(strDollars, 2)
         'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        PrintCheckText(domCheckFormat, "LongAmount", strDollars & " and " & gstrVB6Format(intPennies, "00") & "/100")
+        PrintCheckText(domCheckFormat, "LongAmount", strDollars & " and " & gstrFormatInteger(intPennies, "00") & "/100")
         If strAccountNumber <> "" Then
             'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             PrintCheckText(domCheckFormat, "AccountNumber", "Account #: " & strAccountNumber)
@@ -125,9 +125,9 @@ Module CheckPrinting
         'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         PrintOptionalCheckText(domCheckFormat, "Payee2", strMailName)
         'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        PrintOptionalCheckText(domCheckFormat, "Amount2", "$" & gstrVB6Format(curAmount, gstrFORMAT_CURRENCY))
+        PrintOptionalCheckText(domCheckFormat, "Amount2", "$" & gstrFormatCurrency(curAmount))
         'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        PrintOptionalCheckText(domCheckFormat, "Date2", gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE))
+        PrintOptionalCheckText(domCheckFormat, "Date2", gstrFormatDate(objTrx.datDate))
         'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         PrintOptionalCheckText(domCheckFormat, "Number2", "#" & objTrx.strNumber)
 

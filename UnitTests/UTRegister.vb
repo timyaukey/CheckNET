@@ -387,44 +387,4 @@ Public Class UTRegister
     Private Sub mobjReg_ValidationError(ByVal lngIndex As Integer, ByVal strMsg As String) Handles mobjReg.ValidationError
         mcolErrors.Add("Index=" & lngIndex & ": " & strMsg)
     End Sub
-
-    'Return a multiple line string with the formatted contents of all Trx
-    'in a specified part of the Register. Intended for use in immediate mode window.
-
-    Public Function strDump(Optional ByVal lngStartIndex As Integer = 1, Optional ByVal lngEndIndex As Integer = 0) As String
-
-        Dim lngIndex As Integer
-        Dim lngEndIndex2 As Integer
-        Dim objTrx As Trx
-        Dim strLine As String
-        Dim strResult As String = ""
-        Dim objSplit As Split_Renamed
-        Dim intSplit As Short
-        With mobjReg
-            If lngEndIndex = 0 Then
-                lngEndIndex2 = .lngTrxCount
-            Else
-                lngEndIndex2 = lngEndIndex
-            End If
-            For lngIndex = lngStartIndex To lngEndIndex2
-                objTrx = .objTrx(lngIndex)
-                With objTrx
-                    strLine = gstrVB6Format(lngIndex, "000") & ". " & gstrVB6Format(.datDate, "mm/dd/yy") & " " & Left(.strNumber & Space(6), 6) & " " & gstrVB6Format(.curAmount, "000000.00 ;000000.00-") & " " & gstrVB6Format(.curBalance, "000000.00 ;000000.00-") & " "
-                    If .lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
-                        strLine = strLine & "BUD " & "End=" & gstrVB6Format(.datBudgetEnds, "mm/dd/yy") & " " & "Lim=" & gstrVB6Format(.curBudgetLimit, "####0.00") & " " & "Apl=" & gstrVB6Format(.curBudgetApplied, "####0.00") & " " & "Key=" & .strBudgetKey
-                    ElseIf .lngType = Trx.TrxType.glngTRXTYP_TRANSFER Then
-                        strLine = strLine & "XFR " & "Key=" & .strTransferKey
-                    Else
-                        strLine = strLine & "NOR "
-                        For intSplit = 1 To .lngSplits
-                            objSplit = .objSplit(intSplit)
-                            strLine = strLine & "Spl=" & objSplit.strBudgetKey & ";" & objSplit.strCategoryKey & ";" & objSplit.curAmount & " "
-                        Next
-                    End If
-                End With
-                strResult = strResult & strLine & vbCrLf
-            Next
-        End With
-        strDump = strResult
-    End Function
 End Class

@@ -69,7 +69,7 @@ ErrorHandler:
         For intIndex = 1 To mintNUM_BUDGETS
             LoadSavedBudget(intIndex)
         Next
-        txtStartingDate.Text = gstrVB6Format(Today, gstrFORMAT_DATE)
+        txtStartingDate.Text = gstrFormatDate(Today)
         txtMinBal.Text = GetSetting(gstrREG_APP, strRegSection(), mstrREG_MINBAL)
         txtPrefix.Text = GetSetting(gstrREG_APP, strRegSection(), mstrREG_NAMEPRE)
     End Sub
@@ -442,7 +442,7 @@ ErrorHandler:
 
         objItem = gobjListViewAdd(lvwResults)
         With objItem
-            .Text = gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE)
+            .Text = gstrFormatDate(objTrx.datDate)
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > 1 Then
                 objItem.SubItems(1).Text = objTrx.strDescription
@@ -451,15 +451,15 @@ ErrorHandler:
             End If
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > 2 Then
-                objItem.SubItems(2).Text = gstrVB6Format(objTrx.curBudgetLimit, gstrFORMAT_CURRENCY)
+                objItem.SubItems(2).Text = gstrFormatCurrency(objTrx.curBudgetLimit)
             Else
-                objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrVB6Format(objTrx.curBudgetLimit, gstrFORMAT_CURRENCY)))
+                objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objTrx.curBudgetLimit)))
             End If
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > 3 Then
-                objItem.SubItems(3).Text = gstrVB6Format(objTrx.curBudgetApplied, gstrFORMAT_CURRENCY)
+                objItem.SubItems(3).Text = gstrFormatCurrency(objTrx.curBudgetApplied)
             Else
-                objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrVB6Format(objTrx.curBudgetApplied, gstrFORMAT_CURRENCY)))
+                objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objTrx.curBudgetApplied)))
             End If
         End With
     End Sub

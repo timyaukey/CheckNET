@@ -875,7 +875,7 @@ EventExitSub:
             'UPGRADE_WARNING: Lower bound of collection lvwTrx.ListItems() has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             intItemArrayIndex = CShort(lvwTrx.Items.Item(intListItemIndex).SubItems(mintITMCOL_INDEX).Text)
             With maudtItem(intItemArrayIndex).objImportedTrx
-                If StrComp(.strNumber, mstrImportSearchText, CompareMethod.Text) = 0 Or gstrVB6Format(.curAmount, gstrFORMAT_CURRENCY) = mstrImportSearchText Or InStr(1, .strDescription, mstrImportSearchText, CompareMethod.Text) > 0 Then
+                If StrComp(.strNumber, mstrImportSearchText, CompareMethod.Text) = 0 Or gstrFormatCurrency(.curAmount) = mstrImportSearchText Or InStr(1, .strDescription, mstrImportSearchText, CompareMethod.Text) > 0 Then
                     'UPGRADE_WARNING: Lower bound of collection lvwTrx.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                     lvwTrx.FocusedItem = lvwTrx.Items.Item(intListItemIndex)
                     'UPGRADE_WARNING: MSComctlLib.IListItem method lvwTrx.SelectedItem.EnsureVisible has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
@@ -1122,7 +1122,7 @@ ErrorHandler:
 
         Dim strRegTitle As String
         With objItem
-            .Text = gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE)
+            .Text = gstrFormatDate(objTrx.datDate)
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > 1 Then
                 objItem.SubItems(1).Text = objTrx.strNumber
@@ -1137,9 +1137,9 @@ ErrorHandler:
             End If
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > 3 Then
-                objItem.SubItems(3).Text = gstrVB6Format(objTrx.curAmount, gstrFORMAT_CURRENCY)
+                objItem.SubItems(3).Text = gstrFormatCurrency(objTrx.curAmount)
             Else
-                objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrVB6Format(objTrx.curAmount, gstrFORMAT_CURRENCY)))
+                objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objTrx.curAmount)))
             End If
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > 4 Then
@@ -1381,6 +1381,6 @@ ErrorHandler:
     End Function
 
     Private Function strDescribeTrx(ByRef objTrx As Trx) As String
-        strDescribeTrx = "[ " & gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE) & " " & objTrx.strDescription & " $" & gstrVB6Format(objTrx.curAmount, gstrFORMAT_CURRENCY) & " ]"
+        strDescribeTrx = "[ " & gstrFormatDate(objTrx.datDate) & " " & objTrx.strDescription & " $" & gstrFormatCurrency(objTrx.curAmount) & " ]"
     End Function
 End Class

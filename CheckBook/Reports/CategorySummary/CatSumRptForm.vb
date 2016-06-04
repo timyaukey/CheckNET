@@ -95,7 +95,7 @@ ErrorHandler:
 		WriteRptLine("Totals By Category Report")
 		WriteRptLine("-------------------------")
 		WriteRptLine("")
-        WriteRptLine("Printed On: " & gstrVB6Format(Now, gstrFORMAT_DATE & " hh:mmAMPM"))
+        WriteRptLine("Printed On: " & gstrFormatDate(Now, "MM/dd/yyyy hh:mmtt"))
 		WriteRptLine("")
 		WriteRptLine("Accounts Included:")
 		
@@ -108,13 +108,13 @@ ErrorHandler:
 		End With
 		WriteRptLine("")
 		
-        txtStartDate.Text = gstrVB6Format(datStart, gstrFORMAT_DATE)
-        txtEndDate.Text = gstrVB6Format(datEnd, gstrFORMAT_DATE)
+        txtStartDate.Text = gstrFormatDate(datStart)
+        txtEndDate.Text = gstrFormatDate(datEnd)
 		chkIncludeFake.CheckState = IIf(blnIncludeFake, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
 		chkIncludeGenerated.CheckState = IIf(blnIncludeGenerated, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
 		
-        WriteRptLine("Start Date:    " & gstrVB6Format(datStart, gstrFORMAT_DATE))
-        WriteRptLine("End Date:      " & gstrVB6Format(datEnd, gstrFORMAT_DATE))
+        WriteRptLine("Start Date:    " & gstrFormatDate(datStart))
+        WriteRptLine("End Date:      " & gstrFormatDate(datEnd))
 		WriteRptLine("Fake Trx:      " & IIf(blnIncludeFake, "Yes", "No"))
 		WriteRptLine("Generated Trx: " & IIf(blnIncludeGenerated, "Yes", "No"))
 		
@@ -207,7 +207,7 @@ ErrorHandler:
 		
         strRightPad = New String(" ", intNestingLevel + 1)
         objResultRow.Label = strRightPad & strRightPad & strRightPad & strLabel
-        strAmount = gstrVB6Format(curAmount, gstrFORMAT_CURRENCY)
+        strAmount = gstrFormatCurrency(curAmount)
         objResultRow.Amount = strAmount & strRightPad & strRightPad & strRightPad
         mcolResultRows.Add(objResultRow)
 

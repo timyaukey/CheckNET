@@ -182,8 +182,7 @@ ErrorHandler:
         Dim strBackupFile As String
         For Each objAccount In gcolAccounts
             If objAccount.blnUnsavedChanges Then
-                strBackupFile = gstrBackupPath() & "\" & objAccount.strFileLoaded & "." & gstrVB6Format(Now, "mm$dd$yy$hh$mm")
-                'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                strBackupFile = gstrBackupPath() & "\" & objAccount.strFileLoaded & "." & Now.ToString("MM$dd$yy$hh$mm")
                 If Len(Dir(strBackupFile)) Then
                     Kill(strBackupFile)
                 End If

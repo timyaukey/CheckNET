@@ -45,8 +45,8 @@ Friend Class SearchForm
         mcurAmountTotal = 0
         mdatDefaultDate = Today
         Me.Text = "Search " & mobjReg.strTitle
-        txtStartDate.Text = gstrVB6Format(DateAdd(Microsoft.VisualBasic.DateInterval.Month, -2, Today), gstrFORMAT_DATE)
-        txtEndDate.Text = gstrVB6Format(DateAdd(Microsoft.VisualBasic.DateInterval.Month, 6, Today), gstrFORMAT_DATE)
+        txtStartDate.Text = gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Month, -2, Today))
+        txtEndDate.Text = gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Month, 6, Today))
         LoadSearchIn()
         LoadSearchType()
         LoadComboFromStringTranslator(cboSearchCats, gobjCategories)
@@ -242,11 +242,11 @@ ErrorHandler:
     End Sub
 
     Private Sub cmdTotalToClipboard_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdTotalToClipboard.Click
-        My.Computer.Clipboard.SetText(gstrVB6Format(mcurAmountTotal, gstrFORMAT_CURRENCY))
+        My.Computer.Clipboard.SetText(gstrFormatCurrency(mcurAmountTotal))
     End Sub
 
     Private Sub ShowTotals()
-        lblTotalDollars.Text = "Matched $" & gstrVB6Format(mcurAmountMatched, gstrFORMAT_CURRENCY) & "    Total $" & gstrVB6Format(mcurAmountTotal, gstrFORMAT_CURRENCY)
+        lblTotalDollars.Text = "Matched $" & gstrFormatCurrency(mcurAmountMatched) & "    Total $" & gstrFormatCurrency(mcurAmountTotal)
     End Sub
 
     Private Sub AddSearchMatch(ByVal objTrx As Trx, ByVal lngIndex As Integer, ByVal curMatchAmount As Decimal)
@@ -273,7 +273,7 @@ ErrorHandler:
 
         objItem = gobjListViewAdd(lvwMatches)
         With objItem
-            .Text = gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE)
+            .Text = gstrFormatDate(objTrx.datDate)
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > 1 Then
                 objItem.SubItems(1).Text = objTrx.strNumber
@@ -288,17 +288,17 @@ ErrorHandler:
             End If
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > 3 Then
-                objItem.SubItems(3).Text = gstrVB6Format(curMatchAmount, gstrFORMAT_CURRENCY)
+                objItem.SubItems(3).Text = gstrFormatCurrency(curMatchAmount)
             Else
-                objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrVB6Format(curMatchAmount, gstrFORMAT_CURRENCY)))
+                objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(curMatchAmount)))
             End If
             If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
                 gSummarizeSplits(objTrx, strCategory, strPONumber, strInvoiceNum, strInvoiceDate, strDueDate, strTerms, strBudget, curAvailable)
                 'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                 If objItem.SubItems.Count > 4 Then
-                    objItem.SubItems(4).Text = gstrVB6Format(curAvailable, gstrFORMAT_CURRENCY)
+                    objItem.SubItems(4).Text = gstrFormatCurrency(curAvailable)
                 Else
-                    objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrVB6Format(curAvailable, gstrFORMAT_CURRENCY)))
+                    objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(curAvailable)))
                 End If
                 'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                 If objItem.SubItems.Count > 5 Then
@@ -342,6 +342,15 @@ ErrorHandler:
                 Else
                     objItem.SubItems.Insert(11, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objTrx.strFakeStatus))
                 End If
+            Else
+                objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
+                objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
+                objItem.SubItems.Insert(6, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
+                objItem.SubItems.Insert(7, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
+                objItem.SubItems.Insert(8, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
+                objItem.SubItems.Insert(9, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
+                objItem.SubItems.Insert(10, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
+                objItem.SubItems.Insert(11, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
             End If
             'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > mintHIDDEN_COL Then

@@ -325,8 +325,8 @@ ErrorHandler:
                             Exit Function
                         End If
                     End If
-                    .Items.Insert(intIndex, strNewElement)
-                    gVB6SetItemData(lstElements, intIndex, intKey)
+                    .Items.Insert(intIndex, gobjCreateListBoxItem(strNewElement, intKey))
+                    'gVB6SetItemData(lstElements, intIndex, intKey)
                     Exit For
                 End If
             Next
@@ -566,9 +566,9 @@ ErrorHandler:
             strMakeKey = ""
         Else
             If mlngListType = ListType.glngLIST_TYPE_CATEGORY Or intKey > 99 Then
-                strMakeKey = gstrVB6Format(intKey, "000")
+                strMakeKey = gstrFormatInteger(intKey, "000")
             Else
-                strMakeKey = gstrVB6Format(intKey, "00")
+                strMakeKey = gstrFormatInteger(intKey, "00")
             End If
         End If
     End Function

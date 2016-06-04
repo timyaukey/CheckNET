@@ -249,7 +249,7 @@ ErrorHandler:
             With objTrx
                 datDate = .datDate
                 If datDate <> datLastProgress Then
-                    lblProgress.Text = strRegTitle & "  " & gstrVB6Format(datDate, gstrFORMAT_DATE)
+                    lblProgress.Text = strRegTitle & "  " & gstrFormatDate(datDate)
                     System.Windows.Forms.Application.DoEvents()
                     datLastProgress = datDate
                 End If
@@ -295,7 +295,7 @@ ErrorHandler:
             Case SplitReportType.glngSPLTRPT_TOTALS
                 intCatIndex = gobjCategories.intLookupKey(objSplit.strCategoryKey)
                 If intCatIndex = 0 Then
-                    MsgBox("Could not find category key " & objSplit.strCategoryKey & " for " & "trx dated " & gstrVB6Format(objTrx.datDate, gstrFORMAT_DATE) & " " & "in register " & objReg.strTitle)
+                    MsgBox("Could not find category key " & objSplit.strCategoryKey & " for " & "trx dated " & gstrFormatDate(objTrx.datDate) & " " & "in register " & objReg.strTitle)
                 Else
                     With maudtCatTotals(intCatIndex)
                         .lngCount = .lngCount + 1
@@ -373,11 +373,11 @@ ErrorHandler:
                 frmSumRpt = New CatSumRptForm
                 frmSumRpt.ShowMe(maudtCatTotals, mcolSelectAccounts, gobjCategories, mdatStart, mdatEnd, mblnIncludeFake, mblnIncludeGenerated)
             Case SplitReportType.glngSPLTRPT_PAYABLES
-                strPayables = "Total payables as of " & gstrVB6Format(mdatReportDate, gstrFORMAT_DATE) & " are $" & gstrVB6Format(mcurPayablesTotal, gstrFORMAT_CURRENCY) & vbCrLf & "Payables due in 30 days or less are $" & gstrVB6Format(mcurPayablesCurrent, gstrFORMAT_CURRENCY) & vbCrLf & "Payables more than 30 days out are $" & gstrVB6Format(mcurPayablesFuture, gstrFORMAT_CURRENCY)
+                strPayables = "Total payables as of " & gstrFormatDate(mdatReportDate) & " are $" & gstrFormatCurrency(mcurPayablesTotal) & vbCrLf & "Payables due in 30 days or less are $" & gstrFormatCurrency(mcurPayablesCurrent) & vbCrLf & "Payables more than 30 days out are $" & gstrFormatCurrency(mcurPayablesFuture)
                 curReconTotal = mcurPayablesCurrent + mcurPayablesFuture
                 For intIndex = LBound(macurPayables) To UBound(macurPayables)
                     If macurPayables(intIndex) <> 0 Then
-                        strPayables = strPayables & vbCrLf & "Aged " & CStr(((intIndex + 0) * 30) + 1) & "-" & CStr((intIndex + 1) * 30) & " days: $" & gstrVB6Format(macurPayables(intIndex), gstrFORMAT_CURRENCY)
+                        strPayables = strPayables & vbCrLf & "Aged " & CStr(((intIndex + 0) * 30) + 1) & "-" & CStr((intIndex + 1) * 30) & " days: $" & gstrFormatCurrency(macurPayables(intIndex))
                     End If
                     curReconTotal = curReconTotal + macurPayables(intIndex)
                 Next

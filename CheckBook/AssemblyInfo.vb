@@ -14,7 +14,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("Willow Creek Software")>
 <Assembly: AssemblyProduct("")>
-<Assembly: AssemblyCopyright("Copyright 2005-2015 by Willow Creek Software")> 
+<Assembly: AssemblyCopyright("Copyright 2005-2016 by Willow Creek Software")> 
 <Assembly: AssemblyTrademark("")>
 <Assembly: AssemblyCulture("")>
 
@@ -28,6 +28,6 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers
 ' by using the '*' as shown below:
 
-<Assembly: AssemblyVersion("1.31.0")> 
+<Assembly: AssemblyVersion("1.32.0")> 
 
 
