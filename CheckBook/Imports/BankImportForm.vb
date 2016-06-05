@@ -218,7 +218,7 @@ ErrorHandler:
                     Select Case mlngBatchUpdateType
 
                         Case CBMain.ImportBatchUpdateType.glngIMPBATUPTP_BANK
-                            .objMatchedReg.ImportUpdateBank(.lngMatchedRegIndex, .objMatchedTrx.strNumber, mblnFake, .objImportedTrx.curAmount, .objImportedTrx.strImportKey)
+                            .objMatchedReg.ImportUpdateBank(.lngMatchedRegIndex, .objImportedTrx.datDate, .objMatchedTrx.strNumber, mblnFake, .objImportedTrx.curAmount, .objImportedTrx.strImportKey)
 
                         Case CBMain.ImportBatchUpdateType.glngIMPBATUPTP_AMOUNT
                             .objMatchedReg.ImportUpdateAmount(.lngMatchedRegIndex, mblnFake, .objImportedTrx.curAmount)
@@ -1289,7 +1289,7 @@ ErrorHandler:
                             strNewNumber = objMatchedTrx.strNumber
                             curNewAmount = objMatchedTrx.curAmount
                         End If
-                        objMatchedReg.ImportUpdateBank(lngMatchedRegIndex, strNewNumber, mblnFake, curNewAmount, .strImportKey)
+                        objMatchedReg.ImportUpdateBank(lngMatchedRegIndex, .datDate, strNewNumber, mblnFake, curNewAmount, .strImportKey)
 
                     Case CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_AMOUNT
                         objMatchedReg.ImportUpdateAmount(lngMatchedRegIndex, mblnFake, .curAmount)

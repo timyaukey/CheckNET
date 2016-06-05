@@ -620,7 +620,8 @@ ErrorHandler:
     '   updating an existing Trx, and be sure to pass the appropriate import key
     '   and say it is not fake.
 
-    Public Sub ImportUpdateBank(ByVal lngOldIndex As Integer, ByVal strNumber As String, ByVal blnFake As Boolean, ByVal curAmount As Decimal, ByVal strImportKey As String)
+    Public Sub ImportUpdateBank(ByVal lngOldIndex As Integer, ByVal datDate As Date, ByVal strNumber As String, ByVal blnFake As Boolean, _
+                                ByVal curAmount As Decimal, ByVal strImportKey As String)
 
         Dim objTrx As Trx
         Dim objOldTrx As Trx
@@ -632,7 +633,7 @@ ErrorHandler:
         objOldTrx = objTrx.objClone(Nothing)
         With objTrx
             .UnApplyFromBudgets(Me)
-            .ImportUpdateBank(strNumber, blnFake, curAmount, strImportKey)
+            .ImportUpdateBank(datDate, strNumber, blnFake, curAmount, strImportKey)
         End With
         'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         UpdateEnd(lngOldIndex, New LogChange, "ImportUpdateBank", objOldTrx)
