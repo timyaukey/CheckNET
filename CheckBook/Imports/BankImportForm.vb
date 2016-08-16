@@ -40,7 +40,6 @@ Friend Class BankImportForm
         'trx in some register.
         Dim objMatchedReg As Register
         Dim objMatchedTrx As Trx
-        Dim lngMatchedRegIndex As Integer
     End Structure
 
     'Column number in item list with index into maudtItem().
@@ -194,6 +193,7 @@ ErrorHandler:
         Dim intUpdateCount As Short
         Dim datNull As Date
         Dim strSummaryExplanation As String = ""
+        Dim lngMatchedRegIndex As Integer
 
         ClearUpdateMatches()
         For Each objItem In lvwTrx.Items
@@ -214,17 +214,20 @@ ErrorHandler:
                 'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                 intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
                 With maudtItem(intItemIndex)
-
+                    lngMatchedRegIndex = .objMatchedReg.lngFindTrx(.objMatchedTrx)
+                    If lngMatchedRegIndex = 0 Then
+                        gRaiseError("Could not find matched Trx")
+                    End If
                     Select Case mlngBatchUpdateType
 
                         Case CBMain.ImportBatchUpdateType.glngIMPBATUPTP_BANK
-                            .objMatchedReg.ImportUpdateBank(.lngMatchedRegIndex, .objImportedTrx.datDate, .objMatchedTrx.strNumber, mblnFake, .objImportedTrx.curAmount, .objImportedTrx.strImportKey)
+                            .objMatchedReg.ImportUpdateBank(lngMatchedRegIndex, .objImportedTrx.datDate, .objMatchedTrx.strNumber, mblnFake, .objImportedTrx.curAmount, .objImportedTrx.strImportKey)
 
                         Case CBMain.ImportBatchUpdateType.glngIMPBATUPTP_AMOUNT
-                            .objMatchedReg.ImportUpdateAmount(.lngMatchedRegIndex, mblnFake, .objImportedTrx.curAmount)
+                            .objMatchedReg.ImportUpdateAmount(lngMatchedRegIndex, mblnFake, .objImportedTrx.curAmount)
 
                         Case CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NUMAMT
-                            .objMatchedReg.ImportUpdateNumAmt(.lngMatchedRegIndex, .objImportedTrx.strNumber, mblnFake, .objImportedTrx.curAmount)
+                            .objMatchedReg.ImportUpdateNumAmt(lngMatchedRegIndex, .objImportedTrx.strNumber, mblnFake, .objImportedTrx.curAmount)
 
                         Case Else
                             'Should not be possible.
@@ -267,7 +270,6 @@ ErrorHandler:
         For intIndex = 1 To mintItems
             maudtItem(intIndex).objMatchedReg = Nothing
             maudtItem(intIndex).objMatchedTrx = Nothing
-            maudtItem(intIndex).lngMatchedRegIndex = 0
         Next
     End Sub
 
@@ -332,7 +334,6 @@ ErrorHandler:
                         If objPossibleMatchTrx.strImportKey = "" Then
                             .objMatchedTrx = objPossibleMatchTrx
                             .objMatchedReg = objReg
-                            .lngMatchedRegIndex = lngPossibleIndex
                             intExactCount = intExactCount + 1
                         End If
                     End If

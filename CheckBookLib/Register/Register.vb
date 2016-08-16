@@ -580,6 +580,20 @@ ErrorHandler:
         Return 0
     End Function
 
+    '$Description Find the register index of the specified Trx object.
+    '$Param objTrx The Trx object to find.
+    '$Returns The index of objTrx in this register, or zero if not found.
+
+    Public Function lngFindTrx(ByVal objTrx As Trx) As Integer
+        Dim lngIndex As Integer
+        For lngIndex = mlngTrxUsed To 1 Step -1
+            If maobjTrx(lngIndex) Is objTrx Then
+                Return lngIndex
+            End If
+        Next
+        Return 0
+    End Function
+
     '$Description Find Trx object already in register matching all the arguments.
     '   Used to determine if a transaction has already been imported. Will only
     '   search real and normal Trx objects, because all imported Trx are real and
