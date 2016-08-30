@@ -168,8 +168,9 @@ ErrorHandler:
             If blnValidForAutoUpdate(intItemIndex, False, strFailReason) Then
                 objItem.Checked = True
                 intFoundCount = intFoundCount + 1
-                'UPGRADE_ISSUE: MSComctlLib.ListItem property objItem.ToolTipText was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-                objItem.ToolTipText = "Selected"
+                With maudtItem(intItemIndex).objMatchedTrx
+                    objItem.ToolTipText = gstrFormatDate(.datDate) + " " + .strDescription + " " + gstrFormatCurrency(.curAmount)
+                End With
             Else
                 'UPGRADE_ISSUE: MSComctlLib.ListItem property objItem.ToolTipText was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
                 objItem.ToolTipText = strFailReason

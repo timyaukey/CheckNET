@@ -46,7 +46,7 @@ Public Module CBMain
     'Fields to update during batch import.
     Public Enum ImportBatchUpdateType
         glngIMPBATUPTP_NONE = 1 'Do not allow batch updates during import.
-        glngIMPBATUPTP_BANK = 2 'Bank import key ONLY.
+        glngIMPBATUPTP_BANK = 2 'Bank import key, number, date if not a check, fake->real but not reverse.
         glngIMPBATUPTP_AMOUNT = 3 'Amount only.
         glngIMPBATUPTP_NUMAMT = 4 'Number and amount.
     End Enum
