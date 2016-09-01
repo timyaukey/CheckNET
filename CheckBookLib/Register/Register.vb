@@ -753,12 +753,13 @@ ErrorHandler:
                            ByVal strDescription As String, ByVal curAmount As Decimal, ByVal blnLooseMatch As Boolean, _
                            ByRef colMatches As Collection, ByRef blnExactMatch As Boolean)
         Dim colExactMatches As Collection = Nothing
-        MatchCore(lngNumber, datDate, intDateRange, strDescription, curAmount, blnLooseMatch, colMatches, colExactMatches, blnExactMatch)
+        MatchCore(lngNumber, datDate, intDateRange, strDescription, curAmount, 0.0#, 0.0#, blnLooseMatch, colMatches, colExactMatches, blnExactMatch)
         PruneToExactMatches(colExactMatches, datDate, colMatches, blnExactMatch)
     End Sub
 
     Public Sub MatchCore(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDateRange As Short, _
                          ByVal strDescription As String, ByVal curAmount As Decimal, _
+                         ByVal curMatchMin As Decimal, ByVal curMatchMax As Decimal, _
                          ByVal blnLooseMatch As Boolean, ByRef colMatches As Collection, _
                          ByRef colExactMatches As Collection, ByRef blnExactMatch As Boolean)
 
@@ -770,6 +771,7 @@ ErrorHandler:
         Dim curAmountRange As Decimal
         Dim blnDescrMatches As Boolean
         Dim blnDateMatches As Boolean
+        Dim blnAmountMatches As Boolean
         Dim intDescrMatchLen As Short
         Dim objTrx As Trx
 
@@ -808,11 +810,19 @@ ErrorHandler:
                     blnDescrMatches = (Left(LCase(.strDescription), intDescrMatchLen) = strDescrLC)
                     'UPGRADE_WARNING: DateDiff behavior may be different. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6B38EC3F-686D-4B2E-B5A5-9E8E7A762E32"'
                     blnDateMatches = (System.Math.Abs(DateDiff(Microsoft.VisualBasic.DateInterval.Day, .datDate, datDate)) < 6)
-                    If (IIf(System.Math.Abs(.curAmount - curAmount) <= curAmountRange, 1, 0) + IIf(blnDateMatches, 1, 0)) >= IIf(blnLooseMatch, 1, 2) Then
+                    blnAmountMatches = (System.Math.Abs(.curAmount - curAmount) <= curAmountRange)
+                    If (IIf(blnAmountMatches, 1, 0) + IIf(blnDateMatches, 1, 0)) >= IIf(blnLooseMatch, 1, 2) Then
                         blnMatched = True
                     End If
                     If blnMatched Or blnDescrMatches Then
-                        colMatches.Add(lngIndex)
+                        'If min/max were specified this is a mandatory amount filter, separate from blnAmountMatches.
+                        If curMatchMin <> 0.0# And curMatchMax <> 0.0# Then
+                            If (.curAmount >= curMatchMin) And (.curAmount <= curMatchMax) Then
+                                colMatches.Add(lngIndex)
+                            End If
+                        Else
+                            colMatches.Add(lngIndex)
+                        End If
                     End If
                     If .curAmount = curAmount Then
                         If (blnDescrMatches And blnDateMatches) Or (.strNumber = CStr(lngNumber)) Then

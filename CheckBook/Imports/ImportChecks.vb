@@ -43,7 +43,7 @@ ErrorHandler:
         End If
     End Sub
 
-    Private Function ITrxImport_objNextTrx() As Trx Implements ITrxImport.objNextTrx
+    Private Function ITrxImport_objNextTrx() As ImportedTrx Implements ITrxImport.objNextTrx
         Dim strLine As String
         Dim astrParts() As String
 

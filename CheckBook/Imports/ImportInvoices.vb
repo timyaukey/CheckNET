@@ -30,11 +30,11 @@ Public Class ImportInvoices
 
     End Sub
 
-    Private Function ITrxImport_objNextTrx() As Trx Implements ITrxImport.objNextTrx
+    Private Function ITrxImport_objNextTrx() As ImportedTrx Implements ITrxImport.objNextTrx
         Dim strLine As String
         Dim astrParts() As String
 
-        Dim objTrx As Trx
+        Dim objTrx As ImportedTrx
         Dim datDate As Date
         Dim strDescription As String
         Dim curAmount As Decimal
@@ -86,7 +86,7 @@ Public Class ImportInvoices
         strCatName = astrParts(8)
         strCatKey = gobjCategories.strKey(gobjCategories.intLookupValue1(strCatName))
 
-        objTrx = New Trx
+        objTrx = New ImportedTrx
 
         objTrx.NewStartNormal(Nothing, strTrxNum, datDate, strDescription, "", Trx.TrxStatus.glngTRXSTS_UNREC, TrxGenImportData.NewFake(True))
         objTrx.AddSplit("", strCatKey, strPONumber, strInvNumber, datInvDate, datDueDate, strTerms, "", curAmount, "")

@@ -127,6 +127,7 @@
     </Compile>
     <Compile Include="Imports\ImportChecks.vb" />
     <Compile Include="Imports\ImportChecksSpec.vb" />
+    <Compile Include="Imports\ImportedTrx.vb" />
     <Compile Include="ObjectEditorForm.Designer.vb">
       <DependentUpon>ObjectEditorForm.vb</DependentUpon>
     </Compile>

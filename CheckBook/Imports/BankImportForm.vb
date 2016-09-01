@@ -31,8 +31,8 @@ Friend Class BankImportForm
 
     'Item obtained from ITrxImport.
     Private Structure ImportItem
-        'Trx created by ITrxImport.
-        Dim objImportedTrx As Trx
+        'ImportedTrx created by ITrxImport.
+        Dim objImportedTrx As ImportedTrx
         'Register it was added to or updated in.
         Dim objReg As Register
         Dim lngStatus As ImportStatus
@@ -276,7 +276,7 @@ ErrorHandler:
 
     Private Function blnValidForAutoUpdate(ByRef intItemIndex As Short, ByVal blnAllowNonExact As Boolean, ByRef strFailReason As String) As Boolean
 
-        Dim objTrx As Trx
+        Dim objImportedTrx As ImportedTrx
         Dim objLoaded As LoadedRegister
         Dim objReg As Register
         Dim colMatches As Collection = Nothing
@@ -298,23 +298,24 @@ ErrorHandler:
                 Exit Function
             End If
 
-            objTrx = .objImportedTrx
+            objImportedTrx = .objImportedTrx
             'Verify that all the checked imported trx really do have a
             'single exact match, because the user may have checked additional
             'imported trx.
             intExactCount = 0
-            lngNumber = Val(objTrx.strNumber)
+            lngNumber = Val(objImportedTrx.strNumber)
             For Each objLoaded In mobjAccount.colLoadedRegisters
                 objReg = objLoaded.objReg
 
                 Select Case mlngUpdateSearchType
                     Case CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK
-                        objReg.MatchCore(lngNumber, objTrx.datDate, 60, objTrx.strDescription, objTrx.curAmount, False, colMatches, colExactMatches, blnExactMatch)
-                        objReg.PruneToExactMatches(colExactMatches, objTrx.datDate, colMatches, blnExactMatch)
+                        objReg.MatchCore(lngNumber, objImportedTrx.datDate, 60, objImportedTrx.strDescription, objImportedTrx.curAmount, _
+                                         objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
+                        objReg.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
                         colUnusedMatches = colRemoveAlreadyMatched(objReg, colMatches)
-                        colUnusedMatches = colApplyNarrowMethodForBank(objReg, objTrx, colMatches, blnExactMatch)
+                        colUnusedMatches = colApplyNarrowMethodForBank(objReg, objImportedTrx, colMatches, blnExactMatch)
                     Case CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_PAYEE
-                        objReg.MatchPayee(objTrx.datDate, 7, objTrx.strDescription, False, colMatches, blnExactMatch)
+                        objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, False, colMatches, blnExactMatch)
                         colUnusedMatches = colRemoveAlreadyMatched(objReg, colMatches)
                     Case Else
                         'Should not be possible
@@ -380,7 +381,7 @@ ErrorHandler:
         Return colUnusedMatches
     End Function
 
-    Private Function colApplyNarrowMethodForBank(ByVal objReg As Register, ByVal objTrx As Trx, ByVal colUnusedMatches As Collection, _
+    Private Function colApplyNarrowMethodForBank(ByVal objReg As Register, ByVal objTrx As ImportedTrx, ByVal colUnusedMatches As Collection, _
                                                  ByRef blnExactMatch As Boolean) As Collection
         Dim colResult As Collection
         Dim objPossibleMatchTrx As Trx
@@ -573,7 +574,7 @@ ErrorHandler:
 
         Dim objLoaded As LoadedRegister
         Dim objReg As Register
-        Dim objTrx As Trx
+        Dim objImportedTrx As ImportedTrx
         Dim strTrxNum As String
         Dim objSplit As Split_Renamed
         Dim lngNumber As Integer
@@ -592,13 +593,13 @@ ErrorHandler:
             Exit Function
         End If
 
-        objTrx = maudtItem(intItemIndex).objImportedTrx
-        If objTrx.colSplits.Count() = 0 Then
+        objImportedTrx = maudtItem(intItemIndex).objImportedTrx
+        If objImportedTrx.colSplits.Count() = 0 Then
             strFailReason = "Transaction has no splits"
             Exit Function
         End If
 
-        objSplit = objTrx.colSplits.Item(1)
+        objSplit = objImportedTrx.colSplits.Item(1)
         If objSplit.strCategoryKey = "" And blnSetMissingCategory Then
             If cboDefaultCategory.SelectedIndex <> -1 Then
                 lngCatIdx = gintVB6GetItemData(cboDefaultCategory, cboDefaultCategory.SelectedIndex)
@@ -613,7 +614,7 @@ ErrorHandler:
             Exit Function
         End If
 
-        strTrxNum = LCase(objTrx.strNumber)
+        strTrxNum = LCase(objImportedTrx.strNumber)
         Select Case mlngNewSearchType
             Case CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK
                 If (strTrxNum <> "card") And Not blnAllowBankNonCard Then
@@ -637,10 +638,11 @@ ErrorHandler:
 
             Select Case mlngNewSearchType
                 Case CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK
-                    objReg.MatchCore(lngNumber, objTrx.datDate, 60, objTrx.strDescription, objTrx.curAmount, False, colMatches, colExactMatches, blnExactMatch)
-                    objReg.PruneToExactMatches(colExactMatches, objTrx.datDate, colMatches, blnExactMatch)
+                    objReg.MatchCore(lngNumber, objImportedTrx.datDate, 60, objImportedTrx.strDescription, objImportedTrx.curAmount, _
+                                     objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
+                    objReg.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
                 Case CBMain.ImportBatchNewSearch.glngIMPBATNWSR_VENINV
-                    objReg.MatchInvoice(objTrx.datDate, 120, objTrx.strDescription, objSplit.strInvoiceNum, colMatches)
+                    objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objSplit.strInvoiceNum, colMatches)
                     blnExactMatch = True
                 Case Else
                     'Should not be possible
@@ -687,7 +689,7 @@ ErrorHandler:
     End Sub
 
     Private Function blnLoadImports() As Boolean
-        Dim objTrx As Trx
+        Dim objImportedTrx As ImportedTrx
 
         On Error GoTo ErrorHandler
 
@@ -701,8 +703,8 @@ ErrorHandler:
         Erase maudtItem
 
         Do
-            objTrx = mobjTrxImport.objNextTrx()
-            If objTrx Is Nothing Then
+            objImportedTrx = mobjTrxImport.objNextTrx()
+            If objImportedTrx Is Nothing Then
                 Exit Do
             End If
             mintItems = mintItems + 1
@@ -711,7 +713,7 @@ ErrorHandler:
             With maudtItem(mintItems)
                 'UPGRADE_NOTE: Object maudtItem().objReg may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
                 .objReg = Nothing
-                .objImportedTrx = objTrx
+                .objImportedTrx = objImportedTrx
                 .lngStatus = ImportStatus.mlngIMPSTS_UNRESOLVED
             End With
         Loop
@@ -778,7 +780,7 @@ ErrorHandler:
 
     Private Sub DisplayOneImportItem(ByVal objItem As System.Windows.Forms.ListViewItem, ByVal intIndex As Short)
 
-        Dim objTrx As Trx
+        Dim objTrx As ImportedTrx
         Dim strStatus As String = ""
 
         On Error GoTo ErrorHandler
@@ -873,14 +875,10 @@ EventExitSub:
                 MsgBox("Could not find an import item matching """ & mstrImportSearchText & """.")
                 Exit Sub
             End If
-            'UPGRADE_WARNING: Lower bound of collection lvwTrx.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            'UPGRADE_WARNING: Lower bound of collection lvwTrx.ListItems() has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             intItemArrayIndex = CShort(lvwTrx.Items.Item(intListItemIndex).SubItems(mintITMCOL_INDEX).Text)
             With maudtItem(intItemArrayIndex).objImportedTrx
                 If StrComp(.strNumber, mstrImportSearchText, CompareMethod.Text) = 0 Or gstrFormatCurrency(.curAmount) = mstrImportSearchText Or InStr(1, .strDescription, mstrImportSearchText, CompareMethod.Text) > 0 Then
-                    'UPGRADE_WARNING: Lower bound of collection lvwTrx.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                     lvwTrx.FocusedItem = lvwTrx.Items.Item(intListItemIndex)
-                    'UPGRADE_WARNING: MSComctlLib.IListItem method lvwTrx.SelectedItem.EnsureVisible has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
                     lvwTrx.FocusedItem.EnsureVisible()
                     mintNextImportToSearch = intListItemIndex + 1
                     Exit Sub
@@ -935,7 +933,7 @@ ErrorHandler:
     'Redisplays the import item with current status if that import item has already been imported.
 
     Private Sub SearchForMatches()
-        Dim objTrx As Trx
+        Dim objImportedTrx As ImportedTrx
         Dim objLoaded As LoadedRegister
         Dim objReg As Register
         Dim lngImportMatch As Integer
@@ -958,7 +956,7 @@ ErrorHandler:
         End If
 
         'This is the import item they selected.
-        objTrx = maudtItem(intItemIndex).objImportedTrx
+        objImportedTrx = maudtItem(intItemIndex).objImportedTrx
 
         'Not usually possible to match here, because the item would have been matched
         'when loaded and detected a few lines above where it checks the import status.
@@ -970,8 +968,8 @@ ErrorHandler:
         End If
 
         'Look for possible matches in ALL registers, not just the selected register.
-        If IsNumeric(objTrx.strNumber) Then
-            lngNumber = CInt(objTrx.strNumber)
+        If IsNumeric(objImportedTrx.strNumber) Then
+            lngNumber = CInt(objImportedTrx.strNumber)
         Else
             lngNumber = 0
         End If
@@ -980,34 +978,31 @@ ErrorHandler:
 
             Select Case mlngIndividualSearchType
                 Case CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK
-                    objReg.MatchCore(lngNumber, objTrx.datDate, 60, objTrx.strDescription, objTrx.curAmount, _
+                    objReg.MatchCore(lngNumber, objImportedTrx.datDate, 60, objImportedTrx.strDescription, objImportedTrx.curAmount, _
+                                     objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, _
                                      chkLooseMatch.CheckState = System.Windows.Forms.CheckState.Checked, colMatches, colExactMatches, blnExactMatch)
-                    objReg.PruneToNonImportedExactMatches(colExactMatches, objTrx.datDate, colMatches, blnExactMatch)
+                    objReg.PruneToNonImportedExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
                 Case CBMain.ImportIndividualSearchType.glngIMPINDSRTP_PAYEE
-                    objReg.MatchPayee(objTrx.datDate, 7, objTrx.strDescription, False, colMatches, blnExactMatch)
+                    objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, False, colMatches, blnExactMatch)
                 Case CBMain.ImportIndividualSearchType.glngIMPINDSRTP_VENINV
-                    'UPGRADE_WARNING: Couldn't resolve default property of object objTrx.colSplits().strInvoiceNum. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    objReg.MatchInvoice(objTrx.datDate, 120, objTrx.strDescription, objTrx.colSplits.Item(1).strInvoiceNum, colMatches)
+                    objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.colSplits.Item(1).strInvoiceNum, colMatches)
                     blnExactMatch = True
                 Case Else
                     'Should not be possible
                     gRaiseError("Invalid individual search type")
             End Select
             For Each vlngRegIndex In colMatches
-                'UPGRADE_WARNING: Couldn't resolve default property of object vlngRegIndex. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 objMatchedTrx = objReg.objTrx(vlngRegIndex)
                 'Show the match if it hasn't been imported before,
                 'or we're importing a fake trx. We allow fake trx to be imported
                 'so we can import document information for them - we don't save
                 'their amount or trx number if matched to a real trx.
-                If (Len(objMatchedTrx.strImportKey) = 0 Or objTrx.blnFake) And objMatchedTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
+                If (Len(objMatchedTrx.strImportKey) = 0 Or objImportedTrx.blnFake) And objMatchedTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
                     mintMatches = mintMatches + 1
-                    'UPGRADE_WARNING: Lower bound of array maudtMatch was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
                     ReDim Preserve maudtMatch(mintMatches)
                     With maudtMatch(mintMatches)
                         .objReg = objReg
                         .objTrx = objMatchedTrx
-                        'UPGRADE_WARNING: Couldn't resolve default property of object vlngRegIndex. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         .lngRegIndex = vlngRegIndex
                     End With
                     DisplayMatch(objMatchedTrx, mintMatches)
@@ -1026,7 +1021,7 @@ ErrorHandler:
     'This sets the import status of the import item.
 
     Private Function blnMatchImport(ByVal intItemIndex As Short) As Boolean
-        Dim objTrx As Trx
+        Dim objImportedTrx As ImportedTrx
         Dim objLoaded As LoadedRegister
         Dim objReg As Register
         Dim colMatches As Collection = Nothing
@@ -1038,9 +1033,9 @@ ErrorHandler:
         On Error GoTo ErrorHandler
 
         'This is the import item they selected.
-        objTrx = maudtItem(intItemIndex).objImportedTrx
-        If IsNumeric(objTrx.strNumber) Then
-            lngNumber = CInt(objTrx.strNumber)
+        objImportedTrx = maudtItem(intItemIndex).objImportedTrx
+        If IsNumeric(objImportedTrx.strNumber) Then
+            lngNumber = CInt(objImportedTrx.strNumber)
         Else
             lngNumber = 0
         End If
@@ -1052,13 +1047,13 @@ ErrorHandler:
             lngImportMatch = 0
             Select Case mlngStatusSearchType
                 Case CBMain.ImportStatusSearch.Bank
-                    If objTrx.strImportKey <> "" Then
-                        lngImportMatch = objReg.lngMatchImportKey(objTrx.strImportKey)
+                    If objImportedTrx.strImportKey <> "" Then
+                        lngImportMatch = objReg.lngMatchImportKey(objImportedTrx.strImportKey)
                     End If
                 Case ImportStatusSearch.BillPayment
-                    lngImportMatch = objReg.lngMatchPaymentDetails(objTrx.strNumber, objTrx.datDate, 10, objTrx.strDescription, objTrx.curAmount)
+                    lngImportMatch = objReg.lngMatchPaymentDetails(objImportedTrx.strNumber, objImportedTrx.datDate, 10, objImportedTrx.strDescription, objImportedTrx.curAmount)
                 Case CBMain.ImportStatusSearch.PayeeNonGenerated
-                    objReg.MatchPayee(objTrx.datDate, 7, objTrx.strDescription, True, colMatches, blnExactMatch)
+                    objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, True, colMatches, blnExactMatch)
                     If colMatches.Count > 0 Then
                         'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         lngIndex = colMatches.Item(1)
@@ -1068,7 +1063,7 @@ ErrorHandler:
                     End If
                 Case CBMain.ImportStatusSearch.VendorInvoice
                     'UPGRADE_WARNING: Couldn't resolve default property of object objTrx.colSplits().strInvoiceNum. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    objReg.MatchInvoice(objTrx.datDate, 120, objTrx.strDescription, objTrx.colSplits.Item(1).strInvoiceNum, colMatches)
+                    objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.colSplits.Item(1).strInvoiceNum, colMatches)
                     If colMatches.Count() > 0 Then
                         'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         lngImportMatch = colMatches.Item(1)

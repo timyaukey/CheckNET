@@ -34,8 +34,8 @@ Public Class ImportByPayee
 
     End Sub
 
-    Private Function ITrxImport_objNextTrx() As Trx Implements ITrxImport.objNextTrx
-        Dim objTrx As Trx
+    Private Function ITrxImport_objNextTrx() As ImportedTrx Implements ITrxImport.objNextTrx
+        Dim objTrx As ImportedTrx
         Dim strLine As String
         Dim astrParts() As String
         Dim datDate As Date
@@ -63,7 +63,7 @@ Public Class ImportByPayee
         strDescription = Replace(astrParts(1), "_", " ")
         curAmount = CDec(astrParts(2))
 
-        objTrx = New Trx
+        objTrx = New ImportedTrx
 
         objTrx.NewStartNormal(Nothing, "", datDate, strDescription, "", Trx.TrxStatus.glngTRXSTS_UNREC, New TrxGenImportData())
         objTrx.AddSplit("", "", "", "", datNull, datNull, "", "", curAmount, "")

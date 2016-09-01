@@ -30,6 +30,9 @@ Public Class ImportUtilities
     Private mstrTrxBudget As String
     'Narrowing method to use.
     Private mlngNarrowMethod As ImportMatchNarrowMethod
+    'Amount range for matching.
+    Private mcurMatchMin As Decimal
+    Private mcurMatchMax As Decimal
 
     'Table with trx type translation information.
     Private mdomTrxTypes As VB6XmlDocument
@@ -112,12 +115,14 @@ ErrorHandler:
         mstrTrxCategory = ""
         mstrTrxBudget = ""
         mlngNarrowMethod = ImportMatchNarrowMethod.None
+        mcurMatchMin = 0
+        mcurMatchMax = 0
     End Sub
 
     '$Description Create a new Trx object.
 
-    Public Function objMakeTrx() As Trx
-        Dim objTrx As Trx
+    Public Function objMakeTrx() As ImportedTrx
+        Dim objTrx As ImportedTrx
         Dim datDate As Date
         Dim strImportKey As String
         Dim strCatKey As String = ""
@@ -180,9 +185,12 @@ ErrorHandler:
             strImportKey = strSqueezeInput("|" & gstrFormatDate(datDate) & "|" & strUniqueKey)
         End If
 
-        objTrx = New Trx
+        objTrx = New ImportedTrx
         objTrx.NewStartNormal(Nothing, strNumber, datDate, strDescription, strMemo, Trx.TrxStatus.glngTRXSTS_UNREC, _
-                              mblnMakeFakeTrx, 0.0#, False, False, 0, strImportKey, "", mlngNarrowMethod)
+                              mblnMakeFakeTrx, 0.0#, False, False, 0, strImportKey, "")
+        objTrx.lngNarrowMethod = mlngNarrowMethod
+        objTrx.curMatchMin = mcurMatchMin
+        objTrx.curMatchMax = mcurMatchMax
         objTrx.AddSplit("", strCatKey, strSplitPONumber, strSplitInvoiceNum, datSplitInvoiceDate, datSplitDueDate, strSplitTerms, strBudKey, curAmount, strSplitImageFiles)
         objMakeTrx = objTrx
 
@@ -367,6 +375,7 @@ ErrorHandler:
         Dim blnMatch As Boolean
         Dim curAmount As Decimal
         Dim strInput As String
+        Dim curMatchTmp As Decimal
 
         strOutputPayee = strTrimmedPayee
         objPayees = gdomTransTable.DocumentElement.SelectNodes("Payee")
@@ -377,8 +386,15 @@ ErrorHandler:
                 'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
                 If Not gblnXmlAttributeMissing(elmPayee.GetAttribute("Min")) Then
                     curAmount = CDec(mstrTrxAmount)
+                    mcurMatchMin = CDec(elmPayee.GetAttribute("Min"))
+                    mcurMatchMax = CDec(elmPayee.GetAttribute("Max"))
+                    If mcurMatchMin > mcurMatchMax Then
+                        curMatchTmp = mcurMatchMax
+                        mcurMatchMax = mcurMatchMin
+                        mcurMatchMin = curMatchTmp
+                    End If
                     'UPGRADE_WARNING: Couldn't resolve default property of object elmPayee.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    blnMatch = (curAmount >= CDec(elmPayee.GetAttribute("Min"))) And (curAmount <= CDec(elmPayee.GetAttribute("Max")))
+                    blnMatch = (curAmount >= mcurMatchMin) And (curAmount <= mcurMatchMax)
                 Else
                     blnMatch = True
                 End If

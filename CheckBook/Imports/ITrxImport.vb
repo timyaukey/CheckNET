@@ -31,7 +31,7 @@ Public Interface ITrxImport
     '   The Trx will have at least one Split, but the category for any
     '   Split may be a zero length string.
 
-    Function objNextTrx() As Trx
+    Function objNextTrx() As ImportedTrx
 
     '$Description Close the source opened by blnOpenSource().
     '   Does things like close a file. Must be the last member used.
