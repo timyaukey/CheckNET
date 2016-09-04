@@ -617,7 +617,7 @@ ErrorHandler:
                 End If
                 If .datDate <= datLatestMatch Then
                     If .lngType = Trx.TrxType.glngTRXTYP_NORMAL And Not .blnFake Then
-                        If .strNumber = strNumber And .curAmount = curAmount Then
+                        If .strNumber = strNumber And (.curAmount = curAmount Or curAmount = 0.0#) Then
                             If Left(.strDescription, 10).ToLower() = Left(strDescription, 10).ToLower() Then
                                 Return lngIndex
                             End If

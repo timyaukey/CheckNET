@@ -288,6 +288,7 @@ ErrorHandler:
         Dim objPossibleMatchTrx As Trx
         Dim lngNumber As Integer
         Dim blnNonExactConfirmed As Boolean
+        Dim blnCheckWithoutAmount As Boolean
 
         blnValidForAutoUpdate = False
         strFailReason = "Unspecified"
@@ -329,10 +330,14 @@ ErrorHandler:
                             blnNonExactConfirmed = True
                         End If
                     End If
-                    If (blnExactMatch Or blnNonExactConfirmed) Then
-                        'UPGRADE_WARNING: Couldn't resolve default property of object colUnusedMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        lngPossibleIndex = colUnusedMatches.Item(1)
-                        objPossibleMatchTrx = objReg.objTrx(lngPossibleIndex)
+                    lngPossibleIndex = colUnusedMatches.Item(1)
+                    objPossibleMatchTrx = objReg.objTrx(lngPossibleIndex)
+                    blnCheckWithoutAmount = False
+                    'A check in the register with a zero amount means we didn't know the amount when we entered it, or imported it.
+                    If Val(objPossibleMatchTrx.strNumber) > 0 And objPossibleMatchTrx.curAmount = 0.0# Then
+                        blnCheckWithoutAmount = True
+                    End If
+                    If (blnExactMatch Or blnNonExactConfirmed Or blnCheckWithoutAmount) Then
                         If objPossibleMatchTrx.strImportKey = "" Then
                             .objMatchedTrx = objPossibleMatchTrx
                             .objMatchedReg = objReg
