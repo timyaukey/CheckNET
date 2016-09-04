@@ -308,7 +308,7 @@
         '_lvwMatches_ColumnHeader_7
         '
         Me._lvwMatches_ColumnHeader_7.Text = "Hidden Index"
-        Me._lvwMatches_ColumnHeader_7.Width = 1
+        Me._lvwMatches_ColumnHeader_7.Width = 0
         '
         'cmdRepeatSearch
         '
