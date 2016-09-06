@@ -275,6 +275,10 @@ Module TrxGenerator
         Dim intIndex As Short
         'UPGRADE_WARNING: Arrays in structure datTrxTmp may need to be initialized before they can be used. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
         Dim datTrxTmp As TrxToCreate
+        Dim strDueDayOfMonth As String = ""
+        Dim intDueDayOfMonth As Integer
+        Dim intDueYear As Integer
+        Dim intDueMonth As Integer
 
         colResults = New Collection
         For intIndex = 1 To UBound(datSeqTrx)
@@ -285,6 +289,40 @@ Module TrxGenerator
                 datTrxTmp.datDate = datSeqTrx(intIndex).datDate
                 If datTrxTemplate.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
                     datTrxTmp.adatSplits(1).curAmount = datSeqTrx(intIndex).curAmount
+                    'If the memo says "due [on |by ][the ]nn???" then use "nn" as the day of the month in split due date.
+                    If datTrxTemplate.strMemo <> Nothing Then
+                        If datTrxTemplate.strMemo.StartsWith("due ", StringComparison.InvariantCultureIgnoreCase) Then
+                            strDueDayOfMonth = datTrxTemplate.strMemo.Substring(4)
+                            If strDueDayOfMonth.StartsWith("on ", StringComparison.InvariantCultureIgnoreCase) Then
+                                strDueDayOfMonth = strDueDayOfMonth.Substring(3)
+                            End If
+                            If strDueDayOfMonth.StartsWith("by ", StringComparison.InvariantCultureIgnoreCase) Then
+                                strDueDayOfMonth = strDueDayOfMonth.Substring(3)
+                            End If
+                            If strDueDayOfMonth.StartsWith("the ", StringComparison.InvariantCultureIgnoreCase) Then
+                                strDueDayOfMonth = strDueDayOfMonth.Substring(4)
+                            End If
+                            intDueDayOfMonth = Val(strDueDayOfMonth)
+                            If intDueDayOfMonth > 0 Then
+                                intDueYear = datTrxTmp.datDate.Year
+                                intDueMonth = datTrxTmp.datDate.Month
+                                'If the due day of month is less than the day of month of the transaction that would put
+                                'the due date in the past, so assume the due date is in the following month.
+                                If intDueDayOfMonth < datTrxTmp.datDate.Day Then
+                                    If intDueMonth = 12 Then
+                                        intDueYear = intDueYear + 1
+                                        intDueMonth = 1
+                                    Else
+                                        intDueMonth = intDueMonth + 1
+                                    End If
+                                End If
+                                If intDueDayOfMonth > DateTime.DaysInMonth(intDueYear, intDueMonth) Then
+                                    intDueDayOfMonth = DateTime.DaysInMonth(intDueYear, intDueMonth)
+                                End If
+                                datTrxTmp.adatSplits(1).datDueDate = New DateTime(intDueYear, intDueMonth, intDueDayOfMonth)
+                            End If
+                        End If
+                    End If
                 Else
                     datTrxTmp.curAmount = datSeqTrx(intIndex).curAmount
                 End If

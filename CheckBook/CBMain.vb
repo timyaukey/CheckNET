@@ -31,39 +31,39 @@ Public Module CBMain
 
     'Type of search used to find Trx matches for batch updates during import.
     Public Enum ImportBatchUpdateSearch
-        glngIMPBATUPSR_NONE = 1 'None
-        glngIMPBATUPSR_BANK = 2 'Number, or date/description/amount (2 of 3)
-        glngIMPBATUPSR_PAYEE = 3 'Exact payee name within date range
+        None = 1 'None
+        Bank = 2 'Number, or date/description/amount (2 of 3)
+        Payee = 3 'Exact payee name within date range
     End Enum
 
     'Type of search used to find Trx matches for batch new Trx creation during import.
     Public Enum ImportBatchNewSearch
-        glngIMPBATNWSR_NONE = 1 'Do not allow batch creation of new Trx.
-        glngIMPBATNWSR_BANK = 2 'Number, or date/description/amount (2 of 3).
-        glngIMPBATNWSR_VENINV = 3 'Vendor name and invoice number.
+        None = 1 'Do not allow batch creation of new Trx.
+        Bank = 2 'Number, or date/description/amount (2 of 3).
+        VendorInvoice = 3 'Vendor name and invoice number.
     End Enum
 
     'Fields to update during batch import.
     Public Enum ImportBatchUpdateType
-        glngIMPBATUPTP_NONE = 1 'Do not allow batch updates during import.
-        glngIMPBATUPTP_BANK = 2 'Bank import key, number, date if not a check, fake->real but not reverse.
-        glngIMPBATUPTP_AMOUNT = 3 'Amount only.
-        glngIMPBATUPTP_NUMAMT = 4 'Number and amount.
+        None = 1 'Do not allow batch updates during import.
+        Bank = 2 'Bank import key, number, date if not a check, fake->real but not reverse.
+        Amount = 3 'Amount only.
+        NumberAmount = 4 'Number and amount.
     End Enum
 
     'Type of search used when user clicks on an imported trx.
     Public Enum ImportIndividualSearchType
-        glngIMPINDSRTP_BANK = 1 'Number, or date/description/amount (2 of 3)
-        glngIMPINDSRTP_PAYEE = 2 'Exact payee name within date range
-        glngIMPINDSRTP_VENINV = 3 'Vendor name and invoice number.
+        Bank = 1 'Number, or date/description/amount (2 of 3)
+        Payee = 2 'Exact payee name within date range
+        VendorInvoice = 3 'Vendor name and invoice number.
     End Enum
 
     'Fields to update during individual import.
     Public Enum ImportIndividualUpdateType
-        glngIMPINDUPTP_NONE = 1 'None.
-        glngIMPINDUPTP_BANK = 2 'Bank import key, number, amount.
-        glngIMPINDUPTP_AMOUNT = 3 'Amount only.
-        glntIMPINDUPTP_NUMAMT = 4 'Number and amount.
+        None = 1 'None.
+        Bank = 2 'Bank import key, number, amount.
+        Amount = 3 'Amount only.
+        NumberAmount = 4 'Number and amount.
     End Enum
 
     'UPGRADE_WARNING: Application will terminate when Sub Main() finishes. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E08DDC71-66BA-424F-A612-80AF11498FF8"'

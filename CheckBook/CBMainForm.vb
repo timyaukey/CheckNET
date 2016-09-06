@@ -187,11 +187,11 @@ ErrorHandler:
             objImport = New ImportBankDownloadQIF(objFile, strFile)
             frm.ShowMe("Import QIF File From Bank", objImport, _
                 CBMain.ImportStatusSearch.Bank, _
-                CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, _
-                CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, _
-                CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_BANK, _
-                CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK, _
-                CBMain.ImportBatchUpdateType.glngIMPBATUPTP_BANK, False)
+                CBMain.ImportBatchUpdateSearch.Bank, _
+                CBMain.ImportBatchNewSearch.Bank, _
+                CBMain.ImportIndividualUpdateType.Bank, _
+                CBMain.ImportIndividualSearchType.Bank, _
+                CBMain.ImportBatchUpdateType.Bank, False)
         End If
 
         Exit Sub
@@ -218,11 +218,11 @@ ErrorHandler:
             objImport = New ImportBankDownloadOFX(objFile, strFile)
             frm.ShowMe("Import OFX File From Bank", objImport, _
                 CBMain.ImportStatusSearch.Bank, _
-                CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, _
-                CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, _
-                CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_BANK, _
-                CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK, _
-                CBMain.ImportBatchUpdateType.glngIMPBATUPTP_BANK, False)
+                CBMain.ImportBatchUpdateSearch.Bank, _
+                CBMain.ImportBatchNewSearch.Bank, _
+                CBMain.ImportIndividualUpdateType.Bank, _
+                CBMain.ImportIndividualSearchType.Bank, _
+                CBMain.ImportBatchUpdateType.Bank, False)
         End If
 
         Exit Sub
@@ -243,11 +243,11 @@ ErrorHandler:
         objImport = New ImportByPayee(gobjClipboardReader(), "(clipboard)")
         frm.ShowMe("Import Deposit Amounts", objImport, _
             CBMain.ImportStatusSearch.PayeeNonGenerated, _
-            CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_PAYEE, _
-            CBMain.ImportBatchNewSearch.glngIMPBATNWSR_NONE, _
-            CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_AMOUNT, _
-            CBMain.ImportIndividualSearchType.glngIMPINDSRTP_PAYEE, _
-            CBMain.ImportBatchUpdateType.glngIMPBATUPTP_AMOUNT, False)
+            CBMain.ImportBatchUpdateSearch.Payee, _
+            CBMain.ImportBatchNewSearch.None, _
+            CBMain.ImportIndividualUpdateType.Amount, _
+            CBMain.ImportIndividualSearchType.Payee, _
+            CBMain.ImportBatchUpdateType.Amount, False)
 
         Exit Sub
 ErrorHandler:
@@ -267,11 +267,11 @@ ErrorHandler:
         objImport = New ImportInvoices(gobjClipboardReader(), "(clipboard)")
         frm.ShowMe("Import Invoices", objImport, _
             CBMain.ImportStatusSearch.VendorInvoice, _
-            CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_NONE, _
-            CBMain.ImportBatchNewSearch.glngIMPBATNWSR_VENINV, _
-            CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_NONE, _
-            CBMain.ImportIndividualSearchType.glngIMPINDSRTP_VENINV, _
-            CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NONE, False)
+            CBMain.ImportBatchUpdateSearch.None, _
+            CBMain.ImportBatchNewSearch.VendorInvoice, _
+            CBMain.ImportIndividualUpdateType.None, _
+            CBMain.ImportIndividualSearchType.VendorInvoice, _
+            CBMain.ImportBatchUpdateType.None, False)
 
         Exit Sub
 ErrorHandler:
@@ -294,11 +294,11 @@ ErrorHandler:
         objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
         frm.ShowMe("Import Checks", objImport, _
             CBMain.ImportStatusSearch.BillPayment, _
-            CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, _
-            CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, _
-            CBMain.ImportIndividualUpdateType.glntIMPINDUPTP_NUMAMT, _
-            CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK, _
-            CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NUMAMT, False)
+            CBMain.ImportBatchUpdateSearch.Bank, _
+            CBMain.ImportBatchNewSearch.Bank, _
+            CBMain.ImportIndividualUpdateType.NumberAmount, _
+            CBMain.ImportIndividualSearchType.Bank, _
+            CBMain.ImportBatchUpdateType.NumberAmount, False)
 
         Exit Sub
 ErrorHandler:
@@ -321,11 +321,11 @@ ErrorHandler:
         objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
         frm.ShowMe("Import CompuPay Checks", objImport, _
             CBMain.ImportStatusSearch.BillPayment, _
-            CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, _
-            CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, _
-            CBMain.ImportIndividualUpdateType.glntIMPINDUPTP_NUMAMT, _
-            CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK, _
-            CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NUMAMT, False)
+            CBMain.ImportBatchUpdateSearch.Bank, _
+            CBMain.ImportBatchNewSearch.Bank, _
+            CBMain.ImportIndividualUpdateType.NumberAmount, _
+            CBMain.ImportIndividualSearchType.Bank, _
+            CBMain.ImportBatchUpdateType.NumberAmount, False)
 
         Exit Sub
 ErrorHandler:
@@ -348,11 +348,11 @@ ErrorHandler:
         objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
         frm.ShowMe("Import Oregon State Credit Union Checks", objImport, _
             CBMain.ImportStatusSearch.BillPayment, _
-            CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK, _
-            CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK, _
-            CBMain.ImportIndividualUpdateType.glntIMPINDUPTP_NUMAMT, _
-            CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK, _
-            CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NUMAMT, False)
+            CBMain.ImportBatchUpdateSearch.Bank, _
+            CBMain.ImportBatchNewSearch.Bank, _
+            CBMain.ImportIndividualUpdateType.NumberAmount, _
+            CBMain.ImportIndividualSearchType.Bank, _
+            CBMain.ImportBatchUpdateType.NumberAmount, False)
 
         Exit Sub
 ErrorHandler:

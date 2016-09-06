@@ -121,21 +121,21 @@ ErrorHandler:
 
     Private Sub ConfigureButtons()
         Select Case mlngNewSearchType
-            Case CBMain.ImportBatchNewSearch.glngIMPBATNWSR_NONE
+            Case CBMain.ImportBatchNewSearch.None
                 cmdBatchNew.Enabled = False
                 cmdFindNew.Enabled = False
                 cmdCreateNew.Enabled = False
-            Case CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK
+            Case CBMain.ImportBatchNewSearch.Bank
         End Select
 
         Select Case mlngUpdateSearchType
-            Case CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_NONE
+            Case CBMain.ImportBatchUpdateSearch.None
                 cmdBatchUpdates.Enabled = False
                 cmdFindUpdates.Enabled = False
         End Select
 
         Select Case mlngIndividualUpdateType
-            Case CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_NONE
+            Case CBMain.ImportIndividualUpdateType.None
                 cmdUpdateExisting.Enabled = False
         End Select
     End Sub
@@ -221,13 +221,13 @@ ErrorHandler:
                     End If
                     Select Case mlngBatchUpdateType
 
-                        Case CBMain.ImportBatchUpdateType.glngIMPBATUPTP_BANK
+                        Case CBMain.ImportBatchUpdateType.Bank
                             .objMatchedReg.ImportUpdateBank(lngMatchedRegIndex, .objImportedTrx.datDate, .objMatchedTrx.strNumber, mblnFake, .objImportedTrx.curAmount, .objImportedTrx.strImportKey)
 
-                        Case CBMain.ImportBatchUpdateType.glngIMPBATUPTP_AMOUNT
+                        Case CBMain.ImportBatchUpdateType.Amount
                             .objMatchedReg.ImportUpdateAmount(lngMatchedRegIndex, mblnFake, .objImportedTrx.curAmount)
 
-                        Case CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NUMAMT
+                        Case CBMain.ImportBatchUpdateType.NumberAmount
                             .objMatchedReg.ImportUpdateNumAmt(lngMatchedRegIndex, .objImportedTrx.strNumber, mblnFake, .objImportedTrx.curAmount)
 
                         Case Else
@@ -247,11 +247,11 @@ ErrorHandler:
         EndProgress()
 
         Select Case mlngBatchUpdateType
-            Case CBMain.ImportBatchUpdateType.glngIMPBATUPTP_BANK
+            Case CBMain.ImportBatchUpdateType.Bank
                 strSummaryExplanation = "without changing transaction numbers, or transaction dates."
-            Case CBMain.ImportBatchUpdateType.glngIMPBATUPTP_AMOUNT
+            Case CBMain.ImportBatchUpdateType.Amount
                 strSummaryExplanation = "updating transaction amounts only."
-            Case CBMain.ImportBatchUpdateType.glngIMPBATUPTP_NUMAMT
+            Case CBMain.ImportBatchUpdateType.NumberAmount
                 strSummaryExplanation = "updating transaction numbers and amounts."
             Case Else
                 'Should not be possible.
@@ -309,13 +309,13 @@ ErrorHandler:
                 objReg = objLoaded.objReg
 
                 Select Case mlngUpdateSearchType
-                    Case CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_BANK
+                    Case CBMain.ImportBatchUpdateSearch.Bank
                         objReg.MatchCore(lngNumber, objImportedTrx.datDate, 60, objImportedTrx.strDescription, objImportedTrx.curAmount, _
                                          objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
                         objReg.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
                         colUnusedMatches = colRemoveAlreadyMatched(objReg, colMatches)
                         colUnusedMatches = colApplyNarrowMethodForBank(objReg, objImportedTrx, colMatches, blnExactMatch)
-                    Case CBMain.ImportBatchUpdateSearch.glngIMPBATUPSR_PAYEE
+                    Case CBMain.ImportBatchUpdateSearch.Payee
                         objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, False, colMatches, blnExactMatch)
                         colUnusedMatches = colRemoveAlreadyMatched(objReg, colMatches)
                     Case Else
@@ -514,7 +514,7 @@ ErrorHandler:
                 'Check if we are importing an invoice that can be matched to a purchase order.
                 'If this happens we update an existing Trx by adding a split rather than creating
                 'a new Trx as would normally be the case in this method.
-                If mlngNewSearchType = CBMain.ImportBatchNewSearch.glngIMPBATNWSR_VENINV Then
+                If mlngNewSearchType = CBMain.ImportBatchNewSearch.VendorInvoice Then
                     If objImportedTrx.colSplits.Count() > 0 Then
                         objImportedSplit = objImportedTrx.colSplits.Item(1)
                         strPONumber = objImportedSplit.strPONumber
@@ -621,12 +621,12 @@ ErrorHandler:
 
         strTrxNum = LCase(objImportedTrx.strNumber)
         Select Case mlngNewSearchType
-            Case CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK
+            Case CBMain.ImportBatchNewSearch.Bank
                 If (strTrxNum <> "card") And Not blnAllowBankNonCard Then
                     strFailReason = "Transaction is not a credit or debit card use"
                     Exit Function
                 End If
-            Case CBMain.ImportBatchNewSearch.glngIMPBATNWSR_VENINV
+            Case CBMain.ImportBatchNewSearch.VendorInvoice
                 If strTrxNum <> "inv" And strTrxNum <> "crm" Then
                     strFailReason = "Transaction is not an invoice or credit memo"
                     Exit Function
@@ -642,11 +642,11 @@ ErrorHandler:
             blnExactMatch = False
 
             Select Case mlngNewSearchType
-                Case CBMain.ImportBatchNewSearch.glngIMPBATNWSR_BANK
+                Case CBMain.ImportBatchNewSearch.Bank
                     objReg.MatchCore(lngNumber, objImportedTrx.datDate, 60, objImportedTrx.strDescription, objImportedTrx.curAmount, _
                                      objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
                     objReg.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
-                Case CBMain.ImportBatchNewSearch.glngIMPBATNWSR_VENINV
+                Case CBMain.ImportBatchNewSearch.VendorInvoice
                     objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objSplit.strInvoiceNum, colMatches)
                     blnExactMatch = True
                 Case Else
@@ -982,14 +982,14 @@ ErrorHandler:
             objReg = objLoaded.objReg
 
             Select Case mlngIndividualSearchType
-                Case CBMain.ImportIndividualSearchType.glngIMPINDSRTP_BANK
+                Case CBMain.ImportIndividualSearchType.Bank
                     objReg.MatchCore(lngNumber, objImportedTrx.datDate, 60, objImportedTrx.strDescription, objImportedTrx.curAmount, _
                                      objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, _
                                      chkLooseMatch.CheckState = System.Windows.Forms.CheckState.Checked, colMatches, colExactMatches, blnExactMatch)
                     objReg.PruneToNonImportedExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
-                Case CBMain.ImportIndividualSearchType.glngIMPINDSRTP_PAYEE
+                Case CBMain.ImportIndividualSearchType.Payee
                     objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, False, colMatches, blnExactMatch)
-                Case CBMain.ImportIndividualSearchType.glngIMPINDSRTP_VENINV
+                Case CBMain.ImportIndividualSearchType.VendorInvoice
                     objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.colSplits.Item(1).strInvoiceNum, colMatches)
                     blnExactMatch = True
                 Case Else
@@ -1277,7 +1277,7 @@ ErrorHandler:
 
                 Select Case mlngIndividualUpdateType
 
-                    Case CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_BANK
+                    Case CBMain.ImportIndividualUpdateType.Bank
                         blnPreserveNumAmt = (Not objMatchedTrx.blnFake) And .blnFake
                         If (.curAmount <> objMatchedTrx.curAmount) And Not blnPreserveNumAmt Then
                             If MsgBox("NOTE: The amount of the imported transaction is " & "different than the amount of the match you selected. " & "Updating the matched transaction will change its amount to " & "equal the amount of the import." & vbCrLf & vbCrLf & "Do you really want to do this?", MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
@@ -1293,10 +1293,10 @@ ErrorHandler:
                         End If
                         objMatchedReg.ImportUpdateBank(lngMatchedRegIndex, .datDate, strNewNumber, mblnFake, curNewAmount, .strImportKey)
 
-                    Case CBMain.ImportIndividualUpdateType.glngIMPINDUPTP_AMOUNT
+                    Case CBMain.ImportIndividualUpdateType.Amount
                         objMatchedReg.ImportUpdateAmount(lngMatchedRegIndex, mblnFake, .curAmount)
 
-                    Case CBMain.ImportIndividualUpdateType.glntIMPINDUPTP_NUMAMT
+                    Case CBMain.ImportIndividualUpdateType.NumberAmount
                         objMatchedReg.ImportUpdateNumAmt(lngMatchedRegIndex, .strNumber, mblnFake, .curAmount)
 
                     Case Else

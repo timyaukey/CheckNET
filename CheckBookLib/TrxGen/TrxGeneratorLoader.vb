@@ -688,6 +688,13 @@ Public Module TrxGeneratorLoader
 
         Dim vntAttrib As Object
         Dim datSplit As SplitToCreate = Nothing
+        Dim strError As String
+
+        'Set shared fields.
+        strError = gstrGetTrxGenTemplateShared(elmTrxTpt, strRepeatKey, datTrxTemplate)
+        If strError <> "" Then
+            Return strError
+        End If
 
         datTrxTemplate.lngType = Trx.TrxType.glngTRXTYP_NORMAL
         datTrxTemplate.lngStatus = Trx.TrxStatus.glngTRXSTS_UNREC
@@ -732,8 +739,7 @@ Public Module TrxGeneratorLoader
         ReDim datTrxTemplate.adatSplits(1)
         datTrxTemplate.adatSplits(1) = datSplit
 
-        'Set shared fields.
-        gstrGetTrxGenTemplateNormal = gstrGetTrxGenTemplateShared(elmTrxTpt, strRepeatKey, datTrxTemplate)
+        Return ""
 
     End Function
 
