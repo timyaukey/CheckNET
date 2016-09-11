@@ -603,6 +603,10 @@ ErrorHandler:
             strFailReason = "Transaction has no splits"
             Exit Function
         End If
+        If objImportedTrx.lngNarrowMethod <> ImportMatchNarrowMethod.None Then
+            strFailReason = "Memorized transaction has a narrowing method"
+            Exit Function
+        End If
 
         objSplit = objImportedTrx.colSplits.Item(1)
         If objSplit.strCategoryKey = "" And blnSetMissingCategory Then
