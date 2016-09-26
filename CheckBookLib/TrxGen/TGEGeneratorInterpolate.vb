@@ -10,28 +10,26 @@ Public Class TGEGeneratorInterpolate
     Implements IFilePersistable
 
     Public Overrides Function Validate() As String
-        Validate = Nothing
+        Dim result As String
+        result = Schedule.Validate()
+        If Not result Is Nothing Then
+            Return result
+        End If
+        Return MyBase.Validate()
     End Function
 
+    Public Overrides Sub CleanForSave()
+        MyBase.CleanForSave()
+    End Sub
+
     <XmlElement("schedule")>
-    <CategoryAttribute("Schedule")>
+    <CategoryAttribute("Repeat")>
     <TypeConverter(GetType(ExpandableObjectConverter))>
     <DisplayName("Schedule")>
     Public Property Schedule As TGESchedule
 
     <XmlElement("sample")>
+    <CategoryAttribute("Repeat")>
     <DisplayName("Samples")>
     Public Property Samples As List(Of TGESample)
-
-    <XmlElement("normaltrx")>
-    <CategoryAttribute("Template")>
-    <TypeConverter(GetType(ExpandableObjectConverter))>
-    <DisplayName("NormalTrx")>
-    Public Property NormalTrx As TGENormalTrx
-
-    <XmlElement("budgettrx")>
-    <CategoryAttribute("Template")>
-    <TypeConverter(GetType(ExpandableObjectConverter))>
-    <DisplayName("BudgetTrx")>
-    Public Property BudgetTrx As TGEBudgetTrx
 End Class

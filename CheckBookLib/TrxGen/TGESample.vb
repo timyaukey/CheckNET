@@ -9,8 +9,12 @@ Public Class TGESample
     Implements IFilePersistable
 
     Public Function Validate() As String Implements IFilePersistable.Validate
-        Validate = Nothing
+        Return Nothing
     End Function
+
+    Public Sub CleanForSave() Implements IFilePersistable.CleanForSave
+
+    End Sub
 
     <XmlAttribute("amount")>
     Public Property Amount As Decimal

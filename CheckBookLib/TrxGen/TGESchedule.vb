@@ -9,8 +9,21 @@ Public Class TGESchedule
     Implements IFilePersistable
 
     Public Function Validate() As String Implements IFilePersistable.Validate
-        Validate = Nothing
+        If String.IsNullOrEmpty(Unit) Then
+            Return "Unit is necessary"
+        End If
+        If Interval = 0 Then
+            Return "Interval is necessary"
+        End If
+        If String.IsNullOrEmpty(StartDate) Then
+            Return "Start date is necessary"
+        End If
+        Return Nothing
     End Function
+
+    Public Sub CleanForSave() Implements IFilePersistable.CleanForSave
+
+    End Sub
 
     <XmlAttribute("unit")>
     <TypeConverter(GetType(RepeatUnitTypeConverter))>

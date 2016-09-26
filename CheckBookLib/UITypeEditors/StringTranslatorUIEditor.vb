@@ -31,6 +31,7 @@ Public MustInherit Class StringTranslatorUIEditor
 
         objTranslator = GetStringTranslator()
         selectionControl = New ListBoxUIEditor(editorService)
+        selectionControl.Items.Add("")
         For i = 1 To objTranslator.intElements
             selectionControl.Items.Add(objTranslator.strValue1(CShort(i)))
         Next

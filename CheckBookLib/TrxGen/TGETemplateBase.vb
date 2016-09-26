@@ -8,9 +8,32 @@ Public Class TGETemplateBase
     Inherits TGEBase
 
     <XmlAttribute("number")>
+    <DisplayName("Transaction Number")>
     Public Property Number As String
 
     <XmlAttribute("description")>
     <DisplayName("Description")>
     Public Property Description As String
+
+    Public Overridable Function Validate() As String
+        If String.IsNullOrEmpty(Number) Then
+            Return "Transaction number is required"
+        End If
+        If String.IsNullOrEmpty(Description) Then
+            Return "Description is required"
+        End If
+        Return Nothing
+    End Function
+
+    Public Overridable Function blnIsEmpty() As Boolean
+        Return String.IsNullOrEmpty(Number) And String.IsNullOrEmpty(Description)
+    End Function
+
+    Public Overrides Function ToString() As String
+        If blnIsEmpty() Then
+            Return "(empty)"
+        Else
+            Return "(expand)"
+        End If
+    End Function
 End Class

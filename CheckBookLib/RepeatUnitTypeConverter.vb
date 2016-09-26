@@ -10,6 +10,7 @@ Public Class RepeatUnitTypeConverter
 
     Public Sub New()
         mValues = New List(Of String)
+        mValues.Add("")
         mValues.Add("day")
         mValues.Add("week")
         mValues.Add("month")
