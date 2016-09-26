@@ -310,7 +310,7 @@ ErrorHandler:
 
                 Select Case mlngUpdateSearchType
                     Case CBMain.ImportBatchUpdateSearch.Bank
-                        objReg.MatchCore(lngNumber, objImportedTrx.datDate, 60, objImportedTrx.strDescription, objImportedTrx.curAmount, _
+                        objReg.MatchCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount, _
                                          objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
                         objReg.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
                         colUnusedMatches = colRemoveAlreadyMatched(objReg, colMatches)
@@ -987,7 +987,7 @@ ErrorHandler:
 
             Select Case mlngIndividualSearchType
                 Case CBMain.ImportIndividualSearchType.Bank
-                    objReg.MatchCore(lngNumber, objImportedTrx.datDate, 60, objImportedTrx.strDescription, objImportedTrx.curAmount, _
+                    objReg.MatchCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount, _
                                      objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, _
                                      chkLooseMatch.CheckState = System.Windows.Forms.CheckState.Checked, colMatches, colExactMatches, blnExactMatch)
                     objReg.PruneToNonImportedExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)

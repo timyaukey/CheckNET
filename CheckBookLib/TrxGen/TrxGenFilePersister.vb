@@ -66,8 +66,9 @@ Public Class TrxGenFilePersister
         Else
             Throw New FilePersisterTypeException("Unrecognized file type """ + strType + """")
         End If
-        TGEGeneratorBase.SetGroupReadOnly(False)
+        TGEGeneratorBase.SetGroupReadOnly(True)
         objResult.Enabled = "true"
+        objResult.RepeatKey = DateTime.Now.ToString("yyyyMMdd-HHmmss")
         mobjSerializer = objGetSerializer(objResult.ClassName, strFile)
         Return objResult
     End Function
