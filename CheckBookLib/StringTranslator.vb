@@ -14,6 +14,10 @@ Public Class StringTranslator
         Dim strValue1 As String
         'Alternate name of list element, not suitable for searching.
         Dim strValue2 As String
+
+        Public Overrides Function ToString() As String
+            Return strKey + "|" + strValue1
+        End Function
     End Structure
 
     Private maudtElement() As Element '1 to mintElements

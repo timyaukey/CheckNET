@@ -7,13 +7,14 @@ Imports System.Xml.Serialization
 Public Class TGETemplateBase
     Inherits TGEBase
 
+    <XmlAttribute("description")>
+    <DisplayName("Description")>
+    <Description("Payee name or other transaction description")>
+    Public Property Description As String
+
     <XmlAttribute("number")>
     <DisplayName("Transaction Number")>
     Public Property Number As String
-
-    <XmlAttribute("description")>
-    <DisplayName("Description")>
-    Public Property Description As String
 
     Public Overridable Function Validate() As String
         If String.IsNullOrEmpty(Number) Then

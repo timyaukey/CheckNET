@@ -250,6 +250,9 @@ Public Class Account
             gCreateGeneratedTrx(Me, objLoaded.objReg, datRegisterEndDate)
         Next objLoaded
 
+        'In case trx generators have been edited.
+        mobjRepeats = mobjRepeatSummarizer.BuildStringTranslator()
+
         'Compute budgets and balances.
         For Each objLoaded In mcolLoadedRegisters
             objLoaded.objReg.LoadPostProcessing()

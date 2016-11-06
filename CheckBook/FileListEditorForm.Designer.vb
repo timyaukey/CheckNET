@@ -25,7 +25,6 @@ Partial Class FileListEditorForm
         Me.lvwFiles = New System.Windows.Forms.ListView()
         Me.colName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.colDate = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.colSize = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.btnNewFile = New System.Windows.Forms.Button()
         Me.cboNewType = New System.Windows.Forms.ComboBox()
         Me.lblNewName = New System.Windows.Forms.Label()
@@ -41,12 +40,12 @@ Partial Class FileListEditorForm
         Me.lvwFiles.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lvwFiles.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colName, Me.colDate, Me.colSize})
+        Me.lvwFiles.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colName, Me.colDate})
         Me.lvwFiles.FullRowSelect = True
         Me.lvwFiles.HideSelection = False
         Me.lvwFiles.Location = New System.Drawing.Point(12, 12)
         Me.lvwFiles.Name = "lvwFiles"
-        Me.lvwFiles.Size = New System.Drawing.Size(544, 324)
+        Me.lvwFiles.Size = New System.Drawing.Size(569, 324)
         Me.lvwFiles.TabIndex = 0
         Me.lvwFiles.UseCompatibleStateImageBehavior = False
         Me.lvwFiles.View = System.Windows.Forms.View.Details
@@ -54,22 +53,17 @@ Partial Class FileListEditorForm
         'colName
         '
         Me.colName.Text = "File Name"
-        Me.colName.Width = 301
+        Me.colName.Width = 400
         '
         'colDate
         '
         Me.colDate.Text = "Last Modified"
         Me.colDate.Width = 140
         '
-        'colSize
-        '
-        Me.colSize.Text = "Size"
-        Me.colSize.Width = 80
-        '
         'btnNewFile
         '
         Me.btnNewFile.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnNewFile.Location = New System.Drawing.Point(434, 371)
+        Me.btnNewFile.Location = New System.Drawing.Point(459, 371)
         Me.btnNewFile.Name = "btnNewFile"
         Me.btnNewFile.Size = New System.Drawing.Size(122, 23)
         Me.btnNewFile.TabIndex = 6
@@ -117,7 +111,7 @@ Partial Class FileListEditorForm
         'btnDeleteFile
         '
         Me.btnDeleteFile.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnDeleteFile.Location = New System.Drawing.Point(434, 429)
+        Me.btnDeleteFile.Location = New System.Drawing.Point(459, 429)
         Me.btnDeleteFile.Name = "btnDeleteFile"
         Me.btnDeleteFile.Size = New System.Drawing.Size(122, 23)
         Me.btnDeleteFile.TabIndex = 8
@@ -127,7 +121,7 @@ Partial Class FileListEditorForm
         'btnRenameFile
         '
         Me.btnRenameFile.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnRenameFile.Location = New System.Drawing.Point(434, 400)
+        Me.btnRenameFile.Location = New System.Drawing.Point(459, 400)
         Me.btnRenameFile.Name = "btnRenameFile"
         Me.btnRenameFile.Size = New System.Drawing.Size(122, 23)
         Me.btnRenameFile.TabIndex = 7
@@ -137,7 +131,7 @@ Partial Class FileListEditorForm
         'btnEditFile
         '
         Me.btnEditFile.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnEditFile.Location = New System.Drawing.Point(434, 342)
+        Me.btnEditFile.Location = New System.Drawing.Point(459, 342)
         Me.btnEditFile.Name = "btnEditFile"
         Me.btnEditFile.Size = New System.Drawing.Size(122, 23)
         Me.btnEditFile.TabIndex = 5
@@ -148,7 +142,7 @@ Partial Class FileListEditorForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(568, 464)
+        Me.ClientSize = New System.Drawing.Size(593, 464)
         Me.Controls.Add(Me.btnEditFile)
         Me.Controls.Add(Me.btnRenameFile)
         Me.Controls.Add(Me.btnDeleteFile)
@@ -169,7 +163,6 @@ Partial Class FileListEditorForm
     Friend WithEvents lvwFiles As System.Windows.Forms.ListView
     Friend WithEvents colName As System.Windows.Forms.ColumnHeader
     Friend WithEvents colDate As System.Windows.Forms.ColumnHeader
-    Friend WithEvents colSize As System.Windows.Forms.ColumnHeader
     Friend WithEvents btnNewFile As System.Windows.Forms.Button
     Friend WithEvents cboNewType As System.Windows.Forms.ComboBox
     Friend WithEvents lblNewName As System.Windows.Forms.Label

@@ -8,15 +8,10 @@ Public MustInherit Class TGEGeneratorBase
     Inherits TGEBase
     Implements IFilePersistable
 
-    <XmlAttribute("class"), ReadOnlyAttribute(True)>
-    <DisplayName("Type")>
-    <CategoryAttribute("Core")>
-    Public Property ClassName As String
-
     <XmlAttribute("description")>
-    <DisplayName("Name")>
+    <DisplayName("Repeat Name")>
     <CategoryAttribute("Core")>
-    <Description("Payee name or other description for error messages")>
+    <Description("The Repeat Name that appears on the transaction form")>
     Public Property Description As String
 
     <XmlAttribute("enabled")>
@@ -24,9 +19,15 @@ Public MustInherit Class TGEGeneratorBase
     <TypeConverter(GetType(BooleanStringTypeConverter))>
     Public Property Enabled As String
 
+    <XmlAttribute("class"), ReadOnlyAttribute(True)>
+    <DisplayName("Type")>
+    <CategoryAttribute("Core")>
+    Public Property ClassName As String
+
     <XmlAttribute("repeatkey")>
     <CategoryAttribute("Repeat")>
-    <DisplayName("Group Name or Code")>
+    <DisplayName("Repeat Code")>
+    <Description("An automatically assigned unique code used internally to identify transactions created from this generator")>
     <ReadOnlyAttribute(False)>
     Public Property RepeatKey As String
 

@@ -34,6 +34,7 @@ Partial Class ObjectEditorForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.grdData.Location = New System.Drawing.Point(12, 12)
         Me.grdData.Name = "grdData"
+        Me.grdData.PropertySort = System.Windows.Forms.PropertySort.Categorized
         Me.grdData.Size = New System.Drawing.Size(386, 460)
         Me.grdData.TabIndex = 0
         '

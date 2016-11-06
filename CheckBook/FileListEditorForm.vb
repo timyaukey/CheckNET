@@ -37,9 +37,8 @@ Public Class FileListEditorForm
             file = New FileInfo(strFile)
             strName = file.Name
             If strName.ToLower().EndsWith("." + mstrFileType) Then
-                subItems(0) = file.Name
+                subItems(0) = Path.GetFileNameWithoutExtension(file.Name)
                 subItems(1) = file.LastWriteTime.ToShortDateString() + " " + file.LastWriteTime.ToShortTimeString()
-                subItems(2) = file.Length.ToString()
                 item = New ListViewItem(subItems)
                 item.Tag = file
                 lvwFiles.Items.Add(item)
@@ -74,7 +73,7 @@ Public Class FileListEditorForm
             Try
                 objData = mobjPersister.Load(strFile)
                 Using frm As New ObjectEditorForm
-                    If frm.ShowEditor(objData, Path.GetFileName(strFile)) Then
+                    If frm.ShowEditor(objData, Path.GetFileNameWithoutExtension(strFile)) Then
                         objData.CleanForSave()
                         mobjPersister.Save(objData, strFile)
                         MsgBox("File saved.", MsgBoxStyle.Information)
@@ -99,7 +98,7 @@ Public Class FileListEditorForm
         End If
         objData = mobjPersister.Create(DirectCast(cboNewType.SelectedItem, FilePersistableType).strType, strFile)
         Using frm As New ObjectEditorForm
-            If frm.ShowEditor(objData, Path.GetFileName(strFile)) Then
+            If frm.ShowEditor(objData, Path.GetFileNameWithoutExtension(strFile)) Then
                 objData.CleanForSave()
                 mobjPersister.Save(objData, strFile)
                 MsgBox("File saved.", MsgBoxStyle.Information)
