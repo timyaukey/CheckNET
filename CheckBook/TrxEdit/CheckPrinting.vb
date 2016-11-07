@@ -45,9 +45,11 @@ Module CheckPrinting
         objPrintDoc = New PrintDocument
         AddHandler objPrintDoc.PrintPage, AddressOf pd_PrintPage
         '        objPrintDoc.Print()
-        Dim obj As PrintPreviewDialog = New PrintPreviewDialog()
-        obj.Document = objPrintDoc
-        obj.ShowDialog()
+        Dim preview As PrintPreviewDialog = New PrintPreviewDialog()
+        preview.Height = 800
+        preview.Width = 600
+        preview.Document = objPrintDoc
+        preview.ShowDialog()
 
     End Sub
 
