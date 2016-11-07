@@ -37,21 +37,35 @@ Module CheckPrinting
 
     End Function
 
-    Public Sub gPrintCheck(ByVal domCheckFormat_ As VB6XmlDocument, ByVal objTrx_ As Trx)
+    Public Function gblnPrintCheck(ByVal domCheckFormat_ As VB6XmlDocument, ByVal objTrx_ As Trx) As Boolean
         Dim objPrintDoc As PrintDocument
+        Dim blnPreview As Boolean = False
 
         mdomCheckFormat = domCheckFormat_
         mobjTrx = objTrx_
         objPrintDoc = New PrintDocument
         AddHandler objPrintDoc.PrintPage, AddressOf pd_PrintPage
-        '        objPrintDoc.Print()
-        Dim preview As PrintPreviewDialog = New PrintPreviewDialog()
-        preview.Height = 800
-        preview.Width = 600
-        preview.Document = objPrintDoc
-        preview.ShowDialog()
 
-    End Sub
+        If blnPreview Then
+            Dim preview As PrintPreviewDialog = New PrintPreviewDialog()
+            preview.Height = 800
+            preview.Width = 600
+            preview.Document = objPrintDoc
+            preview.ShowDialog()
+        Else
+            Dim dlg As PrintDialog = New PrintDialog()
+            dlg.PrintToFile = False
+            dlg.AllowCurrentPage = False
+            dlg.AllowSomePages = False
+            dlg.Document = objPrintDoc
+            If dlg.ShowDialog() = DialogResult.OK Then
+                objPrintDoc.Print()
+                Return True
+            End If
+        End If
+        Return False
+
+    End Function
 
     Private Sub pd_PrintPage(ByVal sender As Object, ByVal ev As PrintPageEventArgs)
         Dim colPayees As VB6XmlNodeList

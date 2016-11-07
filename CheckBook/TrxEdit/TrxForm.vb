@@ -237,6 +237,8 @@ ErrorHandler:
 
     Private Sub ConfigNormalControls()
         Dim intIndex As Short
+        cmdPrintCheck.Visible = True
+        cmdMailingAddress.Visible = True
         txtNumber.Visible = True
         cmdCopyInvoiceNumbers.Visible = True
         EnableStatus()
@@ -304,6 +306,8 @@ ErrorHandler:
     End Sub
 
     Private Sub ConfigBudgetControls()
+        cmdPrintCheck.Visible = False
+        cmdMailingAddress.Visible = False
         txtNumber.Visible = False
         lblNumber.Visible = False
         cboStatus.Visible = False
@@ -430,6 +434,8 @@ ErrorHandler:
     End Sub
 
     Private Sub ConfigTransferControls()
+        cmdPrintCheck.Visible = False
+        cmdMailingAddress.Visible = False
         txtNumber.Visible = False
         lblNumber.Visible = False
         cboStatus.Visible = False
@@ -1282,7 +1288,7 @@ ErrorHandler:
         MsgBox(strMsg, MsgBoxStyle.Critical + MsgBoxStyle.OkOnly)
     End Sub
 
-    Private Sub SaveNormal()
+    Public Sub SaveNormal()
         Dim objTrx As Trx
         Dim objTrxOld As Trx = Nothing
         If mblnEditMode Then
@@ -1416,7 +1422,10 @@ ErrorHandler:
         txtDate.Text = gstrFormatDate(Today)
         chkFake.CheckState = System.Windows.Forms.CheckState.Unchecked
 
-        If Not blnValidateAndSave() Then
+        If blnValidateShared() Then
+            Exit Sub
+        End If
+        If blnValidateNormal() Then
             Exit Sub
         End If
 
@@ -1430,9 +1439,10 @@ ErrorHandler:
         mobjReg.LogAction("PrintCheck:" & strNumber)
         objTrx = objCreateTrx(Nothing)
         AddSplits(objTrx)
-        gPrintCheck(domCheckFormat, objTrx)
-
-        Me.Close()
+        If gblnPrintCheck(domCheckFormat, objTrx) Then
+            SaveNormal()
+            Me.Close()
+        End If
 
         Exit Sub
 ErrorHandler:
@@ -2308,4 +2318,9 @@ ErrorHandler:
 ErrorHandler:
         TopError("cboSplitBudget_SelectedIndexChanged")
     End Sub
+
+    Private Function gPrintCheck(domCheckFormat As VB6XmlDocument, objTrx As Trx) As Boolean
+        Throw New NotImplementedException
+    End Function
+
 End Class
