@@ -1,6 +1,7 @@
 Option Strict Off
 Option Explicit On
 
+Imports System.Drawing.Printing
 Imports CheckBookLib
 
 Module CheckPrinting
@@ -10,14 +11,17 @@ Module CheckPrinting
 
     Private mdblMarginLeft As Double
     Private mdblMarginTop As Double
-
+    Private mdblCurrentX As Double
+    Private mdblCurrentY As Double
+    Private mdomCheckFormat As VB6XmlDocument
+    Private mobjTrx As Trx
+    Private mobjFont As Font
 
     Public Function gdomGetCheckFormat() As VB6XmlDocument
         Dim domCheckFormat As VB6XmlDocument
         Dim strCheckFormatFile As String
         Dim objParseError As VB6XmlParseError
 
-        'UPGRADE_NOTE: Object gdomGetCheckFormat may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         gdomGetCheckFormat = Nothing
         domCheckFormat = New VB6XmlDocument
         strCheckFormatFile = gstrAddPath("CheckFormat.xml")
@@ -33,9 +37,21 @@ Module CheckPrinting
 
     End Function
 
-    Public Sub gPrintCheck(ByVal domCheckFormat As VB6XmlDocument, ByVal objTrx As Trx)
-        Dim Printer As New Object
+    Public Sub gPrintCheck(ByVal domCheckFormat_ As VB6XmlDocument, ByVal objTrx_ As Trx)
+        Dim objPrintDoc As PrintDocument
 
+        mdomCheckFormat = domCheckFormat_
+        mobjTrx = objTrx_
+        objPrintDoc = New PrintDocument
+        AddHandler objPrintDoc.PrintPage, AddressOf pd_PrintPage
+        '        objPrintDoc.Print()
+        Dim obj As PrintPreviewDialog = New PrintPreviewDialog()
+        obj.Document = objPrintDoc
+        obj.ShowDialog()
+
+    End Sub
+
+    Private Sub pd_PrintPage(ByVal sender As Object, ByVal ev As PrintPageEventArgs)
         Dim colPayees As VB6XmlNodeList
         Dim objPayee As VB6XmlElement
         Dim strMailName As String = ""
@@ -52,18 +68,16 @@ Module CheckPrinting
         Dim dblLineHeight As Double
         Dim curAmount As Decimal
 
-        'Printer.ScaleMode = ScaleModeConstants.vbInches
-        Printer.FontName = "arial"
-        Printer.FontSize = 10
-        'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        GetCheckPrintPos(domCheckFormat, "Margins", elmItem, mdblMarginLeft, mdblMarginTop)
-        dblLineHeight = Printer.TextHeight("X")
+        mobjFont = New Font("Arial", 10)
+        GetCheckPrintPos(mdomCheckFormat, "Margins", elmItem, mdblMarginLeft, mdblMarginTop)
+        ev.Graphics.PageUnit = GraphicsUnit.Inch
+        dblLineHeight = mobjFont.GetHeight(ev.Graphics)
 
-        curAmount = -objTrx.curAmount
+        curAmount = -mobjTrx.curAmount
 
         'Find the first memorized trx with the same payee name
         'and a mailing address.
-        colPayees = gcolFindPayeeMatches((objTrx.strDescription))
+        colPayees = gcolFindPayeeMatches((mobjTrx.strDescription))
         intPayeeIndex = 0
         Do
             If intPayeeIndex >= colPayees.Length Then
@@ -76,7 +90,7 @@ Module CheckPrinting
             strAccountNumber = gstrGetXMLChildText(objPayee, "Account")
             intSemiPos = InStr(strMailAddr, ";")
             If intSemiPos = 0 Then
-                strMailName = objTrx.strDescription
+                strMailName = mobjTrx.strDescription
             Else
                 strMailName = Left(strMailAddr, intSemiPos - 1)
                 strMailAddr = Mid(strMailAddr, intSemiPos + 1)
@@ -91,30 +105,24 @@ Module CheckPrinting
             intPayeeIndex = intPayeeIndex + 1
         Loop
 
-        'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        PrintCheckText(domCheckFormat, "Date", gstrFormatDate(objTrx.datDate))
-        'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        PrintCheckText(domCheckFormat, "ShortAmount", gstrFormatCurrency(curAmount))
-        'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        PrintCheckText(domCheckFormat, "Payee", objTrx.strDescription)
+        PrintCheckText(mdomCheckFormat, "Date", gstrFormatDate(mobjTrx.datDate), ev)
+        PrintCheckText(mdomCheckFormat, "ShortAmount", gstrFormatCurrency(curAmount), ev)
+        PrintCheckText(mdomCheckFormat, "Payee", mobjTrx.strDescription, ev)
         Dim intPennies As Short
         intPennies = Fix(curAmount * 100.0#) - Fix(curAmount) * 100.0#
         Dim strDollars As String
         strDollars = gstrAmountToWords(curAmount)
         strDollars = UCase(Left(strDollars, 1)) & Mid(strDollars, 2)
-        'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        PrintCheckText(domCheckFormat, "LongAmount", strDollars & " and " & gstrFormatInteger(intPennies, "00") & "/100")
+        PrintCheckText(mdomCheckFormat, "LongAmount", strDollars & " and " & gstrFormatInteger(intPennies, "00") & "/100", ev)
         If strAccountNumber <> "" Then
-            'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            PrintCheckText(domCheckFormat, "AccountNumber", "Account #: " & strAccountNumber)
+            PrintCheckText(mdomCheckFormat, "AccountNumber", "Account #: " & strAccountNumber, ev)
         End If
 
         If strMailAddr <> "" Then
-            'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            GetCheckPrintPos(domCheckFormat, "MailingAddress", elmItem, dblX, dblY)
-            PrintCheckLine(dblX, dblY, dblLineHeight, strMailName)
-            PrintCheckLine(dblX, dblY, dblLineHeight, strMailAddrLine)
-            PrintCheckLine(dblX, dblY, dblLineHeight, strMailCityStateZip)
+            GetCheckPrintPos(mdomCheckFormat, "MailingAddress", elmItem, dblX, dblY)
+            PrintCheckLine(dblX, dblY, dblLineHeight, strMailName, ev)
+            PrintCheckLine(dblX, dblY, dblLineHeight, strMailAddrLine, ev)
+            PrintCheckLine(dblX, dblY, dblLineHeight, strMailCityStateZip, ev)
         End If
 
         'Deliberately do NOT print the memo, because this is a note to the operator
@@ -122,25 +130,19 @@ Module CheckPrinting
         'Everything the payee needs to see (account numbers, invoice numbers)
         'is printed elsewhere.
 
-        'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        PrintOptionalCheckText(domCheckFormat, "Payee2", strMailName)
-        'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        PrintOptionalCheckText(domCheckFormat, "Amount2", "$" & gstrFormatCurrency(curAmount))
-        'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        PrintOptionalCheckText(domCheckFormat, "Date2", gstrFormatDate(objTrx.datDate))
-        'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        PrintOptionalCheckText(domCheckFormat, "Number2", "#" & objTrx.strNumber)
+        PrintOptionalCheckText(mdomCheckFormat, "Payee2", strMailName, ev)
+        PrintOptionalCheckText(mdomCheckFormat, "Amount2", "$" & gstrFormatCurrency(curAmount), ev)
+        PrintOptionalCheckText(mdomCheckFormat, "Date2", gstrFormatDate(mobjTrx.datDate), ev)
+        PrintOptionalCheckText(mdomCheckFormat, "Number2", "#" & mobjTrx.strNumber, ev)
 
-        'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        PrintInvoiceNumbers(domCheckFormat, "InvoiceList1", objTrx, dblLineHeight)
-        'UPGRADE_WARNING: Couldn't resolve default property of object domCheckFormat. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        PrintInvoiceNumbers(domCheckFormat, "InvoiceList2", objTrx, dblLineHeight)
+        PrintInvoiceNumbers(mdomCheckFormat, "InvoiceList1", mobjTrx, dblLineHeight, ev)
+        PrintInvoiceNumbers(mdomCheckFormat, "InvoiceList2", mobjTrx, dblLineHeight, ev)
 
-        Printer.EndDoc()
+        ev.HasMorePages = False
 
     End Sub
 
-    Private Sub PrintInvoiceNumbers(ByVal domCheckFormat As VB6XmlDocument, ByVal strItemName As String, ByVal objTrx As Trx, ByVal dblLineHeight As Double)
+    Private Sub PrintInvoiceNumbers(ByVal domCheckFormat As VB6XmlDocument, ByVal strItemName As String, ByVal objTrx As Trx, ByVal dblLineHeight As Double, ByVal ev As PrintPageEventArgs)
 
         Dim elmInvoiceList As VB6XmlElement
         Dim dblX As Double
@@ -163,37 +165,25 @@ Module CheckPrinting
             Exit Sub
         End If
 
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmInvoiceList.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmInvoiceList.GetAttribute("rows")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             MsgBox("Could not find ""rows"" attribute of <" & strItemName & "> in check format file")
             Exit Sub
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         intMaxRows = Val(vntAttrib)
 
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmInvoiceList.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmInvoiceList.GetAttribute("cols")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             MsgBox("Could not find ""cols"" attribute of <" & strItemName & "> in check format file")
             Exit Sub
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         intMaxCols = Val(vntAttrib)
 
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmInvoiceList.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmInvoiceList.GetAttribute("colwidth")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             MsgBox("Could not find ""colwidth"" attribute of <" & strItemName & "> in check format file")
             Exit Sub
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         dblColWidth = Val(vntAttrib)
 
         intRowNum = 1
@@ -203,7 +193,7 @@ Module CheckPrinting
             strInvoiceNum = objSplit.strInvoiceNum
             If strInvoiceNum <> "" Then
                 If intRowNum = 1 And intColNum = 1 Then
-                    PrintCheckLine(dblX, dblY, dblLineHeight, "Invoice Numbers:")
+                    PrintCheckLine(dblX, dblY, dblLineHeight, "Invoice Numbers:", ev)
                     dblY = dblY + dblLineHeight / 2
                     dblStartY = dblY
                 End If
@@ -217,14 +207,14 @@ Module CheckPrinting
                     dblY = dblStartY
                     dblX = dblX + dblColWidth
                 End If
-                PrintCheckLine(dblX, dblY, dblLineHeight, strInvoiceNum)
+                PrintCheckLine(dblX, dblY, dblLineHeight, strInvoiceNum, ev)
                 intRowNum = intRowNum + 1
             End If
         Next objSplit
 
     End Sub
 
-    Private Sub PrintCheckText(ByVal domCheckFormat As VB6XmlDocument, ByVal strItemName As String, ByVal strValue As String)
+    Private Sub PrintCheckText(ByVal domCheckFormat As VB6XmlDocument, ByVal strItemName As String, ByVal strValue As String, ByVal ev As PrintPageEventArgs)
 
         Dim elmItem As VB6XmlElement = Nothing
         Dim dblX As Double
@@ -235,17 +225,17 @@ Module CheckPrinting
             Exit Sub
         End If
 
-        SetLocation(dblX, dblY)
+        SetLocation(dblX, dblY, ev)
 
         'Text below prints with upper left corner of character cell at CurrentX, CurrentY
-        PrintString(strValue)
+        PrintString(strValue, ev)
 
         ' (x,y)
         'Printer.Line (100, 300)-(200, 500), vbBlack
 
     End Sub
 
-    Private Sub PrintOptionalCheckText(ByVal domCheckFormat As VB6XmlDocument, ByVal strItemName As String, ByVal strValue As String)
+    Private Sub PrintOptionalCheckText(ByVal domCheckFormat As VB6XmlDocument, ByVal strItemName As String, ByVal strValue As String, ByVal ev As PrintPageEventArgs)
 
         Dim elmItem As VB6XmlElement
         Dim dblX As Double
@@ -256,33 +246,31 @@ Module CheckPrinting
             Exit Sub
         End If
 
-        SetLocation(dblX, dblY)
+        SetLocation(dblX, dblY, ev)
 
         'Text below prints with upper left corner of character cell at CurrentX, CurrentY
-        PrintString(strValue)
+        PrintString(strValue, ev)
 
         ' (x,y)
         'Printer.Line (100, 300)-(200, 500), vbBlack
 
     End Sub
 
-    Private Sub PrintCheckLine(ByVal dblX As Double, ByRef dblY As Double, ByVal dblLineHeight As Double, ByVal strValue As String)
+    Private Sub PrintCheckLine(ByVal dblX As Double, ByRef dblY As Double, ByVal dblLineHeight As Double, ByVal strValue As String, ByVal ev As PrintPageEventArgs)
 
-        SetLocation(dblX, dblY)
-        PrintString(strValue)
+        SetLocation(dblX, dblY, ev)
+        PrintString(strValue, ev)
         dblY = dblY + dblLineHeight
 
     End Sub
 
-    Private Sub PrintString(ByVal strValue As String)
-        Dim Printer As New Object
-        Printer.Print(strValue)
+    Private Sub PrintString(ByVal strValue As String, ByVal ev As PrintPageEventArgs)
+        ev.Graphics.DrawString(strValue, mobjFont, Brushes.Black, mdblCurrentX, mdblCurrentY, New StringFormat())
     End Sub
 
-    Private Sub SetLocation(ByVal dblX As Double, ByVal dblY As Double)
-        Dim Printer As New Object
-        Printer.CurrentX = dblX - mdblMarginLeft
-        Printer.CurrentY = dblY - mdblMarginTop
+    Private Sub SetLocation(ByVal dblX As Double, ByVal dblY As Double, ByVal ev As PrintPageEventArgs)
+        mdblCurrentX = dblX - mdblMarginLeft
+        mdblCurrentY = dblY - mdblMarginTop
     End Sub
 
     Private Sub GetCheckPrintPos(ByVal domCheckFormat As VB6XmlDocument, ByVal strItemName As String, ByRef elmItem As VB6XmlElement, ByRef dblX As Double, ByRef dblY As Double)
