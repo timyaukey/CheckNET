@@ -44,18 +44,19 @@ Public Module CheckBookUtils
     End Function
 
     Public Sub gLoadGlobalLists()
-        On Error GoTo ErrorHandler
+        Try
 
-        gobjBudgets = New StringTranslator
-        gobjBudgets.LoadFile(gstrAddPath("Shared.bud"))
-        gobjCategories = New StringTranslator
-        gobjCategories.LoadFile(gstrAddPath("Shared.cat"))
-        gBuildShortTermsCatKeys()
-        gFindPlaceholderBudget()
+            gobjBudgets = New StringTranslator
+            gobjBudgets.LoadFile(gstrAddPath("Shared.bud"))
+            gobjCategories = New StringTranslator
+            gobjCategories.LoadFile(gstrAddPath("Shared.cat"))
+            gBuildShortTermsCatKeys()
+            gFindPlaceholderBudget()
 
-        Exit Sub
-ErrorHandler:
-        NestedError("gLoadGlobalLists")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     'Set gstrPlaceholderBudgetKey to the key of the budget whose name
@@ -191,8 +192,4 @@ ErrorHandler:
     Public Function gstrAgingBracketPastDue(ByVal intStartingAge As Short, ByVal intEndingAge As Short) As String
         gstrAgingBracketPastDue = "Due " & gstrFormatInteger(intStartingAge, "000") & "-" & gstrFormatInteger(intEndingAge, "000") & " Days Ago"
     End Function
-
-    Private Sub NestedError(ByVal strRoutine As String)
-        gNestedErrorTrap("CheckBookUtils." & strRoutine)
-    End Sub
 End Module

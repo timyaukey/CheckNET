@@ -22,18 +22,19 @@ Friend Class PayeeListForm
     Private mblnActivated As Boolean
 
     Public Sub ShowMe()
-        On Error GoTo ErrorHandler
+        Try
 
-        LoadSharedDocument()
-        gLoadComboFromStringTranslator(cboCategory, gobjCategories, True)
-        gLoadComboFromStringTranslator(cboBudget, gobjBudgets, True)
-        gLoadMatchNarrowingMethods(cboNarrowMethod)
-        Me.ShowDialog()
+            LoadSharedDocument()
+            gLoadComboFromStringTranslator(cboCategory, gobjCategories, True)
+            gLoadComboFromStringTranslator(cboBudget, gobjBudgets, True)
+            gLoadMatchNarrowingMethods(cboNarrowMethod)
+            Me.ShowDialog()
 
-        Exit Sub
-ErrorHandler:
-        Me.Close()
-        NestedError("ShowMe")
+            Exit Sub
+        Catch ex As Exception
+            Me.Close()
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Sub LoadSharedDocument()
@@ -44,33 +45,35 @@ ErrorHandler:
     'UPGRADE_WARNING: Form event PayeeListForm.Activate has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
     Private Sub PayeeListForm_Activated(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Activated
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If Not mblnActivated Then
-            mblnActivated = True
-            ShowPayeeList()
-        End If
+            If Not mblnActivated Then
+                mblnActivated = True
+                ShowPayeeList()
+            End If
 
-        Exit Sub
-ErrorHandler:
-        TopError("Form_Activate")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdSaveChanges_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSaveChanges.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        If blnValidateAndCopyPayeeToXML() Then
+            If blnValidateAndCopyPayeeToXML() Then
+                Exit Sub
+            End If
+            gdomTransTable = mdomNewTransTable
+            LoadSharedDocument()
+            gdomTransTable.Save(gstrPayeeFilePath())
+            gCreateTransTableUCS()
+            Me.Close()
+
             Exit Sub
-        End If
-        gdomTransTable = mdomNewTransTable
-        LoadSharedDocument()
-        gdomTransTable.Save(gstrPayeeFilePath())
-        gCreateTransTableUCS()
-        Me.Close()
-
-        Exit Sub
-ErrorHandler:
-        TopError("cmdSaveChanges_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdDiscardChanges_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdDiscardChanges.Click
@@ -81,42 +84,44 @@ ErrorHandler:
         Dim elmPayee As VB6XmlElement
         Dim objNewItem As System.Windows.Forms.ListViewItem
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If blnValidateAndCopyPayeeToXML() Then
+            If blnValidateAndCopyPayeeToXML() Then
+                Exit Sub
+            End If
+            elmPayee = mdomNewTransTable.CreateElement("Payee")
+            elmPayee.SetAttribute("Output", "(new transaction - edit this name)")
+            'UPGRADE_WARNING: Couldn't resolve default property of object elmPayee. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            melmTransTable.AppendChild(elmPayee)
+            mcolPayees = melmTransTable.SelectNodes("Payee")
+            objNewItem = gobjCreatePayeeListItem(elmPayee, lvwPayees, mcolPayees.Length - 1)
+            gSortPayeeListByName(lvwPayees)
+            System.Windows.Forms.Application.DoEvents()
+            SyncDisplay(objNewItem)
+            ShowSelectedPayee()
+
             Exit Sub
-        End If
-        elmPayee = mdomNewTransTable.CreateElement("Payee")
-        elmPayee.SetAttribute("Output", "(new transaction - edit this name)")
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmPayee. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        melmTransTable.AppendChild(elmPayee)
-        mcolPayees = melmTransTable.SelectNodes("Payee")
-        objNewItem = gobjCreatePayeeListItem(elmPayee, lvwPayees, mcolPayees.Length - 1)
-        gSortPayeeListByName(lvwPayees)
-        System.Windows.Forms.Application.DoEvents()
-        SyncDisplay(objNewItem)
-        ShowSelectedPayee()
-
-        Exit Sub
-ErrorHandler:
-        TopError("cmdNewPayee_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdDeletePayee_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdDeletePayee.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        If melmPayeeToSave Is Nothing Then
-            MsgBox("You must select a memorized transaction to delete.", MsgBoxStyle.Critical)
+            If melmPayeeToSave Is Nothing Then
+                MsgBox("You must select a memorized transaction to delete.", MsgBoxStyle.Critical)
+                Exit Sub
+            End If
+
+            'UPGRADE_WARNING: Couldn't resolve default property of object melmPayeeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            melmTransTable.RemoveChild(melmPayeeToSave)
+            ShowPayeeList()
+
             Exit Sub
-        End If
-
-        'UPGRADE_WARNING: Couldn't resolve default property of object melmPayeeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        melmTransTable.RemoveChild(melmPayeeToSave)
-        ShowPayeeList()
-
-        Exit Sub
-ErrorHandler:
-        TopError("cmdDeletePayee_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     'lvwPayees_ItemClick is not converted to an event handler in .NET,
@@ -134,31 +139,32 @@ ErrorHandler:
         'but just to be sure...
         Static sblnInItemClick As Boolean
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If sblnInItemClick Then
-            Exit Sub
-        End If
-        sblnInItemClick = True
-        If lvwPayees.FocusedItem Is Nothing Then
-            sblnInItemClick = False
-            Exit Sub
-        End If
-        If Not mobjDisplayedPayee Is Nothing Then
-            If blnDisplayedPayeeInvalid() Then
-                lvwPayees.FocusedItem = mobjDisplayedPayee
+            If sblnInItemClick Then
+                Exit Sub
+            End If
+            sblnInItemClick = True
+            If lvwPayees.FocusedItem Is Nothing Then
                 sblnInItemClick = False
                 Exit Sub
             End If
-            CopyPayeeToXML()
-        End If
-        ShowSelectedPayee()
-        sblnInItemClick = False
+            If Not mobjDisplayedPayee Is Nothing Then
+                If blnDisplayedPayeeInvalid() Then
+                    lvwPayees.FocusedItem = mobjDisplayedPayee
+                    sblnInItemClick = False
+                    Exit Sub
+                End If
+                CopyPayeeToXML()
+            End If
+            ShowSelectedPayee()
+            sblnInItemClick = False
 
-        Exit Sub
-ErrorHandler:
-        sblnInItemClick = False
-        TopError("lvwPayees_ItemClick")
+            Exit Sub
+        Catch ex As Exception
+            sblnInItemClick = False
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub ShowPayeeList()
@@ -166,89 +172,92 @@ ErrorHandler:
         Dim intIndex As Short
         Dim objFirst As System.Windows.Forms.ListViewItem
 
-        On Error GoTo ErrorHandler
+        Try
 
-        gInitPayeeList(lvwPayees)
-        lvwPayees.Items.Clear()
-        mcolPayees = melmTransTable.SelectNodes("Payee")
-        For intIndex = 1 To mcolPayees.Length
-            elmPayee = mcolPayees.Item(intIndex - 1)
-            gobjCreatePayeeListItem(elmPayee, lvwPayees, intIndex - 1)
-        Next
-        gSortPayeeListByName(lvwPayees)
-        System.Windows.Forms.Application.DoEvents()
-        objFirst = lvwPayees.TopItem
-        If Not objFirst Is Nothing Then
-            lvwPayees.FocusedItem = objFirst
-            ShowSelectedPayee()
-        Else
-            'UPGRADE_NOTE: Object melmPayeeToSave may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-            melmPayeeToSave = Nothing
-            'UPGRADE_NOTE: Object mobjDisplayedPayee may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-            mobjDisplayedPayee = Nothing
-            txtPayee.Text = ""
-            txtAddress1.Text = ""
-            txtAddress2.Text = ""
-            txtCity.Text = ""
-            txtState.Text = ""
-            txtZip.Text = ""
-            txtAccount.Text = ""
-            txtBank.Text = ""
-            txtMinAmount.Text = ""
-            txtMaxAmount.Text = ""
-            txtNumber.Text = ""
-            txtAmount.Text = ""
-            txtMemo.Text = ""
-            cboCategory.SelectedIndex = -1
-            cboBudget.SelectedIndex = -1
-            cboNarrowMethod.SelectedIndex = -1
-        End If
+            gInitPayeeList(lvwPayees)
+            lvwPayees.Items.Clear()
+            mcolPayees = melmTransTable.SelectNodes("Payee")
+            For intIndex = 1 To mcolPayees.Length
+                elmPayee = mcolPayees.Item(intIndex - 1)
+                gobjCreatePayeeListItem(elmPayee, lvwPayees, intIndex - 1)
+            Next
+            gSortPayeeListByName(lvwPayees)
+            System.Windows.Forms.Application.DoEvents()
+            objFirst = lvwPayees.TopItem
+            If Not objFirst Is Nothing Then
+                lvwPayees.FocusedItem = objFirst
+                ShowSelectedPayee()
+            Else
+                'UPGRADE_NOTE: Object melmPayeeToSave may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+                melmPayeeToSave = Nothing
+                'UPGRADE_NOTE: Object mobjDisplayedPayee may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+                mobjDisplayedPayee = Nothing
+                txtPayee.Text = ""
+                txtAddress1.Text = ""
+                txtAddress2.Text = ""
+                txtCity.Text = ""
+                txtState.Text = ""
+                txtZip.Text = ""
+                txtAccount.Text = ""
+                txtBank.Text = ""
+                txtMinAmount.Text = ""
+                txtMaxAmount.Text = ""
+                txtNumber.Text = ""
+                txtAmount.Text = ""
+                txtMemo.Text = ""
+                cboCategory.SelectedIndex = -1
+                cboBudget.SelectedIndex = -1
+                cboNarrowMethod.SelectedIndex = -1
+            End If
 
-        Exit Sub
-ErrorHandler:
-        NestedError("ShowPayeeList")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Sub SyncDisplay(ByVal objItem As System.Windows.Forms.ListViewItem)
-        On Error GoTo ErrorHandler
+        Try
 
-        lvwPayees.Refresh()
-        System.Windows.Forms.Application.DoEvents()
-        'UPGRADE_WARNING: MSComctlLib.ListItem method objItem.EnsureVisible has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
-        objItem.EnsureVisible()
-        System.Windows.Forms.Application.DoEvents()
-        lvwPayees.FocusedItem = objItem
+            lvwPayees.Refresh()
+            System.Windows.Forms.Application.DoEvents()
+            'UPGRADE_WARNING: MSComctlLib.ListItem method objItem.EnsureVisible has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
+            objItem.EnsureVisible()
+            System.Windows.Forms.Application.DoEvents()
+            lvwPayees.FocusedItem = objItem
 
-        Exit Sub
-ErrorHandler:
-        NestedError("SyncDisplay")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Sub ShowSelectedPayee()
-        On Error GoTo ErrorHandler
+        Try
 
-        mobjDisplayedPayee = lvwPayees.FocusedItem
-        melmPayeeToSave = mcolPayees.Item(CShort(mobjDisplayedPayee.Tag))
-        txtPayee.Text = strPayeeAttrib("Output")
-        txtAddress1.Text = strPayeeChild("Address1")
-        txtAddress2.Text = strPayeeChild("Address2")
-        txtCity.Text = strPayeeChild("City")
-        txtState.Text = strPayeeChild("State")
-        txtZip.Text = strPayeeChild("Zip")
-        txtAccount.Text = strPayeeChild("Account")
-        txtBank.Text = strPayeeAttrib("Input")
-        txtMinAmount.Text = strPayeeAttrib("Min")
-        txtMaxAmount.Text = strPayeeAttrib("Max")
-        txtNumber.Text = strPayeeChild("Num")
-        txtAmount.Text = strPayeeChild("Amount")
-        txtMemo.Text = strPayeeChild("Memo")
-        SetComboBox(cboCategory, strPayeeChild("Cat"))
-        SetComboBox(cboBudget, strPayeeChild("Budget"))
-        SetComboBox(cboNarrowMethod, strPayeeChild("NarrowMethod"))
+            mobjDisplayedPayee = lvwPayees.FocusedItem
+            melmPayeeToSave = mcolPayees.Item(CShort(mobjDisplayedPayee.Tag))
+            txtPayee.Text = strPayeeAttrib("Output")
+            txtAddress1.Text = strPayeeChild("Address1")
+            txtAddress2.Text = strPayeeChild("Address2")
+            txtCity.Text = strPayeeChild("City")
+            txtState.Text = strPayeeChild("State")
+            txtZip.Text = strPayeeChild("Zip")
+            txtAccount.Text = strPayeeChild("Account")
+            txtBank.Text = strPayeeAttrib("Input")
+            txtMinAmount.Text = strPayeeAttrib("Min")
+            txtMaxAmount.Text = strPayeeAttrib("Max")
+            txtNumber.Text = strPayeeChild("Num")
+            txtAmount.Text = strPayeeChild("Amount")
+            txtMemo.Text = strPayeeChild("Memo")
+            SetComboBox(cboCategory, strPayeeChild("Cat"))
+            SetComboBox(cboBudget, strPayeeChild("Budget"))
+            SetComboBox(cboNarrowMethod, strPayeeChild("NarrowMethod"))
 
-        Exit Sub
-ErrorHandler:
-        NestedError("ShowSelectedPayee")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Function strPayeeAttrib(ByVal strName As String) As String
@@ -290,21 +299,22 @@ ErrorHandler:
     End Sub
 
     Private Function blnValidateAndCopyPayeeToXML() As Boolean
-        On Error GoTo ErrorHandler
+        Try
 
-        blnValidateAndCopyPayeeToXML = False
-        If Not mobjDisplayedPayee Is Nothing Then
-            If blnDisplayedPayeeInvalid() Then
-                lvwPayees.FocusedItem = mobjDisplayedPayee
-                blnValidateAndCopyPayeeToXML = True
-                Exit Function
+            blnValidateAndCopyPayeeToXML = False
+            If Not mobjDisplayedPayee Is Nothing Then
+                If blnDisplayedPayeeInvalid() Then
+                    lvwPayees.FocusedItem = mobjDisplayedPayee
+                    blnValidateAndCopyPayeeToXML = True
+                    Exit Function
+                End If
+                CopyPayeeToXML()
             End If
-            CopyPayeeToXML()
-        End If
 
-        Exit Function
-ErrorHandler:
-        NestedError("blnValidateAndCopyPayeeToXML")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private Function blnDisplayedPayeeInvalid() As Boolean
@@ -337,96 +347,97 @@ ErrorHandler:
     End Function
 
     Private Sub CopyPayeeToXML()
-        On Error GoTo ErrorHandler
+        Try
 
-        gDisablePayeeListSorting(lvwPayees)
+            gDisablePayeeListSorting(lvwPayees)
 
-        melmPayeeToSave.Text = vbCrLf
+            melmPayeeToSave.Text = vbCrLf
 
-        'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-        If mobjDisplayedPayee.SubItems.Count > 1 Then
-            mobjDisplayedPayee.SubItems(1).Text = txtPayee.Text
-        Else
-            mobjDisplayedPayee.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, txtPayee.Text))
-        End If
-        melmPayeeToSave.SetAttribute("Output", txtPayee.Text)
-
-        SaveChildElement(txtAddress1.Text, "Address1")
-        SaveChildElement(txtAddress2.Text, "Address2")
-        SaveChildElement(txtCity.Text, "City")
-        SaveChildElement(txtState.Text, "State")
-        SaveChildElement(txtZip.Text, "Zip")
-        SaveChildElement(txtAccount.Text, "Account")
-
-        melmPayeeToSave.SetAttribute("Input", txtBank.Text)
-
-        If txtMinAmount.Text = "" Then
-            melmPayeeToSave.RemoveAttribute("Min")
-            melmPayeeToSave.RemoveAttribute("Max")
-        Else
-            melmPayeeToSave.SetAttribute("Min", txtMinAmount.Text)
-            melmPayeeToSave.SetAttribute("Max", txtMaxAmount.Text)
-        End If
-
-        mobjDisplayedPayee.Text = txtNumber.Text
-        SaveChildElement(txtNumber.Text, "Num")
-
-        'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-        If mobjDisplayedPayee.SubItems.Count > 3 Then
-            mobjDisplayedPayee.SubItems(3).Text = txtAmount.Text
-        Else
-            mobjDisplayedPayee.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, txtAmount.Text))
-        End If
-        SaveChildElement(txtAmount.Text, "Amount")
-
-        'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-        If mobjDisplayedPayee.SubItems.Count > 5 Then
-            mobjDisplayedPayee.SubItems(5).Text = txtMemo.Text
-        Else
-            mobjDisplayedPayee.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, txtMemo.Text))
-        End If
-        SaveChildElement(txtMemo.Text, "Memo")
-
-        If cboCategory.SelectedIndex = -1 Then
             'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If mobjDisplayedPayee.SubItems.Count > 2 Then
-                mobjDisplayedPayee.SubItems(2).Text = ""
+            If mobjDisplayedPayee.SubItems.Count > 1 Then
+                mobjDisplayedPayee.SubItems(1).Text = txtPayee.Text
             Else
-                mobjDisplayedPayee.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
+                mobjDisplayedPayee.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, txtPayee.Text))
             End If
-        Else
-            'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If mobjDisplayedPayee.SubItems.Count > 2 Then
-                mobjDisplayedPayee.SubItems(2).Text = cboCategory.Text
-            Else
-                mobjDisplayedPayee.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, cboCategory.Text))
-            End If
-        End If
-        SaveChildElement(cboCategory.Text, "Cat")
+            melmPayeeToSave.SetAttribute("Output", txtPayee.Text)
 
-        If cboBudget.SelectedIndex = -1 Then
-            'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If mobjDisplayedPayee.SubItems.Count > 4 Then
-                mobjDisplayedPayee.SubItems(4).Text = ""
-            Else
-                mobjDisplayedPayee.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
-            End If
-        Else
-            'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If mobjDisplayedPayee.SubItems.Count > 4 Then
-                mobjDisplayedPayee.SubItems(4).Text = cboBudget.Text
-            Else
-                mobjDisplayedPayee.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, cboBudget.Text))
-            End If
-        End If
-        SaveChildElement(cboBudget.Text, "Budget")
-        SaveChildElement(cboNarrowMethod.Text, "NarrowMethod")
+            SaveChildElement(txtAddress1.Text, "Address1")
+            SaveChildElement(txtAddress2.Text, "Address2")
+            SaveChildElement(txtCity.Text, "City")
+            SaveChildElement(txtState.Text, "State")
+            SaveChildElement(txtZip.Text, "Zip")
+            SaveChildElement(txtAccount.Text, "Account")
 
-        gSortPayeeListByName(lvwPayees)
+            melmPayeeToSave.SetAttribute("Input", txtBank.Text)
 
-        Exit Sub
-ErrorHandler:
-        NestedError("CopyPayeeToXML")
+            If txtMinAmount.Text = "" Then
+                melmPayeeToSave.RemoveAttribute("Min")
+                melmPayeeToSave.RemoveAttribute("Max")
+            Else
+                melmPayeeToSave.SetAttribute("Min", txtMinAmount.Text)
+                melmPayeeToSave.SetAttribute("Max", txtMaxAmount.Text)
+            End If
+
+            mobjDisplayedPayee.Text = txtNumber.Text
+            SaveChildElement(txtNumber.Text, "Num")
+
+            'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+            If mobjDisplayedPayee.SubItems.Count > 3 Then
+                mobjDisplayedPayee.SubItems(3).Text = txtAmount.Text
+            Else
+                mobjDisplayedPayee.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, txtAmount.Text))
+            End If
+            SaveChildElement(txtAmount.Text, "Amount")
+
+            'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+            If mobjDisplayedPayee.SubItems.Count > 5 Then
+                mobjDisplayedPayee.SubItems(5).Text = txtMemo.Text
+            Else
+                mobjDisplayedPayee.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, txtMemo.Text))
+            End If
+            SaveChildElement(txtMemo.Text, "Memo")
+
+            If cboCategory.SelectedIndex = -1 Then
+                'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                If mobjDisplayedPayee.SubItems.Count > 2 Then
+                    mobjDisplayedPayee.SubItems(2).Text = ""
+                Else
+                    mobjDisplayedPayee.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
+                End If
+            Else
+                'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                If mobjDisplayedPayee.SubItems.Count > 2 Then
+                    mobjDisplayedPayee.SubItems(2).Text = cboCategory.Text
+                Else
+                    mobjDisplayedPayee.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, cboCategory.Text))
+                End If
+            End If
+            SaveChildElement(cboCategory.Text, "Cat")
+
+            If cboBudget.SelectedIndex = -1 Then
+                'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                If mobjDisplayedPayee.SubItems.Count > 4 Then
+                    mobjDisplayedPayee.SubItems(4).Text = ""
+                Else
+                    mobjDisplayedPayee.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
+                End If
+            Else
+                'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                If mobjDisplayedPayee.SubItems.Count > 4 Then
+                    mobjDisplayedPayee.SubItems(4).Text = cboBudget.Text
+                Else
+                    mobjDisplayedPayee.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, cboBudget.Text))
+                End If
+            End If
+            SaveChildElement(cboBudget.Text, "Budget")
+            SaveChildElement(cboNarrowMethod.Text, "NarrowMethod")
+
+            gSortPayeeListByName(lvwPayees)
+
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Sub SaveChildElement(ByVal strValue As String, ByVal strChildName As String)
@@ -438,13 +449,5 @@ ErrorHandler:
             melmPayeeToSave.AppendChild(elmChild)
         End If
         elmChild.Text = Trim(strValue)
-    End Sub
-
-    Private Sub NestedError(ByVal strRoutine As String)
-        gNestedErrorTrap("PayeeListForm." & strRoutine)
-    End Sub
-
-    Private Sub TopError(ByVal strRoutine As String)
-        gTopErrorTrap("PayeeListForm." & strRoutine)
     End Sub
 End Class

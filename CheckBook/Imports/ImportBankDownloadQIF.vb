@@ -27,28 +27,29 @@ Public Class ImportBankDownloadQIF
     Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements ITrxImport.blnOpenSource
         Dim strFirstLine As String
 
-        On Error GoTo ErrorHandler
+        Try
 
-        mobjUtil = New ImportUtilities
-        mobjUtil.Init(objAccount_)
-        mobjUtil.LoadTrxTypeTable()
+            mobjUtil = New ImportUtilities
+            mobjUtil.Init(objAccount_)
+            mobjUtil.LoadTrxTypeTable()
 
-        strFirstLine = mobjFile.ReadLine()
-        If strFirstLine = "!Type:Bank" Then
-            mobjUtil.blnMakeFakeTrx = False
-        ElseIf strFirstLine = "!Type:Docs" Then
-            mobjUtil.blnMakeFakeTrx = True
-        Else
-            MsgBox("File is not a QIF file.", MsgBoxStyle.Critical)
-            mobjFile.Close()
+            strFirstLine = mobjFile.ReadLine()
+            If strFirstLine = "!Type:Bank" Then
+                mobjUtil.blnMakeFakeTrx = False
+            ElseIf strFirstLine = "!Type:Docs" Then
+                mobjUtil.blnMakeFakeTrx = True
+            Else
+                MsgBox("File is not a QIF file.", MsgBoxStyle.Critical)
+                mobjFile.Close()
+                Exit Function
+            End If
+
+            ITrxImport_blnOpenSource = True
+
             Exit Function
-        End If
-
-        ITrxImport_blnOpenSource = True
-
-        Exit Function
-ErrorHandler:
-        NestedError("ITrxImport_blnOpenSource")
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private Sub ITrxImport_CloseSource() Implements ITrxImport.CloseSource
@@ -63,40 +64,42 @@ ErrorHandler:
         Dim strPrefix As String
         Dim strDate As String
 
-        On Error GoTo ErrorHandler
-
         ITrxImport_objNextTrx = Nothing
-        mobjUtil.ClearSavedTrxData()
-        Do
-            strLine = mobjFile.ReadLine()
-            If strLine Is Nothing Then
-                Exit Do
-            End If
-            strPrefix = Left(strLine, 1)
-            Select Case strPrefix
-                Case "^"
-                    ITrxImport_objNextTrx = mobjUtil.objMakeTrx()
-                    Exit Do
-                Case "D"
-                    strDate = Replace(Mid(strLine, 2), "' ", "/200")
-                    strDate = Replace(strDate, "'", "/")
-                    mobjUtil.strTrxDate = strDate
-                Case "P"
-                    mobjUtil.strTrxPayee = Mid(strLine, 2)
-                Case "T"
-                    mobjUtil.strTrxAmount = Mid(strLine, 2)
-                Case "M"
-                    mobjUtil.strTrxMemo = Mid(strLine, 2)
-                Case "N"
-                    mobjUtil.strTrxNumber = Mid(strLine, 2)
-                Case Else
-                    gRaiseError("Unrecognized input line: " & strLine)
-            End Select
-        Loop
+        Try
 
-        Exit Function
-ErrorHandler:
-        NestedError("ITrxImport_objNextTrx")
+            ITrxImport_objNextTrx = Nothing
+            mobjUtil.ClearSavedTrxData()
+            Do
+                strLine = mobjFile.ReadLine()
+                If strLine Is Nothing Then
+                    Exit Do
+                End If
+                strPrefix = Left(strLine, 1)
+                Select Case strPrefix
+                    Case "^"
+                        ITrxImport_objNextTrx = mobjUtil.objMakeTrx()
+                        Exit Do
+                    Case "D"
+                        strDate = Replace(Mid(strLine, 2), "' ", "/200")
+                        strDate = Replace(strDate, "'", "/")
+                        mobjUtil.strTrxDate = strDate
+                    Case "P"
+                        mobjUtil.strTrxPayee = Mid(strLine, 2)
+                    Case "T"
+                        mobjUtil.strTrxAmount = Mid(strLine, 2)
+                    Case "M"
+                        mobjUtil.strTrxMemo = Mid(strLine, 2)
+                    Case "N"
+                        mobjUtil.strTrxNumber = Mid(strLine, 2)
+                    Case Else
+                        gRaiseError("Unrecognized input line: " & strLine)
+                End Select
+            Loop
+
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private ReadOnly Property ITrxImport_strSource() As String Implements ITrxImport.strSource
@@ -104,8 +107,4 @@ ErrorHandler:
             ITrxImport_strSource = mstrFile
         End Get
     End Property
-
-    Private Sub NestedError(ByVal strRoutine As String)
-        gNestedErrorTrap("ImportBankDownloadQIF." & strRoutine)
-    End Sub
 End Class

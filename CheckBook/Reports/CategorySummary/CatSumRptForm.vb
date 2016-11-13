@@ -35,124 +35,120 @@ Friend Class CatSumRptForm
 		Me.Show()
 		
 	End Sub
-	
-	Private Sub TopError(ByVal strRoutine As String)
-		gTopErrorTrap("CatSumRptForm." & strRoutine)
-	End Sub
-	
-	Private Sub NestedError(ByVal strRoutine As String)
-		gNestedErrorTrap("CatSumRptForm." & strRoutine)
-	End Sub
-	
+
 	Private Sub CatSumRptForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
 		
-		On Error GoTo ErrorHandler
-		
-		'Force the window to the size specified in the IDE, because MDI child windows
-		'are not initially sized the same as in the IDE.
-        Me.Width = 435
-        Me.Height = 550
-		
-        mblnLoadComplete = True
-		
-		LoadUI()
-		
-		Exit Sub
-ErrorHandler: 
-		TopError("Form_Load")
-	End Sub
+        Try
+
+            'Force the window to the size specified in the IDE, because MDI child windows
+            'are not initially sized the same as in the IDE.
+            Me.Width = 435
+            Me.Height = 550
+
+            mblnLoadComplete = True
+
+            LoadUI()
+
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
+    End Sub
 	
 	Private Sub LoadUI()
 		Dim strOutFile As String
 		
-		On Error GoTo ErrorHandler
-		
-		strOutFile = gstrReportPath() & "\CatSum.rpt"
-		mintOutFile = FreeFile
-		FileOpen(mintOutFile, strOutFile, OpenMode.Output)
-		ShowSpecs(mcolSelectedAccounts, mdatStart, mdatEnd, mblnIncludeFake, mblnIncludeGenerated)
-		LoadGrid()
-		FileClose(mintOutFile)
-		mintOutFile = 0
-		
-		MsgBox("Report also written to """ & strOutFile & """.")
-		
-		Exit Sub
-ErrorHandler: 
-		If mintOutFile <> 0 Then
-			FileClose(mintOutFile)
-			mintOutFile = 0
-		End If
-		NestedError("LoadUI")
-	End Sub
+        Try
+
+            strOutFile = gstrReportPath() & "\CatSum.rpt"
+            mintOutFile = FreeFile()
+            FileOpen(mintOutFile, strOutFile, OpenMode.Output)
+            ShowSpecs(mcolSelectedAccounts, mdatStart, mdatEnd, mblnIncludeFake, mblnIncludeGenerated)
+            LoadGrid()
+            FileClose(mintOutFile)
+            mintOutFile = 0
+
+            MsgBox("Report also written to """ & strOutFile & """.")
+
+            Exit Sub
+        Catch ex As Exception
+            If mintOutFile <> 0 Then
+                FileClose(mintOutFile)
+                mintOutFile = 0
+            End If
+            gNestedException(ex)
+        End Try
+    End Sub
 
 	Private Sub ShowSpecs(ByVal colSelectedAccounts As Collection, ByVal datStart As Date, ByVal datEnd As Date, ByVal blnIncludeFake As Boolean, ByVal blnIncludeGenerated As Boolean)
 		
 		Dim objAcct As Account
 		
-		On Error GoTo ErrorHandler
-		
-		WriteRptLine("Totals By Category Report")
-		WriteRptLine("-------------------------")
-		WriteRptLine("")
-        WriteRptLine("Printed On: " & gstrFormatDate(Now, "MM/dd/yyyy hh:mmtt"))
-		WriteRptLine("")
-		WriteRptLine("Accounts Included:")
-		
-		With lstAccounts
-			.Items.Clear()
-			For	Each objAcct In colSelectedAccounts
-				.Items.Add(objAcct.strTitle)
-				WriteRptLine("  " & objAcct.strTitle)
-			Next objAcct
-		End With
-		WriteRptLine("")
-		
-        txtStartDate.Text = gstrFormatDate(datStart)
-        txtEndDate.Text = gstrFormatDate(datEnd)
-		chkIncludeFake.CheckState = IIf(blnIncludeFake, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
-		chkIncludeGenerated.CheckState = IIf(blnIncludeGenerated, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
-		
-        WriteRptLine("Start Date:    " & gstrFormatDate(datStart))
-        WriteRptLine("End Date:      " & gstrFormatDate(datEnd))
-		WriteRptLine("Fake Trx:      " & IIf(blnIncludeFake, "Yes", "No"))
-		WriteRptLine("Generated Trx: " & IIf(blnIncludeGenerated, "Yes", "No"))
-		
-		Exit Sub
-ErrorHandler: 
-		NestedError("ShowSpecs")
-	End Sub
+        Try
+
+            WriteRptLine("Totals By Category Report")
+            WriteRptLine("-------------------------")
+            WriteRptLine("")
+            WriteRptLine("Printed On: " & gstrFormatDate(Now, "MM/dd/yyyy hh:mmtt"))
+            WriteRptLine("")
+            WriteRptLine("Accounts Included:")
+
+            With lstAccounts
+                .Items.Clear()
+                For Each objAcct In colSelectedAccounts
+                    .Items.Add(objAcct.strTitle)
+                    WriteRptLine("  " & objAcct.strTitle)
+                Next objAcct
+            End With
+            WriteRptLine("")
+
+            txtStartDate.Text = gstrFormatDate(datStart)
+            txtEndDate.Text = gstrFormatDate(datEnd)
+            chkIncludeFake.CheckState = IIf(blnIncludeFake, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
+            chkIncludeGenerated.CheckState = IIf(blnIncludeGenerated, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
+
+            WriteRptLine("Start Date:    " & gstrFormatDate(datStart))
+            WriteRptLine("End Date:      " & gstrFormatDate(datEnd))
+            WriteRptLine("Fake Trx:      " & IIf(blnIncludeFake, "Yes", "No"))
+            WriteRptLine("Generated Trx: " & IIf(blnIncludeGenerated, "Yes", "No"))
+
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
+    End Sub
 	
 	Private Sub LoadGrid()
 		Dim intCatIndex As Short
 		Dim intCatNameWidth As Short
 		
-		On Error GoTo ErrorHandler
-		
-        mintMaxCatNameWidth = 0
-		For intCatIndex = 1 To UBound(maudtCatTotals)
-			intCatNameWidth = Len(mobjCats.strValue1(intCatIndex))
-			If intCatNameWidth > mintMaxCatNameWidth Then
-				mintMaxCatNameWidth = intCatNameWidth
-			End If
-		Next 
-		'Add space for the "Total" prefix, assuming it could be applied to the longest
-		'even though that is very unlikely but we have room to spare.
-		mintMaxCatNameWidth = mintMaxCatNameWidth + 12
-		WriteRptLine("")
-		WriteRptLine(VB.Left("Category" & Space(mintMaxCatNameWidth), mintMaxCatNameWidth) & Space(mintAMOUNT_WIDTH - Len("Amount")) & "Amount")
-		WriteRptLine(New String("-", mintMaxCatNameWidth) & " " & New String("-", mintAMOUNT_WIDTH - 1))
+        Try
 
-        mcolResultRows = New List(Of ResultRow)
-		intCatIndex = 1
-        curProcessChildren(intCatIndex, 0, "Grand Total", 0)
-        grdResults.AutoGenerateColumns = False
-        grdResults.DataSource = mcolResultRows
+            mintMaxCatNameWidth = 0
+            For intCatIndex = 1 To UBound(maudtCatTotals)
+                intCatNameWidth = Len(mobjCats.strValue1(intCatIndex))
+                If intCatNameWidth > mintMaxCatNameWidth Then
+                    mintMaxCatNameWidth = intCatNameWidth
+                End If
+            Next
+            'Add space for the "Total" prefix, assuming it could be applied to the longest
+            'even though that is very unlikely but we have room to spare.
+            mintMaxCatNameWidth = mintMaxCatNameWidth + 12
+            WriteRptLine("")
+            WriteRptLine(VB.Left("Category" & Space(mintMaxCatNameWidth), mintMaxCatNameWidth) & Space(mintAMOUNT_WIDTH - Len("Amount")) & "Amount")
+            WriteRptLine(New String("-", mintMaxCatNameWidth) & " " & New String("-", mintAMOUNT_WIDTH - 1))
 
-		Exit Sub
-ErrorHandler: 
-		NestedError("LoadGrid")
-	End Sub
+            mcolResultRows = New List(Of ResultRow)
+            intCatIndex = 1
+            curProcessChildren(intCatIndex, 0, "Grand Total", 0)
+            grdResults.AutoGenerateColumns = False
+            grdResults.DataSource = mcolResultRows
+
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
+    End Sub
 	
 	'Description:
 	'   Process categories with the specified nesting level starting at the specified
@@ -168,34 +164,35 @@ ErrorHandler:
 		Dim curAmount As Decimal
 		Dim curChildTotal As Decimal
 		
-		On Error GoTo ErrorHandler
-		
-		Do 
-			If intCatIndex > UBound(maudtCatTotals) Then
-				Exit Do
-			End If
-			If maudtCatTotals(intCatIndex).intNestingLevel < intNestingLevel Then
-				Exit Do
-			ElseIf maudtCatTotals(intCatIndex).intNestingLevel = intNestingLevel Then 
-				strCatName = mobjCats.strValue1(intCatIndex)
-				curAmount = maudtCatTotals(intCatIndex).curAmount
-				curChildTotal = curChildTotal + curAmount
-				AddOutputRow(strCatName, curAmount, intNestingLevel)
-				intCatIndex = intCatIndex + 1
-			ElseIf maudtCatTotals(intCatIndex).intNestingLevel = intNestingLevel + 1 Then 
-				curChildTotal = curChildTotal + curProcessChildren(intCatIndex, intNestingLevel + 1, "-- Total -- " & strCatName, curAmount)
-			Else
-				gRaiseError("Improper nesting of categories")
-			End If
-		Loop 
-		'Output cumulative total
-		AddOutputRow(strLabel, curChildTotal + curParentAmount, intNestingLevel - 1)
-		curProcessChildren = curChildTotal
-		
-		Exit Function
-ErrorHandler: 
-		NestedError("curProcessChildren")
-	End Function
+        Try
+
+            Do
+                If intCatIndex > UBound(maudtCatTotals) Then
+                    Exit Do
+                End If
+                If maudtCatTotals(intCatIndex).intNestingLevel < intNestingLevel Then
+                    Exit Do
+                ElseIf maudtCatTotals(intCatIndex).intNestingLevel = intNestingLevel Then
+                    strCatName = mobjCats.strValue1(intCatIndex)
+                    curAmount = maudtCatTotals(intCatIndex).curAmount
+                    curChildTotal = curChildTotal + curAmount
+                    AddOutputRow(strCatName, curAmount, intNestingLevel)
+                    intCatIndex = intCatIndex + 1
+                ElseIf maudtCatTotals(intCatIndex).intNestingLevel = intNestingLevel + 1 Then
+                    curChildTotal = curChildTotal + curProcessChildren(intCatIndex, intNestingLevel + 1, "-- Total -- " & strCatName, curAmount)
+                Else
+                    gRaiseError("Improper nesting of categories")
+                End If
+            Loop
+            'Output cumulative total
+            AddOutputRow(strLabel, curChildTotal + curParentAmount, intNestingLevel - 1)
+            curProcessChildren = curChildTotal
+
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
+    End Function
 	
 	Private Sub AddOutputRow(ByVal strLabel As String, ByVal curAmount As Decimal, ByVal intNestingLevel As Short)
 		
@@ -241,28 +238,29 @@ ErrorHandler:
 	End Sub
 	
 	Private Sub cmdResultToClipboard_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdResultToClipboard.Click
-		On Error GoTo ErrorHandler
-		
-		Dim intIndex As Short
-        Dim strResult As String = ""
-		Dim strCatCode As String
-		Dim strCatName As String
-		Dim strLine As String
-		
-		For intIndex = gintLBOUND1 To UBound(maudtCatTotals)
-			strCatCode = mobjCats.strKey(intIndex)
-			strCatName = mobjCats.strValue1(intIndex)
-			strLine = strCatName & vbTab & maudtCatTotals(intIndex).curAmount & vbTab & strCatCode
-			strResult = strResult & strLine & vbCrLf
-		Next 
-		
-		My.Computer.Clipboard.Clear()
-		My.Computer.Clipboard.SetText(strResult)
-		
-		MsgBox("Results copied for clipboard.")
-		
-		Exit Sub
-ErrorHandler: 
-		TopError("cmdResultToClipboard")
-	End Sub
+        Try
+
+            Dim intIndex As Short
+            Dim strResult As String = ""
+            Dim strCatCode As String
+            Dim strCatName As String
+            Dim strLine As String
+
+            For intIndex = gintLBOUND1 To UBound(maudtCatTotals)
+                strCatCode = mobjCats.strKey(intIndex)
+                strCatName = mobjCats.strValue1(intIndex)
+                strLine = strCatName & vbTab & maudtCatTotals(intIndex).curAmount & vbTab & strCatCode
+                strResult = strResult & strLine & vbCrLf
+            Next
+
+            My.Computer.Clipboard.Clear()
+            My.Computer.Clipboard.SetText(strResult)
+
+            MsgBox("Results copied for clipboard.")
+
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
+    End Sub
 End Class

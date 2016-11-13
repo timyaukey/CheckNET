@@ -25,52 +25,54 @@ Friend Class ListEditorForm
 
         Dim frm As System.Windows.Forms.Form
 
-        On Error GoTo ErrorHandler
+        Try
 
-        For Each frm In gcolForms()
-            'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            If TypeOf frm Is RegisterForm Then
-                '
+            For Each frm In gcolForms()
                 'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            ElseIf TypeOf frm Is CBMainForm Then
-                '
-            Else
-                MsgBox("Lists may not be edited if any windows other than registers " & "are open.", MsgBoxStyle.Critical)
-                Exit Sub
+                If TypeOf frm Is RegisterForm Then
+                    '
+                    'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                ElseIf TypeOf frm Is CBMainForm Then
+                    '
+                Else
+                    MsgBox("Lists may not be edited if any windows other than registers " & "are open.", MsgBoxStyle.Critical)
+                    Exit Sub
+                End If
+            Next frm
+            Me.Text = strCaption
+            mlngListType = lngListType
+            mobjList = objList
+            mstrFile = strFile
+            mblnModified = False
+            mobjAccount = objAccount
+            If (mobjAccount Is Nothing) <> (mlngListType <> ListType.glngLIST_TYPE_REPEAT) Then
+                gRaiseError("Invalid account passed as arg")
             End If
-        Next frm
-        Me.Text = strCaption
-        mlngListType = lngListType
-        mobjList = objList
-        mstrFile = strFile
-        mblnModified = False
-        mobjAccount = objAccount
-        If (mobjAccount Is Nothing) <> (mlngListType <> ListType.glngLIST_TYPE_REPEAT) Then
-            gRaiseError("Invalid account passed as arg")
-        End If
-        LoadList()
-        Me.ShowDialog()
+            LoadList()
+            Me.ShowDialog()
 
-        Exit Sub
-ErrorHandler:
-        NestedError("ShowMe")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Sub cmdSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSave.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        gSaveChangedAccounts()
-        RebuildTranslator()
-        WriteFile()
-        gBuildShortTermsCatKeys()
-        gFindPlaceholderBudget()
-        MsgBox("Updated list has been saved. The new names will not appear in " & "register windows until you close and re-open those windows.", MsgBoxStyle.Information)
-        mblnModified = False
-        Me.Close()
+            gSaveChangedAccounts()
+            RebuildTranslator()
+            WriteFile()
+            gBuildShortTermsCatKeys()
+            gFindPlaceholderBudget()
+            MsgBox("Updated list has been saved. The new names will not appear in " & "register windows until you close and re-open those windows.", MsgBoxStyle.Information)
+            mblnModified = False
+            Me.Close()
 
-        Exit Sub
-ErrorHandler:
-        TopError("cmdSave_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdDiscard_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdDiscard.Click
@@ -80,19 +82,20 @@ ErrorHandler:
     Private Sub ListEditorForm_FormClosing(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         Dim Cancel As Boolean = eventArgs.Cancel
         Dim UnloadMode As System.Windows.Forms.CloseReason = eventArgs.CloseReason
-        On Error GoTo ErrorHandler
+        Try
 
-        If mblnModified Then
-            If MsgBox("Do you wish to discard changes made on this window?", MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
-                Cancel = 1
-                Exit Sub
+            If mblnModified Then
+                If MsgBox("Do you wish to discard changes made on this window?", MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                    Cancel = 1
+                    Exit Sub
+                End If
             End If
-        End If
 
-        Exit Sub
-ErrorHandler:
-        TopError("Form_QueryUnload")
-        eventArgs.Cancel = Cancel
+            Exit Sub
+        Catch ex As Exception
+            eventArgs.Cancel = Cancel
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdNew_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNew.Click
@@ -101,27 +104,28 @@ ErrorHandler:
         Dim strKey As String
         Dim strError As String = ""
 
-        On Error GoTo ErrorHandler
+        Try
 
-        strElement = Trim(InputBox("Name to add:"))
-        If strElement = "" Then
-            Exit Sub
-        End If
-        intKey = intGetUnusedKey()
-        strKey = strMakeKey(intKey)
-        If strKey = "" Then
-            MsgBox("Too many entries in list.", MsgBoxStyle.Critical)
-            Exit Sub
-        End If
-        If blnInsertElement(strElement, intKey, False, strError) Then
-            MsgBox(strError, MsgBoxStyle.Critical)
-            Exit Sub
-        End If
-        mblnModified = True
+            strElement = Trim(InputBox("Name to add:"))
+            If strElement = "" Then
+                Exit Sub
+            End If
+            intKey = intGetUnusedKey()
+            strKey = strMakeKey(intKey)
+            If strKey = "" Then
+                MsgBox("Too many entries in list.", MsgBoxStyle.Critical)
+                Exit Sub
+            End If
+            If blnInsertElement(strElement, intKey, False, strError) Then
+                MsgBox(strError, MsgBoxStyle.Critical)
+                Exit Sub
+            End If
+            mblnModified = True
 
-        Exit Sub
-ErrorHandler:
-        TopError("cmdNew_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdChange_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdChange.Click
@@ -135,97 +139,99 @@ ErrorHandler:
         Dim intMatchLen As Short
         Dim strNewChildElement As String
 
-        On Error GoTo ErrorHandler
+        Try
 
-        'Get the new name, and validate.
-        intIndex = lstElements.SelectedIndex
-        If intIndex = -1 Then
-            MsgBox("Please select the list entry to change.", MsgBoxStyle.Critical)
-            Exit Sub
-        End If
-        strOldElement = gstrVB6GetItemString(lstElements, intIndex)
-        strNewElement = InputBox("Edit list entry name:", , strOldElement)
-        If strNewElement = "" Or strNewElement = strOldElement Then
-            Exit Sub
-        End If
-
-        'Delete the old element, and insert the new one with the same key.
-        intKey = gintVB6GetItemData(lstElements, intIndex)
-        'Always delete first, so insert isn't confused by finding the old entry.
-        DeleteElement(intIndex)
-        If blnInsertElement(strNewElement, intKey, False, strError) Then
-            'Insert failed, so put back the entry we just deleted.
-            lstElements.Items.Insert(intIndex, strOldElement)
-            gVB6SetItemData(lstElements, intIndex, intKey)
-            MsgBox(strError, MsgBoxStyle.Critical)
-            Exit Sub
-        End If
-
-        'Change all children of the changed entry.
-        strChildMatchPrefix = UCase(strOldElement & ":")
-        intMatchLen = Len(strChildMatchPrefix)
-        Do
-            blnFoundChild = False
-            For intIndex = 0 To lstElements.Items.Count - 1
-                If UCase(VB.Left(gstrVB6GetItemString(lstElements, intIndex), intMatchLen)) = strChildMatchPrefix Then
-                    intKey = gintVB6GetItemData(lstElements, intIndex)
-                    strNewChildElement = strNewElement & ":" & Mid(gstrVB6GetItemString(lstElements, intIndex), intMatchLen + 1)
-                    DeleteElement(intIndex)
-                    If blnInsertElement(strNewChildElement, intKey, False, strError) Then
-                        gRaiseError("Unexpected error renaming children: " & strError)
-                    End If
-                    blnFoundChild = True
-                    Exit For
-                End If
-            Next
-            If Not blnFoundChild Then
-                Exit Do
+            'Get the new name, and validate.
+            intIndex = lstElements.SelectedIndex
+            If intIndex = -1 Then
+                MsgBox("Please select the list entry to change.", MsgBoxStyle.Critical)
+                Exit Sub
             End If
-        Loop
-        mblnModified = True
+            strOldElement = gstrVB6GetItemString(lstElements, intIndex)
+            strNewElement = InputBox("Edit list entry name:", , strOldElement)
+            If strNewElement = "" Or strNewElement = strOldElement Then
+                Exit Sub
+            End If
 
-        Exit Sub
-ErrorHandler:
-        TopError("cmdChange_Click")
+            'Delete the old element, and insert the new one with the same key.
+            intKey = gintVB6GetItemData(lstElements, intIndex)
+            'Always delete first, so insert isn't confused by finding the old entry.
+            DeleteElement(intIndex)
+            If blnInsertElement(strNewElement, intKey, False, strError) Then
+                'Insert failed, so put back the entry we just deleted.
+                lstElements.Items.Insert(intIndex, strOldElement)
+                gVB6SetItemData(lstElements, intIndex, intKey)
+                MsgBox(strError, MsgBoxStyle.Critical)
+                Exit Sub
+            End If
+
+            'Change all children of the changed entry.
+            strChildMatchPrefix = UCase(strOldElement & ":")
+            intMatchLen = Len(strChildMatchPrefix)
+            Do
+                blnFoundChild = False
+                For intIndex = 0 To lstElements.Items.Count - 1
+                    If UCase(VB.Left(gstrVB6GetItemString(lstElements, intIndex), intMatchLen)) = strChildMatchPrefix Then
+                        intKey = gintVB6GetItemData(lstElements, intIndex)
+                        strNewChildElement = strNewElement & ":" & Mid(gstrVB6GetItemString(lstElements, intIndex), intMatchLen + 1)
+                        DeleteElement(intIndex)
+                        If blnInsertElement(strNewChildElement, intKey, False, strError) Then
+                            gRaiseError("Unexpected error renaming children: " & strError)
+                        End If
+                        blnFoundChild = True
+                        Exit For
+                    End If
+                Next
+                If Not blnFoundChild Then
+                    Exit Do
+                End If
+            Loop
+            mblnModified = True
+
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdDelete_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdDelete.Click
         Dim strElement As String
         Dim intIndex As Short
 
-        On Error GoTo ErrorHandler
+        Try
 
-        intIndex = lstElements.SelectedIndex
-        If intIndex < 0 Then
-            MsgBox("Please select the list entry to delete.", MsgBoxStyle.Critical)
-            Exit Sub
-        End If
-        strElement = gstrVB6GetItemString(lstElements, intIndex)
-        If InStr(strElement, ":") = 0 Then
-            If Not blnFirstLevelChangesAllowed Then
-                MsgBox("You may not delete top level entries in this list.", MsgBoxStyle.Critical)
+            intIndex = lstElements.SelectedIndex
+            If intIndex < 0 Then
+                MsgBox("Please select the list entry to delete.", MsgBoxStyle.Critical)
                 Exit Sub
             End If
-        End If
-        If blnMultipleLevelsAllowed Then
-            If intIndex < (lstElements.Items.Count - 1) Then
-                If UCase(strElement & ":") = UCase(VB.Left(gstrVB6GetItemString(lstElements, intIndex + 1), Len(strElement) + 1)) Then
-                    MsgBox("You may not delete a list entry with child entries.", MsgBoxStyle.Critical)
+            strElement = gstrVB6GetItemString(lstElements, intIndex)
+            If InStr(strElement, ":") = 0 Then
+                If Not blnFirstLevelChangesAllowed Then
+                    MsgBox("You may not delete top level entries in this list.", MsgBoxStyle.Critical)
                     Exit Sub
                 End If
             End If
-        End If
-        If blnElementIsUsed(intIndex) Then
-            MsgBox("List entry is used by an account.", MsgBoxStyle.Critical)
+            If blnMultipleLevelsAllowed Then
+                If intIndex < (lstElements.Items.Count - 1) Then
+                    If UCase(strElement & ":") = UCase(VB.Left(gstrVB6GetItemString(lstElements, intIndex + 1), Len(strElement) + 1)) Then
+                        MsgBox("You may not delete a list entry with child entries.", MsgBoxStyle.Critical)
+                        Exit Sub
+                    End If
+                End If
+            End If
+            If blnElementIsUsed(intIndex) Then
+                MsgBox("List entry is used by an account.", MsgBoxStyle.Critical)
+                Exit Sub
+            End If
+
+            DeleteElement(intIndex)
+            mblnModified = True
+
             Exit Sub
-        End If
-
-        DeleteElement(intIndex)
-        mblnModified = True
-
-        Exit Sub
-ErrorHandler:
-        TopError("cmdDelete_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     '$Description Load lstElements from mobjList, inserting elements in sorted order.
@@ -235,20 +241,21 @@ ErrorHandler:
         Dim intIndex As Short
         Dim strError As String = ""
 
-        On Error GoTo ErrorHandler
+        Try
 
-        With lstElements
-            .Items.Clear()
-            For intIndex = 1 To mobjList.intElements
-                If blnInsertElement(mobjList.strValue1(intIndex), CShort(mobjList.strKey(intIndex)), True, strError) Then
-                    MsgBox(strError)
-                End If
-            Next
-        End With
+            With lstElements
+                .Items.Clear()
+                For intIndex = 1 To mobjList.intElements
+                    If blnInsertElement(mobjList.strValue1(intIndex), CShort(mobjList.strKey(intIndex)), True, strError) Then
+                        MsgBox(strError)
+                    End If
+                Next
+            End With
 
-        Exit Sub
-ErrorHandler:
-        NestedError("LoadList")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     '$Description Insert an element in the correct place in the list based
@@ -270,72 +277,73 @@ ErrorHandler:
         Dim intLastColon As Short
         Dim strPrecedingUCS As String
 
-        On Error GoTo ErrorHandler
+        Try
 
-        strError = ""
-        blnInsertElement = True
-        strNewElementUCS = strNormalizeElement(strNewElement)
-        If strNewElementUCS = "" Then
-            strError = "List entry name is required."
-            Exit Function
-        End If
-        If InStr(strNewElement, "/") > 0 Then
-            strError = "List entry names may not contain ""/""."
-            Exit Function
-        End If
-        If VB.Right(strNewElement, 1) = ":" Then
-            strError = "List entry names may not end in "":""."
-            Exit Function
-        End If
-        intLastColon = InStrRev(strNewElement, ":")
-        If intLastColon > 0 Then
-            If Not blnMultipleLevelsAllowed Then
-                strError = "Multiple levels are not allowed in this list."
+            strError = ""
+            blnInsertElement = True
+            strNewElementUCS = strNormalizeElement(strNewElement)
+            If strNewElementUCS = "" Then
+                strError = "List entry name is required."
                 Exit Function
             End If
-            strNewParentUCS = strNormalizeElement(VB.Left(strNewElement, intLastColon - 1))
-        Else
-            If Not (blnFirstLevelChangesAllowed Or blnInLoad) Then
-                strError = "No changes are allowed to first level entries in this list."
+            If InStr(strNewElement, "/") > 0 Then
+                strError = "List entry names may not contain ""/""."
                 Exit Function
             End If
-            strNewParentUCS = ""
-        End If
-        With lstElements
-            'Iterate one more than the number of elements.
-            For intIndex = 0 To .Items.Count
-                If intIndex < .Items.Count Then
-                    strExistingElementUCS = strNormalizeElement(gstrVB6GetItemString(lstElements, intIndex))
-                    If strExistingElementUCS = strNewElementUCS Then
-                        strError = """" & strNewElement & """ is already in this list."
-                        Exit Function
-                    End If
-                Else
-                    strExistingElementUCS = ""
+            If VB.Right(strNewElement, 1) = ":" Then
+                strError = "List entry names may not end in "":""."
+                Exit Function
+            End If
+            intLastColon = InStrRev(strNewElement, ":")
+            If intLastColon > 0 Then
+                If Not blnMultipleLevelsAllowed Then
+                    strError = "Multiple levels are not allowed in this list."
+                    Exit Function
                 End If
-                If (strExistingElementUCS > strNewElementUCS) Or (intIndex >= .Items.Count) Then
-                    If intIndex = 0 Then
-                        strPrecedingUCS = ""
-                    Else
-                        strPrecedingUCS = strNormalizeElement(gstrVB6GetItemString(lstElements, intIndex - 1))
-                    End If
-                    If strNewParentUCS <> "" Then
-                        If Not ((strNewParentUCS = strPrecedingUCS) Or ((strNewParentUCS & ":") = VB.Left(strPrecedingUCS, Len(strNewParentUCS) + 1))) Then
-                            strError = "Parent of """ & strNewElement & """ not found in list."
+                strNewParentUCS = strNormalizeElement(VB.Left(strNewElement, intLastColon - 1))
+            Else
+                If Not (blnFirstLevelChangesAllowed Or blnInLoad) Then
+                    strError = "No changes are allowed to first level entries in this list."
+                    Exit Function
+                End If
+                strNewParentUCS = ""
+            End If
+            With lstElements
+                'Iterate one more than the number of elements.
+                For intIndex = 0 To .Items.Count
+                    If intIndex < .Items.Count Then
+                        strExistingElementUCS = strNormalizeElement(gstrVB6GetItemString(lstElements, intIndex))
+                        If strExistingElementUCS = strNewElementUCS Then
+                            strError = """" & strNewElement & """ is already in this list."
                             Exit Function
                         End If
+                    Else
+                        strExistingElementUCS = ""
                     End If
-                    .Items.Insert(intIndex, gobjCreateListBoxItem(strNewElement, intKey))
-                    'gVB6SetItemData(lstElements, intIndex, intKey)
-                    Exit For
-                End If
-            Next
-        End With
-        blnInsertElement = False
+                    If (strExistingElementUCS > strNewElementUCS) Or (intIndex >= .Items.Count) Then
+                        If intIndex = 0 Then
+                            strPrecedingUCS = ""
+                        Else
+                            strPrecedingUCS = strNormalizeElement(gstrVB6GetItemString(lstElements, intIndex - 1))
+                        End If
+                        If strNewParentUCS <> "" Then
+                            If Not ((strNewParentUCS = strPrecedingUCS) Or ((strNewParentUCS & ":") = VB.Left(strPrecedingUCS, Len(strNewParentUCS) + 1))) Then
+                                strError = "Parent of """ & strNewElement & """ not found in list."
+                                Exit Function
+                            End If
+                        End If
+                        .Items.Insert(intIndex, gobjCreateListBoxItem(strNewElement, intKey))
+                        'gVB6SetItemData(lstElements, intIndex, intKey)
+                        Exit For
+                    End If
+                Next
+            End With
+            blnInsertElement = False
 
-        Exit Function
-ErrorHandler:
-        NestedError("blnInsertElement")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private Function strNormalizeElement(ByVal strElement As String) As String
@@ -371,33 +379,34 @@ ErrorHandler:
         Dim intColonPos2 As Short
         Dim intIndent As Short
 
-        On Error GoTo ErrorHandler
+        Try
 
-        mobjList.Init()
-        For intIndex = 0 To lstElements.Items.Count - 1
-            strName1 = gstrVB6GetItemString(lstElements, intIndex)
-            strKey = strMakeKey(gintVB6GetItemData(lstElements, intIndex))
-            If blnMultipleLevelsAllowed Then
-                intColonPos = 0
-                intIndent = 0
-                Do
-                    intColonPos2 = InStr(intColonPos + 1, strName1, ":")
-                    If intColonPos2 = 0 Then
-                        strName2 = Space(intIndent) & Mid(strName1, intColonPos + 1)
-                        Exit Do
-                    End If
-                    intColonPos = intColonPos2
-                    intIndent = intIndent + 1
-                Loop
-            Else
-                strName2 = strName1
-            End If
-            mobjList.Add(strKey, strName1, strName2)
-        Next
+            mobjList.Init()
+            For intIndex = 0 To lstElements.Items.Count - 1
+                strName1 = gstrVB6GetItemString(lstElements, intIndex)
+                strKey = strMakeKey(gintVB6GetItemData(lstElements, intIndex))
+                If blnMultipleLevelsAllowed Then
+                    intColonPos = 0
+                    intIndent = 0
+                    Do
+                        intColonPos2 = InStr(intColonPos + 1, strName1, ":")
+                        If intColonPos2 = 0 Then
+                            strName2 = Space(intIndent) & Mid(strName1, intColonPos + 1)
+                            Exit Do
+                        End If
+                        intColonPos = intColonPos2
+                        intIndent = intIndent + 1
+                    Loop
+                Else
+                    strName2 = strName1
+                End If
+                mobjList.Add(strKey, strName1, strName2)
+            Next
 
-        Exit Sub
-ErrorHandler:
-        NestedError("RebuildTranslator")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     '$Description Write new file from mobjList. mobjList is assumed to be in sorted order.
@@ -407,27 +416,28 @@ ErrorHandler:
         Dim intIndex As Short
         Dim strTmpFile As String
 
-        On Error GoTo ErrorHandler
+        Try
 
-        strTmpFile = gstrAddPath("NewList.tmp")
-        intFile = FreeFile()
-        FileOpen(intFile, strTmpFile, OpenMode.Output)
-        PrintLine(intFile, "Generated " & Now)
-        With mobjList
-            For intIndex = 1 To .intElements
-                PrintLine(intFile, "/" & .strKey(intIndex) & "/" & .strValue1(intIndex) & "/" & .strValue2(intIndex))
-            Next
-        End With
-        FileClose(intFile)
-        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        If Dir(mstrFile) <> "" Then
-            Kill(mstrFile)
-        End If
-        Rename(strTmpFile, mstrFile)
+            strTmpFile = gstrAddPath("NewList.tmp")
+            intFile = FreeFile()
+            FileOpen(intFile, strTmpFile, OpenMode.Output)
+            PrintLine(intFile, "Generated " & Now)
+            With mobjList
+                For intIndex = 1 To .intElements
+                    PrintLine(intFile, "/" & .strKey(intIndex) & "/" & .strValue1(intIndex) & "/" & .strValue2(intIndex))
+                Next
+            End With
+            FileClose(intFile)
+            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            If Dir(mstrFile) <> "" Then
+                Kill(mstrFile)
+            End If
+            Rename(strTmpFile, mstrFile)
 
-        Exit Sub
-ErrorHandler:
-        NestedError("WriteFile")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     '$Description Determine if lstElements entry intListIndex is used in any account.
@@ -437,42 +447,44 @@ ErrorHandler:
         Dim strKey As String
         Dim objAccount As Account
 
-        On Error GoTo ErrorHandler
+        Try
 
-        strKey = strMakeKey(gintVB6GetItemData(lstElements, intListIndex))
-        If mobjAccount Is Nothing Then
-            For Each objAccount In gcolAccounts
-                If blnElementIsUsedInAccount(objAccount, strKey) Then
-                    blnElementIsUsed = True
-                    Exit Function
-                End If
-            Next objAccount
-            blnElementIsUsed = False
-        Else
-            blnElementIsUsed = blnElementIsUsedInAccount(mobjAccount, strKey)
-        End If
+            strKey = strMakeKey(gintVB6GetItemData(lstElements, intListIndex))
+            If mobjAccount Is Nothing Then
+                For Each objAccount In gcolAccounts
+                    If blnElementIsUsedInAccount(objAccount, strKey) Then
+                        blnElementIsUsed = True
+                        Exit Function
+                    End If
+                Next objAccount
+                blnElementIsUsed = False
+            Else
+                blnElementIsUsed = blnElementIsUsedInAccount(mobjAccount, strKey)
+            End If
 
-        Exit Function
-ErrorHandler:
-        NestedError("blnElementIsUsed")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private Function blnElementIsUsedInAccount(ByVal objAccount As Account, ByVal strKey As String) As Boolean
 
         Dim objLoadedReg As LoadedRegister
 
-        On Error GoTo ErrorHandler
+        Try
 
-        For Each objLoadedReg In objAccount.colLoadedRegisters
-            If blnElementIsUsedInRegister(objLoadedReg.objReg, strKey) Then
-                blnElementIsUsedInAccount = True
-                Exit Function
-            End If
-        Next objLoadedReg
+            For Each objLoadedReg In objAccount.colLoadedRegisters
+                If blnElementIsUsedInRegister(objLoadedReg.objReg, strKey) Then
+                    blnElementIsUsedInAccount = True
+                    Exit Function
+                End If
+            Next objLoadedReg
 
-        Exit Function
-ErrorHandler:
-        NestedError("blnElementIsUsedInAccount")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private Function blnElementIsUsedInRegister(ByVal objReg As Register, ByVal strKey As String) As Boolean
@@ -482,47 +494,48 @@ ErrorHandler:
         Dim lngSplit As Integer
         Dim objSplit As Split_Renamed
 
-        On Error GoTo ErrorHandler
+        Try
 
-        For lngIndex = 1 To objReg.lngTrxCount
-            objTrx = objReg.objTrx(lngIndex)
-            If mlngListType = ListType.glngLIST_TYPE_REPEAT Then
-                If objTrx.strRepeatKey = strKey Then
-                    blnElementIsUsedInRegister = True
-                    Exit Function
-                End If
-            Else
-                If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                    For lngSplit = 1 To objTrx.lngSplits
-                        objSplit = objTrx.objSplit(lngSplit)
-                        If mlngListType = ListType.glngLIST_TYPE_CATEGORY Then
-                            If objSplit.strCategoryKey = strKey Then
+            For lngIndex = 1 To objReg.lngTrxCount
+                objTrx = objReg.objTrx(lngIndex)
+                If mlngListType = ListType.glngLIST_TYPE_REPEAT Then
+                    If objTrx.strRepeatKey = strKey Then
+                        blnElementIsUsedInRegister = True
+                        Exit Function
+                    End If
+                Else
+                    If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
+                        For lngSplit = 1 To objTrx.lngSplits
+                            objSplit = objTrx.objSplit(lngSplit)
+                            If mlngListType = ListType.glngLIST_TYPE_CATEGORY Then
+                                If objSplit.strCategoryKey = strKey Then
+                                    blnElementIsUsedInRegister = True
+                                    Exit Function
+                                End If
+                            ElseIf mlngListType = ListType.glngLIST_TYPE_BUDGET Then
+                                If objSplit.strBudgetKey = strKey Then
+                                    blnElementIsUsedInRegister = True
+                                    Exit Function
+                                End If
+                            Else
+                                gRaiseError("Unsupported list type")
+                            End If
+                        Next
+                    ElseIf mlngListType = ListType.glngLIST_TYPE_BUDGET Then
+                        If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
+                            If objTrx.strBudgetKey = strKey Then
                                 blnElementIsUsedInRegister = True
                                 Exit Function
                             End If
-                        ElseIf mlngListType = ListType.glngLIST_TYPE_BUDGET Then
-                            If objSplit.strBudgetKey = strKey Then
-                                blnElementIsUsedInRegister = True
-                                Exit Function
-                            End If
-                        Else
-                            gRaiseError("Unsupported list type")
-                        End If
-                    Next
-                ElseIf mlngListType = ListType.glngLIST_TYPE_BUDGET Then
-                    If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
-                        If objTrx.strBudgetKey = strKey Then
-                            blnElementIsUsedInRegister = True
-                            Exit Function
                         End If
                     End If
                 End If
-            End If
-        Next
+            Next
 
-        Exit Function
-ErrorHandler:
-        NestedError("blnElementIsUsedInRegister")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     '$Description Return the lowest positive integer which is not used as a key value
@@ -588,12 +601,4 @@ ErrorHandler:
             blnMultipleLevelsAllowed = (mlngListType = ListType.glngLIST_TYPE_CATEGORY)
         End Get
     End Property
-
-    Private Sub NestedError(ByVal strRoutine As String)
-        gTopErrorTrap("ListEditorForm." & strRoutine)
-    End Sub
-
-    Private Sub TopError(ByVal strRoutine As String)
-        gTopErrorTrap("ListEditorForm." & strRoutine)
-    End Sub
 End Class

@@ -69,23 +69,24 @@ Friend Class TrxForm
 
     Public Function blnAddNormal(ByVal objAccount_ As Account, ByVal objReg_ As Register, ByVal objTrx_ As Trx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
 
-        On Error GoTo ErrorHandler
+        Try
 
-        Init(objAccount_, objReg_, False, 0, Trx.TrxType.glngTRXTYP_NORMAL, blnCheckInvoiceNum_, strLogTitle)
-        mdatDefaultDate = datDefaultDate_
-        ConfigSharedControls()
-        SetSharedControls(objTrx_)
-        ConfigNormalControls()
-        SetNormalControls(objTrx_)
-        Me.ShowDialog()
-        If Not mblnCancel Then
-            datDefaultDate_ = mdatDefaultDate
-        End If
-        blnAddNormal = mblnCancel
+            Init(objAccount_, objReg_, False, 0, Trx.TrxType.glngTRXTYP_NORMAL, blnCheckInvoiceNum_, strLogTitle)
+            mdatDefaultDate = datDefaultDate_
+            ConfigSharedControls()
+            SetSharedControls(objTrx_)
+            ConfigNormalControls()
+            SetNormalControls(objTrx_)
+            Me.ShowDialog()
+            If Not mblnCancel Then
+                datDefaultDate_ = mdatDefaultDate
+            End If
+            blnAddNormal = mblnCancel
 
-        Exit Function
-ErrorHandler:
-        NestedError("blnAddNormal")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     '$Description Like blnAddNormal(), but only displays a UI if the data passed in
@@ -94,27 +95,28 @@ ErrorHandler:
 
     Public Function blnAddNormalSilent(ByVal objAccount_ As Account, ByVal objReg_ As Register, ByVal objTrx_ As Trx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
 
-        On Error GoTo ErrorHandler
+        Try
 
-        Init(objAccount_, objReg_, False, 0, Trx.TrxType.glngTRXTYP_NORMAL, blnCheckInvoiceNum_, strLogTitle)
-        mdatDefaultDate = datDefaultDate_
-        ConfigSharedControls()
-        SetSharedControls(objTrx_)
-        ConfigNormalControls()
-        SetNormalControls(objTrx_)
-        If blnValidateAndSave() Then
-            Me.Close()
-        Else
-            Me.ShowDialog()
-        End If
-        If Not mblnCancel Then
-            datDefaultDate_ = mdatDefaultDate
-        End If
-        blnAddNormalSilent = mblnCancel
+            Init(objAccount_, objReg_, False, 0, Trx.TrxType.glngTRXTYP_NORMAL, blnCheckInvoiceNum_, strLogTitle)
+            mdatDefaultDate = datDefaultDate_
+            ConfigSharedControls()
+            SetSharedControls(objTrx_)
+            ConfigNormalControls()
+            SetNormalControls(objTrx_)
+            If blnValidateAndSave() Then
+                Me.Close()
+            Else
+                Me.ShowDialog()
+            End If
+            If Not mblnCancel Then
+                datDefaultDate_ = mdatDefaultDate
+            End If
+            blnAddNormalSilent = mblnCancel
 
-        Exit Function
-ErrorHandler:
-        NestedError("blnAddNormalSilent")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     '$Description Enter a new budget Trx and add it to a Register.
@@ -122,24 +124,25 @@ ErrorHandler:
 
     Public Function blnAddBudget(ByVal objAccount_ As Account, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
 
-        On Error GoTo ErrorHandler
+        Try
 
-        Init(objAccount_, objReg_, False, 0, Trx.TrxType.glngTRXTYP_BUDGET, False, strLogTitle)
-        mdatDefaultDate = datDefaultDate_
-        ConfigSharedControls()
-        ClearSharedControls()
-        ConfigBudgetControls()
-        HideBudgetApplied()
-        ClearBudgetControls()
-        Me.ShowDialog()
-        If Not mblnCancel Then
-            datDefaultDate_ = mdatDefaultDate
-        End If
-        blnAddBudget = mblnCancel
+            Init(objAccount_, objReg_, False, 0, Trx.TrxType.glngTRXTYP_BUDGET, False, strLogTitle)
+            mdatDefaultDate = datDefaultDate_
+            ConfigSharedControls()
+            ClearSharedControls()
+            ConfigBudgetControls()
+            HideBudgetApplied()
+            ClearBudgetControls()
+            Me.ShowDialog()
+            If Not mblnCancel Then
+                datDefaultDate_ = mdatDefaultDate
+            End If
+            blnAddBudget = mblnCancel
 
-        Exit Function
-ErrorHandler:
-        NestedError("blnAddBudget")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     '$Description Enter a new transfer Trx and add it to a Register.
@@ -147,23 +150,24 @@ ErrorHandler:
 
     Public Function blnAddTransfer(ByVal objAccount_ As Account, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
 
-        On Error GoTo ErrorHandler
+        Try
 
-        Init(objAccount_, objReg_, False, 0, Trx.TrxType.glngTRXTYP_TRANSFER, False, strLogTitle)
-        mdatDefaultDate = datDefaultDate_
-        ConfigSharedControls()
-        ClearSharedControls()
-        ConfigTransferControls()
-        ClearTransferControls()
-        Me.ShowDialog()
-        If Not mblnCancel Then
-            datDefaultDate_ = mdatDefaultDate
-        End If
-        blnAddTransfer = mblnCancel
+            Init(objAccount_, objReg_, False, 0, Trx.TrxType.glngTRXTYP_TRANSFER, False, strLogTitle)
+            mdatDefaultDate = datDefaultDate_
+            ConfigSharedControls()
+            ClearSharedControls()
+            ConfigTransferControls()
+            ClearTransferControls()
+            Me.ShowDialog()
+            If Not mblnCancel Then
+                datDefaultDate_ = mdatDefaultDate
+            End If
+            blnAddTransfer = mblnCancel
 
-        Exit Function
-ErrorHandler:
-        NestedError("blnAddTransfer")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     '$Description Edit and existing Trx in the Register.
@@ -173,38 +177,39 @@ ErrorHandler:
 
         Dim objTrx As Trx
 
-        On Error GoTo ErrorHandler
+        Try
 
-        objTrx = objReg_.objTrx(lngIndex_)
-        Init(objAccount_, objReg_, True, lngIndex_, objTrx.lngType, True, strLogTitle)
-        ConfigSharedControls()
-        SetSharedControls(objTrx)
-        mstrOldRepeatKey = objTrx.strRepeatKey
-        mintOldRepeatSeq = objTrx.intRepeatSeq
-        Select Case objTrx.lngType
-            Case Trx.TrxType.glngTRXTYP_NORMAL
-                ConfigNormalControls()
-                SetNormalControls(objTrx)
-                CheckForPlaceholderBudget()
-                mcurOldAmount = objTrx.curAmount
-                mlngOldStatus = objTrx.lngStatus
-            Case Trx.TrxType.glngTRXTYP_BUDGET
-                ConfigBudgetControls()
-                SetBudgetControls(objTrx)
-                ShowBudgetApplied(objTrx, lngIndex_)
-            Case Trx.TrxType.glngTRXTYP_TRANSFER
-                ConfigTransferControls()
-                SetTransferControls(objTrx)
-        End Select
-        Me.ShowDialog()
-        If Not mblnCancel Then
-            datDefaultDate_ = mdatDefaultDate
-        End If
-        blnUpdate = mblnCancel
+            objTrx = objReg_.objTrx(lngIndex_)
+            Init(objAccount_, objReg_, True, lngIndex_, objTrx.lngType, True, strLogTitle)
+            ConfigSharedControls()
+            SetSharedControls(objTrx)
+            mstrOldRepeatKey = objTrx.strRepeatKey
+            mintOldRepeatSeq = objTrx.intRepeatSeq
+            Select Case objTrx.lngType
+                Case Trx.TrxType.glngTRXTYP_NORMAL
+                    ConfigNormalControls()
+                    SetNormalControls(objTrx)
+                    CheckForPlaceholderBudget()
+                    mcurOldAmount = objTrx.curAmount
+                    mlngOldStatus = objTrx.lngStatus
+                Case Trx.TrxType.glngTRXTYP_BUDGET
+                    ConfigBudgetControls()
+                    SetBudgetControls(objTrx)
+                    ShowBudgetApplied(objTrx, lngIndex_)
+                Case Trx.TrxType.glngTRXTYP_TRANSFER
+                    ConfigTransferControls()
+                    SetTransferControls(objTrx)
+            End Select
+            Me.ShowDialog()
+            If Not mblnCancel Then
+                datDefaultDate_ = mdatDefaultDate
+            End If
+            blnUpdate = mblnCancel
 
-        Exit Function
-ErrorHandler:
-        NestedError("blnUpdate")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private Sub ConfigSharedControls()
@@ -261,26 +266,27 @@ ErrorHandler:
     'End Sub
 
     Private Sub SetNormalControls(ByVal objTrx As Trx)
-        On Error GoTo ErrorHandler
+        Try
 
-        mblnInSetNormalControls = True
-        With objTrx
-            txtNumber.Text = .strNumber
-            cboStatus.SelectedIndex = IIf(.lngStatus = Trx.TrxStatus.glngTRXSTS_UNREC, 0, IIf(.lngStatus = Trx.TrxStatus.glngTRXSTS_SELECTED, 1, 2))
-            chkFake.CheckState = IIf(.blnFake, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
-            txtMatchRange.Text = gstrFormatCurrency(.curNormalMatchRange)
-            mstrImportKey = .strImportKey
-            SetImportKeyControls((mstrImportKey <> ""))
-            chkImported.Enabled = (mstrImportKey <> "")
-            LoadSplits(.colSplits)
-            DisplaySplits(0)
-        End With
-        mblnInSetNormalControls = False
+            mblnInSetNormalControls = True
+            With objTrx
+                txtNumber.Text = .strNumber
+                cboStatus.SelectedIndex = IIf(.lngStatus = Trx.TrxStatus.glngTRXSTS_UNREC, 0, IIf(.lngStatus = Trx.TrxStatus.glngTRXSTS_SELECTED, 1, 2))
+                chkFake.CheckState = IIf(.blnFake, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
+                txtMatchRange.Text = gstrFormatCurrency(.curNormalMatchRange)
+                mstrImportKey = .strImportKey
+                SetImportKeyControls((mstrImportKey <> ""))
+                chkImported.Enabled = (mstrImportKey <> "")
+                LoadSplits(.colSplits)
+                DisplaySplits(0)
+            End With
+            mblnInSetNormalControls = False
 
-        Exit Sub
-ErrorHandler:
-        mblnInSetNormalControls = False
-        NestedError("SetNormalControls")
+            Exit Sub
+        Catch ex As Exception
+            mblnInSetNormalControls = False
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Sub CheckForPlaceholderBudget()
@@ -587,44 +593,45 @@ ErrorHandler:
     Private Sub DisplaySplits(ByVal intNewOffset As Short)
         Dim intIndex As Short
 
-        On Error GoTo ErrorHandler
+        Try
 
-        mblnInDisplaySplits = True
-        mintSplitOffset = intNewOffset
-        If mintSplitOffset + mintSPLIT_CTRL_ARRAY_SIZE > mintSplits Then
-            mintSplits = mintSplitOffset + mintSPLIT_CTRL_ARRAY_SIZE
-            'UPGRADE_WARNING: Lower bound of array maudtSplits was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-            ReDim Preserve maudtSplits(mintSplits)
-            FillSplitDataArray()
-        End If
-        For intIndex = 0 To mintSPLIT_CTRL_ARRAY_SIZE - 1
-            With maudtSplits(intIndex + mintSplitOffset + 1)
-                lblSplitNumber(intIndex).Text = gstrFormatInteger(intIndex + 1 + mintSplitOffset, "##0") & "."
-                SetComboFromStringTranslator(cboSplitCategory(intIndex), gobjCategories, .strCategoryKey)
-                txtSplitPONum(intIndex).Text = .strPONumber
-                txtSplitInvoiceNum(intIndex).Text = .strInvoiceNum
-                txtSplitInvoiceDate(intIndex).Text = .strInvoiceDate
-                txtSplitDueDate(intIndex).Text = .strDueDate
-                txtSplitTerms(intIndex).Text = .strTerms
-                SetComboFromStringTranslator(cboSplitBudget(intIndex), gobjBudgets, .strBudgetKey)
-                txtSplitMemo(intIndex).Text = .strMemo
-                mblnSuppressPlaceholderAdjustment = True
-                txtSplitAmount(intIndex).Text = .strAmount
-                mblnSuppressPlaceholderAdjustment = False
-                If .blnChoose Then
-                    chkChoose(intIndex).CheckState = System.Windows.Forms.CheckState.Checked
-                Else
-                    chkChoose(intIndex).CheckState = System.Windows.Forms.CheckState.Unchecked
-                End If
-            End With
-        Next
-        mblnInDisplaySplits = False
-        DisplaySplitTotal()
+            mblnInDisplaySplits = True
+            mintSplitOffset = intNewOffset
+            If mintSplitOffset + mintSPLIT_CTRL_ARRAY_SIZE > mintSplits Then
+                mintSplits = mintSplitOffset + mintSPLIT_CTRL_ARRAY_SIZE
+                'UPGRADE_WARNING: Lower bound of array maudtSplits was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+                ReDim Preserve maudtSplits(mintSplits)
+                FillSplitDataArray()
+            End If
+            For intIndex = 0 To mintSPLIT_CTRL_ARRAY_SIZE - 1
+                With maudtSplits(intIndex + mintSplitOffset + 1)
+                    lblSplitNumber(intIndex).Text = gstrFormatInteger(intIndex + 1 + mintSplitOffset, "##0") & "."
+                    SetComboFromStringTranslator(cboSplitCategory(intIndex), gobjCategories, .strCategoryKey)
+                    txtSplitPONum(intIndex).Text = .strPONumber
+                    txtSplitInvoiceNum(intIndex).Text = .strInvoiceNum
+                    txtSplitInvoiceDate(intIndex).Text = .strInvoiceDate
+                    txtSplitDueDate(intIndex).Text = .strDueDate
+                    txtSplitTerms(intIndex).Text = .strTerms
+                    SetComboFromStringTranslator(cboSplitBudget(intIndex), gobjBudgets, .strBudgetKey)
+                    txtSplitMemo(intIndex).Text = .strMemo
+                    mblnSuppressPlaceholderAdjustment = True
+                    txtSplitAmount(intIndex).Text = .strAmount
+                    mblnSuppressPlaceholderAdjustment = False
+                    If .blnChoose Then
+                        chkChoose(intIndex).CheckState = System.Windows.Forms.CheckState.Checked
+                    Else
+                        chkChoose(intIndex).CheckState = System.Windows.Forms.CheckState.Unchecked
+                    End If
+                End With
+            Next
+            mblnInDisplaySplits = False
+            DisplaySplitTotal()
 
-        Exit Sub
-ErrorHandler:
-        mblnInDisplaySplits = False
-        NestedError("DisplaySplits")
+            Exit Sub
+        Catch ex As Exception
+            mblnInDisplaySplits = False
+            gNestedException(ex)
+        End Try
     End Sub
 
     '$Description Display the total of all splits in txtSplitTotal, or
@@ -745,10 +752,10 @@ ErrorHandler:
     'not a control array. I tried tab stop even.
 
     'Private Sub cboRepeatKey_Change()
-    '    On Error GoTo ErrorHandler
+    '    Try
     '    SearchInComboBoxChange cboRepeatKey, mintRepeatKeyCode
     '    Exit Sub
-    'ErrorHandler:
+    'Catch ex As Exception
     '    TopError "cboSplitRepeatKey_Change"
     'End Sub
 
@@ -796,13 +803,14 @@ ErrorHandler:
 
     'UPGRADE_WARNING: Event chkImported.CheckStateChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
     Private Sub chkImported_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkImported.CheckStateChanged
-        On Error GoTo ErrorHandler
+        Try
 
-        SetImportKeyControls((chkImported.CheckState = System.Windows.Forms.CheckState.Checked))
+            SetImportKeyControls((chkImported.CheckState = System.Windows.Forms.CheckState.Checked))
 
-        Exit Sub
-ErrorHandler:
-        TopError("chkImported_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCancel.Click
@@ -844,47 +852,49 @@ ErrorHandler:
     End Sub
 
     Private Sub cmdMailingAddress_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdMailingAddress.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        Dim colPayees As VB6XmlNodeList
-        Dim objPayee As VB6XmlElement
-        Dim strMsg As String
-        Dim strPayee As String
-        Dim strAddress2 As String
+            Dim colPayees As VB6XmlNodeList
+            Dim objPayee As VB6XmlElement
+            Dim strMsg As String
+            Dim strPayee As String
+            Dim strAddress2 As String
 
-        colPayees = gcolFindPayeeMatches(txtDescription.Text)
-        If colPayees.Length = 0 Then
-            strMsg = "No matching memorized transactions."
-        Else
-            strMsg = "Matching Memorized Transaction(s):"
-            For Each objPayee In colPayees
-                'UPGRADE_WARNING: Couldn't resolve default property of object objPayee.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                strPayee = objPayee.GetAttribute("Output") & vbCrLf & gstrGetXMLChildText(objPayee, "Address1")
-                strAddress2 = gstrGetXMLChildText(objPayee, "Address2")
-                If Len(strAddress2) > 0 Then
-                    strPayee = strPayee & vbCrLf & strAddress2
-                End If
-                strPayee = strPayee & vbCrLf & gstrGetXMLChildText(objPayee, "City") & " " & gstrGetXMLChildText(objPayee, "State") & " " & gstrGetXMLChildText(objPayee, "Zip") & vbCrLf & "Account #: " & gstrGetXMLChildText(objPayee, "Account")
-                strMsg = strMsg & vbCrLf & vbCrLf & strPayee
-            Next objPayee
-        End If
-        MsgBox(strMsg, MsgBoxStyle.OkOnly + MsgBoxStyle.Information, "Matching Payees")
+            colPayees = gcolFindPayeeMatches(txtDescription.Text)
+            If colPayees.Length = 0 Then
+                strMsg = "No matching memorized transactions."
+            Else
+                strMsg = "Matching Memorized Transaction(s):"
+                For Each objPayee In colPayees
+                    'UPGRADE_WARNING: Couldn't resolve default property of object objPayee.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    strPayee = objPayee.GetAttribute("Output") & vbCrLf & gstrGetXMLChildText(objPayee, "Address1")
+                    strAddress2 = gstrGetXMLChildText(objPayee, "Address2")
+                    If Len(strAddress2) > 0 Then
+                        strPayee = strPayee & vbCrLf & strAddress2
+                    End If
+                    strPayee = strPayee & vbCrLf & gstrGetXMLChildText(objPayee, "City") & " " & gstrGetXMLChildText(objPayee, "State") & " " & gstrGetXMLChildText(objPayee, "Zip") & vbCrLf & "Account #: " & gstrGetXMLChildText(objPayee, "Account")
+                    strMsg = strMsg & vbCrLf & vbCrLf & strPayee
+                Next objPayee
+            End If
+            MsgBox(strMsg, MsgBoxStyle.OkOnly + MsgBoxStyle.Information, "Matching Payees")
 
-        Exit Sub
-ErrorHandler:
-        TopError("cmdMailingAddress_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdOkay_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdOkay.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        If blnValidateAndSave() Then
-            Me.Close()
-        End If
+            If blnValidateAndSave() Then
+                Me.Close()
+            End If
 
-        Exit Sub
-ErrorHandler:
-        TopError("cmdOkay_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     '$Description Validate the data on the form, and add or update the Trx
@@ -1147,22 +1157,23 @@ ErrorHandler:
         Dim blnNumericCheckNumber As Boolean
         Dim objLoadedReg As LoadedRegister
 
-        On Error GoTo ErrorHandler
+        Try
 
-        strCheckNumber = txtNumber.Text
-        blnNumericCheckNumber = IsNumeric(strCheckNumber)
-        strDescriptionKey = strDescriptionCompareKey((txtDescription.Text))
+            strCheckNumber = txtNumber.Text
+            blnNumericCheckNumber = IsNumeric(strCheckNumber)
+            strDescriptionKey = strDescriptionCompareKey((txtDescription.Text))
 
-        For Each objLoadedReg In mobjAccount.colLoadedRegisters
-            If blnExistsInRegister(objLoadedReg.objReg, mobjReg, strCheckNumber, blnNumericCheckNumber, strDescriptionKey) Then
-                blnIsDuplicateTrx = True
-                Exit Function
-            End If
-        Next objLoadedReg
+            For Each objLoadedReg In mobjAccount.colLoadedRegisters
+                If blnExistsInRegister(objLoadedReg.objReg, mobjReg, strCheckNumber, blnNumericCheckNumber, strDescriptionKey) Then
+                    blnIsDuplicateTrx = True
+                    Exit Function
+                End If
+            Next objLoadedReg
 
-        Exit Function
-ErrorHandler:
-        NestedError("blnIsDuplicateTrx")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private Function blnExistsInRegister(ByVal objReg As Register, ByVal objOldReg As Register, ByVal strCheckNumber As String, ByVal blnNumericCheckNumber As Boolean, ByVal strDescriptionKey As String) As Boolean
@@ -1402,51 +1413,52 @@ ErrorHandler:
         Dim domCheckFormat As VB6XmlDocument
         Dim objTrx As Trx
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If chkFake.CheckState <> System.Windows.Forms.CheckState.Checked Or chkAutoGenerated.CheckState = System.Windows.Forms.CheckState.Checked Then
-            MsgBox("You may only print a check for a fake, non-generated transaction.")
+            If chkFake.CheckState <> System.Windows.Forms.CheckState.Checked Or chkAutoGenerated.CheckState = System.Windows.Forms.CheckState.Checked Then
+                MsgBox("You may only print a check for a fake, non-generated transaction.")
+                Exit Sub
+            End If
+            If mcurTotalAmount >= 0 Then
+                MsgBox("You may only print a check for a debit transaction.")
+                Exit Sub
+            End If
+
+            strNumber = InputBox("Please enter the check number to use:", "Check Number", gstrNextCheckNumToPrint)
+            If strNumber = "" Then
+                Exit Sub
+            End If
+
+            txtNumber.Text = strNumber
+            txtDate.Text = gstrFormatDate(Today)
+            chkFake.CheckState = System.Windows.Forms.CheckState.Unchecked
+
+            If blnValidateShared() Then
+                Exit Sub
+            End If
+            If blnValidateNormal() Then
+                Exit Sub
+            End If
+
+            gstrNextCheckNumToPrint = CStr(Val(strNumber) + 1)
+
+            domCheckFormat = gdomGetCheckFormat()
+            If domCheckFormat Is Nothing Then
+                Exit Sub
+            End If
+
+            mobjReg.LogAction("PrintCheck:" & strNumber)
+            objTrx = objCreateTrx(Nothing)
+            AddSplits(objTrx)
+            If gblnPrintCheck(domCheckFormat, objTrx) Then
+                SaveNormal()
+                Me.Close()
+            End If
+
             Exit Sub
-        End If
-        If mcurTotalAmount >= 0 Then
-            MsgBox("You may only print a check for a debit transaction.")
-            Exit Sub
-        End If
-
-        strNumber = InputBox("Please enter the check number to use:", "Check Number", gstrNextCheckNumToPrint)
-        If strNumber = "" Then
-            Exit Sub
-        End If
-
-        txtNumber.Text = strNumber
-        txtDate.Text = gstrFormatDate(Today)
-        chkFake.CheckState = System.Windows.Forms.CheckState.Unchecked
-
-        If blnValidateShared() Then
-            Exit Sub
-        End If
-        If blnValidateNormal() Then
-            Exit Sub
-        End If
-
-        gstrNextCheckNumToPrint = CStr(Val(strNumber) + 1)
-
-        domCheckFormat = gdomGetCheckFormat()
-        If domCheckFormat Is Nothing Then
-            Exit Sub
-        End If
-
-        mobjReg.LogAction("PrintCheck:" & strNumber)
-        objTrx = objCreateTrx(Nothing)
-        AddSplits(objTrx)
-        If gblnPrintCheck(domCheckFormat, objTrx) Then
-            SaveNormal()
-            Me.Close()
-        End If
-
-        Exit Sub
-ErrorHandler:
-        TopError("cmdPrintCheck_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdDelSplits_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdDelSplits.Click
@@ -1454,58 +1466,61 @@ ErrorHandler:
         Dim intDeleteIndex As Short
         Dim intDeleteCount As Short
 
-        On Error GoTo ErrorHandler
+        Try
 
-        FixSplitComboBoxes()
-        Dim counter As Short
-        counter = mintSplits
-        For intDeleteIndex = counter To 1 Step -1
-            If maudtSplits(intDeleteIndex).blnChoose Then
-                'UPGRADE_WARNING: Couldn't resolve default property of object blnPlaceholderAdjustmentRequired(intDeleteIndex). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                If blnPlaceholderAdjustmentRequired(intDeleteIndex) Then
-                    maudtSplits(intDeleteIndex).strAmount = "0"
-                    FindAndAdjustPlaceholderBudgets()
+            FixSplitComboBoxes()
+            Dim counter As Short
+            counter = mintSplits
+            For intDeleteIndex = counter To 1 Step -1
+                If maudtSplits(intDeleteIndex).blnChoose Then
+                    'UPGRADE_WARNING: Couldn't resolve default property of object blnPlaceholderAdjustmentRequired(intDeleteIndex). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    If blnPlaceholderAdjustmentRequired(intDeleteIndex) Then
+                        maudtSplits(intDeleteIndex).strAmount = "0"
+                        FindAndAdjustPlaceholderBudgets()
+                    End If
+                    For intMoveIndex = intDeleteIndex + 1 To mintSplits
+                        maudtSplits(intMoveIndex - 1) = maudtSplits(intMoveIndex)
+                    Next
+                    mintSplits = mintSplits - 1
+                    'UPGRADE_WARNING: Lower bound of array maudtSplits was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+                    ReDim Preserve maudtSplits(mintSplits)
+                    intDeleteCount = intDeleteCount + 1
                 End If
-                For intMoveIndex = intDeleteIndex + 1 To mintSplits
-                    maudtSplits(intMoveIndex - 1) = maudtSplits(intMoveIndex)
-                Next
-                mintSplits = mintSplits - 1
-                'UPGRADE_WARNING: Lower bound of array maudtSplits was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-                ReDim Preserve maudtSplits(mintSplits)
-                intDeleteCount = intDeleteCount + 1
+            Next
+            DisplaySplits(mintSplitOffset)
+            If intDeleteCount = 0 Then
+                MsgBox("Please check one or more splits to delete.")
+            Else
+                MsgBox("Deleted " & intDeleteCount & " splits.")
             End If
-        Next
-        DisplaySplits(mintSplitOffset)
-        If intDeleteCount = 0 Then
-            MsgBox("Please check one or more splits to delete.")
-        Else
-            MsgBox("Deleted " & intDeleteCount & " splits.")
-        End If
-        Exit Sub
-ErrorHandler:
-        TopError("cmdDelSplits_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdSplitScrollDown_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSplitScrollDown.Click
         'Yes, this routine is named the opposite of the button caption.
-        On Error GoTo ErrorHandler
-        FixSplitComboBoxes()
-        DisplaySplits(mintSplitOffset + 1)
-        Exit Sub
-ErrorHandler:
-        TopError("cmdSplitScrollDown_Click")
+        Try
+            FixSplitComboBoxes()
+            DisplaySplits(mintSplitOffset + 1)
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdSplitScrollUp_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSplitScrollUp.Click
         'Yes, this routine is named the opposite of the button caption.
-        On Error GoTo ErrorHandler
-        If mintSplitOffset > 0 Then
-            FixSplitComboBoxes()
-            DisplaySplits(mintSplitOffset - 1)
-        End If
-        Exit Sub
-ErrorHandler:
-        TopError("cmdSplitScrollUp_Click")
+        Try
+            If mintSplitOffset > 0 Then
+                FixSplitComboBoxes()
+                DisplaySplits(mintSplitOffset - 1)
+            End If
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     '$Description Sometimes the combo box .ListIndex properties are not set.
@@ -1546,102 +1561,103 @@ ErrorHandler:
         Dim intNewTrxSplitCount As Short
         Dim objStartLogger As ILogGroupStart
 
-        On Error GoTo ErrorHandler
+        Try
 
-        'Make sure all controls are valid.
-        If chkFake.CheckState <> System.Windows.Forms.CheckState.Checked Then
-            MsgBox("Only fake transactions may be divided.")
-            Exit Sub
-        End If
-        If blnValidateShared() Then
-            Exit Sub
-        End If
-        If blnValidateNormal() Then
-            Exit Sub
-        End If
+            'Make sure all controls are valid.
+            If chkFake.CheckState <> System.Windows.Forms.CheckState.Checked Then
+                MsgBox("Only fake transactions may be divided.")
+                Exit Sub
+            End If
+            If blnValidateShared() Then
+                Exit Sub
+            End If
+            If blnValidateNormal() Then
+                Exit Sub
+            End If
 
-        'Make sure there will be at least one split in both new
-        'and old splits.
-        For intSplit = 1 To mintSplits
-            If blnSplitUsed(intSplit) Then
-                If maudtSplits(intSplit).blnChoose Then
-                    intNewTrxSplitCount = intNewTrxSplitCount + 1
-                Else
-                    intOldTrxSplitCount = intOldTrxSplitCount + 1
+            'Make sure there will be at least one split in both new
+            'and old splits.
+            For intSplit = 1 To mintSplits
+                If blnSplitUsed(intSplit) Then
+                    If maudtSplits(intSplit).blnChoose Then
+                        intNewTrxSplitCount = intNewTrxSplitCount + 1
+                    Else
+                        intOldTrxSplitCount = intOldTrxSplitCount + 1
+                    End If
                 End If
+            Next
+            If intNewTrxSplitCount = 0 Then
+                MsgBox("Please check the splits you want to move to a new transaction.")
+                Exit Sub
             End If
-        Next
-        If intNewTrxSplitCount = 0 Then
-            MsgBox("Please check the splits you want to move to a new transaction.")
-            Exit Sub
-        End If
-        If intOldTrxSplitCount = 0 Then
-            MsgBox("You cannot move all the splits to a new transaction.")
-            Exit Sub
-        End If
-
-        'Confirmation.
-        If MsgBox("Are you sure you want to move the " & intNewTrxSplitCount & " checked " & "splits to a new transaction?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
-            Exit Sub
-        End If
-
-        'Update the existing trx, without the checked splits.
-        objTrx = objUpdateStartNormal(objTrxOld)
-        For intSplit = 1 To mintSplits
-            If Not maudtSplits(intSplit).blnChoose Then
-                AddSplitIfUsed(objTrx, intSplit)
+            If intOldTrxSplitCount = 0 Then
+                MsgBox("You cannot move all the splits to a new transaction.")
+                Exit Sub
             End If
-        Next
-        objStartLogger = mobjReg.objLogGroupStart("TrxForm.Divide")
-        'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        mobjReg.UpdateEnd(mlngIndex, New LogChange, mstrLogTitle & ".DivideOld", objTrxOld)
 
-        'Create the new trx, with the checked splits.
-        objTrx = objNewStartNormal()
-        objTrx.ClearRepeat()
-        For intSplit = 1 To mintSplits
-            If maudtSplits(intSplit).blnChoose Then
-                AddSplitIfUsed(objTrx, intSplit)
+            'Confirmation.
+            If MsgBox("Are you sure you want to move the " & intNewTrxSplitCount & " checked " & "splits to a new transaction?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                Exit Sub
             End If
-        Next
-        'UPGRADE_WARNING: Couldn't resolve default property of object New (LogAdd). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        mobjReg.NewAddEnd(objTrx, New LogAdd, mstrLogTitle & ".DivideNew")
-        mobjReg.LogGroupEnd(objStartLogger)
 
-        mblnCancel = False
-        Me.Close()
+            'Update the existing trx, without the checked splits.
+            objTrx = objUpdateStartNormal(objTrxOld)
+            For intSplit = 1 To mintSplits
+                If Not maudtSplits(intSplit).blnChoose Then
+                    AddSplitIfUsed(objTrx, intSplit)
+                End If
+            Next
+            objStartLogger = mobjReg.objLogGroupStart("TrxForm.Divide")
+            'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            mobjReg.UpdateEnd(mlngIndex, New LogChange, mstrLogTitle & ".DivideOld", objTrxOld)
 
-        Exit Sub
-ErrorHandler:
-        TopError("cmdDivideTrx_Click")
+            'Create the new trx, with the checked splits.
+            objTrx = objNewStartNormal()
+            objTrx.ClearRepeat()
+            For intSplit = 1 To mintSplits
+                If maudtSplits(intSplit).blnChoose Then
+                    AddSplitIfUsed(objTrx, intSplit)
+                End If
+            Next
+            'UPGRADE_WARNING: Couldn't resolve default property of object New (LogAdd). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            mobjReg.NewAddEnd(objTrx, New LogAdd, mstrLogTitle & ".DivideNew")
+            mobjReg.LogGroupEnd(objStartLogger)
+
+            mblnCancel = False
+            Me.Close()
+
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub txtDate_KeyPress(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.KeyPressEventArgs) Handles txtDate.KeyPress
         Dim KeyAscii As Short = Asc(eventArgs.KeyChar)
-        Dim datDate As Date
         Dim intIncrement As Short
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If KeyAscii = 43 Or KeyAscii = 61 Then
-            '"+" or "="
-            intIncrement = 1
-        ElseIf KeyAscii = 45 Then
-            '"-"
-            intIncrement = -1
-        Else
+            If KeyAscii = 43 Or KeyAscii = 61 Then
+                '"+" or "="
+                intIncrement = 1
+            ElseIf KeyAscii = 45 Then
+                '"-"
+                intIncrement = -1
+            Else
+                GoTo EventExitSub
+            End If
+            KeyAscii = 0
+
+            If Not gblnValidDate(txtDate.Text) Then
+                GoTo EventExitSub
+            End If
+            txtDate.Text = gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, intIncrement, CDate(txtDate.Text)))
+
             GoTo EventExitSub
-        End If
-        KeyAscii = 0
-
-        If Not gblnValidDate(txtDate.Text) Then
-            GoTo EventExitSub
-        End If
-        txtDate.Text = gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, intIncrement, CDate(txtDate.Text)))
-
-        GoTo EventExitSub
-ErrorHandler:
-        TopError("txtDate_KeyPress")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
 EventExitSub:
         eventArgs.KeyChar = Chr(KeyAscii)
         If KeyAscii = 0 Then
@@ -1658,46 +1674,47 @@ EventExitSub:
         Dim strBudget As String = ""
         Dim strMemo As String = ""
 
-        On Error GoTo ErrorHandler
+        Try
 
-        '^S (for memorized transaction search)
-        If KeyAscii = 19 Then
-            KeyAscii = 0
-            'UPGRADE_WARNING: Couldn't resolve default property of object blnFindPayee(strPayee, strCategory, strNumber, strBudget, strAmount, strMemo). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            If blnFindPayee(strPayee, strCategory, strNumber, strBudget, strAmount, strMemo) Then
-                txtDescription.Text = strPayee
-                If strMemo <> "" Then
-                    txtMemo.Text = strMemo
+            '^S (for memorized transaction search)
+            If KeyAscii = 19 Then
+                KeyAscii = 0
+                'UPGRADE_WARNING: Couldn't resolve default property of object blnFindPayee(strPayee, strCategory, strNumber, strBudget, strAmount, strMemo). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                If blnFindPayee(strPayee, strCategory, strNumber, strBudget, strAmount, strMemo) Then
+                    txtDescription.Text = strPayee
+                    If strMemo <> "" Then
+                        txtMemo.Text = strMemo
+                    End If
+                    If strNumber <> "" Then
+                        txtNumber.Text = strNumber
+                    End If
+                    If mlngType = Trx.TrxType.glngTRXTYP_NORMAL Then
+                        cboSplitCategory(0).Text = strCategory
+                        If strBudget <> "" Then
+                            cboSplitBudget(0).Text = strBudget
+                        End If
+                        If strAmount <> "" Then
+                            txtSplitAmount(0).Text = strAmount
+                        End If
+                        'txtSplitAmount(0).SetFocus
+                        txtSplitInvoiceNum(0).Focus()
+                    ElseIf mlngType = Trx.TrxType.glngTRXTYP_TRANSFER Then
+                        If strAmount <> "" Then
+                            txtTransferAmount.Text = strAmount
+                        End If
+                    ElseIf mlngType = Trx.TrxType.glngTRXTYP_BUDGET Then
+                        If strAmount <> "" Then
+                            txtBudgetLimit.Text = strAmount
+                        End If
+                    End If
                 End If
-                If strNumber <> "" Then
-                    txtNumber.Text = strNumber
-                End If
-                If mlngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                    cboSplitCategory(0).Text = strCategory
-                    If strBudget <> "" Then
-                        cboSplitBudget(0).Text = strBudget
-                    End If
-                    If strAmount <> "" Then
-                        txtSplitAmount(0).Text = strAmount
-                    End If
-                    'txtSplitAmount(0).SetFocus
-                    txtSplitInvoiceNum(0).Focus()
-                ElseIf mlngType = Trx.TrxType.glngTRXTYP_TRANSFER Then
-                    If strAmount <> "" Then
-                        txtTransferAmount.Text = strAmount
-                    End If
-                ElseIf mlngType = Trx.TrxType.glngTRXTYP_BUDGET Then
-                    If strAmount <> "" Then
-                        txtBudgetLimit.Text = strAmount
-                    End If
-                End If
+                GoTo EventExitSub
             End If
-            GoTo EventExitSub
-        End If
 
-        GoTo EventExitSub
-ErrorHandler:
-        TopError("txtDescription_KeyPress")
+            GoTo EventExitSub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
 EventExitSub:
         eventArgs.KeyChar = Chr(KeyAscii)
         If KeyAscii = 0 Then
@@ -1715,71 +1732,73 @@ EventExitSub:
         Dim elmChild As VB6XmlElement
         Dim frm As PayeeMatchForm
 
-        On Error GoTo ErrorHandler
+        Try
 
-        strPayee = ""
-        strCategory = ""
+            strPayee = ""
+            strCategory = ""
 
-        colPayees = gcolFindPayeeMatches(txtDescription.Text)
-        If colPayees.Length = 0 Then
-            Exit Function
-        End If
-        If colPayees.Length = 1 Then
-            elmPayee = colPayees.Item(0)
-        Else
-            frm = New PayeeMatchForm
-            elmPayee = frm.elmSelect(colPayees)
-            If elmPayee Is Nothing Then
+            colPayees = gcolFindPayeeMatches(txtDescription.Text)
+            If colPayees.Length = 0 Then
                 Exit Function
             End If
-        End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmPayee.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        strPayee = elmPayee.GetAttribute("Output")
-        elmChild = elmPayee.SelectSingleNode("Cat")
-        If Not elmChild Is Nothing Then
-            strCategory = elmChild.Text
-        End If
-        elmChild = elmPayee.SelectSingleNode("Num")
-        If Not elmChild Is Nothing Then
-            strNumber = elmChild.Text
-        End If
-        elmChild = elmPayee.SelectSingleNode("Amount")
-        If Not elmChild Is Nothing Then
-            strAmount = elmChild.Text
-        End If
-        elmChild = elmPayee.SelectSingleNode("Budget")
-        If Not elmChild Is Nothing Then
-            strBudget = elmChild.Text
-        End If
-        elmChild = elmPayee.SelectSingleNode("Memo")
-        If Not elmChild Is Nothing Then
-            strMemo = elmChild.Text
-        End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object blnFindPayee. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        blnFindPayee = True
+            If colPayees.Length = 1 Then
+                elmPayee = colPayees.Item(0)
+            Else
+                frm = New PayeeMatchForm
+                elmPayee = frm.elmSelect(colPayees)
+                If elmPayee Is Nothing Then
+                    Exit Function
+                End If
+            End If
+            'UPGRADE_WARNING: Couldn't resolve default property of object elmPayee.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            strPayee = elmPayee.GetAttribute("Output")
+            elmChild = elmPayee.SelectSingleNode("Cat")
+            If Not elmChild Is Nothing Then
+                strCategory = elmChild.Text
+            End If
+            elmChild = elmPayee.SelectSingleNode("Num")
+            If Not elmChild Is Nothing Then
+                strNumber = elmChild.Text
+            End If
+            elmChild = elmPayee.SelectSingleNode("Amount")
+            If Not elmChild Is Nothing Then
+                strAmount = elmChild.Text
+            End If
+            elmChild = elmPayee.SelectSingleNode("Budget")
+            If Not elmChild Is Nothing Then
+                strBudget = elmChild.Text
+            End If
+            elmChild = elmPayee.SelectSingleNode("Memo")
+            If Not elmChild Is Nothing Then
+                strMemo = elmChild.Text
+            End If
+            'UPGRADE_WARNING: Couldn't resolve default property of object blnFindPayee. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            blnFindPayee = True
 
-        Exit Function
-ErrorHandler:
-        NestedError("blnFindPayee")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     'UPGRADE_WARNING: Event txtNumber.TextChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
     Private Sub txtNumber_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtNumber.TextChanged
-        On Error GoTo ErrorHandler
+        Try
 
-        If mblnInSetNormalControls Then
+            If mblnInSetNormalControls Then
+                Exit Sub
+            End If
+
+            If IsNumeric(txtNumber.Text) Then
+                SaveSetting(gstrREG_APP, gstrRegkeyRegister(mobjReg), "TrxNum", txtNumber.Text)
+            ElseIf LCase(txtNumber.Text) = "inv" Or LCase(txtNumber.Text) = "crm" Then
+                chkFake.CheckState = System.Windows.Forms.CheckState.Checked
+            End If
+
             Exit Sub
-        End If
-
-        If IsNumeric(txtNumber.Text) Then
-            SaveSetting(gstrREG_APP, gstrRegkeyRegister(mobjReg), "TrxNum", txtNumber.Text)
-        ElseIf LCase(txtNumber.Text) = "inv" Or LCase(txtNumber.Text) = "crm" Then
-            chkFake.CheckState = System.Windows.Forms.CheckState.Checked
-        End If
-
-        Exit Sub
-ErrorHandler:
-        TopError("txtNumber_Change")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub txtNumber_KeyPress(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.KeyPressEventArgs) Handles txtNumber.KeyPress
@@ -1788,31 +1807,32 @@ ErrorHandler:
         Dim lngNewNum As Integer
         Dim strKey As String
 
-        On Error GoTo ErrorHandler
+        Try
 
-        strKey = Chr(KeyAscii)
-        If InStr("-=+", strKey) = 0 Then
+            strKey = Chr(KeyAscii)
+            If InStr("-=+", strKey) = 0 Then
+                GoTo EventExitSub
+            End If
+            KeyAscii = 0
+
+            If IsNumeric(txtNumber.Text) Then
+                lngOldNum = CInt(txtNumber.Text)
+            Else
+                lngOldNum = CInt(GetSetting(gstrREG_APP, gstrRegkeyRegister(mobjReg), "TrxNum", "1000"))
+            End If
+
+            If strKey = "-" Then
+                lngNewNum = lngOldNum - 1
+            Else
+                lngNewNum = lngOldNum + 1
+            End If
+
+            txtNumber.Text = CStr(lngNewNum)
+
             GoTo EventExitSub
-        End If
-        KeyAscii = 0
-
-        If IsNumeric(txtNumber.Text) Then
-            lngOldNum = CInt(txtNumber.Text)
-        Else
-            lngOldNum = CInt(GetSetting(gstrREG_APP, gstrRegkeyRegister(mobjReg), "TrxNum", "1000"))
-        End If
-
-        If strKey = "-" Then
-            lngNewNum = lngOldNum - 1
-        Else
-            lngNewNum = lngOldNum + 1
-        End If
-
-        txtNumber.Text = CStr(lngNewNum)
-
-        GoTo EventExitSub
-ErrorHandler:
-        TopError("txtNumber_KeyPress")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
 EventExitSub:
         eventArgs.KeyChar = Chr(KeyAscii)
         If KeyAscii = 0 Then
@@ -1914,105 +1934,106 @@ EventExitSub:
         _txtSplitAmount_9.KeyPress
         Dim KeyAscii As Short = Asc(eventArgs.KeyChar)
         Dim index As Short = CShort(CType(eventSender, TextBox).Tag)
-        On Error GoTo ErrorHandler
+        Try
 
-        '^D (for divide split)
-        If KeyAscii <> 4 Then
-            GoTo EventExitSub
-        End If
-        KeyAscii = 0
-
-        'Current split amount must be numeric and non-zero.
-        If Not IsNumeric(txtSplitAmount(index).Text) Then
-            MsgBox("Invalid split amount.")
-            GoTo EventExitSub
-        End If
-        Dim intSplit As Short
-        Dim curSplitAmount As Decimal
-        intSplit = intGetSplitIndex(index)
-        curSplitAmount = CDec(maudtSplits(intSplit).strAmount)
-        If curSplitAmount = 0 Then
-            MsgBox("Split to divide must not be zero amount.")
-            GoTo EventExitSub
-        End If
-
-        'Ask and validate how much to move to new split.
-        Dim strNewAmount As String
-        Dim curNewAmount As String
-        strNewAmount = InputBox("Enter amount of new split (this will be subtracted " & "from the current split)")
-        If Trim(strNewAmount) = "" Then
-            GoTo EventExitSub
-        End If
-        If Not IsNumeric(strNewAmount) Then
-            MsgBox("Invalid amount.")
-            GoTo EventExitSub
-        End If
-        curNewAmount = CStr(CDec(strNewAmount))
-        If System.Math.Sign(curSplitAmount) <> System.Math.Sign(CDbl(curNewAmount)) Then
-            MsgBox("New split amount must have the same sign as the old one.")
-            GoTo EventExitSub
-        End If
-        If System.Math.Abs(CDbl(curNewAmount)) >= System.Math.Abs(curSplitAmount) Then
-            MsgBox("New split amount must be smaller than the old amount.")
-            GoTo EventExitSub
-        End If
-
-        'Find an unused split to use, or create a new one.
-        Dim intDstSplit As Short
-        intDstSplit = 1
-        Do
-            If intDstSplit > mintSplits Then
-                mintSplits = mintSplits + 1
-                'UPGRADE_WARNING: Lower bound of array maudtSplits was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-                ReDim Preserve maudtSplits(mintSplits)
-                intDstSplit = mintSplits
-                Exit Do
+            '^D (for divide split)
+            If KeyAscii <> 4 Then
+                GoTo EventExitSub
             End If
-            If Not blnSplitUsed(intDstSplit) Then
-                Exit Do
+            KeyAscii = 0
+
+            'Current split amount must be numeric and non-zero.
+            If Not IsNumeric(txtSplitAmount(index).Text) Then
+                MsgBox("Invalid split amount.")
+                GoTo EventExitSub
             End If
-            intDstSplit = intDstSplit + 1
-        Loop
-
-        'Set up the new split and decrease the amount of the old one.
-        Dim objOldSplit As SplitData
-        Dim objNewSplit As SplitData
-        Dim strNewInvoice As String
-        Dim intParenPos As Short
-        Dim strInvNumPostfix As String
-        objNewSplit = New SplitData
-        maudtSplits(intDstSplit) = objNewSplit
-        objOldSplit = maudtSplits(intSplit)
-        objNewSplit.strCategoryKey = objOldSplit.strCategoryKey
-        objNewSplit.strPONumber = objOldSplit.strPONumber
-        objNewSplit.strBudgetKey = objOldSplit.strBudgetKey
-        objNewSplit.strDueDate = objOldSplit.strDueDate
-        objNewSplit.strInvoiceDate = objOldSplit.strInvoiceDate
-        'Figure out the new invoice number.
-        'It must end in "(n)", where "n" the current date and time.
-        strNewInvoice = objOldSplit.strInvoiceNum
-        If strNewInvoice <> "" Then
-            strInvNumPostfix = "(" & gstrFormatDate(Now, "MM/dd/yy") & ")"
-            intParenPos = InStr(strNewInvoice, "(")
-            If intParenPos > 0 Then
-                strNewInvoice = VB.Left(strNewInvoice, intParenPos - 1) & strInvNumPostfix
-            Else
-                strNewInvoice = strNewInvoice & strInvNumPostfix
+            Dim intSplit As Short
+            Dim curSplitAmount As Decimal
+            intSplit = intGetSplitIndex(index)
+            curSplitAmount = CDec(maudtSplits(intSplit).strAmount)
+            If curSplitAmount = 0 Then
+                MsgBox("Split to divide must not be zero amount.")
+                GoTo EventExitSub
             End If
-            objNewSplit.strInvoiceNum = strNewInvoice
-        End If
-        objNewSplit.strMemo = objOldSplit.strMemo
-        objNewSplit.strTerms = objOldSplit.strTerms
-        objNewSplit.strImageFiles = objOldSplit.strImageFiles
-        objOldSplit.strAmount = gstrFormatCurrency(curSplitAmount - CDbl(curNewAmount))
-        objNewSplit.strAmount = gstrFormatCurrency(curNewAmount)
 
-        'Redisplay all the splits.
-        DisplaySplits(mintSplitOffset)
+            'Ask and validate how much to move to new split.
+            Dim strNewAmount As String
+            Dim curNewAmount As String
+            strNewAmount = InputBox("Enter amount of new split (this will be subtracted " & "from the current split)")
+            If Trim(strNewAmount) = "" Then
+                GoTo EventExitSub
+            End If
+            If Not IsNumeric(strNewAmount) Then
+                MsgBox("Invalid amount.")
+                GoTo EventExitSub
+            End If
+            curNewAmount = CStr(CDec(strNewAmount))
+            If System.Math.Sign(curSplitAmount) <> System.Math.Sign(CDbl(curNewAmount)) Then
+                MsgBox("New split amount must have the same sign as the old one.")
+                GoTo EventExitSub
+            End If
+            If System.Math.Abs(CDbl(curNewAmount)) >= System.Math.Abs(curSplitAmount) Then
+                MsgBox("New split amount must be smaller than the old amount.")
+                GoTo EventExitSub
+            End If
 
-        GoTo EventExitSub
-ErrorHandler:
-        TopError("txtSplitAmount_KeyPress")
+            'Find an unused split to use, or create a new one.
+            Dim intDstSplit As Short
+            intDstSplit = 1
+            Do
+                If intDstSplit > mintSplits Then
+                    mintSplits = mintSplits + 1
+                    'UPGRADE_WARNING: Lower bound of array maudtSplits was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+                    ReDim Preserve maudtSplits(mintSplits)
+                    intDstSplit = mintSplits
+                    Exit Do
+                End If
+                If Not blnSplitUsed(intDstSplit) Then
+                    Exit Do
+                End If
+                intDstSplit = intDstSplit + 1
+            Loop
+
+            'Set up the new split and decrease the amount of the old one.
+            Dim objOldSplit As SplitData
+            Dim objNewSplit As SplitData
+            Dim strNewInvoice As String
+            Dim intParenPos As Short
+            Dim strInvNumPostfix As String
+            objNewSplit = New SplitData
+            maudtSplits(intDstSplit) = objNewSplit
+            objOldSplit = maudtSplits(intSplit)
+            objNewSplit.strCategoryKey = objOldSplit.strCategoryKey
+            objNewSplit.strPONumber = objOldSplit.strPONumber
+            objNewSplit.strBudgetKey = objOldSplit.strBudgetKey
+            objNewSplit.strDueDate = objOldSplit.strDueDate
+            objNewSplit.strInvoiceDate = objOldSplit.strInvoiceDate
+            'Figure out the new invoice number.
+            'It must end in "(n)", where "n" the current date and time.
+            strNewInvoice = objOldSplit.strInvoiceNum
+            If strNewInvoice <> "" Then
+                strInvNumPostfix = "(" & gstrFormatDate(Now, "MM/dd/yy") & ")"
+                intParenPos = InStr(strNewInvoice, "(")
+                If intParenPos > 0 Then
+                    strNewInvoice = VB.Left(strNewInvoice, intParenPos - 1) & strInvNumPostfix
+                Else
+                    strNewInvoice = strNewInvoice & strInvNumPostfix
+                End If
+                objNewSplit.strInvoiceNum = strNewInvoice
+            End If
+            objNewSplit.strMemo = objOldSplit.strMemo
+            objNewSplit.strTerms = objOldSplit.strTerms
+            objNewSplit.strImageFiles = objOldSplit.strImageFiles
+            objOldSplit.strAmount = gstrFormatCurrency(curSplitAmount - CDbl(curNewAmount))
+            objNewSplit.strAmount = gstrFormatCurrency(curNewAmount)
+
+            'Redisplay all the splits.
+            DisplaySplits(mintSplitOffset)
+
+            GoTo EventExitSub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
 EventExitSub:
         eventArgs.KeyChar = Chr(KeyAscii)
         If KeyAscii = 0 Then
@@ -2162,14 +2183,6 @@ EventExitSub:
         End If
     End Function
 
-    Private Sub TopError(ByVal strRoutine As String)
-        gTopErrorTrap("TrxForm." & strRoutine)
-    End Sub
-
-    Private Sub NestedError(ByVal strRoutine As String)
-        gNestedErrorTrap("TrxForm." & strRoutine)
-    End Sub
-
     Private Sub chkChoose_CheckStateChanged(sender As Object, e As EventArgs) Handles _
         _chkChoose_0.CheckStateChanged, _
         _chkChoose_1.CheckStateChanged, _
@@ -2198,16 +2211,17 @@ EventExitSub:
         _cboSplitCategory_8.TextChanged, _
         _cboSplitCategory_9.TextChanged
 
-        On Error GoTo ErrorHandler
-        Dim index As Short = CShort(CType(sender, ComboBox).Tag)
-        If Not cboSplitCategory Is Nothing Then
-            If Not mblnInDisplaySplits Then
-                SearchInComboBoxChange(cboSplitCategory(index), mintSplitCatKeyCode)
+        Try
+            Dim index As Short = CShort(CType(sender, ComboBox).Tag)
+            If Not cboSplitCategory Is Nothing Then
+                If Not mblnInDisplaySplits Then
+                    SearchInComboBoxChange(cboSplitCategory(index), mintSplitCatKeyCode)
+                End If
             End If
-        End If
-        Exit Sub
-ErrorHandler:
-        TopError("cboSplitCategory_TextChanged")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cboSplitCategory_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles _
@@ -2240,16 +2254,17 @@ ErrorHandler:
         _cboSplitCategory_8.SelectedIndexChanged, _
         _cboSplitCategory_9.SelectedIndexChanged
 
-        On Error GoTo ErrorHandler
-        Dim index As Short = CShort(CType(sender, ComboBox).Tag)
-        If Not cboSplitCategory Is Nothing Then
-            If Not mblnInDisplaySplits Then
-                maudtSplits(index + 1 + mintSplitOffset).strCategoryKey = strGetStringTranslatorKeyFromCombo(cboSplitCategory(index), gobjCategories)
+        Try
+            Dim index As Short = CShort(CType(sender, ComboBox).Tag)
+            If Not cboSplitCategory Is Nothing Then
+                If Not mblnInDisplaySplits Then
+                    maudtSplits(index + 1 + mintSplitOffset).strCategoryKey = strGetStringTranslatorKeyFromCombo(cboSplitCategory(index), gobjCategories)
+                End If
             End If
-        End If
-        Exit Sub
-ErrorHandler:
-        TopError("cboSplitCategory_SelectedIndexChanged")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cboSplitBudget_TextChanged(sender As Object, e As EventArgs) Handles _
@@ -2264,16 +2279,17 @@ ErrorHandler:
         _cboSplitBudget_8.TextChanged, _
         _cboSplitBudget_9.TextChanged
 
-        On Error GoTo ErrorHandler
-        Dim index As Short = CShort(CType(sender, ComboBox).Tag)
-        If Not cboSplitBudget Is Nothing Then
-            If Not mblnInDisplaySplits Then
-                SearchInComboBoxChange(cboSplitBudget(index), mintSplitBudgetKeyCode)
+        Try
+            Dim index As Short = CShort(CType(sender, ComboBox).Tag)
+            If Not cboSplitBudget Is Nothing Then
+                If Not mblnInDisplaySplits Then
+                    SearchInComboBoxChange(cboSplitBudget(index), mintSplitBudgetKeyCode)
+                End If
             End If
-        End If
-        Exit Sub
-ErrorHandler:
-        TopError("cboSplitBudget_TextChanged")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cboSplitBudget_KeyDown(sender As Object, e As KeyEventArgs) Handles _
@@ -2306,17 +2322,18 @@ ErrorHandler:
         _cboSplitBudget_8.SelectedIndexChanged, _
         _cboSplitBudget_9.SelectedIndexChanged
 
-        On Error GoTo ErrorHandler
-        Dim index As Short = CShort(CType(sender, ComboBox).Tag)
-        If Not cboSplitBudget Is Nothing Then
-            If Not mblnInDisplaySplits Then
-                maudtSplits(index + 1 + mintSplitOffset).strBudgetKey = strGetStringTranslatorKeyFromCombo(cboSplitBudget(index), gobjBudgets)
-                CheckForPlaceholderBudget()
+        Try
+            Dim index As Short = CShort(CType(sender, ComboBox).Tag)
+            If Not cboSplitBudget Is Nothing Then
+                If Not mblnInDisplaySplits Then
+                    maudtSplits(index + 1 + mintSplitOffset).strBudgetKey = strGetStringTranslatorKeyFromCombo(cboSplitBudget(index), gobjBudgets)
+                    CheckForPlaceholderBudget()
+                End If
             End If
-        End If
-        Exit Sub
-ErrorHandler:
-        TopError("cboSplitBudget_SelectedIndexChanged")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Function gPrintCheck(domCheckFormat As VB6XmlDocument, objTrx As Trx) As Boolean

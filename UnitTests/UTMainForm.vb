@@ -9,31 +9,32 @@ Friend Class UTMainForm
     Private mobjEverything As Everything
 
     Private Sub cmdRunBasic_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRunBasic.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        TestFunctions()
-        TestLoad()
-        TestAddUpdDel()
-        TestTransfer()
-        TestMatchNormal()
-        TestImportUpdateBank()
-        TestMatchImportKey()
-        TestMatchPayee()
-        TestMatchInvoice()
-        TestMatchPONumber()
-        TestStringTranslator()
-        TestCursor()
-        TestAgingBrackets()
-        TestDateBrackets()
-        TestRepeat()
-        TestAmountsToWords()
-        TestSecurity()
+            TestFunctions()
+            TestLoad()
+            TestAddUpdDel()
+            TestTransfer()
+            TestMatchNormal()
+            TestImportUpdateBank()
+            TestMatchImportKey()
+            TestMatchPayee()
+            TestMatchInvoice()
+            TestMatchPONumber()
+            TestStringTranslator()
+            TestCursor()
+            TestAgingBrackets()
+            TestDateBrackets()
+            TestRepeat()
+            TestAmountsToWords()
+            TestSecurity()
 
-        MsgBox("Basic tests complete.")
+            MsgBox("Basic tests complete.")
 
-        Exit Sub
-ErrorHandler:
-        MsgBox(Err.Description)
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub TestFunctions()
@@ -838,15 +839,16 @@ ErrorHandler:
     End Sub
 
     Private Sub cmdRunFileLoad_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRunFileLoad.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        TestFileLoad1()
+            TestFileLoad1()
 
-        MsgBox("File loading tests complete.")
+            MsgBox("File loading tests complete.")
 
-        Exit Sub
-ErrorHandler:
-        MsgBox(Err.Description)
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub TestFileLoad1()

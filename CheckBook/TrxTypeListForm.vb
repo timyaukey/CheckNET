@@ -24,55 +24,58 @@ Friend Class TrxTypeListForm
         Dim strTableFile As String
         Dim frm As System.Windows.Forms.Form
 
-        On Error GoTo ErrorHandler
+        Try
 
-        For Each frm In gcolForms()
-            'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            If TypeOf frm Is BankImportForm Then
-                MsgBox("You may not edit transaction types while importing from " & "the bank.", MsgBoxStyle.Critical)
-                Exit Sub
-            End If
-        Next frm
-        'UPGRADE_WARNING: Couldn't resolve default property of object gstrTrxTypeFilePath(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        strTableFile = gstrTrxTypeFilePath()
-        mdomTypeTable = gdomLoadFile(strTableFile)
-        melmTypeTable = mdomTypeTable.DocumentElement
-        Me.ShowDialog()
+            For Each frm In gcolForms()
+                'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                If TypeOf frm Is BankImportForm Then
+                    MsgBox("You may not edit transaction types while importing from " & "the bank.", MsgBoxStyle.Critical)
+                    Exit Sub
+                End If
+            Next frm
+            'UPGRADE_WARNING: Couldn't resolve default property of object gstrTrxTypeFilePath(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            strTableFile = gstrTrxTypeFilePath()
+            mdomTypeTable = gdomLoadFile(strTableFile)
+            melmTypeTable = mdomTypeTable.DocumentElement
+            Me.ShowDialog()
 
-        Exit Sub
-ErrorHandler:
-        Me.Close()
-        NestedError("ShowMe")
+            Exit Sub
+        Catch ex As Exception
+            Me.Close()
+            gNestedException(ex)
+        End Try
     End Sub
 
     'UPGRADE_WARNING: Form event TrxTypeListForm.Activate has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
     Private Sub TrxTypeListForm_Activated(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Activated
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If Not mblnActivated Then
-            mblnActivated = True
-            ShowTrxTypeList()
-        End If
+            If Not mblnActivated Then
+                mblnActivated = True
+                ShowTrxTypeList()
+            End If
 
-        Exit Sub
-ErrorHandler:
-        TopError("Form_Activate")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdSaveChanges_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSaveChanges.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        If blnValidateAndCopyTrxTypeToXML() Then
+            If blnValidateAndCopyTrxTypeToXML() Then
+                Exit Sub
+            End If
+            mdomTypeTable.Save(gstrTrxTypeFilePath())
+            MsgBox("Changes saved.", MsgBoxStyle.Information)
+            Me.Close()
+
             Exit Sub
-        End If
-        mdomTypeTable.Save(gstrTrxTypeFilePath())
-        MsgBox("Changes saved.", MsgBoxStyle.Information)
-        Me.Close()
-
-        Exit Sub
-ErrorHandler:
-        TopError("cmdSaveChanges_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdDiscardChanges_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdDiscardChanges.Click
@@ -82,95 +85,99 @@ ErrorHandler:
     Private Sub cmdMoveUp_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdMoveUp.Click
         Dim intNewIndex As Short
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If blnValidateAndCopyTrxTypeToXML() Then
-            Exit Sub
-        End If
-        If mobjDisplayedTrxType.Index = gintLISTITEM_LOWINDEX Then
-            Exit Sub
-        End If
-        intNewIndex = mobjDisplayedTrxType.Index - 1
-        'UPGRADE_WARNING: Couldn't resolve default property of object melmTrxTypeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        melmTypeTable.RemoveChild(melmTrxTypeToSave)
-        'UPGRADE_WARNING: Couldn't resolve default property of object melmTrxTypeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        melmTypeTable.InsertBefore(melmTrxTypeToSave, mcolTrxTypes.Item(intNewIndex - gintLISTITEM_LOWINDEX))
-        ShowTrxTypeList()
-        'UPGRADE_WARNING: Lower bound of collection lvwTrxTypes.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-        SyncDisplay(lvwTrxTypes.Items.Item(intNewIndex))
-        ShowSelectedTrxType()
+            If blnValidateAndCopyTrxTypeToXML() Then
+                Exit Sub
+            End If
+            If mobjDisplayedTrxType.Index = gintLISTITEM_LOWINDEX Then
+                Exit Sub
+            End If
+            intNewIndex = mobjDisplayedTrxType.Index - 1
+            'UPGRADE_WARNING: Couldn't resolve default property of object melmTrxTypeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            melmTypeTable.RemoveChild(melmTrxTypeToSave)
+            'UPGRADE_WARNING: Couldn't resolve default property of object melmTrxTypeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            melmTypeTable.InsertBefore(melmTrxTypeToSave, mcolTrxTypes.Item(intNewIndex - gintLISTITEM_LOWINDEX))
+            ShowTrxTypeList()
+            'UPGRADE_WARNING: Lower bound of collection lvwTrxTypes.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+            SyncDisplay(lvwTrxTypes.Items.Item(intNewIndex))
+            ShowSelectedTrxType()
 
-        Exit Sub
-ErrorHandler:
-        TopError("cmdMoveUp_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdMoveDown_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdMoveDown.Click
         Dim intNewIndex As Short
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If blnValidateAndCopyTrxTypeToXML() Then
-            Exit Sub
-        End If
-        If (mobjDisplayedTrxType.Index - gintLISTITEM_LOWINDEX + 1) = lvwTrxTypes.Items.Count Then
-            Exit Sub
-        End If
-        intNewIndex = mobjDisplayedTrxType.Index + 1
-        'UPGRADE_WARNING: Couldn't resolve default property of object melmTrxTypeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        melmTypeTable.RemoveChild(melmTrxTypeToSave)
-        'UPGRADE_WARNING: Couldn't resolve default property of object melmTrxTypeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        melmTypeTable.InsertBefore(melmTrxTypeToSave, mcolTrxTypes.Item(intNewIndex - gintLISTITEM_LOWINDEX + 1))
-        ShowTrxTypeList()
-        'UPGRADE_WARNING: Lower bound of collection lvwTrxTypes.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-        SyncDisplay(lvwTrxTypes.Items.Item(intNewIndex))
-        ShowSelectedTrxType()
+            If blnValidateAndCopyTrxTypeToXML() Then
+                Exit Sub
+            End If
+            If (mobjDisplayedTrxType.Index - gintLISTITEM_LOWINDEX + 1) = lvwTrxTypes.Items.Count Then
+                Exit Sub
+            End If
+            intNewIndex = mobjDisplayedTrxType.Index + 1
+            'UPGRADE_WARNING: Couldn't resolve default property of object melmTrxTypeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            melmTypeTable.RemoveChild(melmTrxTypeToSave)
+            'UPGRADE_WARNING: Couldn't resolve default property of object melmTrxTypeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            melmTypeTable.InsertBefore(melmTrxTypeToSave, mcolTrxTypes.Item(intNewIndex - gintLISTITEM_LOWINDEX + 1))
+            ShowTrxTypeList()
+            'UPGRADE_WARNING: Lower bound of collection lvwTrxTypes.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+            SyncDisplay(lvwTrxTypes.Items.Item(intNewIndex))
+            ShowSelectedTrxType()
 
-        Exit Sub
-ErrorHandler:
-        TopError("cmdMoveDown_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdNewTrxType_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewTrxType.Click
         Dim elmTrxType As VB6XmlElement
         Dim objNewItem As System.Windows.Forms.ListViewItem
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If blnValidateAndCopyTrxTypeToXML() Then
+            If blnValidateAndCopyTrxTypeToXML() Then
+                Exit Sub
+            End If
+            elmTrxType = mdomTypeTable.CreateElement("TrxType")
+            elmTrxType.SetAttribute("Before", "(edit or remove this prefix)")
+            elmTrxType.SetAttribute("After", "(edit or remove this ending)")
+            'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxType. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            melmTypeTable.AppendChild(elmTrxType)
+            mcolTrxTypes = melmTypeTable.SelectNodes("TrxType")
+            objNewItem = objCreateTrxTypeListItem(elmTrxType, mcolTrxTypes.Length - 1)
+            System.Windows.Forms.Application.DoEvents()
+            SyncDisplay(objNewItem)
+            ShowSelectedTrxType()
+
             Exit Sub
-        End If
-        elmTrxType = mdomTypeTable.CreateElement("TrxType")
-        elmTrxType.SetAttribute("Before", "(edit or remove this prefix)")
-        elmTrxType.SetAttribute("After", "(edit or remove this ending)")
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxType. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        melmTypeTable.AppendChild(elmTrxType)
-        mcolTrxTypes = melmTypeTable.SelectNodes("TrxType")
-        objNewItem = objCreateTrxTypeListItem(elmTrxType, mcolTrxTypes.Length - 1)
-        System.Windows.Forms.Application.DoEvents()
-        SyncDisplay(objNewItem)
-        ShowSelectedTrxType()
-
-        Exit Sub
-ErrorHandler:
-        TopError("cmdNewTrxType_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdDeleteTrxType_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdDeleteTrxType.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        If melmTrxTypeToSave Is Nothing Then
-            MsgBox("You must select a transaction type to delete.", MsgBoxStyle.Critical)
+            If melmTrxTypeToSave Is Nothing Then
+                MsgBox("You must select a transaction type to delete.", MsgBoxStyle.Critical)
+                Exit Sub
+            End If
+
+            'UPGRADE_WARNING: Couldn't resolve default property of object melmTrxTypeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            melmTypeTable.RemoveChild(melmTrxTypeToSave)
+            ShowTrxTypeList()
+
             Exit Sub
-        End If
-
-        'UPGRADE_WARNING: Couldn't resolve default property of object melmTrxTypeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        melmTypeTable.RemoveChild(melmTrxTypeToSave)
-        ShowTrxTypeList()
-
-        Exit Sub
-ErrorHandler:
-        TopError("cmdDeleteTrxType_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     'lvwTrxTypes_ItemClick is not converted to an event handler in .NET,
@@ -188,31 +195,32 @@ ErrorHandler:
         'but just to be sure...
         Static sblnInItemClick As Boolean
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If sblnInItemClick Then
-            Exit Sub
-        End If
-        sblnInItemClick = True
-        If lvwTrxTypes.FocusedItem Is Nothing Then
-            sblnInItemClick = False
-            Exit Sub
-        End If
-        If Not mobjDisplayedTrxType Is Nothing Then
-            If blnDisplayedTrxTypeInvalid() Then
-                lvwTrxTypes.FocusedItem = mobjDisplayedTrxType
+            If sblnInItemClick Then
+                Exit Sub
+            End If
+            sblnInItemClick = True
+            If lvwTrxTypes.FocusedItem Is Nothing Then
                 sblnInItemClick = False
                 Exit Sub
             End If
-            CopyTrxTypeToXML()
-        End If
-        ShowSelectedTrxType()
-        sblnInItemClick = False
+            If Not mobjDisplayedTrxType Is Nothing Then
+                If blnDisplayedTrxTypeInvalid() Then
+                    lvwTrxTypes.FocusedItem = mobjDisplayedTrxType
+                    sblnInItemClick = False
+                    Exit Sub
+                End If
+                CopyTrxTypeToXML()
+            End If
+            ShowSelectedTrxType()
+            sblnInItemClick = False
 
-        Exit Sub
-ErrorHandler:
-        sblnInItemClick = False
-        TopError("lvwTrxTypes_ItemClick")
+            Exit Sub
+        Catch ex As Exception
+            sblnInItemClick = False
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub ShowTrxTypeList()
@@ -220,63 +228,66 @@ ErrorHandler:
         Dim intIndex As Short
         Dim objFirst As System.Windows.Forms.ListViewItem
 
-        On Error GoTo ErrorHandler
+        Try
 
-        lvwTrxTypes.Items.Clear()
-        mcolTrxTypes = melmTypeTable.SelectNodes("TrxType")
-        For intIndex = 1 To mcolTrxTypes.Length
-            elmTrxType = mcolTrxTypes.item(intIndex - 1)
-            objCreateTrxTypeListItem(elmTrxType, intIndex - 1)
-        Next
-        System.Windows.Forms.Application.DoEvents()
-        objFirst = lvwTrxTypes.TopItem
-        If Not objFirst Is Nothing Then
-            lvwTrxTypes.FocusedItem = objFirst
-            ShowSelectedTrxType()
-        Else
-            'UPGRADE_NOTE: Object melmTrxTypeToSave may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-            melmTrxTypeToSave = Nothing
-            'UPGRADE_NOTE: Object mobjDisplayedTrxType may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-            mobjDisplayedTrxType = Nothing
-            txtNumber.Text = ""
-            txtBefore.Text = ""
-            txtAfter.Text = ""
-            txtMinAfter.Text = ""
-        End If
+            lvwTrxTypes.Items.Clear()
+            mcolTrxTypes = melmTypeTable.SelectNodes("TrxType")
+            For intIndex = 1 To mcolTrxTypes.Length
+                elmTrxType = mcolTrxTypes.Item(intIndex - 1)
+                objCreateTrxTypeListItem(elmTrxType, intIndex - 1)
+            Next
+            System.Windows.Forms.Application.DoEvents()
+            objFirst = lvwTrxTypes.TopItem
+            If Not objFirst Is Nothing Then
+                lvwTrxTypes.FocusedItem = objFirst
+                ShowSelectedTrxType()
+            Else
+                'UPGRADE_NOTE: Object melmTrxTypeToSave may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+                melmTrxTypeToSave = Nothing
+                'UPGRADE_NOTE: Object mobjDisplayedTrxType may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+                mobjDisplayedTrxType = Nothing
+                txtNumber.Text = ""
+                txtBefore.Text = ""
+                txtAfter.Text = ""
+                txtMinAfter.Text = ""
+            End If
 
-        Exit Sub
-ErrorHandler:
-        NestedError("ShowTrxTypeList")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Sub SyncDisplay(ByVal objItem As System.Windows.Forms.ListViewItem)
-        On Error GoTo ErrorHandler
+        Try
 
-        lvwTrxTypes.Refresh()
-        System.Windows.Forms.Application.DoEvents()
-        'UPGRADE_WARNING: MSComctlLib.ListItem method objItem.EnsureVisible has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
-        objItem.EnsureVisible()
-        System.Windows.Forms.Application.DoEvents()
-        lvwTrxTypes.FocusedItem = objItem
+            lvwTrxTypes.Refresh()
+            System.Windows.Forms.Application.DoEvents()
+            'UPGRADE_WARNING: MSComctlLib.ListItem method objItem.EnsureVisible has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
+            objItem.EnsureVisible()
+            System.Windows.Forms.Application.DoEvents()
+            lvwTrxTypes.FocusedItem = objItem
 
-        Exit Sub
-ErrorHandler:
-        NestedError("SyncDisplay")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Sub ShowSelectedTrxType()
-        On Error GoTo ErrorHandler
+        Try
 
-        mobjDisplayedTrxType = lvwTrxTypes.FocusedItem
-        melmTrxTypeToSave = mcolTrxTypes.item(CShort(mobjDisplayedTrxType.Tag))
-        txtNumber.Text = strTrxTypeAttrib(melmTrxTypeToSave, "Number")
-        txtBefore.Text = strTrxTypeAttrib(melmTrxTypeToSave, "Before")
-        txtAfter.Text = strTrxTypeAttrib(melmTrxTypeToSave, "After")
-        txtMinAfter.Text = strTrxTypeAttrib(melmTrxTypeToSave, "MinAfter")
+            mobjDisplayedTrxType = lvwTrxTypes.FocusedItem
+            melmTrxTypeToSave = mcolTrxTypes.Item(CShort(mobjDisplayedTrxType.Tag))
+            txtNumber.Text = strTrxTypeAttrib(melmTrxTypeToSave, "Number")
+            txtBefore.Text = strTrxTypeAttrib(melmTrxTypeToSave, "Before")
+            txtAfter.Text = strTrxTypeAttrib(melmTrxTypeToSave, "After")
+            txtMinAfter.Text = strTrxTypeAttrib(melmTrxTypeToSave, "MinAfter")
 
-        Exit Sub
-ErrorHandler:
-        NestedError("ShowSelectedTrxType")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Function strTrxTypeAttrib(ByVal elm As VB6XmlElement, ByVal strName As String) As String
@@ -296,21 +307,22 @@ ErrorHandler:
     End Function
 
     Private Function blnValidateAndCopyTrxTypeToXML() As Boolean
-        On Error GoTo ErrorHandler
+        Try
 
-        blnValidateAndCopyTrxTypeToXML = False
-        If Not mobjDisplayedTrxType Is Nothing Then
-            If blnDisplayedTrxTypeInvalid() Then
-                lvwTrxTypes.FocusedItem = mobjDisplayedTrxType
-                blnValidateAndCopyTrxTypeToXML = True
-                Exit Function
+            blnValidateAndCopyTrxTypeToXML = False
+            If Not mobjDisplayedTrxType Is Nothing Then
+                If blnDisplayedTrxTypeInvalid() Then
+                    lvwTrxTypes.FocusedItem = mobjDisplayedTrxType
+                    blnValidateAndCopyTrxTypeToXML = True
+                    Exit Function
+                End If
+                CopyTrxTypeToXML()
             End If
-            CopyTrxTypeToXML()
-        End If
 
-        Exit Function
-ErrorHandler:
-        NestedError("blnValidateAndCopyTrxTypeToXML")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private Function blnDisplayedTrxTypeInvalid() As Boolean
@@ -335,99 +347,93 @@ ErrorHandler:
     End Function
 
     Private Sub CopyTrxTypeToXML()
-        On Error GoTo ErrorHandler
+        Try
 
-        With melmTrxTypeToSave
-            .Text = vbCrLf
-            If txtBefore.Text <> "" Then
-                .SetAttribute("Before", Trim(txtBefore.Text))
-            Else
-                .RemoveAttribute("Before")
-            End If
-            If txtAfter.Text <> "" Then
-                .SetAttribute("After", Trim(txtAfter.Text))
-            Else
-                .RemoveAttribute("After")
-            End If
-            If txtMinAfter.Text <> "" Then
-                .SetAttribute("MinAfter", Trim(txtMinAfter.Text))
-            Else
-                .RemoveAttribute("MinAfter")
-            End If
-            If txtNumber.Text <> "" Then
-                .SetAttribute("Number", Trim(txtNumber.Text))
-            Else
-                .RemoveAttribute("Number")
-            End If
-        End With
+            With melmTrxTypeToSave
+                .Text = vbCrLf
+                If txtBefore.Text <> "" Then
+                    .SetAttribute("Before", Trim(txtBefore.Text))
+                Else
+                    .RemoveAttribute("Before")
+                End If
+                If txtAfter.Text <> "" Then
+                    .SetAttribute("After", Trim(txtAfter.Text))
+                Else
+                    .RemoveAttribute("After")
+                End If
+                If txtMinAfter.Text <> "" Then
+                    .SetAttribute("MinAfter", Trim(txtMinAfter.Text))
+                Else
+                    .RemoveAttribute("MinAfter")
+                End If
+                If txtNumber.Text <> "" Then
+                    .SetAttribute("Number", Trim(txtNumber.Text))
+                Else
+                    .RemoveAttribute("Number")
+                End If
+            End With
 
-        With mobjDisplayedTrxType
-            .Text = Trim(txtBefore.Text)
-            'UPGRADE_WARNING: Lower bound of collection mobjDisplayedTrxType has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If mobjDisplayedTrxType.SubItems.Count > 1 Then
-                mobjDisplayedTrxType.SubItems(1).Text = Trim(txtAfter.Text)
-            Else
-                mobjDisplayedTrxType.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Trim(txtAfter.Text)))
-            End If
-            'UPGRADE_WARNING: Lower bound of collection mobjDisplayedTrxType has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If mobjDisplayedTrxType.SubItems.Count > 2 Then
-                mobjDisplayedTrxType.SubItems(2).Text = Trim(txtMinAfter.Text)
-            Else
-                mobjDisplayedTrxType.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Trim(txtMinAfter.Text)))
-            End If
-            'UPGRADE_WARNING: Lower bound of collection mobjDisplayedTrxType has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If mobjDisplayedTrxType.SubItems.Count > 3 Then
-                mobjDisplayedTrxType.SubItems(3).Text = Trim(txtNumber.Text)
-            Else
-                mobjDisplayedTrxType.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Trim(txtNumber.Text)))
-            End If
-        End With
+            With mobjDisplayedTrxType
+                .Text = Trim(txtBefore.Text)
+                'UPGRADE_WARNING: Lower bound of collection mobjDisplayedTrxType has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                If mobjDisplayedTrxType.SubItems.Count > 1 Then
+                    mobjDisplayedTrxType.SubItems(1).Text = Trim(txtAfter.Text)
+                Else
+                    mobjDisplayedTrxType.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Trim(txtAfter.Text)))
+                End If
+                'UPGRADE_WARNING: Lower bound of collection mobjDisplayedTrxType has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                If mobjDisplayedTrxType.SubItems.Count > 2 Then
+                    mobjDisplayedTrxType.SubItems(2).Text = Trim(txtMinAfter.Text)
+                Else
+                    mobjDisplayedTrxType.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Trim(txtMinAfter.Text)))
+                End If
+                'UPGRADE_WARNING: Lower bound of collection mobjDisplayedTrxType has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                If mobjDisplayedTrxType.SubItems.Count > 3 Then
+                    mobjDisplayedTrxType.SubItems(3).Text = Trim(txtNumber.Text)
+                Else
+                    mobjDisplayedTrxType.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Trim(txtNumber.Text)))
+                End If
+            End With
 
-        Exit Sub
-ErrorHandler:
-        NestedError("CopyTrxTypeToXML")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Function objCreateTrxTypeListItem(ByVal elmTrxType As VB6XmlElement, ByVal intDOMIndex As Short) As System.Windows.Forms.ListViewItem
-
         Dim objItem As System.Windows.Forms.ListViewItem
 
-        On Error GoTo ErrorHandler
+        objCreateTrxTypeListItem = Nothing
+        Try
 
-        objItem = lvwTrxTypes.Items.Add(strTrxTypeAttrib(elmTrxType, "Before"))
-        With objItem
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If objItem.SubItems.Count > 1 Then
-                objItem.SubItems(1).Text = strTrxTypeAttrib(elmTrxType, "After")
-            Else
-                objItem.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strTrxTypeAttrib(elmTrxType, "After")))
-            End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If objItem.SubItems.Count > 2 Then
-                objItem.SubItems(2).Text = strTrxTypeAttrib(elmTrxType, "MinAfter")
-            Else
-                objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strTrxTypeAttrib(elmTrxType, "MinAfter")))
-            End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If objItem.SubItems.Count > 3 Then
-                objItem.SubItems(3).Text = strTrxTypeAttrib(elmTrxType, "Number")
-            Else
-                objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strTrxTypeAttrib(elmTrxType, "Number")))
-            End If
-            .Tag = CStr(CShort(intDOMIndex))
-        End With
-        objCreateTrxTypeListItem = objItem
+            objItem = lvwTrxTypes.Items.Add(strTrxTypeAttrib(elmTrxType, "Before"))
+            With objItem
+                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                If objItem.SubItems.Count > 1 Then
+                    objItem.SubItems(1).Text = strTrxTypeAttrib(elmTrxType, "After")
+                Else
+                    objItem.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strTrxTypeAttrib(elmTrxType, "After")))
+                End If
+                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                If objItem.SubItems.Count > 2 Then
+                    objItem.SubItems(2).Text = strTrxTypeAttrib(elmTrxType, "MinAfter")
+                Else
+                    objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strTrxTypeAttrib(elmTrxType, "MinAfter")))
+                End If
+                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                If objItem.SubItems.Count > 3 Then
+                    objItem.SubItems(3).Text = strTrxTypeAttrib(elmTrxType, "Number")
+                Else
+                    objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strTrxTypeAttrib(elmTrxType, "Number")))
+                End If
+                .Tag = CStr(CShort(intDOMIndex))
+            End With
+            objCreateTrxTypeListItem = objItem
 
-        Exit Function
-ErrorHandler:
-        NestedError("objCreateTrxTypeListItem")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
-
-    Private Sub NestedError(ByVal strRoutine As String)
-        gNestedErrorTrap("TrxTypeListForm." & strRoutine)
-    End Sub
-
-    Private Sub TopError(ByVal strRoutine As String)
-        gTopErrorTrap("TrxTypeListForm." & strRoutine)
-    End Sub
 End Class

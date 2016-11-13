@@ -40,30 +40,31 @@ Friend Class ExportForm
     End Sub
 
     Private Sub cmdOkay_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdOkay.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        If Not blnValidControls(chkIncludeAging, txtAgingDate, txtAgingDays, "aging", mblnIncludeAging, mdatAgingDate, mintAgingDays, False) Then
+            If Not blnValidControls(chkIncludeAging, txtAgingDate, txtAgingDays, "aging", mblnIncludeAging, mdatAgingDate, mintAgingDays, False) Then
+                Exit Sub
+            End If
+
+            If Not blnValidControls(chkIncludeTransDate, txtTransDate, txtTransDays, "transaction", mblnIncludeTrans, mdatTransDate, mintTransDays, True) Then
+                Exit Sub
+            End If
+
+            If Not blnValidControls(chkIncludeDueDate, txtDueDate, txtDueDays, "due", mblnIncludeDue, mdatDueDate, mintDueDays, True) Then
+                Exit Sub
+            End If
+
+            If Not blnValidControls(chkIncludeInvDate, txtInvDate, txtInvDays, "invoice", mblnIncludeInv, mdatInvDate, mintInvDays, True) Then
+                Exit Sub
+            End If
+
+            mblnCancel = False
+            Me.Hide()
+
             Exit Sub
-        End If
-
-        If Not blnValidControls(chkIncludeTransDate, txtTransDate, txtTransDays, "transaction", mblnIncludeTrans, mdatTransDate, mintTransDays, True) Then
-            Exit Sub
-        End If
-
-        If Not blnValidControls(chkIncludeDueDate, txtDueDate, txtDueDays, "due", mblnIncludeDue, mdatDueDate, mintDueDays, True) Then
-            Exit Sub
-        End If
-
-        If Not blnValidControls(chkIncludeInvDate, txtInvDate, txtInvDays, "invoice", mblnIncludeInv, mdatInvDate, mintInvDays, True) Then
-            Exit Sub
-        End If
-
-        mblnCancel = False
-        Me.Hide()
-
-        Exit Sub
-ErrorHandler:
-        TopError("cmdOkay_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Function blnValidControls(ByVal chkInclude As System.Windows.Forms.CheckBox, ByVal txtDate As System.Windows.Forms.TextBox, ByVal txtDays As System.Windows.Forms.TextBox, ByVal strLabel As String, ByRef blnInclude As Boolean, ByRef datDate As Date, ByRef intDays As Short, ByVal blnAllowMonthPart As Boolean) As Boolean
@@ -141,60 +142,53 @@ ErrorHandler:
         Dim strDueDate As String = ""
         Dim strBracket As String
 
-        On Error GoTo ErrorHandler
+        Try
 
-        gGetSplitDates(objTrx, objSplit, datInvToUse, datDueToUse)
-        If objSplit.datInvoiceDate > System.DateTime.FromOADate(0) Then
-            strInvDate = gstrFormatDate(objSplit.datInvoiceDate)
-        End If
-        If objSplit.datDueDate > System.DateTime.FromOADate(0) Then
-            strDueDate = gstrFormatDate(objSplit.datDueDate)
-        End If
+            gGetSplitDates(objTrx, objSplit, datInvToUse, datDueToUse)
+            If objSplit.datInvoiceDate > System.DateTime.FromOADate(0) Then
+                strInvDate = gstrFormatDate(objSplit.datInvoiceDate)
+            End If
+            If objSplit.datDueDate > System.DateTime.FromOADate(0) Then
+                strDueDate = gstrFormatDate(objSplit.datDueDate)
+            End If
 
-        strLine = gstrFormatDate(objTrx.datDate) & "," & objTrx.strNumber & ",""" & objTrx.strDescription & """," _
-            & gstrFormatCurrency(objSplit.curAmount) & ",""" & gobjCategories.strKeyToValue1(objSplit.strCategoryKey) _
-            & """," & strDueDate & "," & gstrFormatDate(datDueToUse) & "," & strInvDate & "," _
-            & gstrFormatDate(datInvToUse) & ",""" & objSplit.strPONumber & """,""" & objSplit.strInvoiceNum & """,""" & objSplit.strTerms & """"
+            strLine = gstrFormatDate(objTrx.datDate) & "," & objTrx.strNumber & ",""" & objTrx.strDescription & """," _
+                & gstrFormatCurrency(objSplit.curAmount) & ",""" & gobjCategories.strKeyToValue1(objSplit.strCategoryKey) _
+                & """," & strDueDate & "," & gstrFormatDate(datDueToUse) & "," & strInvDate & "," _
+                & gstrFormatDate(datInvToUse) & ",""" & objSplit.strPONumber & """,""" & objSplit.strInvoiceNum & """,""" & objSplit.strTerms & """"
 
-        'The order of these extra fields must match the order they
-        'are added in OpenOutput().
+            'The order of these extra fields must match the order they
+            'are added in OpenOutput().
 
-        If mblnIncludeAging Then
-            strBracket = gstrMakeAgingBracket(mdatAgingDate, mintAgingDays, objTrx.blnFake, objTrx.datDate, datInvToUse, datDueToUse)
-            strLine = strLine & ",""" & strBracket & """"
-        End If
+            If mblnIncludeAging Then
+                strBracket = gstrMakeAgingBracket(mdatAgingDate, mintAgingDays, objTrx.blnFake, objTrx.datDate, datInvToUse, datDueToUse)
+                strLine = strLine & ",""" & strBracket & """"
+            End If
 
-        If mblnIncludeTrans Then
-            strBracket = gstrMakeDateBracket(objTrx.datDate, mintTransDays, mdatTransDate)
-            strLine = strLine & ",""" & strBracket & """"
-        End If
+            If mblnIncludeTrans Then
+                strBracket = gstrMakeDateBracket(objTrx.datDate, mintTransDays, mdatTransDate)
+                strLine = strLine & ",""" & strBracket & """"
+            End If
 
-        If mblnIncludeDue Then
-            strBracket = gstrMakeDateBracket(datDueToUse, mintDueDays, mdatDueDate)
-            strLine = strLine & ",""" & strBracket & """"
-        End If
+            If mblnIncludeDue Then
+                strBracket = gstrMakeDateBracket(datDueToUse, mintDueDays, mdatDueDate)
+                strLine = strLine & ",""" & strBracket & """"
+            End If
 
-        If mblnIncludeInv Then
-            strBracket = gstrMakeDateBracket(datInvToUse, mintInvDays, mdatInvDate)
-            strLine = strLine & ",""" & strBracket & """"
-        End If
+            If mblnIncludeInv Then
+                strBracket = gstrMakeDateBracket(datInvToUse, mintInvDays, mdatInvDate)
+                strLine = strLine & ",""" & strBracket & """"
+            End If
 
-        PrintLine(mintOutputFile, strLine)
+            PrintLine(mintOutputFile, strLine)
 
-        Exit Sub
-ErrorHandler:
-        NestedError("WriteSplit")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Public Sub CloseOutput()
         FileClose(mintOutputFile)
-    End Sub
-
-    Private Sub TopError(ByVal strRoutine As String)
-        gTopErrorTrap("ExportForm." & strRoutine)
-    End Sub
-
-    Private Sub NestedError(ByVal strRoutine As String)
-        gNestedErrorTrap("ExportForm." & strRoutine)
     End Sub
 End Class

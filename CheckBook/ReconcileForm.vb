@@ -48,14 +48,15 @@ Friend Class ReconcileForm
     End Sub
 
     Private Sub ReconcileForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        On Error GoTo ErrorHandler
+        Try
 
-        LoadTrx()
-        txtEndingBalance.Text = GetSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.strTitle)
+            LoadTrx()
+            txtEndingBalance.Text = GetSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.strTitle)
 
-        Exit Sub
-ErrorHandler:
-        TopError("Form_Load")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub LoadTrx()
@@ -160,28 +161,29 @@ ErrorHandler:
 
     Private Sub lvwTrx_ColumnClick(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.ColumnClickEventArgs) Handles lvwTrx.ColumnClick
         Dim ColumnHeader As System.Windows.Forms.ColumnHeader = lvwTrx.Columns(eventArgs.Column)
-        On Error GoTo ErrorHandler
+        Try
 
-        With lvwTrx
-            Select Case ColumnHeader.Index
-                Case mintCOL_DATE
-                    gSetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_DATE)
-                    .Refresh()
-                Case mintCOL_NUMBER
-                    gSetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_NUMBER)
-                    .Refresh()
-                Case mintCOL_DESCRIPTION
-                    gSetListViewSortColumn(lvwTrx, mintCOL_DESCRIPTION)
-                    .Refresh()
-                Case mintCOL_BANK_DATE
-                    gSetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_BANK_DATE)
-                    .Refresh()
-            End Select
-        End With
+            With lvwTrx
+                Select Case ColumnHeader.Index
+                    Case mintCOL_DATE
+                        gSetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_DATE)
+                        .Refresh()
+                    Case mintCOL_NUMBER
+                        gSetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_NUMBER)
+                        .Refresh()
+                    Case mintCOL_DESCRIPTION
+                        gSetListViewSortColumn(lvwTrx, mintCOL_DESCRIPTION)
+                        .Refresh()
+                    Case mintCOL_BANK_DATE
+                        gSetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_BANK_DATE)
+                        .Refresh()
+                End Select
+            End With
 
-        Exit Sub
-ErrorHandler:
-        TopError("lvwTrx_ColumnClick")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub lvwTrx_ItemCheck(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.ItemCheckEventArgs) Handles lvwTrx.ItemCheck
@@ -189,78 +191,82 @@ ErrorHandler:
         Dim lngArrayIndex As Integer
         Dim objTrx As Trx
 
-        On Error GoTo ErrorHandler
-        'UPGRADE_WARNING: Lower bound of collection Item has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-        lngArrayIndex = CInt(Item.SubItems(mintCOL_ARRAY_INDEX).Text)
-        With maudtTrx(lngArrayIndex)
-            objTrx = .objReg.objTrx(.lngIndex)
-            'Item.Checked still has the OLD value, unlike in VB6.
-            If Not Item.Checked Then
-                mcurClearedBalance = mcurClearedBalance + objTrx.curAmount
-                .blnSelected = True
-            Else
-                mcurClearedBalance = mcurClearedBalance - objTrx.curAmount
-                .blnSelected = False
-            End If
-        End With
-        txtClearedBalance.Text = gstrFormatCurrency(mcurClearedBalance)
+        Try
+            'UPGRADE_WARNING: Lower bound of collection Item has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+            lngArrayIndex = CInt(Item.SubItems(mintCOL_ARRAY_INDEX).Text)
+            With maudtTrx(lngArrayIndex)
+                objTrx = .objReg.objTrx(.lngIndex)
+                'Item.Checked still has the OLD value, unlike in VB6.
+                If Not Item.Checked Then
+                    mcurClearedBalance = mcurClearedBalance + objTrx.curAmount
+                    .blnSelected = True
+                Else
+                    mcurClearedBalance = mcurClearedBalance - objTrx.curAmount
+                    .blnSelected = False
+                End If
+            End With
+            txtClearedBalance.Text = gstrFormatCurrency(mcurClearedBalance)
 
-        Exit Sub
-ErrorHandler:
-        TopError("lvwTrx_ItemCheck")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     'UPGRADE_ISSUE: MSComctlLib.ListView event lvwTrx.ItemClick was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="ABD9AF39-7E24-4AFF-AD8D-3675C1AA3054"'
     'Private Sub lvwTrx_ItemClick(ByVal Item As System.Windows.Forms.ListViewItem)
     'Fired twice if an item is already selected - first for old item, then for new
     Private Sub lvwTrx_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lvwTrx.SelectedIndexChanged
-        On Error GoTo ErrorHandler
-        Dim lvw As ListView
-        Dim Item As ListViewItem
-        lvw = sender
-        If lvw.SelectedIndices.Count > 0 Then
-            Item = lvw.FocusedItem
-            'Fires the "ItemCheck" event
-            Item.Checked = Not Item.Checked
-        End If
+        Try
+            Dim lvw As ListView
+            Dim Item As ListViewItem
+            lvw = sender
+            If lvw.SelectedIndices.Count > 0 Then
+                Item = lvw.FocusedItem
+                'Fires the "ItemCheck" event
+                Item.Checked = Not Item.Checked
+            End If
 
-        Exit Sub
-ErrorHandler:
-        TopError("lvwTrx_SelectedIndexChanged")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdFinish_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdFinish.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        If txtClearedBalance.Text <> txtEndingBalance.Text Then
-            MsgBox("The cleared balance is not equal to the ending statement balance.", MsgBoxStyle.Critical)
+            If txtClearedBalance.Text <> txtEndingBalance.Text Then
+                MsgBox("The cleared balance is not equal to the ending statement balance.", MsgBoxStyle.Critical)
+                Exit Sub
+            End If
+
+            SaveChanges(Trx.TrxStatus.glngTRXSTS_RECON)
+            SaveSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.strTitle, "")
+
+            MsgBox("Congratulations!" & vbCrLf & vbCrLf & "You have reconciled your account to the ending balance " & "on your bank statement. This means that the total of transactions marked as " & "reconciled in the software equals the bank statement ending balance.", MsgBoxStyle.Information)
+            Me.Close()
+
             Exit Sub
-        End If
-
-        SaveChanges(Trx.TrxStatus.glngTRXSTS_RECON)
-        SaveSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.strTitle, "")
-
-        MsgBox("Congratulations!" & vbCrLf & vbCrLf & "You have reconciled your account to the ending balance " & "on your bank statement. This means that the total of transactions marked as " & "reconciled in the software equals the bank statement ending balance.", MsgBoxStyle.Information)
-        Me.Close()
-
-        Exit Sub
-ErrorHandler:
-        TopError("cmdFinish_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdLater_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdLater.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        SaveChanges(Trx.TrxStatus.glngTRXSTS_SELECTED)
-        SaveSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.strTitle, txtEndingBalance.Text)
+            SaveChanges(Trx.TrxStatus.glngTRXSTS_SELECTED)
+            SaveSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.strTitle, txtEndingBalance.Text)
 
-        MsgBox("Your work has been saved. To resume this reconciliation, just " & "reconcile normally. The software will remember what you have already done.", MsgBoxStyle.Information)
+            MsgBox("Your work has been saved. To resume this reconciliation, just " & "reconcile normally. The software will remember what you have already done.", MsgBoxStyle.Information)
 
-        Me.Close()
+            Me.Close()
 
-        Exit Sub
-ErrorHandler:
-        TopError("cmdLater_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub SaveChanges(ByVal lngSelectedStatus As Trx.TrxStatus)
@@ -281,9 +287,5 @@ ErrorHandler:
 
     Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCancel.Click
         Me.Close()
-    End Sub
-
-    Private Sub TopError(ByVal strRoutine As String)
-        gTopErrorTrap("ReconcileFom." & strRoutine)
     End Sub
 End Class

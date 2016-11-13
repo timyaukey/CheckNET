@@ -14,34 +14,32 @@ Friend Class ReconAcctSelectForm
         Dim objAccount As Account
         Dim frm As ReconcileForm
 
-        On Error GoTo ErrorHandler
+        Try
 
-        objAccount = gobjGetSelectedAccountAndUnload(lstAccounts, Me)
-        If objAccount Is Nothing Then
-            MsgBox("Please select the account to reconcile.", MsgBoxStyle.Critical)
+            objAccount = gobjGetSelectedAccountAndUnload(lstAccounts, Me)
+            If objAccount Is Nothing Then
+                MsgBox("Please select the account to reconcile.", MsgBoxStyle.Critical)
+                Exit Sub
+            End If
+
+            frm = New ReconcileForm
+            frm.ShowMe(objAccount)
+
             Exit Sub
-        End If
-
-        frm = New ReconcileForm
-        frm.ShowMe(objAccount)
-
-        Exit Sub
-ErrorHandler:
-        TopError("cmdOkay_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub ReconAcctSelectForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        On Error GoTo ErrorHandler
+        Try
 
-        gLoadAccountListBox(lstAccounts)
+            gLoadAccountListBox(lstAccounts)
 
-        Exit Sub
-ErrorHandler:
-        TopError("Form_Load")
-    End Sub
-
-    Private Sub TopError(ByVal strRoutine As String)
-        gTopErrorTrap("ReconAcctSelectForm." & strRoutine)
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub lstAccounts_DoubleClick(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles lstAccounts.DoubleClick

@@ -19,21 +19,21 @@ Public Class ImportChecks
     End Sub
 
     Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements ITrxImport.blnOpenSource
-        Dim strFirstLine As String
 
-        On Error GoTo ErrorHandler
+        Try
 
-        mobjUtil = New ImportUtilities
-        mobjUtil.Init(objAccount_)
-        mobjUtil.LoadTrxTypeTable()
-        mobjUtil.blnMakeFakeTrx = False
-        mobjUtil.blnNoImportKey = True
+            mobjUtil = New ImportUtilities
+            mobjUtil.Init(objAccount_)
+            mobjUtil.LoadTrxTypeTable()
+            mobjUtil.blnMakeFakeTrx = False
+            mobjUtil.blnNoImportKey = True
 
-        ITrxImport_blnOpenSource = True
+            ITrxImport_blnOpenSource = True
 
-        Exit Function
-ErrorHandler:
-        NestedError("ITrxImport_blnOpenSource")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private Sub ITrxImport_CloseSource() Implements ITrxImport.CloseSource
@@ -47,38 +47,40 @@ ErrorHandler:
         Dim strLine As String
         Dim astrParts() As String
 
-        On Error GoTo ErrorHandler
-
         ITrxImport_objNextTrx = Nothing
-        Do
-            mobjUtil.ClearSavedTrxData()
+        Try
 
-            strLine = mobjFile.ReadLine()
-            If strLine Is Nothing Then
-                Exit Function
-            End If
-            astrParts = gaSplit(Trim(strLine), vbTab)
-            mobjUtil.strTrxNumber = mobjSpecs.strConvertTrxNum(astrParts(mobjSpecs.NumberColumn))
-            mobjUtil.strTrxDate = astrParts(mobjSpecs.DateColumn)
-            mobjUtil.strTrxPayee = astrParts(mobjSpecs.DescrColumn)
-            If (mobjSpecs.MemoColumn >= 0) Then
-                mobjUtil.strTrxMemo = astrParts(mobjSpecs.MemoColumn)
-            End If
-            If astrParts(mobjSpecs.AmountColumn).StartsWith("-") Then
-                mobjUtil.strTrxAmount = astrParts(mobjSpecs.AmountColumn)
-            Else
-                mobjUtil.strTrxAmount = "-" + astrParts(mobjSpecs.AmountColumn)
-            End If
-            If Not mobjSpecs.blnSkipRecord(mobjUtil) Then
-                Exit Do
-            End If
-        Loop
+            ITrxImport_objNextTrx = Nothing
+            Do
+                mobjUtil.ClearSavedTrxData()
 
-        ITrxImport_objNextTrx = mobjUtil.objMakeTrx()
+                strLine = mobjFile.ReadLine()
+                If strLine Is Nothing Then
+                    Exit Function
+                End If
+                astrParts = gaSplit(Trim(strLine), vbTab)
+                mobjUtil.strTrxNumber = mobjSpecs.strConvertTrxNum(astrParts(mobjSpecs.NumberColumn))
+                mobjUtil.strTrxDate = astrParts(mobjSpecs.DateColumn)
+                mobjUtil.strTrxPayee = astrParts(mobjSpecs.DescrColumn)
+                If (mobjSpecs.MemoColumn >= 0) Then
+                    mobjUtil.strTrxMemo = astrParts(mobjSpecs.MemoColumn)
+                End If
+                If astrParts(mobjSpecs.AmountColumn).StartsWith("-") Then
+                    mobjUtil.strTrxAmount = astrParts(mobjSpecs.AmountColumn)
+                Else
+                    mobjUtil.strTrxAmount = "-" + astrParts(mobjSpecs.AmountColumn)
+                End If
+                If Not mobjSpecs.blnSkipRecord(mobjUtil) Then
+                    Exit Do
+                End If
+            Loop
 
-        Exit Function
-ErrorHandler:
-        NestedError("ITrxImport_objNextTrx")
+            ITrxImport_objNextTrx = mobjUtil.objMakeTrx()
+
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private ReadOnly Property ITrxImport_strSource() As String Implements ITrxImport.strSource
@@ -86,9 +88,4 @@ ErrorHandler:
             ITrxImport_strSource = mstrFile
         End Get
     End Property
-
-    Private Sub NestedError(ByVal strRoutine As String)
-        gNestedErrorTrap("ImportChecks." & strRoutine)
-    End Sub
-
 End Class

@@ -69,14 +69,6 @@ Friend Class BankImportForm
     Private mstrImportSearchText As String
     Private mintNextImportToSearch As Short
 
-    Private Sub TopError(ByVal strRoutine As String)
-        gTopErrorTrap("BankImportForm." & strRoutine)
-    End Sub
-
-    Private Sub NestedError(ByVal strRoutine As String)
-        gNestedErrorTrap("BankImportForm." & strRoutine)
-    End Sub
-
     Public Sub ShowMe(ByVal strTitle As String, ByVal objAccount As Account, _
                       ByVal objTrxImport As ITrxImport, _
                       ByVal lngStatusSearchType As CBMain.ImportStatusSearch, _
@@ -87,36 +79,37 @@ Friend Class BankImportForm
                       ByVal lngBatchUpdateType As CBMain.ImportBatchUpdateType, _
                       ByVal blnFake As Boolean)
 
-        On Error GoTo ErrorHandler
+        Try
 
-        mobjAccount = objAccount
-        mobjTrxImport = objTrxImport
-        mlngStatusSearchType = lngStatusSearchType
-        mlngUpdateSearchType = lngUpdateSearchType
-        mlngNewSearchType = lngNewSearchType
-        mlngIndividualUpdateType = lngIndividualUpdateType
-        mlngIndividualSearchType = lngIndividualSearchType
-        mlngBatchUpdateType = lngBatchUpdateType
-        mblnFake = blnFake
+            mobjAccount = objAccount
+            mobjTrxImport = objTrxImport
+            mlngStatusSearchType = lngStatusSearchType
+            mlngUpdateSearchType = lngUpdateSearchType
+            mlngNewSearchType = lngNewSearchType
+            mlngIndividualUpdateType = lngIndividualUpdateType
+            mlngIndividualSearchType = lngIndividualSearchType
+            mlngBatchUpdateType = lngBatchUpdateType
+            mblnFake = blnFake
 
-        mstrImportSearchText = ""
-        mintNextImportToSearch = 1
-        ShowSearchFor()
-        If Not blnLoadImports() Then
+            mstrImportSearchText = ""
+            mintNextImportToSearch = 1
+            ShowSearchFor()
+            If Not blnLoadImports() Then
+                Exit Sub
+            End If
+            DisplayImportItems()
+            LoadRegisterList()
+            gLoadComboFromStringTranslator(cboDefaultCategory, gobjCategories, True)
+
+            Me.Text = strTitle
+            ConfigureButtons()
+            Me.Show()
+
             Exit Sub
-        End If
-        DisplayImportItems()
-        LoadRegisterList()
-        gLoadComboFromStringTranslator(cboDefaultCategory, gobjCategories, True)
-
-        Me.Text = strTitle
-        ConfigureButtons()
-        Me.Show()
-
-        Exit Sub
-ErrorHandler:
-        Me.Close()
-        NestedError("ShowMe")
+        Catch ex As Exception
+            Me.Close()
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Sub ConfigureButtons()
@@ -142,128 +135,129 @@ ErrorHandler:
 
     'UPGRADE_WARNING: Event chkHideCompleted.CheckStateChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
     Private Sub chkHideCompleted_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkHideCompleted.CheckStateChanged
-        On Error GoTo ErrorHandler
+        Try
 
-        DisplayImportItems()
+            DisplayImportItems()
 
-        Exit Sub
-ErrorHandler:
-        TopError("chkHideCompleted_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdFindUpdates_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdFindUpdates.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        Dim objItem As System.Windows.Forms.ListViewItem
-        Dim intItemIndex As Short
-        Dim intFoundCount As Short
-        Dim strFailReason As String = ""
+            Dim objItem As System.Windows.Forms.ListViewItem
+            Dim intItemIndex As Short
+            Dim intFoundCount As Short
+            Dim strFailReason As String = ""
 
-        ClearUpdateMatches()
-        intFoundCount = 0
-        For Each objItem In lvwTrx.Items
-            objItem.Checked = False
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
-            If blnValidForAutoUpdate(intItemIndex, False, strFailReason) Then
-                objItem.Checked = True
-                intFoundCount = intFoundCount + 1
-                With maudtItem(intItemIndex).objMatchedTrx
-                    objItem.ToolTipText = gstrFormatDate(.datDate) + " " + .strDescription + " " + gstrFormatCurrency(.curAmount)
-                End With
-            Else
-                'UPGRADE_ISSUE: MSComctlLib.ListItem property objItem.ToolTipText was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-                objItem.ToolTipText = strFailReason
-            End If
-        Next objItem
+            ClearUpdateMatches()
+            intFoundCount = 0
+            For Each objItem In lvwTrx.Items
+                objItem.Checked = False
+                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
+                If blnValidForAutoUpdate(intItemIndex, False, strFailReason) Then
+                    objItem.Checked = True
+                    intFoundCount = intFoundCount + 1
+                    With maudtItem(intItemIndex).objMatchedTrx
+                        objItem.ToolTipText = gstrFormatDate(.datDate) + " " + .strDescription + " " + gstrFormatCurrency(.curAmount)
+                    End With
+                Else
+                    'UPGRADE_ISSUE: MSComctlLib.ListItem property objItem.ToolTipText was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
+                    objItem.ToolTipText = strFailReason
+                End If
+            Next objItem
 
-        MsgBox("Found " & intFoundCount & " imported transactions with exact matches.")
+            MsgBox("Found " & intFoundCount & " imported transactions with exact matches.")
 
-        Exit Sub
-ErrorHandler:
-        TopError("cmdFindUpdates_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdBatchUpdates_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdBatchUpdates.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        Dim objItem As System.Windows.Forms.ListViewItem
-        Dim intItemIndex As Short
-        Dim intExactCount As Short 'Number of registers where an exact match was found
-        Dim strFailReason As String = ""
-        Dim intUpdateCount As Short
-        Dim datNull As Date
-        Dim strSummaryExplanation As String = ""
-        Dim lngMatchedRegIndex As Integer
+            Dim objItem As System.Windows.Forms.ListViewItem
+            Dim intItemIndex As Short
+            Dim strFailReason As String = ""
+            Dim intUpdateCount As Short
+            Dim strSummaryExplanation As String = ""
+            Dim lngMatchedRegIndex As Integer
 
-        ClearUpdateMatches()
-        For Each objItem In lvwTrx.Items
-            If objItem.Checked Then
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-                intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
-                If Not blnValidForAutoUpdate(intItemIndex, True, strFailReason) Then
-                    objItem.Checked = False
-                    MsgBox("Skipping and unchecking " & strDescribeItem(intItemIndex) & " because: " & strFailReason & ".")
-                End If
-            End If
-        Next objItem
-
-        BeginProgress()
-        intUpdateCount = 0
-        For Each objItem In lvwTrx.Items
-            If objItem.Checked Then
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-                intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
-                With maudtItem(intItemIndex)
-                    lngMatchedRegIndex = .objMatchedReg.lngFindTrx(.objMatchedTrx)
-                    If lngMatchedRegIndex = 0 Then
-                        gRaiseError("Could not find matched Trx")
+            ClearUpdateMatches()
+            For Each objItem In lvwTrx.Items
+                If objItem.Checked Then
+                    'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                    intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
+                    If Not blnValidForAutoUpdate(intItemIndex, True, strFailReason) Then
+                        objItem.Checked = False
+                        MsgBox("Skipping and unchecking " & strDescribeItem(intItemIndex) & " because: " & strFailReason & ".")
                     End If
-                    Select Case mlngBatchUpdateType
+                End If
+            Next objItem
 
-                        Case CBMain.ImportBatchUpdateType.Bank
-                            .objMatchedReg.ImportUpdateBank(lngMatchedRegIndex, .objImportedTrx.datDate, .objMatchedTrx.strNumber, mblnFake, .objImportedTrx.curAmount, .objImportedTrx.strImportKey)
+            BeginProgress()
+            intUpdateCount = 0
+            For Each objItem In lvwTrx.Items
+                If objItem.Checked Then
+                    'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                    intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
+                    With maudtItem(intItemIndex)
+                        lngMatchedRegIndex = .objMatchedReg.lngFindTrx(.objMatchedTrx)
+                        If lngMatchedRegIndex = 0 Then
+                            gRaiseError("Could not find matched Trx")
+                        End If
+                        Select Case mlngBatchUpdateType
 
-                        Case CBMain.ImportBatchUpdateType.Amount
-                            .objMatchedReg.ImportUpdateAmount(lngMatchedRegIndex, mblnFake, .objImportedTrx.curAmount)
+                            Case CBMain.ImportBatchUpdateType.Bank
+                                .objMatchedReg.ImportUpdateBank(lngMatchedRegIndex, .objImportedTrx.datDate, .objMatchedTrx.strNumber, mblnFake, .objImportedTrx.curAmount, .objImportedTrx.strImportKey)
 
-                        Case CBMain.ImportBatchUpdateType.NumberAmount
-                            .objMatchedReg.ImportUpdateNumAmt(lngMatchedRegIndex, .objImportedTrx.strNumber, mblnFake, .objImportedTrx.curAmount)
+                            Case CBMain.ImportBatchUpdateType.Amount
+                                .objMatchedReg.ImportUpdateAmount(lngMatchedRegIndex, mblnFake, .objImportedTrx.curAmount)
 
-                        Case Else
-                            'Should not be possible.
-                            gRaiseError("Invalid batch update type")
+                            Case CBMain.ImportBatchUpdateType.NumberAmount
+                                .objMatchedReg.ImportUpdateNumAmt(lngMatchedRegIndex, .objImportedTrx.strNumber, mblnFake, .objImportedTrx.curAmount)
 
-                    End Select
+                            Case Else
+                                'Should not be possible.
+                                gRaiseError("Invalid batch update type")
 
-                    .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
-                    .objReg = .objMatchedReg
-                    DisplayOneImportItem(objItem, intItemIndex)
-                    intUpdateCount = intUpdateCount + 1
-                    UpdateProgress(.objReg)
-                End With
-            End If
-        Next objItem
-        EndProgress()
+                        End Select
 
-        Select Case mlngBatchUpdateType
-            Case CBMain.ImportBatchUpdateType.Bank
-                strSummaryExplanation = "without changing transaction numbers, or transaction dates."
-            Case CBMain.ImportBatchUpdateType.Amount
-                strSummaryExplanation = "updating transaction amounts only."
-            Case CBMain.ImportBatchUpdateType.NumberAmount
-                strSummaryExplanation = "updating transaction numbers and amounts."
-            Case Else
-                'Should not be possible.
-                gRaiseError("Invalid batch update type")
-        End Select
+                        .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
+                        .objReg = .objMatchedReg
+                        DisplayOneImportItem(objItem, intItemIndex)
+                        intUpdateCount = intUpdateCount + 1
+                        UpdateProgress(.objReg)
+                    End With
+                End If
+            Next objItem
+            EndProgress()
 
-        MsgBox("Marked " & intUpdateCount & " transactions as imported, " & strSummaryExplanation)
+            Select Case mlngBatchUpdateType
+                Case CBMain.ImportBatchUpdateType.Bank
+                    strSummaryExplanation = "without changing transaction numbers, or transaction dates."
+                Case CBMain.ImportBatchUpdateType.Amount
+                    strSummaryExplanation = "updating transaction amounts only."
+                Case CBMain.ImportBatchUpdateType.NumberAmount
+                    strSummaryExplanation = "updating transaction numbers and amounts."
+                Case Else
+                    'Should not be possible.
+                    gRaiseError("Invalid batch update type")
+            End Select
 
-        Exit Sub
-ErrorHandler:
-        EndProgress()
-        TopError("cmdBatchUpdates_Click")
+            MsgBox("Marked " & intUpdateCount & " transactions as imported, " & strSummaryExplanation)
+
+            Exit Sub
+        Catch ex As Exception
+            EndProgress()
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub ClearUpdateMatches()
@@ -432,147 +426,149 @@ ErrorHandler:
     End Function
 
     Private Sub cmdFindNew_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdFindNew.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        Dim objItem As System.Windows.Forms.ListViewItem
-        Dim intItemIndex As Short
-        Dim intFoundCount As Short
-        Dim strFailReason As String = ""
+            Dim objItem As System.Windows.Forms.ListViewItem
+            Dim intItemIndex As Short
+            Dim intFoundCount As Short
+            Dim strFailReason As String = ""
 
-        intFoundCount = 0
-        For Each objItem In lvwTrx.Items
-            objItem.Checked = False
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
-            If blnValidForAutoNew(intItemIndex, False, False, strFailReason) Then
-                objItem.Checked = True
-                intFoundCount = intFoundCount + 1
-                'UPGRADE_ISSUE: MSComctlLib.ListItem property objItem.ToolTipText was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-                objItem.ToolTipText = "Selected"
-            Else
-                'UPGRADE_ISSUE: MSComctlLib.ListItem property objItem.ToolTipText was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-                objItem.ToolTipText = strFailReason
-            End If
-        Next objItem
+            intFoundCount = 0
+            For Each objItem In lvwTrx.Items
+                objItem.Checked = False
+                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
+                If blnValidForAutoNew(intItemIndex, False, False, strFailReason) Then
+                    objItem.Checked = True
+                    intFoundCount = intFoundCount + 1
+                    'UPGRADE_ISSUE: MSComctlLib.ListItem property objItem.ToolTipText was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
+                    objItem.ToolTipText = "Selected"
+                Else
+                    'UPGRADE_ISSUE: MSComctlLib.ListItem property objItem.ToolTipText was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
+                    objItem.ToolTipText = strFailReason
+                End If
+            Next objItem
 
-        MsgBox("Found " & intFoundCount & " imported transactions to turn into new transactions.")
+            MsgBox("Found " & intFoundCount & " imported transactions to turn into new transactions.")
 
-        Exit Sub
-ErrorHandler:
-        TopError("cmdFindNew_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdBatchNew_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdBatchNew.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        Dim objItem As System.Windows.Forms.ListViewItem
-        Dim intItemIndex As Short
-        Dim intCreateCount As Short
-        Dim frm As TrxForm
-        Dim datDummy As Date
-        Dim objImportedTrx As Trx
-        Dim objImportedSplit As Split_Renamed
-        Dim colPOMatches As Collection = Nothing
-        Dim blnItemImported As Boolean
-        Dim vlngMatchedTrxIndex As Object
-        Dim objMatchedTrx As Trx
-        Dim objMatchedSplit As Split_Renamed
-        Dim strPONumber As String
-        Dim blnAllowBankNonCard As Boolean
-        Dim strFailReason As String = ""
+            Dim objItem As System.Windows.Forms.ListViewItem
+            Dim intItemIndex As Short
+            Dim intCreateCount As Short
+            Dim frm As TrxForm
+            Dim datDummy As Date
+            Dim objImportedTrx As Trx
+            Dim objImportedSplit As Split_Renamed
+            Dim colPOMatches As Collection = Nothing
+            Dim blnItemImported As Boolean
+            Dim vlngMatchedTrxIndex As Object
+            Dim objMatchedTrx As Trx
+            Dim objMatchedSplit As Split_Renamed
+            Dim strPONumber As String
+            Dim blnAllowBankNonCard As Boolean
+            Dim strFailReason As String = ""
 
-        If mobjSelectedRegister Is Nothing Then
-            MsgBox("First select the register to create the transactions in.", MsgBoxStyle.Critical)
-            Exit Sub
-        End If
-
-        If MsgBox("Do you really want to create new transactions for everything" & " you have checked?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
-            Exit Sub
-        End If
-
-        blnAllowBankNonCard = (chkAllowManualBatchNew.CheckState = System.Windows.Forms.CheckState.Checked)
-
-        For Each objItem In lvwTrx.Items
-            If objItem.Checked Then
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-                intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
-                If Not blnValidForAutoNew(intItemIndex, blnAllowBankNonCard, True, strFailReason) Then
-                    MsgBox("Skipping and unchecking " & strDescribeItem(intItemIndex) & " because: " & strFailReason & ".")
-                    objItem.Checked = False
-                End If
+            If mobjSelectedRegister Is Nothing Then
+                MsgBox("First select the register to create the transactions in.", MsgBoxStyle.Critical)
+                Exit Sub
             End If
-        Next objItem
 
-        BeginProgress()
-        intCreateCount = 0
-        For Each objItem In lvwTrx.Items
-            If objItem.Checked Then
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-                intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
-                blnItemImported = False
-                objImportedTrx = maudtItem(intItemIndex).objImportedTrx
-                'Check if we are importing an invoice that can be matched to a purchase order.
-                'If this happens we update an existing Trx by adding a split rather than creating
-                'a new Trx as would normally be the case in this method.
-                If mlngNewSearchType = CBMain.ImportBatchNewSearch.VendorInvoice Then
-                    If objImportedTrx.colSplits.Count() > 0 Then
-                        objImportedSplit = objImportedTrx.colSplits.Item(1)
-                        strPONumber = objImportedSplit.strPONumber
-                        If LCase(strPONumber) = "none" Then
-                            strPONumber = ""
-                        End If
-                        If strPONumber <> "" Then
-                            mobjSelectedRegister.MatchPONumber(objImportedTrx.datDate, 14, objImportedTrx.strDescription, strPONumber, colPOMatches)
-                            'There should be only one matching Trx, but we'll check all matches
-                            'and use the first one with a split with no invoice number. That split
-                            'represents the uninvoiced part of the purchase order due on that date.
-                            For Each vlngMatchedTrxIndex In colPOMatches
-                                'UPGRADE_WARNING: Couldn't resolve default property of object vlngMatchedTrxIndex. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                                objMatchedTrx = mobjSelectedRegister.objTrx(vlngMatchedTrxIndex)
-                                For Each objMatchedSplit In objMatchedTrx.colSplits
-                                    If objMatchedSplit.strPONumber = strPONumber And objMatchedSplit.strInvoiceNum = "" Then
-                                        'Add the imported Trx as a new split in objMatchedTrx,
-                                        'and reduce the amount of objMatchedSplit by the same amount
-                                        'so the total amount of objMatchedTrx does not change.
-                                        'UPGRADE_WARNING: Couldn't resolve default property of object vlngMatchedTrxIndex. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                                        mobjSelectedRegister.ImportUpdatePurchaseOrder(vlngMatchedTrxIndex, objMatchedSplit, objImportedSplit)
-                                        blnItemImported = True
-                                    End If
-                                Next objMatchedSplit
-                            Next vlngMatchedTrxIndex
-                        End If
+            If MsgBox("Do you really want to create new transactions for everything" & " you have checked?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                Exit Sub
+            End If
+
+            blnAllowBankNonCard = (chkAllowManualBatchNew.CheckState = System.Windows.Forms.CheckState.Checked)
+
+            For Each objItem In lvwTrx.Items
+                If objItem.Checked Then
+                    'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                    intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
+                    If Not blnValidForAutoNew(intItemIndex, blnAllowBankNonCard, True, strFailReason) Then
+                        MsgBox("Skipping and unchecking " & strDescribeItem(intItemIndex) & " because: " & strFailReason & ".")
+                        objItem.Checked = False
                     End If
                 End If
-                'If we did not match the import to a purchase order.
-                If Not blnItemImported Then
-                    frm = New TrxForm
-                    If Not frm.blnAddNormalSilent(mobjAccount, mobjSelectedRegister, objImportedTrx, datDummy, True, "ImportNewBatch") Then
-                        'Either the Trx was silently added, or TrxForm was displayed because
-                        'of a validation error and the user successfully fixed the problem
-                        'and saved the Trx.
-                        blnItemImported = True
+            Next objItem
+
+            BeginProgress()
+            intCreateCount = 0
+            For Each objItem In lvwTrx.Items
+                If objItem.Checked Then
+                    'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                    intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
+                    blnItemImported = False
+                    objImportedTrx = maudtItem(intItemIndex).objImportedTrx
+                    'Check if we are importing an invoice that can be matched to a purchase order.
+                    'If this happens we update an existing Trx by adding a split rather than creating
+                    'a new Trx as would normally be the case in this method.
+                    If mlngNewSearchType = CBMain.ImportBatchNewSearch.VendorInvoice Then
+                        If objImportedTrx.colSplits.Count() > 0 Then
+                            objImportedSplit = objImportedTrx.colSplits.Item(1)
+                            strPONumber = objImportedSplit.strPONumber
+                            If LCase(strPONumber) = "none" Then
+                                strPONumber = ""
+                            End If
+                            If strPONumber <> "" Then
+                                mobjSelectedRegister.MatchPONumber(objImportedTrx.datDate, 14, objImportedTrx.strDescription, strPONumber, colPOMatches)
+                                'There should be only one matching Trx, but we'll check all matches
+                                'and use the first one with a split with no invoice number. That split
+                                'represents the uninvoiced part of the purchase order due on that date.
+                                For Each vlngMatchedTrxIndex In colPOMatches
+                                    'UPGRADE_WARNING: Couldn't resolve default property of object vlngMatchedTrxIndex. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                                    objMatchedTrx = mobjSelectedRegister.objTrx(vlngMatchedTrxIndex)
+                                    For Each objMatchedSplit In objMatchedTrx.colSplits
+                                        If objMatchedSplit.strPONumber = strPONumber And objMatchedSplit.strInvoiceNum = "" Then
+                                            'Add the imported Trx as a new split in objMatchedTrx,
+                                            'and reduce the amount of objMatchedSplit by the same amount
+                                            'so the total amount of objMatchedTrx does not change.
+                                            'UPGRADE_WARNING: Couldn't resolve default property of object vlngMatchedTrxIndex. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                                            mobjSelectedRegister.ImportUpdatePurchaseOrder(vlngMatchedTrxIndex, objMatchedSplit, objImportedSplit)
+                                            blnItemImported = True
+                                        End If
+                                    Next objMatchedSplit
+                                Next vlngMatchedTrxIndex
+                            End If
+                        End If
+                    End If
+                    'If we did not match the import to a purchase order.
+                    If Not blnItemImported Then
+                        frm = New TrxForm
+                        If Not frm.blnAddNormalSilent(mobjAccount, mobjSelectedRegister, objImportedTrx, datDummy, True, "ImportNewBatch") Then
+                            'Either the Trx was silently added, or TrxForm was displayed because
+                            'of a validation error and the user successfully fixed the problem
+                            'and saved the Trx.
+                            blnItemImported = True
+                        End If
+                    End If
+                    'Now update the UI on the import form and any open register forms.
+                    If blnItemImported Then
+                        With maudtItem(intItemIndex)
+                            .lngStatus = ImportStatus.mlngIMPSTS_NEW
+                            .objReg = mobjSelectedRegister
+                        End With
+                        DisplayOneImportItem(objItem, intItemIndex)
+                        intCreateCount = intCreateCount + 1
+                        UpdateProgress(mobjSelectedRegister)
                     End If
                 End If
-                'Now update the UI on the import form and any open register forms.
-                If blnItemImported Then
-                    With maudtItem(intItemIndex)
-                        .lngStatus = ImportStatus.mlngIMPSTS_NEW
-                        .objReg = mobjSelectedRegister
-                    End With
-                    DisplayOneImportItem(objItem, intItemIndex)
-                    intCreateCount = intCreateCount + 1
-                    UpdateProgress(mobjSelectedRegister)
-                End If
-            End If
-        Next objItem
-        EndProgress()
+            Next objItem
+            EndProgress()
 
-        MsgBox("Imported " & intCreateCount & " transactions into the selected register.")
+            MsgBox("Imported " & intCreateCount & " transactions into the selected register.")
 
-        Exit Sub
-ErrorHandler:
-        EndProgress()
-        TopError("cmdBatchNew_Click")
+            Exit Sub
+        Catch ex As Exception
+            EndProgress()
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Function blnValidForAutoNew(ByRef intItemIndex As Short, ByVal blnAllowBankNonCard As Boolean, ByVal blnSetMissingCategory As Boolean, ByRef strFailReason As String) As Boolean
@@ -688,51 +684,53 @@ ErrorHandler:
     End Sub
 
     Private Sub cmdRefreshItems_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRefreshItems.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        DisplayImportItems()
+            DisplayImportItems()
 
-        Exit Sub
-ErrorHandler:
-        TopError("cmdRefreshItems_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Function blnLoadImports() As Boolean
         Dim objImportedTrx As ImportedTrx
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If Not mobjTrxImport.blnOpenSource(mobjAccount) Then
-            Exit Function
-        End If
-        lblReadFrom.Text = "Items read from " & mobjTrxImport.strSource
-
-        blnLoadImports = True
-        mintItems = 0
-        Erase maudtItem
-
-        Do
-            objImportedTrx = mobjTrxImport.objNextTrx()
-            If objImportedTrx Is Nothing Then
-                Exit Do
+            If Not mobjTrxImport.blnOpenSource(mobjAccount) Then
+                Exit Function
             End If
-            mintItems = mintItems + 1
-            'UPGRADE_WARNING: Lower bound of array maudtItem was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
-            ReDim Preserve maudtItem(mintItems)
-            With maudtItem(mintItems)
-                'UPGRADE_NOTE: Object maudtItem().objReg may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-                .objReg = Nothing
-                .objImportedTrx = objImportedTrx
-                .lngStatus = ImportStatus.mlngIMPSTS_UNRESOLVED
-            End With
-        Loop
+            lblReadFrom.Text = "Items read from " & mobjTrxImport.strSource
 
-        mobjTrxImport.CloseSource()
+            blnLoadImports = True
+            mintItems = 0
+            Erase maudtItem
 
-        Exit Function
-ErrorHandler:
-        mobjTrxImport.CloseSource()
-        NestedError("blnLoadImports")
+            Do
+                objImportedTrx = mobjTrxImport.objNextTrx()
+                If objImportedTrx Is Nothing Then
+                    Exit Do
+                End If
+                mintItems = mintItems + 1
+                'UPGRADE_WARNING: Lower bound of array maudtItem was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
+                ReDim Preserve maudtItem(mintItems)
+                With maudtItem(mintItems)
+                    'UPGRADE_NOTE: Object maudtItem().objReg may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+                    .objReg = Nothing
+                    .objImportedTrx = objImportedTrx
+                    .lngStatus = ImportStatus.mlngIMPSTS_UNRESOLVED
+                End With
+            Loop
+
+            mobjTrxImport.CloseSource()
+
+            Exit Function
+        Catch ex As Exception
+            mobjTrxImport.CloseSource()
+            gNestedException(ex)
+        End Try
     End Function
 
     '$Description Display import items.
@@ -744,47 +742,50 @@ ErrorHandler:
         Dim objNewItem As System.Windows.Forms.ListViewItem = Nothing
         Dim objNewSelectedItem As System.Windows.Forms.ListViewItem = Nothing
 
-        On Error GoTo ErrorHandler
+        Try
 
-        ClearCurrentItemMatches()
-        blnShowCompleted = (chkHideCompleted.CheckState <> System.Windows.Forms.CheckState.Checked)
-        If Not lvwTrx.FocusedItem Is Nothing Then
-            intOldSelectedIndex = intSelectedItemIndex()
-        End If
-        lvwTrx.Items.Clear()
-        For intIndex = 1 To mintItems
-            If maudtItem(intIndex).lngStatus = ImportStatus.mlngIMPSTS_UNRESOLVED Or blnShowCompleted Then
-                blnMatchImport(intIndex)
-                objNewItem = objAddToImportList(intIndex)
-                If intIndex = intOldSelectedIndex Then
-                    objNewSelectedItem = objNewItem
-                End If
+            ClearCurrentItemMatches()
+            blnShowCompleted = (chkHideCompleted.CheckState <> System.Windows.Forms.CheckState.Checked)
+            If Not lvwTrx.FocusedItem Is Nothing Then
+                intOldSelectedIndex = intSelectedItemIndex()
             End If
-        Next
-        ClearLvwSelection(lvwTrx)
-        If Not objNewSelectedItem Is Nothing Then
-            lvwTrx.FocusedItem = objNewSelectedItem
-            'UPGRADE_WARNING: MSComctlLib.ListItem method objNewSelectedItem.EnsureVisible has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
-            objNewSelectedItem.EnsureVisible()
-        End If
+            lvwTrx.Items.Clear()
+            For intIndex = 1 To mintItems
+                If maudtItem(intIndex).lngStatus = ImportStatus.mlngIMPSTS_UNRESOLVED Or blnShowCompleted Then
+                    blnMatchImport(intIndex)
+                    objNewItem = objAddToImportList(intIndex)
+                    If intIndex = intOldSelectedIndex Then
+                        objNewSelectedItem = objNewItem
+                    End If
+                End If
+            Next
+            ClearLvwSelection(lvwTrx)
+            If Not objNewSelectedItem Is Nothing Then
+                lvwTrx.FocusedItem = objNewSelectedItem
+                'UPGRADE_WARNING: MSComctlLib.ListItem method objNewSelectedItem.EnsureVisible has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
+                objNewSelectedItem.EnsureVisible()
+            End If
 
-        Exit Sub
-ErrorHandler:
-        NestedError("DisplayImportItems")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Function objAddToImportList(ByVal intIndex As Short) As System.Windows.Forms.ListViewItem
         Dim objItem As System.Windows.Forms.ListViewItem
 
-        On Error GoTo ErrorHandler
+        objAddToImportList = Nothing
+        Try
 
-        objItem = gobjListViewAdd(lvwTrx)
-        DisplayOneImportItem(objItem, intIndex)
-        objAddToImportList = objItem
+            objItem = gobjListViewAdd(lvwTrx)
+            DisplayOneImportItem(objItem, intIndex)
+            objAddToImportList = objItem
 
-        Exit Function
-ErrorHandler:
-        NestedError("objAddToImportList")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private Sub DisplayOneImportItem(ByVal objItem As System.Windows.Forms.ListViewItem, ByVal intIndex As Short)
@@ -792,36 +793,37 @@ ErrorHandler:
         Dim objTrx As ImportedTrx
         Dim strStatus As String = ""
 
-        On Error GoTo ErrorHandler
+        Try
 
-        objTrx = maudtItem(intIndex).objImportedTrx
-        SetTrxSubItems(objTrx, objItem, maudtItem(intIndex).objReg, 6)
-        With objItem
-            Select Case maudtItem(intIndex).lngStatus
-                Case ImportStatus.mlngIMPSTS_PRIOR
-                    strStatus = "Prior"
-                Case ImportStatus.mlngIMPSTS_NEW
-                    strStatus = "New"
-                Case ImportStatus.mlngIMPSTS_UPDATE
-                    strStatus = "Update"
-            End Select
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If objItem.SubItems.Count > 5 Then
-                objItem.SubItems(5).Text = strStatus
-            Else
-                objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strStatus))
-            End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-            If objItem.SubItems.Count > mintITMCOL_INDEX Then
-                objItem.SubItems(mintITMCOL_INDEX).Text = CStr(intIndex)
-            Else
-                objItem.SubItems.Insert(mintITMCOL_INDEX, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, CStr(intIndex)))
-            End If
-        End With
+            objTrx = maudtItem(intIndex).objImportedTrx
+            SetTrxSubItems(objTrx, objItem, maudtItem(intIndex).objReg, 6)
+            With objItem
+                Select Case maudtItem(intIndex).lngStatus
+                    Case ImportStatus.mlngIMPSTS_PRIOR
+                        strStatus = "Prior"
+                    Case ImportStatus.mlngIMPSTS_NEW
+                        strStatus = "New"
+                    Case ImportStatus.mlngIMPSTS_UPDATE
+                        strStatus = "Update"
+                End Select
+                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                If objItem.SubItems.Count > 5 Then
+                    objItem.SubItems(5).Text = strStatus
+                Else
+                    objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strStatus))
+                End If
+                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                If objItem.SubItems.Count > mintITMCOL_INDEX Then
+                    objItem.SubItems(mintITMCOL_INDEX).Text = CStr(intIndex)
+                Else
+                    objItem.SubItems.Insert(mintITMCOL_INDEX, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, CStr(intIndex)))
+                End If
+            End With
 
-        Exit Sub
-ErrorHandler:
-        NestedError("DisplayOneImportItem")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Sub LoadRegisterList()
@@ -840,29 +842,30 @@ ErrorHandler:
 
     Private Sub BankImportForm_KeyPress(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.KeyPressEventArgs) Handles MyBase.KeyPress
         Dim KeyAscii As Short = Asc(eventArgs.KeyChar)
-        On Error GoTo ErrorHandler
-        If KeyAscii >= 32 And KeyAscii <= 126 Then
-            mstrImportSearchText = mstrImportSearchText & Chr(KeyAscii)
-            KeyAscii = 0
-            ShowSearchFor()
-        ElseIf KeyAscii = 3 Then  '^C (clear search string)
-            mstrImportSearchText = ""
-            KeyAscii = 0
-            ShowSearchFor()
-        ElseIf KeyAscii = 8 Then  'Backspace (delete last char from search string)
-            If Len(mstrImportSearchText) > 0 Then
-                mstrImportSearchText = VB.Left(mstrImportSearchText, Len(mstrImportSearchText) - 1)
+        Try
+            If KeyAscii >= 32 And KeyAscii <= 126 Then
+                mstrImportSearchText = mstrImportSearchText & Chr(KeyAscii)
+                KeyAscii = 0
+                ShowSearchFor()
+            ElseIf KeyAscii = 3 Then  '^C (clear search string)
+                mstrImportSearchText = ""
+                KeyAscii = 0
+                ShowSearchFor()
+            ElseIf KeyAscii = 8 Then  'Backspace (delete last char from search string)
+                If Len(mstrImportSearchText) > 0 Then
+                    mstrImportSearchText = VB.Left(mstrImportSearchText, Len(mstrImportSearchText) - 1)
+                End If
+                KeyAscii = 0
+                ShowSearchFor()
+            ElseIf KeyAscii = 19 Then  '^S (search for search string)
+                FindMatchingImport()
+                KeyAscii = 0
             End If
-            KeyAscii = 0
-            ShowSearchFor()
-        ElseIf KeyAscii = 19 Then  '^S (search for search string)
-            FindMatchingImport()
-            KeyAscii = 0
-        End If
 
-        GoTo EventExitSub
-ErrorHandler:
-        TopError("Form_KeyPress")
+            GoTo EventExitSub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
 EventExitSub:
         eventArgs.KeyChar = Chr(KeyAscii)
         If KeyAscii = 0 Then
@@ -912,30 +915,32 @@ EventExitSub:
     End Sub
 
     Private Sub lvwTrx_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles lvwTrx.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        If Not lvwTrx.FocusedItem Is Nothing Then
-            SearchForMatches()
-        End If
+            If Not lvwTrx.FocusedItem Is Nothing Then
+                SearchForMatches()
+            End If
 
-        Exit Sub
-ErrorHandler:
-        TopError("lvwTrx_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdRepeatSearch_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRepeatSearch.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        'Did they select anything?
-        If lvwTrx.FocusedItem Is Nothing Then
-            MsgBox("Select an item in the top list first.", MsgBoxStyle.Critical)
+            'Did they select anything?
+            If lvwTrx.FocusedItem Is Nothing Then
+                MsgBox("Select an item in the top list first.", MsgBoxStyle.Critical)
+                Exit Sub
+            End If
+            SearchForMatches()
+
             Exit Sub
-        End If
-        SearchForMatches()
-
-        Exit Sub
-ErrorHandler:
-        TopError("cmdRepeatSearch_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     'Search for matches to the import item currently selected in the top list.
@@ -945,7 +950,6 @@ ErrorHandler:
         Dim objImportedTrx As ImportedTrx
         Dim objLoaded As LoadedRegister
         Dim objReg As Register
-        Dim lngImportMatch As Integer
         Dim intItemIndex As Short
         Dim lngNumber As Integer
         Dim colMatches As Collection = Nothing
@@ -954,76 +958,77 @@ ErrorHandler:
         Dim vlngRegIndex As Object
         Dim objMatchedTrx As Trx
 
-        On Error GoTo ErrorHandler
+        Try
 
-        ClearCurrentItemMatches()
+            ClearCurrentItemMatches()
 
-        'Has the selected item already been processed?
-        intItemIndex = intSelectedItemIndex()
-        If maudtItem(intItemIndex).lngStatus <> ImportStatus.mlngIMPSTS_UNRESOLVED Then
+            'Has the selected item already been processed?
+            intItemIndex = intSelectedItemIndex()
+            If maudtItem(intItemIndex).lngStatus <> ImportStatus.mlngIMPSTS_UNRESOLVED Then
+                Exit Sub
+            End If
+
+            'This is the import item they selected.
+            objImportedTrx = maudtItem(intItemIndex).objImportedTrx
+
+            'Not usually possible to match here, because the item would have been matched
+            'when loaded and detected a few lines above where it checks the import status.
+            'Probably means the matching trx was changed since the imports were loaded,
+            'and it only matches now.
+            If blnMatchImport(intItemIndex) Then
+                RedisplaySelectedItem()
+                Exit Sub
+            End If
+
+            'Look for possible matches in ALL registers, not just the selected register.
+            If IsNumeric(objImportedTrx.strNumber) Then
+                lngNumber = CInt(objImportedTrx.strNumber)
+            Else
+                lngNumber = 0
+            End If
+            For Each objLoaded In mobjAccount.colLoadedRegisters
+                objReg = objLoaded.objReg
+
+                Select Case mlngIndividualSearchType
+                    Case CBMain.ImportIndividualSearchType.Bank
+                        objReg.MatchCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount, _
+                                         objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, _
+                                         chkLooseMatch.CheckState = System.Windows.Forms.CheckState.Checked, colMatches, colExactMatches, blnExactMatch)
+                        objReg.PruneToNonImportedExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
+                    Case CBMain.ImportIndividualSearchType.Payee
+                        objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, False, colMatches, blnExactMatch)
+                    Case CBMain.ImportIndividualSearchType.VendorInvoice
+                        objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.colSplits.Item(1).strInvoiceNum, colMatches)
+                        blnExactMatch = True
+                    Case Else
+                        'Should not be possible
+                        gRaiseError("Invalid individual search type")
+                End Select
+                For Each vlngRegIndex In colMatches
+                    objMatchedTrx = objReg.objTrx(vlngRegIndex)
+                    'Show the match if it hasn't been imported before,
+                    'or we're importing a fake trx. We allow fake trx to be imported
+                    'so we can import document information for them - we don't save
+                    'their amount or trx number if matched to a real trx.
+                    If (Len(objMatchedTrx.strImportKey) = 0 Or objImportedTrx.blnFake) And objMatchedTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
+                        mintMatches = mintMatches + 1
+                        ReDim Preserve maudtMatch(mintMatches)
+                        With maudtMatch(mintMatches)
+                            .objReg = objReg
+                            .objTrx = objMatchedTrx
+                            .lngRegIndex = vlngRegIndex
+                        End With
+                        DisplayMatch(objMatchedTrx, mintMatches)
+                    End If
+                Next vlngRegIndex
+            Next objLoaded
+            'Deselect everything in list (the first item is selected by default).
+            ClearLvwSelection(lvwMatches)
+
             Exit Sub
-        End If
-
-        'This is the import item they selected.
-        objImportedTrx = maudtItem(intItemIndex).objImportedTrx
-
-        'Not usually possible to match here, because the item would have been matched
-        'when loaded and detected a few lines above where it checks the import status.
-        'Probably means the matching trx was changed since the imports were loaded,
-        'and it only matches now.
-        If blnMatchImport(intItemIndex) Then
-            RedisplaySelectedItem()
-            Exit Sub
-        End If
-
-        'Look for possible matches in ALL registers, not just the selected register.
-        If IsNumeric(objImportedTrx.strNumber) Then
-            lngNumber = CInt(objImportedTrx.strNumber)
-        Else
-            lngNumber = 0
-        End If
-        For Each objLoaded In mobjAccount.colLoadedRegisters
-            objReg = objLoaded.objReg
-
-            Select Case mlngIndividualSearchType
-                Case CBMain.ImportIndividualSearchType.Bank
-                    objReg.MatchCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount, _
-                                     objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, _
-                                     chkLooseMatch.CheckState = System.Windows.Forms.CheckState.Checked, colMatches, colExactMatches, blnExactMatch)
-                    objReg.PruneToNonImportedExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
-                Case CBMain.ImportIndividualSearchType.Payee
-                    objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, False, colMatches, blnExactMatch)
-                Case CBMain.ImportIndividualSearchType.VendorInvoice
-                    objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.colSplits.Item(1).strInvoiceNum, colMatches)
-                    blnExactMatch = True
-                Case Else
-                    'Should not be possible
-                    gRaiseError("Invalid individual search type")
-            End Select
-            For Each vlngRegIndex In colMatches
-                objMatchedTrx = objReg.objTrx(vlngRegIndex)
-                'Show the match if it hasn't been imported before,
-                'or we're importing a fake trx. We allow fake trx to be imported
-                'so we can import document information for them - we don't save
-                'their amount or trx number if matched to a real trx.
-                If (Len(objMatchedTrx.strImportKey) = 0 Or objImportedTrx.blnFake) And objMatchedTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
-                    mintMatches = mintMatches + 1
-                    ReDim Preserve maudtMatch(mintMatches)
-                    With maudtMatch(mintMatches)
-                        .objReg = objReg
-                        .objTrx = objMatchedTrx
-                        .lngRegIndex = vlngRegIndex
-                    End With
-                    DisplayMatch(objMatchedTrx, mintMatches)
-                End If
-            Next vlngRegIndex
-        Next objLoaded
-        'Deselect everything in list (the first item is selected by default).
-        ClearLvwSelection(lvwMatches)
-
-        Exit Sub
-ErrorHandler:
-        NestedError("SearchForMatches")
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     'Look for an existing transaction that matches the specified import item.
@@ -1039,59 +1044,60 @@ ErrorHandler:
         Dim lngImportMatch As Integer
         Dim lngNumber As Integer
 
-        On Error GoTo ErrorHandler
+        Try
 
-        'This is the import item they selected.
-        objImportedTrx = maudtItem(intItemIndex).objImportedTrx
-        If IsNumeric(objImportedTrx.strNumber) Then
-            lngNumber = CInt(objImportedTrx.strNumber)
-        Else
-            lngNumber = 0
-        End If
-
-        'Look for an import match in ALL registers, not just the selected register.
-        'If found, update maudtItem() and redisplay it with the match info.
-        For Each objLoaded In mobjAccount.colLoadedRegisters
-            objReg = objLoaded.objReg
-            lngImportMatch = 0
-            Select Case mlngStatusSearchType
-                Case CBMain.ImportStatusSearch.Bank
-                    If objImportedTrx.strImportKey <> "" Then
-                        lngImportMatch = objReg.lngMatchImportKey(objImportedTrx.strImportKey)
-                    End If
-                Case ImportStatusSearch.BillPayment
-                    lngImportMatch = objReg.lngMatchPaymentDetails(objImportedTrx.strNumber, objImportedTrx.datDate, 10, objImportedTrx.strDescription, objImportedTrx.curAmount)
-                Case CBMain.ImportStatusSearch.PayeeNonGenerated
-                    objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, True, colMatches, blnExactMatch)
-                    If colMatches.Count > 0 Then
-                        'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        lngIndex = colMatches.Item(1)
-                        If Not objReg.objTrx(lngIndex).blnAutoGenerated Then
-                            lngImportMatch = lngIndex
-                        End If
-                    End If
-                Case CBMain.ImportStatusSearch.VendorInvoice
-                    'UPGRADE_WARNING: Couldn't resolve default property of object objTrx.colSplits().strInvoiceNum. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.colSplits.Item(1).strInvoiceNum, colMatches)
-                    If colMatches.Count() > 0 Then
-                        'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        lngImportMatch = colMatches.Item(1)
-                    End If
-                Case Else
-                    'Should not be possible
-                    gRaiseError("Invalid import prior match type")
-            End Select
-            If lngImportMatch > 0 Then
-                maudtItem(intItemIndex).lngStatus = ImportStatus.mlngIMPSTS_PRIOR
-                maudtItem(intItemIndex).objReg = objReg
-                blnMatchImport = True
-                Exit Function
+            'This is the import item they selected.
+            objImportedTrx = maudtItem(intItemIndex).objImportedTrx
+            If IsNumeric(objImportedTrx.strNumber) Then
+                lngNumber = CInt(objImportedTrx.strNumber)
+            Else
+                lngNumber = 0
             End If
-        Next objLoaded
 
-        Exit Function
-ErrorHandler:
-        NestedError("blnMatchImport")
+            'Look for an import match in ALL registers, not just the selected register.
+            'If found, update maudtItem() and redisplay it with the match info.
+            For Each objLoaded In mobjAccount.colLoadedRegisters
+                objReg = objLoaded.objReg
+                lngImportMatch = 0
+                Select Case mlngStatusSearchType
+                    Case CBMain.ImportStatusSearch.Bank
+                        If objImportedTrx.strImportKey <> "" Then
+                            lngImportMatch = objReg.lngMatchImportKey(objImportedTrx.strImportKey)
+                        End If
+                    Case ImportStatusSearch.BillPayment
+                        lngImportMatch = objReg.lngMatchPaymentDetails(objImportedTrx.strNumber, objImportedTrx.datDate, 10, objImportedTrx.strDescription, objImportedTrx.curAmount)
+                    Case CBMain.ImportStatusSearch.PayeeNonGenerated
+                        objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, True, colMatches, blnExactMatch)
+                        If colMatches.Count > 0 Then
+                            'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            lngIndex = colMatches.Item(1)
+                            If Not objReg.objTrx(lngIndex).blnAutoGenerated Then
+                                lngImportMatch = lngIndex
+                            End If
+                        End If
+                    Case CBMain.ImportStatusSearch.VendorInvoice
+                        'UPGRADE_WARNING: Couldn't resolve default property of object objTrx.colSplits().strInvoiceNum. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.colSplits.Item(1).strInvoiceNum, colMatches)
+                        If colMatches.Count() > 0 Then
+                            'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            lngImportMatch = colMatches.Item(1)
+                        End If
+                    Case Else
+                        'Should not be possible
+                        gRaiseError("Invalid import prior match type")
+                End Select
+                If lngImportMatch > 0 Then
+                    maudtItem(intItemIndex).lngStatus = ImportStatus.mlngIMPSTS_PRIOR
+                    maudtItem(intItemIndex).objReg = objReg
+                    blnMatchImport = True
+                    Exit Function
+                End If
+            Next objLoaded
+
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private Sub ClearLvwSelection(ByRef lvw As System.Windows.Forms.ListView)
@@ -1189,67 +1195,69 @@ ErrorHandler:
         Dim frm As TrxForm
         Dim datDummy As Date
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If Not blnValidImportItemSelected() Then
-            Exit Sub
-        End If
-        If mobjSelectedRegister Is Nothing Then
-            MsgBox("First select the register to create the transaction in.", MsgBoxStyle.Critical)
-            Exit Sub
-        End If
-
-        frm = New TrxForm
-        'If chkBypassDateConfirm.value = vbChecked Then
-        '    frm.blnBypassConfirmation = True
-        'End If
-        With maudtItem(intSelectedItemIndex())
-            If frm.blnAddNormal(mobjAccount, mobjSelectedRegister, .objImportedTrx, datDummy, True, "Import.CreateNew") Then
+            If Not blnValidImportItemSelected() Then
                 Exit Sub
             End If
-            .lngStatus = ImportStatus.mlngIMPSTS_NEW
-            .objReg = mobjSelectedRegister
-        End With
-        RedisplaySelectedItem()
+            If mobjSelectedRegister Is Nothing Then
+                MsgBox("First select the register to create the transaction in.", MsgBoxStyle.Critical)
+                Exit Sub
+            End If
 
-        Exit Sub
-ErrorHandler:
-        TopError("cmdCreateNew_Click")
+            frm = New TrxForm
+            'If chkBypassDateConfirm.value = vbChecked Then
+            '    frm.blnBypassConfirmation = True
+            'End If
+            With maudtItem(intSelectedItemIndex())
+                If frm.blnAddNormal(mobjAccount, mobjSelectedRegister, .objImportedTrx, datDummy, True, "Import.CreateNew") Then
+                    Exit Sub
+                End If
+                .lngStatus = ImportStatus.mlngIMPSTS_NEW
+                .objReg = mobjSelectedRegister
+            End With
+            RedisplaySelectedItem()
+
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub lvwTrx_DoubleClick(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles lvwTrx.DoubleClick
         Dim frm As TrxForm
         Dim datDummy As Date
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If Not blnValidImportItemSelected() Then
-            Exit Sub
-        End If
-        If mobjSelectedRegister Is Nothing Then
-            MsgBox("First select the register to create the transaction in.", MsgBoxStyle.Critical)
-            Exit Sub
-        End If
-
-        frm = New TrxForm
-        'If chkBypassDateConfirm.value = vbChecked Then
-        '    frm.blnBypassConfirmation = True
-        'End If
-        With maudtItem(intSelectedItemIndex())
-            If MsgBox("Create transaction " & strDescribeTrx(.objImportedTrx) & "?", MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton1, "Create Transaction") <> MsgBoxResult.Ok Then
+            If Not blnValidImportItemSelected() Then
                 Exit Sub
             End If
-            If frm.blnAddNormalSilent(mobjAccount, mobjSelectedRegister, .objImportedTrx, datDummy, True, "ImportNewSilent") Then
+            If mobjSelectedRegister Is Nothing Then
+                MsgBox("First select the register to create the transaction in.", MsgBoxStyle.Critical)
                 Exit Sub
             End If
-            .lngStatus = ImportStatus.mlngIMPSTS_NEW
-            .objReg = mobjSelectedRegister
-        End With
-        RedisplaySelectedItem()
 
-        Exit Sub
-ErrorHandler:
-        TopError("lvwTrx_DblClick")
+            frm = New TrxForm
+            'If chkBypassDateConfirm.value = vbChecked Then
+            '    frm.blnBypassConfirmation = True
+            'End If
+            With maudtItem(intSelectedItemIndex())
+                If MsgBox("Create transaction " & strDescribeTrx(.objImportedTrx) & "?", MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton1, "Create Transaction") <> MsgBoxResult.Ok Then
+                    Exit Sub
+                End If
+                If frm.blnAddNormalSilent(mobjAccount, mobjSelectedRegister, .objImportedTrx, datDummy, True, "ImportNewSilent") Then
+                    Exit Sub
+                End If
+                .lngStatus = ImportStatus.mlngIMPSTS_NEW
+                .objReg = mobjSelectedRegister
+            End With
+            RedisplaySelectedItem()
+
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub cmdUpdateExisting_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdUpdateExisting.Click
@@ -1259,64 +1267,64 @@ ErrorHandler:
         Dim strNewNumber As String
         Dim curNewAmount As Decimal
         Dim blnPreserveNumAmt As Boolean
-        Dim datNull As Date
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If Not blnValidImportItemSelected() Then
-            Exit Sub
-        End If
-        If lvwMatches.FocusedItem Is Nothing Then
-            MsgBox("First select the matched transaction to update.", MsgBoxStyle.Critical)
-            Exit Sub
-        End If
+            If Not blnValidImportItemSelected() Then
+                Exit Sub
+            End If
+            If lvwMatches.FocusedItem Is Nothing Then
+                MsgBox("First select the matched transaction to update.", MsgBoxStyle.Critical)
+                Exit Sub
+            End If
 
-        With maudtMatch(intSelectedMatchIndex())
-            objMatchedReg = .objReg
-            lngMatchedRegIndex = .lngRegIndex
-            objMatchedTrx = .objTrx
-        End With
-        With maudtItem(intSelectedItemIndex())
-            With .objImportedTrx
-
-                Select Case mlngIndividualUpdateType
-
-                    Case CBMain.ImportIndividualUpdateType.Bank
-                        blnPreserveNumAmt = (Not objMatchedTrx.blnFake) And .blnFake
-                        If (.curAmount <> objMatchedTrx.curAmount) And Not blnPreserveNumAmt Then
-                            If MsgBox("NOTE: The amount of the imported transaction is " & "different than the amount of the match you selected. " & "Updating the matched transaction will change its amount to " & "equal the amount of the import." & vbCrLf & vbCrLf & "Do you really want to do this?", MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
-                                MsgBox("Update cancelled.", MsgBoxStyle.Information)
-                                Exit Sub
-                            End If
-                        End If
-                        strNewNumber = .strNumber
-                        curNewAmount = .curAmount
-                        If blnPreserveNumAmt Then
-                            strNewNumber = objMatchedTrx.strNumber
-                            curNewAmount = objMatchedTrx.curAmount
-                        End If
-                        objMatchedReg.ImportUpdateBank(lngMatchedRegIndex, .datDate, strNewNumber, mblnFake, curNewAmount, .strImportKey)
-
-                    Case CBMain.ImportIndividualUpdateType.Amount
-                        objMatchedReg.ImportUpdateAmount(lngMatchedRegIndex, mblnFake, .curAmount)
-
-                    Case CBMain.ImportIndividualUpdateType.NumberAmount
-                        objMatchedReg.ImportUpdateNumAmt(lngMatchedRegIndex, .strNumber, mblnFake, .curAmount)
-
-                    Case Else
-                        'Should not be possible
-                        gRaiseError("Invalid individual update type")
-
-                End Select
+            With maudtMatch(intSelectedMatchIndex())
+                objMatchedReg = .objReg
+                lngMatchedRegIndex = .lngRegIndex
+                objMatchedTrx = .objTrx
             End With
-            .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
-            .objReg = objMatchedReg
-        End With
-        RedisplaySelectedItem()
+            With maudtItem(intSelectedItemIndex())
+                With .objImportedTrx
 
-        Exit Sub
-ErrorHandler:
-        TopError("cmdUpdateExisting_Click")
+                    Select Case mlngIndividualUpdateType
+
+                        Case CBMain.ImportIndividualUpdateType.Bank
+                            blnPreserveNumAmt = (Not objMatchedTrx.blnFake) And .blnFake
+                            If (.curAmount <> objMatchedTrx.curAmount) And Not blnPreserveNumAmt Then
+                                If MsgBox("NOTE: The amount of the imported transaction is " & "different than the amount of the match you selected. " & "Updating the matched transaction will change its amount to " & "equal the amount of the import." & vbCrLf & vbCrLf & "Do you really want to do this?", MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                                    MsgBox("Update cancelled.", MsgBoxStyle.Information)
+                                    Exit Sub
+                                End If
+                            End If
+                            strNewNumber = .strNumber
+                            curNewAmount = .curAmount
+                            If blnPreserveNumAmt Then
+                                strNewNumber = objMatchedTrx.strNumber
+                                curNewAmount = objMatchedTrx.curAmount
+                            End If
+                            objMatchedReg.ImportUpdateBank(lngMatchedRegIndex, .datDate, strNewNumber, mblnFake, curNewAmount, .strImportKey)
+
+                        Case CBMain.ImportIndividualUpdateType.Amount
+                            objMatchedReg.ImportUpdateAmount(lngMatchedRegIndex, mblnFake, .curAmount)
+
+                        Case CBMain.ImportIndividualUpdateType.NumberAmount
+                            objMatchedReg.ImportUpdateNumAmt(lngMatchedRegIndex, .strNumber, mblnFake, .curAmount)
+
+                        Case Else
+                            'Should not be possible
+                            gRaiseError("Invalid individual update type")
+
+                    End Select
+                End With
+                .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
+                .objReg = objMatchedReg
+            End With
+            RedisplaySelectedItem()
+
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Function blnValidImportItemSelected() As Boolean
@@ -1355,31 +1363,33 @@ ErrorHandler:
 
     'UPGRADE_WARNING: Event cboRegister.SelectedIndexChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
     Private Sub cboRegister_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboRegister.SelectedIndexChanged
-        On Error GoTo ErrorHandler
+        Try
 
-        With cboRegister
-            If .SelectedIndex < 0 Then
-                'UPGRADE_NOTE: Object mobjSelectedRegister may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-                mobjSelectedRegister = Nothing
-            Else
-                'UPGRADE_WARNING: Couldn't resolve default property of object mobjAccount.colLoadedRegisters.Item().objReg. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                mobjSelectedRegister = mobjAccount.colLoadedRegisters.Item(gintVB6GetItemData(cboRegister, .SelectedIndex)).objReg
-            End If
-        End With
+            With cboRegister
+                If .SelectedIndex < 0 Then
+                    'UPGRADE_NOTE: Object mobjSelectedRegister may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+                    mobjSelectedRegister = Nothing
+                Else
+                    'UPGRADE_WARNING: Couldn't resolve default property of object mobjAccount.colLoadedRegisters.Item().objReg. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    mobjSelectedRegister = mobjAccount.colLoadedRegisters.Item(gintVB6GetItemData(cboRegister, .SelectedIndex)).objReg
+                End If
+            End With
 
-        Exit Sub
-ErrorHandler:
-        TopError("cboRegister_Change")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub mobjAccount_ChangeMade() Handles mobjAccount.ChangeMade
-        On Error GoTo ErrorHandler
-        'Because MatchItem.lngRegIndex may have changed for any matches.
-        'Also, this clears the list after "Create New" or "Update Existing".
-        ClearCurrentItemMatches()
-        Exit Sub
-ErrorHandler:
-        TopError("mobjAccount_ChangeMade")
+        Try
+            'Because MatchItem.lngRegIndex may have changed for any matches.
+            'Also, this clears the list after "Create New" or "Update Existing".
+            ClearCurrentItemMatches()
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Function strDescribeItem(ByRef intItemIndex As Short) As String

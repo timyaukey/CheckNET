@@ -71,14 +71,6 @@ Public Module CBMain
         CBMainForm.Show()
     End Sub
 
-    Private Sub TopError(ByVal strRoutine As String)
-        gTopErrorTrap("CBMain." & strRoutine)
-    End Sub
-
-    Private Sub NestedError(ByVal strRoutine As String)
-        gNestedErrorTrap("CBMain." & strRoutine)
-    End Sub
-
     Public Function gcolForms() As Collection
         Dim frm As System.Windows.Forms.Form
         Dim colResult As Collection
@@ -106,54 +98,55 @@ Public Module CBMain
         End If
     End Sub
 
+    Private objLockFile As System.IO.Stream
+
     Public Function gblnDataIsLocked() As Boolean
-        On Error GoTo ErrorHandler
-        Dim intLockFile As Short
-        intLockFile = FreeFile()
-        FileOpen(intLockFile, gstrAddPath("LockFile.dat"), OpenMode.Append, OpenAccess.Write, OpenShare.LockWrite)
-        gblnDataIsLocked = False
-        Exit Function
-ErrorHandler:
-        If Err.Number = 70 Then
+        Try
+            objLockFile = New IO.FileStream(gstrAddPath("LockFile.dat"), IO.FileMode.Append, IO.FileAccess.Write, IO.FileShare.None)
+            gblnDataIsLocked = False
+            Exit Function
+        Catch ex As System.IO.IOException
             gblnDataIsLocked = True
             Exit Function
-        End If
-        Err.Raise(Err.Number, Err.Source, Err.Description)
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Public Function gblnUserAuthenticated() As Boolean
-        On Error GoTo ErrorHandler
-        Dim strLogin As String
-        Dim strPassword As String
-        Dim frmLogin As LoginForm
+        Try
+            Dim strLogin As String
+            Dim strPassword As String
+            Dim frmLogin As LoginForm
 
-        strLogin = ""
-        strPassword = ""
-        frmLogin = New LoginForm
-        If Not frmLogin.blnGetCredentials(strLogin, strPassword) Then
-            Exit Function
-        End If
+            strLogin = ""
+            strPassword = ""
+            frmLogin = New LoginForm
+            If Not frmLogin.blnGetCredentials(strLogin, strPassword) Then
+                Exit Function
+            End If
 
-        gblnUserAuthenticated = False
-        gobjSecurity = New Security
-        gobjSecurity.Load(gobjSecurity.strDefaultFileName)
-        If Not gobjSecurity.blnFindUser(strLogin) Then
-            MsgBox("Invalid login or password")
-            Exit Function
-        End If
-        If Not gobjSecurity.blnPasswordMatches(strPassword) Then
-            MsgBox("Invalid login or password")
-            Exit Function
-        End If
-        If Not gobjSecurity.blnUserSignatureIsValid Then
-            MsgBox("User data is invalid")
-            Exit Function
-        End If
-        gblnUserAuthenticated = True
+            gblnUserAuthenticated = False
+            gobjSecurity = New Security
+            gobjSecurity.Load(gobjSecurity.strDefaultFileName)
+            If Not gobjSecurity.blnFindUser(strLogin) Then
+                MsgBox("Invalid login or password")
+                Exit Function
+            End If
+            If Not gobjSecurity.blnPasswordMatches(strPassword) Then
+                MsgBox("Invalid login or password")
+                Exit Function
+            End If
+            If Not gobjSecurity.blnUserSignatureIsValid Then
+                MsgBox("User data is invalid")
+                Exit Function
+            End If
+            gblnUserAuthenticated = True
 
-        Exit Function
-ErrorHandler:
-        NestedError("gblnUserAuthenticated")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Friend Sub gShowRegister(ByVal objAccount As Account, ByVal objReg As Register, ByVal frmStartup As StartupForm)
@@ -199,7 +192,6 @@ ErrorHandler:
         'will be deleted.
         Dim adatDays(30) As BackupPurgeDay
         Dim strBackup As String
-        Dim vntOldDate As Object
         Dim strParsableDate As String
         Dim datCreateDate As Date
         Dim strEncodedDate As String
@@ -208,65 +200,66 @@ ErrorHandler:
         Dim intBackupsToKeep As Short
         Dim intAgeInDays As Short
 
-        On Error GoTo ErrorHandler
+        Try
 
-        For intIndex = LBound(adatDays) To UBound(adatDays)
-            adatDays(intIndex).colCreateDates = New Collection
-            adatDays(intIndex).colNames = New Collection
-        Next
-
-        'For each day in the last "n" days, build twin collections of backup file
-        'names and backup save dates for backups created on those days, for each
-        'day sorted in increasing backup save time.
-        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        strBackup = Dir(gstrBackupPath() & "\" & objAccount.strFileLoaded & ".*", FileAttribute.Normal)
-        Do While strBackup <> ""
-            strEncodedDate = Mid(strBackup, InStr(UCase(strBackup), ".ACT.") + 5)
-            strParsableDate = "20" & Mid(strEncodedDate, 7, 2) & "/" & Mid(strEncodedDate, 1, 2) & "/" & Mid(strEncodedDate, 4, 2) & " " & Mid(strEncodedDate, 10, 2) & ":" & Mid(strEncodedDate, 13, 2)
-            datCreateDate = CDate(strParsableDate)
-            'UPGRADE_WARNING: DateDiff behavior may be different. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6B38EC3F-686D-4B2E-B5A5-9E8E7A762E32"'
-            intAgeInDays = DateDiff(Microsoft.VisualBasic.DateInterval.Day, datCreateDate, Today)
-            If intAgeInDays <= UBound(adatDays) Then
-                blnFound = False
-                For intIndex = 1 To adatDays(intAgeInDays).colCreateDates.Count()
-                    'UPGRADE_WARNING: Couldn't resolve default property of object adatDays(intAgeInDays).colCreateDates(intIndex). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    If datCreateDate < adatDays(intAgeInDays).colCreateDates.Item(intIndex) Then
-                        adatDays(intAgeInDays).colCreateDates.Add(datCreateDate, , intIndex)
-                        adatDays(intAgeInDays).colNames.Add(strBackup, , intIndex)
-                        blnFound = True
-                        Exit For
-                    End If
-                Next
-                If Not blnFound Then
-                    adatDays(intAgeInDays).colCreateDates.Add(datCreateDate)
-                    adatDays(intAgeInDays).colNames.Add(strBackup)
-                End If
-            End If
-            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            strBackup = Dir()
-        Loop
-
-        'Delete everything but the "intBackupsToKeep" most recent backups
-        'created on each date.
-        For intAgeInDays = 0 To UBound(adatDays)
-            If intAgeInDays = 0 Then
-                'Keep all backups from the current date.
-                intBackupsToKeep = 100
-            ElseIf intAgeInDays < 5 Then
-                intBackupsToKeep = 10
-            Else
-                intBackupsToKeep = 1
-            End If
-            For intIndex = 1 To adatDays(intAgeInDays).colNames.Count() - intBackupsToKeep
-                'UPGRADE_WARNING: Couldn't resolve default property of object adatDays().colNames(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                strBackup = adatDays(intAgeInDays).colNames.Item(intIndex)
-                Kill(gstrBackupPath() & "\" & strBackup)
+            For intIndex = LBound(adatDays) To UBound(adatDays)
+                adatDays(intIndex).colCreateDates = New Collection
+                adatDays(intIndex).colNames = New Collection
             Next
-        Next
 
-        Exit Sub
-ErrorHandler:
-        NestedError("PurgeAccountBackups")
+            'For each day in the last "n" days, build twin collections of backup file
+            'names and backup save dates for backups created on those days, for each
+            'day sorted in increasing backup save time.
+            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            strBackup = Dir(gstrBackupPath() & "\" & objAccount.strFileLoaded & ".*", FileAttribute.Normal)
+            Do While strBackup <> ""
+                strEncodedDate = Mid(strBackup, InStr(UCase(strBackup), ".ACT.") + 5)
+                strParsableDate = "20" & Mid(strEncodedDate, 7, 2) & "/" & Mid(strEncodedDate, 1, 2) & "/" & Mid(strEncodedDate, 4, 2) & " " & Mid(strEncodedDate, 10, 2) & ":" & Mid(strEncodedDate, 13, 2)
+                datCreateDate = CDate(strParsableDate)
+                'UPGRADE_WARNING: DateDiff behavior may be different. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6B38EC3F-686D-4B2E-B5A5-9E8E7A762E32"'
+                intAgeInDays = DateDiff(Microsoft.VisualBasic.DateInterval.Day, datCreateDate, Today)
+                If intAgeInDays <= UBound(adatDays) Then
+                    blnFound = False
+                    For intIndex = 1 To adatDays(intAgeInDays).colCreateDates.Count()
+                        'UPGRADE_WARNING: Couldn't resolve default property of object adatDays(intAgeInDays).colCreateDates(intIndex). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        If datCreateDate < adatDays(intAgeInDays).colCreateDates.Item(intIndex) Then
+                            adatDays(intAgeInDays).colCreateDates.Add(datCreateDate, , intIndex)
+                            adatDays(intAgeInDays).colNames.Add(strBackup, , intIndex)
+                            blnFound = True
+                            Exit For
+                        End If
+                    Next
+                    If Not blnFound Then
+                        adatDays(intAgeInDays).colCreateDates.Add(datCreateDate)
+                        adatDays(intAgeInDays).colNames.Add(strBackup)
+                    End If
+                End If
+                'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                strBackup = Dir()
+            Loop
+
+            'Delete everything but the "intBackupsToKeep" most recent backups
+            'created on each date.
+            For intAgeInDays = 0 To UBound(adatDays)
+                If intAgeInDays = 0 Then
+                    'Keep all backups from the current date.
+                    intBackupsToKeep = 100
+                ElseIf intAgeInDays < 5 Then
+                    intBackupsToKeep = 10
+                Else
+                    intBackupsToKeep = 1
+                End If
+                For intIndex = 1 To adatDays(intAgeInDays).colNames.Count() - intBackupsToKeep
+                    'UPGRADE_WARNING: Couldn't resolve default property of object adatDays().colNames(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    strBackup = adatDays(intAgeInDays).colNames.Item(intIndex)
+                    Kill(gstrBackupPath() & "\" & strBackup)
+                Next
+            Next
+
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Public Function gblnAskAndCreateAccount() As Boolean
@@ -366,131 +359,133 @@ ErrorHandler:
     End Function
 
     Public Sub gCreateStandardFolders()
-        On Error GoTo ErrorHandler
+        Try
 
-        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        If Dir(gstrDataPath(), FileAttribute.Directory) = "" Then
-            MkDir(gstrDataPath())
-        End If
-        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        If Dir(gstrAccountPath(), FileAttribute.Directory) = "" Then
-            MkDir(gstrAccountPath())
-        End If
-        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        If Dir(gstrBackupPath(), FileAttribute.Directory) = "" Then
-            MkDir(gstrBackupPath())
-        End If
-        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        If Dir(gstrReportPath(), FileAttribute.Directory) = "" Then
-            MkDir(gstrReportPath())
-        End If
+            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            If Dir(gstrDataPath(), FileAttribute.Directory) = "" Then
+                MkDir(gstrDataPath())
+            End If
+            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            If Dir(gstrAccountPath(), FileAttribute.Directory) = "" Then
+                MkDir(gstrAccountPath())
+            End If
+            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            If Dir(gstrBackupPath(), FileAttribute.Directory) = "" Then
+                MkDir(gstrBackupPath())
+            End If
+            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            If Dir(gstrReportPath(), FileAttribute.Directory) = "" Then
+                MkDir(gstrReportPath())
+            End If
 
-        Exit Sub
-ErrorHandler:
-        NestedError("CreateStandardFolders")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Public Sub gCreateStandardFiles()
         Dim strFile As String
         Dim intFile As Short
 
-        On Error GoTo ErrorHandler
+        Try
 
-        'Standard category file
-        strFile = gstrAddPath("Shared.cat")
-        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        If Dir(strFile, FileAttribute.Normal) = "" Then
-            MsgBox("Creating standard category list, which you can edit later...", MsgBoxStyle.Information)
-            intFile = FreeFile()
-            FileOpen(intFile, strFile, OpenMode.Output)
-            'Note: Keep the first line up to date!
-            PrintLine(intFile, "Last used: 40")
-            PrintLine(intFile, "/001/I/Income")
-            PrintLine(intFile, "/002/I:Interest/ Interest")
-            PrintLine(intFile, "/003/I:Wages/ Wages")
-            PrintLine(intFile, "/004/I:Bonus/ Bonus")
-            PrintLine(intFile, "/005/I:Other/ Other")
-            PrintLine(intFile, "/006/I:Sales/ Sales")
-            PrintLine(intFile, "/007/I:Draw/ Draw")
-            PrintLine(intFile, "/008/I:Gift/ Gift")
-            PrintLine(intFile, "/009/E/Expense")
-            PrintLine(intFile, "/010/E:Cable TV/ Cable TV")
-            PrintLine(intFile, "/011/E:Car/ Car")
-            PrintLine(intFile, "/012/E:Car:Gasoline/  Gasoline")
-            PrintLine(intFile, "/013/E:Car:Payment/  Car Payment")
-            PrintLine(intFile, "/014/E:Car:Repair/  Car Repair")
-            PrintLine(intFile, "/015/E:Charity/ Charity")
-            PrintLine(intFile, "/016/E:Cleaning/ Cleaning")
-            PrintLine(intFile, "/017/E:Clothing/ Clothing")
-            PrintLine(intFile, "/018/E:Credit Cards/ Credit Cards")
-            PrintLine(intFile, "/019/E:Entertainment/ Entertainment")
-            PrintLine(intFile, "/020/E:Groceries/ Groceries")
-            PrintLine(intFile, "/021/E:Home/ Home")
-            PrintLine(intFile, "/022/E:Home:Mortgage/  Mortgage")
-            PrintLine(intFile, "/023/E:Home:Repair/  Home Repair")
-            PrintLine(intFile, "/024/E:Internet/ Internet")
-            PrintLine(intFile, "/025/E:Medical/ Medical")
-            PrintLine(intFile, "/026/E:Medical:Insurance/  Insurance")
-            PrintLine(intFile, "/027/E:Medical:Office Visits/  Office Visits")
-            PrintLine(intFile, "/028/E:Medical:Prescriptions/  Prescriptions")
-            PrintLine(intFile, "/029/E:Miscellaneous/ Miscellaneous")
-            PrintLine(intFile, "/030/E:Taxes/ Taxes")
-            PrintLine(intFile, "/031/E:Taxes:Federal Income/  Federal Income")
-            PrintLine(intFile, "/032/E:Taxes:Local Income/  Local Income")
-            PrintLine(intFile, "/033/E:Taxes:Property/  Property")
-            PrintLine(intFile, "/034/E:Taxes:State Income/  State Income")
-            PrintLine(intFile, "/035/E:Util/ Utilities")
-            PrintLine(intFile, "/036/E:Util:Electric/  Electricity")
-            PrintLine(intFile, "/037/E:Util:Oil/  Fuel Oil")
-            PrintLine(intFile, "/040/E:Util:Natural Gas/  Natural Gas")
-            PrintLine(intFile, "/039/E:Util:Phone/  Phone")
-            PrintLine(intFile, "/038/E:Util:Water/  Water")
-            FileClose(intFile)
-        End If
+            'Standard category file
+            strFile = gstrAddPath("Shared.cat")
+            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            If Dir(strFile, FileAttribute.Normal) = "" Then
+                MsgBox("Creating standard category list, which you can edit later...", MsgBoxStyle.Information)
+                intFile = FreeFile()
+                FileOpen(intFile, strFile, OpenMode.Output)
+                'Note: Keep the first line up to date!
+                PrintLine(intFile, "Last used: 40")
+                PrintLine(intFile, "/001/I/Income")
+                PrintLine(intFile, "/002/I:Interest/ Interest")
+                PrintLine(intFile, "/003/I:Wages/ Wages")
+                PrintLine(intFile, "/004/I:Bonus/ Bonus")
+                PrintLine(intFile, "/005/I:Other/ Other")
+                PrintLine(intFile, "/006/I:Sales/ Sales")
+                PrintLine(intFile, "/007/I:Draw/ Draw")
+                PrintLine(intFile, "/008/I:Gift/ Gift")
+                PrintLine(intFile, "/009/E/Expense")
+                PrintLine(intFile, "/010/E:Cable TV/ Cable TV")
+                PrintLine(intFile, "/011/E:Car/ Car")
+                PrintLine(intFile, "/012/E:Car:Gasoline/  Gasoline")
+                PrintLine(intFile, "/013/E:Car:Payment/  Car Payment")
+                PrintLine(intFile, "/014/E:Car:Repair/  Car Repair")
+                PrintLine(intFile, "/015/E:Charity/ Charity")
+                PrintLine(intFile, "/016/E:Cleaning/ Cleaning")
+                PrintLine(intFile, "/017/E:Clothing/ Clothing")
+                PrintLine(intFile, "/018/E:Credit Cards/ Credit Cards")
+                PrintLine(intFile, "/019/E:Entertainment/ Entertainment")
+                PrintLine(intFile, "/020/E:Groceries/ Groceries")
+                PrintLine(intFile, "/021/E:Home/ Home")
+                PrintLine(intFile, "/022/E:Home:Mortgage/  Mortgage")
+                PrintLine(intFile, "/023/E:Home:Repair/  Home Repair")
+                PrintLine(intFile, "/024/E:Internet/ Internet")
+                PrintLine(intFile, "/025/E:Medical/ Medical")
+                PrintLine(intFile, "/026/E:Medical:Insurance/  Insurance")
+                PrintLine(intFile, "/027/E:Medical:Office Visits/  Office Visits")
+                PrintLine(intFile, "/028/E:Medical:Prescriptions/  Prescriptions")
+                PrintLine(intFile, "/029/E:Miscellaneous/ Miscellaneous")
+                PrintLine(intFile, "/030/E:Taxes/ Taxes")
+                PrintLine(intFile, "/031/E:Taxes:Federal Income/  Federal Income")
+                PrintLine(intFile, "/032/E:Taxes:Local Income/  Local Income")
+                PrintLine(intFile, "/033/E:Taxes:Property/  Property")
+                PrintLine(intFile, "/034/E:Taxes:State Income/  State Income")
+                PrintLine(intFile, "/035/E:Util/ Utilities")
+                PrintLine(intFile, "/036/E:Util:Electric/  Electricity")
+                PrintLine(intFile, "/037/E:Util:Oil/  Fuel Oil")
+                PrintLine(intFile, "/040/E:Util:Natural Gas/  Natural Gas")
+                PrintLine(intFile, "/039/E:Util:Phone/  Phone")
+                PrintLine(intFile, "/038/E:Util:Water/  Water")
+                FileClose(intFile)
+            End If
 
-        'Standard budget file
-        strFile = gstrAddPath("Shared.bud")
-        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        If Dir(strFile, FileAttribute.Normal) = "" Then
-            MsgBox("Creating standard budget list, which you can edit later...", MsgBoxStyle.Information)
-            intFile = FreeFile()
-            FileOpen(intFile, strFile, OpenMode.Output)
-            'Note: Keep the first line up to date!
-            PrintLine(intFile, "Last used: 03")
-            PrintLine(intFile, "/01/Groceries/Groceries")
-            PrintLine(intFile, "/02/Clothing/Clothing")
-            PrintLine(intFile, "/03/Entertainment/Entertainment")
-            FileClose(intFile)
-        End If
+            'Standard budget file
+            strFile = gstrAddPath("Shared.bud")
+            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            If Dir(strFile, FileAttribute.Normal) = "" Then
+                MsgBox("Creating standard budget list, which you can edit later...", MsgBoxStyle.Information)
+                intFile = FreeFile()
+                FileOpen(intFile, strFile, OpenMode.Output)
+                'Note: Keep the first line up to date!
+                PrintLine(intFile, "Last used: 03")
+                PrintLine(intFile, "/01/Groceries/Groceries")
+                PrintLine(intFile, "/02/Clothing/Clothing")
+                PrintLine(intFile, "/03/Entertainment/Entertainment")
+                FileClose(intFile)
+            End If
 
-        'Standard payee file
-        strFile = gstrPayeeFilePath()
-        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        If Dir(strFile, FileAttribute.Normal) = "" Then
-            intFile = FreeFile()
-            FileOpen(intFile, strFile, OpenMode.Output)
-            'Note: Keep the first line up to date!
-            PrintLine(intFile, "<Table>")
-            PrintLine(intFile, "</Table>")
-            FileClose(intFile)
-        End If
+            'Standard payee file
+            strFile = gstrPayeeFilePath()
+            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            If Dir(strFile, FileAttribute.Normal) = "" Then
+                intFile = FreeFile()
+                FileOpen(intFile, strFile, OpenMode.Output)
+                'Note: Keep the first line up to date!
+                PrintLine(intFile, "<Table>")
+                PrintLine(intFile, "</Table>")
+                FileClose(intFile)
+            End If
 
-        'Standard QIF import transaction types file
-        'UPGRADE_WARNING: Couldn't resolve default property of object gstrTrxTypeFilePath(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        strFile = gstrTrxTypeFilePath()
-        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-        If Dir(strFile, FileAttribute.Normal) = "" Then
-            intFile = FreeFile()
-            FileOpen(intFile, strFile, OpenMode.Output)
-            'Note: Keep the first line up to date!
-            PrintLine(intFile, "<Table>")
-            PrintLine(intFile, "</Table>")
-            FileClose(intFile)
-        End If
+            'Standard QIF import transaction types file
+            'UPGRADE_WARNING: Couldn't resolve default property of object gstrTrxTypeFilePath(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            strFile = gstrTrxTypeFilePath()
+            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            If Dir(strFile, FileAttribute.Normal) = "" Then
+                intFile = FreeFile()
+                FileOpen(intFile, strFile, OpenMode.Output)
+                'Note: Keep the first line up to date!
+                PrintLine(intFile, "<Table>")
+                PrintLine(intFile, "</Table>")
+                FileClose(intFile)
+            End If
 
-        Exit Sub
-ErrorHandler:
-        NestedError("CreateStandardFiles")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     '$Description Path and name of trx type translation file.
@@ -575,22 +570,23 @@ ErrorHandler:
 
     Public Sub gLoadComboFromStringTranslator(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As StringTranslator, ByVal blnAddEmpty As Boolean)
 
-        On Error GoTo ErrorHandler
+        Try
 
-        Dim intIndex As Short
-        With cbo
-            .Items.Clear()
-            If blnAddEmpty Then
-                .Items.Add(gobjCreateListBoxItem("", 0))
-            End If
-            For intIndex = 1 To objList.intElements
-                .Items.Add(gobjCreateListBoxItem(objList.strValue1(intIndex), intIndex))
-            Next
-        End With
+            Dim intIndex As Short
+            With cbo
+                .Items.Clear()
+                If blnAddEmpty Then
+                    .Items.Add(gobjCreateListBoxItem("", 0))
+                End If
+                For intIndex = 1 To objList.intElements
+                    .Items.Add(gobjCreateListBoxItem(objList.strValue1(intIndex), intIndex))
+                Next
+            End With
 
-        Exit Sub
-ErrorHandler:
-        NestedError("gLoadComboFromStringTranslator")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Public Sub gLoadMatchNarrowingMethods(ByVal cbo As ComboBox)

@@ -53,35 +53,36 @@ Public Class StringTranslator
         Dim intPos2 As Short
         Dim strSeparator As String
 
-        On Error GoTo ErrorHandler
+        Try
 
-        Init()
-        intFile = FreeFile()
-        FileOpen(intFile, strPath, OpenMode.Input)
+            Init()
+            intFile = FreeFile()
+            FileOpen(intFile, strPath, OpenMode.Input)
 
-        'Skip first line.
-        'First line can contain anything, like a comment indicating the
-        'next available key value.
-        strLine = LineInput(intFile)
-        While Not EOF(intFile)
+            'Skip first line.
+            'First line can contain anything, like a comment indicating the
+            'next available key value.
             strLine = LineInput(intFile)
-            strSeparator = Left(strLine, 1)
-            intPos1 = InStr(2, strLine, strSeparator)
-            If intPos1 = 0 Then
-                gRaiseError("Cannot find second separator " & strLine)
-            End If
-            intPos2 = InStr(intPos1 + 1, strLine, strSeparator)
-            If intPos2 = 0 Then
-                gRaiseError("Cannot find third separator " & strLine)
-            End If
-            Add(Mid(strLine, 2, intPos1 - 2), Mid(strLine, intPos1 + 1, intPos2 - intPos1 - 1), Mid(strLine, intPos2 + 1))
-        End While
+            While Not EOF(intFile)
+                strLine = LineInput(intFile)
+                strSeparator = Left(strLine, 1)
+                intPos1 = InStr(2, strLine, strSeparator)
+                If intPos1 = 0 Then
+                    gRaiseError("Cannot find second separator " & strLine)
+                End If
+                intPos2 = InStr(intPos1 + 1, strLine, strSeparator)
+                If intPos2 = 0 Then
+                    gRaiseError("Cannot find third separator " & strLine)
+                End If
+                Add(Mid(strLine, 2, intPos1 - 2), Mid(strLine, intPos1 + 1, intPos2 - intPos1 - 1), Mid(strLine, intPos2 + 1))
+            End While
 
-        FileClose(intFile)
+            FileClose(intFile)
 
-        Exit Sub
-ErrorHandler:
-        gNestedErrorTrap("StringTranslator.LoadFile(" & strPath & ")")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     '$Description Add a key string and its pair of values to the list.

@@ -28,49 +28,49 @@ Public Class ImportBankDownloadOFX
     End Sub
 
     Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements ITrxImport.blnOpenSource
-        Dim strPath As String
         Dim strHeaderLine As String
 
-        On Error GoTo ErrorHandler
+        Try
 
-        mobjUtil = New ImportUtilities
-        mobjUtil.Init(objAccount_)
-        mobjUtil.LoadTrxTypeTable()
+            mobjUtil = New ImportUtilities
+            mobjUtil.Init(objAccount_)
+            mobjUtil.LoadTrxTypeTable()
 
-        strHeaderLine = mobjFile.ReadLine()
-        If strHeaderLine = "OFXHEADER:100" Then
-            mobjUtil.blnMakeFakeTrx = False
-        Else
-            MsgBox("File is not an OFX file.", MsgBoxStyle.Critical)
-            mobjFile.Close()
-            Exit Function
-        End If
-        mobjFile.ReadLine()
-        strHeaderLine = mobjFile.ReadLine()
-        If strHeaderLine <> "VERSION:102" Then
-            MsgBox("File is not correct OFX version.", MsgBoxStyle.Critical)
-            mobjFile.Close()
-            Exit Function
-        End If
-        Do
             strHeaderLine = mobjFile.ReadLine()
-            If strHeaderLine Is Nothing Then
-                MsgBox("Unexpected EOF in header section of OFX file.", MsgBoxStyle.Critical)
+            If strHeaderLine = "OFXHEADER:100" Then
+                mobjUtil.blnMakeFakeTrx = False
+            Else
+                MsgBox("File is not an OFX file.", MsgBoxStyle.Critical)
                 mobjFile.Close()
                 Exit Function
             End If
-            If strHeaderLine = "" Then
-                Exit Do
+            mobjFile.ReadLine()
+            strHeaderLine = mobjFile.ReadLine()
+            If strHeaderLine <> "VERSION:102" Then
+                MsgBox("File is not correct OFX version.", MsgBoxStyle.Critical)
+                mobjFile.Close()
+                Exit Function
             End If
-        Loop
+            Do
+                strHeaderLine = mobjFile.ReadLine()
+                If strHeaderLine Is Nothing Then
+                    MsgBox("Unexpected EOF in header section of OFX file.", MsgBoxStyle.Critical)
+                    mobjFile.Close()
+                    Exit Function
+                End If
+                If strHeaderLine = "" Then
+                    Exit Do
+                End If
+            Loop
 
-        ITrxImport_blnOpenSource = True
-        mblnInputEOF = False
-        mstrInputLine = ""
+            ITrxImport_blnOpenSource = True
+            mblnInputEOF = False
+            mstrInputLine = ""
 
-        Exit Function
-ErrorHandler:
-        NestedError("ITrxImport_blnOpenSource")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private Sub ITrxImport_CloseSource() Implements ITrxImport.CloseSource
@@ -81,67 +81,67 @@ ErrorHandler:
     End Sub
 
     Private Function ITrxImport_objNextTrx() As ImportedTrx Implements ITrxImport.objNextTrx
-        Dim strLine As String
-        Dim strPrefix As String
         Dim strToken As String
         Dim strCheckNum As String
 
-        On Error GoTo ErrorHandler
-
         ITrxImport_objNextTrx = Nothing
-        mobjUtil.ClearSavedTrxData()
-        strCheckNum = ""
-        Do
-            strToken = strGetToken()
-            If mblnInputEOF Then
-                gRaiseError("Unexpected EOF in OFX file")
-            End If
-            Select Case strToken
-                Case "</OFX>"
-                    Exit Do
-                Case "</STMTTRN>"
-                    If strCheckNum <> "" Then
-                        mobjUtil.strTrxNumber = strCheckNum
-                    End If
-                    ITrxImport_objNextTrx = mobjUtil.objMakeTrx()
-                    strCheckNum = ""
-                    Exit Do
-                Case "<DTPOSTED>"
-                    strToken = strGetToken()
-                    mobjUtil.strTrxDate = Mid(strToken, 5, 2) & "/" & Mid(strToken, 7, 2) & "/" & Mid(strToken, 1, 4)
-                Case "<NAME>"
-                    mobjUtil.strTrxPayee = strGetToken()
-                Case "<FITID>"
-                    mobjUtil.strTrxUniqueKey = strGetToken()
-                Case "<TRNAMT>"
-                    mobjUtil.strTrxAmount = strGetToken()
-                Case "<TRNTYPE>"
-                    strToken = strGetToken()
-                    If strToken = "POS" Then
-                        mobjUtil.strTrxNumber = "Card"
-                    ElseIf (strToken = "DEP") Or (strToken = "DIRECTDEP") Then
-                        mobjUtil.strTrxNumber = "DEP"
-                    ElseIf strToken = "CHECK" Then
-                        'Will be overridden later
-                        mobjUtil.strTrxNumber = "CHECK"
-                    Else
-                        mobjUtil.strTrxNumber = "Pmt"
-                    End If
-                Case "<CHECKNUM>"
-                    strCheckNum = strGetToken()
-                    Do
-                        If Left(strCheckNum, 1) = "0" Then
-                            strCheckNum = Mid(strCheckNum, 2)
-                        Else
-                            Exit Do
-                        End If
-                    Loop
-            End Select
-        Loop
+        Try
 
-        Exit Function
-ErrorHandler:
-        NestedError("ITrxImport_objNextTrx")
+            ITrxImport_objNextTrx = Nothing
+            mobjUtil.ClearSavedTrxData()
+            strCheckNum = ""
+            Do
+                strToken = strGetToken()
+                If mblnInputEOF Then
+                    gRaiseError("Unexpected EOF in OFX file")
+                End If
+                Select Case strToken
+                    Case "</OFX>"
+                        Exit Do
+                    Case "</STMTTRN>"
+                        If strCheckNum <> "" Then
+                            mobjUtil.strTrxNumber = strCheckNum
+                        End If
+                        ITrxImport_objNextTrx = mobjUtil.objMakeTrx()
+                        strCheckNum = ""
+                        Exit Do
+                    Case "<DTPOSTED>"
+                        strToken = strGetToken()
+                        mobjUtil.strTrxDate = Mid(strToken, 5, 2) & "/" & Mid(strToken, 7, 2) & "/" & Mid(strToken, 1, 4)
+                    Case "<NAME>"
+                        mobjUtil.strTrxPayee = strGetToken()
+                    Case "<FITID>"
+                        mobjUtil.strTrxUniqueKey = strGetToken()
+                    Case "<TRNAMT>"
+                        mobjUtil.strTrxAmount = strGetToken()
+                    Case "<TRNTYPE>"
+                        strToken = strGetToken()
+                        If strToken = "POS" Then
+                            mobjUtil.strTrxNumber = "Card"
+                        ElseIf (strToken = "DEP") Or (strToken = "DIRECTDEP") Then
+                            mobjUtil.strTrxNumber = "DEP"
+                        ElseIf strToken = "CHECK" Then
+                            'Will be overridden later
+                            mobjUtil.strTrxNumber = "CHECK"
+                        Else
+                            mobjUtil.strTrxNumber = "Pmt"
+                        End If
+                    Case "<CHECKNUM>"
+                        strCheckNum = strGetToken()
+                        Do
+                            If Left(strCheckNum, 1) = "0" Then
+                                strCheckNum = Mid(strCheckNum, 2)
+                            Else
+                                Exit Do
+                            End If
+                        Loop
+                End Select
+            Loop
+
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private ReadOnly Property ITrxImport_strSource() As String Implements ITrxImport.strSource
@@ -149,10 +149,6 @@ ErrorHandler:
             ITrxImport_strSource = mstrFile
         End Get
     End Property
-
-    Private Sub NestedError(ByVal strRoutine As String)
-        gNestedErrorTrap("ImportBankDownloadOFX." & strRoutine)
-    End Sub
 
     Private Function strGetToken() As String
         Dim intEndPos As Short

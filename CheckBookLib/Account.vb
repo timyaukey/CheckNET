@@ -354,40 +354,41 @@ Public Class Account
         Dim blnFileOpen As Boolean
         Dim objLoaded As LoadedRegister
 
-        On Error GoTo ErrorHandler
+        Try
 
-        mintSaveFile = FreeFile()
-        FileOpen(mintSaveFile, gstrAccountPath() & "\" & strPath_, OpenMode.Output)
-        blnFileOpen = True
+            mintSaveFile = FreeFile()
+            FileOpen(mintSaveFile, gstrAccountPath() & "\" & strPath_, OpenMode.Output)
+            blnFileOpen = True
 
-        SaveLine("FHCKBK2")
-        If mstrTitle <> "" Then
-            SaveLine("AT" & mstrTitle)
-        End If
-        'Define each register at the top of the file.
-        For Each objLoaded In mcolLoadedRegisters
-            If Not objLoaded.blnDeleted Then
-                SaveDefineRegister(objLoaded)
+            SaveLine("FHCKBK2")
+            If mstrTitle <> "" Then
+                SaveLine("AT" & mstrTitle)
             End If
-        Next objLoaded
-        'Save the transactions for each register.
-        For Each objLoaded In mcolLoadedRegisters
-            If Not objLoaded.blnDeleted Then
-                SaveLoadedRegister(objLoaded)
-            End If
-        Next objLoaded
-        SaveLine(".A")
+            'Define each register at the top of the file.
+            For Each objLoaded In mcolLoadedRegisters
+                If Not objLoaded.blnDeleted Then
+                    SaveDefineRegister(objLoaded)
+                End If
+            Next objLoaded
+            'Save the transactions for each register.
+            For Each objLoaded In mcolLoadedRegisters
+                If Not objLoaded.blnDeleted Then
+                    SaveLoadedRegister(objLoaded)
+                End If
+            Next objLoaded
+            SaveLine(".A")
 
-        FileClose(mintSaveFile)
-        blnFileOpen = False
-        mblnUnsavedChanges = False
-
-        Exit Sub
-ErrorHandler:
-        If blnFileOpen Then
             FileClose(mintSaveFile)
-        End If
-        gNestedErrorTrap("Account.Save(" & strPath_ & ")")
+            blnFileOpen = False
+            mblnUnsavedChanges = False
+
+            Exit Sub
+        Catch ex As Exception
+            If blnFileOpen Then
+                FileClose(mintSaveFile)
+            End If
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Sub SaveDefineRegister(ByVal objLoaded As LoadedRegister)

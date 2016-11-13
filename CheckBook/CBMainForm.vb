@@ -156,16 +156,17 @@ Friend Class CBMainForm
     End Sub
 
     Private Sub CBMainForm_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
-        On Error GoTo ErrorHandler
+        Try
 
-        If Not mblnCancelStart Then
-            gSaveChangedAccounts()
-        End If
-        mobjEverything.Teardown()
+            If Not mblnCancelStart Then
+                gSaveChangedAccounts()
+            End If
+            mobjEverything.Teardown()
 
-        Exit Sub
-ErrorHandler:
-        TopError("MDIForm_Unload")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Public Sub mnuActBankImportQIF_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActBankImportQIF.Click
@@ -174,29 +175,30 @@ ErrorHandler:
         Dim strFile As String
         Dim objFile As TextReader
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If blnImportFormAlreadyOpen() Then
+            If blnImportFormAlreadyOpen() Then
+                Exit Sub
+            End If
+
+            strFile = CommonDialogControlForm.strChooseFile("Select Bank Download QIF File To Import", "QIF", "BankQIFPath")
+            If strFile <> "" Then
+                objFile = New StreamReader(strFile)
+                frm = New BankImportAcctSelectForm
+                objImport = New ImportBankDownloadQIF(objFile, strFile)
+                frm.ShowMe("Import QIF File From Bank", objImport, _
+                    CBMain.ImportStatusSearch.Bank, _
+                    CBMain.ImportBatchUpdateSearch.Bank, _
+                    CBMain.ImportBatchNewSearch.Bank, _
+                    CBMain.ImportIndividualUpdateType.Bank, _
+                    CBMain.ImportIndividualSearchType.Bank, _
+                    CBMain.ImportBatchUpdateType.Bank, False)
+            End If
+
             Exit Sub
-        End If
-
-        strFile = CommonDialogControlForm.strChooseFile("Select Bank Download QIF File To Import", "QIF", "BankQIFPath")
-        If strFile <> "" Then
-            objFile = New StreamReader(strFile)
-            frm = New BankImportAcctSelectForm
-            objImport = New ImportBankDownloadQIF(objFile, strFile)
-            frm.ShowMe("Import QIF File From Bank", objImport, _
-                CBMain.ImportStatusSearch.Bank, _
-                CBMain.ImportBatchUpdateSearch.Bank, _
-                CBMain.ImportBatchNewSearch.Bank, _
-                CBMain.ImportIndividualUpdateType.Bank, _
-                CBMain.ImportIndividualSearchType.Bank, _
-                CBMain.ImportBatchUpdateType.Bank, False)
-        End If
-
-        Exit Sub
-ErrorHandler:
-        TopError("mnuActBankImportQIF_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Public Sub mnuBankImportOFX_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuBankImportOFX.Click
@@ -205,77 +207,80 @@ ErrorHandler:
         Dim strFile As String
         Dim objFile As TextReader
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If blnImportFormAlreadyOpen() Then
+            If blnImportFormAlreadyOpen() Then
+                Exit Sub
+            End If
+
+            strFile = CommonDialogControlForm.strChooseFile("Select Bank Download OFX File To Import", "OFX", "BankOFXPath")
+            If strFile <> "" Then
+                objFile = New StreamReader(strFile)
+                frm = New BankImportAcctSelectForm
+                objImport = New ImportBankDownloadOFX(objFile, strFile)
+                frm.ShowMe("Import OFX File From Bank", objImport, _
+                    CBMain.ImportStatusSearch.Bank, _
+                    CBMain.ImportBatchUpdateSearch.Bank, _
+                    CBMain.ImportBatchNewSearch.Bank, _
+                    CBMain.ImportIndividualUpdateType.Bank, _
+                    CBMain.ImportIndividualSearchType.Bank, _
+                    CBMain.ImportBatchUpdateType.Bank, False)
+            End If
+
             Exit Sub
-        End If
-
-        strFile = CommonDialogControlForm.strChooseFile("Select Bank Download OFX File To Import", "OFX", "BankOFXPath")
-        If strFile <> "" Then
-            objFile = New StreamReader(strFile)
-            frm = New BankImportAcctSelectForm
-            objImport = New ImportBankDownloadOFX(objFile, strFile)
-            frm.ShowMe("Import OFX File From Bank", objImport, _
-                CBMain.ImportStatusSearch.Bank, _
-                CBMain.ImportBatchUpdateSearch.Bank, _
-                CBMain.ImportBatchNewSearch.Bank, _
-                CBMain.ImportIndividualUpdateType.Bank, _
-                CBMain.ImportIndividualSearchType.Bank, _
-                CBMain.ImportBatchUpdateType.Bank, False)
-        End If
-
-        Exit Sub
-ErrorHandler:
-        TopError("mnuActBankImportOFX_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Public Sub mnuActDepImport_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActDepImport.Click
         Dim frm As BankImportAcctSelectForm
         Dim objImport As ITrxImport
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If blnImportFormAlreadyOpen() Then
+            If blnImportFormAlreadyOpen() Then
+                Exit Sub
+            End If
+            frm = New BankImportAcctSelectForm
+            objImport = New ImportByPayee(gobjClipboardReader(), "(clipboard)")
+            frm.ShowMe("Import Deposit Amounts", objImport, _
+                CBMain.ImportStatusSearch.PayeeNonGenerated, _
+                CBMain.ImportBatchUpdateSearch.Payee, _
+                CBMain.ImportBatchNewSearch.None, _
+                CBMain.ImportIndividualUpdateType.Amount, _
+                CBMain.ImportIndividualSearchType.Payee, _
+                CBMain.ImportBatchUpdateType.Amount, False)
+
             Exit Sub
-        End If
-        frm = New BankImportAcctSelectForm
-        objImport = New ImportByPayee(gobjClipboardReader(), "(clipboard)")
-        frm.ShowMe("Import Deposit Amounts", objImport, _
-            CBMain.ImportStatusSearch.PayeeNonGenerated, _
-            CBMain.ImportBatchUpdateSearch.Payee, _
-            CBMain.ImportBatchNewSearch.None, _
-            CBMain.ImportIndividualUpdateType.Amount, _
-            CBMain.ImportIndividualSearchType.Payee, _
-            CBMain.ImportBatchUpdateType.Amount, False)
-
-        Exit Sub
-ErrorHandler:
-        TopError("mnuActBankImport_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Public Sub mnuActInvImport_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActInvImport.Click
         Dim frm As BankImportAcctSelectForm
         Dim objImport As ITrxImport
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If blnImportFormAlreadyOpen() Then
+            If blnImportFormAlreadyOpen() Then
+                Exit Sub
+            End If
+            frm = New BankImportAcctSelectForm
+            objImport = New ImportInvoices(gobjClipboardReader(), "(clipboard)")
+            frm.ShowMe("Import Invoices", objImport, _
+                CBMain.ImportStatusSearch.VendorInvoice, _
+                CBMain.ImportBatchUpdateSearch.None, _
+                CBMain.ImportBatchNewSearch.VendorInvoice, _
+                CBMain.ImportIndividualUpdateType.None, _
+                CBMain.ImportIndividualSearchType.VendorInvoice, _
+                CBMain.ImportBatchUpdateType.None, False)
+
             Exit Sub
-        End If
-        frm = New BankImportAcctSelectForm
-        objImport = New ImportInvoices(gobjClipboardReader(), "(clipboard)")
-        frm.ShowMe("Import Invoices", objImport, _
-            CBMain.ImportStatusSearch.VendorInvoice, _
-            CBMain.ImportBatchUpdateSearch.None, _
-            CBMain.ImportBatchNewSearch.VendorInvoice, _
-            CBMain.ImportIndividualUpdateType.None, _
-            CBMain.ImportIndividualSearchType.VendorInvoice, _
-            CBMain.ImportBatchUpdateType.None, False)
-
-        Exit Sub
-ErrorHandler:
-        TopError("mnuActInvImport_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub mnuActCheckImport_Click(sender As Object, e As EventArgs) Handles mnuActCheckImport.Click
@@ -283,26 +288,27 @@ ErrorHandler:
         Dim objImport As ITrxImport
         Dim objSpecs As ImportChecksSpec
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If blnImportFormAlreadyOpen() Then
+            If blnImportFormAlreadyOpen() Then
+                Exit Sub
+            End If
+            frm = New BankImportAcctSelectForm
+
+            objSpecs = New ImportChecksSpec(1, 0, 2, 3, -1)
+            objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
+            frm.ShowMe("Import Checks", objImport, _
+                CBMain.ImportStatusSearch.BillPayment, _
+                CBMain.ImportBatchUpdateSearch.Bank, _
+                CBMain.ImportBatchNewSearch.Bank, _
+                CBMain.ImportIndividualUpdateType.NumberAmount, _
+                CBMain.ImportIndividualSearchType.Bank, _
+                CBMain.ImportBatchUpdateType.NumberAmount, False)
+
             Exit Sub
-        End If
-        frm = New BankImportAcctSelectForm
-
-        objSpecs = New ImportChecksSpec(1, 0, 2, 3, -1)
-        objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
-        frm.ShowMe("Import Checks", objImport, _
-            CBMain.ImportStatusSearch.BillPayment, _
-            CBMain.ImportBatchUpdateSearch.Bank, _
-            CBMain.ImportBatchNewSearch.Bank, _
-            CBMain.ImportIndividualUpdateType.NumberAmount, _
-            CBMain.ImportIndividualSearchType.Bank, _
-            CBMain.ImportBatchUpdateType.NumberAmount, False)
-
-        Exit Sub
-ErrorHandler:
-        TopError("mnuActCheckImport_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub mnuActCompuPayImport_Click(sender As Object, e As EventArgs) Handles mnuActCompuPayImport.Click
@@ -310,26 +316,27 @@ ErrorHandler:
         Dim objImport As ITrxImport
         Dim objSpecs As ImportChecksSpec
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If blnImportFormAlreadyOpen() Then
+            If blnImportFormAlreadyOpen() Then
+                Exit Sub
+            End If
+            frm = New BankImportAcctSelectForm
+
+            objSpecs = New ImportChecksSpec(0, 5, 9, 12, -1)
+            objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
+            frm.ShowMe("Import CompuPay Checks", objImport, _
+                CBMain.ImportStatusSearch.BillPayment, _
+                CBMain.ImportBatchUpdateSearch.Bank, _
+                CBMain.ImportBatchNewSearch.Bank, _
+                CBMain.ImportIndividualUpdateType.NumberAmount, _
+                CBMain.ImportIndividualSearchType.Bank, _
+                CBMain.ImportBatchUpdateType.NumberAmount, False)
+
             Exit Sub
-        End If
-        frm = New BankImportAcctSelectForm
-
-        objSpecs = New ImportChecksSpec(0, 5, 9, 12, -1)
-        objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
-        frm.ShowMe("Import CompuPay Checks", objImport, _
-            CBMain.ImportStatusSearch.BillPayment, _
-            CBMain.ImportBatchUpdateSearch.Bank, _
-            CBMain.ImportBatchNewSearch.Bank, _
-            CBMain.ImportIndividualUpdateType.NumberAmount, _
-            CBMain.ImportIndividualSearchType.Bank, _
-            CBMain.ImportBatchUpdateType.NumberAmount, False)
-
-        Exit Sub
-ErrorHandler:
-        TopError("mnuActCompuPayImport_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub mnuActOSUImport_Click(sender As Object, e As EventArgs) Handles mnuActOSUImport.Click
@@ -337,26 +344,27 @@ ErrorHandler:
         Dim objImport As ITrxImport
         Dim objSpecs As ImportChecksSpec
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If blnImportFormAlreadyOpen() Then
+            If blnImportFormAlreadyOpen() Then
+                Exit Sub
+            End If
+            frm = New BankImportAcctSelectForm
+
+            objSpecs = New ImportChecksSpec(6, 0, 1, 2, -1)
+            objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
+            frm.ShowMe("Import Oregon State Credit Union Checks", objImport, _
+                CBMain.ImportStatusSearch.BillPayment, _
+                CBMain.ImportBatchUpdateSearch.Bank, _
+                CBMain.ImportBatchNewSearch.Bank, _
+                CBMain.ImportIndividualUpdateType.NumberAmount, _
+                CBMain.ImportIndividualSearchType.Bank, _
+                CBMain.ImportBatchUpdateType.NumberAmount, False)
+
             Exit Sub
-        End If
-        frm = New BankImportAcctSelectForm
-
-        objSpecs = New ImportChecksSpec(6, 0, 1, 2, -1)
-        objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
-        frm.ShowMe("Import Oregon State Credit Union Checks", objImport, _
-            CBMain.ImportStatusSearch.BillPayment, _
-            CBMain.ImportBatchUpdateSearch.Bank, _
-            CBMain.ImportBatchNewSearch.Bank, _
-            CBMain.ImportIndividualUpdateType.NumberAmount, _
-            CBMain.ImportIndividualSearchType.Bank, _
-            CBMain.ImportBatchUpdateType.NumberAmount, False)
-
-        Exit Sub
-ErrorHandler:
-        TopError("mnuActOSUImport_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Function blnImportFormAlreadyOpen() As Boolean
@@ -377,130 +385,138 @@ ErrorHandler:
         Dim frmReg As RegisterForm
         Dim frmAdjust As AdjustBudgetsToCashForm
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If Not TypeOf Me.ActiveMdiChild Is RegisterForm Then
-            MsgBox("Please click on the register window you wish to adjust.", MsgBoxStyle.Critical)
-            Exit Sub
-        End If
-        frmReg = Me.ActiveMdiChild
-        If frmReg.objReg.blnRepeat Then
-            MsgBox("Not available for repeating transaction registers.", MsgBoxStyle.Critical)
-            Exit Sub
-        End If
-        frmAdjust = New AdjustBudgetsToCashForm
-        frmAdjust.ShowModal(frmReg.objReg, gobjBudgets)
+            If Not TypeOf Me.ActiveMdiChild Is RegisterForm Then
+                MsgBox("Please click on the register window you wish to adjust.", MsgBoxStyle.Critical)
+                Exit Sub
+            End If
+            frmReg = Me.ActiveMdiChild
+            If frmReg.objReg.blnRepeat Then
+                MsgBox("Not available for repeating transaction registers.", MsgBoxStyle.Critical)
+                Exit Sub
+            End If
+            frmAdjust = New AdjustBudgetsToCashForm
+            frmAdjust.ShowModal(frmReg.objReg, gobjBudgets)
 
-        Exit Sub
-ErrorHandler:
-        TopError("mnuActAdjBudget_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Public Sub mnuActFindLiveBudget_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActFindLiveBudget.Click
         Dim frmReg As RegisterForm
         Dim frmLive As LiveBudgetListForm
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If Not TypeOf Me.ActiveMdiChild Is RegisterForm Then
-            MsgBox("Please click on the register window you wish to search for live budgets.", MsgBoxStyle.Critical)
+            If Not TypeOf Me.ActiveMdiChild Is RegisterForm Then
+                MsgBox("Please click on the register window you wish to search for live budgets.", MsgBoxStyle.Critical)
+                Exit Sub
+            End If
+            frmReg = Me.ActiveMdiChild
+            frmLive = New LiveBudgetListForm
+            frmLive.ShowModal(frmReg.objReg, gobjBudgets)
+
             Exit Sub
-        End If
-        frmReg = Me.ActiveMdiChild
-        frmLive = New LiveBudgetListForm
-        frmLive.ShowModal(frmReg.objReg, gobjBudgets)
-
-        Exit Sub
-ErrorHandler:
-        TopError("mnuActAdjBudget_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Public Sub mnuActRepeatKeys_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActRepeatKeys.Click
-        Dim frmReg As RegisterForm
-        Dim objAccount As Account
-        Dim frmList As ListEditorForm
+        'Dim frmReg As RegisterForm
+        'Dim objAccount As Account
+        'Dim frmList As ListEditorForm
 
-        On Error GoTo ErrorHandler
+        Try
 
-        'If Not TypeOf Me.ActiveMdiChild Is RegisterForm Then
-        '    MsgBox("Please click on a register window for the account you wish edit repeat keys for.", MsgBoxStyle.Critical)
-        '    Exit Sub
-        'End If
-        'frmReg = Me.ActiveMdiChild
-        'objAccount = frmReg.objAccount
-        'frmList = New ListEditorForm
-        'With objAccount
-        '    frmList.ShowMe(ListEditorForm.ListType.glngLIST_TYPE_REPEAT, .strRepeatsFile, .objRepeats, "Repeated Transaction Keys", objAccount)
-        'End With
+            'If Not TypeOf Me.ActiveMdiChild Is RegisterForm Then
+            '    MsgBox("Please click on a register window for the account you wish edit repeat keys for.", MsgBoxStyle.Critical)
+            '    Exit Sub
+            'End If
+            'frmReg = Me.ActiveMdiChild
+            'objAccount = frmReg.objAccount
+            'frmList = New ListEditorForm
+            'With objAccount
+            '    frmList.ShowMe(ListEditorForm.ListType.glngLIST_TYPE_REPEAT, .strRepeatsFile, .objRepeats, "Repeated Transaction Keys", objAccount)
+            'End With
 
-        Exit Sub
-ErrorHandler:
-        TopError("mnuActAdjBudget_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Public Sub mnuListBudgets_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuListBudgets.Click
         Dim frm As ListEditorForm
 
-        On Error GoTo ErrorHandler
+        Try
 
-        frm = New ListEditorForm
-        frm.ShowMe(ListEditorForm.ListType.glngLIST_TYPE_BUDGET, gstrAddPath("Shared.bud"), gobjBudgets, "Budget List", Nothing)
+            frm = New ListEditorForm
+            frm.ShowMe(ListEditorForm.ListType.glngLIST_TYPE_BUDGET, gstrAddPath("Shared.bud"), gobjBudgets, "Budget List", Nothing)
 
-        Exit Sub
-ErrorHandler:
-        TopError("mnuListBudgets_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Public Sub mnuListCategories_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuListCategories.Click
         Dim frm As ListEditorForm
 
-        On Error GoTo ErrorHandler
+        Try
 
-        frm = New ListEditorForm
-        frm.ShowMe(ListEditorForm.ListType.glngLIST_TYPE_CATEGORY, gstrAddPath("Shared.cat"), gobjCategories, "Category List", Nothing)
+            frm = New ListEditorForm
+            frm.ShowMe(ListEditorForm.ListType.glngLIST_TYPE_CATEGORY, gstrAddPath("Shared.cat"), gobjCategories, "Category List", Nothing)
 
-        Exit Sub
-ErrorHandler:
-        TopError("mnuListCategories_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Public Sub mnuListPayees_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuListPayees.Click
         Dim frm As PayeeListForm
 
-        On Error GoTo ErrorHandler
+        Try
 
-        frm = New PayeeListForm
-        frm.ShowMe()
+            frm = New PayeeListForm
+            frm.ShowMe()
 
-        Exit Sub
-ErrorHandler:
-        TopError("mnuListPayees_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Public Sub mnuListTrxTypes_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuListTrxTypes.Click
         Dim frm As TrxTypeListForm
 
-        On Error GoTo ErrorHandler
+        Try
 
-        frm = New TrxTypeListForm
-        frm.ShowMe()
+            frm = New TrxTypeListForm
+            frm.ShowMe()
 
-        Exit Sub
-ErrorHandler:
-        TopError("mnuListTrxTypes_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Public Sub mnuActRecon_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActRecon.Click
         Dim frm As ReconAcctSelectForm
 
-        On Error GoTo ErrorHandler
+        Try
 
-        frm = New ReconAcctSelectForm
-        frm.ShowDialog()
+            frm = New ReconAcctSelectForm
+            frm.ShowDialog()
 
-        Exit Sub
-ErrorHandler:
-        TopError("mnuActRecon_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Public Sub mnuFileExit_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileExit.Click
@@ -508,66 +524,66 @@ ErrorHandler:
     End Sub
 
     Public Sub mnuFileSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileSave.Click
-        On Error GoTo ErrorHandler
+        Try
 
-        gSaveChangedAccounts()
-        mnuFileSave.Enabled = False
+            gSaveChangedAccounts()
+            mnuFileSave.Enabled = False
 
-        Exit Sub
-ErrorHandler:
-        TopError("mnuFileSave_Click")
-    End Sub
-
-    Private Sub TopError(ByVal strRoutine As String)
-        gTopErrorTrap("CBMainForm." & strRoutine)
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Public Sub mnuFileShowReg_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileShowReg.Click
         Dim frm As ShowRegisterForm
         Dim frm2 As System.Windows.Forms.Form
 
-        On Error GoTo ErrorHandler
+        Try
 
-        For Each frm2 In gcolForms()
-            'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            If TypeOf frm2 Is ShowRegisterForm Then
-                frm2.Activate()
-                Exit Sub
-            End If
-        Next frm2
+            For Each frm2 In gcolForms()
+                'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                If TypeOf frm2 Is ShowRegisterForm Then
+                    frm2.Activate()
+                    Exit Sub
+                End If
+            Next frm2
 
-        frm = New ShowRegisterForm
-        frm.Show()
+            frm = New ShowRegisterForm
+            frm.Show()
 
-        Exit Sub
-ErrorHandler:
-        TopError("mnuFileShowReg_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Public Sub mnuRptCategory_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuRptCategory.Click
         Dim frmRpt As RptScanSplitsForm
 
-        On Error GoTo ErrorHandler
+        Try
 
-        frmRpt = New RptScanSplitsForm
-        frmRpt.ShowMe(RptScanSplitsForm.SplitReportType.glngSPLTRPT_TOTALS)
+            frmRpt = New RptScanSplitsForm
+            frmRpt.ShowMe(RptScanSplitsForm.SplitReportType.glngSPLTRPT_TOTALS)
 
-        Exit Sub
-ErrorHandler:
-        TopError("mnuRptCategory_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Public Sub mnuRptPayables_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuRptPayables.Click
         Dim frmRpt As RptScanSplitsForm
 
-        On Error GoTo ErrorHandler
+        Try
 
-        frmRpt = New RptScanSplitsForm
-        frmRpt.ShowMe(RptScanSplitsForm.SplitReportType.glngSPLTRPT_PAYABLES)
+            frmRpt = New RptScanSplitsForm
+            frmRpt.ShowMe(RptScanSplitsForm.SplitReportType.glngSPLTRPT_PAYABLES)
 
-        Exit Sub
-ErrorHandler:
-        TopError("mnuRptCategory_Click")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub mobjEverything_SomethingModified() Handles mobjEverything.SomethingModified

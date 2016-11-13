@@ -287,28 +287,29 @@ Public Class Register
         Dim objTrx As Trx
 
         'Hack error trap
-        On Error GoTo ErrorHandler
+        Try
 
-        If lngOldIndex < 1 Or lngOldIndex > mlngTrxUsed Then
-            gRaiseError("Invalid index " & lngOldIndex & " passed to Register.UpdateEnd")
-        End If
-        objTrx = maobjTrx(lngOldIndex)
-        UpdateEarliestBudget(objTrx)
-        If objTrx.intRepeatSeq > 0 Then
-            SetRepeatTrx(objTrx)
-        End If
-        objTrx.ApplyToBudgets(Me)
-        lngNewIndex = lngUpdateMove(lngOldIndex)
-        mlngTrxCurrent = lngNewIndex
-        RaiseEvent TrxUpdated(lngOldIndex, lngNewIndex, objTrx)
-        UpdateFirstAffected(lngOldIndex)
-        UpdateFirstAffected(lngNewIndex)
-        FixBalancesAndRefreshUI()
-        mobjLog.AddILogChange(objChangeLogger, strTitle, objTrx, objOldTrx)
+            If lngOldIndex < 1 Or lngOldIndex > mlngTrxUsed Then
+                gRaiseError("Invalid index " & lngOldIndex & " passed to Register.UpdateEnd")
+            End If
+            objTrx = maobjTrx(lngOldIndex)
+            UpdateEarliestBudget(objTrx)
+            If objTrx.intRepeatSeq > 0 Then
+                SetRepeatTrx(objTrx)
+            End If
+            objTrx.ApplyToBudgets(Me)
+            lngNewIndex = lngUpdateMove(lngOldIndex)
+            mlngTrxCurrent = lngNewIndex
+            RaiseEvent TrxUpdated(lngOldIndex, lngNewIndex, objTrx)
+            UpdateFirstAffected(lngOldIndex)
+            UpdateFirstAffected(lngNewIndex)
+            FixBalancesAndRefreshUI()
+            mobjLog.AddILogChange(objChangeLogger, strTitle, objTrx, objOldTrx)
 
-        Exit Sub
-ErrorHandler:
-        NestedError("UpdateEnd")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     '$Description Move a Trx to the correct position based on sort key.
@@ -1409,9 +1410,5 @@ NoneSuch:
 
     Public Sub WriteEventLog(ByVal strAccountTitle As String, ByVal objRepeats As StringTranslator)
         mobjLog.WriteAll(strAccountTitle, objRepeats)
-    End Sub
-
-    Private Sub NestedError(ByVal strRoutine As String)
-        gNestedErrorTrap("Register." & strRoutine)
     End Sub
 End Class

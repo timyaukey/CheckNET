@@ -40,27 +40,28 @@ Friend Class AdjustBudgetsToCashForm
     Private Const mstrREG_NAMEPRE As String = "NamePrefix"
 
     Public Sub ShowModal(ByVal objReg_ As Register, ByVal objBudgets_ As StringTranslator)
-        On Error GoTo ErrorHandler
+        Try
 
-        cboBudget(1) = _cboBudget_1
-        cboBudget(2) = _cboBudget_2
-        cboBudget(3) = _cboBudget_3
-        cboBudget(4) = _cboBudget_4
-        cboBudget(5) = _cboBudget_5
-        txtPercent(1) = _txtPercent_1
-        txtPercent(2) = _txtPercent_2
-        txtPercent(3) = _txtPercent_3
-        txtPercent(4) = _txtPercent_4
-        txtPercent(5) = _txtPercent_5
-        mobjReg = objReg_
-        mobjBudgets = objBudgets_
-        Me.Text = "Adjust Budgets For " & objReg_.strTitle
-        LoadSavedSpecs()
-        Me.ShowDialog()
+            cboBudget(1) = _cboBudget_1
+            cboBudget(2) = _cboBudget_2
+            cboBudget(3) = _cboBudget_3
+            cboBudget(4) = _cboBudget_4
+            cboBudget(5) = _cboBudget_5
+            txtPercent(1) = _txtPercent_1
+            txtPercent(2) = _txtPercent_2
+            txtPercent(3) = _txtPercent_3
+            txtPercent(4) = _txtPercent_4
+            txtPercent(5) = _txtPercent_5
+            mobjReg = objReg_
+            mobjBudgets = objBudgets_
+            Me.Text = "Adjust Budgets For " & objReg_.strTitle
+            LoadSavedSpecs()
+            Me.ShowDialog()
 
-        Exit Sub
-ErrorHandler:
-        NestedError("ShowModal")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Sub LoadSavedSpecs()
@@ -81,22 +82,23 @@ ErrorHandler:
     Private Sub LoadSavedBudget(ByVal intIndex As Short)
         Dim strValue1 As String
 
-        On Error GoTo ErrorHandler
+        Try
 
-        gLoadComboFromStringTranslator(cboBudget(intIndex), mobjBudgets, True)
-        With cboBudget(intIndex)
-            strValue1 = mobjBudgets.strKeyToValue1(GetSetting(gstrREG_APP, strRegSection(), mstrREG_BUDKEY_NAME & intIndex))
-            If strValue1 = "" Then
-                .SelectedIndex = -1
-            Else
-                .Text = strValue1
-            End If
-        End With
-        txtPercent(intIndex).Text = GetSetting(gstrREG_APP, strRegSection(), mstrREG_BUDPCT_NAME & intIndex)
+            gLoadComboFromStringTranslator(cboBudget(intIndex), mobjBudgets, True)
+            With cboBudget(intIndex)
+                strValue1 = mobjBudgets.strKeyToValue1(GetSetting(gstrREG_APP, strRegSection(), mstrREG_BUDKEY_NAME & intIndex))
+                If strValue1 = "" Then
+                    .SelectedIndex = -1
+                Else
+                    .Text = strValue1
+                End If
+            End With
+            txtPercent(intIndex).Text = GetSetting(gstrREG_APP, strRegSection(), mstrREG_BUDPCT_NAME & intIndex)
 
-        Exit Sub
-ErrorHandler:
-        NestedError("InitSpecs(" & intIndex & ")")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Private Sub cmdAdjust_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdAdjust.Click
@@ -105,37 +107,38 @@ ErrorHandler:
         Dim datMatch As Date
         Dim objStartLogger As ILogGroupStart
 
-        On Error GoTo ErrorHandler
+        Try
 
-        If Not blnValidate() Then
+            If Not blnValidate() Then
+                Exit Sub
+            End If
+
+            objStartLogger = mobjReg.objLogGroupStart("AdjustBudgets")
+            mblnAdjustedBudgetExceeded = False
+            lvwResults.Items.Clear()
+            lngStartIndex = mobjReg.lngFindBeforeDate(CDate(txtStartingDate.Text)) + 1
+            lngIndex = lngStartIndex
+            While lngIndex <= mobjReg.lngTrxCount
+                If blnScanWholeDaysForBudgets(lngIndex, datMatch) Then
+                    ZeroMatchedBudgets()
+                End If
+            End While
+            lngIndex = lngStartIndex
+            While lngIndex <= mobjReg.lngTrxCount
+                If blnScanWholeDaysForBudgets(lngIndex, datMatch) Then
+                    SetBudgets(lngIndex, datMatch)
+                End If
+            End While
+            mobjReg.LogGroupEnd(objStartLogger)
+            DoubleCheckBalances(lngStartIndex)
+            If mblnAdjustedBudgetExceeded Then
+                MsgBox("WARNING: At least one of the adjusted budgets is already " & "overspent, which confuses the budget adjustment algorithm. " & "The register is still okay, but the adjusted budgets may have " & "silly amounts.", MsgBoxStyle.Critical)
+            End If
+
             Exit Sub
-        End If
-
-        objStartLogger = mobjReg.objLogGroupStart("AdjustBudgets")
-        mblnAdjustedBudgetExceeded = False
-        lvwResults.Items.Clear()
-        lngStartIndex = mobjReg.lngFindBeforeDate(CDate(txtStartingDate.Text)) + 1
-        lngIndex = lngStartIndex
-        While lngIndex <= mobjReg.lngTrxCount
-            If blnScanWholeDaysForBudgets(lngIndex, datMatch) Then
-                ZeroMatchedBudgets()
-            End If
-        End While
-        lngIndex = lngStartIndex
-        While lngIndex <= mobjReg.lngTrxCount
-            If blnScanWholeDaysForBudgets(lngIndex, datMatch) Then
-                SetBudgets(lngIndex, datMatch)
-            End If
-        End While
-        mobjReg.LogGroupEnd(objStartLogger)
-        DoubleCheckBalances(lngStartIndex)
-        If mblnAdjustedBudgetExceeded Then
-            MsgBox("WARNING: At least one of the adjusted budgets is already " & "overspent, which confuses the budget adjustment algorithm. " & "The register is still okay, but the adjusted budgets may have " & "silly amounts.", MsgBoxStyle.Critical)
-        End If
-
-        Exit Sub
-ErrorHandler:
-        TopError("cmdAdjust_Click")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     '$Description Validate the specifications, and set up mastrBudgetKey().
@@ -145,52 +148,53 @@ ErrorHandler:
         Dim intIndex As Short
         Dim intBudgetsSelected As Short
 
-        On Error GoTo ErrorHandler
+        Try
 
-        For intIndex = 1 To mintNUM_BUDGETS
-            mastrBudgetKey(intIndex) = ""
-            If blnBudgetUsed(intIndex) Then
-                If Not IsNumeric(txtPercent(intIndex).Text) Then
-                    MsgBox("Invalid percentage in budget #" & intIndex)
-                    Exit Function
+            For intIndex = 1 To mintNUM_BUDGETS
+                mastrBudgetKey(intIndex) = ""
+                If blnBudgetUsed(intIndex) Then
+                    If Not IsNumeric(txtPercent(intIndex).Text) Then
+                        MsgBox("Invalid percentage in budget #" & intIndex)
+                        Exit Function
+                    End If
+                    intTotalPercent = intTotalPercent + CShort(txtPercent(intIndex).Text)
+                    intBudgetsSelected = intBudgetsSelected + 1
+                    mastrBudgetKey(intIndex) = strGetStringTranslatorKeyFromCombo(cboBudget(intIndex), mobjBudgets)
+                Else
+                    If txtPercent(intIndex).Text <> "" Then
+                        MsgBox("Percentage must be empty unless budget is selected.", MsgBoxStyle.Critical)
+                        Exit Function
+                    End If
                 End If
-                intTotalPercent = intTotalPercent + CShort(txtPercent(intIndex).Text)
-                intBudgetsSelected = intBudgetsSelected + 1
-                mastrBudgetKey(intIndex) = strGetStringTranslatorKeyFromCombo(cboBudget(intIndex), mobjBudgets)
-            Else
-                If txtPercent(intIndex).Text <> "" Then
-                    MsgBox("Percentage must be empty unless budget is selected.", MsgBoxStyle.Critical)
-                    Exit Function
-                End If
+            Next
+
+            If intBudgetsSelected = 0 Then
+                MsgBox("Please select at least one budget to adjust.", MsgBoxStyle.Critical)
+                Exit Function
             End If
-        Next
+            If intTotalPercent <> 100 Then
+                MsgBox("Percentages of selected budgets must add up to 100.", MsgBoxStyle.Critical)
+                Exit Function
+            End If
+            If Not gblnValidDate(txtStartingDate.Text) Then
+                MsgBox("Invalid starting date.", MsgBoxStyle.Critical)
+                Exit Function
+            End If
+            If Not gblnValidAmount(txtMinBal.Text) Then
+                MsgBox("Invalid minimum balance.", MsgBoxStyle.Critical)
+                Exit Function
+            End If
 
-        If intBudgetsSelected = 0 Then
-            MsgBox("Please select at least one budget to adjust.", MsgBoxStyle.Critical)
-            Exit Function
-        End If
-        If intTotalPercent <> 100 Then
-            MsgBox("Percentages of selected budgets must add up to 100.", MsgBoxStyle.Critical)
-            Exit Function
-        End If
-        If Not gblnValidDate(txtStartingDate.Text) Then
-            MsgBox("Invalid starting date.", MsgBoxStyle.Critical)
-            Exit Function
-        End If
-        If Not gblnValidAmount(txtMinBal.Text) Then
-            MsgBox("Invalid minimum balance.", MsgBoxStyle.Critical)
-            Exit Function
-        End If
+            If MsgBox("Do you really want to fix these budgets?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                Exit Function
+            End If
 
-        If MsgBox("Do you really want to fix these budgets?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+            blnValidate = True
+
             Exit Function
-        End If
-
-        blnValidate = True
-
-        Exit Function
-ErrorHandler:
-        NestedError("blnValidate")
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Private Function blnBudgetUsed(ByVal intIndex As Short) As Boolean
@@ -215,76 +219,77 @@ ErrorHandler:
         Dim intBudget As Short
         Dim strTrxBudgetKey As String
 
-        On Error GoTo ErrorHandler
+        Try
 
-        'Clear match information.
-        For intBudget = 1 To mintNUM_BUDGETS
-            malngRegIndex(intBudget) = 0
-            'UPGRADE_NOTE: Object maobjRegTrx() may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-            maobjRegTrx(intBudget) = Nothing
-        Next
+            'Clear match information.
+            For intBudget = 1 To mintNUM_BUDGETS
+                malngRegIndex(intBudget) = 0
+                'UPGRADE_NOTE: Object maobjRegTrx() may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+                maobjRegTrx(intBudget) = Nothing
+            Next
 
-        datPrev = mobjReg.objTrx(lngIndex).datDate
-        lngTrxCount = mobjReg.lngTrxCount
-        Do
-            'Are we past the end of the register?
-            If lngIndex > lngTrxCount Then
-                'The day is definitely finished (!),
-                'the only question is whether we found any
-                'matches on it. This is the only way we may
-                'exit without any matches.
-                Exit Do
-            End If
-            'There IS a trx, so check it.
-            objTrx = mobjReg.objTrx(lngIndex)
-            'If we are starting a new day.
-            If objTrx.datDate <> datPrev Then
-                'If there are any matches on the day just ended.
-                'Since we check after each day, any matches at all is
-                'the same as any matches on the day just ended.
-                If blnAnyMatches Then
+            datPrev = mobjReg.objTrx(lngIndex).datDate
+            lngTrxCount = mobjReg.lngTrxCount
+            Do
+                'Are we past the end of the register?
+                If lngIndex > lngTrxCount Then
+                    'The day is definitely finished (!),
+                    'the only question is whether we found any
+                    'matches on it. This is the only way we may
+                    'exit without any matches.
                     Exit Do
                 End If
-                'No matches on previous date, so restart on this date.
-                datPrev = objTrx.datDate
-            End If
-            'If this is a budget trx, see if it matches anything we are looking for.
-            If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
-                strTrxBudgetKey = objTrx.strBudgetKey
-                'Check against each budget key we are looking for.
-                For intBudget = 1 To mintNUM_BUDGETS
-                    'Is this budget key specified?
-                    If Len(mastrBudgetKey(intBudget)) Then
-                        'Does it match the current trx?
-                        If mastrBudgetKey(intBudget) = strTrxBudgetKey Then
-                            'Remember where we found it. Note that this index
-                            'only remains valid so long as we don't insert or
-                            'delete above it in the register, so we must do
-                            'our updates before adding new budgets! And every
-                            'budget we add, we must increment the starting
-                            'position of the next can to this method because
-                            'the added budget will always be inserted above
-                            'the starting index of that scan.
-                            malngRegIndex(intBudget) = lngIndex
-                            'Will confirm this later during the update as a sanity
-                            'check to insure intervening activity has not caused
-                            'the Trx to move in the register.
-                            maobjRegTrx(intBudget) = objTrx
-                            blnAnyMatches = True
-                        End If
+                'There IS a trx, so check it.
+                objTrx = mobjReg.objTrx(lngIndex)
+                'If we are starting a new day.
+                If objTrx.datDate <> datPrev Then
+                    'If there are any matches on the day just ended.
+                    'Since we check after each day, any matches at all is
+                    'the same as any matches on the day just ended.
+                    If blnAnyMatches Then
+                        Exit Do
                     End If
-                Next
+                    'No matches on previous date, so restart on this date.
+                    datPrev = objTrx.datDate
+                End If
+                'If this is a budget trx, see if it matches anything we are looking for.
+                If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
+                    strTrxBudgetKey = objTrx.strBudgetKey
+                    'Check against each budget key we are looking for.
+                    For intBudget = 1 To mintNUM_BUDGETS
+                        'Is this budget key specified?
+                        If Len(mastrBudgetKey(intBudget)) Then
+                            'Does it match the current trx?
+                            If mastrBudgetKey(intBudget) = strTrxBudgetKey Then
+                                'Remember where we found it. Note that this index
+                                'only remains valid so long as we don't insert or
+                                'delete above it in the register, so we must do
+                                'our updates before adding new budgets! And every
+                                'budget we add, we must increment the starting
+                                'position of the next can to this method because
+                                'the added budget will always be inserted above
+                                'the starting index of that scan.
+                                malngRegIndex(intBudget) = lngIndex
+                                'Will confirm this later during the update as a sanity
+                                'check to insure intervening activity has not caused
+                                'the Trx to move in the register.
+                                maobjRegTrx(intBudget) = objTrx
+                                blnAnyMatches = True
+                            End If
+                        End If
+                    Next
+                End If
+                lngIndex = lngIndex + 1
+            Loop
+            blnScanWholeDaysForBudgets = blnAnyMatches
+            If blnAnyMatches Then
+                datMatch = datPrev
             End If
-            lngIndex = lngIndex + 1
-        Loop
-        blnScanWholeDaysForBudgets = blnAnyMatches
-        If blnAnyMatches Then
-            datMatch = datPrev
-        End If
 
-        Exit Function
-ErrorHandler:
-        NestedError("blnScanWholeDaysForBudgets")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     '$Description Set the budget limits for all matched budget transactions to zero.
@@ -293,19 +298,20 @@ ErrorHandler:
     Private Sub ZeroMatchedBudgets()
         Dim intBudget As Short
 
-        On Error GoTo ErrorHandler
+        Try
 
-        For intBudget = 1 To mintNUM_BUDGETS
-            If Len(mastrBudgetKey(intBudget)) Then
-                If malngRegIndex(intBudget) Then
-                    UpdateBudget(malngRegIndex(intBudget), 0, intBudget)
+            For intBudget = 1 To mintNUM_BUDGETS
+                If Len(mastrBudgetKey(intBudget)) Then
+                    If malngRegIndex(intBudget) Then
+                        UpdateBudget(malngRegIndex(intBudget), 0, intBudget)
+                    End If
                 End If
-            End If
-        Next
+            Next
 
-        Exit Sub
-ErrorHandler:
-        NestedError("ZeroMatchedBudgets")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     '$Description Set the budget limits all budgets on one day to amounts computed
@@ -329,87 +335,88 @@ ErrorHandler:
         Dim intLastSpecifiedBudget As Short
         Dim curAlreadySpent As Decimal
 
-        On Error GoTo ErrorHandler
+        Try
 
-        'NOTE NOTE NOTE!
-        'This algorithm gets confused when transactions applied to budgets which
-        'are being adjusted exceed the budget limits. This should not be a problem
-        'in practice, since we generally only adjust future dated budgets and those
-        'should never be overspent!
+            'NOTE NOTE NOTE!
+            'This algorithm gets confused when transactions applied to budgets which
+            'are being adjusted exceed the budget limits. This should not be a problem
+            'in practice, since we generally only adjust future dated budgets and those
+            'should never be overspent!
 
-        'How much money do we have available?
-        For intBudget = 1 To mintNUM_BUDGETS
-            If Len(mastrBudgetKey(intBudget)) Then
-                'To avoid rounding problems, the last specified budget always gets
-                'what is left over rather than computing it as a percentage of the
-                'total available as we do for the others.
-                intLastSpecifiedBudget = intBudget
-                If Not maobjRegTrx(intBudget) Is Nothing Then
-                    curAlreadySpent = curAlreadySpent + maobjRegTrx(intBudget).curBudgetApplied
-                End If
-            End If
-        Next
-        curTotalAvailable = curLowestBalance(lngContinueIndex) - CDec(txtMinBal.Text) - curAlreadySpent
-        If curTotalAvailable < 0 Then
-            curTotalAvailable = 0
-        End If
-        'Divide it up.
-        curRemainderAvailable = curTotalAvailable
-        For intBudget = 1 To mintNUM_BUDGETS
-            If Len(mastrBudgetKey(intBudget)) Then
-                If intBudget = intLastSpecifiedBudget Then
-                    acurNewLimit(intBudget) = -curRemainderAvailable
-                Else
-                    acurNewLimit(intBudget) = -curTotalAvailable * (CDbl(txtPercent(intBudget).Text) / 100.0#)
-                    curRemainderAvailable = curRemainderAvailable + acurNewLimit(intBudget)
-                End If
-            End If
-        Next
-
-        'First update existing budgets.
-        'We update first because adding budgets will invalidate
-        'the indices of the budgets we need to update. Actually
-        'they may be inserted at the end of the day so the existing
-        'budgets on the same day would not be affected, but coding
-        'the updates first means we won't break if that behavior
-        'changes.
-        For intBudget = 1 To mintNUM_BUDGETS
-            If Len(mastrBudgetKey(intBudget)) Then
-                lngUpdateIndex = malngRegIndex(intBudget)
-                If lngUpdateIndex > 0 Then
-                    UpdateBudget(lngUpdateIndex, acurNewLimit(intBudget), intBudget)
-                    objTrx = mobjReg.objTrx(lngUpdateIndex)
-                    ShowBudget(objTrx)
-                    If System.Math.Abs(objTrx.curBudgetApplied) > System.Math.Abs(objTrx.curBudgetLimit) Then
-                        mblnAdjustedBudgetExceeded = True
+            'How much money do we have available?
+            For intBudget = 1 To mintNUM_BUDGETS
+                If Len(mastrBudgetKey(intBudget)) Then
+                    'To avoid rounding problems, the last specified budget always gets
+                    'what is left over rather than computing it as a percentage of the
+                    'total available as we do for the others.
+                    intLastSpecifiedBudget = intBudget
+                    If Not maobjRegTrx(intBudget) Is Nothing Then
+                        curAlreadySpent = curAlreadySpent + maobjRegTrx(intBudget).curBudgetApplied
                     End If
-                    'Use the same budget ending date for new trx.
-                    'Assume they all end on the same date.
-                    datBudgetEnds = objTrx.datBudgetEnds
                 End If
+            Next
+            curTotalAvailable = curLowestBalance(lngContinueIndex) - CDec(txtMinBal.Text) - curAlreadySpent
+            If curTotalAvailable < 0 Then
+                curTotalAvailable = 0
             End If
-        Next
-
-        'Now add any missing budgets.
-        For intBudget = 1 To mintNUM_BUDGETS
-            If Len(mastrBudgetKey(intBudget)) Then
-                If malngRegIndex(intBudget) = 0 Then
-                    objTrx = New Trx
-                    objTrx.NewStartBudget(mobjReg, datMatch, txtPrefix.Text & mobjBudgets.strKeyToValue1(mastrBudgetKey(intBudget)), "", False, False, 0, "", acurNewLimit(intBudget), datBudgetEnds, mastrBudgetKey(intBudget))
-                    'UPGRADE_WARNING: Couldn't resolve default property of object New (LogAdd). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    mobjReg.NewAddEnd(objTrx, New LogAdd, "AdjustBudgetsToCashForm.SetBudgets")
-                    ShowBudget(objTrx)
-                    'The added budget by definition will be inserted
-                    'above the continue point for the budget search,
-                    'so increment that to keep it accurate.
-                    lngContinueIndex = lngContinueIndex + 1
+            'Divide it up.
+            curRemainderAvailable = curTotalAvailable
+            For intBudget = 1 To mintNUM_BUDGETS
+                If Len(mastrBudgetKey(intBudget)) Then
+                    If intBudget = intLastSpecifiedBudget Then
+                        acurNewLimit(intBudget) = -curRemainderAvailable
+                    Else
+                        acurNewLimit(intBudget) = -curTotalAvailable * (CDbl(txtPercent(intBudget).Text) / 100.0#)
+                        curRemainderAvailable = curRemainderAvailable + acurNewLimit(intBudget)
+                    End If
                 End If
-            End If
-        Next
+            Next
 
-        Exit Sub
-ErrorHandler:
-        NestedError("SetBudgets")
+            'First update existing budgets.
+            'We update first because adding budgets will invalidate
+            'the indices of the budgets we need to update. Actually
+            'they may be inserted at the end of the day so the existing
+            'budgets on the same day would not be affected, but coding
+            'the updates first means we won't break if that behavior
+            'changes.
+            For intBudget = 1 To mintNUM_BUDGETS
+                If Len(mastrBudgetKey(intBudget)) Then
+                    lngUpdateIndex = malngRegIndex(intBudget)
+                    If lngUpdateIndex > 0 Then
+                        UpdateBudget(lngUpdateIndex, acurNewLimit(intBudget), intBudget)
+                        objTrx = mobjReg.objTrx(lngUpdateIndex)
+                        ShowBudget(objTrx)
+                        If System.Math.Abs(objTrx.curBudgetApplied) > System.Math.Abs(objTrx.curBudgetLimit) Then
+                            mblnAdjustedBudgetExceeded = True
+                        End If
+                        'Use the same budget ending date for new trx.
+                        'Assume they all end on the same date.
+                        datBudgetEnds = objTrx.datBudgetEnds
+                    End If
+                End If
+            Next
+
+            'Now add any missing budgets.
+            For intBudget = 1 To mintNUM_BUDGETS
+                If Len(mastrBudgetKey(intBudget)) Then
+                    If malngRegIndex(intBudget) = 0 Then
+                        objTrx = New Trx
+                        objTrx.NewStartBudget(mobjReg, datMatch, txtPrefix.Text & mobjBudgets.strKeyToValue1(mastrBudgetKey(intBudget)), "", False, False, 0, "", acurNewLimit(intBudget), datBudgetEnds, mastrBudgetKey(intBudget))
+                        'UPGRADE_WARNING: Couldn't resolve default property of object New (LogAdd). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        mobjReg.NewAddEnd(objTrx, New LogAdd, "AdjustBudgetsToCashForm.SetBudgets")
+                        ShowBudget(objTrx)
+                        'The added budget by definition will be inserted
+                        'above the continue point for the budget search,
+                        'so increment that to keep it accurate.
+                        lngContinueIndex = lngContinueIndex + 1
+                    End If
+                End If
+            Next
+
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     '$Description Update the limit of an existing budget, after confirming as a
@@ -420,22 +427,23 @@ ErrorHandler:
         Dim objTrx As Trx
         Dim objTrxOld As Trx
 
-        On Error GoTo ErrorHandler
+        Try
 
-        objTrx = mobjReg.objTrx(lngIndex)
-        objTrxOld = objTrx.objClone(Nothing)
-        If Not objTrx Is maobjRegTrx(intBudget) Then
-            gRaiseError("Trx is at wrong index")
-        End If
-        With objTrx
-            .UpdateStartBudget(mobjReg, .datDate, .strDescription, .strMemo, .blnAwaitingReview, False, .intRepeatSeq, .strRepeatKey, curLimit, .datBudgetEnds, .strBudgetKey)
-            'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            mobjReg.UpdateEnd(lngIndex, New LogChange, "AdjustBudgetsToCashForm.Update", objTrxOld)
-        End With
+            objTrx = mobjReg.objTrx(lngIndex)
+            objTrxOld = objTrx.objClone(Nothing)
+            If Not objTrx Is maobjRegTrx(intBudget) Then
+                gRaiseError("Trx is at wrong index")
+            End If
+            With objTrx
+                .UpdateStartBudget(mobjReg, .datDate, .strDescription, .strMemo, .blnAwaitingReview, False, .intRepeatSeq, .strRepeatKey, curLimit, .datBudgetEnds, .strBudgetKey)
+                'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                mobjReg.UpdateEnd(lngIndex, New LogChange, "AdjustBudgetsToCashForm.Update", objTrxOld)
+            End With
 
-        Exit Sub
-ErrorHandler:
-        NestedError("UpdateBudget")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     '$Description Show a budget transaction in the list of budgets affected by
@@ -510,19 +518,20 @@ ErrorHandler:
     Private Sub AdjustBudgetsToCashForm_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
         Dim intIndex As Short
 
-        On Error GoTo ErrorHandler
+        Try
 
-        'Save all specifications.
-        For intIndex = 1 To mintNUM_BUDGETS
-            SaveSetting(gstrREG_APP, strRegSection(), mstrREG_BUDKEY_NAME & intIndex, strGetStringTranslatorKeyFromCombo(cboBudget(intIndex), mobjBudgets))
-            SaveSetting(gstrREG_APP, strRegSection(), mstrREG_BUDPCT_NAME & intIndex, txtPercent(intIndex).Text)
-        Next
-        SaveSetting(gstrREG_APP, strRegSection(), mstrREG_NAMEPRE, txtPrefix.Text)
-        SaveSetting(gstrREG_APP, strRegSection(), mstrREG_MINBAL, txtMinBal.Text)
+            'Save all specifications.
+            For intIndex = 1 To mintNUM_BUDGETS
+                SaveSetting(gstrREG_APP, strRegSection(), mstrREG_BUDKEY_NAME & intIndex, strGetStringTranslatorKeyFromCombo(cboBudget(intIndex), mobjBudgets))
+                SaveSetting(gstrREG_APP, strRegSection(), mstrREG_BUDPCT_NAME & intIndex, txtPercent(intIndex).Text)
+            Next
+            SaveSetting(gstrREG_APP, strRegSection(), mstrREG_NAMEPRE, txtPrefix.Text)
+            SaveSetting(gstrREG_APP, strRegSection(), mstrREG_MINBAL, txtMinBal.Text)
 
-        Exit Sub
-ErrorHandler:
-        TopError("Form_Unload")
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Function strGetStringTranslatorKeyFromCombo(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As StringTranslator) As String
@@ -540,12 +549,4 @@ ErrorHandler:
             End If
         End If
     End Function
-
-    Private Sub TopError(ByVal strRoutine As String)
-        gTopErrorTrap("AdjustBudgetsToCashForm." & strRoutine)
-    End Sub
-
-    Private Sub NestedError(ByVal strRoutine As String)
-        gNestedErrorTrap("AdjustBudgetsToCashForm." & strRoutine)
-    End Sub
 End Class

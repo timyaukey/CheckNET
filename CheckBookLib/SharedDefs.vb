@@ -531,17 +531,18 @@ Public Module SharedDefs
     '$Description Load list of memorized payees and import translation instructions.
 
     Public Sub gLoadTransTable()
-        On Error GoTo ErrorHandler
+        Try
 
-        Dim strTableFile As String
+            Dim strTableFile As String
 
-        strTableFile = gstrPayeeFilePath()
-        gdomTransTable = gdomLoadFile(strTableFile)
-        gCreateTransTableUCS()
+            strTableFile = gstrPayeeFilePath()
+            gdomTransTable = gdomLoadFile(strTableFile)
+            gCreateTransTableUCS()
 
-        Exit Sub
-ErrorHandler:
-        NestedError("gLoadTransTable")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     '$Description Deep clone gdomTransTable into gdomTransTableUCS, adding
@@ -554,40 +555,43 @@ ErrorHandler:
         Dim elmPayee As VB6XmlElement
         Dim vntOutput As Object
 
-        On Error GoTo ErrorHandler
+        Try
 
-        gdomTransTableUCS = gdomTransTable.CloneNode(True)
-        colPayees = gdomTransTableUCS.DocumentElement.SelectNodes("Payee")
-        For Each elmPayee In colPayees
-            'UPGRADE_WARNING: Couldn't resolve default property of object elmPayee.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            'UPGRADE_WARNING: Couldn't resolve default property of object vntOutput. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            vntOutput = elmPayee.GetAttribute("Output")
-            'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
-            If Not gblnXmlAttributeMissing(vntOutput) Then
+            gdomTransTableUCS = gdomTransTable.CloneNode(True)
+            colPayees = gdomTransTableUCS.DocumentElement.SelectNodes("Payee")
+            For Each elmPayee In colPayees
+                'UPGRADE_WARNING: Couldn't resolve default property of object elmPayee.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 'UPGRADE_WARNING: Couldn't resolve default property of object vntOutput. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                elmPayee.SetAttribute("OutputUCS", UCase(vntOutput))
-            End If
-        Next elmPayee
+                vntOutput = elmPayee.GetAttribute("Output")
+                'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
+                If Not gblnXmlAttributeMissing(vntOutput) Then
+                    'UPGRADE_WARNING: Couldn't resolve default property of object vntOutput. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    elmPayee.SetAttribute("OutputUCS", UCase(vntOutput))
+                End If
+            Next elmPayee
 
-        Exit Sub
-ErrorHandler:
-        NestedError("gCreateTransTableUCS")
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Sub
 
     Public Function gcolFindPayeeMatches(ByRef strRawInput As String) As VB6XmlNodeList
         Dim strInput As String
         Dim strXPath As String
 
-        On Error GoTo ErrorHandler
+        gcolFindPayeeMatches = Nothing
+        Try
 
-        strInput = UCase(Trim(strRawInput))
-        strInput = Replace(strInput, "'", "")
-        strXPath = "Payee[substring(@OutputUCS,1," & Len(strInput) & ")='" & strInput & "']"
-        gcolFindPayeeMatches = gdomTransTableUCS.DocumentElement.SelectNodes(strXPath)
+            strInput = UCase(Trim(strRawInput))
+            strInput = Replace(strInput, "'", "")
+            strXPath = "Payee[substring(@OutputUCS,1," & Len(strInput) & ")='" & strInput & "']"
+            gcolFindPayeeMatches = gdomTransTableUCS.DocumentElement.SelectNodes(strXPath)
 
-        Exit Function
-ErrorHandler:
-        NestedError("gcolFindPayeeMatches")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     '$Description Load an XML file into a new DOM and return it.
@@ -596,22 +600,24 @@ ErrorHandler:
         Dim dom As VB6XmlDocument
         Dim objParseError As VB6XmlParseError
 
-        On Error GoTo ErrorHandler
+        gdomLoadFile = Nothing
+        Try
 
-        dom = New VB6XmlDocument
-        With dom
-            .Load(strFile)
-            objParseError = .ParseError
-            If Not objParseError Is Nothing Then
-                gRaiseError("XML parse error loading file: " & gstrXMLParseErrorText(objParseError))
-            End If
-            .SetProperty("SelectionLanguage", "XPath")
-        End With
-        gdomLoadFile = dom
+            dom = New VB6XmlDocument
+            With dom
+                .Load(strFile)
+                objParseError = .ParseError
+                If Not objParseError Is Nothing Then
+                    gRaiseError("XML parse error loading file: " & gstrXMLParseErrorText(objParseError))
+                End If
+                .SetProperty("SelectionLanguage", "XPath")
+            End With
+            gdomLoadFile = dom
 
-        Exit Function
-ErrorHandler:
-        NestedError("gdomLoadFile(" & strFile & ")")
+            Exit Function
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
     End Function
 
     Public Function gblnValidDate(ByVal strDate As String) As Boolean
@@ -705,12 +711,4 @@ ErrorHandler:
         strData = Trim(My.Computer.Clipboard.GetText())
         gobjClipboardReader = New StringReader(strData)
     End Function
-
-    Private Sub TopError(ByVal strRoutine As String)
-        gTopErrorTrap("SharedDefs." & strRoutine)
-    End Sub
-
-    Private Sub NestedError(ByVal strRoutine As String)
-        gNestedErrorTrap("SharedDefs." & strRoutine)
-    End Sub
 End Module
