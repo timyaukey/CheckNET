@@ -271,7 +271,6 @@ Friend Class BankImportForm
     Private Function blnValidForAutoUpdate(ByRef intItemIndex As Short, ByVal blnAllowNonExact As Boolean, ByRef strFailReason As String) As Boolean
 
         Dim objImportedTrx As ImportedTrx
-        Dim objLoaded As LoadedRegister
         Dim objReg As Register
         Dim colMatches As Collection = Nothing
         Dim colExactMatches As Collection = Nothing
@@ -299,8 +298,7 @@ Friend Class BankImportForm
             'imported trx.
             intExactCount = 0
             lngNumber = Val(objImportedTrx.strNumber)
-            For Each objLoaded In mobjAccount.colLoadedRegisters
-                objReg = objLoaded.objReg
+            For Each objReg In mobjAccount.colRegisters
 
                 Select Case mlngUpdateSearchType
                     Case CBMain.ImportBatchUpdateSearch.Bank
@@ -339,7 +337,7 @@ Friend Class BankImportForm
                         End If
                     End If
                 End If
-            Next objLoaded
+            Next objReg
 
             If intExactCount = 0 Then
                 strFailReason = "Could not find an identical or very similar transaction to update"
@@ -573,7 +571,6 @@ Friend Class BankImportForm
 
     Private Function blnValidForAutoNew(ByRef intItemIndex As Short, ByVal blnAllowBankNonCard As Boolean, ByVal blnSetMissingCategory As Boolean, ByRef strFailReason As String) As Boolean
 
-        Dim objLoaded As LoadedRegister
         Dim objReg As Register
         Dim objImportedTrx As ImportedTrx
         Dim strTrxNum As String
@@ -636,8 +633,7 @@ Friend Class BankImportForm
                 gRaiseError("Invalid batch new search type")
         End Select
 
-        For Each objLoaded In mobjAccount.colLoadedRegisters
-            objReg = objLoaded.objReg
+        For Each objReg In mobjAccount.colRegisters
             colMatches = New Collection
             blnExactMatch = False
 
@@ -658,7 +654,7 @@ Friend Class BankImportForm
                 strFailReason = "An identical or very similar transaction already exists"
                 Exit Function
             End If
-        Next objLoaded
+        Next objReg
 
         blnValidForAutoNew = True
 
@@ -827,16 +823,16 @@ Friend Class BankImportForm
     End Sub
 
     Private Sub LoadRegisterList()
-        Dim objLoaded As LoadedRegister
+        Dim objReg As Register
         Dim intIndex As Short
 
         With cboRegister
             .Items.Clear()
             intIndex = 0
-            For Each objLoaded In mobjAccount.colLoadedRegisters
+            For Each objReg In mobjAccount.colRegisters
                 intIndex = intIndex + 1
-                .Items.Add(gobjCreateListBoxItem(objLoaded.objReg.strTitle, intIndex))
-            Next objLoaded
+                .Items.Add(gobjCreateListBoxItem(objReg.strTitle, intIndex))
+            Next objReg
         End With
     End Sub
 
@@ -948,7 +944,6 @@ EventExitSub:
 
     Private Sub SearchForMatches()
         Dim objImportedTrx As ImportedTrx
-        Dim objLoaded As LoadedRegister
         Dim objReg As Register
         Dim intItemIndex As Short
         Dim lngNumber As Integer
@@ -986,8 +981,7 @@ EventExitSub:
             Else
                 lngNumber = 0
             End If
-            For Each objLoaded In mobjAccount.colLoadedRegisters
-                objReg = objLoaded.objReg
+            For Each objReg In mobjAccount.colRegisters
 
                 Select Case mlngIndividualSearchType
                     Case CBMain.ImportIndividualSearchType.Bank
@@ -1021,7 +1015,7 @@ EventExitSub:
                         DisplayMatch(objMatchedTrx, mintMatches)
                     End If
                 Next vlngRegIndex
-            Next objLoaded
+            Next objReg
             'Deselect everything in list (the first item is selected by default).
             ClearLvwSelection(lvwMatches)
 
@@ -1036,7 +1030,6 @@ EventExitSub:
 
     Private Function blnMatchImport(ByVal intItemIndex As Short) As Boolean
         Dim objImportedTrx As ImportedTrx
-        Dim objLoaded As LoadedRegister
         Dim objReg As Register
         Dim colMatches As Collection = Nothing
         Dim blnExactMatch As Boolean
@@ -1056,8 +1049,7 @@ EventExitSub:
 
             'Look for an import match in ALL registers, not just the selected register.
             'If found, update maudtItem() and redisplay it with the match info.
-            For Each objLoaded In mobjAccount.colLoadedRegisters
-                objReg = objLoaded.objReg
+            For Each objReg In mobjAccount.colRegisters
                 lngImportMatch = 0
                 Select Case mlngStatusSearchType
                     Case CBMain.ImportStatusSearch.Bank
@@ -1092,7 +1084,7 @@ EventExitSub:
                     blnMatchImport = True
                     Exit Function
                 End If
-            Next objLoaded
+            Next objReg
 
             Exit Function
         Catch ex As Exception
@@ -1371,7 +1363,7 @@ EventExitSub:
                     mobjSelectedRegister = Nothing
                 Else
                     'UPGRADE_WARNING: Couldn't resolve default property of object mobjAccount.colLoadedRegisters.Item().objReg. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    mobjSelectedRegister = mobjAccount.colLoadedRegisters.Item(gintVB6GetItemData(cboRegister, .SelectedIndex)).objReg
+                    mobjSelectedRegister = mobjAccount.colRegisters.Item(gintVB6GetItemData(cboRegister, .SelectedIndex))
                 End If
             End With
 

@@ -16,7 +16,7 @@ Public Class Account
     'Private mstrRepeatsFile As String
     'All LoadedRegister objects for account, whether or not
     'displayed in any UI.
-    Private mcolLoadedRegisters As Collection
+    Private mcolRegisters As Collection
     'Account has unsaved changes.
     Private mblnUnsavedChanges As Boolean
     'File number for Save().
@@ -63,13 +63,13 @@ Public Class Account
         End Get
         Set(ByVal Value As String)
             mstrTitle = Value
-            gSetAccountChanged(Me)
+            SetChanged()
         End Set
     End Property
 
-    Public ReadOnly Property colLoadedRegisters() As Collection
+    Public ReadOnly Property colRegisters() As Collection
         Get
-            colLoadedRegisters = mcolLoadedRegisters
+            colRegisters = mcolRegisters
         End Get
     End Property
 
@@ -118,7 +118,7 @@ Public Class Account
         Dim strRegTitle As String = ""
         Dim blnRegShow As Boolean
         Dim blnRegNonBank As Boolean
-        Dim objLoaded As LoadedRegister
+        Dim objReg As Register
         Dim blnFileOpen As Boolean
         Dim datRegisterEndDate As Date
 
@@ -127,7 +127,7 @@ Public Class Account
             mstrFileLoaded = strAcctFile
             mblnUnsavedChanges = False
             datRegisterEndDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, 45, Today)
-            mcolLoadedRegisters = New Collection
+            mcolRegisters = New Collection
             RaiseEvent LoadStatus("Loading " & strAcctFile)
             intFile = FreeFile()
             FileOpen(intFile, gstrAccountPath() & "\" & strAcctFile, OpenMode.Input)
@@ -192,9 +192,9 @@ Public Class Account
             'balances or doing any post processing for any of them,
             'because generating a transfer adds Trx to two registers.
             RaiseEvent LoadStatus("Creating generated transactions")
-            For Each objLoaded In mcolLoadedRegisters
-                gCreateGeneratedTrx(Me, objLoaded.objReg, datRegisterEndDate)
-            Next objLoaded
+            For Each objReg In mcolRegisters
+                gCreateGeneratedTrx(Me, objReg, datRegisterEndDate)
+            Next objReg
 
             'Construct repeat key StringTranslator from actual transaction
             'data and info in .GEN files.
@@ -202,8 +202,8 @@ Public Class Account
 
             'Call LoadPostProcessing after everything has been loaded.
             RaiseEvent LoadStatus("Load postprocessing")
-            For Each objLoaded In mcolLoadedRegisters
-                With objLoaded.objReg
+            For Each objReg In mcolRegisters
+                With objReg
                     .LoadPostProcessing()
                     'If .datOldestFakeNormal < DateAdd("d", -10, Date) And _
                     ''    .datOldestFakeNormal <> 0 Then
@@ -213,7 +213,7 @@ Public Class Account
                     ''        vbInformation
                     'End If
                 End With
-            Next objLoaded
+            Next objReg
 
             RaiseEvent LoadStatus("Load complete")
 
@@ -231,13 +231,13 @@ Public Class Account
     '   then recreate generated Trx through the specified end date.
 
     Public Sub RecreateGeneratedTrx(ByVal datRegisterEndDate As Date)
-        Dim objLoaded As LoadedRegister
+        Dim objReg As Register
 
         'Purge generated Trx and clear all budget allocations for each register.
-        For Each objLoaded In mcolLoadedRegisters
-            objLoaded.objReg.FireHideTrx()
-            objLoaded.objReg.PurgeGenerated()
-        Next objLoaded
+        For Each objReg In mcolRegisters
+            objReg.FireHideTrx()
+            objReg.PurgeGenerated()
+        Next objReg
 
         'Generate all Trx.
         'Have to generate for all registers before computing
@@ -246,29 +246,28 @@ Public Class Account
         'This only takes 5 to 10 percent of the total time spent
         'in this routine. The rest is divided fairly evenly between
         'LoadPostProcessing() and FireRedisplayTrx().
-        For Each objLoaded In mcolLoadedRegisters
-            gCreateGeneratedTrx(Me, objLoaded.objReg, datRegisterEndDate)
-        Next objLoaded
+        For Each objReg In mcolRegisters
+            gCreateGeneratedTrx(Me, objReg, datRegisterEndDate)
+        Next objReg
 
         'In case trx generators have been edited.
         mobjRepeats = mobjRepeatSummarizer.BuildStringTranslator()
 
         'Compute budgets and balances.
-        For Each objLoaded In mcolLoadedRegisters
-            objLoaded.objReg.LoadPostProcessing()
-        Next objLoaded
+        For Each objReg In mcolRegisters
+            objReg.LoadPostProcessing()
+        Next objReg
 
         'Tell all register windows to refresh themselves.
-        For Each objLoaded In mcolLoadedRegisters
-            objLoaded.objReg.FireRedisplayTrx()
-        Next objLoaded
+        For Each objReg In mcolRegisters
+            objReg.FireRedisplayTrx()
+        Next objReg
 
     End Sub
 
     Public Sub CreateRegister(ByVal strRegKey As String, ByVal strRegTitle As String, ByVal blnRegShow As Boolean, ByVal blnRegNonBank As Boolean)
 
         Dim objReg As Register
-        Dim objLoaded As LoadedRegister
 
         If strRegKey = "" Then
             gRaiseError("Missing RK line before RI line")
@@ -281,24 +280,54 @@ Public Class Account
         End If
         objReg = New Register
         objReg.Init(strRegTitle, strRegKey, blnRegShow, blnRegNonBank, 32, DateAdd(Microsoft.VisualBasic.DateInterval.Day, -1, Today), False)
-        objLoaded = New LoadedRegister
-        objLoaded.Init(Me, objReg)
-        mcolLoadedRegisters.Add(objLoaded)
+        mcolRegisters.Add(objReg)
+        AddHandler objReg.StatusChanged, AddressOf objReg_StatusChanged
+        AddHandler objReg.TrxAdded, AddressOf objReg_TrxAdded
+        AddHandler objReg.TrxDeleted, AddressOf objReg_TrxDeleted
+        AddHandler objReg.TrxUpdated, AddressOf objReg_TrxUpdated
+        AddHandler objReg.MiscChange, AddressOf objReg_MiscChange
+    End Sub
+
+    Private Sub objReg_StatusChanged(ByVal lngIndex As Integer)
+        SetChanged()
+    End Sub
+
+    Private Sub objReg_TrxAdded(ByVal lngIndex As Integer, ByVal objTrx As Trx)
+        If Not objTrx.blnAutoGenerated Then
+            SetChanged()
+        End If
+    End Sub
+
+    Private Sub objReg_TrxDeleted(ByVal lngIndex As Integer)
+        SetChanged()
+    End Sub
+
+    Private Sub objReg_TrxUpdated(ByVal lngOldIndex As Integer, ByVal lngNewIndex As Integer, ByVal objTrx As Trx)
+        SetChanged()
+    End Sub
+
+    Private Sub objReg_MiscChange()
+        SetChanged()
+    End Sub
+
+    Public Sub SetChanged()
+        mblnUnsavedChanges = True
+        RaiseEvent ChangeMade()
+        objEverything.FireSomethingModified()
     End Sub
 
     Private Sub LoadRegister(ByVal strLine As String, ByVal blnFake As Boolean, ByVal intFile As Short, ByVal datRptEndMax As Date, ByRef lngLinesRead As Integer)
 
         Dim strSearchRegKey As String
-        Dim objLoaded As LoadedRegister
+        Dim objReg As Register
 
         strSearchRegKey = Mid(strLine, 3)
-        objLoaded = objFindReg(strSearchRegKey)
-        If objLoaded Is Nothing Then
+        objReg = objFindReg(strSearchRegKey)
+        If objReg Is Nothing Then
             gRaiseError("Register key " & strSearchRegKey & " not found in " & Left(strLine, 2) & " line")
         Else
             mobjLoader = New RegisterLoader
-            mobjLoader.LoadFile(objLoaded.objReg, mobjRepeatSummarizer, intFile, blnFake, datRptEndMax, lngLinesRead)
-            'UPGRADE_NOTE: Object mobjLoader may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+            mobjLoader.LoadFile(objReg, mobjRepeatSummarizer, intFile, blnFake, datRptEndMax, lngLinesRead)
             mobjLoader = Nothing
         End If
     End Sub
@@ -316,43 +345,35 @@ Public Class Account
         Loop
     End Sub
 
-    Public Function objFindReg(ByVal strRegisterKey As String) As LoadedRegister
-        Dim objLoaded As LoadedRegister
-        For Each objLoaded In mcolLoadedRegisters
-            If objLoaded.objReg.strRegisterKey = strRegisterKey Then
-                objFindReg = objLoaded
+    Public Function objFindReg(ByVal strRegisterKey As String) As Register
+        Dim objReg As Register
+        For Each objReg In mcolRegisters
+            If objReg.strRegisterKey = strRegisterKey Then
+                objFindReg = objReg
                 Exit Function
             End If
-        Next objLoaded
+        Next objReg
         objFindReg = Nothing
     End Function
 
     Public Function objRegisterList() As StringTranslator
-        Dim objLoaded As LoadedRegister
         Dim objReg As Register
         Dim objResult As StringTranslator
 
         objResult = New StringTranslator
-        For Each objLoaded In mcolLoadedRegisters
-            objReg = objLoaded.objReg
+        For Each objReg In mcolRegisters
             objResult.Add(objReg.strRegisterKey, objReg.strTitle, objReg.strTitle)
-        Next objLoaded
+        Next objReg
         objRegisterList = objResult
     End Function
 
-    'UPGRADE_NOTE: ChangeMade was upgraded to ChangeMade_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    Public Sub ChangeMade_Renamed()
-        mblnUnsavedChanges = True
-        RaiseEvent ChangeMade()
-    End Sub
-
     Private Sub mobjLoader_FindRegister(ByVal strRegisterKey As String, ByRef objReg As Register) Handles mobjLoader.FindRegister
-        objReg = objFindReg(strRegisterKey).objReg
+        objReg = objFindReg(strRegisterKey)
     End Sub
 
     Public Sub Save(ByVal strPath_ As String)
         Dim blnFileOpen As Boolean
-        Dim objLoaded As LoadedRegister
+        Dim objReg As Register
 
         Try
 
@@ -365,17 +386,17 @@ Public Class Account
                 SaveLine("AT" & mstrTitle)
             End If
             'Define each register at the top of the file.
-            For Each objLoaded In mcolLoadedRegisters
-                If Not objLoaded.blnDeleted Then
-                    SaveDefineRegister(objLoaded)
+            For Each objReg In mcolRegisters
+                If Not objReg.blnDeleted Then
+                    SaveDefineRegister(objReg)
                 End If
-            Next objLoaded
+            Next objReg
             'Save the transactions for each register.
-            For Each objLoaded In mcolLoadedRegisters
-                If Not objLoaded.blnDeleted Then
-                    SaveLoadedRegister(objLoaded)
+            For Each objReg In mcolRegisters
+                If Not objReg.blnDeleted Then
+                    SaveLoadedRegister(objReg)
                 End If
-            Next objLoaded
+            Next objReg
             SaveLine(".A")
 
             FileClose(mintSaveFile)
@@ -391,8 +412,8 @@ Public Class Account
         End Try
     End Sub
 
-    Private Sub SaveDefineRegister(ByVal objLoaded As LoadedRegister)
-        With objLoaded.objReg
+    Private Sub SaveDefineRegister(ByVal objReg As Register)
+        With objReg
             SaveLine("RK" & .strRegisterKey)
             SaveLine("RT" & .strTitle)
             If .blnShowInitially Then
@@ -405,16 +426,14 @@ Public Class Account
         End With
     End Sub
 
-    '$Description Save one LoadedRegister for Save(). Writes real, fake non-generated
+    '$Description Save one Register for Save(). Writes real, fake non-generated
     '   and fake generated Trx for LoadedRegister.
 
-    Private Sub SaveLoadedRegister(ByVal objLoaded As LoadedRegister)
+    Private Sub SaveLoadedRegister(ByVal objReg As Register)
         Dim objSaver As RegisterSaver
         Dim colFakeLines As Collection
         Dim vstrLine As Object
-        Dim objReg As Register
 
-        objReg = objLoaded.objReg
         objSaver = New RegisterSaver
 
         'Output the non-fake Trx, and remember the non-generated fake.
@@ -433,8 +452,8 @@ Public Class Account
 
         'RR line is for repeating register, no longer used.
 
-        objLoaded.objReg.LogSave()
-        objLoaded.objReg.WriteEventLog(mstrTitle, mobjRepeats)
+        objReg.LogSave()
+        objReg.WriteEventLog(mstrTitle, mobjRepeats)
     End Sub
 
     '$Description Write one line to the Save() output file.

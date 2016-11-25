@@ -61,7 +61,6 @@ Friend Class ReconcileForm
 
     Private Sub LoadTrx()
         Dim lngIndex As Integer
-        Dim objLoadedReg As LoadedRegister
         Dim objReg As Register
         Dim lngMaxRegIndex As Integer
         Dim objTrx As Trx
@@ -74,8 +73,7 @@ Friend Class ReconcileForm
         'UPGRADE_WARNING: Lower bound of array maudtTrx was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim maudtTrx(mlngTrxAllocated)
 
-        For Each objLoadedReg In mobjAccount.colLoadedRegisters
-            objReg = objLoadedReg.objReg
+        For Each objReg In mobjAccount.colRegisters
             lngMaxRegIndex = objReg.lngTrxCount
             For lngIndex = 1 To lngMaxRegIndex
                 objTrx = objReg.objTrx(lngIndex)
@@ -103,7 +101,7 @@ Friend Class ReconcileForm
                     End If
                 End With
             Next
-        Next objLoadedReg
+        Next objReg
 
         txtStartingBalance.Text = gstrFormatCurrency(curStartingBalance)
         mcurClearedBalance = curStartingBalance + curSelectedTotal

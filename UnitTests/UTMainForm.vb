@@ -925,21 +925,15 @@ Friend Class UTMainForm
         Dim objLoader As RegisterLoader
         'Dim intFile As Short
         Dim objReg As Register
-        Dim objRegRpt As Register
         Dim objRepeatSummarizer As RepeatSummarizer
         Dim lngLinesRead As Integer
 
         objLoader = New RegisterLoader
         objReg = New Register
         objReg.Init("Regular", "reg", False, False, 3, System.DateTime.FromOADate(0), False)
-        objRegRpt = New Register
-        objRegRpt.Init("Repeat", "rpt", False, False, 3, System.DateTime.FromOADate(0), True)
         objRepeatSummarizer = New RepeatSummarizer()
-        'intFile = FreeFile
-        'FileOpen(intFile, gstrAddPath("UTData\" & strFileName), OpenMode.Input)
         lngLinesRead = 0
         objLoader.LoadFileUT(objReg, objRepeatSummarizer, gstrAddPath("UTData\" & strFileName), False, #1/1/1980#, lngLinesRead)
-        'FileClose(intFile)
         objReg.LoadPostProcessing()
         objLoadFile = objReg
     End Function

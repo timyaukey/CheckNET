@@ -21,13 +21,13 @@ Module TrxGenerator
         Dim datTrxToCreate As TrxToCreate
         'Dim intSplitIndex As Short
 		Dim strError As String
-		Dim objLoaded As LoadedRegister
+        Dim objReg2 As Register
 		Dim colReg As Collection
 		
 		colReg = New Collection
-		For	Each objLoaded In objAccount.colLoadedRegisters
-			colReg.Add(objLoaded.objReg)
-		Next objLoaded
+        For Each objReg2 In objAccount.colRegisters
+            colReg.Add(objReg2)
+        Next objReg2
 		
 		colGenerators = gcolCreateTrxGenerators(objAccount, objReg)
 		For	Each objGenerator In colGenerators

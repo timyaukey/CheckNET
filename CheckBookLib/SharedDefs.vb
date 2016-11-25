@@ -150,11 +150,6 @@ Public Module SharedDefs
         gaSplit = astrResults.Clone()
     End Function
 
-    Public Sub gSetAccountChanged(ByVal objAccount As Account)
-        objAccount.ChangeMade_Renamed()
-        objAccount.objEverything.FireSomethingModified()
-    End Sub
-
     Public Function gstrDataPath() As String
         gstrDataPath = gstrDataPathValue
     End Function

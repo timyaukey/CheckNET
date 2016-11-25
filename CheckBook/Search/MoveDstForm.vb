@@ -7,23 +7,23 @@ Friend Class MoveDstForm
     Inherits System.Windows.Forms.Form
 
     Private mblnSuccess As Boolean
-    Private mcolLoadedRegisters As Collection
+    Private mcolRegisters As Collection
     Private mobjOldReg As Register
     Private mstrNewDate As String
     Private mobjNewReg As Register
 
-    Public Function blnShowModal(ByVal colLoadedRegisters As Collection, ByVal objOldReg As Register, ByRef strNewDate As String, ByRef objNewReg As Register) As Boolean
+    Public Function blnShowModal(ByVal colRegisters As Collection, ByVal objOldReg As Register, ByRef strNewDate As String, ByRef objNewReg As Register) As Boolean
 
-        Dim objLoadedReg As LoadedRegister
+        Dim objReg As Register
         Dim intRegIdx As Short
 
         mblnSuccess = False
-        mcolLoadedRegisters = colLoadedRegisters
+        mcolRegisters = colRegisters
         mobjOldReg = objOldReg
         cboRegister.Items.Add(gobjCreateListBoxItem("", -1))
-        For intRegIdx = 1 To mcolLoadedRegisters.Count()
-            objLoadedReg = mcolLoadedRegisters.Item(intRegIdx)
-            cboRegister.Items.Add(gobjCreateListBoxItem(objLoadedReg.objReg.strTitle, intRegIdx))
+        For intRegIdx = 1 To mcolRegisters.Count()
+            objReg = mcolRegisters.Item(intRegIdx)
+            cboRegister.Items.Add(gobjCreateListBoxItem(objReg.strTitle, intRegIdx))
         Next
         cboRegister.SelectedIndex = 0
         Me.ShowDialog()
@@ -40,7 +40,6 @@ Friend Class MoveDstForm
 
     Private Sub cmdOkay_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdOkay.Click
         Dim strDateOrDays As String
-        Dim objNewLoadedReg As LoadedRegister
         Dim objNewReg As Register
 
         strDateOrDays = Trim(txtDateOrDays.Text)
@@ -55,8 +54,7 @@ Friend Class MoveDstForm
             End If
         End If
         If cboRegister.SelectedIndex > 0 Then
-            objNewLoadedReg = mcolLoadedRegisters.Item(gintVB6GetItemData(cboRegister, cboRegister.SelectedIndex))
-            objNewReg = objNewLoadedReg.objReg
+            objNewReg = mcolRegisters.Item(gintVB6GetItemData(cboRegister, cboRegister.SelectedIndex))
             If objNewReg Is mobjOldReg Then
                 MsgBox("You may not choose the same register (select no register " & "to leave in the same register.")
                 Exit Sub

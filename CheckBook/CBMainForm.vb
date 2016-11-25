@@ -15,7 +15,6 @@ Friend Class CBMainForm
 
     Private Sub CBMainForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Dim objAccount As Account
-        Dim objLoaded As LoadedRegister
         Dim objReg As Register
         Dim astrFiles() As String = Nothing
         Dim intFiles As Short
@@ -23,14 +22,7 @@ Friend Class CBMainForm
         Dim strSecurityOption As String = ""
 
         Try
-
-
             mblnCancelStart = True
-
-            'If App.PrevInstance Then
-            '    MsgBox "Only one copy of this program may run at a time.", vbCritical
-            '    Exit Sub
-            'End If
 
             mobjEverything = gobjInitialize()
             gcolAccounts = mobjEverything.colAccounts
@@ -86,25 +78,16 @@ Friend Class CBMainForm
             End If
 
             'Find all ".act" files.
-            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-            'UPGRADE_WARNING: Couldn't resolve default property of object vstrFile. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             vstrFile = Dir(gstrAccountPath() & "\*.act")
-            'UPGRADE_WARNING: Couldn't resolve default property of object vstrFile. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             If vstrFile = "" Then
                 MsgBox("Creating first checking account...", MsgBoxStyle.Information)
                 gCreateAccount("Main", "Checking Account", "Main Register")
-                'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                'UPGRADE_WARNING: Couldn't resolve default property of object vstrFile. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 vstrFile = Dir(gstrAccountPath() & "\*.act")
             End If
-            'UPGRADE_WARNING: Couldn't resolve default property of object vstrFile. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             While vstrFile <> ""
                 intFiles = intFiles + 1
                 ReDim Preserve astrFiles(intFiles - 1)
-                'UPGRADE_WARNING: Couldn't resolve default property of object vstrFile. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 astrFiles(intFiles - 1) = vstrFile
-                'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-                'UPGRADE_WARNING: Couldn't resolve default property of object vstrFile. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 vstrFile = Dir()
             End While
             'Load them all.
@@ -112,7 +95,6 @@ Friend Class CBMainForm
                 objAccount = New Account
                 objAccount.Init(mobjEverything)
                 frmStartup.Configure(objAccount)
-                'UPGRADE_WARNING: Couldn't resolve default property of object vstrFile. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 objAccount.Load(vstrFile)
                 gcolAccounts.Add(objAccount)
                 frmStartup.Configure(Nothing)
@@ -127,12 +109,11 @@ Friend Class CBMainForm
             mblnCancelStart = False
 
             For Each objAccount In gcolAccounts
-                For Each objLoaded In objAccount.colLoadedRegisters
-                    objReg = objLoaded.objReg
+                For Each objReg In objAccount.colRegisters
                     If objReg.blnShowInitially Then
                         gShowRegister(objAccount, objReg, frmStartup)
                     End If
-                Next objLoaded
+                Next objReg
             Next objAccount
 
             frmStartup.Close()

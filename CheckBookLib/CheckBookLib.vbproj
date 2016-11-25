@@ -96,7 +96,6 @@
     <Compile Include="TrxGen\TGEBudgetTrx.vb" />
     <Compile Include="TrxGen\TGEGeneratorInterpolate.vb" />
     <Compile Include="TrxGen\ITrxGenerator.vb" />
-    <Compile Include="Register\LoadedRegister.vb" />
     <Compile Include="Logging\LogAction.vb" />
     <Compile Include="Logging\LogAdd.vb" />
     <Compile Include="Logging\LogChange.vb" />

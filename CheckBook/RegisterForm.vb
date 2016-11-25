@@ -123,7 +123,7 @@ Friend Class RegisterForm
                     'mobjReg.Delete lngRegisterIndex()
                 Else
                     objXfer = New TransferManager
-                    objOtherReg = mobjAccount.objFindReg(objTrx.strTransferKey).objReg
+                    objOtherReg = mobjAccount.objFindReg(objTrx.strTransferKey)
                     objXfer.DeleteTransfer(mobjReg, lngRegisterIndex(), objOtherReg)
                 End If
             Else
@@ -351,7 +351,7 @@ Friend Class RegisterForm
             Function(objTrx As Trx) objTrx.strMemo)
         ConfigGridCol(intCol, mintColTransferKey, "Transfer To", 1000, _
             Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_TRANSFER, _
-                mobjAccount.objFindReg(objTrx.strTransferKey).objReg.strTitle, ""))
+                mobjAccount.objFindReg(objTrx.strTransferKey).strTitle, ""))
         ConfigGridCol(intCol, mintColMatchRange, "Range", 600, _
             Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, _
                 objTrx.curNormalMatchRange.ToString(gstrFORMAT_CURRENCY), ""), _
@@ -435,26 +435,30 @@ Friend Class RegisterForm
         ByVal e As System.Windows.Forms.DataGridViewCellValueEventArgs) Handles grdReg.CellValueNeeded
         If Not mobjReg Is Nothing Then
             Dim objTrx As Trx
-            objTrx = mobjReg.objTrx(e.RowIndex + 1)
-            e.Value = mstrColValueFuncs(e.ColumnIndex)(objTrx)
+            If e.RowIndex < mobjReg.lngTrxCount Then
+                objTrx = mobjReg.objTrx(e.RowIndex + 1)
+                e.Value = mstrColValueFuncs(e.ColumnIndex)(objTrx)
+            End If
         End If
     End Sub
 
     Private Sub grdReg_CellFormatting(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellFormattingEventArgs) Handles grdReg.CellFormatting
         Dim objTrx As Trx
         If Not mobjReg Is Nothing Then
-            objTrx = mobjReg.objTrx(e.RowIndex + 1)
-            If objTrx.blnFake Then
-                e.CellStyle.BackColor = mlngCOLOR_FAKE
-            Else
-                e.CellStyle.BackColor = mlngCOLOR_REAL
-            End If
-            If objTrx.curAmount > 0 Then
-                e.CellStyle.ForeColor = mlngCOLOR_CREDIT
-            ElseIf objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
-                e.CellStyle.ForeColor = mlngCOLOR_BUDGET
-            Else
-                e.CellStyle.ForeColor = Color.Black
+            If e.RowIndex < mobjReg.lngTrxCount Then
+                objTrx = mobjReg.objTrx(e.RowIndex + 1)
+                If objTrx.blnFake Then
+                    e.CellStyle.BackColor = mlngCOLOR_FAKE
+                Else
+                    e.CellStyle.BackColor = mlngCOLOR_REAL
+                End If
+                If objTrx.curAmount > 0 Then
+                    e.CellStyle.ForeColor = mlngCOLOR_CREDIT
+                ElseIf objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
+                    e.CellStyle.ForeColor = mlngCOLOR_BUDGET
+                Else
+                    e.CellStyle.ForeColor = Color.Black
+                End If
             End If
         End If
     End Sub

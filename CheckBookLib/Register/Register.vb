@@ -43,6 +43,8 @@ Public Class Register
     Private mblnRepeat As Boolean
     'EventLog for Register.
     Private mobjLog As EventLog
+    'True iff operator deleted register.
+    Private mblnDeleted As Boolean
 
     'Temp hack to assign initial sequence numbers.
     'UPGRADE_WARNING: Lower bound of array maintNextSeq was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
@@ -1268,6 +1270,15 @@ Public Class Register
         Get
             blnRepeat = mblnRepeat
         End Get
+    End Property
+
+    Public Property blnDeleted() As Boolean
+        Get
+            blnDeleted = mblnDeleted
+        End Get
+        Set(ByVal Value As Boolean)
+            mblnDeleted = Value
+        End Set
     End Property
 
     '$Description For debugging use only - return the internal mcolRepeatTrx collection.

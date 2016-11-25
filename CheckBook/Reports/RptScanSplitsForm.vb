@@ -198,7 +198,7 @@ Friend Class RptScanSplitsForm
 
     Private Sub IterateSplits()
         Dim objAcct As Account
-        Dim objLoadedReg As LoadedRegister
+        Dim objReg As Register
         Dim intAcctIdx As Short
 
         Try
@@ -209,9 +209,9 @@ Friend Class RptScanSplitsForm
                 If lstAccounts.GetSelected(intAcctIdx) Then
                     objAcct = gcolAccounts.Item(intAcctIdx + 1)
                     mcolSelectAccounts.Add(objAcct)
-                    For Each objLoadedReg In objAcct.colLoadedRegisters
-                        ScanRegister(objLoadedReg.objReg)
-                    Next objLoadedReg
+                    For Each objReg In objAcct.colRegisters
+                        ScanRegister(objReg)
+                    Next objReg
                 End If
             Next
             lblProgress.Text = ""

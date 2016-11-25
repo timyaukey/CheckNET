@@ -470,16 +470,16 @@ Friend Class ListEditorForm
 
     Private Function blnElementIsUsedInAccount(ByVal objAccount As Account, ByVal strKey As String) As Boolean
 
-        Dim objLoadedReg As LoadedRegister
+        Dim objReg As Register
 
         Try
 
-            For Each objLoadedReg In objAccount.colLoadedRegisters
-                If blnElementIsUsedInRegister(objLoadedReg.objReg, strKey) Then
+            For Each objReg In objAccount.colRegisters
+                If blnElementIsUsedInRegister(objReg, strKey) Then
                     blnElementIsUsedInAccount = True
                     Exit Function
                 End If
-            Next objLoadedReg
+            Next objReg
 
             Exit Function
         Catch ex As Exception

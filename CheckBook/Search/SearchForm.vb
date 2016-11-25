@@ -728,7 +728,7 @@ Friend Class SearchForm
             End If
 
             frmMoveTo = New MoveDstForm
-            If Not frmMoveTo.blnShowModal(mobjAccount.colLoadedRegisters, mobjReg, strNewDate, objNewReg) Then
+            If Not frmMoveTo.blnShowModal(mobjAccount.colRegisters, mobjReg, strNewDate, objNewReg) Then
                 Exit Sub
             End If
             If gblnValidDate(strNewDate) Then
