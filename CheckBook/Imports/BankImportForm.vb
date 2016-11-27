@@ -92,7 +92,7 @@ Friend Class BankImportForm
             mblnFake = blnFake
 
             mstrImportSearchText = ""
-            mintNextImportToSearch = 1
+            mintNextImportToSearch = 0
             ShowSearchFor()
             If Not blnLoadImports() Then
                 Exit Sub
@@ -841,32 +841,35 @@ Friend Class BankImportForm
         Try
             If KeyAscii >= 32 And KeyAscii <= 126 Then
                 mstrImportSearchText = mstrImportSearchText & Chr(KeyAscii)
-                KeyAscii = 0
                 ShowSearchFor()
+                CancelKeyPress(eventArgs)
+                Return
             ElseIf KeyAscii = 3 Then  '^C (clear search string)
                 mstrImportSearchText = ""
-                KeyAscii = 0
                 ShowSearchFor()
+                CancelKeyPress(eventArgs)
+                Return
             ElseIf KeyAscii = 8 Then  'Backspace (delete last char from search string)
                 If Len(mstrImportSearchText) > 0 Then
                     mstrImportSearchText = VB.Left(mstrImportSearchText, Len(mstrImportSearchText) - 1)
                 End If
-                KeyAscii = 0
                 ShowSearchFor()
+                CancelKeyPress(eventArgs)
+                Return
             ElseIf KeyAscii = 19 Then  '^S (search for search string)
                 FindMatchingImport()
-                KeyAscii = 0
+                CancelKeyPress(eventArgs)
+                Return
             End If
 
-            GoTo EventExitSub
         Catch ex As Exception
             gTopException(ex)
         End Try
-EventExitSub:
-        eventArgs.KeyChar = Chr(KeyAscii)
-        If KeyAscii = 0 Then
-            eventArgs.Handled = True
-        End If
+    End Sub
+
+    Private Sub CancelKeyPress(eventArgs As KeyPressEventArgs)
+        eventArgs.KeyChar = Chr(0)
+        eventArgs.Handled = True
     End Sub
 
     Private Sub FindMatchingImport()
@@ -879,14 +882,16 @@ EventExitSub:
         End If
         intListItemIndex = mintNextImportToSearch
         Do
-            If intListItemIndex > lvwTrx.Items.Count Then
+            If intListItemIndex >= lvwTrx.Items.Count Then
                 MsgBox("Could not find an import item matching """ & mstrImportSearchText & """.")
                 Exit Sub
             End If
             intItemArrayIndex = CShort(lvwTrx.Items.Item(intListItemIndex).SubItems(mintITMCOL_INDEX).Text)
             With maudtItem(intItemArrayIndex).objImportedTrx
                 If StrComp(.strNumber, mstrImportSearchText, CompareMethod.Text) = 0 Or gstrFormatCurrency(.curAmount) = mstrImportSearchText Or InStr(1, .strDescription, mstrImportSearchText, CompareMethod.Text) > 0 Then
+                    lvwTrx.SelectedItems.Clear()
                     lvwTrx.FocusedItem = lvwTrx.Items.Item(intListItemIndex)
+                    lvwTrx.FocusedItem.Selected = True
                     lvwTrx.FocusedItem.EnsureVisible()
                     mintNextImportToSearch = intListItemIndex + 1
                     Exit Sub
@@ -902,7 +907,7 @@ EventExitSub:
         Else
             lblSearchFor.Text = "^S to search for """ & mstrImportSearchText & """, backspace to edit, ^C to start over)"
         End If
-        mintNextImportToSearch = 1
+        mintNextImportToSearch = 0
     End Sub
 
     Private Sub BankImportForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
@@ -914,6 +919,7 @@ EventExitSub:
         Try
 
             If Not lvwTrx.FocusedItem Is Nothing Then
+                mintNextImportToSearch = lvwTrx.FocusedItem.Index
                 SearchForMatches()
             End If
 

@@ -443,10 +443,10 @@
         Me.lblDoubleClickHint.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblDoubleClickHint.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblDoubleClickHint.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblDoubleClickHint.Location = New System.Drawing.Point(538, 26)
+        Me.lblDoubleClickHint.Location = New System.Drawing.Point(511, 25)
         Me.lblDoubleClickHint.Name = "lblDoubleClickHint"
         Me.lblDoubleClickHint.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblDoubleClickHint.Size = New System.Drawing.Size(285, 15)
+        Me.lblDoubleClickHint.Size = New System.Drawing.Size(312, 16)
         Me.lblDoubleClickHint.TabIndex = 4
         Me.lblDoubleClickHint.Text = "Double-click a row to create a quick transaction from it"
         Me.lblDoubleClickHint.TextAlign = System.Drawing.ContentAlignment.TopRight
