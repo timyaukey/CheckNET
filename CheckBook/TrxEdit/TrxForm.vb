@@ -1637,7 +1637,6 @@ Friend Class TrxForm
         Dim intIncrement As Short
 
         Try
-
             If KeyAscii = 43 Or KeyAscii = 61 Then
                 '"+" or "="
                 intIncrement = 1
@@ -1645,24 +1644,15 @@ Friend Class TrxForm
                 '"-"
                 intIncrement = -1
             Else
-                GoTo EventExitSub
+                Exit Sub
             End If
-            KeyAscii = 0
-
-            If Not gblnValidDate(txtDate.Text) Then
-                GoTo EventExitSub
+            If gblnValidDate(txtDate.Text) Then
+                txtDate.Text = gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, intIncrement, CDate(txtDate.Text)))
             End If
-            txtDate.Text = gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, intIncrement, CDate(txtDate.Text)))
-
-            GoTo EventExitSub
+            eventArgs.Handled = True
         Catch ex As Exception
             gTopException(ex)
         End Try
-EventExitSub:
-        eventArgs.KeyChar = Chr(KeyAscii)
-        If KeyAscii = 0 Then
-            eventArgs.Handled = True
-        End If
     End Sub
 
     Private Sub txtDescription_KeyPress(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.KeyPressEventArgs) Handles txtDescription.KeyPress
@@ -1679,7 +1669,6 @@ EventExitSub:
             '^S (for memorized transaction search)
             If KeyAscii = 19 Then
                 KeyAscii = 0
-                'UPGRADE_WARNING: Couldn't resolve default property of object blnFindPayee(strPayee, strCategory, strNumber, strBudget, strAmount, strMemo). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 If blnFindPayee(strPayee, strCategory, strNumber, strBudget, strAmount, strMemo) Then
                     txtDescription.Text = strPayee
                     If strMemo <> "" Then
@@ -1708,18 +1697,12 @@ EventExitSub:
                         End If
                     End If
                 End If
-                GoTo EventExitSub
+                eventArgs.Handled = True
             End If
 
-            GoTo EventExitSub
         Catch ex As Exception
             gTopException(ex)
         End Try
-EventExitSub:
-        eventArgs.KeyChar = Chr(KeyAscii)
-        If KeyAscii = 0 Then
-            eventArgs.Handled = True
-        End If
     End Sub
 
     Private Function blnFindPayee(ByRef strPayee As String, ByRef strCategory As String, ByRef strNumber As String, _
