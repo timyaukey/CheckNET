@@ -1311,20 +1311,20 @@ Public Class Register
     End Sub
 
     Public Sub SetRepeatTrx(ByVal objTrx As Trx)
-        On Error GoTo DupeKey
-        mcolRepeatTrx.Add(objTrx, objTrx.strRepeatId)
-        Exit Sub
-DupeKey:
-        mcolRepeatTrx.Remove(objTrx.strRepeatId)
-        mcolRepeatTrx.Add(objTrx, objTrx.strRepeatId)
+        Try
+            mcolRepeatTrx.Add(objTrx, objTrx.strRepeatId)
+        Catch
+            mcolRepeatTrx.Remove(objTrx.strRepeatId)
+            mcolRepeatTrx.Add(objTrx, objTrx.strRepeatId)
+        End Try
     End Sub
 
     Public Function objRepeatTrx(ByVal strRepeatKey As String, ByVal intRepeatSeq As Short) As Trx
-        On Error GoTo NoneSuch
-        objRepeatTrx = mcolRepeatTrx.Item(gstrMakeRepeatId(strRepeatKey, intRepeatSeq))
-        Exit Function
-NoneSuch:
-        'return Nothing
+        Try
+            objRepeatTrx = mcolRepeatTrx.Item(gstrMakeRepeatId(strRepeatKey, intRepeatSeq))
+        Catch
+            objRepeatTrx = Nothing
+        End Try
     End Function
 
     Public Sub RemoveRepeatTrx(ByVal objTrx As Trx)
