@@ -1794,9 +1794,9 @@ Friend Class TrxForm
 
             strKey = Chr(KeyAscii)
             If InStr("-=+", strKey) = 0 Then
-                GoTo EventExitSub
+                Exit Sub
             End If
-            KeyAscii = 0
+            eventArgs.Handled = True
 
             If IsNumeric(txtNumber.Text) Then
                 lngOldNum = CInt(txtNumber.Text)
@@ -1812,15 +1812,10 @@ Friend Class TrxForm
 
             txtNumber.Text = CStr(lngNewNum)
 
-            GoTo EventExitSub
+            Exit Sub
         Catch ex As Exception
             gTopException(ex)
         End Try
-EventExitSub:
-        eventArgs.KeyChar = Chr(KeyAscii)
-        If KeyAscii = 0 Then
-            eventArgs.Handled = True
-        End If
     End Sub
 
     Private Sub cmdRptInfo_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRptInfo.Click
@@ -1921,14 +1916,14 @@ EventExitSub:
 
             '^D (for divide split)
             If KeyAscii <> 4 Then
-                GoTo EventExitSub
+                Exit Sub
             End If
-            KeyAscii = 0
+            eventArgs.Handled = True
 
             'Current split amount must be numeric and non-zero.
             If Not IsNumeric(txtSplitAmount(index).Text) Then
                 MsgBox("Invalid split amount.")
-                GoTo EventExitSub
+                Exit Sub
             End If
             Dim intSplit As Short
             Dim curSplitAmount As Decimal
@@ -1936,7 +1931,7 @@ EventExitSub:
             curSplitAmount = CDec(maudtSplits(intSplit).strAmount)
             If curSplitAmount = 0 Then
                 MsgBox("Split to divide must not be zero amount.")
-                GoTo EventExitSub
+                Exit Sub
             End If
 
             'Ask and validate how much to move to new split.
@@ -1944,20 +1939,20 @@ EventExitSub:
             Dim curNewAmount As String
             strNewAmount = InputBox("Enter amount of new split (this will be subtracted " & "from the current split)")
             If Trim(strNewAmount) = "" Then
-                GoTo EventExitSub
+                Exit Sub
             End If
             If Not IsNumeric(strNewAmount) Then
                 MsgBox("Invalid amount.")
-                GoTo EventExitSub
+                Exit Sub
             End If
             curNewAmount = CStr(CDec(strNewAmount))
             If System.Math.Sign(curSplitAmount) <> System.Math.Sign(CDbl(curNewAmount)) Then
                 MsgBox("New split amount must have the same sign as the old one.")
-                GoTo EventExitSub
+                Exit Sub
             End If
             If System.Math.Abs(CDbl(curNewAmount)) >= System.Math.Abs(curSplitAmount) Then
                 MsgBox("New split amount must be smaller than the old amount.")
-                GoTo EventExitSub
+                Exit Sub
             End If
 
             'Find an unused split to use, or create a new one.
@@ -2013,15 +2008,10 @@ EventExitSub:
             'Redisplay all the splits.
             DisplaySplits(mintSplitOffset)
 
-            GoTo EventExitSub
+            Exit Sub
         Catch ex As Exception
             gTopException(ex)
         End Try
-EventExitSub:
-        eventArgs.KeyChar = Chr(KeyAscii)
-        If KeyAscii = 0 Then
-            eventArgs.Handled = True
-        End If
     End Sub
 
     Private Sub txtSplitAmount_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
