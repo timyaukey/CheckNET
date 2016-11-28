@@ -6,34 +6,36 @@ Public Class StringTranslator
     'Encapsulate a searchable list of key strings, each of which is associated with
     'two additional string values.
 
-    Private Structure Element
+    Private Class Element
         'Unique identifier in the list.
         'This is what is stored in the database.
-        Dim strKey As String
+        Public strKey As String
         'Unique name of list element.
-        Dim strValue1 As String
+        Public strValue1 As String
         'Alternate name of list element, not suitable for searching.
-        Dim strValue2 As String
+        Public strValue2 As String
 
         Public Overrides Function ToString() As String
             Return strKey + "|" + strValue1
         End Function
-    End Structure
+    End Class
 
     Private maudtElement() As Element '1 to mintElements
     Private mintElements As Short
+
     'maudtElement() indices, keyed by "#" & Element.strKey
-    Private mcolKeyIndices As Collection
+    Private mdictKeyIndices As Dictionary(Of String, Integer)
+
     'maudtElement() indices, keyed by "#" & Element.strValue1
-    Private mcolValue1Indices As Collection
+    Private mdictValue1Indices As Dictionary(Of String, Integer)
 
     '$Description Initialize an instance.
 
     Public Sub Init()
         mintElements = 0
         Erase maudtElement
-        mcolKeyIndices = New Collection
-        mcolValue1Indices = New Collection
+        mdictKeyIndices = New Dictionary(Of String, Integer)()
+        mdictValue1Indices = New Dictionary(Of String, Integer)()
     End Sub
 
     '$Description Load a text file into this object. Does NOT clear the object first.
@@ -95,15 +97,16 @@ Public Class StringTranslator
     Public Sub Add(ByVal strKey_ As String, ByVal strValue1_ As String, ByVal strValue2_ As String)
 
         mintElements = mintElements + 1
-        'UPGRADE_WARNING: Lower bound of array maudtElement was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim Preserve maudtElement(mintElements)
-        With maudtElement(mintElements)
+        Dim elm As Element = New Element()
+        maudtElement(mintElements) = elm
+        With elm
             .strKey = strKey_
             .strValue1 = strValue1_
             .strValue2 = strValue2_
         End With
-        mcolKeyIndices.Add(mintElements, "#" & strKey_)
-        mcolValue1Indices.Add(mintElements, "#" & strValue1_)
+        mdictKeyIndices.Add("#" & strKey_, mintElements)
+        mdictValue1Indices.Add("#" & strValue1_, mintElements)
     End Sub
 
     '$Description Search the list for the specified key string. Search is case
@@ -114,9 +117,9 @@ Public Class StringTranslator
     '   to retrieve values for that key string.
 
     Public Function intLookupKey(ByVal strKey_ As String) As Short
-        If mcolKeyIndices.Contains("#" & strKey_) Then
-            'Empirical research shows this to be extremely fast, even on large collections.
-            Return mcolKeyIndices.Item("#" & strKey_)
+        Dim result As Short
+        If mdictKeyIndices.TryGetValue("#" & strKey_, result) Then
+            Return result
         Else
             Return 0
         End If
@@ -129,11 +132,12 @@ Public Class StringTranslator
     '   the key was not found.
 
     Public Function strKeyToValue1(ByVal strKey_ As String) As String
-        Try
-            Return maudtElement(mcolKeyIndices.Item("#" & strKey_)).strValue1
-        Catch
+        Dim idx As Integer
+        If mdictKeyIndices.TryGetValue("#" & strKey_, idx) Then
+            Return maudtElement(idx).strValue1
+        Else
             Return ""
-        End Try
+        End If
     End Function
 
     '$Description The number of key strings in the list.
@@ -165,20 +169,15 @@ Public Class StringTranslator
     '$Description Like intLookupKey(), but searches for a strValue1 match.
 
     Public Function intLookupValue1(ByVal strValue1_ As String) As Short
-        Try
-            'Empirical research shows this to be extremely fast, even on large collections.
-            Return mcolValue1Indices.Item("#" & strValue1_)
-        Catch
+        Dim result As Short
+        If mdictValue1Indices.TryGetValue("#" & strValue1_, result) Then
+            Return result
+        Else
             Return 0
-        End Try
+        End If
     End Function
 
-    'UPGRADE_NOTE: Class_Initialize was upgraded to Class_Initialize_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    Private Sub Class_Initialize_Renamed()
-        Init()
-    End Sub
     Public Sub New()
-        MyBase.New()
-        Class_Initialize_Renamed()
+        Init()
     End Sub
 End Class

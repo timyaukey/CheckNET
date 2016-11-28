@@ -959,6 +959,8 @@ Friend Class UTMainForm
         gUTAssert(objString.strKey(2) = "2", "Wrong strKey(2)")
         gUTAssert(objString.strValue1(1) = "value1", "Wrong strValue1(1)")
         gUTAssert(objString.strValue2(3) = "THIRD line.", "Wrong strValue2(3)")
+        gUTAssert(objString.strKeyToValue1("v1") = "value1", "Wrong strKeyToValue1(v1)")
+        gUTAssert(objString.strKeyToValue1("zzz") = "", "Wrong strKeyToValue1(zzz)")
 
     End Sub
 
