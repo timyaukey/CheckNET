@@ -114,14 +114,12 @@ Public Class StringTranslator
     '   to retrieve values for that key string.
 
     Public Function intLookupKey(ByVal strKey_ As String) As Short
-        On Error GoTo NoMatch
-        'Empirical research shows this to be extremely fast, even on large
-        'collections.
-        'UPGRADE_WARNING: Couldn't resolve default property of object mcolKeyIndices.Item(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        intLookupKey = mcolKeyIndices.Item("#" & strKey_)
-        Exit Function
-NoMatch:
-        intLookupKey = 0
+        If mcolKeyIndices.Contains("#" & strKey_) Then
+            'Empirical research shows this to be extremely fast, even on large collections.
+            Return mcolKeyIndices.Item("#" & strKey_)
+        Else
+            Return 0
+        End If
     End Function
 
     '$Description Search the list for the specified key string, and return
@@ -131,12 +129,11 @@ NoMatch:
     '   the key was not found.
 
     Public Function strKeyToValue1(ByVal strKey_ As String) As String
-        On Error GoTo NoMatch
-        'UPGRADE_WARNING: Couldn't resolve default property of object mcolKeyIndices.Item(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        strKeyToValue1 = maudtElement(mcolKeyIndices.Item("#" & strKey_)).strValue1
-        Exit Function
-NoMatch:
-        strKeyToValue1 = ""
+        Try
+            Return maudtElement(mcolKeyIndices.Item("#" & strKey_)).strValue1
+        Catch
+            Return ""
+        End Try
     End Function
 
     '$Description The number of key strings in the list.
@@ -168,14 +165,12 @@ NoMatch:
     '$Description Like intLookupKey(), but searches for a strValue1 match.
 
     Public Function intLookupValue1(ByVal strValue1_ As String) As Short
-        On Error GoTo NoMatch
-        'Empirical research shows this to be extremely fast, even on large
-        'collections.
-        'UPGRADE_WARNING: Couldn't resolve default property of object mcolValue1Indices.Item(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        intLookupValue1 = mcolValue1Indices.Item("#" & strValue1_)
-        Exit Function
-NoMatch:
-        intLookupValue1 = 0
+        Try
+            'Empirical research shows this to be extremely fast, even on large collections.
+            Return mcolValue1Indices.Item("#" & strValue1_)
+        Catch
+            Return 0
+        End Try
     End Function
 
     'UPGRADE_NOTE: Class_Initialize was upgraded to Class_Initialize_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
