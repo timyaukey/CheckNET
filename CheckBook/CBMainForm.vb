@@ -50,6 +50,10 @@ Friend Class CBMainForm
                 End If
             Next
 
+            Me.Text = "Willow Creek Checkbook " & My.Application.Info.Version.Major & "." & _
+                My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build & _
+                " [" & LCase(gstrDataPathValue) & "]"
+
             If gblnDataIsLocked() Then
                 MsgBox("Data files are in use by someone else running this software.")
                 frmStartup.Close()
@@ -101,10 +105,6 @@ Friend Class CBMainForm
             Next vstrFile
 
             frmStartup.ShowStatus("Loading main window")
-
-            Me.Text = "Willow Creek Checkbook " & My.Application.Info.Version.Major & "." & _
-                My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build & _
-                " [" & LCase(gobjSecurity.strLogin) & "] [" & LCase(gstrDataPathValue) & "]"
 
             mblnCancelStart = False
 
