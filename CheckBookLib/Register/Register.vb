@@ -1422,4 +1422,8 @@ Public Class Register
     Public Sub WriteEventLog(ByVal strAccountTitle As String, ByVal objRepeats As StringTranslator)
         mobjLog.WriteAll(strAccountTitle, objRepeats)
     End Sub
+
+    Public Overrides Function ToString() As String
+        Return Me.strTitle
+    End Function
 End Class

@@ -207,7 +207,7 @@ Friend Class RptScanSplitsForm
             mlngSplitCount = 0
             For intAcctIdx = 0 To lstAccounts.Items.Count - 1
                 If lstAccounts.GetSelected(intAcctIdx) Then
-                    objAcct = gcolAccounts.Item(intAcctIdx + 1)
+                    objAcct = gcolAccounts.Item(intAcctIdx)
                     mcolSelectAccounts.Add(objAcct)
                     For Each objReg In objAcct.colRegisters
                         ScanRegister(objReg)

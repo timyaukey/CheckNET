@@ -830,8 +830,8 @@ Friend Class BankImportForm
             .Items.Clear()
             intIndex = 0
             For Each objReg In mobjAccount.colRegisters
-                intIndex = intIndex + 1
                 .Items.Add(gobjCreateListBoxItem(objReg.strTitle, intIndex))
+                intIndex = intIndex + 1
             Next objReg
         End With
     End Sub

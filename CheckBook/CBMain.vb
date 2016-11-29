@@ -353,7 +353,7 @@ Public Module CBMain
             gobjGetSelectedAccountAndUnload = Nothing
             Exit Function
         End If
-        gobjGetSelectedAccountAndUnload = gcolAccounts.Item(lst.SelectedIndex + 1)
+        gobjGetSelectedAccountAndUnload = gcolAccounts.Item(lst.SelectedIndex)
         frm.Close()
         System.Windows.Forms.Application.DoEvents()
     End Function

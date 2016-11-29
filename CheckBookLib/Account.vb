@@ -462,4 +462,8 @@ Public Class Account
     Private Sub SaveLine(ByVal strLine As String)
         PrintLine(mintSaveFile, strLine)
     End Sub
+
+    Public Overrides Function ToString() As String
+        Return Me.strTitle
+    End Function
 End Class

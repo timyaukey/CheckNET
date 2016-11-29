@@ -10,7 +10,7 @@ Public Module CheckBookUtils
     Public gobjSecurity As Security
 
     'Collection of loaded Account objects.
-    Public gcolAccounts As Collection
+    Public gcolAccounts As List(Of Account)
 
     'Global category and budget lists.
     Public gobjCategories As StringTranslator

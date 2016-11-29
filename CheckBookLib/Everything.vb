@@ -4,13 +4,13 @@ Public Class Everything
 
     Public Event SomethingModified()
 
-    Private mcolAccounts As Collection
+    Private mcolAccounts As List(Of Account)
 
     Public Sub Init()
-        mcolAccounts = New Collection
+        mcolAccounts = New List(Of Account)
     End Sub
 
-    Public ReadOnly Property colAccounts() As Collection
+    Public ReadOnly Property colAccounts() As List(Of Account)
         Get
             colAccounts = mcolAccounts
         End Get
