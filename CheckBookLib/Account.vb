@@ -16,7 +16,7 @@ Public Class Account
     'Private mstrRepeatsFile As String
     'All LoadedRegister objects for account, whether or not
     'displayed in any UI.
-    Private mcolRegisters As Collection
+    Private mcolRegisters As List(Of Register)
     'Account has unsaved changes.
     Private mblnUnsavedChanges As Boolean
     'File number for Save().
@@ -67,7 +67,7 @@ Public Class Account
         End Set
     End Property
 
-    Public ReadOnly Property colRegisters() As Collection
+    Public ReadOnly Property colRegisters() As List(Of Register)
         Get
             colRegisters = mcolRegisters
         End Get
@@ -127,7 +127,7 @@ Public Class Account
             mstrFileLoaded = strAcctFile
             mblnUnsavedChanges = False
             datRegisterEndDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, 45, Today)
-            mcolRegisters = New Collection
+            mcolRegisters = New List(Of Register)
             RaiseEvent LoadStatus("Loading " & strAcctFile)
             intFile = FreeFile()
             FileOpen(intFile, gstrAccountPath() & "\" & strAcctFile, OpenMode.Input)

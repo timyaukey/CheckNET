@@ -7,12 +7,12 @@ Friend Class MoveDstForm
     Inherits System.Windows.Forms.Form
 
     Private mblnSuccess As Boolean
-    Private mcolRegisters As Collection
+    Private mcolRegisters As List(Of Register)
     Private mobjOldReg As Register
     Private mstrNewDate As String
     Private mobjNewReg As Register
 
-    Public Function blnShowModal(ByVal colRegisters As Collection, ByVal objOldReg As Register, ByRef strNewDate As String, ByRef objNewReg As Register) As Boolean
+    Public Function blnShowModal(ByVal colRegisters As List(Of Register), ByVal objOldReg As Register, ByRef strNewDate As String, ByRef objNewReg As Register) As Boolean
 
         Dim objReg As Register
         Dim intRegIdx As Short
