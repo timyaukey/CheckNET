@@ -491,7 +491,6 @@ Friend Class ListEditorForm
 
         Dim lngIndex As Integer
         Dim objTrx As Trx
-        Dim lngSplit As Integer
         Dim objSplit As Split_Renamed
 
         Try
@@ -505,8 +504,7 @@ Friend Class ListEditorForm
                     End If
                 Else
                     If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                        For lngSplit = 1 To objTrx.lngSplits
-                            objSplit = objTrx.objSplit(lngSplit)
+                        For Each objSplit In objTrx.colSplits
                             If mlngListType = ListType.glngLIST_TYPE_CATEGORY Then
                                 If objSplit.strCategoryKey = strKey Then
                                     blnElementIsUsedInRegister = True

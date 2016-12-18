@@ -294,7 +294,7 @@ Public Class Register
             If lngOldIndex < 1 Or lngOldIndex > mlngTrxUsed Then
                 gRaiseError("Invalid index " & lngOldIndex & " passed to Register.UpdateEnd")
             End If
-            objTrx = maobjTrx(lngOldIndex)
+            objTrx = Me.objTrx(lngOldIndex)
             UpdateEarliestBudget(objTrx)
             If objTrx.intRepeatSeq > 0 Then
                 SetRepeatTrx(objTrx)
@@ -330,19 +330,19 @@ Public Class Register
         Dim objTrx As Trx
         Dim strNewSortKey As String
 
-        objTrx = maobjTrx(lngOldIndex)
+        objTrx = Me.objTrx(lngOldIndex)
         objTrx.SetSortKey()
         strNewSortKey = objTrx.strSortKey
 
         If lngOldIndex > 1 Then
-            If strNewSortKey < maobjTrx(lngOldIndex - 1).strSortKey Then
+            If strNewSortKey < Me.objTrx(lngOldIndex - 1).strSortKey Then
                 lngUpdateMove = lngMoveUp(lngOldIndex - 1, objTrx)
                 Exit Function
             End If
         End If
 
         If lngOldIndex < mlngTrxUsed Then
-            If strNewSortKey > maobjTrx(lngOldIndex + 1).strSortKey Then
+            If strNewSortKey > Me.objTrx(lngOldIndex + 1).strSortKey Then
                 lngUpdateMove = lngMoveDown(lngOldIndex + 1, objTrx)
                 Exit Function
             End If
@@ -386,7 +386,7 @@ Public Class Register
     Public Sub SetTrxStatus(ByVal lngIndex As Integer, ByVal lngStatus As Trx.TrxStatus, ByVal objAddLogger As ILogAdd, ByVal strTitle As String)
 
         Dim objStatusTrx As Trx
-        objStatusTrx = maobjTrx(lngIndex)
+        objStatusTrx = Me.objTrx(lngIndex)
         objStatusTrx.SetStatus(lngStatus)
         RaiseEvent StatusChanged(lngIndex)
         'Use an ILogAdd instead of a specialized logger because it's a cheap
@@ -406,7 +406,7 @@ Public Class Register
             gRaiseError("Register.Delete passed invalid index=" & lngIndex)
         End If
         ClearFirstAffected()
-        With maobjTrx(lngIndex)
+        With Me.objTrx(lngIndex)
             objTrxOld = .objClone(Nothing)
             'Budget Trx always come before any Split objects applied to
             'them, so deleting a normal Trx cannot change the index of
@@ -458,11 +458,11 @@ Public Class Register
         If lngStartIndex = 1 Then
             curBalance = 0
         Else
-            curBalance = maobjTrx(lngStartIndex - 1).curBalance
+            curBalance = Me.objTrx(lngStartIndex - 1).curBalance
         End If
         lngLastChange = lngStartIndex
         For lngIndex = lngStartIndex To mlngTrxUsed
-            With maobjTrx(lngIndex)
+            With Me.objTrx(lngIndex)
                 curBalance = curBalance + .curAmount
                 If curBalance <> .curBalance Then
                     .SetBalance(curBalance)
@@ -483,7 +483,7 @@ Public Class Register
         Dim lngIndex As Integer
 
         For lngIndex = 1 To mlngTrxUsed
-            With maobjTrx(lngIndex)
+            With Me.objTrx(lngIndex)
                 .ApplyToBudgets(Me)
                 If .lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
                     If .blnFake Then
@@ -572,7 +572,7 @@ Public Class Register
     Public Function lngMatchImportKey(ByVal strImportKey As String) As Integer
         Dim lngIndex As Integer
         For lngIndex = mlngTrxUsed To 1 Step -1
-            With maobjTrx(lngIndex)
+            With Me.objTrx(lngIndex)
                 If .lngType = Trx.TrxType.glngTRXTYP_NORMAL And Not .blnFake Then
                     If .strImportKey = strImportKey Then
                         Return lngIndex
@@ -590,7 +590,7 @@ Public Class Register
     Public Function lngFindTrx(ByVal objTrx As Trx) As Integer
         Dim lngIndex As Integer
         For lngIndex = mlngTrxUsed To 1 Step -1
-            If maobjTrx(lngIndex) Is objTrx Then
+            If Me.objTrx(lngIndex) Is objTrx Then
                 Return lngIndex
             End If
         Next
@@ -614,7 +614,7 @@ Public Class Register
         datEarliestMatch = DateAdd(DateInterval.Day, -(intDateRange - 1), datDate)
         datLatestMatch = DateAdd(DateInterval.Day, intDateRange - 1, datDate)
         For lngIndex = mlngTrxUsed To 1 Step -1
-            With maobjTrx(lngIndex)
+            With Me.objTrx(lngIndex)
                 If .datDate < datEarliestMatch Then
                     Exit For
                 End If
@@ -646,7 +646,7 @@ Public Class Register
         If lngOldIndex < 1 Or lngOldIndex > mlngTrxUsed Then
             gRaiseError("Invalid index " & lngOldIndex & " passed to Register.ImportUpdateBank")
         End If
-        objTrx = maobjTrx(lngOldIndex)
+        objTrx = Me.objTrx(lngOldIndex)
         objOldTrx = objTrx.objClone(Nothing)
         With objTrx
             .UnApplyFromBudgets(Me)
@@ -668,7 +668,7 @@ Public Class Register
         If lngOldIndex < 1 Or lngOldIndex > mlngTrxUsed Then
             gRaiseError("Invalid index " & lngOldIndex & " passed to Register.ImportUpdateNumAmt")
         End If
-        objTrx = maobjTrx(lngOldIndex)
+        objTrx = Me.objTrx(lngOldIndex)
         objOldTrx = objTrx.objClone(Nothing)
         With objTrx
             .UnApplyFromBudgets(Me)
@@ -689,7 +689,7 @@ Public Class Register
         If lngOldIndex < 1 Or lngOldIndex > mlngTrxUsed Then
             gRaiseError("Invalid index " & lngOldIndex & " passed to Register.ImportUpdateAmount")
         End If
-        objTrx = maobjTrx(lngOldIndex)
+        objTrx = Me.objTrx(lngOldIndex)
         objOldTrx = objTrx.objClone(Nothing)
         With objTrx
             .UnApplyFromBudgets(Me)
@@ -712,7 +712,7 @@ Public Class Register
         If lngOldIndex < 1 Or lngOldIndex > mlngTrxUsed Then
             gRaiseError("Invalid index " & lngOldIndex & " passed to Register.ImportUpdatePurchaseOrder")
         End If
-        objTrx = maobjTrx(lngOldIndex)
+        objTrx = Me.objTrx(lngOldIndex)
         objOldTrx = objTrx.objClone(Nothing)
         With objTrx
             .UnApplyFromBudgets(Me)
@@ -790,7 +790,7 @@ Public Class Register
             If lngIndex > mlngTrxUsed Then
                 Exit Do
             End If
-            objTrx = maobjTrx(lngIndex)
+            objTrx = Me.objTrx(lngIndex)
             With objTrx
                 If .datDate > datEnd Then
                     Exit Do
@@ -868,7 +868,7 @@ Public Class Register
             blnFirstIteration = True
             For Each vlngMatchIndex In colExactMatches
                 lngIndex = vlngMatchIndex
-                objTrx = maobjTrx(lngIndex)
+                objTrx = Me.objTrx(lngIndex)
                 If blnFirstIteration Then
                     datFirstMatch = objTrx.datDate
                     datLastMatch = objTrx.datDate
@@ -952,7 +952,7 @@ Public Class Register
             If lngIndex > mlngTrxUsed Then
                 Exit Do
             End If
-            With maobjTrx(lngIndex)
+            With Me.objTrx(lngIndex)
                 If .datDate > datEnd Then
                     Exit Do
                 End If
@@ -993,7 +993,7 @@ Public Class Register
             If lngIndex > mlngTrxUsed Then
                 Exit Do
             End If
-            With maobjTrx(lngIndex)
+            With Me.objTrx(lngIndex)
                 If .datDate > datEnd Then
                     Exit Do
                 End If
@@ -1034,7 +1034,7 @@ Public Class Register
             If lngIndex > mlngTrxUsed Then
                 Exit Do
             End If
-            With maobjTrx(lngIndex)
+            With Me.objTrx(lngIndex)
                 If .datDate > datEnd Then
                     Exit Do
                 End If
@@ -1065,7 +1065,7 @@ Public Class Register
         'lngIndex is initialized to mlngTrxUsed even if the body of the loop
         'is never executed, and will be left as zero if no matching Trx is found.
         For lngIndex = mlngTrxUsed To 1 Step -1
-            If maobjTrx(lngIndex).datDate < datDate Then
+            If Me.objTrx(lngIndex).datDate < datDate Then
                 Exit For
             End If
         Next
@@ -1087,7 +1087,7 @@ Public Class Register
         lngMatchTransfer = 0
 
         For lngIndex = mlngTrxUsed To 1 Step -1
-            With maobjTrx(lngIndex)
+            With Me.objTrx(lngIndex)
                 If .datDate < datDate Then
                     Exit Function
                 End If
@@ -1125,7 +1125,7 @@ Public Class Register
             Exit Function
         End If
         For lngIndex = mlngTrxUsed To 1 Step -1
-            With maobjTrx(lngIndex)
+            With Me.objTrx(lngIndex)
                 If .datDate < mdatEarliestBudgetStart Then
                     Exit For
                 End If
@@ -1360,7 +1360,7 @@ Public Class Register
         strPriorSortKey = ""
 
         For lngIndex = 1 To mlngTrxUsed
-            objTrx = maobjTrx(lngIndex)
+            objTrx = Me.objTrx(lngIndex)
             With objTrx
                 If Not mblnRepeat Then
                     If .curBalance <> (curPriorBalance + .curAmount) Then
