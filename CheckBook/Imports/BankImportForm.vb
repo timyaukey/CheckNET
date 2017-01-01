@@ -509,7 +509,7 @@ Friend Class BankImportForm
                     'a new Trx as would normally be the case in this method.
                     If mlngNewSearchType = CBMain.ImportBatchNewSearch.VendorInvoice Then
                         If objImportedTrx.colSplits.Count() > 0 Then
-                            objImportedSplit = objImportedTrx.colSplits.Item(1)
+                            objImportedSplit = objImportedTrx.objFirstSplit
                             strPONumber = objImportedSplit.strPONumber
                             If LCase(strPONumber) = "none" Then
                                 strPONumber = ""
@@ -601,7 +601,7 @@ Friend Class BankImportForm
             Exit Function
         End If
 
-        objSplit = objImportedTrx.colSplits.Item(1)
+        objSplit = objImportedTrx.objFirstSplit
         If objSplit.strCategoryKey = "" And blnSetMissingCategory Then
             If cboDefaultCategory.SelectedIndex <> -1 Then
                 lngCatIdx = gintVB6GetItemData(cboDefaultCategory, cboDefaultCategory.SelectedIndex)
@@ -998,7 +998,7 @@ Friend Class BankImportForm
                     Case CBMain.ImportIndividualSearchType.Payee
                         objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, False, colMatches, blnExactMatch)
                     Case CBMain.ImportIndividualSearchType.VendorInvoice
-                        objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.colSplits.Item(1).strInvoiceNum, colMatches)
+                        objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.objFirstSplit.strInvoiceNum, colMatches)
                         blnExactMatch = True
                     Case Else
                         'Should not be possible
@@ -1075,7 +1075,7 @@ Friend Class BankImportForm
                         End If
                     Case CBMain.ImportStatusSearch.VendorInvoice
                         'UPGRADE_WARNING: Couldn't resolve default property of object objTrx.colSplits().strInvoiceNum. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.colSplits.Item(1).strInvoiceNum, colMatches)
+                        objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.objFirstSplit.strInvoiceNum, colMatches)
                         If colMatches.Count() > 0 Then
                             'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                             lngImportMatch = colMatches.Item(1)
@@ -1182,7 +1182,7 @@ Friend Class BankImportForm
     Private Function strSummarizeTrxCat(ByVal objTrx As Trx) As String
 
         If objTrx.lngSplits = 1 Then
-            strSummarizeTrxCat = gobjCategories.strKeyToValue1(objTrx.objSplit(1).strCategoryKey)
+            strSummarizeTrxCat = gobjCategories.strKeyToValue1(objTrx.objFirstSplit.strCategoryKey)
         Else
             strSummarizeTrxCat = "(split)"
         End If

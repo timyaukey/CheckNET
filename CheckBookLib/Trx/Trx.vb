@@ -715,6 +715,12 @@ Public Class Trx
         End Get
     End Property
 
+    Public ReadOnly Property objFirstSplit() As Split_Renamed
+        Get
+            Return mcolSplits.Item(1)
+        End Get
+    End Property
+
     Public ReadOnly Property colSplits() As Collection
         Get
             colSplits = mcolSplits
@@ -914,9 +920,7 @@ Public Class Trx
 
     Public Sub SetSortKey()
         Dim strInvNum As String = ""
-        Dim objFirstSplit As Split_Renamed
         If mlngType = TrxType.glngTRXTYP_NORMAL Then
-            objFirstSplit = mcolSplits.Item(1)
             strInvNum = objFirstSplit.strInvoiceNum
         End If
         mstrSortKey = mdatDate.ToString("yyyyMMdd") & IIf(mcurAmount > 0, "C", "D") & Mid("ZYX", mlngType + 1, 1) & _
