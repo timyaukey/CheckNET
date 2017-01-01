@@ -345,7 +345,7 @@ Friend Class TrxForm
     Private Sub ShowBudgetApplied(ByVal objBudget As Trx, ByVal lngIndex_ As Integer)
         Dim lngCurrent As Integer
         Dim objCurrent As Trx
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim objItem As System.Windows.Forms.ListViewItem
         Dim curTotalApplied As Decimal
 
@@ -540,7 +540,7 @@ Friend Class TrxForm
     '$Description Load a collection of Split objects into maudtSplits().
 
     Private Sub LoadSplits(ByVal colSplits As Collection)
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim intIndex As Short
 
         mintSplits = colSplits.Count()
@@ -1181,7 +1181,7 @@ Friend Class TrxForm
         Dim lngIndex As Integer
         Dim objTrx As Trx
         Dim intSplit As Short
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
 
         blnExistsInRegister = False
 

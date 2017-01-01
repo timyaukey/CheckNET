@@ -703,7 +703,7 @@ Public Class Trx
         End Get
     End Property
 
-    Public ReadOnly Property objSplit(ByVal lngIndex As Integer) As Split_Renamed
+    Public ReadOnly Property objSplit(ByVal lngIndex As Integer) As TrxSplit
         Get
             If mlngType <> TrxType.glngTRXTYP_NORMAL Then
                 gRaiseError("Trx.objSplit only allowed on normal transaction")
@@ -715,7 +715,7 @@ Public Class Trx
         End Get
     End Property
 
-    Public ReadOnly Property objFirstSplit() As Split_Renamed
+    Public ReadOnly Property objFirstSplit() As TrxSplit
         Get
             Return mcolSplits.Item(1)
         End Get
@@ -736,7 +736,7 @@ Public Class Trx
         End Get
     End Property
 
-    Public ReadOnly Property objAppliedSplit(ByVal lngIndex As Integer) As Split_Renamed
+    Public ReadOnly Property objAppliedSplit(ByVal lngIndex As Integer) As TrxSplit
         Get
             If mlngType <> TrxType.glngTRXTYP_BUDGET Then
                 gRaiseError("Trx.objAppliedSplit only allowed on budget transaction")
@@ -836,7 +836,7 @@ Public Class Trx
     Private Sub AdjustSplitsProportionally(ByVal curNewAmount As Decimal)
         Dim dblRatio As Double
         Dim curRemainder As Decimal
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim lngSplit As Integer
         Dim curThisSplit As Decimal
 
@@ -884,7 +884,7 @@ Public Class Trx
     'represents applying an invoice to an open purchase order, but this routine
     'does not check the PO#.
 
-    Public Sub ImportUpdatePurchaseOrder(ByVal objPOSplit As Split_Renamed, ByVal objImportedSplit As Split_Renamed)
+    Public Sub ImportUpdatePurchaseOrder(ByVal objPOSplit As TrxSplit, ByVal objImportedSplit As TrxSplit)
 
         'A split with a PO# represents part of a purchase order due on that date.
         'If the split has no invoice number it represents a part of that purchase
@@ -905,7 +905,7 @@ Public Class Trx
     End Sub
 
     Private Sub SetSplitDocInfo(ByVal strPONumber_ As String, ByVal strInvoiceNum_ As String, ByVal datInvoiceDate_ As Date, ByVal datDueDate_ As Date, ByVal strTerms_ As String, ByVal strImageFiles_ As String)
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         For Each objSplit In mcolSplits
             With objSplit
                 .strPONumber = strPONumber_
@@ -923,7 +923,7 @@ Public Class Trx
         If mlngType = TrxType.glngTRXTYP_NORMAL Then
             strInvNum = objFirstSplit.strInvoiceNum
         End If
-        mstrSortKey = mdatDate.ToString("yyyyMMdd") & IIf(mcurAmount > 0, "C", "D") & Mid("ZYX", mlngType + 1, 1) & _
+        mstrSortKey = mdatDate.ToString("yyyyMMdd") & IIf(mcurAmount > 0, "C", "D") & Mid("ZYX", mlngType + 1, 1) &
             Left(mstrNumber & "          ", 10) & Left(mstrDescription & "                    ", 20) & Left(strInvNum & "                ", 16)
     End Sub
 
@@ -971,13 +971,13 @@ Public Class Trx
 
     Public Sub AddSplit(ByVal strMemo_ As String, ByVal strCategoryKey_ As String, ByVal strPONumber_ As String, ByVal strInvoiceNum_ As String, ByVal datInvoiceDate_ As Date, ByVal datDueDate_ As Date, ByVal strTerms_ As String, ByVal strBudgetKey_ As String, ByVal curAmount_ As Decimal, ByVal strImageFiles_ As String)
 
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
 
         If mlngType <> TrxType.glngTRXTYP_NORMAL Then
             gRaiseError("Trx.AddSplit only allowed on normal transaction")
         End If
 
-        objSplit = New Split_Renamed
+        objSplit = New TrxSplit
         objSplit.Init(strMemo_, strCategoryKey_, strPONumber_, strInvoiceNum_, datInvoiceDate_, datDueDate_, strTerms_, strBudgetKey_, curAmount_, strImageFiles_)
         mcolSplits.Add(objSplit)
         mcurAmount = mcurAmount + curAmount_
@@ -986,14 +986,14 @@ Public Class Trx
 
     '$Description Like AddSplit(), but clones an existing split and returns the new split.
 
-    Public Function objAddSplit(ByVal objSrcSplit As Split_Renamed) As Split_Renamed
-        Dim objDstSplit As Split_Renamed
+    Public Function objAddSplit(ByVal objSrcSplit As TrxSplit) As TrxSplit
+        Dim objDstSplit As TrxSplit
 
         If mlngType <> TrxType.glngTRXTYP_NORMAL Then
             gRaiseError("Trx.AddSplit only allowed on normal transaction")
         End If
 
-        objDstSplit = New Split_Renamed
+        objDstSplit = New TrxSplit
         With objSrcSplit
             objDstSplit.Init(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount, .strImageFiles)
             mcolSplits.Add(objDstSplit)
@@ -1008,7 +1008,7 @@ Public Class Trx
 
     Public Sub ApplyToBudgets(ByVal objReg As Register)
 
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim blnNoMatch As Boolean
         mblnAnyUnmatchedBudget = False
         If mlngType = TrxType.glngTRXTYP_NORMAL Then
@@ -1024,7 +1024,7 @@ Public Class Trx
     '   not currently applied to budgets. Does nothing except for normal Trx.
 
     Public Sub UnApplyFromBudgets(ByVal objReg As Register)
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
 
         If mlngType = TrxType.glngTRXTYP_NORMAL Then
             For Each objSplit In mcolSplits
@@ -1036,7 +1036,7 @@ Public Class Trx
     '$Description Apply a Split to the budget Trx which is ourself.
     '   Called only by Split.ApplyToBudget().
 
-    Public Sub ApplyToThisBudget(ByVal objSplit As Split_Renamed, ByVal objReg As Register)
+    Public Sub ApplyToThisBudget(ByVal objSplit As TrxSplit, ByVal objReg As Register)
 
         If mlngType <> TrxType.glngTRXTYP_BUDGET Then
             gRaiseError("Trx.ApplyToThisBudget only allowed on budget transaction")
@@ -1051,11 +1051,11 @@ Public Class Trx
     '$Description Un-apply a Split from the budget Trx which is ourself.
     '   Called only by Split.UnApplyFromBudget().
 
-    Public Sub UnApplyFromThisBudget(ByVal objSplit As Split_Renamed, ByVal objReg As Register)
+    Public Sub UnApplyFromThisBudget(ByVal objSplit As TrxSplit, ByVal objReg As Register)
 
         Dim intIndex As Short
         Dim intDeleteIndex As Short
-        Dim objEachSplit As Split_Renamed
+        Dim objEachSplit As TrxSplit
 
         If mlngType <> TrxType.glngTRXTYP_BUDGET Then
             gRaiseError("Trx.UnApplyFromThisBudget only allowed on budget transaction")
@@ -1084,7 +1084,7 @@ Public Class Trx
     '   is not a budget.
 
     Public Sub DestroyThisBudget()
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         If mlngType = TrxType.glngTRXTYP_BUDGET Then
             For Each objSplit In mcolAppliedSplits
                 objSplit.ClearBudgetReference()
@@ -1115,7 +1115,7 @@ Public Class Trx
 
     Public Function blnIsSearchMatch(ByVal lngSearchField As TrxSearchField, ByVal strSearchFor As String, ByVal lngSearchType As TrxSearchType, ByRef curMatchAmount As Decimal) As Boolean
 
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim strTrxData As String = ""
         Dim blnAnySplitsMatch As Boolean
         Dim blnThisSplitMatches As Boolean
@@ -1259,7 +1259,7 @@ Public Class Trx
     End Sub
 
     Private Sub ValidateNormal(ByVal objReg As Register, ByVal lngIndex As Integer)
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim curTotal As Decimal
         If mcolSplits Is Nothing Then
             objReg.ValidationError_Renamed(lngIndex, "Missing split collection")
@@ -1312,7 +1312,7 @@ Public Class Trx
     End Sub
 
     Private Sub ValidateBudget(ByVal objReg As Register, ByVal lngIndex As Integer)
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim curTotal As Decimal
         If mstrBudgetKey = "" Then
             objReg.ValidationError_Renamed(lngIndex, "Budget trx requires budget key")
@@ -1398,7 +1398,7 @@ Public Class Trx
     End Sub
 
     Public Sub CopySplits(ByVal objDstTrx As Trx)
-        Dim objSrcSplit As Split_Renamed
+        Dim objSrcSplit As TrxSplit
         For Each objSrcSplit In mcolSplits
             objDstTrx.objAddSplit(objSrcSplit)
         Next objSrcSplit

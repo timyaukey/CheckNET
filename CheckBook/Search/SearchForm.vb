@@ -486,7 +486,7 @@ Friend Class SearchForm
             Dim lngTrxIndex As Integer
             Dim objTrx As Trx
             Dim colSplits As Collection
-            Dim objSplit As Split_Renamed
+            Dim objSplit As TrxSplit
             Dim lngExportCount As Short
 
             If Not frmExport.blnGetSettings() Then
@@ -540,7 +540,7 @@ Friend Class SearchForm
             Dim objTrx As Trx
             Dim objTrxOld As Trx
             Dim colSplits As Collection
-            Dim objSplit As Split_Renamed
+            Dim objSplit As TrxSplit
             Dim strCatKey As String
             Dim lngChgCount As Integer
             Dim objStartLogger As ILogGroupStart
@@ -617,7 +617,7 @@ Friend Class SearchForm
             Dim objNewTrx As Trx = Nothing
             Dim objOldTrx As Trx
             Dim colOldTrx As Collection
-            Dim objOldSplit As Split_Renamed
+            Dim objOldSplit As TrxSplit
             Dim lngTrxIndex As Integer
             Dim frmTrx As TrxForm
             Dim objStartLogger As ILogGroupStart
@@ -700,7 +700,7 @@ Friend Class SearchForm
             Dim objTrxFirst As Trx = Nothing
             Dim colTrx As Collection
             Dim colSplits As Collection
-            Dim objSplit As Split_Renamed
+            Dim objSplit As TrxSplit
             Dim strNewDate As String = ""
             Dim objNewReg As Register = Nothing
             Dim datExplicitDate As Date

@@ -491,7 +491,7 @@ Friend Class ListEditorForm
 
         Dim lngIndex As Integer
         Dim objTrx As Trx
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
 
         Try
 

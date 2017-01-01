@@ -854,7 +854,7 @@ Friend Class UTMainForm
     Private Sub TestFileLoad1()
         Dim objReg As Register
         Dim objTrx As Trx
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
 
         gUTSetTestTitle("TestFileLoad1")
 

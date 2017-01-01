@@ -168,7 +168,7 @@ Public Module SharedDefs
 
     Public Function gstrSummarizeTrxCat(ByVal objTrx As Trx) As String
 
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim strCategoryKey As String = ""
 
         For Each objSplit In objTrx.colSplits
@@ -187,7 +187,7 @@ Public Module SharedDefs
 
     Public Function gstrSummarizeTrxBudget(ByVal objTrx As Trx) As String
 
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim strBudgetKey As String = ""
 
         For Each objSplit In objTrx.colSplits
@@ -206,7 +206,7 @@ Public Module SharedDefs
 
     Public Function gstrSummarizeTrxDueDate(ByVal objTrx As Trx) As String
 
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim datDueDate As Date = System.DateTime.FromOADate(0)
 
         For Each objSplit In objTrx.colSplits
@@ -229,7 +229,7 @@ Public Module SharedDefs
 
     Public Function gstrSummarizeTrxInvoiceDate(ByVal objTrx As Trx) As String
 
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim datInvoiceDate As Date = System.DateTime.FromOADate(0)
 
         For Each objSplit In objTrx.colSplits
@@ -252,7 +252,7 @@ Public Module SharedDefs
 
     Public Function gstrSummarizeTrxPONumber(ByVal objTrx As Trx) As String
 
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim strPONumber As String = ""
 
         For Each objSplit In objTrx.colSplits
@@ -271,7 +271,7 @@ Public Module SharedDefs
 
     Public Function gstrSummarizeTrxTerms(ByVal objTrx As Trx) As String
 
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim strTerms As String = ""
 
         For Each objSplit In objTrx.colSplits
@@ -290,7 +290,7 @@ Public Module SharedDefs
 
     Public Function gstrSummarizeTrxInvoiceNum(ByVal objTrx As Trx) As String
 
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim strInvNumber As String = ""
 
         For Each objSplit In objTrx.colSplits
@@ -322,7 +322,7 @@ Public Module SharedDefs
 
     Public Sub gSummarizeSplits(ByVal objTrx As Trx, ByRef strCategory As String, ByRef strPONumber As String, ByRef strInvoiceNum As String, ByRef strInvoiceDate As String, ByRef strDueDate As String, ByRef strTerms As String, ByRef strBudget As String, ByRef curAvailable As Decimal)
 
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim strCatKey As String = ""
         Dim strPONumber2 As String = ""
         Dim strInvoiceNum2 As String = ""

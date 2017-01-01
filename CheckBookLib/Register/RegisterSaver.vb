@@ -46,7 +46,7 @@ Public Class RegisterSaver
     End Sub
 
     Private Sub SaveTrxNormal()
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
 
         SaveTrxShared("TN")
         With mobjTrx

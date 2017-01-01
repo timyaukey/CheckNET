@@ -230,7 +230,7 @@ Friend Class RptScanSplitsForm
         Dim objCursor As RegCursor
         Dim datDate As Date
         Dim blnInclude As Boolean
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim strRegTitle As String
 
         Try
@@ -281,7 +281,7 @@ Friend Class RptScanSplitsForm
         End Try
     End Sub
 
-    Private Sub ProcessSplit(ByVal objReg As Register, ByRef objTrx As Trx, ByVal objSplit As Split_Renamed)
+    Private Sub ProcessSplit(ByVal objReg As Register, ByRef objTrx As Trx, ByVal objSplit As TrxSplit)
         Dim intCatIndex As Short
 
         Try

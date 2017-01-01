@@ -596,7 +596,7 @@ Public Module CBMain
         cbo.Items.Add(gobjCreateListBoxItem("Earliest Date", ImportMatchNarrowMethod.EarliestDate))
     End Sub
 
-    Public Sub gGetSplitDates(ByVal objTrx As Trx, ByVal objSplit As Split_Renamed, ByRef datInvoiceDate As Date, ByRef datDueDate As Date)
+    Public Sub gGetSplitDates(ByVal objTrx As Trx, ByVal objSplit As TrxSplit, ByRef datInvoiceDate As Date, ByRef datDueDate As Date)
 
         datDueDate = objSplit.datDueDate
         If datDueDate = System.DateTime.FromOADate(0) Then

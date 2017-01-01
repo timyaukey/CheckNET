@@ -505,7 +505,7 @@ Public Class Register
         Dim lngInIndex As Integer
         Dim lngOutIndex As Integer
         Dim objTrx As Trx
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
 
         If mlngTrxUsed = 0 Then
             Exit Sub
@@ -606,7 +606,7 @@ Public Class Register
     '   procedure for adding a Trx.
     '$Returns The index of the matching Trx, or zero if there is no match.
 
-    Public Function lngMatchPaymentDetails(ByVal strNumber As String, ByVal datDate As Date, ByVal intDateRange As Short, _
+    Public Function lngMatchPaymentDetails(ByVal strNumber As String, ByVal datDate As Date, ByVal intDateRange As Short,
                                            ByVal strDescription As String, ByVal curAmount As Decimal) As Integer
         Dim lngIndex As Integer
         Dim datEarliestMatch As Date
@@ -637,7 +637,7 @@ Public Class Register
     '   updating an existing Trx, and be sure to pass the appropriate import key
     '   and say it is not fake.
 
-    Public Sub ImportUpdateBank(ByVal lngOldIndex As Integer, ByVal datDate As Date, ByVal strNumber As String, ByVal blnFake As Boolean, _
+    Public Sub ImportUpdateBank(ByVal lngOldIndex As Integer, ByVal datDate As Date, ByVal strNumber As String, ByVal blnFake As Boolean,
                                 ByVal curAmount As Decimal, ByVal strImportKey As String)
 
         Dim objTrx As Trx
@@ -704,7 +704,7 @@ Public Class Register
     '   amount of the new invoice, and adds the new invoice as a new Split to the
     '   existing Trx. The Trx total amount does not change.
 
-    Public Sub ImportUpdatePurchaseOrder(ByVal lngOldIndex As Integer, ByVal objPOSplit As Split_Renamed, ByVal objImportedSplit As Split_Renamed)
+    Public Sub ImportUpdatePurchaseOrder(ByVal lngOldIndex As Integer, ByVal objPOSplit As TrxSplit, ByVal objImportedSplit As TrxSplit)
 
         Dim objTrx As Trx
         Dim objOldTrx As Trx
@@ -752,18 +752,18 @@ Public Class Register
     '   indices of all possible (or a single exact) matching Trx objects.
     '$Param blnExactMatch True iff there is exactly one very reliable match in colMatches.
 
-    Public Sub MatchNormal(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDateRange As Short, _
-                           ByVal strDescription As String, ByVal curAmount As Decimal, ByVal blnLooseMatch As Boolean, _
+    Public Sub MatchNormal(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDateRange As Short,
+                           ByVal strDescription As String, ByVal curAmount As Decimal, ByVal blnLooseMatch As Boolean,
                            ByRef colMatches As Collection, ByRef blnExactMatch As Boolean)
         Dim colExactMatches As Collection = Nothing
         MatchCore(lngNumber, datDate, intDateRange, strDescription, curAmount, 0.0#, 0.0#, blnLooseMatch, colMatches, colExactMatches, blnExactMatch)
         PruneToExactMatches(colExactMatches, datDate, colMatches, blnExactMatch)
     End Sub
 
-    Public Sub MatchCore(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDateRange As Short, _
-                         ByVal strDescription As String, ByVal curAmount As Decimal, _
-                         ByVal curMatchMin As Decimal, ByVal curMatchMax As Decimal, _
-                         ByVal blnLooseMatch As Boolean, ByRef colMatches As Collection, _
+    Public Sub MatchCore(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDateRange As Short,
+                         ByVal strDescription As String, ByVal curAmount As Decimal,
+                         ByVal curMatchMin As Decimal, ByVal curMatchMax As Decimal,
+                         ByVal blnLooseMatch As Boolean, ByRef colMatches As Collection,
                          ByRef colExactMatches As Collection, ByRef blnExactMatch As Boolean)
 
         Dim lngIndex As Integer
@@ -850,7 +850,7 @@ Public Class Register
     ''' <param name="blnExactMatch"></param>
     ''' <param name="blnTrxPruner"></param>
     ''' <remarks></remarks>
-    Public Sub PruneSearchMatches(ByVal colExactMatches As Collection, ByRef colMatches As Collection, _
+    Public Sub PruneSearchMatches(ByVal colExactMatches As Collection, ByRef colMatches As Collection,
                                   ByRef blnExactMatch As Boolean, ByVal blnTrxPruner As PruneMatchesTrx)
         Dim lngIndex As Integer
         Dim lngPerfectMatchIndex As Integer
@@ -913,7 +913,7 @@ Public Class Register
 
     Public Sub PruneToNonImportedExactMatches(ByVal colExactMatches As Collection, ByVal datDate As Date, ByRef colMatches As Collection, ByRef blnExactMatch As Boolean)
 
-        PruneSearchMatches(colExactMatches, colMatches, blnExactMatch, _
+        PruneSearchMatches(colExactMatches, colMatches, blnExactMatch,
                            Function(objTrx As Trx) As Boolean
                                If objTrx.datDate = datDate Then
                                    If objTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
@@ -984,7 +984,7 @@ Public Class Register
 
         Dim lngIndex As Integer
         Dim datEnd As Date
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
 
         colMatches = New Collection
         lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1
@@ -1025,7 +1025,7 @@ Public Class Register
 
         Dim lngIndex As Integer
         Dim datEnd As Date
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
 
         colMatches = New Collection
         lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1

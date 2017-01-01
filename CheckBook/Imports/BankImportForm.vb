@@ -302,7 +302,7 @@ Friend Class BankImportForm
 
                 Select Case mlngUpdateSearchType
                     Case CBMain.ImportBatchUpdateSearch.Bank
-                        objReg.MatchCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount, _
+                        objReg.MatchCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
                                          objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
                         objReg.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
                         colUnusedMatches = colRemoveAlreadyMatched(objReg, colMatches)
@@ -378,7 +378,7 @@ Friend Class BankImportForm
         Return colUnusedMatches
     End Function
 
-    Private Function colApplyNarrowMethodForBank(ByVal objReg As Register, ByVal objTrx As ImportedTrx, ByVal colUnusedMatches As Collection, _
+    Private Function colApplyNarrowMethodForBank(ByVal objReg As Register, ByVal objTrx As ImportedTrx, ByVal colUnusedMatches As Collection,
                                                  ByRef blnExactMatch As Boolean) As Collection
         Dim colResult As Collection
         Dim objPossibleMatchTrx As Trx
@@ -464,12 +464,12 @@ Friend Class BankImportForm
             Dim frm As TrxForm
             Dim datDummy As Date
             Dim objImportedTrx As Trx
-            Dim objImportedSplit As Split_Renamed
+            Dim objImportedSplit As TrxSplit
             Dim colPOMatches As Collection = Nothing
             Dim blnItemImported As Boolean
             Dim vlngMatchedTrxIndex As Object
             Dim objMatchedTrx As Trx
-            Dim objMatchedSplit As Split_Renamed
+            Dim objMatchedSplit As TrxSplit
             Dim strPONumber As String
             Dim blnAllowBankNonCard As Boolean
             Dim strFailReason As String = ""
@@ -574,7 +574,7 @@ Friend Class BankImportForm
         Dim objReg As Register
         Dim objImportedTrx As ImportedTrx
         Dim strTrxNum As String
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim lngNumber As Integer
         Dim colMatches As Collection = Nothing
         Dim colExactMatches As Collection = Nothing
@@ -639,7 +639,7 @@ Friend Class BankImportForm
 
             Select Case mlngNewSearchType
                 Case CBMain.ImportBatchNewSearch.Bank
-                    objReg.MatchCore(lngNumber, objImportedTrx.datDate, 60, objImportedTrx.strDescription, objImportedTrx.curAmount, _
+                    objReg.MatchCore(lngNumber, objImportedTrx.datDate, 60, objImportedTrx.strDescription, objImportedTrx.curAmount,
                                      objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
                     objReg.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
                 Case CBMain.ImportBatchNewSearch.VendorInvoice
@@ -991,8 +991,8 @@ Friend Class BankImportForm
 
                 Select Case mlngIndividualSearchType
                     Case CBMain.ImportIndividualSearchType.Bank
-                        objReg.MatchCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount, _
-                                         objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, _
+                        objReg.MatchCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
+                                         objImportedTrx.curMatchMin, objImportedTrx.curMatchMax,
                                          chkLooseMatch.CheckState = System.Windows.Forms.CheckState.Checked, colMatches, colExactMatches, blnExactMatch)
                         objReg.PruneToNonImportedExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
                     Case CBMain.ImportIndividualSearchType.Payee

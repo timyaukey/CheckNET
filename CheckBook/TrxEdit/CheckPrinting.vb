@@ -170,7 +170,7 @@ Module CheckPrinting
         Dim intRowNum As Short
         Dim intColNum As Short
         Dim vntAttrib As Object
-        Dim objSplit As Split_Renamed
+        Dim objSplit As TrxSplit
         Dim strInvoiceNum As String
 
         '<InvoiceList1 x="2.0" y="4.0" rows="3" cols="2" colwidth="1.5" />
