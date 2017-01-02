@@ -485,7 +485,7 @@ Friend Class SearchForm
             Dim objItem As System.Windows.Forms.ListViewItem
             Dim lngTrxIndex As Integer
             Dim objTrx As Trx
-            Dim colSplits As Collection
+            Dim colSplits As IEnumerable(Of TrxSplit)
             Dim objSplit As TrxSplit
             Dim lngExportCount As Short
 
@@ -539,7 +539,7 @@ Friend Class SearchForm
             Dim lngTrxIndex As Integer
             Dim objTrx As Trx
             Dim objTrxOld As Trx
-            Dim colSplits As Collection
+            Dim colSplits As IEnumerable(Of TrxSplit)
             Dim objSplit As TrxSplit
             Dim strCatKey As String
             Dim lngChgCount As Integer
@@ -699,7 +699,7 @@ Friend Class SearchForm
             Dim objTrxNew As Trx
             Dim objTrxFirst As Trx = Nothing
             Dim colTrx As Collection
-            Dim colSplits As Collection
+            Dim colSplits As IEnumerable(Of TrxSplit)
             Dim objSplit As TrxSplit
             Dim strNewDate As String = ""
             Dim objNewReg As Register = Nothing

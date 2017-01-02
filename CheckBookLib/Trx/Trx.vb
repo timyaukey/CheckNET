@@ -157,9 +157,9 @@ Public Class Trx
     Private mcurBudgetApplied As Decimal
     'Collection of Split objects belonging to other Trx and applied to this
     'budget Trx. Nothing if this is not a budget Trx.
-    Private mcolAppliedSplits As Collection
+    Private mcolAppliedSplits As List(Of TrxSplit)
     'Collection of Split objects belonging to this Trx.
-    Private mcolSplits As Collection
+    Private mcolSplits As List(Of TrxSplit)
     'True iff any split with a budget key was not matched to a budget Trx,
     'and the Trx date was not before the earliest budget in the register.
     Private mblnAnyUnmatchedBudget As Boolean
@@ -254,7 +254,7 @@ Public Class Trx
 
         'UPGRADE_NOTE: Object mcolAppliedSplits may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         mcolAppliedSplits = Nothing
-        mcolSplits = New Collection
+        mcolSplits = New List(Of TrxSplit)
     End Sub
 
     '$Description Initialize a new budget Trx object. Normally followed by
@@ -292,7 +292,7 @@ Public Class Trx
         End If
         mcurBalance = 0
 
-        mcolAppliedSplits = New Collection
+        mcolAppliedSplits = New List(Of TrxSplit)
         'UPGRADE_NOTE: Object mcolSplits may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         mcolSplits = Nothing
 
@@ -379,7 +379,7 @@ Public Class Trx
         mcurAmount = 0
         mcurBalance = 0
 
-        mcolSplits = New Collection
+        mcolSplits = New List(Of TrxSplit)
 
         RaiseErrorOnBadData("UpdateStartNormal")
 
@@ -703,45 +703,21 @@ Public Class Trx
         End Get
     End Property
 
-    Public ReadOnly Property objSplit(ByVal lngIndex As Integer) As TrxSplit
+    Public ReadOnly Property objFirstSplit() As TrxSplit
         Get
-            If mlngType <> TrxType.glngTRXTYP_NORMAL Then
-                gRaiseError("Trx.objSplit only allowed on normal transaction")
-            End If
-            If lngIndex < 1 Or lngIndex > mcolSplits.Count() Then
-                gRaiseError("Invalid index " & lngIndex & " in Trx.objSplit")
-            End If
-            objSplit = mcolSplits.Item(lngIndex)
+            Return mcolSplits.Item(0)
         End Get
     End Property
 
-    Public ReadOnly Property objFirstSplit() As TrxSplit
+    Public ReadOnly Property objSecondSplit() As TrxSplit
         Get
             Return mcolSplits.Item(1)
         End Get
     End Property
 
-    Public ReadOnly Property colSplits() As Collection
+    Public ReadOnly Property colSplits() As IEnumerable(Of TrxSplit)
         Get
-            colSplits = mcolSplits
-        End Get
-    End Property
-
-    Public ReadOnly Property lngAppliedSplits() As Integer
-        Get
-            If mlngType <> TrxType.glngTRXTYP_BUDGET Then
-                gRaiseError("Trx.lngAppliedSplits only allowed on budget transaction")
-            End If
-            lngAppliedSplits = mcolAppliedSplits.Count()
-        End Get
-    End Property
-
-    Public ReadOnly Property objAppliedSplit(ByVal lngIndex As Integer) As TrxSplit
-        Get
-            If mlngType <> TrxType.glngTRXTYP_BUDGET Then
-                gRaiseError("Trx.objAppliedSplit only allowed on budget transaction")
-            End If
-            objAppliedSplit = mcolAppliedSplits.Item(lngIndex)
+            Return mcolSplits
         End Get
     End Property
 
@@ -1052,25 +1028,11 @@ Public Class Trx
     '   Called only by Split.UnApplyFromBudget().
 
     Public Sub UnApplyFromThisBudget(ByVal objSplit As TrxSplit, ByVal objReg As Register)
-
-        Dim intIndex As Short
-        Dim intDeleteIndex As Short
-        Dim objEachSplit As TrxSplit
-
         If mlngType <> TrxType.glngTRXTYP_BUDGET Then
             gRaiseError("Trx.UnApplyFromThisBudget only allowed on budget transaction")
         End If
 
-        For Each objEachSplit In mcolAppliedSplits
-            intIndex = intIndex + 1
-            If objEachSplit Is objSplit Then
-                intDeleteIndex = intIndex
-                Exit For
-            End If
-        Next objEachSplit
-        If intDeleteIndex > 0 Then
-            mcolAppliedSplits.Remove(intDeleteIndex)
-        Else
+        If Not mcolAppliedSplits.Remove(objSplit) Then
             gRaiseError("Could not find split in Trx.UnApplyFromThisBudget")
         End If
 
@@ -1097,7 +1059,7 @@ Public Class Trx
     Public Sub ClearThisBudget()
         If mlngType = TrxType.glngTRXTYP_BUDGET Then
             mcurBudgetApplied = 0
-            mcolAppliedSplits = New Collection
+            mcolAppliedSplits = New List(Of TrxSplit)
         End If
     End Sub
 

@@ -400,10 +400,10 @@ Friend Class UTMainForm
 
             'Delete one of the budgets, to show the applied splits are un-applied.
             objTrx = objUTReg.objReg.objTrx(5)
-            gUTAssert(Not objTrx.objSplit(2).objBudget Is Nothing, "Expected split to be applied")
+            gUTAssert(Not objTrx.objSecondSplit.objBudget Is Nothing, "Expected split to be applied")
             .DeleteEntry(4, 4, 4, "Fourth delete")
             .Validate("", 3, 5, 6, 7)
-            gUTAssert(objTrx.objSplit(2).objBudget Is Nothing, "Expected split to be un-applied")
+            gUTAssert(objTrx.objSecondSplit.objBudget Is Nothing, "Expected split to be un-applied")
 
             'Delete a normal trx applied to a budget, to show it un-applies.
             .SetTrxAmount(6, -21.94)
@@ -887,11 +887,11 @@ Friend Class UTMainForm
             gUTAssert(.strMemo = "Bird seed", "Wrong memo")
             gUTAssert(.curAmount = (-24.95 - 10.99), "Wrong amount")
             gUTAssert(.lngSplits = 2, "Wrong numbe of splits")
-            objSplit = .objSplit(1)
+            objSplit = .objFirstSplit
             gUTAssert(objSplit.curAmount = -24.95, "Wrong split1 amount")
             gUTAssert(objSplit.strBudgetKey = "", "Wrong split1 budget key")
             gUTAssert(objSplit.strCategoryKey = "cat1", "Wrong split1 category key")
-            objSplit = .objSplit(2)
+            objSplit = .objSecondSplit
             gUTAssert(objSplit.curAmount = -10.99, "Wrong split2 amount")
             gUTAssert(objSplit.strCategoryKey = "cat2", "Wrong split2 category key")
             gUTAssert(objSplit.strMemo = "sunflower", "Wrong split2 memo")

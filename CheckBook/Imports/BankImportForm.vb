@@ -508,7 +508,7 @@ Friend Class BankImportForm
                     'If this happens we update an existing Trx by adding a split rather than creating
                     'a new Trx as would normally be the case in this method.
                     If mlngNewSearchType = CBMain.ImportBatchNewSearch.VendorInvoice Then
-                        If objImportedTrx.colSplits.Count() > 0 Then
+                        If objImportedTrx.lngSplits > 0 Then
                             objImportedSplit = objImportedTrx.objFirstSplit
                             strPONumber = objImportedSplit.strPONumber
                             If LCase(strPONumber) = "none" Then
@@ -592,7 +592,7 @@ Friend Class BankImportForm
         End If
 
         objImportedTrx = maudtItem(intItemIndex).objImportedTrx
-        If objImportedTrx.colSplits.Count() = 0 Then
+        If objImportedTrx.lngSplits = 0 Then
             strFailReason = "Transaction has no splits"
             Exit Function
         End If

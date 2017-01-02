@@ -539,7 +539,7 @@ Friend Class TrxForm
 
     '$Description Load a collection of Split objects into maudtSplits().
 
-    Private Sub LoadSplits(ByVal colSplits As Collection)
+    Private Sub LoadSplits(ByVal colSplits As IEnumerable(Of TrxSplit))
         Dim objSplit As TrxSplit
         Dim intIndex As Short
 
