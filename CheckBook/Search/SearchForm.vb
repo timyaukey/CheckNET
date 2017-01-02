@@ -382,7 +382,7 @@ Friend Class SearchForm
             'UPGRADE_WARNING: Lower bound of collection lvwMatches.SelectedItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             lngResultIndex = CInt(lvwMatches.FocusedItem.SubItems(mintHIDDEN_COL).Text)
             mobjReg.SetCurrent(maudtMatches(lngResultIndex).lngRegIndex)
-            mobjReg.ShowCurrent_Renamed()
+            mobjReg.RaiseShowCurrent()
             RememberCheckedAndSelected()
 
             Exit Sub
@@ -681,7 +681,7 @@ Friend Class SearchForm
             mobjReg.LogGroupEnd(objStartLogger)
 
             mobjReg.SetCurrent(mobjReg.lngTrxIndex(objNewTrx))
-            mobjReg.ShowCurrent_Renamed()
+            mobjReg.RaiseShowCurrent()
 
             Exit Sub
         Catch ex As Exception
@@ -796,10 +796,10 @@ Friend Class SearchForm
             If Not objTrxFirst Is Nothing Then
                 If objNewReg Is Nothing Then
                     mobjReg.SetCurrent(mobjReg.lngTrxIndex(objTrxFirst))
-                    mobjReg.ShowCurrent_Renamed()
+                    mobjReg.RaiseShowCurrent()
                 Else
                     objNewReg.SetCurrent(objNewReg.lngTrxIndex(objTrxFirst))
-                    objNewReg.ShowCurrent_Renamed()
+                    objNewReg.RaiseShowCurrent()
                 End If
             End If
 

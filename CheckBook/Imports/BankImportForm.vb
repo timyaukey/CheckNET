@@ -667,7 +667,7 @@ Friend Class BankImportForm
 
     Private Sub UpdateProgress(ByVal objReg As Register)
         System.Windows.Forms.Application.DoEvents()
-        objReg.ShowCurrent_Renamed()
+        objReg.RaiseShowCurrent()
     End Sub
 
     Private Sub EndProgress()

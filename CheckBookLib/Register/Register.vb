@@ -376,7 +376,7 @@ Public Class Register
             lngLastAffectedIndex = lngFixBalances(mlngFirstAffected)
             RaiseEvent BalancesChanged(mlngFirstAffected, lngLastAffectedIndex)
         End If
-        ShowCurrent_Renamed()
+        RaiseShowCurrent()
     End Sub
 
     '$Description Set the status of a transaction, and fire a StatusChanged event for it.
@@ -1146,8 +1146,7 @@ Public Class Register
     '$Description Used to report to the UI that a budget Trx has changed, in
     '   case balances need to be updated.
 
-    'UPGRADE_NOTE: BudgetChanged was upgraded to BudgetChanged_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    Public Sub BudgetChanged_Renamed(ByVal objBudgetTrx As Trx)
+    Public Sub RaiseBudgetChanged(ByVal objBudgetTrx As Trx)
         Dim lngIndex As Integer
         lngIndex = lngTrxIndex(objBudgetTrx)
         UpdateFirstAffected(lngIndex)
@@ -1289,8 +1288,7 @@ Public Class Register
         End Get
     End Property
 
-    'UPGRADE_NOTE: ShowCurrent was upgraded to ShowCurrent_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    Public Sub ShowCurrent_Renamed()
+    Public Sub RaiseShowCurrent()
         If mlngTrxUsed = 0 Then
             Exit Sub
         End If
@@ -1364,12 +1362,12 @@ Public Class Register
             With objTrx
                 If Not mblnRepeat Then
                     If .curBalance <> (curPriorBalance + .curAmount) Then
-                        ValidationError_Renamed(lngIndex, "Incorrect balance")
+                        RaiseValidationError(lngIndex, "Incorrect balance")
                     End If
                 End If
                 curPriorBalance = .curBalance
                 If .strSortKey < strPriorSortKey Then
-                    ValidationError_Renamed(lngIndex, "Not in correct sort order")
+                    RaiseValidationError(lngIndex, "Not in correct sort order")
                 End If
                 strPriorSortKey = .strSortKey
                 .Validate(Me, lngIndex)
@@ -1380,20 +1378,19 @@ Public Class Register
         Next
 
         If intRepeatTrxCount <> mcolRepeatTrx.Count() Then
-            ValidationError_Renamed(0, "Wrong number of repeat trx")
+            RaiseValidationError(0, "Wrong number of repeat trx")
         End If
 
         For Each objTrx In mcolRepeatTrx
             objTrx2 = objRepeatTrx(objTrx.strRepeatKey, objTrx.intRepeatSeq)
             If Not objTrx Is objTrx2 Then
-                ValidationError_Renamed(0, "Repeat collection element points to wrong trx")
+                RaiseValidationError(0, "Repeat collection element points to wrong trx")
             End If
         Next objTrx
 
     End Sub
 
-    'UPGRADE_NOTE: ValidationError was upgraded to ValidationError_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-    Public Sub ValidationError_Renamed(ByVal lngIndex As Integer, ByVal strMsg As String)
+    Public Sub RaiseValidationError(ByVal lngIndex As Integer, ByVal strMsg As String)
         RaiseEvent ValidationError(lngIndex, strMsg)
     End Sub
 

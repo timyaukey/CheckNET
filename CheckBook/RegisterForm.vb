@@ -425,7 +425,7 @@ Friend Class RegisterForm
         Next
         If lngSelectIndex > 0 Then
             mobjReg.SetCurrent(lngSelectIndex)
-            mobjReg.ShowCurrent_Renamed()
+            mobjReg.RaiseShowCurrent()
         End If
         RefreshPage()
         mobjReg.ValidateRegister()
