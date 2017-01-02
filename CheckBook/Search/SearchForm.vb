@@ -275,19 +275,19 @@ Friend Class SearchForm
         objItem = gobjListViewAdd(lvwMatches)
         With objItem
             .Text = gstrFormatDate(objTrx.datDate)
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
             If objItem.SubItems.Count > 1 Then
                 objItem.SubItems(1).Text = objTrx.strNumber
             Else
                 objItem.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objTrx.strNumber))
             End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
             If objItem.SubItems.Count > 2 Then
                 objItem.SubItems(2).Text = objTrx.strDescription
             Else
                 objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objTrx.strDescription))
             End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
             If objItem.SubItems.Count > 3 Then
                 objItem.SubItems(3).Text = gstrFormatCurrency(curMatchAmount)
             Else
@@ -295,49 +295,49 @@ Friend Class SearchForm
             End If
             If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
                 gSummarizeSplits(objTrx, strCategory, strPONumber, strInvoiceNum, strInvoiceDate, strDueDate, strTerms, strBudget, curAvailable)
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                 If objItem.SubItems.Count > 4 Then
                     objItem.SubItems(4).Text = gstrFormatCurrency(curAvailable)
                 Else
                     objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(curAvailable)))
                 End If
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                 If objItem.SubItems.Count > 5 Then
                     objItem.SubItems(5).Text = strCategory
                 Else
                     objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strCategory))
                 End If
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                 If objItem.SubItems.Count > 6 Then
                     objItem.SubItems(6).Text = strPONumber
                 Else
                     objItem.SubItems.Insert(6, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strPONumber))
                 End If
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                 If objItem.SubItems.Count > 7 Then
                     objItem.SubItems(7).Text = strInvoiceNum
                 Else
                     objItem.SubItems.Insert(7, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strInvoiceNum))
                 End If
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                 If objItem.SubItems.Count > 8 Then
                     objItem.SubItems(8).Text = strInvoiceDate
                 Else
                     objItem.SubItems.Insert(8, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strInvoiceDate))
                 End If
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                 If objItem.SubItems.Count > 9 Then
                     objItem.SubItems(9).Text = strDueDate
                 Else
                     objItem.SubItems.Insert(9, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strDueDate))
                 End If
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                 If objItem.SubItems.Count > 10 Then
                     objItem.SubItems(10).Text = strTerms
                 Else
                     objItem.SubItems.Insert(10, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strTerms))
                 End If
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                 If objItem.SubItems.Count > 11 Then
                     objItem.SubItems(11).Text = objTrx.strFakeStatus
                 Else
@@ -353,7 +353,7 @@ Friend Class SearchForm
                 objItem.SubItems.Insert(10, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
                 objItem.SubItems.Insert(11, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
             End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
             If objItem.SubItems.Count > mintHIDDEN_COL Then
                 objItem.SubItems(mintHIDDEN_COL).Text = CStr(mlngMatchesUsed)
             Else
@@ -499,7 +499,7 @@ Friend Class SearchForm
             lngExportCount = 0
             For Each objItem In lvwMatches.Items
                 If objItem.Checked Then
-                    'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                     lngTrxIndex = maudtMatches(CInt(objItem.SubItems(mintHIDDEN_COL).Text)).lngRegIndex
                     objTrx = mobjReg.objTrx(lngTrxIndex)
                     'Ignore budgets and transfers instead of showing an error, because
@@ -554,7 +554,7 @@ Friend Class SearchForm
             For Each objItem In lvwMatches.Items
                 If objItem.Checked Then
                     'Get the trx and validate it.
-                    'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                     lngTrxIndex = maudtMatches(CInt(objItem.SubItems(mintHIDDEN_COL).Text)).lngRegIndex
                     objTrx = mobjReg.objTrx(lngTrxIndex)
                     If objTrx.lngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
@@ -631,7 +631,7 @@ Friend Class SearchForm
             For Each objItem In lvwMatches.Items
                 If objItem.Checked Then
                     'Get the old trx and validate it.
-                    'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                     lngTrxIndex = maudtMatches(CInt(objItem.SubItems(mintHIDDEN_COL).Text)).lngRegIndex
                     objOldTrx = mobjReg.objTrx(lngTrxIndex)
                     If Not blnValidTrxForBulkOperation(objOldTrx, "combined") Then
@@ -713,7 +713,7 @@ Friend Class SearchForm
             For Each objItem In lvwMatches.Items
                 If objItem.Checked Then
                     'Get the trx and validate it.
-                    'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                     lngTrxIndex = maudtMatches(CInt(objItem.SubItems(mintHIDDEN_COL).Text)).lngRegIndex
                     objTrxSrc = mobjReg.objTrx(lngTrxIndex)
                     If Not blnValidTrxForBulkOperation(objTrxSrc, "moved") Then
@@ -870,7 +870,7 @@ Friend Class SearchForm
         For Each objItem In lvwMatches.Items
             If objItem.Checked Then
                 'Get the trx and validate it.
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                 lngTrxIndex = maudtMatches(CInt(objItem.SubItems(mintHIDDEN_COL).Text)).lngRegIndex
                 objCheckedTrx = mobjReg.objTrx(lngTrxIndex)
                 colCheckedTrx.Add(objCheckedTrx)
@@ -894,7 +894,7 @@ Friend Class SearchForm
         Dim objCheckedTrx As Trx
 
         For Each objItem In lvwMatches.Items
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
             lngTrxIndex = maudtMatches(CInt(objItem.SubItems(mintHIDDEN_COL).Text)).lngRegIndex
             objTrx = mobjReg.objTrx(lngTrxIndex)
             For Each objCheckedTrx In colCheckedTrx

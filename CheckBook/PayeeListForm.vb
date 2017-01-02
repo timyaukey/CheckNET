@@ -353,7 +353,7 @@ Friend Class PayeeListForm
 
             melmPayeeToSave.Text = vbCrLf
 
-            'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
             If mobjDisplayedPayee.SubItems.Count > 1 Then
                 mobjDisplayedPayee.SubItems(1).Text = txtPayee.Text
             Else
@@ -381,7 +381,7 @@ Friend Class PayeeListForm
             mobjDisplayedPayee.Text = txtNumber.Text
             SaveChildElement(txtNumber.Text, "Num")
 
-            'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
             If mobjDisplayedPayee.SubItems.Count > 3 Then
                 mobjDisplayedPayee.SubItems(3).Text = txtAmount.Text
             Else
@@ -389,7 +389,7 @@ Friend Class PayeeListForm
             End If
             SaveChildElement(txtAmount.Text, "Amount")
 
-            'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
             If mobjDisplayedPayee.SubItems.Count > 5 Then
                 mobjDisplayedPayee.SubItems(5).Text = txtMemo.Text
             Else
@@ -398,14 +398,14 @@ Friend Class PayeeListForm
             SaveChildElement(txtMemo.Text, "Memo")
 
             If cboCategory.SelectedIndex = -1 Then
-                'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                 If mobjDisplayedPayee.SubItems.Count > 2 Then
                     mobjDisplayedPayee.SubItems(2).Text = ""
                 Else
                     mobjDisplayedPayee.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
                 End If
             Else
-                'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                 If mobjDisplayedPayee.SubItems.Count > 2 Then
                     mobjDisplayedPayee.SubItems(2).Text = cboCategory.Text
                 Else
@@ -415,14 +415,14 @@ Friend Class PayeeListForm
             SaveChildElement(cboCategory.Text, "Cat")
 
             If cboBudget.SelectedIndex = -1 Then
-                'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                 If mobjDisplayedPayee.SubItems.Count > 4 Then
                     mobjDisplayedPayee.SubItems(4).Text = ""
                 Else
                     mobjDisplayedPayee.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
                 End If
             Else
-                'UPGRADE_WARNING: Lower bound of collection mobjDisplayedPayee has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+
                 If mobjDisplayedPayee.SubItems.Count > 4 Then
                     mobjDisplayedPayee.SubItems(4).Text = cboBudget.Text
                 Else
