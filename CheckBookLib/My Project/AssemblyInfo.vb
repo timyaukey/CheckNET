@@ -11,8 +11,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("CheckBookLib")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("CheckBookLib")> 
-<Assembly: AssemblyCopyright("Copyright ©  2005-2016")> 
+<Assembly: AssemblyProduct("CheckBookLib")>
+<Assembly: AssemblyCopyright("Copyright ©  2005-2017")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.45.0")>
+<Assembly: AssemblyVersion("1.46.0")>
 <Assembly: AssemblyFileVersion("1.0.0")> 
