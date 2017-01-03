@@ -111,6 +111,20 @@ Public Class Account
     '$Param strAcctFile Name of account file, without path.
 
     Public Sub Load(ByVal strAcctFile As String)
+        Dim datRegisterEndDate As Date
+
+        RaiseEvent LoadStatus("Loading " & strAcctFile)
+        mstrFileLoaded = strAcctFile
+        mblnUnsavedChanges = False
+        datRegisterEndDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, 45, Today)
+        mcolRegisters = New List(Of Register)
+        LoadIndividual(strAcctFile, datRegisterEndDate)
+        LoadGenerated(strAcctFile, datRegisterEndDate)
+        LoadFinish(strAcctFile)
+        RaiseEvent LoadStatus("Load complete")
+    End Sub
+
+    Private Sub LoadIndividual(strAcctFile As String, datRegisterEndDate As Date)
         Dim intFile As Short
         Dim strLine As String
         Dim lngLinesRead As Integer
@@ -118,20 +132,11 @@ Public Class Account
         Dim strRegTitle As String = ""
         Dim blnRegShow As Boolean
         Dim blnRegNonBank As Boolean
-        Dim objReg As Register
-        Dim blnFileOpen As Boolean
-        Dim datRegisterEndDate As Date
 
         Try
 
-            mstrFileLoaded = strAcctFile
-            mblnUnsavedChanges = False
-            datRegisterEndDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, 45, Today)
-            mcolRegisters = New List(Of Register)
-            RaiseEvent LoadStatus("Loading " & strAcctFile)
             intFile = FreeFile()
             FileOpen(intFile, gstrAccountPath() & "\" & strAcctFile, OpenMode.Input)
-            blnFileOpen = True
 
             strLine = LineInput(intFile)
             lngLinesRead = lngLinesRead + 1
@@ -185,8 +190,16 @@ Public Class Account
             Loop
 
             FileClose(intFile)
-            blnFileOpen = False
+        Catch ex As Exception
+            FileClose(intFile)
+            Throw New Exception("Error in Account.LoadIndividual(" & strAcctFile & ";" & lngLinesRead & ")", ex)
+        End Try
+    End Sub
 
+    Private Sub LoadGenerated(strAcctFile As String, datRegisterEndDate As Date)
+        Dim objReg As Register
+
+        Try
             'Create generated Trx.
             'Have to generate for all registers before computing
             'balances or doing any post processing for any of them,
@@ -195,6 +208,14 @@ Public Class Account
             For Each objReg In mcolRegisters
                 gCreateGeneratedTrx(Me, objReg, datRegisterEndDate)
             Next objReg
+        Catch ex As Exception
+            Throw New Exception("Error in Account.LoadGenerated(" & strAcctFile & ")", ex)
+        End Try
+    End Sub
+
+    Private Sub LoadFinish(strAcctFile As String)
+        Dim objReg As Register
+        Try
 
             'Construct repeat key StringTranslator from actual transaction
             'data and info in .GEN files.
@@ -203,27 +224,13 @@ Public Class Account
             'Call LoadPostProcessing after everything has been loaded.
             RaiseEvent LoadStatus("Load postprocessing")
             For Each objReg In mcolRegisters
-                With objReg
-                    .LoadPostProcessing()
-                    'If .datOldestFakeNormal < DateAdd("d", -10, Date) And _
-                    ''    .datOldestFakeNormal <> 0 Then
-                    '    MsgBox "NOTE: The oldest fake normal transaction in register """ & _
-                    ''        .strTitle & """ is suspiciously old, dated " & _
-                    ''        Format$(.datOldestFakeNormal, gstrFORMAT_DATE) & ".", _
-                    ''        vbInformation
-                    'End If
-                End With
+                objReg.LoadPostProcessing()
             Next objReg
-
-            RaiseEvent LoadStatus("Load complete")
 
             Exit Sub
 
         Catch ex As Exception
-            If blnFileOpen Then
-                FileClose(intFile)
-            End If
-            Throw New Exception("Error in Account.Load(" & strAcctFile & ";" & lngLinesRead & ")", ex)
+            Throw New Exception("Error in Account.LoadFinish(" & strAcctFile & ")", ex)
         End Try
     End Sub
 
