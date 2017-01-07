@@ -706,4 +706,17 @@ Public Module SharedDefs
         strData = Trim(My.Computer.Clipboard.GetText())
         gobjClipboardReader = New StringReader(strData)
     End Function
+
+    Public Function gdatFirstElement(Of T)(enumerable As IEnumerable(Of T)) As T
+        Dim enumerator As IEnumerator(Of T) = enumerable.GetEnumerator()
+        enumerator.MoveNext()
+        Return enumerator.Current
+    End Function
+
+    Public Function gdatSecondElement(Of T)(enumerable As IEnumerable(Of T)) As T
+        Dim enumerator As IEnumerator(Of T) = enumerable.GetEnumerator()
+        enumerator.MoveNext()
+        enumerator.MoveNext()
+        Return enumerator.Current
+    End Function
 End Module

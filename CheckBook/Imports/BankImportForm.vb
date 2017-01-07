@@ -272,9 +272,9 @@ Friend Class BankImportForm
 
         Dim objImportedTrx As ImportedTrx
         Dim objReg As Register
-        Dim colMatches As Collection = Nothing
-        Dim colExactMatches As Collection = Nothing
-        Dim colUnusedMatches As Collection = Nothing
+        Dim colMatches As ICollection(Of Integer) = Nothing
+        Dim colExactMatches As ICollection(Of Integer) = Nothing
+        Dim colUnusedMatches As ICollection(Of Integer) = Nothing
         Dim blnExactMatch As Boolean
         Dim intExactCount As Short
         Dim lngPossibleIndex As Integer
@@ -322,7 +322,7 @@ Friend Class BankImportForm
                             blnNonExactConfirmed = True
                         End If
                     End If
-                    lngPossibleIndex = colUnusedMatches.Item(1)
+                    lngPossibleIndex = gdatFirstElement(colUnusedMatches)
                     objPossibleMatchTrx = objReg.objTrx(lngPossibleIndex)
                     blnCheckWithoutAmount = False
                     'A check in the register with a zero amount means we didn't know the amount when we entered it, or imported it.
@@ -354,16 +354,16 @@ Friend Class BankImportForm
     End Function
 
     'Filter out trx that are already matched to something in maudtItem().
-    Private Function colRemoveAlreadyMatched(ByVal objReg As Register, ByVal colMatches As Collection) As Collection
-        Dim colUnusedMatches As Collection
+    Private Function colRemoveAlreadyMatched(ByVal objReg As Register, ByVal colMatches As ICollection(Of Integer)) As ICollection(Of Integer)
+        Dim colUnusedMatches As ICollection(Of Integer)
         Dim intCheckIndex As Integer
         Dim blnAlreadyMatched As Boolean
         Dim objPossibleMatchTrx As Trx
-        Dim vlngPossibleIndex As Object
+        Dim intPossibleIndex As Integer
 
-        colUnusedMatches = New Collection
-        For Each vlngPossibleIndex In colMatches
-            objPossibleMatchTrx = objReg.objTrx(vlngPossibleIndex)
+        colUnusedMatches = New List(Of Integer)
+        For Each intPossibleIndex In colMatches
+            objPossibleMatchTrx = objReg.objTrx(intPossibleIndex)
             blnAlreadyMatched = False
             For intCheckIndex = 1 To mintItems
                 If maudtItem(intCheckIndex).objMatchedTrx Is objPossibleMatchTrx Then
@@ -372,17 +372,17 @@ Friend Class BankImportForm
                 End If
             Next
             If Not blnAlreadyMatched Then
-                colUnusedMatches.Add(vlngPossibleIndex)
+                colUnusedMatches.Add(intPossibleIndex)
             End If
         Next
         Return colUnusedMatches
     End Function
 
-    Private Function colApplyNarrowMethodForBank(ByVal objReg As Register, ByVal objTrx As ImportedTrx, ByVal colUnusedMatches As Collection,
-                                                 ByRef blnExactMatch As Boolean) As Collection
-        Dim colResult As Collection
+    Private Function colApplyNarrowMethodForBank(ByVal objReg As Register, ByVal objTrx As ImportedTrx, ByVal colUnusedMatches As ICollection(Of Integer),
+                                                 ByRef blnExactMatch As Boolean) As ICollection(Of Integer)
+        Dim colResult As ICollection(Of Integer)
         Dim objPossibleMatchTrx As Trx
-        Dim vlngPossibleIndex As Object
+        Dim intPossibleIndex As Integer
         Dim datTargetDate As Date
         Dim dblBestDistance As Double
         Dim dblCurrentDistance As Double
@@ -405,19 +405,19 @@ Friend Class BankImportForm
         End Select
 
         blnHaveFirstMatch = False
-        For Each vlngPossibleIndex In colUnusedMatches
-            objPossibleMatchTrx = objReg.objTrx(vlngPossibleIndex)
+        For Each intPossibleIndex In colUnusedMatches
+            objPossibleMatchTrx = objReg.objTrx(intPossibleIndex)
             If String.IsNullOrEmpty(objPossibleMatchTrx.strImportKey) And (objPossibleMatchTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON) Then
                 dblCurrentDistance = Math.Abs(objPossibleMatchTrx.datDate.Subtract(datTargetDate).TotalDays)
                 If (Not blnHaveFirstMatch) Or (dblCurrentDistance < dblBestDistance) Then
                     dblBestDistance = dblCurrentDistance
-                    lngBestMatch = vlngPossibleIndex
+                    lngBestMatch = intPossibleIndex
                     blnHaveFirstMatch = True
                 End If
             End If
         Next
         blnExactMatch = True
-        colResult = New Collection
+        colResult = New List(Of Integer)
         colResult.Add(lngBestMatch)
         Return colResult
 
@@ -465,7 +465,7 @@ Friend Class BankImportForm
             Dim datDummy As Date
             Dim objImportedTrx As Trx
             Dim objImportedSplit As TrxSplit
-            Dim colPOMatches As Collection = Nothing
+            Dim colPOMatches As ICollection(Of Integer) = Nothing
             Dim blnItemImported As Boolean
             Dim vlngMatchedTrxIndex As Object
             Dim objMatchedTrx As Trx
@@ -576,8 +576,8 @@ Friend Class BankImportForm
         Dim strTrxNum As String
         Dim objSplit As TrxSplit
         Dim lngNumber As Integer
-        Dim colMatches As Collection = Nothing
-        Dim colExactMatches As Collection = Nothing
+        Dim colMatches As ICollection(Of Integer) = Nothing
+        Dim colExactMatches As ICollection(Of Integer) = Nothing
         Dim blnExactMatch As Boolean
         Dim lngCatIdx As Integer
         Dim strDefaultCatKey As String
@@ -634,7 +634,7 @@ Friend Class BankImportForm
         End Select
 
         For Each objReg In mobjAccount.colRegisters
-            colMatches = New Collection
+            colMatches = New List(Of Integer)
             blnExactMatch = False
 
             Select Case mlngNewSearchType
@@ -953,8 +953,8 @@ Friend Class BankImportForm
         Dim objReg As Register
         Dim intItemIndex As Short
         Dim lngNumber As Integer
-        Dim colMatches As Collection = Nothing
-        Dim colExactMatches As Collection = Nothing
+        Dim colMatches As ICollection(Of Integer) = Nothing
+        Dim colExactMatches As ICollection(Of Integer) = Nothing
         Dim blnExactMatch As Boolean
         Dim vlngRegIndex As Object
         Dim objMatchedTrx As Trx
@@ -1037,7 +1037,7 @@ Friend Class BankImportForm
     Private Function blnMatchImport(ByVal intItemIndex As Short) As Boolean
         Dim objImportedTrx As ImportedTrx
         Dim objReg As Register
-        Dim colMatches As Collection = Nothing
+        Dim colMatches As ICollection(Of Integer) = Nothing
         Dim blnExactMatch As Boolean
         Dim lngIndex As Integer
         Dim lngImportMatch As Integer
@@ -1068,7 +1068,7 @@ Friend Class BankImportForm
                         objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, True, colMatches, blnExactMatch)
                         If colMatches.Count > 0 Then
                             'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                            lngIndex = colMatches.Item(1)
+                            lngIndex = gdatFirstElement(colMatches)
                             If Not objReg.objTrx(lngIndex).blnAutoGenerated Then
                                 lngImportMatch = lngIndex
                             End If
@@ -1078,7 +1078,7 @@ Friend Class BankImportForm
                         objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.objFirstSplit.strInvoiceNum, colMatches)
                         If colMatches.Count() > 0 Then
                             'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                            lngImportMatch = colMatches.Item(1)
+                            lngImportMatch = gdatFirstElement(colMatches)
                         End If
                     Case Else
                         'Should not be possible

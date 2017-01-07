@@ -733,8 +733,8 @@ Public Class Register
 
     Public Sub MatchNormal(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDateRange As Short,
                            ByVal strDescription As String, ByVal curAmount As Decimal, ByVal blnLooseMatch As Boolean,
-                           ByRef colMatches As Collection, ByRef blnExactMatch As Boolean)
-        Dim colExactMatches As Collection = Nothing
+                           ByRef colMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean)
+        Dim colExactMatches As ICollection(Of Integer) = Nothing
         MatchCore(lngNumber, datDate, intDateRange, strDescription, curAmount, 0.0#, 0.0#, blnLooseMatch, colMatches, colExactMatches, blnExactMatch)
         PruneToExactMatches(colExactMatches, datDate, colMatches, blnExactMatch)
     End Sub
@@ -742,8 +742,8 @@ Public Class Register
     Public Sub MatchCore(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDateRange As Short,
                          ByVal strDescription As String, ByVal curAmount As Decimal,
                          ByVal curMatchMin As Decimal, ByVal curMatchMax As Decimal,
-                         ByVal blnLooseMatch As Boolean, ByRef colMatches As Collection,
-                         ByRef colExactMatches As Collection, ByRef blnExactMatch As Boolean)
+                         ByVal blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of Integer),
+                         ByRef colExactMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean)
 
         Dim lngIndex As Integer
         Dim datEnd As Date
@@ -757,9 +757,9 @@ Public Class Register
         Dim intDescrMatchLen As Short
         Dim objTrx As Trx
 
-        colMatches = New Collection
+        colMatches = New List(Of Integer)
         blnExactMatch = False
-        colExactMatches = New Collection
+        colExactMatches = New List(Of Integer)
         intDescrMatchLen = 10
         lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
@@ -829,11 +829,10 @@ Public Class Register
     ''' <param name="blnExactMatch"></param>
     ''' <param name="blnTrxPruner"></param>
     ''' <remarks></remarks>
-    Public Sub PruneSearchMatches(ByVal colExactMatches As Collection, ByRef colMatches As Collection,
+    Public Sub PruneSearchMatches(ByVal colExactMatches As ICollection(Of Integer), ByRef colMatches As ICollection(Of Integer),
                                   ByRef blnExactMatch As Boolean, ByVal blnTrxPruner As PruneMatchesTrx)
         Dim lngIndex As Integer
         Dim lngPerfectMatchIndex As Integer
-        Dim vlngMatchIndex As Object
         Dim datFirstMatch As DateTime
         Dim datLastMatch As DateTime
         Dim blnFirstIteration As Boolean
@@ -845,8 +844,7 @@ Public Class Register
         If colExactMatches.Count() > 1 Then
             lngPerfectMatchIndex = -1
             blnFirstIteration = True
-            For Each vlngMatchIndex In colExactMatches
-                lngIndex = vlngMatchIndex
+            For Each lngIndex In colExactMatches
                 objTrx = Me.objTrx(lngIndex)
                 If blnFirstIteration Then
                     datFirstMatch = objTrx.datDate
@@ -866,9 +864,9 @@ Public Class Register
                     End If
                     Exit For
                 End If
-            Next vlngMatchIndex
+            Next
             If lngPerfectMatchIndex <> -1 And datLastMatch.Subtract(datFirstMatch).TotalDays <= 2D Then
-                colExactMatches = New Collection
+                colExactMatches = New List(Of Integer)
                 colExactMatches.Add(lngPerfectMatchIndex)
             End If
         End If
@@ -884,13 +882,13 @@ Public Class Register
 
     End Sub
 
-    Public Sub PruneToExactMatches(ByVal colExactMatches As Collection, ByVal datDate As Date, ByRef colMatches As Collection, ByRef blnExactMatch As Boolean)
+    Public Sub PruneToExactMatches(ByVal colExactMatches As ICollection(Of Integer), ByVal datDate As Date, ByRef colMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean)
 
         PruneSearchMatches(colExactMatches, colMatches, blnExactMatch, Function(objTrx As Trx) objTrx.datDate = datDate)
 
     End Sub
 
-    Public Sub PruneToNonImportedExactMatches(ByVal colExactMatches As Collection, ByVal datDate As Date, ByRef colMatches As Collection, ByRef blnExactMatch As Boolean)
+    Public Sub PruneToNonImportedExactMatches(ByVal colExactMatches As ICollection(Of Integer), ByVal datDate As Date, ByRef colMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean)
 
         PruneSearchMatches(colExactMatches, colMatches, blnExactMatch,
                            Function(objTrx As Trx) As Boolean
@@ -916,14 +914,14 @@ Public Class Register
     '   indices of all possible (or a single exact) matching Trx objects.
     '$Param blnExactMatch True iff there is exactly one match in colMatches.
 
-    Public Sub MatchPayee(ByVal datDate As Date, ByVal intDateRange As Short, ByVal strDescription As String, ByVal blnMatchImportedFromBank As Boolean, ByRef colMatches As Collection, ByRef blnExactMatch As Boolean)
+    Public Sub MatchPayee(ByVal datDate As Date, ByVal intDateRange As Short, ByVal strDescription As String, ByVal blnMatchImportedFromBank As Boolean, ByRef colMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean)
 
         Dim lngIndex As Integer
         Dim datEnd As Date
         '    Dim strNumber As String
         Dim blnImportOkay As Boolean
 
-        colMatches = New Collection
+        colMatches = New List(Of Integer)
         blnExactMatch = False
         lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
@@ -959,13 +957,13 @@ Public Class Register
     '$Param colMatches A new Collection object created by this method, containing
     '   indices of all matching Trx objects.
 
-    Public Sub MatchInvoice(ByVal datDate As Date, ByVal intDateRange As Short, ByVal strPayee As String, ByVal strInvoiceNum As String, ByRef colMatches As Collection)
+    Public Sub MatchInvoice(ByVal datDate As Date, ByVal intDateRange As Short, ByVal strPayee As String, ByVal strInvoiceNum As String, ByRef colMatches As ICollection(Of Integer))
 
         Dim lngIndex As Integer
         Dim datEnd As Date
         Dim objSplit As TrxSplit
 
-        colMatches = New Collection
+        colMatches = New List(Of Integer)
         lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
         Do
@@ -1000,13 +998,13 @@ Public Class Register
     '$Param colMatches A new Collection object created by this method, containing
     '   indices of all matching Trx objects.
 
-    Public Sub MatchPONumber(ByVal datDate As Date, ByVal intDateRange As Short, ByVal strPayee As String, ByVal strPONumber As String, ByRef colMatches As Collection)
+    Public Sub MatchPONumber(ByVal datDate As Date, ByVal intDateRange As Short, ByVal strPayee As String, ByVal strPONumber As String, ByRef colMatches As ICollection(Of Integer))
 
         Dim lngIndex As Integer
         Dim datEnd As Date
         Dim objSplit As TrxSplit
 
-        colMatches = New Collection
+        colMatches = New List(Of Integer)
         lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
         Do

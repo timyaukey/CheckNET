@@ -546,7 +546,7 @@ Friend Class UTMainForm
 
     Private Sub TestMatchNormal()
         Dim objUTReg As UTRegister
-        Dim colMatches As Collection = Nothing
+        Dim colMatches As ICollection(Of Integer) = Nothing
         Dim blnExactMatch As Boolean
 
         gUTSetTestTitle("Test MatchNormal")
@@ -638,13 +638,13 @@ Friend Class UTMainForm
 
     End Sub
 
-    Private Function strConcatMatchResults(ByVal colMatches As Collection) As String
-        Dim vntElement As Object
+    Private Function strConcatMatchResults(ByVal colMatches As ICollection(Of Integer)) As String
+        Dim intElement As Integer
         Dim strResult As String = ""
-        For Each vntElement In colMatches
+        For Each intElement In colMatches
             'UPGRADE_WARNING: Couldn't resolve default property of object vntElement. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            strResult = strResult & ";" & vntElement
-        Next vntElement
+            strResult = strResult & ";" & intElement
+        Next
         strConcatMatchResults = strResult
     End Function
 
@@ -726,7 +726,7 @@ Friend Class UTMainForm
 
     Private Sub TestMatchPayee()
         Dim objUTReg As UTRegister
-        Dim colMatches As Collection = Nothing
+        Dim colMatches As ICollection(Of Integer) = Nothing
         Dim blnExactMatch As Boolean
         Dim objTrx As Trx
 
@@ -744,9 +744,9 @@ Friend Class UTMainForm
             .objReg.MatchPayee(#4/3/2000#, 1, "company2", True, colMatches, blnExactMatch)
             gUTAssert(colMatches.Count() = 1, "company2 fail")
             'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            objTrx = .objReg.objTrx(colMatches.Item(1))
+            objTrx = .objReg.objTrx(gdatFirstElement(colMatches))
             'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            gUTAssert(colMatches.Item(1) = 2, "company2 index fail")
+            gUTAssert(gdatFirstElement(colMatches) = 2, "company2 index fail")
             gUTAssert(objTrx.strDescription = "company2", "company2 name fail")
             gUTAssert(objTrx.datDate = #4/3/2000#, "company2 date fail")
             gUTAssert(blnExactMatch = True, "company2 exact fail")
@@ -754,11 +754,11 @@ Friend Class UTMainForm
             .objReg.MatchPayee(#4/6/2000#, 1, "payee1", True, colMatches, blnExactMatch)
             gUTAssert(colMatches.Count() = 2, "payee1 fail")
             'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            objTrx = .objReg.objTrx(colMatches.Item(1))
+            objTrx = .objReg.objTrx(gdatFirstElement(colMatches))
             'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            gUTAssert(colMatches.Item(1) = 3, "payee1#1 index fail")
+            gUTAssert(gdatFirstElement(colMatches) = 3, "payee1#1 index fail")
             'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            gUTAssert(colMatches.Item(2) = 4, "payee1#2 index fail")
+            gUTAssert(gdatSecondElement(colMatches) = 4, "payee1#2 index fail")
             gUTAssert(blnExactMatch = False, "payee#1 exact fail")
         End With
 
@@ -766,7 +766,7 @@ Friend Class UTMainForm
 
     Private Sub TestMatchInvoice()
         Dim objUTReg As UTRegister
-        Dim colMatches As Collection = Nothing
+        Dim colMatches As ICollection(Of Integer) = Nothing
 
         gUTSetTestTitle("Test MatchInvoice")
 
@@ -782,12 +782,12 @@ Friend Class UTMainForm
             .objReg.MatchInvoice(#4/3/2000#, 10, "company2", "I1000", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 I1000 fail")
             'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            gUTAssert(colMatches.Item(1) = 2, "company2 I1000 index fail")
+            gUTAssert(gdatFirstElement(colMatches) = 2, "company2 I1000 index fail")
 
             .objReg.MatchInvoice(#4/3/2000#, 10, "company2", "I1001", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 I1001 fail")
             'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            gUTAssert(colMatches.Item(1) = 2, "company2 I1001 index fail")
+            gUTAssert(gdatFirstElement(colMatches) = 2, "company2 I1001 index fail")
 
             .objReg.MatchInvoice(#4/5/2000#, 1, "company2", "I1000", colMatches)
             gUTAssert(colMatches.Count() = 0, "company2 I1000 -2 fail")
@@ -803,7 +803,7 @@ Friend Class UTMainForm
 
     Private Sub TestMatchPONumber()
         Dim objUTReg As UTRegister
-        Dim colMatches As Collection = Nothing
+        Dim colMatches As ICollection(Of Integer) = Nothing
 
         gUTSetTestTitle("Test MatchPONumber")
 
@@ -819,12 +819,12 @@ Friend Class UTMainForm
             .objReg.MatchPONumber(#4/3/2000#, 10, "company2", "P1", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 P1 fail")
             'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            gUTAssert(colMatches.Item(1) = 2, "company2 P1 index fail")
+            gUTAssert(gdatFirstElement(colMatches) = 2, "company2 P1 index fail")
 
             .objReg.MatchPONumber(#4/3/2000#, 10, "company2", "P2", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 P2 fail")
             'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            gUTAssert(colMatches.Item(1) = 2, "company2 I1001 index fail")
+            gUTAssert(gdatFirstElement(colMatches) = 2, "company2 I1001 index fail")
 
             .objReg.MatchPONumber(#4/5/2000#, 1, "company2", "P1", colMatches)
             gUTAssert(colMatches.Count() = 0, "company2 P1 -2 fail")
