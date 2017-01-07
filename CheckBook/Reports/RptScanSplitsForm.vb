@@ -27,10 +27,9 @@ Friend Class RptScanSplitsForm
     Private mcurPayablesTotal As Decimal
     Private mcurPayablesCurrent As Decimal
     Private mcurPayablesFuture As Decimal
-    Private mcolPayables As Collection
 
     'Accounts selected to scan.
-    Private mcolSelectAccounts As Collection
+    Private mcolSelectAccounts As ICollection(Of Account)
 
     'Other scan parameters.
     Private mdatStart As Date
@@ -102,7 +101,6 @@ Friend Class RptScanSplitsForm
                 mcurPayablesTotal = 0
                 mcurPayablesCurrent = 0
                 mcurPayablesFuture = 0
-                mcolPayables = New Collection
             End If
             IterateSplits()
             ShowResults()
@@ -203,7 +201,7 @@ Friend Class RptScanSplitsForm
 
         Try
 
-            mcolSelectAccounts = New Collection
+            mcolSelectAccounts = New List(Of Account)
             mlngSplitCount = 0
             For intAcctIdx = 0 To lstAccounts.Items.Count - 1
                 If lstAccounts.GetSelected(intAcctIdx) Then
@@ -346,7 +344,6 @@ Friend Class RptScanSplitsForm
                                     End If
                                 End If
                                 mcurPayablesTotal = mcurPayablesTotal + objSplit.curAmount
-                                mcolPayables.Add(objSplit)
                             End If
                         End If
                     End If

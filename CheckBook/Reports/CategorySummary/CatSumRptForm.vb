@@ -9,8 +9,8 @@ Friend Class CatSumRptForm
 	Inherits System.Windows.Forms.Form
 	
 	Private maudtCatTotals() As PublicTypes.CategoryInfo 'Indexed by index in gobjCategories.
-	Private mcolSelectedAccounts As Collection
-	Private mobjCats As StringTranslator
+    Private mcolSelectedAccounts As IEnumerable(Of Account)
+    Private mobjCats As StringTranslator
 	Private mdatStart As Date
 	Private mdatEnd As Date
 	Private mblnIncludeFake As Boolean
@@ -21,22 +21,22 @@ Friend Class CatSumRptForm
     Private mcolResultRows As List(Of ResultRow)
 	
 	Private Const mintAMOUNT_WIDTH As Short = 24
-	
-	Public Sub ShowMe(ByRef audtCatTotals() As PublicTypes.CategoryInfo, ByVal colSelectedAccounts As Collection, ByVal objCats As StringTranslator, ByVal datStart As Date, ByVal datEnd As Date, ByVal blnIncludeFake As Boolean, ByVal blnIncludeGenerated As Boolean)
-		
+
+    Public Sub ShowMe(ByRef audtCatTotals() As PublicTypes.CategoryInfo, ByVal colSelectedAccounts As IEnumerable(Of Account), ByVal objCats As StringTranslator, ByVal datStart As Date, ByVal datEnd As Date, ByVal blnIncludeFake As Boolean, ByVal blnIncludeGenerated As Boolean)
+
         'maudtCatTotals = VB6.CopyArray(audtCatTotals)
         maudtCatTotals = audtCatTotals.Clone()
-		mcolSelectedAccounts = colSelectedAccounts
-		mobjCats = objCats
-		mdatStart = datStart
-		mdatEnd = datEnd
-		mblnIncludeFake = blnIncludeFake
-		mblnIncludeGenerated = blnIncludeGenerated
-		Me.Show()
-		
-	End Sub
+        mcolSelectedAccounts = colSelectedAccounts
+        mobjCats = objCats
+        mdatStart = datStart
+        mdatEnd = datEnd
+        mblnIncludeFake = blnIncludeFake
+        mblnIncludeGenerated = blnIncludeGenerated
+        Me.Show()
 
-	Private Sub CatSumRptForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
+    End Sub
+
+    Private Sub CatSumRptForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
 		
         Try
 
@@ -80,10 +80,10 @@ Friend Class CatSumRptForm
         End Try
     End Sub
 
-	Private Sub ShowSpecs(ByVal colSelectedAccounts As Collection, ByVal datStart As Date, ByVal datEnd As Date, ByVal blnIncludeFake As Boolean, ByVal blnIncludeGenerated As Boolean)
-		
-		Dim objAcct As Account
-		
+    Private Sub ShowSpecs(ByVal colSelectedAccounts As IEnumerable(Of Account), ByVal datStart As Date, ByVal datEnd As Date, ByVal blnIncludeFake As Boolean, ByVal blnIncludeGenerated As Boolean)
+
+        Dim objAcct As Account
+
         Try
 
             WriteRptLine("Totals By Category Report")
@@ -117,8 +117,8 @@ Friend Class CatSumRptForm
             gNestedException(ex)
         End Try
     End Sub
-	
-	Private Sub LoadGrid()
+
+    Private Sub LoadGrid()
 		Dim intCatIndex As Short
 		Dim intCatNameWidth As Short
 		

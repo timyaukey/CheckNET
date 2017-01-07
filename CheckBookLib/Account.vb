@@ -438,23 +438,23 @@ Public Class Account
 
     Private Sub SaveLoadedRegister(ByVal objReg As Register)
         Dim objSaver As RegisterSaver
-        Dim colFakeLines As Collection
-        Dim vstrLine As Object
+        Dim colFakeLines As ICollection(Of String)
+        Dim strLine As String
 
         objSaver = New RegisterSaver
 
         'Output the non-fake Trx, and remember the non-generated fake.
-        colFakeLines = New Collection
+        colFakeLines = New List(Of String)
         SaveLine("RL" & objReg.strRegisterKey)
         objSaver.Save(objReg, mintSaveFile, colFakeLines)
         SaveLine(".R")
 
         'Save non-generated fake Trx we saved above.
         SaveLine("RF" & objReg.strRegisterKey)
-        For Each vstrLine In colFakeLines
+        For Each strLine In colFakeLines
             'UPGRADE_WARNING: Couldn't resolve default property of object vstrLine. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            SaveLine(vstrLine)
-        Next vstrLine
+            SaveLine(strLine)
+        Next strLine
         SaveLine(".R")
 
         'RR line is for repeating register, no longer used.

@@ -6,7 +6,7 @@ Public Class RegisterSaver
     'Write lines for non-fake Trx to this file.
     Private mintRealFile As Short
     'Append lines for fake non-generated Trx to this Collection.
-    Private mcolFakeLines As Collection
+    Private mcolFakeLines As ICollection(Of String)
     'True iff saving a Register to create generated Trx from.
     'Controls how a few Trx properties are saved, like budget ending date,
     'and whether properties specific to repeating Trx are saved (unit type,
@@ -16,7 +16,7 @@ Public Class RegisterSaver
     Private mblnFake As Boolean
     Private mobjTrx As Trx
 
-    Public Sub Save(ByVal objReg_ As Register, ByVal intRealFile_ As Short, ByVal colFakeLines_ As Collection)
+    Public Sub Save(ByVal objReg_ As Register, ByVal intRealFile_ As Short, ByVal colFakeLines_ As ICollection(Of String))
 
         Dim lngIndex As Integer
 
