@@ -5,9 +5,9 @@ Public Class EventLog
     'Collection of all ILogger objects passed to AddILogg???().
     'Note that these objects also implement another interface
     'specific to the method used to add them, like ILogAdd.
-    Private mcolLoggers As Collection
+    Private mcolLoggers As List(Of ILogger)
     'Collection of ILogGroupStart objects for open groups.
-    Private mcolGroups As Collection
+    Private mcolGroups As List(Of ILogGroupStart)
     'The XML document used to build log output.
     Private mdomOutput As VB6XmlDocument
     'Element to add events to.
@@ -24,8 +24,8 @@ Public Class EventLog
     Private mobjRepeats As StringTranslator
 
     Public Sub Init(ByVal objReg As Register, ByVal strLogin As String)
-        mcolLoggers = New Collection
-        mcolGroups = New Collection
+        mcolLoggers = New List(Of ILogger)
+        mcolGroups = New List(Of ILogGroupStart)
         'UPGRADE_NOTE: Object mdomOutput may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         mdomOutput = Nothing
         mstrLogin = strLogin
@@ -107,11 +107,11 @@ Public Class EventLog
 
     Public Sub AddILogGroupEnd(ByVal objEndLogger As ILogGroupEnd, ByVal objStartLogger As ILogGroupStart)
         Dim objTopGroup As ILogGroupStart
-        objTopGroup = mcolGroups.Item(mcolGroups.Count())
+        objTopGroup = mcolGroups.Item(mcolGroups.Count() - 1)
         If Not objTopGroup Is objStartLogger Then
             gRaiseError("Invalid log group nesting")
         End If
-        mcolGroups.Remove(mcolGroups.Count())
+        mcolGroups.RemoveAt(mcolGroups.Count() - 1)
         mcolLoggers.Add(objEndLogger)
     End Sub
 

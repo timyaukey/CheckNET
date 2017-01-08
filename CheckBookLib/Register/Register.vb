@@ -36,7 +36,7 @@ Public Class Register
     Private mdatOldestBudgetEndAllowed As Date
     'Collection of all Trx that are part of a repeating sequence,
     'keyed by "#" & strRepeatKey & "." & intRepeatSeq.
-    Private mcolRepeatTrx As Collection
+    Private mcolRepeatTrx As Dictionary(Of String, Trx)
     'Register is to define repeating Trx.
     Private mblnRepeat As Boolean
     'EventLog for Register.
@@ -105,7 +105,7 @@ Public Class Register
         End If
         mdatOldestFakeNormal = System.DateTime.FromOADate(0)
         mdatOldestBudgetEndAllowed = datOldestBudgetEndAllowed_
-        mcolRepeatTrx = New Collection
+        mcolRepeatTrx = New Dictionary(Of String, Trx)
         mblnRepeat = blnRepeat_
         Erase maobjTrx
         mlngTrxAllocated = 0
@@ -1243,7 +1243,7 @@ Public Class Register
 
     '$Description For debugging use only - return the internal mcolRepeatTrx collection.
 
-    Public ReadOnly Property colDbgRepeatTrx() As Collection
+    Public ReadOnly Property colDbgRepeatTrx() As Dictionary(Of String, Trx)
         Get
             colDbgRepeatTrx = mcolRepeatTrx
         End Get
@@ -1266,24 +1266,20 @@ Public Class Register
     End Sub
 
     Public Sub AddRepeatTrx(ByVal objTrx As Trx)
-        mcolRepeatTrx.Add(objTrx, objTrx.strRepeatId)
+        mcolRepeatTrx.Add(objTrx.strRepeatId, objTrx)
     End Sub
 
     Public Sub SetRepeatTrx(ByVal objTrx As Trx)
-        Try
-            mcolRepeatTrx.Add(objTrx, objTrx.strRepeatId)
-        Catch
-            mcolRepeatTrx.Remove(objTrx.strRepeatId)
-            mcolRepeatTrx.Add(objTrx, objTrx.strRepeatId)
-        End Try
+        mcolRepeatTrx.Item(objTrx.strRepeatId) = objTrx
     End Sub
 
     Public Function objRepeatTrx(ByVal strRepeatKey As String, ByVal intRepeatSeq As Short) As Trx
-        Try
-            objRepeatTrx = mcolRepeatTrx.Item(gstrMakeRepeatId(strRepeatKey, intRepeatSeq))
-        Catch
-            objRepeatTrx = Nothing
-        End Try
+        Dim objTrx As Trx = Nothing
+        If mcolRepeatTrx.TryGetValue(gstrMakeRepeatId(strRepeatKey, intRepeatSeq), objTrx) Then
+            Return objTrx
+        Else
+            Return Nothing
+        End If
     End Function
 
     Public Sub RemoveRepeatTrx(ByVal objTrx As Trx)
@@ -1342,7 +1338,7 @@ Public Class Register
             RaiseValidationError(0, "Wrong number of repeat trx")
         End If
 
-        For Each objTrx In mcolRepeatTrx
+        For Each objTrx In mcolRepeatTrx.Values
             objTrx2 = objRepeatTrx(objTrx.strRepeatKey, objTrx.intRepeatSeq)
             If Not objTrx Is objTrx2 Then
                 RaiseValidationError(0, "Repeat collection element points to wrong trx")

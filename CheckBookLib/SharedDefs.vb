@@ -708,15 +708,17 @@ Public Module SharedDefs
     End Function
 
     Public Function gdatFirstElement(Of T)(enumerable As IEnumerable(Of T)) As T
-        Dim enumerator As IEnumerator(Of T) = enumerable.GetEnumerator()
-        enumerator.MoveNext()
-        Return enumerator.Current
+        Using enumerator As IEnumerator(Of T) = enumerable.GetEnumerator()
+            enumerator.MoveNext()
+            Return enumerator.Current
+        End Using
     End Function
 
     Public Function gdatSecondElement(Of T)(enumerable As IEnumerable(Of T)) As T
-        Dim enumerator As IEnumerator(Of T) = enumerable.GetEnumerator()
-        enumerator.MoveNext()
-        enumerator.MoveNext()
-        Return enumerator.Current
+        Using enumerator As IEnumerator(Of T) = enumerable.GetEnumerator()
+            enumerator.MoveNext()
+            enumerator.MoveNext()
+            Return enumerator.Current
+        End Using
     End Function
 End Module
