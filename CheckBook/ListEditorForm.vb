@@ -28,10 +28,8 @@ Friend Class ListEditorForm
         Try
 
             For Each frm In gcolForms()
-                'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
                 If TypeOf frm Is RegisterForm Then
                     '
-                    'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
                 ElseIf TypeOf frm Is CBMainForm Then
                     '
                 Else
@@ -428,7 +426,6 @@ Friend Class ListEditorForm
                 Next
             End With
             FileClose(intFile)
-            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             If Dir(mstrFile) <> "" Then
                 Kill(mstrFile)
             End If

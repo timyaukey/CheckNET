@@ -70,7 +70,6 @@ Friend Class ReconcileForm
         lvwTrx.Items.Clear()
         mlngTrxAllocated = 10
         mlngTrxUsed = 0
-        'UPGRADE_WARNING: Lower bound of array maudtTrx was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim maudtTrx(mlngTrxAllocated)
 
         For Each objReg In mobjAccount.colRegisters
@@ -85,7 +84,6 @@ Friend Class ReconcileForm
                             mlngTrxUsed = mlngTrxUsed + 1
                             If mlngTrxUsed > mlngTrxAllocated Then
                                 mlngTrxAllocated = mlngTrxAllocated + 10
-                                'UPGRADE_WARNING: Lower bound of array maudtTrx was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
                                 ReDim Preserve maudtTrx(mlngTrxAllocated)
                             End If
                             With maudtTrx(mlngTrxUsed)
@@ -190,7 +188,6 @@ Friend Class ReconcileForm
         Dim objTrx As Trx
 
         Try
-            'UPGRADE_WARNING: Lower bound of collection Item has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             lngArrayIndex = CInt(Item.SubItems(mintCOL_ARRAY_INDEX).Text)
             With maudtTrx(lngArrayIndex)
                 objTrx = .objReg.objTrx(.lngIndex)
@@ -275,7 +272,6 @@ Friend Class ReconcileForm
             With maudtTrx(lngIndex)
                 lngNewStatus = IIf(.blnSelected, lngSelectedStatus, Trx.TrxStatus.glngTRXSTS_UNREC)
                 If .objReg.objTrx(.lngIndex).lngStatus <> lngNewStatus Then
-                    'UPGRADE_WARNING: Couldn't resolve default property of object New (LogStatus). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     .objReg.SetTrxStatus(.lngIndex, lngNewStatus, New LogStatus, "ReconcileForm.SaveChanges")
                 End If
             End With

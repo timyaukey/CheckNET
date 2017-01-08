@@ -36,7 +36,6 @@ Friend Class PayeeMatchForm
         End Try
     End Function
 
-    'UPGRADE_WARNING: Form event PayeeMatchForm.Activate has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
     Private Sub PayeeMatchForm_Activated(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Activated
         Dim objFirst As System.Windows.Forms.ListViewItem
 

@@ -124,7 +124,6 @@ Friend Class CBMainForm
         End Try
     End Sub
 
-    'UPGRADE_WARNING: Form event CBMainForm.Activate has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
     Private Sub CBMainForm_Activated(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Activated
         If mblnCancelStart Then
             If Not frmStartup Is Nothing Then
@@ -352,7 +351,6 @@ Friend Class CBMainForm
         Dim frm As System.Windows.Forms.Form
 
         For Each frm In gcolForms()
-            'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             If TypeOf frm Is BankImportForm Then
                 MsgBox("An import form is already open, and only one can be open at a time.")
                 blnImportFormAlreadyOpen = True
@@ -523,7 +521,6 @@ Friend Class CBMainForm
         Try
 
             For Each frm2 In gcolForms()
-                'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
                 If TypeOf frm2 Is ShowRegisterForm Then
                     frm2.Activate()
                     Exit Sub

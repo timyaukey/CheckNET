@@ -22,13 +22,10 @@ Friend Class AdjustBudgetsToCashForm
     Private cboBudget(mintNUM_BUDGETS) As ComboBox
     Private txtPercent(mintNUM_BUDGETS) As TextBox
     'Register index of budget Trx with budget in cboBudget(i).
-    'UPGRADE_WARNING: Lower bound of array malngRegIndex was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
     Private malngRegIndex(mintNUM_BUDGETS) As Integer
     'Trx objects referenced by malngRegIndex(). Used for sanity check.
-    'UPGRADE_WARNING: Lower bound of array maobjRegTrx was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
     Private maobjRegTrx(mintNUM_BUDGETS) As Trx
     'Budget key of budget Trx with budget in cboBudget(i).
-    'UPGRADE_WARNING: Lower bound of array mastrBudgetKey was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
     Private mastrBudgetKey(mintNUM_BUDGETS) As String
 
     'The budget limit of at least one adjusted budget was exceeded.
@@ -328,7 +325,6 @@ Friend Class AdjustBudgetsToCashForm
         Dim lngUpdateIndex As Integer
         Dim objTrx As Trx
         Dim datBudgetEnds As Date
-        'UPGRADE_WARNING: Lower bound of array acurNewLimit was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         Dim acurNewLimit(mintNUM_BUDGETS) As Decimal
         Dim curTotalAvailable As Decimal
         Dim curRemainderAvailable As Decimal
@@ -402,7 +398,6 @@ Friend Class AdjustBudgetsToCashForm
                     If malngRegIndex(intBudget) = 0 Then
                         objTrx = New Trx
                         objTrx.NewStartBudget(mobjReg, datMatch, txtPrefix.Text & mobjBudgets.strKeyToValue1(mastrBudgetKey(intBudget)), "", False, False, 0, "", acurNewLimit(intBudget), datBudgetEnds, mastrBudgetKey(intBudget))
-                        'UPGRADE_WARNING: Couldn't resolve default property of object New (LogAdd). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         mobjReg.NewAddEnd(objTrx, New LogAdd, "AdjustBudgetsToCashForm.SetBudgets")
                         ShowBudget(objTrx)
                         'The added budget by definition will be inserted
@@ -436,7 +431,6 @@ Friend Class AdjustBudgetsToCashForm
             End If
             With objTrx
                 .UpdateStartBudget(mobjReg, .datDate, .strDescription, .strMemo, .blnAwaitingReview, False, .intRepeatSeq, .strRepeatKey, curLimit, .datBudgetEnds, .strBudgetKey)
-                'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 mobjReg.UpdateEnd(lngIndex, New LogChange, "AdjustBudgetsToCashForm.Update", objTrxOld)
             End With
 
@@ -455,19 +449,16 @@ Friend Class AdjustBudgetsToCashForm
         objItem = gobjListViewAdd(lvwResults)
         With objItem
             .Text = gstrFormatDate(objTrx.datDate)
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > 1 Then
                 objItem.SubItems(1).Text = objTrx.strDescription
             Else
                 objItem.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objTrx.strDescription))
             End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > 2 Then
                 objItem.SubItems(2).Text = gstrFormatCurrency(objTrx.curBudgetLimit)
             Else
                 objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objTrx.curBudgetLimit)))
             End If
-            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             If objItem.SubItems.Count > 3 Then
                 objItem.SubItems(3).Text = gstrFormatCurrency(objTrx.curBudgetApplied)
             Else

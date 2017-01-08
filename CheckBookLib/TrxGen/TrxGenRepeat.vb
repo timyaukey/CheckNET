@@ -9,7 +9,6 @@ Public Class TrxGenRepeat
     Private mblnEnabled As Boolean
     Private mcurAmount As Decimal
     Private mdatSequence As DateSequenceParams
-    'UPGRADE_WARNING: Arrays in structure mdatTrxTemplate may need to be initialized before they can be used. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
     Private mdatTrxTemplate As TrxToCreate
     Private mstrRepeatKey As String
     Private mintStartRepeatSeq As Short
@@ -32,20 +31,15 @@ Public Class TrxGenRepeat
             Exit Function
         End If
 
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmRepeat.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmRepeat.GetAttribute("amount")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             ITrxGenerator_strLoad = "Missing [amount] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         If Not gblnValidAmount(vntAttrib) Then
             ITrxGenerator_strLoad = "Invalid [amount] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         mcurAmount = CDec(vntAttrib)
 
         ITrxGenerator_strLoad = gstrGetTrxGenTemplate(domDoc, mstrRepeatKey, mcurAmount, mdatTrxTemplate)

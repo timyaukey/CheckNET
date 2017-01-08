@@ -45,7 +45,6 @@ Public Class Register
     Private mblnDeleted As Boolean
 
     'Temp hack to assign initial sequence numbers.
-    'UPGRADE_WARNING: Lower bound of array maintNextSeq was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
     Private maintNextSeq(200) As Short
 
     'Fired by NewAddEnd() when it adds a Trx to the register.
@@ -177,7 +176,6 @@ Public Class Register
         Dim lngIndex As Integer
         If mlngTrxUsed = mlngTrxAllocated Then
             mlngTrxAllocated = mlngTrxAllocated + mlngAllocationUnit
-            'UPGRADE_WARNING: Lower bound of array maobjTrx was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
             ReDim Preserve maobjTrx(mlngTrxAllocated)
         End If
         objNew.SetSortKey()
@@ -515,7 +513,6 @@ Public Class Register
         If lngOutIndex = 0 Then
             Erase maobjTrx
         Else
-            'UPGRADE_WARNING: Lower bound of array maobjTrx was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
             ReDim Preserve maobjTrx(lngOutIndex)
         End If
         mlngTrxUsed = lngOutIndex
@@ -631,7 +628,6 @@ Public Class Register
             .UnApplyFromBudgets(Me)
             .ImportUpdateBank(datDate, strNumber, blnFake, curAmount, strImportKey)
         End With
-        'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         UpdateEnd(lngOldIndex, New LogChange, "ImportUpdateBank", objOldTrx)
     End Sub
 
@@ -653,7 +649,6 @@ Public Class Register
             .UnApplyFromBudgets(Me)
             .ImportUpdateNumAmt(strNumber, blnFake, curAmount)
         End With
-        'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         UpdateEnd(lngOldIndex, New LogChange, "ImportUpdateNumAmt", objOldTrx)
     End Sub
 
@@ -674,7 +669,6 @@ Public Class Register
             .UnApplyFromBudgets(Me)
             .ImportUpdateAmount(blnFake, curAmount)
         End With
-        'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         UpdateEnd(lngOldIndex, New LogChange, "ImportUpdateAmount", objOldTrx)
     End Sub
 
@@ -697,7 +691,6 @@ Public Class Register
             .UnApplyFromBudgets(Me)
             .ImportUpdatePurchaseOrder(objPOSplit, objImportedSplit)
         End With
-        'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         UpdateEnd(lngOldIndex, New LogChange, "ImportUpdatePurchaseOrder", objOldTrx)
     End Sub
 
@@ -790,7 +783,6 @@ Public Class Register
                         curAmountRange = .curNormalMatchRange
                     End If
                     blnDescrMatches = (Left(LCase(.strDescription), intDescrMatchLen) = strDescrLC)
-                    'UPGRADE_WARNING: DateDiff behavior may be different. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6B38EC3F-686D-4B2E-B5A5-9E8E7A762E32"'
                     blnDateMatches = (System.Math.Abs(DateDiff(Microsoft.VisualBasic.DateInterval.Day, .datDate, datDate)) < 6)
                     blnAmountMatches = (System.Math.Abs(.curAmount - curAmount) <= curAmountRange)
                     If (IIf(blnAmountMatches, 1, 0) + IIf(blnDateMatches, 1, 0)) >= IIf(blnLooseMatch, 1, 2) Then
@@ -1352,12 +1344,10 @@ Public Class Register
     End Sub
 
     Public Sub LogAction(ByVal strTitle As String)
-        'UPGRADE_WARNING: Couldn't resolve default property of object New (LogAction). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         mobjLog.AddILogAction(New LogAction, strTitle)
     End Sub
 
     Public Sub LogSave()
-        'UPGRADE_WARNING: Couldn't resolve default property of object New (LogSave). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         mobjLog.AddILogAction(New LogSave, "Register.Save")
     End Sub
 
@@ -1369,7 +1359,6 @@ Public Class Register
     End Function
 
     Public Sub LogGroupEnd(ByVal objStartLogger As ILogGroupStart)
-        'UPGRADE_WARNING: Couldn't resolve default property of object New (LogGroupEnd). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         mobjLog.AddILogGroupEnd(New LogGroupEnd, objStartLogger)
     End Sub
 

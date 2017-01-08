@@ -9,7 +9,6 @@ Public Class TrxGenInterpolate
     Private mblnEnabled As Boolean
     Private mdatSequence As DateSequenceParams
     Private mdatSamples() As SequencedTrx
-    'UPGRADE_WARNING: Arrays in structure mdatTrxTemplate may need to be initialized before they can be used. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
     Private mdatTrxTemplate As TrxToCreate
     Private mstrRepeatKey As String
     Private mintStartRepeatSeq As Short

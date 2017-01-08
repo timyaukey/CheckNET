@@ -177,7 +177,6 @@ Friend Class RptScanSplitsForm
 
         Try
 
-            'UPGRADE_WARNING: Lower bound of array maudtCatTotals was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
             ReDim maudtCatTotals(gobjCategories.intElements)
             For intCatIndex = 1 To gobjCategories.intElements
                 strCatName = gobjCategories.strValue1(intCatIndex)
@@ -328,7 +327,6 @@ Friend Class RptScanSplitsForm
                                     'Current or future payable.
                                     'Anything due more than 30 days in the future is a "future".
                                     'This definition is rather arbitrary.
-                                    'UPGRADE_WARNING: DateDiff behavior may be different. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6B38EC3F-686D-4B2E-B5A5-9E8E7A762E32"'
                                     If DateDiff(Microsoft.VisualBasic.DateInterval.Day, mdatReportDate, datDueDate) <= 30 Then
                                         mcurPayablesCurrent = mcurPayablesCurrent + objSplit.curAmount
                                     Else
@@ -336,7 +334,6 @@ Friend Class RptScanSplitsForm
                                     End If
                                 Else
                                     'Payable is at or past due date, and so belongs in one of the age brackets.
-                                    'UPGRADE_WARNING: DateDiff behavior may be different. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6B38EC3F-686D-4B2E-B5A5-9E8E7A762E32"'
                                     intAgeInDays = DateDiff(Microsoft.VisualBasic.DateInterval.Day, datDueDate, mdatReportDate)
                                     intAgeBracket = (intAgeInDays - 1) / 30
                                     If intAgeBracket <= UBound(macurPayables) Then

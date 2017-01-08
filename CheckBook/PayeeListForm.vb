@@ -42,7 +42,6 @@ Friend Class PayeeListForm
         melmTransTable = mdomNewTransTable.DocumentElement
     End Sub
 
-    'UPGRADE_WARNING: Form event PayeeListForm.Activate has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
     Private Sub PayeeListForm_Activated(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Activated
 
         Try
@@ -91,7 +90,6 @@ Friend Class PayeeListForm
             End If
             elmPayee = mdomNewTransTable.CreateElement("Payee")
             elmPayee.SetAttribute("Output", "(new transaction - edit this name)")
-            'UPGRADE_WARNING: Couldn't resolve default property of object elmPayee. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             melmTransTable.AppendChild(elmPayee)
             mcolPayees = melmTransTable.SelectNodes("Payee")
             objNewItem = gobjCreatePayeeListItem(elmPayee, lvwPayees, mcolPayees.Length - 1)
@@ -114,7 +112,6 @@ Friend Class PayeeListForm
                 Exit Sub
             End If
 
-            'UPGRADE_WARNING: Couldn't resolve default property of object melmPayeeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             melmTransTable.RemoveChild(melmPayeeToSave)
             ShowPayeeList()
 
@@ -221,7 +218,6 @@ Friend Class PayeeListForm
 
             lvwPayees.Refresh()
             System.Windows.Forms.Application.DoEvents()
-            'UPGRADE_WARNING: MSComctlLib.ListItem method objItem.EnsureVisible has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
             objItem.EnsureVisible()
             System.Windows.Forms.Application.DoEvents()
             lvwPayees.FocusedItem = objItem
@@ -263,15 +259,10 @@ Friend Class PayeeListForm
     Private Function strPayeeAttrib(ByVal strName As String) As String
         Dim vstrValue As Object
 
-        'UPGRADE_WARNING: Couldn't resolve default property of object melmPayeeToSave.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vstrValue. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vstrValue = melmPayeeToSave.GetAttribute(strName)
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vstrValue) Then
-            'UPGRADE_WARNING: Couldn't resolve default property of object vstrValue. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             vstrValue = ""
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vstrValue. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         strPayeeAttrib = Trim(vstrValue)
     End Function
 
@@ -445,7 +436,6 @@ Friend Class PayeeListForm
         elmChild = melmPayeeToSave.SelectSingleNode(strChildName)
         If elmChild Is Nothing Then
             elmChild = mdomNewTransTable.CreateElement(strChildName)
-            'UPGRADE_WARNING: Couldn't resolve default property of object elmChild. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             melmPayeeToSave.AppendChild(elmChild)
         End If
         elmChild.Text = Trim(strValue)

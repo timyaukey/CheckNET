@@ -106,7 +106,6 @@ Friend Class SearchForm
         End With
     End Sub
 
-    'UPGRADE_WARNING: Event cboSearchIn.SelectedIndexChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
     Private Sub cboSearchIn_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboSearchIn.SelectedIndexChanged
         Select Case gintVB6GetItemData(cboSearchIn, cboSearchIn.SelectedIndex)
             Case Trx.TrxSearchField.glngTRXSFL_CATKEY
@@ -206,7 +205,6 @@ Friend Class SearchForm
 
     Private Sub cmdAddToTotal_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdAddToTotal.Click
         Dim dblAmount As Double
-        'UPGRADE_WARNING: Couldn't resolve default property of object blnValidAmount(dblAmount). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         If blnValidAmount(dblAmount) Then
             mcurAmountTotal = mcurAmountTotal + dblAmount
             ShowTotals()
@@ -215,7 +213,6 @@ Friend Class SearchForm
 
     Private Sub cmdMultTotalBy_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdMultTotalBy.Click
         Dim dblAmount As Double
-        'UPGRADE_WARNING: Couldn't resolve default property of object blnValidAmount(dblAmount). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         If blnValidAmount(dblAmount) Then
             mcurAmountTotal = mcurAmountTotal * dblAmount
             ShowTotals()
@@ -232,7 +229,6 @@ Friend Class SearchForm
             Exit Function
         End If
         dblAmount = CDbl(txtAddMultAmount.Text)
-        'UPGRADE_WARNING: Couldn't resolve default property of object blnValidAmount. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         blnValidAmount = True
     End Function
 
@@ -264,7 +260,6 @@ Friend Class SearchForm
 
         If mlngMatchesUsed >= mlngMatchesAlloc Then
             mlngMatchesAlloc = mlngMatchesAlloc + 5
-            'UPGRADE_WARNING: Lower bound of array maudtMatches was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
             ReDim Preserve maudtMatches(mlngMatchesAlloc)
         End If
         mlngMatchesUsed = mlngMatchesUsed + 1
@@ -379,7 +374,6 @@ Friend Class SearchForm
             If lvwMatches.FocusedItem Is Nothing Then
                 Exit Sub
             End If
-            'UPGRADE_WARNING: Lower bound of collection lvwMatches.SelectedItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             lngResultIndex = CInt(lvwMatches.FocusedItem.SubItems(mintHIDDEN_COL).Text)
             mobjReg.SetCurrent(maudtMatches(lngResultIndex).lngRegIndex)
             mobjReg.RaiseShowCurrent()
@@ -433,7 +427,6 @@ Friend Class SearchForm
             If lvwMatches.FocusedItem Is Nothing Then
                 Exit Sub
             End If
-            'UPGRADE_WARNING: Lower bound of collection lvwMatches.SelectedItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             lngResultIndex = CInt(lvwMatches.FocusedItem.SubItems(mintHIDDEN_COL).Text)
             lngRegSelect = maudtMatches(lngResultIndex).lngRegIndex
             frmEdit = frmCreateTrxForm()
@@ -596,7 +589,6 @@ Friend Class SearchForm
                         objTrx.AddSplit(.strMemo, strCatKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount, .strImageFiles)
                     End With
                 Next objSplit
-                'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 mobjReg.UpdateEnd(lngTrxIndex, New LogChange, "SearchForm.Recategorize", objTrxOld)
                 lngChgCount = lngChgCount + 1
             Next objTrx
@@ -675,7 +667,6 @@ Friend Class SearchForm
             objStartLogger = mobjReg.objLogGroupStart("SearchForm.CombineDelete")
             For Each objOldTrx In colOldTrx
                 lngTrxIndex = mobjReg.lngTrxIndex(objOldTrx)
-                'UPGRADE_WARNING: Couldn't resolve default property of object New (LogDelete). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 mobjReg.Delete(lngTrxIndex, New LogDelete, "SearchForm.CombineDeleteTrx")
             Next objOldTrx
             mobjReg.LogGroupEnd(objStartLogger)
@@ -767,7 +758,6 @@ Friend Class SearchForm
                         For Each objSplit In colSplits
                             .objAddSplit(objSplit)
                         Next objSplit
-                        'UPGRADE_WARNING: Couldn't resolve default property of object New (LogMove). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         mobjReg.UpdateEnd(lngTrxIndex, New LogMove, "SearchForm.MoveUpdate", objTrxOld)
                         If objTrxFirst Is Nothing Then
                             objTrxFirst = objTrxSrc
@@ -779,12 +769,10 @@ Friend Class SearchForm
                         objTempTrx.SetDate(datNewDate)
                         objTrxNew.NewStartNormal(objNewReg, objTempTrx)
                         .CopySplits(objTrxNew)
-                        'UPGRADE_WARNING: Couldn't resolve default property of object New (LogAdd). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         objNewReg.NewAddEnd(objTrxNew, New LogAdd, "SearchForm.MoveAdd")
                         If objTrxFirst Is Nothing Then
                             objTrxFirst = objTrxNew
                         End If
-                        'UPGRADE_WARNING: Couldn't resolve default property of object New (LogDelete). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         mobjReg.Delete(lngTrxIndex, New LogDelete, "SearchForm.MoveDelete")
                     End If
                 End With
@@ -880,7 +868,6 @@ Friend Class SearchForm
         'UPGRADE_NOTE: Object objSelectedTrx may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         objSelectedTrx = Nothing
         If Not lvwMatches.FocusedItem Is Nothing Then
-            'UPGRADE_WARNING: Lower bound of collection lvwMatches.SelectedItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             lngTrxIndex = maudtMatches(CInt(lvwMatches.FocusedItem.SubItems(mintHIDDEN_COL).Text)).lngRegIndex
             objSelectedTrx = mobjReg.objTrx(lngTrxIndex)
         End If
@@ -905,7 +892,6 @@ Friend Class SearchForm
             Next objCheckedTrx
             If objTrx Is objSelectedTrx Then
                 lvwMatches.FocusedItem = objItem
-                'UPGRADE_WARNING: MSComctlLib.ListItem method objItem.EnsureVisible has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
                 objItem.EnsureVisible()
             End If
         Next objItem

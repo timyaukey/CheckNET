@@ -10,11 +10,9 @@ Public Class TrxGenPeriod
     Private mdatFirstPeriodStarts As Date
     Private mdatPeriodEndings() As SequencedTrx
     Private mdblDefaultPercentIncrease As Double
-    'UPGRADE_WARNING: Arrays in structure mdatTrxTemplate may need to be initialized before they can be used. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
     Private mdatTrxTemplate As TrxToCreate
     Private mstrRepeatKey As String
     Private mintStartRepeatSeq As Short
-    'UPGRADE_WARNING: Lower bound of array mdblDOWUsage was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
     Private mdblDOWUsage(7) As Double 'vbSunday to vbSaturday
 
     Public Function ITrxGenerator_strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String Implements ITrxGenerator.strLoad
@@ -89,20 +87,15 @@ Public Class TrxGenPeriod
             ITrxGenerator_strLoad = "Missing <firstperiodstarts> element"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmFirst.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmFirst.GetAttribute("date")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             ITrxGenerator_strLoad = "Missing [date] attribute of <firstperiodstarts> element"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         If Not gblnValidDate(vntAttrib) Then
             ITrxGenerator_strLoad = "Invalid [date] attribute of <firstperiodstarts> element"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         mdatFirstPeriodStarts = CDate(vntAttrib)
 
         'Load default amount scaling percentage.
@@ -110,17 +103,12 @@ Public Class TrxGenPeriod
         If elmScaling Is Nothing Then
             mdblDefaultPercentIncrease = 0.0#
         Else
-            'UPGRADE_WARNING: Couldn't resolve default property of object elmScaling.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             vntAttrib = elmScaling.GetAttribute("increasepercent")
-            'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
             If gblnXmlAttributeMissing(vntAttrib) Then
                 ITrxGenerator_strLoad = "Missing [increasepercent] attribute of <scaling> element"
                 Exit Function
             End If
-            'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             If gblnValidAmount(vntAttrib) Then
-                'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 mdblDefaultPercentIncrease = CDbl(vntAttrib) / 100.0#
             Else
                 ITrxGenerator_strLoad = "Invalid [increasepercent] attribute of <scaling> element"
@@ -143,10 +131,7 @@ Public Class TrxGenPeriod
         Dim vntAttrib As Object
         Dim dblResult As Double
 
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmDOWUsage.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmDOWUsage.GetAttribute(strName)
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             strError = "Missing [" & strName & "] attribute of <dowusage> element"
             Exit Function
@@ -155,7 +140,6 @@ Public Class TrxGenPeriod
             strError = "Invalid [" & strName & "] attribute of <dowusage> element"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         dblResult = CDbl(vntAttrib)
         If dblResult < 0 Then
             strError = "[" & strName & "] attribute of <dowusage> element may not be negative"

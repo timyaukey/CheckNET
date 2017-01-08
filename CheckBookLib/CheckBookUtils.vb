@@ -120,7 +120,6 @@ Public Module CheckBookUtils
         If datInvDate <= datAgingDate Then
             'If item was not paid as of the report date.
             If blnFake Or (datTrxDate > datAgingDate) Then
-                'UPGRADE_WARNING: DateDiff behavior may be different. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6B38EC3F-686D-4B2E-B5A5-9E8E7A762E32"'
                 intAgeInDays = DateDiff(Microsoft.VisualBasic.DateInterval.Day, datDueDate, datAgingDate)
                 'If intBracketSize = 30:
                 '1 to 30 = bracket 0, 31 to 60 = bracket 1, etc.
@@ -165,7 +164,6 @@ Public Module CheckBookUtils
                 gstrMakeDateBracket = gstrFormatDate(datInputDate, "yyyy/MM/") & gstrFormatInteger(1 + intMonthPart * 8, "0#")
             End If
         Else
-            'UPGRADE_WARNING: DateDiff behavior may be different. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6B38EC3F-686D-4B2E-B5A5-9E8E7A762E32"'
             intOffsetDays = DateDiff(Microsoft.VisualBasic.DateInterval.Day, datBaseDate, datInputDate)
             datBracketDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, Int(intOffsetDays / intBracketSize) * intBracketSize, datBaseDate)
             gstrMakeDateBracket = gstrFormatDate(datBracketDate, "yyyy/MM/dd")

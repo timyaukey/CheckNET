@@ -46,7 +46,6 @@ Public Class ImportUtilities
 
             Dim strTableFile As String
 
-            'UPGRADE_WARNING: Couldn't resolve default property of object gstrTrxTypeFilePath(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             strTableFile = gstrTrxTypeFilePath()
             mdomTrxTypes = gdomLoadFile(strTableFile)
 
@@ -235,47 +234,31 @@ Public Class ImportUtilities
                 'and whichever is specified does not match the trx description.
                 blnFailMatch = False
                 'Check if starts with the ENTIRE  "Before" attribute.
-                'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxType.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                'UPGRADE_WARNING: Couldn't resolve default property of object vstrBefore. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 vstrBefore = elmTrxType.GetAttribute("Before")
-                'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
                 If Not gblnXmlAttributeMissing(vstrBefore) Then
-                    'UPGRADE_WARNING: Couldn't resolve default property of object vstrBefore. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     vstrBefore = strNormalizeInput(vstrBefore)
-                    'UPGRADE_WARNING: Couldn't resolve default property of object vstrBefore. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     If Left(strNormalizedInput, Len(vstrBefore)) <> vstrBefore Then
                         blnFailMatch = True
                     End If
                 End If
                 'Check if ends with at least "n" characters from the start of the "After" attrib.
-                'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxType.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                'UPGRADE_WARNING: Couldn't resolve default property of object vstrAfter. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 vstrAfter = elmTrxType.GetAttribute("After")
-                'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
                 If Not gblnXmlAttributeMissing(vstrAfter) Then
-                    'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxType.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    'UPGRADE_WARNING: Couldn't resolve default property of object vintMinAfter. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     vintMinAfter = elmTrxType.GetAttribute("MinAfter")
-                    'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
                     If gblnXmlAttributeMissing(vintMinAfter) Then
-                        'UPGRADE_WARNING: Couldn't resolve default property of object vintMinAfter. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         vintMinAfter = 3
                     End If
-                    'UPGRADE_WARNING: Couldn't resolve default property of object vstrAfter. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     vstrAfter = strNormalizeInput(vstrAfter)
                     blnMatchAfter = False
                     Do
                         intAfterLen = Len(vstrAfter)
-                        'UPGRADE_WARNING: Couldn't resolve default property of object vstrAfter. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         If Right(strNormalizedInput, intAfterLen) = vstrAfter Then
                             blnMatchAfter = True
                             Exit Do
                         End If
-                        'UPGRADE_WARNING: Couldn't resolve default property of object vintMinAfter. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         If intAfterLen <= vintMinAfter Then
                             Exit Do
                         End If
-                        'UPGRADE_WARNING: Couldn't resolve default property of object vstrAfter. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         vstrAfter = Left(vstrAfter, intAfterLen - 1)
                     Loop
                     If Not blnMatchAfter Then
@@ -283,7 +266,6 @@ Public Class ImportUtilities
                     End If
                 End If
                 'Sanity check.
-                'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
                 If gblnXmlAttributeMissing(vstrBefore) And gblnXmlAttributeMissing(vstrAfter) Then
                     gRaiseError("Neither Before= or After= specified for TrxType element")
                 End If
@@ -293,11 +275,9 @@ Public Class ImportUtilities
                     'We used the squeezed version, not the fully normalized, so
                     'we get the original case information.
                     strPayeeTrimmed = mstrTrxPayeeTrimmed
-                    'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
                     If Not gblnXmlAttributeMissing(vstrBefore) Then
                         strPayeeTrimmed = Mid(strPayeeTrimmed, Len(vstrBefore) + 1)
                     End If
-                    'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
                     If Not gblnXmlAttributeMissing(vstrAfter) Then
                         strPayeeTrimmed = Left(strPayeeTrimmed, Len(strPayeeTrimmed) - Len(vstrAfter))
                     End If
@@ -305,15 +285,10 @@ Public Class ImportUtilities
                     strPayeeTrimmed = Trim(strPayeeTrimmed)
                     'If Number=(number), then the trimmed input is really a check
                     'number and we perform a sanity check to insure it really is a number.
-                    'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxType.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    'UPGRADE_WARNING: Couldn't resolve default property of object vstrNumber. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     vstrNumber = elmTrxType.GetAttribute("Number")
-                    'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
                     If gblnXmlAttributeMissing(vstrNumber) Then
-                        'UPGRADE_WARNING: Couldn't resolve default property of object vstrNumber. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         vstrNumber = ""
                     End If
-                    'UPGRADE_WARNING: Couldn't resolve default property of object vstrNumber. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     If vstrNumber = "(number)" Then
                         If Not IsNumeric(strPayeeTrimmed) Then
                             blnFailMatch = True
@@ -324,11 +299,9 @@ Public Class ImportUtilities
                         'The match cannot be rejected after this point, so it is safe to set
                         'mstrTrxPayeeTrimmed to the value trimmed according to the matched TrxType.
                         mstrTrxPayeeTrimmed = strPayeeTrimmed
-                        'UPGRADE_WARNING: Couldn't resolve default property of object vstrNumber. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         If vstrNumber = "(number)" Then
                             mstrTrxNumber = strPayeeTrimmed
                         Else
-                            'UPGRADE_WARNING: Couldn't resolve default property of object vstrNumber. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                             mstrTrxNumber = vstrNumber
                             LookupPayee(strPayeeTrimmed)
                         End If
@@ -384,10 +357,8 @@ Public Class ImportUtilities
             strOutputPayee = strTrimmedPayee
             objPayees = gdomTransTable.DocumentElement.SelectNodes("Payee")
             For Each elmPayee In objPayees
-                'UPGRADE_WARNING: Couldn't resolve default property of object elmPayee.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 strInput = UCase(Trim(elmPayee.GetAttribute("Input")))
                 If (strInput <> "") And (InStr(UCase(strTrimmedPayee), strInput) > 0) Then
-                    'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
                     If Not gblnXmlAttributeMissing(elmPayee.GetAttribute("Min")) Then
                         curAmount = CDec(mstrTrxAmount)
                         mcurMatchMin = CDec(elmPayee.GetAttribute("Min"))
@@ -397,13 +368,11 @@ Public Class ImportUtilities
                             mcurMatchMax = mcurMatchMin
                             mcurMatchMin = curMatchTmp
                         End If
-                        'UPGRADE_WARNING: Couldn't resolve default property of object elmPayee.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         blnMatch = (curAmount >= mcurMatchMin) And (curAmount <= mcurMatchMax)
                     Else
                         blnMatch = True
                     End If
                     If blnMatch Then
-                        'UPGRADE_WARNING: Couldn't resolve default property of object elmPayee.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                         strOutputPayee = elmPayee.GetAttribute("Output")
                         elmCategory = elmPayee.SelectSingleNode("Cat")
                         If Not elmCategory Is Nothing Then

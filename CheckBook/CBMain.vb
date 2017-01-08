@@ -70,7 +70,6 @@ Public Module CBMain
         NumberAmount = 4 'Number and amount.
     End Enum
 
-    'UPGRADE_WARNING: Application will terminate when Sub Main() finishes. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E08DDC71-66BA-424F-A612-80AF11498FF8"'
     Public Sub Main()
         CBMainForm.Show()
     End Sub
@@ -159,7 +158,6 @@ Public Module CBMain
         Dim frmReg As RegisterForm
 
         For Each frm In gcolForms()
-            'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             If TypeOf frm Is RegisterForm Then
                 frmReg = frm
                 If frmReg.objReg Is objReg Then
@@ -272,7 +270,6 @@ Public Module CBMain
             Exit Function
         End If
         strFile = gstrAccountPath() & "\" & strFileRoot & ".act"
-        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
         If Dir(strFile) <> "" Then
             MsgBox("Account file already exists with that name.", MsgBoxStyle.Critical)
             Exit Function
@@ -361,19 +358,15 @@ Public Module CBMain
     Public Sub gCreateStandardFolders()
         Try
 
-            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             If Dir(gstrDataPath(), FileAttribute.Directory) = "" Then
                 MkDir(gstrDataPath())
             End If
-            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             If Dir(gstrAccountPath(), FileAttribute.Directory) = "" Then
                 MkDir(gstrAccountPath())
             End If
-            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             If Dir(gstrBackupPath(), FileAttribute.Directory) = "" Then
                 MkDir(gstrBackupPath())
             End If
-            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             If Dir(gstrReportPath(), FileAttribute.Directory) = "" Then
                 MkDir(gstrReportPath())
             End If
@@ -392,7 +385,6 @@ Public Module CBMain
 
             'Standard category file
             strFile = gstrAddPath("Shared.cat")
-            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             If Dir(strFile, FileAttribute.Normal) = "" Then
                 MsgBox("Creating standard category list, which you can edit later...", MsgBoxStyle.Information)
                 intFile = FreeFile()
@@ -444,7 +436,6 @@ Public Module CBMain
 
             'Standard budget file
             strFile = gstrAddPath("Shared.bud")
-            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             If Dir(strFile, FileAttribute.Normal) = "" Then
                 MsgBox("Creating standard budget list, which you can edit later...", MsgBoxStyle.Information)
                 intFile = FreeFile()
@@ -459,7 +450,6 @@ Public Module CBMain
 
             'Standard payee file
             strFile = gstrPayeeFilePath()
-            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             If Dir(strFile, FileAttribute.Normal) = "" Then
                 intFile = FreeFile()
                 FileOpen(intFile, strFile, OpenMode.Output)
@@ -470,9 +460,7 @@ Public Module CBMain
             End If
 
             'Standard QIF import transaction types file
-            'UPGRADE_WARNING: Couldn't resolve default property of object gstrTrxTypeFilePath(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             strFile = gstrTrxTypeFilePath()
-            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             If Dir(strFile, FileAttribute.Normal) = "" Then
                 intFile = FreeFile()
                 FileOpen(intFile, strFile, OpenMode.Output)
@@ -535,8 +523,6 @@ Public Module CBMain
         gDisablePayeeListSorting(lvwPayees)
         objItem = lvwPayees.Items.Add(strNum)
         objItem.Tag = CStr(intIndex)
-        'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmPayee.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         If objItem.SubItems.Count > 1 Then
             objItem.SubItems(1).Text = elmPayee.GetAttribute("Output")
         Else
@@ -560,7 +546,6 @@ Public Module CBMain
         Else
             strText = elmChild.Text
         End If
-        'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
         If objItem.SubItems.Count > intSubItem Then
             objItem.SubItems(intSubItem).Text = strText
         Else
@@ -649,7 +634,6 @@ Public Module CBMain
         If strSecurityOption = "createfile" Then
             'Make standard security file.
             strFile = objSec.strMakePath(objSec.strDefaultFileName)
-            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             If Dir(strFile, FileAttribute.Normal) = "" Then
                 objSec.CreateEmpty(objSec.strDefaultFileName)
                 objSec.CreateUser("admin", "Administrator")

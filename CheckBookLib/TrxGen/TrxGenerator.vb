@@ -180,7 +180,6 @@ Module TrxGenerator
 		Do 
 			'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
             If Not gblnXmlAttributeMissing(vntNominalEndDate) Then
-                'UPGRADE_WARNING: Couldn't resolve default property of object vntNominalEndDate. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 If datTrxDate > vntNominalEndDate Then
                     Exit Do
                 End If
@@ -273,7 +272,6 @@ Module TrxGenerator
 
         Dim colResults As ICollection(Of TrxToCreate)
         Dim intIndex As Short
-        'UPGRADE_WARNING: Arrays in structure datTrxTmp may need to be initialized before they can be used. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
         Dim datTrxTmp As TrxToCreate
         Dim strDueDayOfMonth As String = ""
         Dim intDueDayOfMonth As Integer
@@ -284,7 +282,6 @@ Module TrxGenerator
         For intIndex = 1 To UBound(datSeqTrx)
             If Not datSeqTrx(intIndex).blnSkip Then
                 'LSet datTrxTmp = datTrxTemplate
-                'UPGRADE_WARNING: Couldn't resolve default property of object datTrxTmp. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 datTrxTmp = gdatCopyTrxToCreate(datTrxTemplate)
                 datTrxTmp.datDate = datSeqTrx(intIndex).datDate
                 If datTrxTemplate.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then

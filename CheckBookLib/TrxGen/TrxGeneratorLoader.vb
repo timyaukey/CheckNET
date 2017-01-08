@@ -6,7 +6,6 @@ Public Module TrxGeneratorLoader
 
     'Routines related to creating ITrxGenerator objects from XML files.
 
-    'UPGRADE_WARNING: Arrays in structure mdatNullTrxToCreate may need to be initialized before they can be used. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
     Private mdatNullTrxToCreate As TrxToCreate
 
     '$Description Create the ITrxGenerator for the specified XML document, and call
@@ -25,15 +24,11 @@ Public Module TrxGeneratorLoader
             gShowTrxGenLoadError(domDoc, "Document element is not <generator>")
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object domDoc.documentElement.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntClassName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntClassName = domDoc.DocumentElement.GetAttribute("class")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntClassName) Then
             gShowTrxGenLoadError(domDoc, "Missing class attribute")
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntClassName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         strClassName = CStr(vntClassName)
         If strClassName = "wccheckbook.period" Then
             objGenerator = New TrxGenPeriod
@@ -97,7 +92,6 @@ Public Module TrxGeneratorLoader
                         End If
                     End If
                 End If
-                'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             Catch ex As Exception
                 Throw New Exception("Error loading trx generator [" + strFullXMLFile + "]", ex)
             End Try
@@ -119,18 +113,13 @@ Public Module TrxGeneratorLoader
     Public Sub gShowTrxGenLoadError(ByVal domDoc As VB6XmlDocument, ByVal strError As String)
         Dim strDescription As String
         Dim vntDescription As Object
-        'UPGRADE_WARNING: Couldn't resolve default property of object domDoc.documentElement.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntDescription. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntDescription = domDoc.DocumentElement.GetAttribute("description")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntDescription) Then
-            'UPGRADE_WARNING: Couldn't resolve default property of object vntDescription. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             vntDescription = ""
         End If
         If Len(vntDescription) = 0 Then
             strDescription = domDoc.FullPath
         Else
-            'UPGRADE_WARNING: Couldn't resolve default property of object vntDescription. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             strDescription = CStr(vntDescription)
         End If
         ShowTrxGenLoadError(strDescription, strError)
@@ -190,41 +179,29 @@ Public Module TrxGeneratorLoader
         Dim vntAttrib As Object
 
         gstrLoadTrxGeneratorCore = ""
-        'UPGRADE_WARNING: Couldn't resolve default property of object domDoc.documentElement.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = domDoc.DocumentElement.GetAttribute("enabled")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             gstrLoadTrxGeneratorCore = "Missing [enabled] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         If vntAttrib <> "true" And vntAttrib <> "false" Then
             gstrLoadTrxGeneratorCore = "[enabled] attribute must be ""true"" or ""false"""
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         blnEnabled = CBool(vntAttrib)
 
-        'UPGRADE_WARNING: Couldn't resolve default property of object domDoc.documentElement.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = domDoc.DocumentElement.GetAttribute("repeatkey")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             gstrLoadTrxGeneratorCore = "Missing [repeatkey] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         strRepeatKey = CStr(vntAttrib)
         'If objAccount.objRepeats.intLookupKey(strRepeatKey) = 0 Then
         '    gstrLoadTrxGeneratorCore = "Invalid [repeatkey] attribute"
         '    Exit Function
         'End If
 
-        'UPGRADE_WARNING: Couldn't resolve default property of object domDoc.documentElement.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = domDoc.DocumentElement.GetAttribute("description")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             gstrLoadTrxGeneratorCore = "Missing [description] attribute"
             Exit Function
@@ -233,13 +210,9 @@ Public Module TrxGeneratorLoader
             gstrLoadTrxGeneratorCore = "Empty [description] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         strDescription = CStr(vntAttrib)
 
-        'UPGRADE_WARNING: Couldn't resolve default property of object domDoc.documentElement.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = domDoc.DocumentElement.GetAttribute("startseq")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             gstrLoadTrxGeneratorCore = "Missing [startseq] attribute"
             Exit Function
@@ -248,7 +221,6 @@ Public Module TrxGeneratorLoader
             gstrLoadTrxGeneratorCore = "Invalid [startseq] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         intStartRepeatSeq = CShort(vntAttrib)
     End Function
 
@@ -383,48 +355,33 @@ Public Module TrxGeneratorLoader
         Dim objSeq As SequencedTrx
 
         gdatCreateOneSequencedTrx = Nothing
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmSeq.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmSeq.GetAttribute("date")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             strError = "Missing [date] attribute" & strErrorEnding
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         If gblnValidDate(vntAttrib) Then
-            'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             datTrxDate = CDate(vntAttrib)
         Else
             strError = "Invalid [date] attribute" & strErrorEnding
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmSeq.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmSeq.GetAttribute("increasepercent")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             dblPercentIncrease = dblDefaultPercentIncrease
         Else
-            'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             If Not gblnValidAmount(vntAttrib) Then
                 strError = "Invalid [increasepercent] attribute" & strErrorEnding
                 Exit Function
             End If
-            'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             dblPercentIncrease = CDbl(vntAttrib) / 100.0#
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmSeq.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmSeq.GetAttribute("amount")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             strError = "Missing [amount] attribute" & strErrorEnding
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         If gblnValidAmount(vntAttrib) Then
-            'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             curAmount = CDec(vntAttrib) * (1.0# + dblPercentIncrease)
         Else
             strError = "Invalid [amount] attribute" & strErrorEnding
@@ -564,7 +521,6 @@ Public Module TrxGeneratorLoader
 
         'Clear everything.
         'LSet datTrxTemplate = mdatNullTrxToCreate
-        'UPGRADE_WARNING: Couldn't resolve default property of object datTrxTemplate. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         datTrxTemplate = gdatCopyTrxToCreate(mdatNullTrxToCreate)
 
         elmTrxTpt = domDoc.DocumentElement.SelectSingleNode("normaltrx")
@@ -602,15 +558,11 @@ Public Module TrxGeneratorLoader
         'Amount.
         datTrxTemplate.curAmount = curAmount
         'Key of other register.
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxTpt.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmTrxTpt.GetAttribute("transferkey")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             gstrGetTrxGenTemplateTransfer = "Missing [transferkey] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         datTrxTemplate.strTransferKey = CStr(vntAttrib)
 
         'Set shared fields.
@@ -628,46 +580,33 @@ Public Module TrxGeneratorLoader
         datTrxTemplate.lngType = Trx.TrxType.glngTRXTYP_BUDGET
         datTrxTemplate.lngStatus = Trx.TrxStatus.glngTRXSTS_NONBANK
         'Budget key.
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxTpt.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmTrxTpt.GetAttribute("budgetkey")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             gstrGetTrxGenTemplateBudget = "Missing [budgetkey] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         If gobjBudgets.intLookupKey(vntAttrib) = 0 Then
             gstrGetTrxGenTemplateBudget = "Invalid [budgetkey] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         datTrxTemplate.strBudgetKey = CStr(vntAttrib)
         'Budget unit.
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxTpt.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmTrxTpt.GetAttribute("budgetunit")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             gstrGetTrxGenTemplateBudget = "Missing [budgetunit] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         datTrxTemplate.lngBudgetUnit = glngConvertRepeatUnit(UCase(vntAttrib))
         If datTrxTemplate.lngBudgetUnit = Trx.RepeatUnit.glngRPTUNT_MISSING Then
             gstrGetTrxGenTemplateBudget = "Invalid [budgetunit] attribute"
             Exit Function
         End If
         'Budget number.
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxTpt.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmTrxTpt.GetAttribute("budgetnumber")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             gstrGetTrxGenTemplateBudget = "Missing [budgetnumber] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         datTrxTemplate.intBudgetNumber = gintConvertRepeatCount(vntAttrib)
         If datTrxTemplate.intBudgetNumber = 0 Then
             gstrGetTrxGenTemplateBudget = "Invalid [budgetnumber] attribute"
@@ -752,10 +691,7 @@ Public Module TrxGeneratorLoader
 
         gstrGetTrxGenTemplateShared = ""
         'Description.
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxTpt.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmTrxTpt.GetAttribute("description")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             gstrGetTrxGenTemplateShared = "Missing [description] attribute"
             Exit Function
@@ -764,15 +700,10 @@ Public Module TrxGeneratorLoader
             gstrGetTrxGenTemplateShared = "Empty [description] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         datTrxTemplate.strDescription = CStr(vntAttrib)
         'Memo.
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxTpt.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmTrxTpt.GetAttribute("memo")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If Not gblnXmlAttributeMissing(vntAttrib) Then
-            'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             datTrxTemplate.strMemo = CStr(vntAttrib)
         End If
         'Other.
@@ -783,7 +714,6 @@ Public Module TrxGeneratorLoader
     End Function
 
     Public Function gdatCopyTrxToCreate(ByRef datInput As TrxToCreate) As TrxToCreate
-        'UPGRADE_WARNING: Couldn't resolve default property of object gdatCopyTrxToCreate. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         gdatCopyTrxToCreate = datInput
         'Necessary for .NET compatibility, because .NET adatSplits is an object
         'and the code converter doesn't notice so all copies share the same array.

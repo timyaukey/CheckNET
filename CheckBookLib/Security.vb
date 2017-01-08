@@ -16,7 +16,6 @@ Public Class Security
     Public Sub Load(ByVal strFileName As String)
         Init()
         MakePath(strFileName)
-        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
         If Dir(mstrFilePath) = "" Then
             gRaiseError("Could not find security file " & mstrFilePath)
         End If
@@ -90,9 +89,6 @@ Public Class Security
     End Sub
 
     Private Function strCreateUserSignature(ByVal elmUser As VB6XmlElement) As String
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmUser.getAttribute(isadmin). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmUser.getAttribute(name). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmUser.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         strCreateUserSignature = strMakeHash(elmUser.GetAttribute("login") & elmUser.GetAttribute("name") & ":isadmin=" & elmUser.GetAttribute("isadmin"))
     End Function
 
@@ -104,11 +100,9 @@ Public Class Security
         melmUser = mdomSecurity.CreateElement("user")
         melmUser.SetAttribute("login", strLogin)
         melmUser.SetAttribute("name", strName)
-        'UPGRADE_WARNING: Couldn't resolve default property of object melmUser. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         mdomSecurity.DocumentElement.AppendChild(melmUser)
         Dim objText As VB6XmlText
         objText = mdomSecurity.CreateTextNode(vbCrLf)
-        'UPGRADE_WARNING: Couldn't resolve default property of object objText. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         mdomSecurity.DocumentElement.AppendChild(objText)
         mstrLogin = strLogin
     End Sub
@@ -122,12 +116,10 @@ Public Class Security
     Public Function blnUserSignatureIsValid() As Boolean
         Dim strComputedSignature As String
         strComputedSignature = strCreateUserSignature(melmUser)
-        'UPGRADE_WARNING: Couldn't resolve default property of object melmUser.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         blnUserSignatureIsValid = (strComputedSignature = melmUser.GetAttribute("signhash"))
     End Function
 
     Public Function blnPasswordMatches(ByVal strPassword As String) As Boolean
-        'UPGRADE_WARNING: Couldn't resolve default property of object melmUser.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         blnPasswordMatches = (melmUser.GetAttribute("passwordhash") = strMakeHash(strPassword))
     End Function
 
@@ -145,14 +137,10 @@ Public Class Security
 
     Private Function strUserValue(ByVal strAttrib As String) As String
         Dim vstrValue As Object
-        'UPGRADE_WARNING: Couldn't resolve default property of object melmUser.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vstrValue. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vstrValue = melmUser.GetAttribute(strAttrib)
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vstrValue) Then
             strUserValue = ""
         Else
-            'UPGRADE_WARNING: Couldn't resolve default property of object vstrValue. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             strUserValue = CStr(vstrValue)
         End If
     End Function

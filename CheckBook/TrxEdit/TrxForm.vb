@@ -382,38 +382,32 @@ Friend Class TrxForm
                         With objCurrent
                             objItem = gobjListViewAdd(lvwAppliedTo)
                             objItem.Text = gstrFormatDate(.datDate)
-                            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                             If objItem.SubItems.Count > 1 Then
                                 objItem.SubItems(1).Text = .strNumber
                             Else
                                 objItem.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, .strNumber))
                             End If
-                            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                             If objItem.SubItems.Count > 2 Then
                                 objItem.SubItems(2).Text = .strDescription
                             Else
                                 objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, .strDescription))
                             End If
-                            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                             If objItem.SubItems.Count > 3 Then
                                 objItem.SubItems(3).Text = objSplit.strInvoiceNum
                             Else
                                 objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objSplit.strInvoiceNum))
                             End If
-                            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                             If objItem.SubItems.Count > 4 Then
                                 objItem.SubItems(4).Text = objSplit.strPONumber
                             Else
                                 objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objSplit.strPONumber))
                             End If
-                            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                             If objItem.SubItems.Count > 5 Then
                                 objItem.SubItems(5).Text = gstrFormatCurrency(objSplit.curAmount)
                             Else
                                 objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objSplit.curAmount)))
                             End If
                             curTotalApplied = curTotalApplied + objSplit.curAmount
-                            'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                             If objItem.SubItems.Count > 6 Then
                                 objItem.SubItems(6).Text = gstrTranslateCatKey(objSplit.strCategoryKey)
                             Else
@@ -547,7 +541,6 @@ Friend Class TrxForm
         If mintSplits = 0 Then
             mintSplits = 1
         End If
-        'UPGRADE_WARNING: Lower bound of array maudtSplits was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim maudtSplits(mintSplits)
         FillSplitDataArray()
         intIndex = 0
@@ -599,7 +592,6 @@ Friend Class TrxForm
             mintSplitOffset = intNewOffset
             If mintSplitOffset + mintSPLIT_CTRL_ARRAY_SIZE > mintSplits Then
                 mintSplits = mintSplitOffset + mintSPLIT_CTRL_ARRAY_SIZE
-                'UPGRADE_WARNING: Lower bound of array maudtSplits was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
                 ReDim Preserve maudtSplits(mintSplits)
                 FillSplitDataArray()
             End If
@@ -679,10 +671,8 @@ Friend Class TrxForm
 
     Private Function blnPlaceholderAdjustmentRequired(ByRef intSplitIndex As Short) As Object
         If mblnHasPlaceholderBudget And maudtSplits(intSplitIndex).strBudgetKey <> gstrPlaceholderBudgetKey Then
-            'UPGRADE_WARNING: Couldn't resolve default property of object blnPlaceholderAdjustmentRequired. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             blnPlaceholderAdjustmentRequired = True
         Else
-            'UPGRADE_WARNING: Couldn't resolve default property of object blnPlaceholderAdjustmentRequired. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             blnPlaceholderAdjustmentRequired = False
         End If
     End Function
@@ -711,7 +701,6 @@ Friend Class TrxForm
         For intSplitIndex = 1 To mintSplits
             If maudtSplits(intSplitIndex).strBudgetKey = gstrPlaceholderBudgetKey Then
                 intPlaceholders = intPlaceholders + 1
-                'UPGRADE_WARNING: Lower bound of array intPlaceholderIndexes was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
                 ReDim Preserve intPlaceholderIndexes(intPlaceholders)
                 intPlaceholderIndexes(intPlaceholders) = intSplitIndex
             Else
@@ -801,7 +790,6 @@ Friend Class TrxForm
         Next
     End Sub
 
-    'UPGRADE_WARNING: Event chkImported.CheckStateChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
     Private Sub chkImported_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkImported.CheckStateChanged
         Try
 
@@ -866,7 +854,6 @@ Friend Class TrxForm
             Else
                 strMsg = "Matching Memorized Transaction(s):"
                 For Each objPayee In colPayees
-                    'UPGRADE_WARNING: Couldn't resolve default property of object objPayee.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     strPayee = objPayee.GetAttribute("Output") & vbCrLf & gstrGetXMLChildText(objPayee, "Address1")
                     strAddress2 = gstrGetXMLChildText(objPayee, "Address2")
                     If Len(strAddress2) > 0 Then
@@ -1254,7 +1241,6 @@ Friend Class TrxForm
     End Function
 
     Private Function blnSplitUsed(ByVal intSplit As Short) As Boolean
-        'UPGRADE_WARNING: Couldn't resolve default property of object maudtSplits().blnUsed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         blnSplitUsed = maudtSplits(intSplit).blnUsed
     End Function
 
@@ -1305,12 +1291,10 @@ Friend Class TrxForm
         If mblnEditMode Then
             objTrx = objUpdateStartNormal(objTrxOld)
             AddSplits(objTrx)
-            'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             mobjReg.UpdateEnd(mlngIndex, New LogChange, mstrLogTitle, objTrxOld)
         Else
             objTrx = objNewStartNormal()
             AddSplits(objTrx)
-            'UPGRADE_WARNING: Couldn't resolve default property of object New (LogAdd). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             mobjReg.NewAddEnd(objTrx, New LogAdd, mstrLogTitle)
         End If
         If objTrx.blnAnyUnmatchedBudget Then
@@ -1473,7 +1457,6 @@ Friend Class TrxForm
             counter = mintSplits
             For intDeleteIndex = counter To 1 Step -1
                 If maudtSplits(intDeleteIndex).blnChoose Then
-                    'UPGRADE_WARNING: Couldn't resolve default property of object blnPlaceholderAdjustmentRequired(intDeleteIndex). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     If blnPlaceholderAdjustmentRequired(intDeleteIndex) Then
                         maudtSplits(intDeleteIndex).strAmount = "0"
                         FindAndAdjustPlaceholderBudgets()
@@ -1482,7 +1465,6 @@ Friend Class TrxForm
                         maudtSplits(intMoveIndex - 1) = maudtSplits(intMoveIndex)
                     Next
                     mintSplits = mintSplits - 1
-                    'UPGRADE_WARNING: Lower bound of array maudtSplits was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
                     ReDim Preserve maudtSplits(mintSplits)
                     intDeleteCount = intDeleteCount + 1
                 End If
@@ -1608,7 +1590,6 @@ Friend Class TrxForm
                 End If
             Next
             objStartLogger = mobjReg.objLogGroupStart("TrxForm.Divide")
-            'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             mobjReg.UpdateEnd(mlngIndex, New LogChange, mstrLogTitle & ".DivideOld", objTrxOld)
 
             'Create the new trx, with the checked splits.
@@ -1619,7 +1600,6 @@ Friend Class TrxForm
                     AddSplitIfUsed(objTrx, intSplit)
                 End If
             Next
-            'UPGRADE_WARNING: Couldn't resolve default property of object New (LogAdd). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             mobjReg.NewAddEnd(objTrx, New LogAdd, mstrLogTitle & ".DivideNew")
             mobjReg.LogGroupEnd(objStartLogger)
 
@@ -1733,7 +1713,6 @@ Friend Class TrxForm
                     Exit Function
                 End If
             End If
-            'UPGRADE_WARNING: Couldn't resolve default property of object elmPayee.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             strPayee = elmPayee.GetAttribute("Output")
             elmChild = elmPayee.SelectSingleNode("Cat")
             If Not elmChild Is Nothing Then
@@ -1755,7 +1734,6 @@ Friend Class TrxForm
             If Not elmChild Is Nothing Then
                 strMemo = elmChild.Text
             End If
-            'UPGRADE_WARNING: Couldn't resolve default property of object blnFindPayee. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             blnFindPayee = True
 
             Exit Function
@@ -1764,7 +1742,6 @@ Friend Class TrxForm
         End Try
     End Function
 
-    'UPGRADE_WARNING: Event txtNumber.TextChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
     Private Sub txtNumber_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtNumber.TextChanged
         Try
 
@@ -1961,7 +1938,6 @@ Friend Class TrxForm
             Do
                 If intDstSplit > mintSplits Then
                     mintSplits = mintSplits + 1
-                    'UPGRADE_WARNING: Lower bound of array maudtSplits was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
                     ReDim Preserve maudtSplits(mintSplits)
                     intDstSplit = mintSplits
                     Exit Do
@@ -2030,7 +2006,6 @@ Friend Class TrxForm
         If Not (mblnSuppressPlaceholderAdjustment Or mblnInDisplaySplits) Then
             intSplitIndex = intGetSplitIndex(index)
             maudtSplits(intSplitIndex).strAmount = txtSplitAmount(index).Text
-            'UPGRADE_WARNING: Couldn't resolve default property of object blnPlaceholderAdjustmentRequired(intSplitIndex). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             If blnPlaceholderAdjustmentRequired(intSplitIndex) Then
                 FindAndAdjustPlaceholderBudgets()
             Else
@@ -2092,13 +2067,11 @@ Friend Class TrxForm
             objTrx = mobjReg.objTrx(mlngIndex)
             objTrxOld = objTrx.objClone(Nothing)
             objTrx.UpdateStartBudget(mobjReg, CDate(txtDate.Text), txtDescription.Text, txtMemo.Text, blnAwaitingReview(), blnAutoGenerated(), intRepeatSeq(), strRepeatKey(), CDec(txtBudgetLimit.Text), datBudgetEnds, strBudgetKey)
-            'UPGRADE_WARNING: Couldn't resolve default property of object New (LogChange). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             mobjReg.UpdateEnd(mlngIndex, New LogChange, mstrLogTitle, objTrxOld)
             MsgBox("If you have changed the budget dates or budget name, " & "transactions already applied to this budget will not be checked to " & "see if they should still be applied until the " & "software is restarted, or the existing transactions are edited " & "and saved.")
         Else
             objTrx = New Trx
             objTrx.NewStartBudget(mobjReg, CDate(txtDate.Text), txtDescription.Text, txtMemo.Text, blnAwaitingReview(), blnAutoGenerated(), intRepeatSeq(), strRepeatKey(), CDec(txtBudgetLimit.Text), datBudgetEnds, strBudgetKey)
-            'UPGRADE_WARNING: Couldn't resolve default property of object New (LogAdd). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             mobjReg.NewAddEnd(objTrx, New LogAdd, mstrLogTitle)
             MsgBox("Existing transactions will not be applied to this budget " & "until the software is restarted, or the existing transactions " & "are edited and saved.")
         End If

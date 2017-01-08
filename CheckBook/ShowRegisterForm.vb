@@ -153,7 +153,6 @@ Friend Class ShowRegisterForm
         Try
 
             Do
-                'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
                 strFile = Dir(gstrBackupPath() & "\" & strNameRoot & ".act.*")
                 If strFile = "" Then
                     Exit Do
@@ -162,7 +161,6 @@ Friend Class ShowRegisterForm
             Loop
 
             strFile = gstrAccountPath() & "\" & strNameRoot & ".rep"
-            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             If Dir(strFile) <> "" Then
                 Kill(strFile)
             End If
@@ -170,7 +168,6 @@ Friend Class ShowRegisterForm
             'It looks for ACT files to find accounts, so delete this one last
             'in case it crashes deleting other files. So you can try again.
             strFile = gstrAccountPath() & "\" & strNameRoot & ".act"
-            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             If Dir(strFile) <> "" Then
                 Kill(strFile)
             End If
@@ -315,11 +312,9 @@ Friend Class ShowRegisterForm
                 strRegisterEndDate = InputBox("Enter ending date to generate transactions through:", "Ending Date", gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, 90, Now)))
                 If strRegisterEndDate <> "" Then
                     If gblnValidDate(strRegisterEndDate) Then
-                        'UPGRADE_WARNING: Screen property Screen.MousePointer has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
                         System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor
                         .objAccount.RecreateGeneratedTrx(CDate(strRegisterEndDate))
                         Me.Activate()
-                        'UPGRADE_WARNING: Screen property Screen.MousePointer has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
                         System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
                     Else
                         MsgBox("Invalid date.")
@@ -329,7 +324,6 @@ Friend Class ShowRegisterForm
 
             Exit Sub
         Catch ex As Exception
-            'UPGRADE_WARNING: Screen property Screen.MousePointer has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
             gTopException(ex)
         End Try
@@ -376,7 +370,6 @@ Friend Class ShowRegisterForm
         End Try
     End Sub
 
-    'UPGRADE_WARNING: Event lstRegisters.SelectedIndexChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
     Private Sub lstRegisters_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles lstRegisters.SelectedIndexChanged
         Dim blnRegisterSelected As Boolean
 

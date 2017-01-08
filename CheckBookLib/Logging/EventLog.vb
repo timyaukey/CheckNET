@@ -66,12 +66,10 @@ Public Class EventLog
             objLogger.WriteLog(Me)
         Next objLogger
         strLogFolder = gstrAddPath("EventLogs")
-        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
         If Dir(strLogFolder, FileAttribute.Directory) = "" Then
             MkDir(strLogFolder)
         End If
         strLogFolder = strLogFolder & "\" & gstrFormatDate(Today, "yyyy-MMM")
-        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
         If Dir(strLogFolder, FileAttribute.Directory) = "" Then
             MkDir(strLogFolder)
         End If
@@ -120,7 +118,6 @@ Public Class EventLog
         melmEvent = mdomOutput.CreateElement("Event")
         melmEvent.SetAttribute("Title", strTitle)
         melmEvent.SetAttribute("When", gstrFormatDate(datTimestamp, "G"))
-        'UPGRADE_WARNING: Couldn't resolve default property of object melmEvent. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         melmEventContainer.AppendChild(melmEvent)
     End Sub
 
@@ -141,7 +138,6 @@ Public Class EventLog
         Dim objSplit As TrxSplit
         Dim elmSplitParent As VB6XmlElement
         elmTrx = mdomOutput.CreateElement(strName)
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmTrx. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         melmEvent.AppendChild(elmTrx)
         With elmTrx
             .SetAttribute("Date", gstrFormatDate(objTrx.datDate))
@@ -163,7 +159,6 @@ Public Class EventLog
                     For Each objSplit In objTrx.colSplits
                         If objTrx.lngSplits > 1 Then
                             elmSplitParent = mdomOutput.CreateElement("Split")
-                            'UPGRADE_WARNING: Couldn't resolve default property of object elmSplitParent. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                             elmTrx.AppendChild(elmSplitParent)
                         End If
                         With elmSplitParent
@@ -208,7 +203,6 @@ Public Class EventLog
         Dim elmNewGroup As VB6XmlElement
         elmNewGroup = mdomOutput.CreateElement("Group")
         elmNewGroup.SetAttribute("Title", strTitle)
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmNewGroup. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         melmEventContainer.AppendChild(elmNewGroup)
         melmEventContainer = elmNewGroup
     End Sub

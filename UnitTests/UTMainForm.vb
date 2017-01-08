@@ -642,7 +642,6 @@ Friend Class UTMainForm
         Dim intElement As Integer
         Dim strResult As String = ""
         For Each intElement In colMatches
-            'UPGRADE_WARNING: Couldn't resolve default property of object vntElement. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             strResult = strResult & ";" & intElement
         Next
         strConcatMatchResults = strResult
@@ -743,9 +742,7 @@ Friend Class UTMainForm
 
             .objReg.MatchPayee(#4/3/2000#, 1, "company2", True, colMatches, blnExactMatch)
             gUTAssert(colMatches.Count() = 1, "company2 fail")
-            'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             objTrx = .objReg.objTrx(gdatFirstElement(colMatches))
-            'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             gUTAssert(gdatFirstElement(colMatches) = 2, "company2 index fail")
             gUTAssert(objTrx.strDescription = "company2", "company2 name fail")
             gUTAssert(objTrx.datDate = #4/3/2000#, "company2 date fail")
@@ -753,11 +750,8 @@ Friend Class UTMainForm
 
             .objReg.MatchPayee(#4/6/2000#, 1, "payee1", True, colMatches, blnExactMatch)
             gUTAssert(colMatches.Count() = 2, "payee1 fail")
-            'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             objTrx = .objReg.objTrx(gdatFirstElement(colMatches))
-            'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             gUTAssert(gdatFirstElement(colMatches) = 3, "payee1#1 index fail")
-            'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             gUTAssert(gdatSecondElement(colMatches) = 4, "payee1#2 index fail")
             gUTAssert(blnExactMatch = False, "payee#1 exact fail")
         End With
@@ -781,12 +775,10 @@ Friend Class UTMainForm
 
             .objReg.MatchInvoice(#4/3/2000#, 10, "company2", "I1000", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 I1000 fail")
-            'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             gUTAssert(gdatFirstElement(colMatches) = 2, "company2 I1000 index fail")
 
             .objReg.MatchInvoice(#4/3/2000#, 10, "company2", "I1001", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 I1001 fail")
-            'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             gUTAssert(gdatFirstElement(colMatches) = 2, "company2 I1001 index fail")
 
             .objReg.MatchInvoice(#4/5/2000#, 1, "company2", "I1000", colMatches)
@@ -818,12 +810,10 @@ Friend Class UTMainForm
 
             .objReg.MatchPONumber(#4/3/2000#, 10, "company2", "P1", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 P1 fail")
-            'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             gUTAssert(gdatFirstElement(colMatches) = 2, "company2 P1 index fail")
 
             .objReg.MatchPONumber(#4/3/2000#, 10, "company2", "P2", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 P2 fail")
-            'UPGRADE_WARNING: Couldn't resolve default property of object colMatches(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             gUTAssert(gdatFirstElement(colMatches) = 2, "company2 I1001 index fail")
 
             .objReg.MatchPONumber(#4/5/2000#, 1, "company2", "P1", colMatches)

@@ -16,7 +16,6 @@ Public Class TrxGenList
         Dim strError As String
         Dim nodeTrx As VB6XmlNode
         Dim elmTrx As VB6XmlElement
-        'UPGRADE_WARNING: Arrays in structure udtTrx may need to be initialized before they can be used. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="814DF224-76BD-4BB4-BFFB-EA359CB9FC48"'
         Dim udtTrx As TrxToCreate = New TrxToCreate()
         Dim datDate As Date
         Dim curAmount As Decimal
@@ -33,10 +32,8 @@ Public Class TrxGenList
 
         intCount = 0
         intNextRepeatSeq = mintStartRepeatSeq
-        'UPGRADE_WARNING: Lower bound of array maudtTrx was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
         ReDim maudtTrx(1)
         For Each nodeTrx In domDoc.DocumentElement.ChildNodes
-            'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             If TypeOf nodeTrx Is VB6XmlElement Then
                 elmTrx = nodeTrx
                 blnAddTrx = False
@@ -62,9 +59,7 @@ Public Class TrxGenList
                     udtTrx.intRepeatSeq = intNextRepeatSeq
                     intNextRepeatSeq = intNextRepeatSeq + 1
                     intCount = intCount + 1
-                    'UPGRADE_WARNING: Lower bound of array maudtTrx was changed from gintLBOUND1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="0F1C9BE1-AF9D-476E-83B1-17D43BECFF20"'
                     ReDim Preserve maudtTrx(intCount)
-                    'UPGRADE_WARNING: Couldn't resolve default property of object maudtTrx(intCount). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                     maudtTrx(intCount) = udtTrx
                 End If
             End If
@@ -78,36 +73,26 @@ Public Class TrxGenList
         Dim vntAttrib As Object
 
         strGetCommonFields = ""
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmTrx.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmTrx.GetAttribute("date")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             strGetCommonFields = "Missing [date] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         If Not gblnValidDate(vntAttrib) Then
             strGetCommonFields = "Invalid [date] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         datDate = CDate(vntAttrib)
 
-        'UPGRADE_WARNING: Couldn't resolve default property of object elmTrx.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vntAttrib = elmTrx.GetAttribute("amount")
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vntAttrib) Then
             strGetCommonFields = "Missing [amount] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         If Not gblnValidAmount(vntAttrib) Then
             strGetCommonFields = "Invalid [amount] attribute"
             Exit Function
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vntAttrib. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         curAmount = CDec(vntAttrib)
     End Function
 

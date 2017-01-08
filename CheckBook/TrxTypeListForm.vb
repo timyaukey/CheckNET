@@ -27,13 +27,11 @@ Friend Class TrxTypeListForm
         Try
 
             For Each frm In gcolForms()
-                'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
                 If TypeOf frm Is BankImportForm Then
                     MsgBox("You may not edit transaction types while importing from " & "the bank.", MsgBoxStyle.Critical)
                     Exit Sub
                 End If
             Next frm
-            'UPGRADE_WARNING: Couldn't resolve default property of object gstrTrxTypeFilePath(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             strTableFile = gstrTrxTypeFilePath()
             mdomTypeTable = gdomLoadFile(strTableFile)
             melmTypeTable = mdomTypeTable.DocumentElement
@@ -46,7 +44,6 @@ Friend Class TrxTypeListForm
         End Try
     End Sub
 
-    'UPGRADE_WARNING: Form event TrxTypeListForm.Activate has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
     Private Sub TrxTypeListForm_Activated(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Activated
 
         Try
@@ -94,12 +91,9 @@ Friend Class TrxTypeListForm
                 Exit Sub
             End If
             intNewIndex = mobjDisplayedTrxType.Index - 1
-            'UPGRADE_WARNING: Couldn't resolve default property of object melmTrxTypeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             melmTypeTable.RemoveChild(melmTrxTypeToSave)
-            'UPGRADE_WARNING: Couldn't resolve default property of object melmTrxTypeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             melmTypeTable.InsertBefore(melmTrxTypeToSave, mcolTrxTypes.Item(intNewIndex - gintLISTITEM_LOWINDEX))
             ShowTrxTypeList()
-            'UPGRADE_WARNING: Lower bound of collection lvwTrxTypes.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             SyncDisplay(lvwTrxTypes.Items.Item(intNewIndex))
             ShowSelectedTrxType()
 
@@ -121,12 +115,9 @@ Friend Class TrxTypeListForm
                 Exit Sub
             End If
             intNewIndex = mobjDisplayedTrxType.Index + 1
-            'UPGRADE_WARNING: Couldn't resolve default property of object melmTrxTypeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             melmTypeTable.RemoveChild(melmTrxTypeToSave)
-            'UPGRADE_WARNING: Couldn't resolve default property of object melmTrxTypeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             melmTypeTable.InsertBefore(melmTrxTypeToSave, mcolTrxTypes.Item(intNewIndex - gintLISTITEM_LOWINDEX + 1))
             ShowTrxTypeList()
-            'UPGRADE_WARNING: Lower bound of collection lvwTrxTypes.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
             SyncDisplay(lvwTrxTypes.Items.Item(intNewIndex))
             ShowSelectedTrxType()
 
@@ -148,7 +139,6 @@ Friend Class TrxTypeListForm
             elmTrxType = mdomTypeTable.CreateElement("TrxType")
             elmTrxType.SetAttribute("Before", "(edit or remove this prefix)")
             elmTrxType.SetAttribute("After", "(edit or remove this ending)")
-            'UPGRADE_WARNING: Couldn't resolve default property of object elmTrxType. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             melmTypeTable.AppendChild(elmTrxType)
             mcolTrxTypes = melmTypeTable.SelectNodes("TrxType")
             objNewItem = objCreateTrxTypeListItem(elmTrxType, mcolTrxTypes.Length - 1)
@@ -170,7 +160,6 @@ Friend Class TrxTypeListForm
                 Exit Sub
             End If
 
-            'UPGRADE_WARNING: Couldn't resolve default property of object melmTrxTypeToSave. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             melmTypeTable.RemoveChild(melmTrxTypeToSave)
             ShowTrxTypeList()
 
@@ -263,7 +252,6 @@ Friend Class TrxTypeListForm
 
             lvwTrxTypes.Refresh()
             System.Windows.Forms.Application.DoEvents()
-            'UPGRADE_WARNING: MSComctlLib.ListItem method objItem.EnsureVisible has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
             objItem.EnsureVisible()
             System.Windows.Forms.Application.DoEvents()
             lvwTrxTypes.FocusedItem = objItem
@@ -294,15 +282,10 @@ Friend Class TrxTypeListForm
 
         Dim vstrValue As Object
 
-        'UPGRADE_WARNING: Couldn't resolve default property of object elm.getAttribute(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-        'UPGRADE_WARNING: Couldn't resolve default property of object vstrValue. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         vstrValue = elm.GetAttribute(strName)
-        'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
         If gblnXmlAttributeMissing(vstrValue) Then
-            'UPGRADE_WARNING: Couldn't resolve default property of object vstrValue. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
             vstrValue = ""
         End If
-        'UPGRADE_WARNING: Couldn't resolve default property of object vstrValue. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
         strTrxTypeAttrib = vstrValue
     End Function
 
@@ -375,19 +358,16 @@ Friend Class TrxTypeListForm
 
             With mobjDisplayedTrxType
                 .Text = Trim(txtBefore.Text)
-                'UPGRADE_WARNING: Lower bound of collection mobjDisplayedTrxType has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                 If mobjDisplayedTrxType.SubItems.Count > 1 Then
                     mobjDisplayedTrxType.SubItems(1).Text = Trim(txtAfter.Text)
                 Else
                     mobjDisplayedTrxType.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Trim(txtAfter.Text)))
                 End If
-                'UPGRADE_WARNING: Lower bound of collection mobjDisplayedTrxType has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                 If mobjDisplayedTrxType.SubItems.Count > 2 Then
                     mobjDisplayedTrxType.SubItems(2).Text = Trim(txtMinAfter.Text)
                 Else
                     mobjDisplayedTrxType.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Trim(txtMinAfter.Text)))
                 End If
-                'UPGRADE_WARNING: Lower bound of collection mobjDisplayedTrxType has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                 If mobjDisplayedTrxType.SubItems.Count > 3 Then
                     mobjDisplayedTrxType.SubItems(3).Text = Trim(txtNumber.Text)
                 Else
@@ -409,19 +389,16 @@ Friend Class TrxTypeListForm
 
             objItem = lvwTrxTypes.Items.Add(strTrxTypeAttrib(elmTrxType, "Before"))
             With objItem
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                 If objItem.SubItems.Count > 1 Then
                     objItem.SubItems(1).Text = strTrxTypeAttrib(elmTrxType, "After")
                 Else
                     objItem.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strTrxTypeAttrib(elmTrxType, "After")))
                 End If
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                 If objItem.SubItems.Count > 2 Then
                     objItem.SubItems(2).Text = strTrxTypeAttrib(elmTrxType, "MinAfter")
                 Else
                     objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strTrxTypeAttrib(elmTrxType, "MinAfter")))
                 End If
-                'UPGRADE_WARNING: Lower bound of collection objItem has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                 If objItem.SubItems.Count > 3 Then
                     objItem.SubItems(3).Text = strTrxTypeAttrib(elmTrxType, "Number")
                 Else
