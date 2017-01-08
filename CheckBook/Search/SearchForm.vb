@@ -22,7 +22,7 @@ Friend Class SearchForm
     Private mcurAmountMatched As Decimal
     Private mcurAmountTotal As Decimal
     Private mblnIgnoreTrxUpdates As Boolean
-    Private colCheckedTrx As Collection
+    Private colCheckedTrx As ICollection(Of Trx)
     Private objSelectedTrx As Trx
 
     'Parameters of most recent successful search
@@ -40,7 +40,7 @@ Friend Class SearchForm
         mobjReg = objReg_
         mobjAccount = objAccount_
         mfrmReg = frmReg_
-        colCheckedTrx = New Collection
+        colCheckedTrx = New List(Of Trx)
         mcurAmountMatched = 0
         mcurAmountTotal = 0
         mdatDefaultDate = Today
@@ -534,7 +534,7 @@ Friend Class SearchForm
             Dim frmArgs As ChangeCategoryForm
             Dim strOldCatKey As String = ""
             Dim strNewCatKey As String = ""
-            Dim colTrx As Collection
+            Dim colTrx As ICollection(Of Trx)
             Dim objItem As System.Windows.Forms.ListViewItem
             Dim lngTrxIndex As Integer
             Dim objTrx As Trx
@@ -550,7 +550,7 @@ Friend Class SearchForm
                 Exit Sub
             End If
 
-            colTrx = New Collection
+            colTrx = New List(Of Trx)
             For Each objItem In lvwMatches.Items
                 If objItem.Checked Then
                     'Get the trx and validate it.
@@ -616,7 +616,7 @@ Friend Class SearchForm
             Dim objItem As System.Windows.Forms.ListViewItem
             Dim objNewTrx As Trx = Nothing
             Dim objOldTrx As Trx
-            Dim colOldTrx As Collection
+            Dim colOldTrx As ICollection(Of Trx)
             Dim objOldSplit As TrxSplit
             Dim lngTrxIndex As Integer
             Dim frmTrx As TrxForm
@@ -627,7 +627,7 @@ Friend Class SearchForm
             'Build the new Trx from selected (checked) Trx.
             'Use the first Trx for Trx level data, and clone the splits of all Trx.
             'Keep a collection of the chosen Trx, to delete them at the end.
-            colOldTrx = New Collection
+            colOldTrx = New List(Of Trx)
             For Each objItem In lvwMatches.Items
                 If objItem.Checked Then
                     'Get the old trx and validate it.
@@ -698,7 +698,7 @@ Friend Class SearchForm
             Dim objTrxOld As Trx
             Dim objTrxNew As Trx
             Dim objTrxFirst As Trx = Nothing
-            Dim colTrx As Collection
+            Dim colTrx As ICollection(Of Trx)
             Dim colSplits As IEnumerable(Of TrxSplit)
             Dim objSplit As TrxSplit
             Dim strNewDate As String = ""
@@ -709,7 +709,7 @@ Friend Class SearchForm
             Dim datNewDate As Date
             Dim frmMoveTo As MoveDstForm
 
-            colTrx = New Collection
+            colTrx = New List(Of Trx)
             For Each objItem In lvwMatches.Items
                 If objItem.Checked Then
                     'Get the trx and validate it.
@@ -866,7 +866,7 @@ Friend Class SearchForm
         Dim objCheckedTrx As Trx
 
         'Remember the results that are checked.
-        colCheckedTrx = New Collection
+        colCheckedTrx = New List(Of Trx)
         For Each objItem In lvwMatches.Items
             If objItem.Checked Then
                 'Get the trx and validate it.

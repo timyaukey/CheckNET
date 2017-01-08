@@ -52,7 +52,7 @@ Public Class RegisterLoader
     Private mstrSBudgetKey As String
     Private mcurSAmount As Decimal
     Private mstrSImageFiles As String
-    Private mcolSplits As Collection
+    Private mcolSplits As ICollection(Of TrxSplit)
 
     '$Description Load transactions into an existing register from an open file handle.
     '   Does not clear the existing register contents before starting, so can be used
@@ -304,7 +304,7 @@ Public Class RegisterLoader
         mdatRptEnd = System.DateTime.FromOADate(0)
 
         ClearSplitData()
-        mcolSplits = New Collection
+        mcolSplits = New List(Of TrxSplit)
     End Sub
 
     Private Sub ClearSplitData()

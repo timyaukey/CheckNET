@@ -29,7 +29,7 @@ Public Interface ITrxGenerator
     '   than this constraint, the date range and dates are controlled by
     '   the generator and not the caller.
 
-    Function colCreateTrx(ByVal objReg As Register, ByVal datRptEndMax As Date) As Collection
+    Function colCreateTrx(ByVal objReg As Register, ByVal datRptEndMax As Date) As ICollection(Of TrxToCreate)
 End Interface
 
 'Data from which one Split can be created by gstrCreateOneTrx().

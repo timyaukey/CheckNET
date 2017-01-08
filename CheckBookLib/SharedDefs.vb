@@ -118,36 +118,10 @@ Public Module SharedDefs
     End Function
 
     Public Function gaSplit(ByVal strInput As String, ByVal strSeparator As String) As String()
-        'gaSplit = Split(strInput, strSeparator, -1, vbBinaryCompare)
-        Dim lngStartIndex As Integer
-        Dim lngNextSepIndex As Integer
-        Dim intSepLen As Short
-        Dim colResults As Collection
-        Dim astrResults() As String
-        Dim vstrPart As Object
-        Dim lngOutIndex As Integer
-
-        colResults = New Collection
-        intSepLen = Len(strSeparator)
-        lngStartIndex = 1
-        Do
-            lngNextSepIndex = InStr(lngStartIndex, strInput, strSeparator)
-            If lngNextSepIndex <= 0 Then
-                colResults.Add(Mid(strInput, lngStartIndex))
-                Exit Do
-            End If
-            colResults.Add(Mid(strInput, lngStartIndex, lngNextSepIndex - lngStartIndex))
-            lngStartIndex = lngNextSepIndex + intSepLen
-        Loop
-        ReDim astrResults(colResults.Count() - 1)
-        lngOutIndex = 0
-        For Each vstrPart In colResults
-            'UPGRADE_WARNING: Couldn't resolve default property of object vstrPart. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            astrResults(lngOutIndex) = vstrPart
-            lngOutIndex = lngOutIndex + 1
-        Next vstrPart
-        'gaSplit = VB6.CopyArray(astrResults)
-        gaSplit = astrResults.Clone()
+        Dim sep(1) As String
+        sep(0) = strSeparator
+        Dim tmp() As String = strInput.Split(sep, StringSplitOptions.None)
+        Return tmp
     End Function
 
     Public Function gstrDataPath() As String

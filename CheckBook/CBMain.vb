@@ -16,10 +16,14 @@ Public Module CBMain
     'Will be 0 in .NET, 1 in VB6.
     Public Const gintLISTITEM_LOWINDEX As Short = 0
 
-    Private Structure BackupPurgeDay
-        Dim colCreateDates As Collection
-        Dim colNames As Collection
-    End Structure
+    Private Class BackupPurgeDay
+        Public colInstances As ICollection(Of BackupInstance)
+    End Class
+
+    Private Class BackupInstance
+        Public datCreate As Date
+        Public strName As String
+    End Class
 
     'Type of search used to recognize trx that have already been imported.
     Public Enum ImportStatusSearch
@@ -71,10 +75,10 @@ Public Module CBMain
         CBMainForm.Show()
     End Sub
 
-    Public Function gcolForms() As Collection
+    Public Function gcolForms() As IEnumerable(Of Form)
         Dim frm As System.Windows.Forms.Form
-        Dim colResult As Collection
-        colResult = New Collection
+        Dim colResult As List(Of Form)
+        colResult = New List(Of Form)
         For Each frm In CBMainForm.MdiChildren
             colResult.Add(frm)
         Next frm
@@ -188,70 +192,62 @@ Public Module CBMain
     End Sub
 
     Private Sub PurgeAccountBackups(ByVal objAccount As Account)
-        'Backups older than the upper bound of this array (in days)
-        'will be deleted.
+        'Backups older than the upper bound of this array (in days) will be deleted.
         Dim adatDays(30) As BackupPurgeDay
         Dim strBackup As String
         Dim strParsableDate As String
         Dim datCreateDate As Date
         Dim strEncodedDate As String
         Dim intIndex As Short
-        Dim blnFound As Boolean
         Dim intBackupsToKeep As Short
         Dim intAgeInDays As Short
+        Dim colInstances As List(Of BackupInstance)
+        Dim colOlderFiles As List(Of String) = New List(Of String)
 
         Try
 
             For intIndex = LBound(adatDays) To UBound(adatDays)
-                adatDays(intIndex).colCreateDates = New Collection
-                adatDays(intIndex).colNames = New Collection
+                adatDays(intIndex) = New BackupPurgeDay()
+                adatDays(intIndex).colInstances = New List(Of BackupInstance)
             Next
 
-            'For each day in the last "n" days, build twin collections of backup file
-            'names and backup save dates for backups created on those days, for each
-            'day sorted in increasing backup save time.
-            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
             strBackup = Dir(gstrBackupPath() & "\" & objAccount.strFileLoaded & ".*", FileAttribute.Normal)
             Do While strBackup <> ""
                 strEncodedDate = Mid(strBackup, InStr(UCase(strBackup), ".ACT.") + 5)
                 strParsableDate = "20" & Mid(strEncodedDate, 7, 2) & "/" & Mid(strEncodedDate, 1, 2) & "/" & Mid(strEncodedDate, 4, 2) & " " & Mid(strEncodedDate, 10, 2) & ":" & Mid(strEncodedDate, 13, 2)
                 datCreateDate = CDate(strParsableDate)
-                'UPGRADE_WARNING: DateDiff behavior may be different. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6B38EC3F-686D-4B2E-B5A5-9E8E7A762E32"'
                 intAgeInDays = DateDiff(Microsoft.VisualBasic.DateInterval.Day, datCreateDate, Today)
                 If intAgeInDays <= UBound(adatDays) Then
-                    blnFound = False
-                    For intIndex = 1 To adatDays(intAgeInDays).colCreateDates.Count()
-                        'UPGRADE_WARNING: Couldn't resolve default property of object adatDays(intAgeInDays).colCreateDates(intIndex). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                        If datCreateDate < adatDays(intAgeInDays).colCreateDates.Item(intIndex) Then
-                            adatDays(intAgeInDays).colCreateDates.Add(datCreateDate, , intIndex)
-                            adatDays(intAgeInDays).colNames.Add(strBackup, , intIndex)
-                            blnFound = True
-                            Exit For
-                        End If
-                    Next
-                    If Not blnFound Then
-                        adatDays(intAgeInDays).colCreateDates.Add(datCreateDate)
-                        adatDays(intAgeInDays).colNames.Add(strBackup)
-                    End If
+                    Dim inst As BackupInstance = New BackupInstance()
+                    inst.datCreate = datCreateDate
+                    inst.strName = strBackup
+                    adatDays(intAgeInDays).colInstances.Add(inst)
+                Else
+                    colOlderFiles.Add(strBackup)
                 End If
-                'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
                 strBackup = Dir()
             Loop
 
-            'Delete everything but the "intBackupsToKeep" most recent backups
-            'created on each date.
+            'Delete the very old backups
+            For Each strBackup In colOlderFiles
+                Kill(gstrBackupPath() & "\" & strBackup)
+            Next
+
+            'Delete everything but the "intBackupsToKeep" most recent backups created on each date.
             For intAgeInDays = 0 To UBound(adatDays)
                 If intAgeInDays = 0 Then
                     'Keep all backups from the current date.
-                    intBackupsToKeep = 100
+                    intBackupsToKeep = 2 ' 100
                 ElseIf intAgeInDays < 5 Then
                     intBackupsToKeep = 10
                 Else
                     intBackupsToKeep = 1
                 End If
-                For intIndex = 1 To adatDays(intAgeInDays).colNames.Count() - intBackupsToKeep
-                    'UPGRADE_WARNING: Couldn't resolve default property of object adatDays().colNames(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-                    strBackup = adatDays(intAgeInDays).colNames.Item(intIndex)
+
+                colInstances = adatDays(intAgeInDays).colInstances
+                colInstances.Sort(AddressOf BackupInstanceComparer)
+                For intIndex = 1 To colInstances.Count() - intBackupsToKeep
+                    strBackup = colInstances(intIndex - 1).strName
                     Kill(gstrBackupPath() & "\" & strBackup)
                 Next
             Next
@@ -261,6 +257,10 @@ Public Module CBMain
             gNestedException(ex)
         End Try
     End Sub
+
+    Private Function BackupInstanceComparer(ByVal i1 As BackupInstance, ByVal i2 As BackupInstance)
+        Return i1.datCreate.CompareTo(i2.datCreate)
+    End Function
 
     Public Function gblnAskAndCreateAccount() As Boolean
         Dim strFileRoot As String

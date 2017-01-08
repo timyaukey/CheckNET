@@ -60,7 +60,7 @@ Public Module TrxGeneratorLoader
     '   is encountered will display a message and not create that object.
     '$Returns The Collection of ITrxGenerator objects created.
 
-    Public Function gcolCreateTrxGenerators(ByVal objAccount As Account, ByVal objReg As Register) As Collection
+    Public Function gcolCreateTrxGenerators(ByVal objAccount As Account, ByVal objReg As Register) As ICollection(Of ITrxGenerator)
 
         Dim strPath As String
         Dim strXMLFile As String
@@ -68,11 +68,11 @@ Public Module TrxGeneratorLoader
         Dim domDoc As VB6XmlDocument
         Dim objParseError As VB6XmlParseError
         Dim objGenerator As ITrxGenerator
-        Dim colResults As Collection
+        Dim colResults As ICollection(Of ITrxGenerator)
         Dim strRepeatKeysUsed As String = ""
         Dim strThisRepeatKey As String
 
-        colResults = New Collection
+        colResults = New List(Of ITrxGenerator)
         strPath = gstrGeneratorPath(objAccount, objReg)
         strXMLFile = Dir(strPath & "\*.gen")
         While strXMLFile <> ""

@@ -69,7 +69,7 @@ Public Class TrxGenRepeat
         End Get
     End Property
 
-    Public Function ITrxGenerator_colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As Collection Implements ITrxGenerator.colCreateTrx
+    Public Function ITrxGenerator_colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As ICollection(Of TrxToCreate) Implements ITrxGenerator.colCreateTrx
 
         Dim datSeqTrx() As SequencedTrx
 

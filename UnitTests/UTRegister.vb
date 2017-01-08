@@ -31,7 +31,7 @@ Public Class UTRegister
     Private WithEvents mobjReg As Register
 
     'Errors discovered by Register.Validate().
-    Private mcolErrors As Collection
+    Private mcolErrors As List(Of String)
 
     'Set by Register event handlers from arguments passed to them
     'so other code can confirm events were fired as expected.
@@ -349,11 +349,11 @@ Public Class UTRegister
             End With
         Next
 
-        mcolErrors = New Collection
+        mcolErrors = New List(Of String)
         mobjReg.ValidateRegister()
         If mcolErrors.Count() > 0 Then
             'UPGRADE_WARNING: Couldn't resolve default property of object mcolErrors.Item(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            gUTFailure("Unexpected validation errors: " & mcolErrors.Item(1))
+            gUTFailure("Unexpected validation errors: " & gdatFirstElement(mcolErrors))
         End If
 
     End Sub
