@@ -5,7 +5,7 @@ Imports System.IO
 Imports CheckBookLib
 
 Public Class ImportBankDownloadOFX
-    Implements ITrxImport
+    Implements ITrxReader
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     'Implement ITrxImport for an OFX file downloaded from an online banking service.
@@ -27,7 +27,7 @@ Public Class ImportBankDownloadOFX
         mstrFile = strFile
     End Sub
 
-    Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements ITrxImport.blnOpenSource
+    Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements ITrxReader.blnOpenSource
         Dim strHeaderLine As String
 
         Try
@@ -73,14 +73,14 @@ Public Class ImportBankDownloadOFX
         End Try
     End Function
 
-    Private Sub ITrxImport_CloseSource() Implements ITrxImport.CloseSource
+    Private Sub ITrxImport_CloseSource() Implements ITrxReader.CloseSource
         If Not mobjFile Is Nothing Then
             mobjFile.Close()
             mobjFile = Nothing
         End If
     End Sub
 
-    Private Function ITrxImport_objNextTrx() As ImportedTrx Implements ITrxImport.objNextTrx
+    Private Function ITrxImport_objNextTrx() As ImportedTrx Implements ITrxReader.objNextTrx
         Dim strToken As String
         Dim strCheckNum As String
 
@@ -144,7 +144,7 @@ Public Class ImportBankDownloadOFX
         End Try
     End Function
 
-    Private ReadOnly Property ITrxImport_strSource() As String Implements ITrxImport.strSource
+    Private ReadOnly Property ITrxImport_strSource() As String Implements ITrxReader.strSource
         Get
             ITrxImport_strSource = mstrFile
         End Get

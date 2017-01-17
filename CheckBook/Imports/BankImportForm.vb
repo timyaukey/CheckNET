@@ -9,8 +9,8 @@ Friend Class BankImportForm
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     Private WithEvents mobjAccount As Account
-    Private mobjTrxImport As ITrxImport
-    Private mlngStatusSearchType As CBMain.ImportStatusSearch
+    Private mobjImportHandler As IImportHandler
+    Private mobjTrxReader As ITrxReader
     Private mlngUpdateSearchType As CBMain.ImportBatchUpdateSearch
     Private mlngNewSearchType As CBMain.ImportBatchNewSearch
     Private mlngBatchUpdateType As CBMain.ImportBatchUpdateType
@@ -69,21 +69,21 @@ Friend Class BankImportForm
     Private mstrImportSearchText As String
     Private mintNextImportToSearch As Short
 
-    Public Sub ShowMe(ByVal strTitle As String, ByVal objAccount As Account, _
-                      ByVal objTrxImport As ITrxImport, _
-                      ByVal lngStatusSearchType As CBMain.ImportStatusSearch, _
-                      ByVal lngUpdateSearchType As CBMain.ImportBatchUpdateSearch, _
-                      ByVal lngNewSearchType As CBMain.ImportBatchNewSearch, _
-                      ByVal lngIndividualUpdateType As CBMain.ImportIndividualUpdateType, _
-                      ByVal lngIndividualSearchType As CBMain.ImportIndividualSearchType, _
-                      ByVal lngBatchUpdateType As CBMain.ImportBatchUpdateType, _
+    Public Sub ShowMe(ByVal strTitle As String, ByVal objAccount As Account,
+                      ByVal objImportHandler As IImportHandler,
+                      ByVal objTrxReader As ITrxReader,
+                      ByVal lngUpdateSearchType As CBMain.ImportBatchUpdateSearch,
+                      ByVal lngNewSearchType As CBMain.ImportBatchNewSearch,
+                      ByVal lngIndividualUpdateType As CBMain.ImportIndividualUpdateType,
+                      ByVal lngIndividualSearchType As CBMain.ImportIndividualSearchType,
+                      ByVal lngBatchUpdateType As CBMain.ImportBatchUpdateType,
                       ByVal blnFake As Boolean)
 
         Try
 
             mobjAccount = objAccount
-            mobjTrxImport = objTrxImport
-            mlngStatusSearchType = lngStatusSearchType
+            mobjImportHandler = objImportHandler
+            mobjTrxReader = objTrxReader
             mlngUpdateSearchType = lngUpdateSearchType
             mlngNewSearchType = lngNewSearchType
             mlngIndividualUpdateType = lngIndividualUpdateType
@@ -690,17 +690,17 @@ Friend Class BankImportForm
 
         Try
 
-            If Not mobjTrxImport.blnOpenSource(mobjAccount) Then
+            If Not mobjTrxReader.blnOpenSource(mobjAccount) Then
                 Exit Function
             End If
-            lblReadFrom.Text = "Items read from " & mobjTrxImport.strSource
+            lblReadFrom.Text = "Items read from " & mobjTrxReader.strSource
 
             blnLoadImports = True
             mintItems = 0
             Erase maudtItem
 
             Do
-                objImportedTrx = mobjTrxImport.objNextTrx()
+                objImportedTrx = mobjTrxReader.objNextTrx()
                 If objImportedTrx Is Nothing Then
                     Exit Do
                 End If
@@ -714,11 +714,11 @@ Friend Class BankImportForm
                 End With
             Loop
 
-            mobjTrxImport.CloseSource()
+            mobjTrxReader.CloseSource()
 
             Exit Function
         Catch ex As Exception
-            mobjTrxImport.CloseSource()
+            mobjTrxReader.CloseSource()
             gNestedException(ex)
         End Try
     End Function
@@ -1030,9 +1030,6 @@ Friend Class BankImportForm
     Private Function blnMatchImport(ByVal intItemIndex As Short) As Boolean
         Dim objImportedTrx As ImportedTrx
         Dim objReg As Register
-        Dim colMatches As ICollection(Of Integer) = Nothing
-        Dim blnExactMatch As Boolean
-        Dim lngIndex As Integer
         Dim lngImportMatch As Integer
         Dim lngNumber As Integer
 
@@ -1049,31 +1046,7 @@ Friend Class BankImportForm
             'Look for an import match in ALL registers, not just the selected register.
             'If found, update maudtItem() and redisplay it with the match info.
             For Each objReg In mobjAccount.colRegisters
-                lngImportMatch = 0
-                Select Case mlngStatusSearchType
-                    Case CBMain.ImportStatusSearch.Bank
-                        If objImportedTrx.strImportKey <> "" Then
-                            lngImportMatch = objReg.lngMatchImportKey(objImportedTrx.strImportKey)
-                        End If
-                    Case ImportStatusSearch.BillPayment
-                        lngImportMatch = objReg.lngMatchPaymentDetails(objImportedTrx.strNumber, objImportedTrx.datDate, 10, objImportedTrx.strDescription, objImportedTrx.curAmount)
-                    Case CBMain.ImportStatusSearch.PayeeNonGenerated
-                        objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, True, colMatches, blnExactMatch)
-                        If colMatches.Count > 0 Then
-                            lngIndex = gdatFirstElement(colMatches)
-                            If Not objReg.objTrx(lngIndex).blnAutoGenerated Then
-                                lngImportMatch = lngIndex
-                            End If
-                        End If
-                    Case CBMain.ImportStatusSearch.VendorInvoice
-                        objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.objFirstSplit.strInvoiceNum, colMatches)
-                        If colMatches.Count() > 0 Then
-                            lngImportMatch = gdatFirstElement(colMatches)
-                        End If
-                    Case Else
-                        'Should not be possible
-                        gRaiseError("Invalid import prior match type")
-                End Select
+                lngImportMatch = mobjImportHandler.lngStatusSearch(objImportedTrx, objReg)
                 If lngImportMatch > 0 Then
                     maudtItem(intItemIndex).lngStatus = ImportStatus.mlngIMPSTS_PRIOR
                     maudtItem(intItemIndex).objReg = objReg

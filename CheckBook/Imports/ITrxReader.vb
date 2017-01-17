@@ -7,7 +7,7 @@ Imports CheckBookLib
 'This interface allows the application to retrieve a series
 'of new Trx objects from some external source.
 
-Public Interface ITrxImport
+Public Interface ITrxReader
 
     '$Description Locate an external source, and prepare to
     '   obtain data from it. Must be called before other members.

@@ -26,12 +26,12 @@ Public Module CBMain
     End Class
 
     'Type of search used to recognize trx that have already been imported.
-    Public Enum ImportStatusSearch
-        Bank = 1 'Bank import key.
-        PayeeNonGenerated = 2 'Payee name and non-generated trx.
-        VendorInvoice = 3 'Vendor name and invoice number.
-        BillPayment = 4 'Check number, or close match on payee, date and amount
-    End Enum
+    'Public Enum ImportStatusSearch
+    '    Bank = 1 'Bank import key.
+    '    PayeeNonGenerated = 2 'Payee name and non-generated trx.
+    '    VendorInvoice = 3 'Vendor name and invoice number.
+    '    BillPayment = 4 'Check number, or close match on payee, date and amount
+    'End Enum
 
     'Type of search used to find Trx matches for batch updates during import.
     Public Enum ImportBatchUpdateSearch

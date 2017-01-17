@@ -126,9 +126,14 @@
     <Compile Include="Imports\BankImportForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Imports\IImportHandler.vb" />
     <Compile Include="Imports\ImportChecks.vb" />
     <Compile Include="Imports\ImportChecksSpec.vb" />
     <Compile Include="Imports\ImportedTrx.vb" />
+    <Compile Include="Imports\ImportHandlerBank.vb" />
+    <Compile Include="Imports\ImportHandlerChecks.vb" />
+    <Compile Include="Imports\ImportHandlerDeposits.vb" />
+    <Compile Include="Imports\ImportHandlerInvoices.vb" />
     <Compile Include="ObjectEditorForm.Designer.vb">
       <DependentUpon>ObjectEditorForm.vb</DependentUpon>
     </Compile>
@@ -191,7 +196,7 @@
     <Compile Include="Imports\ImportUtilities.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Imports\ITrxImport.vb">
+    <Compile Include="Imports\ITrxReader.vb">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ListEditorForm.Designer.vb">

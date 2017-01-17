@@ -149,9 +149,7 @@
     <Compile Include="TrxGen\TrxGenRepeat.vb" />
     <Compile Include="Trx\TrxGenImportData.vb" />
     <Compile Include="UITypeEditors\DateConverter.vb" />
-    <Compile Include="UITypeEditors\StringTranslatorUIEditor.vb">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="UITypeEditors\StringTranslatorUIEditor.vb" />
     <Compile Include="VB6Xml\VB6XmlDocument.vb" />
     <Compile Include="VB6Xml\VB6XmlElement.vb" />
     <Compile Include="VB6Xml\VB6XmlNode.vb" />
@@ -178,6 +176,9 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Imports\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

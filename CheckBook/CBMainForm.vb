@@ -151,7 +151,7 @@ Friend Class CBMainForm
 
     Public Sub mnuActBankImportQIF_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActBankImportQIF.Click
         Dim frm As BankImportAcctSelectForm
-        Dim objImport As ITrxImport
+        Dim objImport As ITrxReader
         Dim strFile As String
         Dim objFile As TextReader
 
@@ -166,12 +166,11 @@ Friend Class CBMainForm
                 objFile = New StreamReader(strFile)
                 frm = New BankImportAcctSelectForm
                 objImport = New ImportBankDownloadQIF(objFile, strFile)
-                frm.ShowMe("Import QIF File From Bank", objImport, _
-                    CBMain.ImportStatusSearch.Bank, _
-                    CBMain.ImportBatchUpdateSearch.Bank, _
-                    CBMain.ImportBatchNewSearch.Bank, _
-                    CBMain.ImportIndividualUpdateType.Bank, _
-                    CBMain.ImportIndividualSearchType.Bank, _
+                frm.ShowMe("Import QIF File From Bank", New ImportHandlerBank(), objImport,
+                    CBMain.ImportBatchUpdateSearch.Bank,
+                    CBMain.ImportBatchNewSearch.Bank,
+                    CBMain.ImportIndividualUpdateType.Bank,
+                    CBMain.ImportIndividualSearchType.Bank,
                     CBMain.ImportBatchUpdateType.Bank, False)
             End If
 
@@ -183,7 +182,7 @@ Friend Class CBMainForm
 
     Public Sub mnuBankImportOFX_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuBankImportOFX.Click
         Dim frm As BankImportAcctSelectForm
-        Dim objImport As ITrxImport
+        Dim objImport As ITrxReader
         Dim strFile As String
         Dim objFile As TextReader
 
@@ -198,12 +197,11 @@ Friend Class CBMainForm
                 objFile = New StreamReader(strFile)
                 frm = New BankImportAcctSelectForm
                 objImport = New ImportBankDownloadOFX(objFile, strFile)
-                frm.ShowMe("Import OFX File From Bank", objImport, _
-                    CBMain.ImportStatusSearch.Bank, _
-                    CBMain.ImportBatchUpdateSearch.Bank, _
-                    CBMain.ImportBatchNewSearch.Bank, _
-                    CBMain.ImportIndividualUpdateType.Bank, _
-                    CBMain.ImportIndividualSearchType.Bank, _
+                frm.ShowMe("Import OFX File From Bank", New ImportHandlerBank(), objImport,
+                    CBMain.ImportBatchUpdateSearch.Bank,
+                    CBMain.ImportBatchNewSearch.Bank,
+                    CBMain.ImportIndividualUpdateType.Bank,
+                    CBMain.ImportIndividualSearchType.Bank,
                     CBMain.ImportBatchUpdateType.Bank, False)
             End If
 
@@ -215,7 +213,7 @@ Friend Class CBMainForm
 
     Public Sub mnuActDepImport_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActDepImport.Click
         Dim frm As BankImportAcctSelectForm
-        Dim objImport As ITrxImport
+        Dim objImport As ITrxReader
 
         Try
 
@@ -224,12 +222,11 @@ Friend Class CBMainForm
             End If
             frm = New BankImportAcctSelectForm
             objImport = New ImportByPayee(gobjClipboardReader(), "(clipboard)")
-            frm.ShowMe("Import Deposit Amounts", objImport, _
-                CBMain.ImportStatusSearch.PayeeNonGenerated, _
-                CBMain.ImportBatchUpdateSearch.Payee, _
-                CBMain.ImportBatchNewSearch.None, _
-                CBMain.ImportIndividualUpdateType.Amount, _
-                CBMain.ImportIndividualSearchType.Payee, _
+            frm.ShowMe("Import Deposit Amounts", New ImportHandlerDeposits(), objImport,
+                CBMain.ImportBatchUpdateSearch.Payee,
+                CBMain.ImportBatchNewSearch.None,
+                CBMain.ImportIndividualUpdateType.Amount,
+                CBMain.ImportIndividualSearchType.Payee,
                 CBMain.ImportBatchUpdateType.Amount, False)
 
             Exit Sub
@@ -240,7 +237,7 @@ Friend Class CBMainForm
 
     Public Sub mnuActInvImport_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActInvImport.Click
         Dim frm As BankImportAcctSelectForm
-        Dim objImport As ITrxImport
+        Dim objImport As ITrxReader
 
         Try
 
@@ -249,12 +246,11 @@ Friend Class CBMainForm
             End If
             frm = New BankImportAcctSelectForm
             objImport = New ImportInvoices(gobjClipboardReader(), "(clipboard)")
-            frm.ShowMe("Import Invoices", objImport, _
-                CBMain.ImportStatusSearch.VendorInvoice, _
-                CBMain.ImportBatchUpdateSearch.None, _
-                CBMain.ImportBatchNewSearch.VendorInvoice, _
-                CBMain.ImportIndividualUpdateType.None, _
-                CBMain.ImportIndividualSearchType.VendorInvoice, _
+            frm.ShowMe("Import Invoices", New ImportHandlerInvoices(), objImport,
+                CBMain.ImportBatchUpdateSearch.None,
+                CBMain.ImportBatchNewSearch.VendorInvoice,
+                CBMain.ImportIndividualUpdateType.None,
+                CBMain.ImportIndividualSearchType.VendorInvoice,
                 CBMain.ImportBatchUpdateType.None, False)
 
             Exit Sub
@@ -265,7 +261,7 @@ Friend Class CBMainForm
 
     Private Sub mnuActCheckImport_Click(sender As Object, e As EventArgs) Handles mnuActCheckImport.Click
         Dim frm As BankImportAcctSelectForm
-        Dim objImport As ITrxImport
+        Dim objImport As ITrxReader
         Dim objSpecs As ImportChecksSpec
 
         Try
@@ -277,12 +273,11 @@ Friend Class CBMainForm
 
             objSpecs = New ImportChecksSpec(1, 0, 2, 3, -1)
             objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
-            frm.ShowMe("Import Checks", objImport, _
-                CBMain.ImportStatusSearch.BillPayment, _
-                CBMain.ImportBatchUpdateSearch.Bank, _
-                CBMain.ImportBatchNewSearch.Bank, _
-                CBMain.ImportIndividualUpdateType.NumberAmount, _
-                CBMain.ImportIndividualSearchType.Bank, _
+            frm.ShowMe("Import Checks", New ImportHandlerChecks(), objImport,
+                CBMain.ImportBatchUpdateSearch.Bank,
+                CBMain.ImportBatchNewSearch.Bank,
+                CBMain.ImportIndividualUpdateType.NumberAmount,
+                CBMain.ImportIndividualSearchType.Bank,
                 CBMain.ImportBatchUpdateType.NumberAmount, False)
 
             Exit Sub
@@ -293,7 +288,7 @@ Friend Class CBMainForm
 
     Private Sub mnuActCompuPayImport_Click(sender As Object, e As EventArgs) Handles mnuActCompuPayImport.Click
         Dim frm As BankImportAcctSelectForm
-        Dim objImport As ITrxImport
+        Dim objImport As ITrxReader
         Dim objSpecs As ImportChecksSpec
 
         Try
@@ -305,12 +300,11 @@ Friend Class CBMainForm
 
             objSpecs = New ImportChecksSpec(0, 5, 9, 12, -1)
             objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
-            frm.ShowMe("Import CompuPay Checks", objImport, _
-                CBMain.ImportStatusSearch.BillPayment, _
-                CBMain.ImportBatchUpdateSearch.Bank, _
-                CBMain.ImportBatchNewSearch.Bank, _
-                CBMain.ImportIndividualUpdateType.NumberAmount, _
-                CBMain.ImportIndividualSearchType.Bank, _
+            frm.ShowMe("Import CompuPay Checks", New ImportHandlerChecks(), objImport,
+                CBMain.ImportBatchUpdateSearch.Bank,
+                CBMain.ImportBatchNewSearch.Bank,
+                CBMain.ImportIndividualUpdateType.NumberAmount,
+                CBMain.ImportIndividualSearchType.Bank,
                 CBMain.ImportBatchUpdateType.NumberAmount, False)
 
             Exit Sub
@@ -321,7 +315,7 @@ Friend Class CBMainForm
 
     Private Sub mnuActOSUImport_Click(sender As Object, e As EventArgs) Handles mnuActOSUImport.Click
         Dim frm As BankImportAcctSelectForm
-        Dim objImport As ITrxImport
+        Dim objImport As ITrxReader
         Dim objSpecs As ImportChecksSpec
 
         Try
@@ -333,12 +327,11 @@ Friend Class CBMainForm
 
             objSpecs = New ImportChecksSpec(6, 0, 1, 2, -1)
             objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
-            frm.ShowMe("Import Oregon State Credit Union Checks", objImport, _
-                CBMain.ImportStatusSearch.BillPayment, _
-                CBMain.ImportBatchUpdateSearch.Bank, _
-                CBMain.ImportBatchNewSearch.Bank, _
-                CBMain.ImportIndividualUpdateType.NumberAmount, _
-                CBMain.ImportIndividualSearchType.Bank, _
+            frm.ShowMe("Import Oregon State Credit Union Checks", New ImportHandlerChecks(), objImport,
+                CBMain.ImportBatchUpdateSearch.Bank,
+                CBMain.ImportBatchNewSearch.Bank,
+                CBMain.ImportIndividualUpdateType.NumberAmount,
+                CBMain.ImportIndividualSearchType.Bank,
                 CBMain.ImportBatchUpdateType.NumberAmount, False)
 
             Exit Sub

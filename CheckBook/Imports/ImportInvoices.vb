@@ -5,7 +5,7 @@ Imports System.IO
 Imports CheckBookLib
 
 Public Class ImportInvoices
-    Implements ITrxImport
+    Implements ITrxReader
 
     Private mobjInput As TextReader
     Private mstrFile As String
@@ -17,7 +17,7 @@ Public Class ImportInvoices
         mstrFile = strFile
     End Sub
 
-    Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements ITrxImport.blnOpenSource
+    Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements ITrxReader.blnOpenSource
         Dim strData As String
 
         strData = mobjInput.ReadToEnd()
@@ -26,11 +26,11 @@ Public Class ImportInvoices
         ITrxImport_blnOpenSource = True
     End Function
 
-    Private Sub ITrxImport_CloseSource() Implements ITrxImport.CloseSource
+    Private Sub ITrxImport_CloseSource() Implements ITrxReader.CloseSource
 
     End Sub
 
-    Private Function ITrxImport_objNextTrx() As ImportedTrx Implements ITrxImport.objNextTrx
+    Private Function ITrxImport_objNextTrx() As ImportedTrx Implements ITrxReader.objNextTrx
         Dim strLine As String
         Dim astrParts() As String
 
@@ -94,7 +94,7 @@ Public Class ImportInvoices
         ITrxImport_objNextTrx = objTrx
     End Function
 
-    Private ReadOnly Property ITrxImport_strSource() As String Implements ITrxImport.strSource
+    Private ReadOnly Property ITrxImport_strSource() As String Implements ITrxReader.strSource
         Get
             ITrxImport_strSource = mstrFile
         End Get
