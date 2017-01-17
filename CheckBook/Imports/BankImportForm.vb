@@ -12,7 +12,6 @@ Friend Class BankImportForm
     Private mobjImportHandler As IImportHandler
     Private mobjTrxReader As ITrxReader
     Private mlngUpdateSearchType As CBMain.ImportBatchUpdateSearch
-    Private mlngNewSearchType As CBMain.ImportBatchNewSearch
     Private mlngBatchUpdateType As CBMain.ImportBatchUpdateType
     Private mlngIndividualSearchType As CBMain.ImportIndividualSearchType
     Private mlngIndividualUpdateType As CBMain.ImportIndividualUpdateType
@@ -73,7 +72,6 @@ Friend Class BankImportForm
                       ByVal objImportHandler As IImportHandler,
                       ByVal objTrxReader As ITrxReader,
                       ByVal lngUpdateSearchType As CBMain.ImportBatchUpdateSearch,
-                      ByVal lngNewSearchType As CBMain.ImportBatchNewSearch,
                       ByVal lngIndividualUpdateType As CBMain.ImportIndividualUpdateType,
                       ByVal lngIndividualSearchType As CBMain.ImportIndividualSearchType,
                       ByVal lngBatchUpdateType As CBMain.ImportBatchUpdateType,
@@ -85,7 +83,6 @@ Friend Class BankImportForm
             mobjImportHandler = objImportHandler
             mobjTrxReader = objTrxReader
             mlngUpdateSearchType = lngUpdateSearchType
-            mlngNewSearchType = lngNewSearchType
             mlngIndividualUpdateType = lngIndividualUpdateType
             mlngIndividualSearchType = lngIndividualSearchType
             mlngBatchUpdateType = lngBatchUpdateType
@@ -113,13 +110,9 @@ Friend Class BankImportForm
     End Sub
 
     Private Sub ConfigureButtons()
-        Select Case mlngNewSearchType
-            Case CBMain.ImportBatchNewSearch.None
-                cmdBatchNew.Enabled = False
-                cmdFindNew.Enabled = False
-                cmdCreateNew.Enabled = False
-            Case CBMain.ImportBatchNewSearch.Bank
-        End Select
+        cmdBatchNew.Enabled = mobjImportHandler.blnAllowNew
+        cmdFindNew.Enabled = mobjImportHandler.blnAllowNew
+        cmdCreateNew.Enabled = mobjImportHandler.blnAllowNew
 
         Select Case mlngUpdateSearchType
             Case CBMain.ImportBatchUpdateSearch.None
@@ -463,13 +456,7 @@ Friend Class BankImportForm
             Dim frm As TrxForm
             Dim datDummy As Date
             Dim objImportedTrx As Trx
-            Dim objImportedSplit As TrxSplit
-            Dim colPOMatches As ICollection(Of Integer) = Nothing
             Dim blnItemImported As Boolean
-            Dim vlngMatchedTrxIndex As Object
-            Dim objMatchedTrx As Trx
-            Dim objMatchedSplit As TrxSplit
-            Dim strPONumber As String
             Dim blnAllowBankNonCard As Boolean
             Dim strFailReason As String = ""
 
@@ -501,39 +488,9 @@ Friend Class BankImportForm
                 If objItem.Checked Then
 
                     intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
-                    blnItemImported = False
                     objImportedTrx = maudtItem(intItemIndex).objImportedTrx
-                    'Check if we are importing an invoice that can be matched to a purchase order.
-                    'If this happens we update an existing Trx by adding a split rather than creating
-                    'a new Trx as would normally be the case in this method.
-                    If mlngNewSearchType = CBMain.ImportBatchNewSearch.VendorInvoice Then
-                        If objImportedTrx.lngSplits > 0 Then
-                            objImportedSplit = objImportedTrx.objFirstSplit
-                            strPONumber = objImportedSplit.strPONumber
-                            If LCase(strPONumber) = "none" Then
-                                strPONumber = ""
-                            End If
-                            If strPONumber <> "" Then
-                                mobjSelectedRegister.MatchPONumber(objImportedTrx.datDate, 14, objImportedTrx.strDescription, strPONumber, colPOMatches)
-                                'There should be only one matching Trx, but we'll check all matches
-                                'and use the first one with a split with no invoice number. That split
-                                'represents the uninvoiced part of the purchase order due on that date.
-                                For Each vlngMatchedTrxIndex In colPOMatches
-                                    objMatchedTrx = mobjSelectedRegister.objTrx(vlngMatchedTrxIndex)
-                                    For Each objMatchedSplit In objMatchedTrx.colSplits
-                                        If objMatchedSplit.strPONumber = strPONumber And objMatchedSplit.strInvoiceNum = "" Then
-                                            'Add the imported Trx as a new split in objMatchedTrx,
-                                            'and reduce the amount of objMatchedSplit by the same amount
-                                            'so the total amount of objMatchedTrx does not change.
-                                            mobjSelectedRegister.ImportUpdatePurchaseOrder(vlngMatchedTrxIndex, objMatchedSplit, objImportedSplit)
-                                            blnItemImported = True
-                                        End If
-                                    Next objMatchedSplit
-                                Next vlngMatchedTrxIndex
-                            End If
-                        End If
-                    End If
-                    'If we did not match the import to a purchase order.
+                    blnItemImported = mobjImportHandler.blnAlternateAutoNewHandling(objImportedTrx, mobjSelectedRegister)
+                    'If we did not use alternate handling.
                     If Not blnItemImported Then
                         frm = New TrxForm
                         If Not frm.blnAddNormalSilent(mobjAccount, mobjSelectedRegister, objImportedTrx, datDummy, True, "ImportNewBatch") Then
@@ -570,11 +527,8 @@ Friend Class BankImportForm
 
         Dim objReg As Register
         Dim objImportedTrx As ImportedTrx
-        Dim strTrxNum As String
         Dim objSplit As TrxSplit
-        Dim lngNumber As Integer
         Dim colMatches As ICollection(Of Integer) = Nothing
-        Dim colExactMatches As ICollection(Of Integer) = Nothing
         Dim blnExactMatch As Boolean
         Dim lngCatIdx As Integer
         Dim strDefaultCatKey As String
@@ -582,20 +536,19 @@ Friend Class BankImportForm
         blnValidForAutoNew = False
         strFailReason = "Unspecified"
 
-        lngNumber = 0
         If maudtItem(intItemIndex).lngStatus <> ImportStatus.mlngIMPSTS_UNRESOLVED Then
             strFailReason = "Transaction already imported"
-            Exit Function
+            Return False
         End If
 
         objImportedTrx = maudtItem(intItemIndex).objImportedTrx
         If objImportedTrx.lngSplits = 0 Then
             strFailReason = "Transaction has no splits"
-            Exit Function
+            Return False
         End If
         If objImportedTrx.lngNarrowMethod <> ImportMatchNarrowMethod.None Then
             strFailReason = "Memorized transaction has a narrowing method"
-            Exit Function
+            Return False
         End If
 
         objSplit = objImportedTrx.objFirstSplit
@@ -610,50 +563,25 @@ Friend Class BankImportForm
         End If
         If objSplit.strCategoryKey = "" Then
             strFailReason = "Transaction has no category"
-            Exit Function
+            Return False
         End If
 
-        strTrxNum = LCase(objImportedTrx.strNumber)
-        Select Case mlngNewSearchType
-            Case CBMain.ImportBatchNewSearch.Bank
-                If (strTrxNum <> "card") And Not blnAllowBankNonCard Then
-                    strFailReason = "Transaction is not a credit or debit card use"
-                    Exit Function
-                End If
-            Case CBMain.ImportBatchNewSearch.VendorInvoice
-                If strTrxNum <> "inv" And strTrxNum <> "crm" Then
-                    strFailReason = "Transaction is not an invoice or credit memo"
-                    Exit Function
-                End If
-            Case Else
-                'Should not be possible
-                gRaiseError("Invalid batch new search type")
-        End Select
+        strFailReason = mobjImportHandler.strAutoNewValidationError(objImportedTrx, blnAllowBankNonCard)
+        If Not String.IsNullOrEmpty(strFailReason) Then
+            Return False
+        End If
 
         For Each objReg In mobjAccount.colRegisters
             colMatches = New List(Of Integer)
             blnExactMatch = False
-
-            Select Case mlngNewSearchType
-                Case CBMain.ImportBatchNewSearch.Bank
-                    objReg.MatchCore(lngNumber, objImportedTrx.datDate, 60, objImportedTrx.strDescription, objImportedTrx.curAmount,
-                                     objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
-                    objReg.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
-                Case CBMain.ImportBatchNewSearch.VendorInvoice
-                    objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objSplit.strInvoiceNum, colMatches)
-                    blnExactMatch = True
-                Case Else
-                    'Should not be possible
-                    gRaiseError("Invalid batch new search type")
-            End Select
-
+            mobjImportHandler.AutoNewSearch(objImportedTrx, objReg, colMatches, blnExactMatch)
             If colMatches.Count() > 0 And blnExactMatch Then
                 strFailReason = "An identical or very similar transaction already exists"
-                Exit Function
+                Return False
             End If
         Next objReg
 
-        blnValidForAutoNew = True
+        Return True
 
     End Function
 

@@ -41,11 +41,11 @@ Public Module CBMain
     End Enum
 
     'Type of search used to find Trx matches for batch new Trx creation during import.
-    Public Enum ImportBatchNewSearch
-        None = 1 'Do not allow batch creation of new Trx.
-        Bank = 2 'Number, or date/description/amount (2 of 3).
-        VendorInvoice = 3 'Vendor name and invoice number.
-    End Enum
+    'Public Enum ImportBatchNewSearch
+    '    None = 1 'Do not allow batch creation of new Trx.
+    '    Bank = 2 'Number, or date/description/amount (2 of 3).
+    '    VendorInvoice = 3 'Vendor name and invoice number.
+    'End Enum
 
     'Fields to update during batch import.
     Public Enum ImportBatchUpdateType

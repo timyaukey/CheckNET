@@ -168,7 +168,6 @@ Friend Class CBMainForm
                 objImport = New ImportBankDownloadQIF(objFile, strFile)
                 frm.ShowMe("Import QIF File From Bank", New ImportHandlerBank(), objImport,
                     CBMain.ImportBatchUpdateSearch.Bank,
-                    CBMain.ImportBatchNewSearch.Bank,
                     CBMain.ImportIndividualUpdateType.Bank,
                     CBMain.ImportIndividualSearchType.Bank,
                     CBMain.ImportBatchUpdateType.Bank, False)
@@ -199,7 +198,6 @@ Friend Class CBMainForm
                 objImport = New ImportBankDownloadOFX(objFile, strFile)
                 frm.ShowMe("Import OFX File From Bank", New ImportHandlerBank(), objImport,
                     CBMain.ImportBatchUpdateSearch.Bank,
-                    CBMain.ImportBatchNewSearch.Bank,
                     CBMain.ImportIndividualUpdateType.Bank,
                     CBMain.ImportIndividualSearchType.Bank,
                     CBMain.ImportBatchUpdateType.Bank, False)
@@ -224,7 +222,6 @@ Friend Class CBMainForm
             objImport = New ImportByPayee(gobjClipboardReader(), "(clipboard)")
             frm.ShowMe("Import Deposit Amounts", New ImportHandlerDeposits(), objImport,
                 CBMain.ImportBatchUpdateSearch.Payee,
-                CBMain.ImportBatchNewSearch.None,
                 CBMain.ImportIndividualUpdateType.Amount,
                 CBMain.ImportIndividualSearchType.Payee,
                 CBMain.ImportBatchUpdateType.Amount, False)
@@ -248,7 +245,6 @@ Friend Class CBMainForm
             objImport = New ImportInvoices(gobjClipboardReader(), "(clipboard)")
             frm.ShowMe("Import Invoices", New ImportHandlerInvoices(), objImport,
                 CBMain.ImportBatchUpdateSearch.None,
-                CBMain.ImportBatchNewSearch.VendorInvoice,
                 CBMain.ImportIndividualUpdateType.None,
                 CBMain.ImportIndividualSearchType.VendorInvoice,
                 CBMain.ImportBatchUpdateType.None, False)
@@ -275,7 +271,6 @@ Friend Class CBMainForm
             objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
             frm.ShowMe("Import Checks", New ImportHandlerChecks(), objImport,
                 CBMain.ImportBatchUpdateSearch.Bank,
-                CBMain.ImportBatchNewSearch.Bank,
                 CBMain.ImportIndividualUpdateType.NumberAmount,
                 CBMain.ImportIndividualSearchType.Bank,
                 CBMain.ImportBatchUpdateType.NumberAmount, False)
@@ -302,7 +297,6 @@ Friend Class CBMainForm
             objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
             frm.ShowMe("Import CompuPay Checks", New ImportHandlerChecks(), objImport,
                 CBMain.ImportBatchUpdateSearch.Bank,
-                CBMain.ImportBatchNewSearch.Bank,
                 CBMain.ImportIndividualUpdateType.NumberAmount,
                 CBMain.ImportIndividualSearchType.Bank,
                 CBMain.ImportBatchUpdateType.NumberAmount, False)
@@ -329,7 +323,6 @@ Friend Class CBMainForm
             objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
             frm.ShowMe("Import Oregon State Credit Union Checks", New ImportHandlerChecks(), objImport,
                 CBMain.ImportBatchUpdateSearch.Bank,
-                CBMain.ImportBatchNewSearch.Bank,
                 CBMain.ImportIndividualUpdateType.NumberAmount,
                 CBMain.ImportIndividualSearchType.Bank,
                 CBMain.ImportBatchUpdateType.NumberAmount, False)
