@@ -25,51 +25,6 @@ Public Module CBMain
         Public strName As String
     End Class
 
-    'Type of search used to recognize trx that have already been imported.
-    'Public Enum ImportStatusSearch
-    '    Bank = 1 'Bank import key.
-    '    PayeeNonGenerated = 2 'Payee name and non-generated trx.
-    '    VendorInvoice = 3 'Vendor name and invoice number.
-    '    BillPayment = 4 'Check number, or close match on payee, date and amount
-    'End Enum
-
-    'Type of search used to find Trx matches for batch updates during import.
-    'Public Enum ImportBatchUpdateSearch
-    '    None = 1 'None
-    '    Bank = 2 'Number, or date/description/amount (2 of 3)
-    '    Payee = 3 'Exact payee name within date range
-    'End Enum
-
-    'Type of search used to find Trx matches for batch new Trx creation during import.
-    'Public Enum ImportBatchNewSearch
-    '    None = 1 'Do not allow batch creation of new Trx.
-    '    Bank = 2 'Number, or date/description/amount (2 of 3).
-    '    VendorInvoice = 3 'Vendor name and invoice number.
-    'End Enum
-
-    'Fields to update during batch import.
-    'Public Enum ImportBatchUpdateType
-    '    None = 1 'Do not allow batch updates during import.
-    '    Bank = 2 'Bank import key, number, date if not a check, fake->real but not reverse.
-    '    Amount = 3 'Amount only.
-    '    NumberAmount = 4 'Number and amount.
-    'End Enum
-
-    'Type of search used when user clicks on an imported trx.
-    Public Enum ImportIndividualSearchType
-        Bank = 1 'Number, or date/description/amount (2 of 3)
-        Payee = 2 'Exact payee name within date range
-        VendorInvoice = 3 'Vendor name and invoice number.
-    End Enum
-
-    'Fields to update during individual import.
-    Public Enum ImportIndividualUpdateType
-        None = 1 'None.
-        Bank = 2 'Bank import key, number, amount.
-        Amount = 3 'Amount only.
-        NumberAmount = 4 'Number and amount.
-    End Enum
-
     Public Sub Main()
         CBMainForm.Show()
     End Sub

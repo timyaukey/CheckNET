@@ -60,4 +60,19 @@ Public Class ImportHandlerDeposits
             Return True
         End Get
     End Property
+
+    Public ReadOnly Property blnAllowIndividualUpdates As Boolean Implements IImportHandler.blnAllowIndividualUpdates
+        Get
+            Return True
+        End Get
+    End Property
+
+    Public Sub IndividualSearch(objReg As Register, objImportedTrx As ImportedTrx, blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean) Implements IImportHandler.IndividualSearch
+        objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, False, colMatches, blnExactMatch)
+    End Sub
+
+    Public Function blnIndividualUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx, blnFake As Boolean) As Boolean Implements IImportHandler.blnIndividualUpdate
+        objMatchedReg.ImportUpdateAmount(lngMatchedRegIndex, blnFake, objImportedTrx.curAmount)
+        Return True
+    End Function
 End Class

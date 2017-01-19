@@ -12,8 +12,6 @@ Friend Class BankImportForm
     Private WithEvents mobjAccount As Account
     Private mobjImportHandler As IImportHandler
     Private mobjTrxReader As ITrxReader
-    Private mlngIndividualSearchType As CBMain.ImportIndividualSearchType
-    Private mlngIndividualUpdateType As CBMain.ImportIndividualUpdateType
     Private mblnFake As Boolean
 
     Private Enum ImportStatus
@@ -131,8 +129,6 @@ Friend Class BankImportForm
     Public Sub ShowMe(ByVal strTitle As String, ByVal objAccount As Account,
                       ByVal objImportHandler As IImportHandler,
                       ByVal objTrxReader As ITrxReader,
-                      ByVal lngIndividualUpdateType As CBMain.ImportIndividualUpdateType,
-                      ByVal lngIndividualSearchType As CBMain.ImportIndividualSearchType,
                       ByVal blnFake As Boolean)
 
         Try
@@ -140,8 +136,6 @@ Friend Class BankImportForm
             mobjAccount = objAccount
             mobjImportHandler = objImportHandler
             mobjTrxReader = objTrxReader
-            mlngIndividualUpdateType = lngIndividualUpdateType
-            mlngIndividualSearchType = lngIndividualSearchType
             mblnFake = blnFake
 
             mstrImportSearchText = ""
@@ -169,14 +163,9 @@ Friend Class BankImportForm
         cmdBatchNew.Enabled = mobjImportHandler.blnAllowNew
         cmdFindNew.Enabled = mobjImportHandler.blnAllowNew
         cmdCreateNew.Enabled = mobjImportHandler.blnAllowNew
-
         cmdBatchUpdates.Enabled = mobjImportHandler.blnAllowBatchUpdates
         cmdFindUpdates.Enabled = mobjImportHandler.blnAllowBatchUpdates
-
-        Select Case mlngIndividualUpdateType
-            Case CBMain.ImportIndividualUpdateType.None
-                cmdUpdateExisting.Enabled = False
-        End Select
+        cmdUpdateExisting.Enabled = mobjImportHandler.blnAllowIndividualUpdates
     End Sub
 
     Private Sub chkHideCompleted_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkHideCompleted.CheckStateChanged
@@ -811,15 +800,12 @@ Friend Class BankImportForm
         Dim objImportedTrx As ImportedTrx
         Dim objReg As Register
         Dim intItemIndex As Short
-        Dim lngNumber As Integer
         Dim colMatches As ICollection(Of Integer) = Nothing
-        Dim colExactMatches As ICollection(Of Integer) = Nothing
         Dim blnExactMatch As Boolean
-        Dim vlngRegIndex As Object
+        Dim lngRegIndex As Integer
         Dim objMatchedTrx As Trx
 
         Try
-
             ClearCurrentItemMatches()
 
             'Has the selected item already been processed?
@@ -841,30 +827,12 @@ Friend Class BankImportForm
             End If
 
             'Look for possible matches in ALL registers, not just the selected register.
-            If IsNumeric(objImportedTrx.strNumber) Then
-                lngNumber = CInt(objImportedTrx.strNumber)
-            Else
-                lngNumber = 0
-            End If
             For Each objReg In mobjAccount.colRegisters
-
-                Select Case mlngIndividualSearchType
-                    Case CBMain.ImportIndividualSearchType.Bank
-                        objReg.MatchCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
-                                         objImportedTrx.curMatchMin, objImportedTrx.curMatchMax,
-                                         chkLooseMatch.CheckState = System.Windows.Forms.CheckState.Checked, colMatches, colExactMatches, blnExactMatch)
-                        objReg.PruneToNonImportedExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
-                    Case CBMain.ImportIndividualSearchType.Payee
-                        objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, False, colMatches, blnExactMatch)
-                    Case CBMain.ImportIndividualSearchType.VendorInvoice
-                        objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.objFirstSplit.strInvoiceNum, colMatches)
-                        blnExactMatch = True
-                    Case Else
-                        'Should not be possible
-                        gRaiseError("Invalid individual search type")
-                End Select
-                For Each vlngRegIndex In colMatches
-                    objMatchedTrx = objReg.objTrx(vlngRegIndex)
+                mobjImportHandler.IndividualSearch(objReg, objImportedTrx,
+                    chkLooseMatch.CheckState = System.Windows.Forms.CheckState.Checked,
+                    colMatches, blnExactMatch)
+                For Each lngRegIndex In colMatches
+                    objMatchedTrx = objReg.objTrx(lngRegIndex)
                     'Show the match if it hasn't been imported before,
                     'or we're importing a fake trx. We allow fake trx to be imported
                     'so we can import document information for them - we don't save
@@ -875,11 +843,11 @@ Friend Class BankImportForm
                         With maudtMatch(mintMatches)
                             .objReg = objReg
                             .objTrx = objMatchedTrx
-                            .lngRegIndex = vlngRegIndex
+                            .lngRegIndex = lngRegIndex
                         End With
                         DisplayMatch(objMatchedTrx, mintMatches)
                     End If
-                Next vlngRegIndex
+                Next
             Next objReg
             'Deselect everything in list (the first item is selected by default).
             ClearLvwSelection(lvwMatches)
@@ -1091,12 +1059,8 @@ Friend Class BankImportForm
         Dim objMatchedReg As Register
         Dim lngMatchedRegIndex As Integer
         Dim objMatchedTrx As Trx
-        Dim strNewNumber As String
-        Dim curNewAmount As Decimal
-        Dim blnPreserveNumAmt As Boolean
 
         Try
-
             If Not blnValidImportItemSelected() Then
                 Exit Sub
             End If
@@ -1111,40 +1075,10 @@ Friend Class BankImportForm
                 objMatchedTrx = .objTrx
             End With
             With maudtItem(intSelectedItemIndex())
-                With .objImportedTrx
-
-                    Select Case mlngIndividualUpdateType
-
-                        Case CBMain.ImportIndividualUpdateType.Bank
-                            blnPreserveNumAmt = (Not objMatchedTrx.blnFake) And .blnFake
-                            If (.curAmount <> objMatchedTrx.curAmount) And Not blnPreserveNumAmt Then
-                                If MsgBox("NOTE: The amount of the imported transaction is " & "different than the amount of the match you selected. " & "Updating the matched transaction will change its amount to " & "equal the amount of the import." & vbCrLf & vbCrLf & "Do you really want to do this?", MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
-                                    MsgBox("Update cancelled.", MsgBoxStyle.Information)
-                                    Exit Sub
-                                End If
-                            End If
-                            strNewNumber = .strNumber
-                            curNewAmount = .curAmount
-                            If blnPreserveNumAmt Then
-                                strNewNumber = objMatchedTrx.strNumber
-                                curNewAmount = objMatchedTrx.curAmount
-                            End If
-                            objMatchedReg.ImportUpdateBank(lngMatchedRegIndex, .datDate, strNewNumber, mblnFake, curNewAmount, .strImportKey)
-
-                        Case CBMain.ImportIndividualUpdateType.Amount
-                            objMatchedReg.ImportUpdateAmount(lngMatchedRegIndex, mblnFake, .curAmount)
-
-                        Case CBMain.ImportIndividualUpdateType.NumberAmount
-                            objMatchedReg.ImportUpdateNumAmt(lngMatchedRegIndex, .strNumber, mblnFake, .curAmount)
-
-                        Case Else
-                            'Should not be possible
-                            gRaiseError("Invalid individual update type")
-
-                    End Select
-                End With
-                .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
-                .objReg = objMatchedReg
+                If mobjImportHandler.blnIndividualUpdate(objMatchedReg, lngMatchedRegIndex, .objImportedTrx, objMatchedTrx, mblnFake) Then
+                    .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
+                    .objReg = objMatchedReg
+                End If
             End With
             RedisplaySelectedItem()
 

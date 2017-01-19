@@ -91,4 +91,20 @@ Public Class ImportHandlerInvoices
             Return False
         End Get
     End Property
+
+    Public ReadOnly Property blnAllowIndividualUpdates As Boolean Implements IImportHandler.blnAllowIndividualUpdates
+        Get
+            Return False
+        End Get
+    End Property
+
+    Public Sub IndividualSearch(objReg As Register, objImportedTrx As ImportedTrx, blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean) Implements IImportHandler.IndividualSearch
+        objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.objFirstSplit.strInvoiceNum, colMatches)
+        blnExactMatch = True
+    End Sub
+
+    Public Function blnIndividualUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx, blnFake As Boolean) As Boolean Implements IImportHandler.blnIndividualUpdate
+        'Do nothing
+        Return False
+    End Function
 End Class
