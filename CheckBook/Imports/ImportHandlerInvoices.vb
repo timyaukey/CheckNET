@@ -72,4 +72,23 @@ Public Class ImportHandlerInvoices
         Return 0
     End Function
 
+    Public Sub BatchUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx, blnFake As Boolean) Implements IImportHandler.BatchUpdate
+        'Do nothing for invoices.
+    End Sub
+
+    Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colImportMatchedTrx As IEnumerable(Of Trx), ByRef colUnusedMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
+        'Do nothing
+    End Sub
+
+    Public ReadOnly Property strBatchUpdateFields As String Implements IImportHandler.strBatchUpdateFields
+        Get
+            Return ""  'Never finds anything to update, so not needed.
+        End Get
+    End Property
+
+    Public ReadOnly Property blnAllowBatchUpdates As Boolean Implements IImportHandler.blnAllowBatchUpdates
+        Get
+            Return False
+        End Get
+    End Property
 End Class

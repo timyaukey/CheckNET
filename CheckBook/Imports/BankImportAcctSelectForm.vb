@@ -8,7 +8,7 @@ Friend Class BankImportAcctSelectForm
 
     Private mobjAccount As Account
 
-    Public Sub ShowMe(ByVal strTitle As String, ByVal objImportHandler As IImportHandler, ByVal objTrxReader As ITrxReader, ByVal lngUpdateSearchType As CBMain.ImportBatchUpdateSearch, ByVal lngIndividualUpdateType As CBMain.ImportIndividualUpdateType, ByVal lngIndividualSearchType As CBMain.ImportIndividualSearchType, ByVal lngBatchUpdateType As CBMain.ImportBatchUpdateType, ByVal blnFake As Boolean)
+    Public Sub ShowMe(ByVal strTitle As String, ByVal objImportHandler As IImportHandler, ByVal objTrxReader As ITrxReader, ByVal lngIndividualUpdateType As CBMain.ImportIndividualUpdateType, ByVal lngIndividualSearchType As CBMain.ImportIndividualSearchType, ByVal blnFake As Boolean)
 
         Dim frm As BankImportForm
         Try
@@ -19,7 +19,7 @@ Friend Class BankImportAcctSelectForm
             System.Windows.Forms.Application.DoEvents()
             If Not mobjAccount Is Nothing Then
                 frm = New BankImportForm
-                frm.ShowMe(strTitle, mobjAccount, objImportHandler, objTrxReader, lngUpdateSearchType, lngIndividualUpdateType, lngIndividualSearchType, lngBatchUpdateType, blnFake)
+                frm.ShowMe(strTitle, mobjAccount, objImportHandler, objTrxReader, lngIndividualUpdateType, lngIndividualSearchType, blnFake)
             End If
             Exit Sub
         Catch ex As Exception

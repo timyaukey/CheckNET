@@ -34,11 +34,11 @@ Public Module CBMain
     'End Enum
 
     'Type of search used to find Trx matches for batch updates during import.
-    Public Enum ImportBatchUpdateSearch
-        None = 1 'None
-        Bank = 2 'Number, or date/description/amount (2 of 3)
-        Payee = 3 'Exact payee name within date range
-    End Enum
+    'Public Enum ImportBatchUpdateSearch
+    '    None = 1 'None
+    '    Bank = 2 'Number, or date/description/amount (2 of 3)
+    '    Payee = 3 'Exact payee name within date range
+    'End Enum
 
     'Type of search used to find Trx matches for batch new Trx creation during import.
     'Public Enum ImportBatchNewSearch
@@ -48,12 +48,12 @@ Public Module CBMain
     'End Enum
 
     'Fields to update during batch import.
-    Public Enum ImportBatchUpdateType
-        None = 1 'Do not allow batch updates during import.
-        Bank = 2 'Bank import key, number, date if not a check, fake->real but not reverse.
-        Amount = 3 'Amount only.
-        NumberAmount = 4 'Number and amount.
-    End Enum
+    'Public Enum ImportBatchUpdateType
+    '    None = 1 'Do not allow batch updates during import.
+    '    Bank = 2 'Bank import key, number, date if not a check, fake->real but not reverse.
+    '    Amount = 3 'Amount only.
+    '    NumberAmount = 4 'Number and amount.
+    'End Enum
 
     'Type of search used when user clicks on an imported trx.
     Public Enum ImportIndividualSearchType

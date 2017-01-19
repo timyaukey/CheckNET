@@ -167,10 +167,9 @@ Friend Class CBMainForm
                 frm = New BankImportAcctSelectForm
                 objImport = New ImportBankDownloadQIF(objFile, strFile)
                 frm.ShowMe("Import QIF File From Bank", New ImportHandlerBank(), objImport,
-                    CBMain.ImportBatchUpdateSearch.Bank,
                     CBMain.ImportIndividualUpdateType.Bank,
                     CBMain.ImportIndividualSearchType.Bank,
-                    CBMain.ImportBatchUpdateType.Bank, False)
+                    False)
             End If
 
             Exit Sub
@@ -197,10 +196,9 @@ Friend Class CBMainForm
                 frm = New BankImportAcctSelectForm
                 objImport = New ImportBankDownloadOFX(objFile, strFile)
                 frm.ShowMe("Import OFX File From Bank", New ImportHandlerBank(), objImport,
-                    CBMain.ImportBatchUpdateSearch.Bank,
                     CBMain.ImportIndividualUpdateType.Bank,
                     CBMain.ImportIndividualSearchType.Bank,
-                    CBMain.ImportBatchUpdateType.Bank, False)
+                    False)
             End If
 
             Exit Sub
@@ -221,10 +219,9 @@ Friend Class CBMainForm
             frm = New BankImportAcctSelectForm
             objImport = New ImportByPayee(gobjClipboardReader(), "(clipboard)")
             frm.ShowMe("Import Deposit Amounts", New ImportHandlerDeposits(), objImport,
-                CBMain.ImportBatchUpdateSearch.Payee,
                 CBMain.ImportIndividualUpdateType.Amount,
                 CBMain.ImportIndividualSearchType.Payee,
-                CBMain.ImportBatchUpdateType.Amount, False)
+                False)
 
             Exit Sub
         Catch ex As Exception
@@ -244,10 +241,9 @@ Friend Class CBMainForm
             frm = New BankImportAcctSelectForm
             objImport = New ImportInvoices(gobjClipboardReader(), "(clipboard)")
             frm.ShowMe("Import Invoices", New ImportHandlerInvoices(), objImport,
-                CBMain.ImportBatchUpdateSearch.None,
                 CBMain.ImportIndividualUpdateType.None,
                 CBMain.ImportIndividualSearchType.VendorInvoice,
-                CBMain.ImportBatchUpdateType.None, False)
+                False)
 
             Exit Sub
         Catch ex As Exception
@@ -270,10 +266,9 @@ Friend Class CBMainForm
             objSpecs = New ImportChecksSpec(1, 0, 2, 3, -1)
             objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
             frm.ShowMe("Import Checks", New ImportHandlerChecks(), objImport,
-                CBMain.ImportBatchUpdateSearch.Bank,
                 CBMain.ImportIndividualUpdateType.NumberAmount,
                 CBMain.ImportIndividualSearchType.Bank,
-                CBMain.ImportBatchUpdateType.NumberAmount, False)
+                False)
 
             Exit Sub
         Catch ex As Exception
@@ -296,10 +291,9 @@ Friend Class CBMainForm
             objSpecs = New ImportChecksSpec(0, 5, 9, 12, -1)
             objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
             frm.ShowMe("Import CompuPay Checks", New ImportHandlerChecks(), objImport,
-                CBMain.ImportBatchUpdateSearch.Bank,
                 CBMain.ImportIndividualUpdateType.NumberAmount,
                 CBMain.ImportIndividualSearchType.Bank,
-                CBMain.ImportBatchUpdateType.NumberAmount, False)
+                False)
 
             Exit Sub
         Catch ex As Exception
@@ -322,10 +316,9 @@ Friend Class CBMainForm
             objSpecs = New ImportChecksSpec(6, 0, 1, 2, -1)
             objImport = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
             frm.ShowMe("Import Oregon State Credit Union Checks", New ImportHandlerChecks(), objImport,
-                CBMain.ImportBatchUpdateSearch.Bank,
                 CBMain.ImportIndividualUpdateType.NumberAmount,
                 CBMain.ImportIndividualSearchType.Bank,
-                CBMain.ImportBatchUpdateType.NumberAmount, False)
+                False)
 
             Exit Sub
         Catch ex As Exception

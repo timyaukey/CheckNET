@@ -3,6 +3,7 @@ Option Explicit On
 
 Imports VB = Microsoft.VisualBasic
 Imports CheckBookLib
+Imports CheckBook
 
 Friend Class BankImportForm
     Inherits System.Windows.Forms.Form
@@ -11,8 +12,6 @@ Friend Class BankImportForm
     Private WithEvents mobjAccount As Account
     Private mobjImportHandler As IImportHandler
     Private mobjTrxReader As ITrxReader
-    Private mlngUpdateSearchType As CBMain.ImportBatchUpdateSearch
-    Private mlngBatchUpdateType As CBMain.ImportBatchUpdateType
     Private mlngIndividualSearchType As CBMain.ImportIndividualSearchType
     Private mlngIndividualUpdateType As CBMain.ImportIndividualUpdateType
     Private mblnFake As Boolean
@@ -50,6 +49,67 @@ Friend Class BankImportForm
     Private maudtItem() As ImportItem '1 to mintItems
     Private mintItems As Short
 
+    'An enumerable collection of Trx matched to the imported items.
+    Private Class AllMatchedTrx
+        Implements IEnumerable(Of Trx)
+
+        Private mcolImportItems As IEnumerable(Of ImportItem)
+
+        Public Sub New(colImportItems As IEnumerable(Of ImportItem))
+            mcolImportItems = colImportItems
+        End Sub
+
+        Public Function GetEnumerator() As IEnumerator(Of Trx) Implements IEnumerable(Of Trx).GetEnumerator
+            Return New AllMatchedTrxEnumerator(mcolImportItems.GetEnumerator())
+        End Function
+
+        Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+            Return New AllMatchedTrxEnumerator(mcolImportItems.GetEnumerator())
+        End Function
+    End Class
+
+    'The enumerator class for AllMatchedTrx
+    'Delegates to an enumerator of the underlying ImportItem array
+    Private Class AllMatchedTrxEnumerator
+        Implements IEnumerator(Of Trx)
+
+        Private mobjImportItemEnumerator As IEnumerator(Of ImportItem)
+
+        Public Sub New(ByVal objImportItemEnumerator As IEnumerator(Of ImportItem))
+            mobjImportItemEnumerator = objImportItemEnumerator
+        End Sub
+
+        Public ReadOnly Property Current As Trx Implements IEnumerator(Of Trx).Current
+            Get
+                Return mobjImportItemEnumerator.Current.objMatchedTrx
+            End Get
+        End Property
+
+        Private ReadOnly Property IEnumerator_Current As Object Implements IEnumerator.Current
+            Get
+                Return mobjImportItemEnumerator.Current.objMatchedTrx
+            End Get
+        End Property
+
+        Public Sub Dispose() Implements IDisposable.Dispose
+            mobjImportItemEnumerator.Dispose()
+        End Sub
+
+        Public Sub Reset() Implements IEnumerator.Reset
+            mobjImportItemEnumerator.Reset()
+        End Sub
+
+        Public Function MoveNext() As Boolean Implements IEnumerator.MoveNext
+            Return mobjImportItemEnumerator.MoveNext()
+        End Function
+    End Class
+
+    Private ReadOnly Property colAllMatchedTrx() As IEnumerable(Of Trx)
+        Get
+            Return New AllMatchedTrx(maudtItem)
+        End Get
+    End Property
+
     'Match to an item in maudtItem().
     Private Structure MatchItem
         Dim objTrx As Trx
@@ -71,10 +131,8 @@ Friend Class BankImportForm
     Public Sub ShowMe(ByVal strTitle As String, ByVal objAccount As Account,
                       ByVal objImportHandler As IImportHandler,
                       ByVal objTrxReader As ITrxReader,
-                      ByVal lngUpdateSearchType As CBMain.ImportBatchUpdateSearch,
                       ByVal lngIndividualUpdateType As CBMain.ImportIndividualUpdateType,
                       ByVal lngIndividualSearchType As CBMain.ImportIndividualSearchType,
-                      ByVal lngBatchUpdateType As CBMain.ImportBatchUpdateType,
                       ByVal blnFake As Boolean)
 
         Try
@@ -82,10 +140,8 @@ Friend Class BankImportForm
             mobjAccount = objAccount
             mobjImportHandler = objImportHandler
             mobjTrxReader = objTrxReader
-            mlngUpdateSearchType = lngUpdateSearchType
             mlngIndividualUpdateType = lngIndividualUpdateType
             mlngIndividualSearchType = lngIndividualSearchType
-            mlngBatchUpdateType = lngBatchUpdateType
             mblnFake = blnFake
 
             mstrImportSearchText = ""
@@ -114,11 +170,8 @@ Friend Class BankImportForm
         cmdFindNew.Enabled = mobjImportHandler.blnAllowNew
         cmdCreateNew.Enabled = mobjImportHandler.blnAllowNew
 
-        Select Case mlngUpdateSearchType
-            Case CBMain.ImportBatchUpdateSearch.None
-                cmdBatchUpdates.Enabled = False
-                cmdFindUpdates.Enabled = False
-        End Select
+        cmdBatchUpdates.Enabled = mobjImportHandler.blnAllowBatchUpdates
+        cmdFindUpdates.Enabled = mobjImportHandler.blnAllowBatchUpdates
 
         Select Case mlngIndividualUpdateType
             Case CBMain.ImportIndividualUpdateType.None
@@ -178,7 +231,6 @@ Friend Class BankImportForm
             Dim intItemIndex As Short
             Dim strFailReason As String = ""
             Dim intUpdateCount As Short
-            Dim strSummaryExplanation As String = ""
             Dim lngMatchedRegIndex As Integer
 
             ClearUpdateMatches()
@@ -204,23 +256,7 @@ Friend Class BankImportForm
                         If lngMatchedRegIndex = 0 Then
                             gRaiseError("Could not find matched Trx")
                         End If
-                        Select Case mlngBatchUpdateType
-
-                            Case CBMain.ImportBatchUpdateType.Bank
-                                .objMatchedReg.ImportUpdateBank(lngMatchedRegIndex, .objImportedTrx.datDate, .objMatchedTrx.strNumber, mblnFake, .objImportedTrx.curAmount, .objImportedTrx.strImportKey)
-
-                            Case CBMain.ImportBatchUpdateType.Amount
-                                .objMatchedReg.ImportUpdateAmount(lngMatchedRegIndex, mblnFake, .objImportedTrx.curAmount)
-
-                            Case CBMain.ImportBatchUpdateType.NumberAmount
-                                .objMatchedReg.ImportUpdateNumAmt(lngMatchedRegIndex, .objImportedTrx.strNumber, mblnFake, .objImportedTrx.curAmount)
-
-                            Case Else
-                                'Should not be possible.
-                                gRaiseError("Invalid batch update type")
-
-                        End Select
-
+                        mobjImportHandler.BatchUpdate(.objMatchedReg, lngMatchedRegIndex, .objImportedTrx, .objMatchedTrx, mblnFake)
                         .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
                         .objReg = .objMatchedReg
                         DisplayOneImportItem(objItem, intItemIndex)
@@ -230,20 +266,7 @@ Friend Class BankImportForm
                 End If
             Next objItem
             EndProgress()
-
-            Select Case mlngBatchUpdateType
-                Case CBMain.ImportBatchUpdateType.Bank
-                    strSummaryExplanation = "without changing transaction numbers, or transaction dates."
-                Case CBMain.ImportBatchUpdateType.Amount
-                    strSummaryExplanation = "updating transaction amounts only."
-                Case CBMain.ImportBatchUpdateType.NumberAmount
-                    strSummaryExplanation = "updating transaction numbers and amounts."
-                Case Else
-                    'Should not be possible.
-                    gRaiseError("Invalid batch update type")
-            End Select
-
-            MsgBox("Marked " & intUpdateCount & " transactions as imported, " & strSummaryExplanation)
+            MsgBox("Marked " & intUpdateCount & " transactions as imported, " & mobjImportHandler.strBatchUpdateFields + ".")
 
             Exit Sub
         Catch ex As Exception
@@ -264,14 +287,13 @@ Friend Class BankImportForm
 
         Dim objImportedTrx As ImportedTrx
         Dim objReg As Register
-        Dim colMatches As ICollection(Of Integer) = Nothing
-        Dim colExactMatches As ICollection(Of Integer) = Nothing
+        'Dim colMatches As ICollection(Of Integer) = Nothing
+        'Dim colExactMatches As ICollection(Of Integer) = Nothing
         Dim colUnusedMatches As ICollection(Of Integer) = Nothing
         Dim blnExactMatch As Boolean
         Dim intExactCount As Short
         Dim lngPossibleIndex As Integer
         Dim objPossibleMatchTrx As Trx
-        Dim lngNumber As Integer
         Dim blnNonExactConfirmed As Boolean
         Dim blnCheckWithoutAmount As Boolean
 
@@ -289,23 +311,9 @@ Friend Class BankImportForm
             'single exact match, because the user may have checked additional
             'imported trx.
             intExactCount = 0
-            lngNumber = Val(objImportedTrx.strNumber)
             For Each objReg In mobjAccount.colRegisters
 
-                Select Case mlngUpdateSearchType
-                    Case CBMain.ImportBatchUpdateSearch.Bank
-                        objReg.MatchCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
-                                         objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
-                        objReg.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
-                        colUnusedMatches = colRemoveAlreadyMatched(objReg, colMatches)
-                        colUnusedMatches = colApplyNarrowMethodForBank(objReg, objImportedTrx, colMatches, blnExactMatch)
-                    Case CBMain.ImportBatchUpdateSearch.Payee
-                        objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, False, colMatches, blnExactMatch)
-                        colUnusedMatches = colRemoveAlreadyMatched(objReg, colMatches)
-                    Case Else
-                        'Should not be possible
-                        gRaiseError("Invalid batch update search type")
-                End Select
+                mobjImportHandler.BatchUpdateSearch(objReg, objImportedTrx, colAllMatchedTrx, colUnusedMatches, blnExactMatch)
                 'If we have one match that wasn't matched by a previous import item.
                 If colUnusedMatches.Count() = 1 Then
                     blnNonExactConfirmed = False
@@ -342,76 +350,6 @@ Friend Class BankImportForm
 
         End With
         blnValidForAutoUpdate = True
-
-    End Function
-
-    'Filter out trx that are already matched to something in maudtItem().
-    Private Function colRemoveAlreadyMatched(ByVal objReg As Register, ByVal colMatches As ICollection(Of Integer)) As ICollection(Of Integer)
-        Dim colUnusedMatches As ICollection(Of Integer)
-        Dim intCheckIndex As Integer
-        Dim blnAlreadyMatched As Boolean
-        Dim objPossibleMatchTrx As Trx
-        Dim intPossibleIndex As Integer
-
-        colUnusedMatches = New List(Of Integer)
-        For Each intPossibleIndex In colMatches
-            objPossibleMatchTrx = objReg.objTrx(intPossibleIndex)
-            blnAlreadyMatched = False
-            For intCheckIndex = 1 To mintItems
-                If maudtItem(intCheckIndex).objMatchedTrx Is objPossibleMatchTrx Then
-                    blnAlreadyMatched = True
-                    Exit For
-                End If
-            Next
-            If Not blnAlreadyMatched Then
-                colUnusedMatches.Add(intPossibleIndex)
-            End If
-        Next
-        Return colUnusedMatches
-    End Function
-
-    Private Function colApplyNarrowMethodForBank(ByVal objReg As Register, ByVal objTrx As ImportedTrx, ByVal colUnusedMatches As ICollection(Of Integer),
-                                                 ByRef blnExactMatch As Boolean) As ICollection(Of Integer)
-        Dim colResult As ICollection(Of Integer)
-        Dim objPossibleMatchTrx As Trx
-        Dim intPossibleIndex As Integer
-        Dim datTargetDate As Date
-        Dim dblBestDistance As Double
-        Dim dblCurrentDistance As Double
-        Dim lngBestMatch As Integer
-        Dim blnHaveFirstMatch As Boolean
-
-        If colUnusedMatches.Count = 0 Then
-            Return colUnusedMatches
-        End If
-
-        Select Case objTrx.lngNarrowMethod
-            Case ImportMatchNarrowMethod.EarliestDate
-                datTargetDate = #1/1/1980#
-            Case ImportMatchNarrowMethod.ClosestDate
-                datTargetDate = objTrx.datDate
-            Case ImportMatchNarrowMethod.None
-                Return colUnusedMatches
-            Case Else
-                gRaiseError("Unrecognized narrowing method")
-        End Select
-
-        blnHaveFirstMatch = False
-        For Each intPossibleIndex In colUnusedMatches
-            objPossibleMatchTrx = objReg.objTrx(intPossibleIndex)
-            If String.IsNullOrEmpty(objPossibleMatchTrx.strImportKey) And (objPossibleMatchTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON) Then
-                dblCurrentDistance = Math.Abs(objPossibleMatchTrx.datDate.Subtract(datTargetDate).TotalDays)
-                If (Not blnHaveFirstMatch) Or (dblCurrentDistance < dblBestDistance) Then
-                    dblBestDistance = dblCurrentDistance
-                    lngBestMatch = intPossibleIndex
-                    blnHaveFirstMatch = True
-                End If
-            End If
-        Next
-        blnExactMatch = True
-        colResult = New List(Of Integer)
-        colResult.Add(lngBestMatch)
-        Return colResult
 
     End Function
 

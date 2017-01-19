@@ -39,4 +39,25 @@ Public Class ImportHandlerDeposits
         Return 0
     End Function
 
+    Public Sub BatchUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx, blnFake As Boolean) Implements IImportHandler.BatchUpdate
+        objMatchedReg.ImportUpdateAmount(lngMatchedRegIndex, blnFake, objImportedTrx.curAmount)
+    End Sub
+
+    Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of Trx), ByRef colUnusedMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
+        Dim colMatches As ICollection(Of Integer) = Nothing
+        objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, False, colMatches, blnExactMatch)
+        colUnusedMatches = ImportUtilities.colRemoveAlreadyMatched(objReg, colMatches, colAllMatchedTrx)
+    End Sub
+
+    Public ReadOnly Property strBatchUpdateFields As String Implements IImportHandler.strBatchUpdateFields
+        Get
+            Return "updating transaction amounts only"
+        End Get
+    End Property
+
+    Public ReadOnly Property blnAllowBatchUpdates As Boolean Implements IImportHandler.blnAllowBatchUpdates
+        Get
+            Return True
+        End Get
+    End Property
 End Class
