@@ -47,64 +47,14 @@ Friend Class BankImportForm
     Private maudtItem() As ImportItem '1 to mintItems
     Private mintItems As Short
 
-    'An enumerable collection of Trx matched to the imported items.
-    Private Class AllMatchedTrx
-        Implements IEnumerable(Of Trx)
-
-        Private mcolImportItems As IEnumerable(Of ImportItem)
-
-        Public Sub New(colImportItems As IEnumerable(Of ImportItem))
-            mcolImportItems = colImportItems
-        End Sub
-
-        Public Function GetEnumerator() As IEnumerator(Of Trx) Implements IEnumerable(Of Trx).GetEnumerator
-            Return New AllMatchedTrxEnumerator(mcolImportItems.GetEnumerator())
-        End Function
-
-        Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-            Return New AllMatchedTrxEnumerator(mcolImportItems.GetEnumerator())
-        End Function
-    End Class
-
-    'The enumerator class for AllMatchedTrx
-    'Delegates to an enumerator of the underlying ImportItem array
-    Private Class AllMatchedTrxEnumerator
-        Implements IEnumerator(Of Trx)
-
-        Private mobjImportItemEnumerator As IEnumerator(Of ImportItem)
-
-        Public Sub New(ByVal objImportItemEnumerator As IEnumerator(Of ImportItem))
-            mobjImportItemEnumerator = objImportItemEnumerator
-        End Sub
-
-        Public ReadOnly Property Current As Trx Implements IEnumerator(Of Trx).Current
-            Get
-                Return mobjImportItemEnumerator.Current.objMatchedTrx
-            End Get
-        End Property
-
-        Private ReadOnly Property IEnumerator_Current As Object Implements IEnumerator.Current
-            Get
-                Return mobjImportItemEnumerator.Current.objMatchedTrx
-            End Get
-        End Property
-
-        Public Sub Dispose() Implements IDisposable.Dispose
-            mobjImportItemEnumerator.Dispose()
-        End Sub
-
-        Public Sub Reset() Implements IEnumerator.Reset
-            mobjImportItemEnumerator.Reset()
-        End Sub
-
-        Public Function MoveNext() As Boolean Implements IEnumerator.MoveNext
-            Return mobjImportItemEnumerator.MoveNext()
-        End Function
-    End Class
-
-    Private ReadOnly Property colAllMatchedTrx() As IEnumerable(Of Trx)
+    Private ReadOnly Iterator Property colAllMatchedTrx() As IEnumerable(Of Trx)
         Get
-            Return New AllMatchedTrx(maudtItem)
+            Dim item As ImportItem
+            For Each item In maudtItem
+                If Not item.objMatchedTrx Is Nothing Then
+                    Yield item.objMatchedTrx
+                End If
+            Next
         End Get
     End Property
 

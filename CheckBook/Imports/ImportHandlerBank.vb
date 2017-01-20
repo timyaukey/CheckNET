@@ -51,7 +51,7 @@ Public Class ImportHandlerBank
                          objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
         objReg.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
         colUnusedMatches = ImportUtilities.colRemoveAlreadyMatched(objReg, colMatches, colAllMatchedTrx)
-        colUnusedMatches = ImportUtilities.colApplyNarrowMethodForBank(objReg, objImportedTrx, colMatches, blnExactMatch)
+        colUnusedMatches = ImportUtilities.colApplyNarrowMethod(objReg, objImportedTrx, colUnusedMatches, blnExactMatch)
     End Sub
 
     Public ReadOnly Property strBatchUpdateFields As String Implements IImportHandler.strBatchUpdateFields

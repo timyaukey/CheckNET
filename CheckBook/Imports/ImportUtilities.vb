@@ -416,9 +416,9 @@ Public Class ImportUtilities
 
     'Filter out trx that are already matched to something in maudtItem().
     Public Shared Function colRemoveAlreadyMatched(ByVal objReg As Register,
-                                                    ByVal colMatches As ICollection(Of Integer),
-                                                    ByVal colImportMatches As IEnumerable(Of Trx)) _
-                                                    As ICollection(Of Integer)
+                                                   ByVal colInputMatches As ICollection(Of Integer),
+                                                   ByVal colAllMatchedTrx As IEnumerable(Of Trx)) _
+                                                   As ICollection(Of Integer)
         Dim colUnusedMatches As ICollection(Of Integer)
         Dim blnAlreadyMatched As Boolean
         Dim objPossibleMatchTrx As Trx
@@ -426,10 +426,10 @@ Public Class ImportUtilities
         Dim objMatchedTrx As Trx
 
         colUnusedMatches = New List(Of Integer)
-        For Each intPossibleIndex In colMatches
+        For Each intPossibleIndex In colInputMatches
             objPossibleMatchTrx = objReg.objTrx(intPossibleIndex)
             blnAlreadyMatched = False
-            For Each objMatchedTrx In colImportMatches
+            For Each objMatchedTrx In colAllMatchedTrx
                 If objMatchedTrx Is objPossibleMatchTrx Then
                     blnAlreadyMatched = True
                     Exit For
@@ -442,8 +442,11 @@ Public Class ImportUtilities
         Return colUnusedMatches
     End Function
 
-    Public Shared Function colApplyNarrowMethodForBank(ByVal objReg As Register, ByVal objTrx As ImportedTrx, ByVal colUnusedMatches As ICollection(Of Integer),
-                                                 ByRef blnExactMatch As Boolean) As ICollection(Of Integer)
+    Public Shared Function colApplyNarrowMethod(ByVal objReg As Register,
+                                                ByVal objTrx As ImportedTrx,
+                                                ByVal colInputMatches As ICollection(Of Integer),
+                                                ByRef blnExactMatch As Boolean) _
+                                                As ICollection(Of Integer)
         Dim colResult As ICollection(Of Integer)
         Dim objPossibleMatchTrx As Trx
         Dim intPossibleIndex As Integer
@@ -453,8 +456,8 @@ Public Class ImportUtilities
         Dim lngBestMatch As Integer
         Dim blnHaveFirstMatch As Boolean
 
-        If colUnusedMatches.Count = 0 Then
-            Return colUnusedMatches
+        If colInputMatches.Count = 0 Then
+            Return colInputMatches
         End If
 
         Select Case objTrx.lngNarrowMethod
@@ -463,13 +466,13 @@ Public Class ImportUtilities
             Case ImportMatchNarrowMethod.ClosestDate
                 datTargetDate = objTrx.datDate
             Case ImportMatchNarrowMethod.None
-                Return colUnusedMatches
+                Return colInputMatches
             Case Else
                 gRaiseError("Unrecognized narrowing method")
         End Select
 
         blnHaveFirstMatch = False
-        For Each intPossibleIndex In colUnusedMatches
+        For Each intPossibleIndex In colInputMatches
             objPossibleMatchTrx = objReg.objTrx(intPossibleIndex)
             If String.IsNullOrEmpty(objPossibleMatchTrx.strImportKey) And (objPossibleMatchTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON) Then
                 dblCurrentDistance = Math.Abs(objPossibleMatchTrx.datDate.Subtract(datTargetDate).TotalDays)
