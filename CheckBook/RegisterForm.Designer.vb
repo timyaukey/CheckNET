@@ -34,16 +34,16 @@
     'It can be modified using the Windows Form Designer.
     'Do not modify it using the code editor.
 	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(RegisterForm))
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.cmdSearch = New System.Windows.Forms.Button
-        Me.cmdNewXfer = New System.Windows.Forms.Button
-        Me.cmdNewBudget = New System.Windows.Forms.Button
-        Me.cmdDelete = New System.Windows.Forms.Button
-        Me.cmdEdit = New System.Windows.Forms.Button
-        Me.cmdNewNormal = New System.Windows.Forms.Button
-        Me.grdReg = New System.Windows.Forms.DataGridView
+        Me.cmdSearch = New System.Windows.Forms.Button()
+        Me.cmdNewXfer = New System.Windows.Forms.Button()
+        Me.cmdNewBudget = New System.Windows.Forms.Button()
+        Me.cmdDelete = New System.Windows.Forms.Button()
+        Me.cmdEdit = New System.Windows.Forms.Button()
+        Me.cmdNewNormal = New System.Windows.Forms.Button()
+        Me.grdReg = New System.Windows.Forms.DataGridView()
         CType(Me.grdReg, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -142,8 +142,8 @@
         Me.grdReg.AllowUserToAddRows = False
         Me.grdReg.AllowUserToDeleteRows = False
         Me.grdReg.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.grdReg.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.grdReg.Location = New System.Drawing.Point(12, 12)
         Me.grdReg.Name = "grdReg"

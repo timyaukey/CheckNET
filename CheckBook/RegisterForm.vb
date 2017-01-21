@@ -176,14 +176,6 @@ Friend Class RegisterForm
         End Try
     End Sub
 
-    Private Sub RegisterForm_Activated(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Activated
-        CBMainForm.mnuAccount.Visible = True
-    End Sub
-
-    Private Sub RegisterForm_Deactivate(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Deactivate
-        CBMainForm.mnuAccount.Visible = False
-    End Sub
-
     Private Sub RegisterForm_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
         'If we don't clear these here, the form continues to receive events
         'through mobjReg. Something about our processing for these events
@@ -193,7 +185,6 @@ Friend Class RegisterForm
         mobjReg = Nothing
         'UPGRADE_NOTE: Object mobjAccount may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         mobjAccount = Nothing
-        CBMainForm.mnuAccount.Visible = False
     End Sub
 
     Private Sub grdReg_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles grdReg.DoubleClick
