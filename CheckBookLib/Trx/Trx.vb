@@ -1063,6 +1063,9 @@ Public Class Trx
         End If
     End Sub
 
+    Public Delegate Sub AddSearchMaxTrxDelegate(ByVal objTrx As Trx, ByVal lngIndex As Integer)
+    Public Delegate Sub AddSearchMaxSplitDelegate(ByVal objTrx As Trx, ByVal lngIndex As Integer, ByVal objSplit As TrxSplit)
+
     '$Description Determine if this Trx is a match to search criteria.
     '$Param lngSearchField Which Trx data to search.
     '$Param strSearchFor What you are searching for. For category searches
@@ -1070,89 +1073,52 @@ Public Class Trx
     '   Split for the Trx has this category key.
     '$Param lngSearchType What kind of comparison to do. Ignored for category
     '   searches, which are always for equality.
-    '$Param curMatchAmount The dollar amount of the item matched. Is the sum
-    '   of matched split amounts for glngTRXSFL_CATKEY searches, otherwise
-    '   the trx amount.
-    '$Returns True iff the Trx is a match.
 
-    Public Function blnIsSearchMatch(ByVal lngSearchField As TrxSearchField, ByVal strSearchFor As String, ByVal lngSearchType As TrxSearchType, ByRef curMatchAmount As Decimal) As Boolean
+    Public Sub CheckSearchMatch(
+        ByVal lngSearchField As TrxSearchField, ByVal strSearchFor As String,
+        ByVal lngSearchType As TrxSearchType, ByVal lngIndex As Integer,
+        ByVal dlgAddTrxResult As AddSearchMaxTrxDelegate,
+        ByVal dlgAddSplitResult As AddSearchMaxSplitDelegate)
 
         Dim objSplit As TrxSplit
         Dim strTrxData As String = ""
-        Dim blnAnySplitsMatch As Boolean
-        Dim blnThisSplitMatches As Boolean
         Dim strCatName As String
-
-        blnIsSearchMatch = False
-        curMatchAmount = 0
 
         Select Case lngSearchField
             Case TrxSearchField.glngTRXSFL_CATKEY
-                'This is a special case, so we always exit the
-                'function from this case.
                 If mlngType = TrxType.glngTRXTYP_NORMAL Then
-                    'Always check all splits because there may be multiple matches
-                    'and we must return the total dollars matched.
-                    blnAnySplitsMatch = False
                     For Each objSplit In mcolSplits
-                        blnThisSplitMatches = False
                         If lngSearchType = TrxSearchType.glngTRXSTP_EQUAL Then
-                            blnThisSplitMatches = (objSplit.strCategoryKey = strSearchFor)
+                            If objSplit.strCategoryKey = strSearchFor Then
+                                dlgAddSplitResult(Me, lngIndex, objSplit)
+                            End If
                         Else
                             strCatName = gobjCategories.strKeyToValue1(objSplit.strCategoryKey)
-                            blnThisSplitMatches = (Left(strCatName, Len(strSearchFor) + 1) = (strSearchFor & ":")) Or (strCatName = strSearchFor)
+                            If (Left(strCatName, Len(strSearchFor) + 1) = (strSearchFor & ":")) Or (strCatName = strSearchFor) Then
+                                dlgAddSplitResult(Me, lngIndex, objSplit)
+                            End If
                         End If
-                        If blnThisSplitMatches Then
-                            curMatchAmount = curMatchAmount + objSplit.curAmount
-                            blnAnySplitsMatch = True
-                        End If
-                    Next objSplit
-                    If blnAnySplitsMatch Then
-                        blnIsSearchMatch = True
-                        Exit Function
-                    End If
+                    Next
                 End If
-                Exit Function
+                Exit Sub
             Case TrxSearchField.glngTRXSFL_INVNUM
-                'This is a special case, so we always exit the
-                'function from this case.
                 If mlngType = TrxType.glngTRXTYP_NORMAL Then
-                    'Always check all splits because there may be multiple matches
-                    'and we must return the total dollars matched.
-                    blnAnySplitsMatch = False
                     For Each objSplit In mcolSplits
-                        blnThisSplitMatches = blnIsStringMatch(lngSearchType, (objSplit.strInvoiceNum), strSearchFor)
-                        If blnThisSplitMatches Then
-                            curMatchAmount = curMatchAmount + objSplit.curAmount
-                            blnAnySplitsMatch = True
+                        If blnIsStringMatch(lngSearchType, (objSplit.strInvoiceNum), strSearchFor) Then
+                            dlgAddSplitResult(Me, lngIndex, objSplit)
                         End If
-                    Next objSplit
-                    If blnAnySplitsMatch Then
-                        blnIsSearchMatch = True
-                        Exit Function
-                    End If
+                    Next
                 End If
-                Exit Function
+                Exit Sub
             Case TrxSearchField.glngTRXSFL_PONUMBER
-                'This is a special case, so we always exit the
-                'function from this case.
                 If mlngType = TrxType.glngTRXTYP_NORMAL Then
-                    'Always check all splits because there may be multiple matches
-                    'and we must return the total dollars matched.
-                    blnAnySplitsMatch = False
                     For Each objSplit In mcolSplits
-                        blnThisSplitMatches = blnIsStringMatch(lngSearchType, (objSplit.strPONumber), strSearchFor)
-                        If blnThisSplitMatches Then
-                            curMatchAmount = curMatchAmount + objSplit.curAmount
-                            blnAnySplitsMatch = True
+                        If blnIsStringMatch(lngSearchType, (objSplit.strPONumber), strSearchFor) Then
+                            dlgAddSplitResult(Me, lngIndex, objSplit)
                         End If
-                    Next objSplit
-                    If blnAnySplitsMatch Then
-                        blnIsSearchMatch = True
-                        Exit Function
-                    End If
+                    Next
                 End If
-                Exit Function
+                Exit Sub
             Case TrxSearchField.glngTRXSFL_DESCR
                 strTrxData = mstrDescription
             Case TrxSearchField.glngTRXSFL_NUMBER
@@ -1165,10 +1131,13 @@ Public Class Trx
                 gRaiseError("Unrecognized field in Trx.blnIsSearchMatch")
         End Select
 
-        curMatchAmount = mcurAmount
-        blnIsSearchMatch = blnIsStringMatch(lngSearchType, strTrxData, strSearchFor)
+        'All the searches that check and report individual splits report their 
+        'results and exit before here.
+        If blnIsStringMatch(lngSearchType, strTrxData, strSearchFor) Then
+            dlgAddTrxResult(Me, lngIndex)
+        End If
 
-    End Function
+    End Sub
 
     Private Function blnIsStringMatch(ByVal lngSearchType As TrxSearchType, ByRef strTrxData As String, ByRef strSearchFor As String) As Boolean
 

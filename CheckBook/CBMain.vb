@@ -43,6 +43,14 @@ Public Module CBMain
         gobjListViewAdd = lvw.Items.Add("")
     End Function
 
+    Public Sub gAddListSubItem(ByVal objItem As ListViewItem, ByVal intColIndex As Integer, ByVal strValue As String)
+        If objItem.SubItems.Count > intColIndex Then
+            objItem.SubItems(intColIndex).Text = strValue
+        Else
+            objItem.SubItems.Insert(intColIndex, New ListViewItem.ListViewSubItem(Nothing, strValue))
+        End If
+    End Sub
+
     Public Sub gSetListViewSortColumn(ByVal lvw As System.Windows.Forms.ListView, ByVal intColumn As Short)
         'In .NET the list view will have to have its .ListViewItemSorter set to
         'some object, and the column passed to that object. Copy ListViewSorter.vb
