@@ -423,20 +423,16 @@ Friend Class SearchForm
 
     Private Sub cmdEditTrx_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdEditTrx.Click
         Try
-
-            Dim lngResultIndex As Integer
-            Dim lngRegSelect As Integer
-            Dim frmEdit As TrxForm
-
             If lvwMatches.FocusedItem Is Nothing Then
                 Exit Sub
             End If
-            lngResultIndex = CInt(lvwMatches.FocusedItem.SubItems(mintHIDDEN_COL).Text)
-            lngRegSelect = maudtMatches(lngResultIndex).lngRegIndex
-            frmEdit = frmCreateTrxForm()
-            If frmEdit.blnUpdate(mobjAccount, lngRegSelect, mobjReg, mdatDefaultDate, "SearchForm.Edit") Then
-                Exit Sub
-            End If
+            Dim lngResultIndex As Integer = CInt(lvwMatches.FocusedItem.SubItems(mintHIDDEN_COL).Text)
+            Dim lngRegSelect As Integer = maudtMatches(lngResultIndex).lngRegIndex
+            Using frmEdit As TrxForm = frmCreateTrxForm()
+                If frmEdit.blnUpdate(mobjAccount, lngRegSelect, mobjReg, mdatDefaultDate, "SearchForm.Edit") Then
+                    Exit Sub
+                End If
+            End Using
             mobjReg.ValidateRegister()
 
             Exit Sub
@@ -446,19 +442,15 @@ Friend Class SearchForm
     End Sub
 
     Private Sub cmdNewNormal_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewNormal.Click
-        Dim frm As TrxForm
-        Dim objTrx As Trx
-
         Try
-
-            objTrx = New Trx
+            Dim objTrx As Trx = New Trx
             objTrx.NewEmptyNormal(mobjReg, mdatDefaultDate)
-            frm = frmCreateTrxForm()
-            If frm.blnAddNormal(mobjAccount, mobjReg, objTrx, mdatDefaultDate, True, "SearchForm.NewNormal") Then
-                MsgBox("Canceled.")
-            End If
+            Using frm As TrxForm = frmCreateTrxForm()
+                If frm.blnAddNormal(mobjAccount, mobjReg, objTrx, mdatDefaultDate, True, "SearchForm.NewNormal") Then
+                    MsgBox("Canceled.")
+                End If
+            End Using
             mobjReg.ValidateRegister()
-
             Exit Sub
         Catch ex As Exception
             gTopException(ex)
@@ -466,12 +458,7 @@ Friend Class SearchForm
     End Sub
 
     Private Function frmCreateTrxForm() As TrxForm
-        Dim frm As TrxForm
-        frm = New TrxForm
-        'If chkBypassConfirmation.value = vbChecked Then
-        '    frm.blnBypassConfirmation = True
-        'End If
-        frmCreateTrxForm = frm
+        Return New TrxForm()
     End Function
 
     Private Iterator Function colGetCheckedTrx() As IEnumerable(Of Trx)
@@ -611,7 +598,6 @@ Friend Class SearchForm
             Dim colOldTrx As ICollection(Of Trx)
             Dim objOldSplit As TrxSplit
             Dim lngTrxIndex As Integer
-            Dim frmTrx As TrxForm
             Dim objStartLogger As ILogGroupStart
             Dim datToday As Date
             Dim datResult As Date
@@ -647,12 +633,12 @@ Friend Class SearchForm
             End If
 
             'Now let them edit it and possibly save it.
-            frmTrx = frmCreateTrxForm()
-
-            If frmTrx.blnAddNormal(mobjAccount, mobjReg, objNewTrx, datResult, False, "SearchForm.CombineNew") Then
-                'They did not save it.
-                Exit Sub
-            End If
+            Using frmTrx As TrxForm = frmCreateTrxForm()
+                If frmTrx.blnAddNormal(mobjAccount, mobjReg, objNewTrx, datResult, False, "SearchForm.CombineNew") Then
+                    'They did not save it.
+                    Exit Sub
+                End If
+            End Using
             objNewTrx = mobjReg.objTrx(mobjReg.lngCurrentTrxIndex())
 
             'Now delete old trx.

@@ -14,8 +14,8 @@ Friend Class RegisterForm
 	Private mobjAccount As Account
 	Private mblnLoadComplete As Boolean
     Private mdatDefaultNewDate As Date
-	Private WithEvents mfrmSearch As System.Windows.Forms.Form
-	Private mblnOldVisible As Boolean
+    Private WithEvents mfrmSearch As SearchForm
+    Private mblnOldVisible As Boolean
 	
     'Column numbers.
 	Private mintColDate As Short
@@ -139,9 +139,7 @@ Friend Class RegisterForm
 
     Private Sub cmdEdit_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdEdit.Click
         Try
-
             EditTrx()
-
             Exit Sub
         Catch ex As Exception
             gTopException(ex)
@@ -149,31 +147,24 @@ Friend Class RegisterForm
     End Sub
 
     Private Sub EditTrx()
-        Dim frm As TrxForm
-        Dim lngIndex As Integer
-
-        lngIndex = lngRegisterIndex()
+        Dim lngIndex As Integer = lngRegisterIndex()
         If lngIndex > mobjReg.lngTrxCount Then
             MsgBox("You may not edit a blank register row.", MsgBoxStyle.Critical)
             Exit Sub
         End If
-        frm = frmCreateTrxForm
-        If frm.blnUpdate(mobjAccount, lngIndex, mobjReg, mdatDefaultNewDate, "RegForm.Edit") Then
-            Exit Sub
-        End If
+        Using frm As TrxForm = frmCreateTrxForm()
+            If frm.blnUpdate(mobjAccount, lngIndex, mobjReg, mdatDefaultNewDate, "RegForm.Edit") Then
+                Exit Sub
+            End If
+        End Using
         DiagnosticValidate()
-
     End Sub
 
     Private Sub cmdSearch_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSearch.Click
-        Dim frm As SearchForm
-
         Try
-
             If mfrmSearch Is Nothing Then
-                frm = New SearchForm
-                mfrmSearch = frm
-                frm.ShowMe(mobjReg, mobjAccount, Me)
+                mfrmSearch = New SearchForm
+                mfrmSearch.ShowMe(mobjReg, mobjAccount, Me)
             Else
                 mfrmSearch.Show()
                 mfrmSearch.Activate()
@@ -206,7 +197,12 @@ Friend Class RegisterForm
     End Sub
 
     Private Sub grdReg_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles grdReg.DoubleClick
-        cmdEdit_Click(cmdEdit, New System.EventArgs())
+        Try
+            EditTrx()
+            Exit Sub
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     'Populate grid columns with data for the rows that are currently visible,
@@ -217,35 +213,28 @@ Friend Class RegisterForm
     End Sub
 
     Private Sub cmdNewNormal_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewNormal.Click
-        Dim frm As TrxForm
-        Dim objTrx As Trx
-
         Try
-
-            objTrx = New Trx
+            Dim objTrx As Trx = New Trx
             objTrx.NewEmptyNormal(mobjReg, mdatDefaultNewDate)
-            frm = frmCreateTrxForm()
-            If frm.blnAddNormal(mobjAccount, mobjReg, objTrx, mdatDefaultNewDate, True, "RegForm.NewNormal") Then
-                MsgBox("Canceled.")
-            End If
+            Using frm As TrxForm = frmCreateTrxForm()
+                If frm.blnAddNormal(mobjAccount, mobjReg, objTrx, mdatDefaultNewDate, True, "RegForm.NewNormal") Then
+                    MsgBox("Canceled.")
+                End If
+            End Using
             DiagnosticValidate()
-
             Exit Sub
         Catch ex As Exception
             gTopException(ex) : End Try
     End Sub
 
     Private Sub cmdNewBudget_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewBudget.Click
-        Dim frm As TrxForm
-
         Try
-
-            frm = frmCreateTrxForm()
-            If frm.blnAddBudget(mobjAccount, mobjReg, mdatDefaultNewDate, "RegForm.NewBudget") Then
-                MsgBox("Canceled.")
-            End If
+            Using frm As TrxForm = frmCreateTrxForm()
+                If frm.blnAddBudget(mobjAccount, mobjReg, mdatDefaultNewDate, "RegForm.NewBudget") Then
+                    MsgBox("Canceled.")
+                End If
+            End Using
             DiagnosticValidate()
-
             Exit Sub
         Catch ex As Exception
             gTopException(ex)
@@ -253,16 +242,13 @@ Friend Class RegisterForm
     End Sub
 
     Private Sub cmdNewXfer_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewXfer.Click
-        Dim frm As TrxForm
-
         Try
-
-            frm = frmCreateTrxForm()
-            If frm.blnAddTransfer(mobjAccount, mobjReg, mdatDefaultNewDate, "RegForm.NewXfer") Then
-                MsgBox("Canceled.")
-            End If
+            Using frm As TrxForm = frmCreateTrxForm()
+                If frm.blnAddTransfer(mobjAccount, mobjReg, mdatDefaultNewDate, "RegForm.NewXfer") Then
+                    MsgBox("Canceled.")
+                End If
+            End Using
             DiagnosticValidate()
-
             Exit Sub
         Catch ex As Exception
             gTopException(ex)
@@ -270,12 +256,7 @@ Friend Class RegisterForm
     End Sub
 
     Private Function frmCreateTrxForm() As TrxForm
-        Dim frm As TrxForm
-        frm = New TrxForm
-        'If chkBypassDateConfirm.value = vbChecked Then
-        '    frm.blnBypassConfirmation = True
-        'End If
-        frmCreateTrxForm = frm
+        Return New TrxForm
     End Function
 
     Private Sub RegisterForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
