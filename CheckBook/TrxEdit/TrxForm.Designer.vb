@@ -2536,7 +2536,7 @@
         Me.lvwAppliedTo.ForeColor = System.Drawing.SystemColors.WindowText
         Me.lvwAppliedTo.FullRowSelect = True
         Me.lvwAppliedTo.HideSelection = False
-        Me.lvwAppliedTo.Location = New System.Drawing.Point(10, 91)
+        Me.lvwAppliedTo.Location = New System.Drawing.Point(9, 96)
         Me.lvwAppliedTo.Name = "lvwAppliedTo"
         Me.lvwAppliedTo.Size = New System.Drawing.Size(958, 187)
         Me.lvwAppliedTo.TabIndex = 169
@@ -2546,38 +2546,38 @@
         '_lvwAppliedTo_ColumnHeader_1
         '
         Me._lvwAppliedTo_ColumnHeader_1.Text = "Date"
-        Me._lvwAppliedTo_ColumnHeader_1.Width = 106
+        Me._lvwAppliedTo_ColumnHeader_1.Width = 62
         '
         '_lvwAppliedTo_ColumnHeader_2
         '
         Me._lvwAppliedTo_ColumnHeader_2.Text = "Number"
-        Me._lvwAppliedTo_ColumnHeader_2.Width = 95
+        Me._lvwAppliedTo_ColumnHeader_2.Width = 69
         '
         '_lvwAppliedTo_ColumnHeader_3
         '
         Me._lvwAppliedTo_ColumnHeader_3.Text = "Description"
-        Me._lvwAppliedTo_ColumnHeader_3.Width = 412
+        Me._lvwAppliedTo_ColumnHeader_3.Width = 285
         '
         '_lvwAppliedTo_ColumnHeader_4
         '
         Me._lvwAppliedTo_ColumnHeader_4.Text = "Invoice Number"
-        Me._lvwAppliedTo_ColumnHeader_4.Width = 212
+        Me._lvwAppliedTo_ColumnHeader_4.Width = 124
         '
         '_lvwAppliedTo_ColumnHeader_5
         '
         Me._lvwAppliedTo_ColumnHeader_5.Text = "PO Number"
-        Me._lvwAppliedTo_ColumnHeader_5.Width = 170
+        Me._lvwAppliedTo_ColumnHeader_5.Width = 103
         '
         '_lvwAppliedTo_ColumnHeader_6
         '
         Me._lvwAppliedTo_ColumnHeader_6.Text = "Split Amt"
         Me._lvwAppliedTo_ColumnHeader_6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me._lvwAppliedTo_ColumnHeader_6.Width = 118
+        Me._lvwAppliedTo_ColumnHeader_6.Width = 76
         '
         '_lvwAppliedTo_ColumnHeader_7
         '
         Me._lvwAppliedTo_ColumnHeader_7.Text = "Category"
-        Me._lvwAppliedTo_ColumnHeader_7.Width = 353
+        Me._lvwAppliedTo_ColumnHeader_7.Width = 213
         '
         'txtBudgetApplied
         '
@@ -3075,9 +3075,6 @@
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.CancelButton = Me.cmdCancel
         Me.ClientSize = New System.Drawing.Size(999, 445)
-        Me.Controls.Add(Me.frmNormal)
-        Me.Controls.Add(Me.frmTransfer)
-        Me.Controls.Add(Me.frmBudget)
         Me.Controls.Add(Me.cmdCopyInvoiceNumbers)
         Me.Controls.Add(Me.cmdPrintCheck)
         Me.Controls.Add(Me.cmdRptInfo)
@@ -3104,6 +3101,9 @@
         Me.Controls.Add(Me.lblDescription)
         Me.Controls.Add(Me.lblNumber)
         Me.Controls.Add(Me.lblDate)
+        Me.Controls.Add(Me.frmNormal)
+        Me.Controls.Add(Me.frmBudget)
+        Me.Controls.Add(Me.frmTransfer)
         Me.Cursor = System.Windows.Forms.Cursors.Default
         Me.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -3126,5 +3126,5 @@
         Me.PerformLayout()
 
     End Sub
-#End Region 
+#End Region
 End Class
