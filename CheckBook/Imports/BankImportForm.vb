@@ -25,9 +25,9 @@ Friend Class BankImportForm
         mlngIMPSTS_UPDATE = 3
     End Enum
 
-    'Item obtained from ITrxImport.
+    'Item obtained from ITrxReader.
     Private Structure ImportItem
-        'ImportedTrx created by ITrxImport.
+        'ImportedTrx created by ITrxReader.
         Dim objImportedTrx As ImportedTrx
         'Register it was added to or updated in.
         Dim objReg As Register

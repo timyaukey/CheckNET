@@ -2,23 +2,22 @@
 Option Explicit On
 
 Imports System.IO
-Imports CheckBookLib
 
-Public Class ImportChecks
+Public Class ReadChecks
     Implements ITrxReader
 
     Private mobjFile As TextReader
     Private mstrFile As String
-    Private mobjSpecs As ImportChecksSpec
+    Private mobjSpecs As ReadChecksSpec
     Private mobjUtil As ImportUtilities
 
-    Public Sub New(ByVal objFile As TextReader, ByVal strFile As String, ByVal objSpecs As ImportChecksSpec)
+    Public Sub New(ByVal objFile As TextReader, ByVal strFile As String, ByVal objSpecs As ReadChecksSpec)
         mobjFile = objFile
         mstrFile = strFile
         mobjSpecs = objSpecs
     End Sub
 
-    Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements ITrxReader.blnOpenSource
+    Private Function blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements ITrxReader.blnOpenSource
 
         Try
 
@@ -28,7 +27,7 @@ Public Class ImportChecks
             mobjUtil.blnMakeFakeTrx = False
             mobjUtil.blnNoImportKey = True
 
-            ITrxImport_blnOpenSource = True
+            blnOpenSource = True
 
             Exit Function
         Catch ex As Exception
@@ -36,21 +35,21 @@ Public Class ImportChecks
         End Try
     End Function
 
-    Private Sub ITrxImport_CloseSource() Implements ITrxReader.CloseSource
+    Private Sub CloseSource() Implements ITrxReader.CloseSource
         If Not mobjFile Is Nothing Then
             mobjFile.Close()
             mobjFile = Nothing
         End If
     End Sub
 
-    Private Function ITrxImport_objNextTrx() As ImportedTrx Implements ITrxReader.objNextTrx
+    Private Function objNextTrx() As ImportedTrx Implements ITrxReader.objNextTrx
         Dim strLine As String
         Dim astrParts() As String
 
-        ITrxImport_objNextTrx = Nothing
+        objNextTrx = Nothing
         Try
 
-            ITrxImport_objNextTrx = Nothing
+            objNextTrx = Nothing
             mobjUtil.ClearSavedTrxData()
 
             strLine = mobjFile.ReadLine()
@@ -70,7 +69,7 @@ Public Class ImportChecks
                 mobjUtil.strTrxAmount = "-" + astrParts(mobjSpecs.AmountColumn)
             End If
 
-            ITrxImport_objNextTrx = mobjUtil.objMakeTrx()
+            objNextTrx = mobjUtil.objMakeTrx()
 
             Exit Function
         Catch ex As Exception
@@ -78,9 +77,9 @@ Public Class ImportChecks
         End Try
     End Function
 
-    Private ReadOnly Property ITrxImport_strSource() As String Implements ITrxReader.strSource
+    Private ReadOnly Property strSource() As String Implements ITrxReader.strSource
         Get
-            ITrxImport_strSource = mstrFile
+            strSource = mstrFile
         End Get
     End Property
 End Class

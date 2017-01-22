@@ -383,7 +383,7 @@ Friend Class CBMainForm
             If strFile <> "" Then
                 objFile = New StreamReader(strFile)
                 frm = New BankImportAcctSelectForm
-                objTrxReader = New ImportBankDownloadOFX(objFile, strFile)
+                objTrxReader = New ReadBankOFX(objFile, strFile)
                 frm.ShowMe("Import OFX File From Bank", New ImportHandlerBank(), objTrxReader, False)
             End If
 
@@ -409,7 +409,7 @@ Friend Class CBMainForm
             If strFile <> "" Then
                 objFile = New StreamReader(strFile)
                 frm = New BankImportAcctSelectForm
-                objTrxReader = New ImportBankDownloadQIF(objFile, strFile)
+                objTrxReader = New ReadBankQIF(objFile, strFile)
                 frm.ShowMe("Import QIF File From Bank", New ImportHandlerBank(), objTrxReader, False)
             End If
 
@@ -422,7 +422,7 @@ Friend Class CBMainForm
     Private Sub mnuImportChecksStandard_Click(sender As Object, e As EventArgs)
         Dim frm As BankImportAcctSelectForm
         Dim objTrxReader As ITrxReader
-        Dim objSpecs As ImportChecksSpec
+        Dim objSpecs As ReadChecksSpec
 
         Try
 
@@ -431,8 +431,8 @@ Friend Class CBMainForm
             End If
             frm = New BankImportAcctSelectForm
 
-            objSpecs = New ImportChecksSpec(1, 0, 2, 3, -1)
-            objTrxReader = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
+            objSpecs = New ReadChecksSpec(1, 0, 2, 3, -1)
+            objTrxReader = New ReadChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
             frm.ShowMe("Import Checks", New ImportHandlerChecks(), objTrxReader, False)
 
             Exit Sub
@@ -444,7 +444,7 @@ Friend Class CBMainForm
     Private Sub mnuImportChecksInsight_Click(sender As Object, e As EventArgs)
         Dim frm As BankImportAcctSelectForm
         Dim objTrxReader As ITrxReader
-        Dim objSpecs As ImportChecksSpec
+        Dim objSpecs As ReadChecksSpec
 
         Try
 
@@ -453,8 +453,8 @@ Friend Class CBMainForm
             End If
             frm = New BankImportAcctSelectForm
 
-            objSpecs = New ImportChecksSpec(6, 0, 1, 2, -1)
-            objTrxReader = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
+            objSpecs = New ReadChecksSpec(6, 0, 1, 2, -1)
+            objTrxReader = New ReadChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
             frm.ShowMe("Import Oregon State Credit Union Checks", New ImportHandlerChecks(), objTrxReader, False)
 
             Exit Sub
@@ -466,7 +466,7 @@ Friend Class CBMainForm
     Private Sub mnuImportChecksCompuPay_Click(sender As Object, e As EventArgs)
         Dim frm As BankImportAcctSelectForm
         Dim objTrxReader As ITrxReader
-        Dim objSpecs As ImportChecksSpec
+        Dim objSpecs As ReadChecksSpec
 
         Try
 
@@ -475,8 +475,8 @@ Friend Class CBMainForm
             End If
             frm = New BankImportAcctSelectForm
 
-            objSpecs = New ImportChecksSpec(0, 5, 9, 12, -1)
-            objTrxReader = New ImportChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
+            objSpecs = New ReadChecksSpec(0, 5, 9, 12, -1)
+            objTrxReader = New ReadChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
             frm.ShowMe("Import CompuPay Checks", New ImportHandlerChecks(), objTrxReader, False)
 
             Exit Sub
@@ -495,7 +495,7 @@ Friend Class CBMainForm
                 Exit Sub
             End If
             frm = New BankImportAcctSelectForm
-            objTrxReader = New ImportByPayee(gobjClipboardReader(), "(clipboard)")
+            objTrxReader = New ReadDeposits(gobjClipboardReader(), "(clipboard)")
             frm.ShowMe("Import Deposit Amounts", New ImportHandlerDeposits(), objTrxReader, False)
 
             Exit Sub
@@ -514,7 +514,7 @@ Friend Class CBMainForm
                 Exit Sub
             End If
             frm = New BankImportAcctSelectForm
-            objTrxReader = New ImportInvoices(gobjClipboardReader(), "(clipboard)")
+            objTrxReader = New ReadInvoices(gobjClipboardReader(), "(clipboard)")
             frm.ShowMe("Import Invoices", New ImportHandlerInvoices(), objTrxReader, False)
 
             Exit Sub

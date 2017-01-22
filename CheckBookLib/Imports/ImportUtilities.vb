@@ -170,7 +170,7 @@ Public Class ImportUtilities
                 If mstrTrxUniqueKey <> "" Then
                     strUniqueKey = mstrTrxUniqueKey
                 Else
-                    'If the ITrxImport did not supply a unique key then we construct one.
+                    'If the ITrxReader did not supply a unique key then we construct one.
                     'Have to use left part of mstrTrxPayeeTrimmed instead of the entire
                     'thing because FSBLink sometimes
                     'formats the payee name with different numbers of imbedded blanks in its

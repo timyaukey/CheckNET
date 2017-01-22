@@ -1,7 +1,7 @@
 ﻿Option Explicit On
 Option Strict On
 
-Public Class ImportChecksSpec
+Public Class ReadChecksSpec
 
     Public Sub New(ByVal numberColumn_ As Integer,
                    ByVal dateColumn_ As Integer,

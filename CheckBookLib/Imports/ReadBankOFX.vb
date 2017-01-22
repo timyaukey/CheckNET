@@ -2,13 +2,12 @@ Option Strict Off
 Option Explicit On
 
 Imports System.IO
-Imports CheckBookLib
 
-Public Class ImportBankDownloadOFX
+Public Class ReadBankOFX
     Implements ITrxReader
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
-    'Implement ITrxImport for an OFX file downloaded from an online banking service.
+    'Implement ITrxReader for an OFX file downloaded from an online banking service.
     'The downloaded data will not have category or split
     'information, and the payee names will be passed through a translation algorithm
     'to scrub them and provide a category based on matching them to a predefined
@@ -27,7 +26,7 @@ Public Class ImportBankDownloadOFX
         mstrFile = strFile
     End Sub
 
-    Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements ITrxReader.blnOpenSource
+    Private Function blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements ITrxReader.blnOpenSource
         Dim strHeaderLine As String
 
         Try
@@ -63,7 +62,7 @@ Public Class ImportBankDownloadOFX
                 End If
             Loop
 
-            ITrxImport_blnOpenSource = True
+            blnOpenSource = True
             mblnInputEOF = False
             mstrInputLine = ""
 
@@ -73,21 +72,21 @@ Public Class ImportBankDownloadOFX
         End Try
     End Function
 
-    Private Sub ITrxImport_CloseSource() Implements ITrxReader.CloseSource
+    Private Sub CloseSource() Implements ITrxReader.CloseSource
         If Not mobjFile Is Nothing Then
             mobjFile.Close()
             mobjFile = Nothing
         End If
     End Sub
 
-    Private Function ITrxImport_objNextTrx() As ImportedTrx Implements ITrxReader.objNextTrx
+    Private Function objNextTrx() As ImportedTrx Implements ITrxReader.objNextTrx
         Dim strToken As String
         Dim strCheckNum As String
 
-        ITrxImport_objNextTrx = Nothing
+        objNextTrx = Nothing
         Try
 
-            ITrxImport_objNextTrx = Nothing
+            objNextTrx = Nothing
             mobjUtil.ClearSavedTrxData()
             strCheckNum = ""
             Do
@@ -102,7 +101,7 @@ Public Class ImportBankDownloadOFX
                         If strCheckNum <> "" Then
                             mobjUtil.strTrxNumber = strCheckNum
                         End If
-                        ITrxImport_objNextTrx = mobjUtil.objMakeTrx()
+                        objNextTrx = mobjUtil.objMakeTrx()
                         strCheckNum = ""
                         Exit Do
                     Case "<DTPOSTED>"
@@ -144,9 +143,9 @@ Public Class ImportBankDownloadOFX
         End Try
     End Function
 
-    Private ReadOnly Property ITrxImport_strSource() As String Implements ITrxReader.strSource
+    Private ReadOnly Property strSource() As String Implements ITrxReader.strSource
         Get
-            ITrxImport_strSource = mstrFile
+            strSource = mstrFile
         End Get
     End Property
 

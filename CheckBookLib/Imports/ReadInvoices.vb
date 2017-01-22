@@ -2,9 +2,8 @@ Option Strict Off
 Option Explicit On
 
 Imports System.IO
-Imports CheckBookLib
 
-Public Class ImportInvoices
+Public Class ReadInvoices
     Implements ITrxReader
 
     Private mobjInput As TextReader
@@ -17,20 +16,20 @@ Public Class ImportInvoices
         mstrFile = strFile
     End Sub
 
-    Private Function ITrxImport_blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements ITrxReader.blnOpenSource
+    Private Function blnOpenSource(ByVal objAccount_ As Account) As Boolean Implements ITrxReader.blnOpenSource
         Dim strData As String
 
         strData = mobjInput.ReadToEnd()
         mastrLines = gaSplit(strData, vbNewLine)
         mintNextIndex = LBound(mastrLines)
-        ITrxImport_blnOpenSource = True
+        blnOpenSource = True
     End Function
 
-    Private Sub ITrxImport_CloseSource() Implements ITrxReader.CloseSource
+    Private Sub CloseSource() Implements ITrxReader.CloseSource
 
     End Sub
 
-    Private Function ITrxImport_objNextTrx() As ImportedTrx Implements ITrxReader.objNextTrx
+    Private Function objNextTrx() As ImportedTrx Implements ITrxReader.objNextTrx
         Dim strLine As String
         Dim astrParts() As String
 
@@ -50,7 +49,7 @@ Public Class ImportInvoices
 
         If mintNextIndex > UBound(mastrLines) Then
             'UPGRADE_NOTE: Object ITrxImport_objNextTrx may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-            ITrxImport_objNextTrx = Nothing
+            objNextTrx = Nothing
             Exit Function
         End If
 
@@ -91,12 +90,12 @@ Public Class ImportInvoices
         objTrx.NewStartNormal(Nothing, strTrxNum, datDate, strDescription, "", Trx.TrxStatus.glngTRXSTS_UNREC, TrxGenImportData.NewFake(True))
         objTrx.AddSplit("", strCatKey, strPONumber, strInvNumber, datInvDate, datDueDate, strTerms, "", curAmount, "")
 
-        ITrxImport_objNextTrx = objTrx
+        objNextTrx = objTrx
     End Function
 
-    Private ReadOnly Property ITrxImport_strSource() As String Implements ITrxReader.strSource
+    Private ReadOnly Property strSource() As String Implements ITrxReader.strSource
         Get
-            ITrxImport_strSource = mstrFile
+            strSource = mstrFile
         End Get
     End Property
 End Class
