@@ -81,6 +81,13 @@
     <Compile Include="FilePersisterExceptions.vb" />
     <Compile Include="IFilePersister.vb" />
     <Compile Include="IFilePersistable.vb" />
+    <Compile Include="Imports\BankImportOFX.vb" />
+    <Compile Include="Imports\BankImportPlugin.vb" />
+    <Compile Include="Imports\BankImportQIF.vb" />
+    <Compile Include="Imports\CheckImportCompuPay.vb" />
+    <Compile Include="Imports\CheckImportInsight.vb" />
+    <Compile Include="Imports\CheckImportPlugin.vb" />
+    <Compile Include="Imports\CheckImportStandard.vb" />
     <Compile Include="Imports\IHostUI.vb" />
     <Compile Include="Imports\IImportHandler.vb" />
     <Compile Include="Imports\ReadBankOFX.vb" />

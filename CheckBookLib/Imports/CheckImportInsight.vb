@@ -1,0 +1,22 @@
+﻿Option Explicit On
+Option Strict On
+
+Public Class CheckImportInsight
+    Inherits CheckImportPlugin
+
+    Public Sub New(ByVal hostUI_ As IHostUI)
+        MyBase.New(hostUI_)
+    End Sub
+
+    Public Overrides Function GetImportWindowCaption() As String
+        Return "Import Digital Insight Online Banking Checks"
+    End Function
+
+    Public Overrides Function GetMenuTitle() As String
+        Return "Digital Insight Clipboard"
+    End Function
+
+    Protected Overrides Function GetCheckSpecs() As ReadChecksSpec
+        Return New ReadChecksSpec(6, 0, 1, 2, -1)
+    End Function
+End Class

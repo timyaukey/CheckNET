@@ -7,7 +7,7 @@ Imports CheckBookLib
 
 Friend Class CBMainForm
     Inherits System.Windows.Forms.Form
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
+    Implements IHostUI
 
     Private frmStartup As StartupForm
     Private mblnCancelStart As Boolean
@@ -119,12 +119,12 @@ Friend Class CBMainForm
             frmStartup.Close()
             frmStartup = frmStartup
 
-            AddBankImportOption("OFX File", AddressOf mnuImportBankOFX_Click)
-            AddBankImportOption("QIF File", AddressOf mnuImportBankQIF_Click)
+            AddMenuOption(mnuImportBank, New BankImportOFX(Me))
+            AddMenuOption(mnuImportBank, New BankImportQIF(Me))
 
-            AddCheckImportOption("Standard Clipboard", AddressOf mnuImportChecksStandard_Click)
-            AddCheckImportOption("Digital Insight Clipboard", AddressOf mnuImportChecksInsight_Click)
-            AddCheckImportOption("CompuPay Clipboard", AddressOf mnuImportChecksCompuPay_Click)
+            AddMenuOption(mnuImportChecks, New CheckImportStandard(Me))
+            AddMenuOption(mnuImportChecks, New CheckImportInsight(Me))
+            AddMenuOption(mnuImportChecks, New CheckImportCompuPay(Me))
 
         Catch ex As Exception
             gTopException(ex)
@@ -136,6 +136,13 @@ Friend Class CBMainForm
         mnuBankCustom.Text = strOptionName
         AddHandler mnuBankCustom.Click, handler
         mnuImportBank.DropDownItems.Add(mnuBankCustom)
+    End Sub
+
+    Private Sub AddMenuOption(ByVal parent As ToolStripMenuItem, ByVal plugin As ToolPlugin)
+        Dim mnuNewItem As ToolStripMenuItem = New ToolStripMenuItem()
+        mnuNewItem.Text = plugin.GetMenuTitle()
+        AddHandler mnuNewItem.Click, AddressOf plugin.ClickHandler
+        parent.DropDownItems.Add(mnuNewItem)
     End Sub
 
     Private Sub AddCheckImportOption(ByVal strOptionName As String, ByVal handler As EventHandler)
@@ -170,7 +177,7 @@ Friend Class CBMainForm
         End Try
     End Sub
 
-    Private Function blnImportFormAlreadyOpen() As Boolean
+    Private Function blnImportFormAlreadyOpen() As Boolean Implements IHostUI.blnImportFormAlreadyOpen
         Dim frm As System.Windows.Forms.Form
 
         For Each frm In gcolForms()
@@ -181,6 +188,19 @@ Friend Class CBMainForm
             End If
         Next frm
         blnImportFormAlreadyOpen = False
+    End Function
+
+    Public Sub OpenImportForm(strWindowCaption As String, objHandler As IImportHandler,
+        objReader As ITrxReader, blnFake As Boolean) Implements IHostUI.OpenImportForm
+
+        Using frm As BankImportAcctSelectForm = New BankImportAcctSelectForm()
+            frm.ShowMe(strWindowCaption, objHandler, objReader, blnFake)
+        End Using
+    End Sub
+
+    Public Function strChooseFile(strWindowCaption As String, strFileType As String, strSettingsKey As String) _
+        As String Implements IHostUI.strChooseFile
+        Return CommonDialogControlForm.strChooseFile(strWindowCaption, strFileType, strSettingsKey)
     End Function
 
     Public Sub mnuActAdjBudget_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActAdjBudget.Click
@@ -367,137 +387,15 @@ Friend Class CBMainForm
         mnuFileSave.Enabled = True
     End Sub
 
-    Private Sub mnuImportBankOFX_Click(sender As Object, e As EventArgs)
-        Dim frm As BankImportAcctSelectForm
-        Dim objTrxReader As ITrxReader
-        Dim strFile As String
-        Dim objFile As TextReader
-
-        Try
-
-            If blnImportFormAlreadyOpen() Then
-                Exit Sub
-            End If
-
-            strFile = CommonDialogControlForm.strChooseFile("Select Bank Download OFX File To Import", "OFX", "BankOFXPath")
-            If strFile <> "" Then
-                objFile = New StreamReader(strFile)
-                frm = New BankImportAcctSelectForm
-                objTrxReader = New ReadBankOFX(objFile, strFile)
-                frm.ShowMe("Import OFX File From Bank", New ImportHandlerBank(), objTrxReader, False)
-            End If
-
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
-
-    Private Sub mnuImportBankQIF_Click(sender As Object, e As EventArgs)
-        Dim frm As BankImportAcctSelectForm
-        Dim objTrxReader As ITrxReader
-        Dim strFile As String
-        Dim objFile As TextReader
-
-        Try
-
-            If blnImportFormAlreadyOpen() Then
-                Exit Sub
-            End If
-
-            strFile = CommonDialogControlForm.strChooseFile("Select Bank Download QIF File To Import", "QIF", "BankQIFPath")
-            If strFile <> "" Then
-                objFile = New StreamReader(strFile)
-                frm = New BankImportAcctSelectForm
-                objTrxReader = New ReadBankQIF(objFile, strFile)
-                frm.ShowMe("Import QIF File From Bank", New ImportHandlerBank(), objTrxReader, False)
-            End If
-
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
-
-    Private Sub mnuImportChecksStandard_Click(sender As Object, e As EventArgs)
-        Dim frm As BankImportAcctSelectForm
-        Dim objTrxReader As ITrxReader
-        Dim objSpecs As ReadChecksSpec
-
-        Try
-
-            If blnImportFormAlreadyOpen() Then
-                Exit Sub
-            End If
-            frm = New BankImportAcctSelectForm
-
-            objSpecs = New ReadChecksSpec(1, 0, 2, 3, -1)
-            objTrxReader = New ReadChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
-            frm.ShowMe("Import Checks", New ImportHandlerChecks(), objTrxReader, False)
-
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
-
-    Private Sub mnuImportChecksInsight_Click(sender As Object, e As EventArgs)
-        Dim frm As BankImportAcctSelectForm
-        Dim objTrxReader As ITrxReader
-        Dim objSpecs As ReadChecksSpec
-
-        Try
-
-            If blnImportFormAlreadyOpen() Then
-                Exit Sub
-            End If
-            frm = New BankImportAcctSelectForm
-
-            objSpecs = New ReadChecksSpec(6, 0, 1, 2, -1)
-            objTrxReader = New ReadChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
-            frm.ShowMe("Import Oregon State Credit Union Checks", New ImportHandlerChecks(), objTrxReader, False)
-
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
-
-    Private Sub mnuImportChecksCompuPay_Click(sender As Object, e As EventArgs)
-        Dim frm As BankImportAcctSelectForm
-        Dim objTrxReader As ITrxReader
-        Dim objSpecs As ReadChecksSpec
-
-        Try
-
-            If blnImportFormAlreadyOpen() Then
-                Exit Sub
-            End If
-            frm = New BankImportAcctSelectForm
-
-            objSpecs = New ReadChecksSpec(0, 5, 9, 12, -1)
-            objTrxReader = New ReadChecks(gobjClipboardReader(), "(clipboard)", objSpecs)
-            frm.ShowMe("Import CompuPay Checks", New ImportHandlerChecks(), objTrxReader, False)
-
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
-
     Private Sub mnuImportDepositsStandard_Click(sender As Object, e As EventArgs) Handles mnuImportDepositsStandard.Click
-        Dim frm As BankImportAcctSelectForm
-        Dim objTrxReader As ITrxReader
-
         Try
-
             If blnImportFormAlreadyOpen() Then
                 Exit Sub
             End If
-            frm = New BankImportAcctSelectForm
-            objTrxReader = New ReadDeposits(gobjClipboardReader(), "(clipboard)")
-            frm.ShowMe("Import Deposit Amounts", New ImportHandlerDeposits(), objTrxReader, False)
-
+            Using frm As BankImportAcctSelectForm = New BankImportAcctSelectForm
+                Dim objTrxReader As ITrxReader = New ReadDeposits(gobjClipboardReader(), "(clipboard)")
+                frm.ShowMe("Import Deposit Amounts", New ImportHandlerDeposits(), objTrxReader, False)
+            End Using
             Exit Sub
         Catch ex As Exception
             gTopException(ex)
@@ -505,18 +403,14 @@ Friend Class CBMainForm
     End Sub
 
     Private Sub mnuImportInvoicesStandard_Click(sender As Object, e As EventArgs) Handles mnuImportInvoicesStandard.Click
-        Dim frm As BankImportAcctSelectForm
-        Dim objTrxReader As ITrxReader
-
         Try
-
             If blnImportFormAlreadyOpen() Then
                 Exit Sub
             End If
-            frm = New BankImportAcctSelectForm
-            objTrxReader = New ReadInvoices(gobjClipboardReader(), "(clipboard)")
-            frm.ShowMe("Import Invoices", New ImportHandlerInvoices(), objTrxReader, False)
-
+            Using frm As BankImportAcctSelectForm = New BankImportAcctSelectForm
+                Dim objTrxReader As ITrxReader = New ReadInvoices(gobjClipboardReader(), "(clipboard)")
+                frm.ShowMe("Import Invoices", New ImportHandlerInvoices(), objTrxReader, False)
+            End Using
             Exit Sub
         Catch ex As Exception
             gTopException(ex)
