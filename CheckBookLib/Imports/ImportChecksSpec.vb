@@ -1,9 +1,12 @@
-﻿Public Class ImportChecksSpec
+﻿Option Explicit On
+Option Strict On
 
-    Public Sub New(ByVal numberColumn_ As Integer, _
-                   ByVal dateColumn_ As Integer, _
-                   ByVal descrColumn_ As Integer, _
-                   ByVal amountColumn_ As Integer, _
+Public Class ImportChecksSpec
+
+    Public Sub New(ByVal numberColumn_ As Integer,
+                   ByVal dateColumn_ As Integer,
+                   ByVal descrColumn_ As Integer,
+                   ByVal amountColumn_ As Integer,
                    ByVal memoColumn_ As Integer)
 
         NumberColumn = numberColumn_
@@ -20,10 +23,6 @@
     Public ReadOnly DescrColumn As Integer
     Public ReadOnly AmountColumn As Integer
     Public ReadOnly MemoColumn As Integer
-
-    Public Function blnSkipRecord(objUtil As ImportUtilities) As Boolean
-        Return False
-    End Function
 
     Public Function strConvertTrxNum(ByVal strInput As String) As String
         If strInput.StartsWith("Electr") Then

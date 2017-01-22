@@ -439,12 +439,6 @@ Public Module CBMain
         End Try
     End Sub
 
-    '$Description Path and name of trx type translation file.
-
-    Public Function gstrTrxTypeFilePath() As Object
-        gstrTrxTypeFilePath = gstrAddPath("QIFImportTrxTypes.xml")
-    End Function
-
     Public Sub gInitPayeeList(ByVal lvwPayees As System.Windows.Forms.ListView)
         With lvwPayees
             .Columns.Clear()

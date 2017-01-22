@@ -81,6 +81,17 @@
     <Compile Include="FilePersisterExceptions.vb" />
     <Compile Include="IFilePersister.vb" />
     <Compile Include="IFilePersistable.vb" />
+    <Compile Include="Imports\IHostUI.vb" />
+    <Compile Include="Imports\IImportHandler.vb" />
+    <Compile Include="Imports\ImportByPayee.vb" />
+    <Compile Include="Imports\ImportChecks.vb" />
+    <Compile Include="Imports\ImportChecksSpec.vb" />
+    <Compile Include="Imports\ImportedTrx.vb" />
+    <Compile Include="Imports\ImportInvoices.vb" />
+    <Compile Include="Imports\ImportUtilities.vb" />
+    <Compile Include="Imports\ITrxReader.vb" />
+    <Compile Include="Imports\ToolPlugin.vb" />
+    <Compile Include="Imports\TrxImportPlugin.vb" />
     <Compile Include="Logging\EventLog.vb" />
     <Compile Include="Everything.vb" />
     <Compile Include="Logging\ILogAction.vb" />
@@ -177,9 +188,7 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Imports\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

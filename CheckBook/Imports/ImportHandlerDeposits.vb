@@ -1,7 +1,6 @@
 ﻿Option Strict Off
 Option Explicit On
 
-Imports CheckBook
 Imports CheckBookLib
 
 Public Class ImportHandlerDeposits

@@ -51,29 +51,24 @@ Public Class ImportChecks
         Try
 
             ITrxImport_objNextTrx = Nothing
-            Do
-                mobjUtil.ClearSavedTrxData()
+            mobjUtil.ClearSavedTrxData()
 
-                strLine = mobjFile.ReadLine()
-                If strLine Is Nothing Then
-                    Exit Function
-                End If
-                astrParts = gaSplit(Trim(strLine), vbTab)
-                mobjUtil.strTrxNumber = mobjSpecs.strConvertTrxNum(astrParts(mobjSpecs.NumberColumn))
-                mobjUtil.strTrxDate = astrParts(mobjSpecs.DateColumn)
-                mobjUtil.strTrxPayee = astrParts(mobjSpecs.DescrColumn)
-                If (mobjSpecs.MemoColumn >= 0) Then
-                    mobjUtil.strTrxMemo = astrParts(mobjSpecs.MemoColumn)
-                End If
-                If astrParts(mobjSpecs.AmountColumn).StartsWith("-") Then
-                    mobjUtil.strTrxAmount = astrParts(mobjSpecs.AmountColumn)
-                Else
-                    mobjUtil.strTrxAmount = "-" + astrParts(mobjSpecs.AmountColumn)
-                End If
-                If Not mobjSpecs.blnSkipRecord(mobjUtil) Then
-                    Exit Do
-                End If
-            Loop
+            strLine = mobjFile.ReadLine()
+            If strLine Is Nothing Then
+                Exit Function
+            End If
+            astrParts = gaSplit(Trim(strLine), vbTab)
+            mobjUtil.strTrxNumber = mobjSpecs.strConvertTrxNum(astrParts(mobjSpecs.NumberColumn))
+            mobjUtil.strTrxDate = astrParts(mobjSpecs.DateColumn)
+            mobjUtil.strTrxPayee = astrParts(mobjSpecs.DescrColumn)
+            If (mobjSpecs.MemoColumn >= 0) Then
+                mobjUtil.strTrxMemo = astrParts(mobjSpecs.MemoColumn)
+            End If
+            If astrParts(mobjSpecs.AmountColumn).StartsWith("-") Then
+                mobjUtil.strTrxAmount = astrParts(mobjSpecs.AmountColumn)
+            Else
+                mobjUtil.strTrxAmount = "-" + astrParts(mobjSpecs.AmountColumn)
+            End If
 
             ITrxImport_objNextTrx = mobjUtil.objMakeTrx()
 
