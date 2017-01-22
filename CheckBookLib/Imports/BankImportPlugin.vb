@@ -3,6 +3,10 @@ Option Explicit On
 
 Imports System.IO
 
+''' <summary>
+''' All bank import plugins must inherit from this.
+''' </summary>
+
 Public MustInherit Class BankImportPlugin
     Inherits TrxImportPlugin
 

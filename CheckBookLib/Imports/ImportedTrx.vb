@@ -1,6 +1,12 @@
 ﻿Option Strict On
 Option Explicit On
 
+''' <summary>
+''' The ITrxReader interface returns instances of this
+''' read from some kind of external source, like a file
+''' or the clipboard.
+''' </summary>
+
 Public Class ImportedTrx
     Inherits Trx
 

@@ -1,6 +1,10 @@
 ﻿Option Strict On
 Option Explicit On
 
+''' <summary>
+''' All check import plugins must inherit from this.
+''' </summary>
+
 Public MustInherit Class CheckImportPlugin
     Inherits TrxImportPlugin
 

@@ -2,7 +2,7 @@ Option Strict On
 Option Explicit On
 
 'This interface allows the application to retrieve a series
-'of new Trx objects from some external source.
+'of new ImportedTrx objects from some external source.
 
 Public Interface ITrxReader
 

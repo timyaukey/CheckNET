@@ -3,6 +3,13 @@ Option Explicit On
 
 Imports System.IO
 
+''' <summary>
+''' All plugins that import Trx using ITrxReader and IImportHandler
+''' inherit from this. This class is subclassed several different
+''' ways for different types of Trx importers. CBMainForm checks
+''' the subclass to determine which menu to add them to.
+''' </summary>
+
 Public MustInherit Class TrxImportPlugin
     Inherits ToolPlugin
 
