@@ -1,5 +1,7 @@
-﻿Option Explicit On
-Option Strict On
+﻿Option Strict On
+Option Explicit On
+
+Imports System.IO
 
 Public MustInherit Class BankImportPlugin
     Inherits TrxImportPlugin
@@ -7,7 +9,7 @@ Public MustInherit Class BankImportPlugin
     Protected MustOverride Function GetFileSelectionWindowCaption() As String
     Protected MustOverride Function GetFileType() As String
     Protected MustOverride Function GetSettingsKey() As String
-    Protected MustOverride Function GetBankReader(ByVal objFile As System.IO.TextReader, ByVal strFile As String) As ITrxReader
+    Protected MustOverride Function GetBankReader(ByVal objFile As TextReader, ByVal strFile As String) As ITrxReader
 
     Public Sub New(ByVal hostUI_ As IHostUI)
         MyBase.New(hostUI_)
@@ -18,10 +20,9 @@ Public MustInherit Class BankImportPlugin
     End Function
 
     Public Overrides Function GetTrxReader() As ITrxReader
-        Dim strFile As String = HostUI.strChooseFile(GetFileSelectionWindowCaption(), GetFileType(), GetSettingsKey())
-        If strFile <> "" Then
-            Dim objFile As System.IO.TextReader = New System.IO.StreamReader(strFile)
-            Return GetBankReader(objFile, strFile)
+        Dim objInput As TrxImportPlugin.InputFile = objAskForFile(GetFileSelectionWindowCaption(), GetFileType(), GetSettingsKey())
+        If Not objInput Is Nothing Then
+            Return GetBankReader(objInput.objFile, objInput.strFile)
         End If
         Return Nothing
     End Function

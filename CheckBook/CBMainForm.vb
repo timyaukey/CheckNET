@@ -119,37 +119,62 @@ Friend Class CBMainForm
             frmStartup.Close()
             frmStartup = frmStartup
 
-            AddMenuOption(mnuImportBank, New BankImportOFX(Me))
-            AddMenuOption(mnuImportBank, New BankImportQIF(Me))
+            LoadPlugins(New ImportPlugins())
+            LoadPlugins(New ToolPlugins())
 
-            AddMenuOption(mnuImportChecks, New CheckImportStandard(Me))
-            AddMenuOption(mnuImportChecks, New CheckImportInsight(Me))
-            AddMenuOption(mnuImportChecks, New CheckImportCompuPay(Me))
+            AddPluginsToMenu(mnuImportBank, colBankImportPlugins)
+            AddPluginsToMenu(mnuImportChecks, colCheckImportPlugins)
+            AddPluginsToMenu(mnuImportDeposits, colDepositImportPlugins)
+            AddPluginsToMenu(mnuImportInvoices, colInvoiceImportPlugins)
+            AddPluginsToMenu(mnuTools, colToolPlugins)
+            AddPluginsToMenu(mnuRpt, colReportPlugins)
 
         Catch ex As Exception
             gTopException(ex)
         End Try
     End Sub
 
-    Private Sub AddBankImportOption(ByVal strOptionName As String, ByVal handler As EventHandler)
-        Dim mnuBankCustom As ToolStripMenuItem = New ToolStripMenuItem()
-        mnuBankCustom.Text = strOptionName
-        AddHandler mnuBankCustom.Click, handler
-        mnuImportBank.DropDownItems.Add(mnuBankCustom)
+    Private colBankImportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
+    Private colCheckImportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
+    Private colDepositImportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
+    Private colInvoiceImportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
+    Private colToolPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
+    Private colReportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
+
+    Private Sub LoadPlugins(ByVal objFactory As IPluginFactory)
+        For Each objPlugin As ToolPlugin In objFactory.colGetPlugins(Me)
+            If TypeOf objPlugin Is BankImportPlugin Then
+                colBankImportPlugins.Add(objPlugin)
+            ElseIf TypeOf objPlugin Is CheckImportPlugin Then
+                colCheckImportPlugins.Add(objPlugin)
+            ElseIf TypeOf objPlugin Is DepositImportPlugin Then
+                colDepositImportPlugins.Add(objPlugin)
+            ElseIf TypeOf objPlugin Is InvoiceImportPlugin Then
+                colInvoiceImportPlugins.Add(objPlugin)
+            ElseIf TypeOf objPlugin Is ReportPlugin Then
+                colReportPlugins.Add(objPlugin)
+            Else
+                colToolPlugins.Add(objPlugin)
+            End If
+        Next
     End Sub
+
+    Private Sub AddPluginsToMenu(ByVal objMenu As ToolStripMenuItem, ByVal colPlugins As List(Of ToolPlugin))
+        colPlugins.Sort(AddressOf PluginComparer)
+        For Each objPlugin As ToolPlugin In colPlugins
+            AddMenuOption(objMenu, objPlugin)
+        Next
+    End Sub
+
+    Private Function PluginComparer(ByVal objPlugin1 As ToolPlugin, ByVal objPlugin2 As ToolPlugin) As Integer
+        Return objPlugin1.SortCode.CompareTo(objPlugin2.SortCode)
+    End Function
 
     Private Sub AddMenuOption(ByVal parent As ToolStripMenuItem, ByVal plugin As ToolPlugin)
         Dim mnuNewItem As ToolStripMenuItem = New ToolStripMenuItem()
         mnuNewItem.Text = plugin.GetMenuTitle()
         AddHandler mnuNewItem.Click, AddressOf plugin.ClickHandler
         parent.DropDownItems.Add(mnuNewItem)
-    End Sub
-
-    Private Sub AddCheckImportOption(ByVal strOptionName As String, ByVal handler As EventHandler)
-        Dim mnuCheckCustom As ToolStripMenuItem = New ToolStripMenuItem()
-        mnuCheckCustom.Text = strOptionName
-        AddHandler mnuCheckCustom.Click, handler
-        mnuImportChecks.DropDownItems.Add(mnuCheckCustom)
     End Sub
 
     Private Sub CBMainForm_Activated(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Activated
@@ -203,49 +228,12 @@ Friend Class CBMainForm
         Return CommonDialogControlForm.strChooseFile(strWindowCaption, strFileType, strSettingsKey)
     End Function
 
-    Public Sub mnuActAdjBudget_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActAdjBudget.Click
-        Dim frmReg As RegisterForm
-        Dim frmAdjust As AdjustBudgetsToCashForm
-
-        Try
-
-            If Not TypeOf Me.ActiveMdiChild Is RegisterForm Then
-                MsgBox("Please click on the register window you wish to adjust.", MsgBoxStyle.Critical)
-                Exit Sub
-            End If
-            frmReg = Me.ActiveMdiChild
-            If frmReg.objReg.blnRepeat Then
-                MsgBox("Not available for repeating transaction registers.", MsgBoxStyle.Critical)
-                Exit Sub
-            End If
-            frmAdjust = New AdjustBudgetsToCashForm
-            frmAdjust.ShowModal(frmReg.objReg, gobjBudgets)
-
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
-
-    Public Sub mnuActFindLiveBudget_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuActFindLiveBudget.Click
-        Dim frmReg As RegisterForm
-        Dim frmLive As LiveBudgetListForm
-
-        Try
-
-            If Not TypeOf Me.ActiveMdiChild Is RegisterForm Then
-                MsgBox("Please click on the register window you wish to search for live budgets.", MsgBoxStyle.Critical)
-                Exit Sub
-            End If
-            frmReg = Me.ActiveMdiChild
-            frmLive = New LiveBudgetListForm
-            frmLive.ShowModal(frmReg.objReg, gobjBudgets)
-
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
+    Public Function objGetCurrentRegister() As Register Implements IHostUI.objGetCurrentRegister
+        If Not TypeOf Me.ActiveMdiChild Is RegisterForm Then
+            Return Nothing
+        End If
+        Return CType(Me.ActiveMdiChild, RegisterForm).objReg
+    End Function
 
     Public Sub mnuListBudgets_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuListBudgets.Click
         Dim frm As ListEditorForm
@@ -303,20 +291,6 @@ Friend Class CBMainForm
         End Try
     End Sub
 
-    Private Sub mnuActRecon_Click(sender As Object, e As EventArgs) Handles mnuActRecon.Click
-        Dim frm As ReconAcctSelectForm
-
-        Try
-
-            frm = New ReconAcctSelectForm
-            frm.ShowDialog()
-
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
-
     Public Sub mnuFileExit_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileExit.Click
         Me.Close()
     End Sub
@@ -355,65 +329,8 @@ Friend Class CBMainForm
         End Try
     End Sub
 
-    Public Sub mnuRptCategory_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuRptCategory.Click
-        Dim frmRpt As RptScanSplitsForm
-
-        Try
-
-            frmRpt = New RptScanSplitsForm
-            frmRpt.ShowMe(RptScanSplitsForm.SplitReportType.glngSPLTRPT_TOTALS)
-
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
-
-    Public Sub mnuRptPayables_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuRptPayables.Click
-        Dim frmRpt As RptScanSplitsForm
-
-        Try
-
-            frmRpt = New RptScanSplitsForm
-            frmRpt.ShowMe(RptScanSplitsForm.SplitReportType.glngSPLTRPT_PAYABLES)
-
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
-
     Private Sub mobjEverything_SomethingModified() Handles mobjEverything.SomethingModified
         mnuFileSave.Enabled = True
     End Sub
 
-    Private Sub mnuImportDepositsStandard_Click(sender As Object, e As EventArgs) Handles mnuImportDepositsStandard.Click
-        Try
-            If blnImportFormAlreadyOpen() Then
-                Exit Sub
-            End If
-            Using frm As BankImportAcctSelectForm = New BankImportAcctSelectForm
-                Dim objTrxReader As ITrxReader = New ReadDeposits(gobjClipboardReader(), "(clipboard)")
-                frm.ShowMe("Import Deposit Amounts", New ImportHandlerDeposits(), objTrxReader, False)
-            End Using
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
-
-    Private Sub mnuImportInvoicesStandard_Click(sender As Object, e As EventArgs) Handles mnuImportInvoicesStandard.Click
-        Try
-            If blnImportFormAlreadyOpen() Then
-                Exit Sub
-            End If
-            Using frm As BankImportAcctSelectForm = New BankImportAcctSelectForm
-                Dim objTrxReader As ITrxReader = New ReadInvoices(gobjClipboardReader(), "(clipboard)")
-                frm.ShowMe("Import Invoices", New ImportHandlerInvoices(), objTrxReader, False)
-            End Using
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
 End Class

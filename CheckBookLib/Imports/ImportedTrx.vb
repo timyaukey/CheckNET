@@ -1,8 +1,5 @@
-﻿Option Strict Off
+﻿Option Strict On
 Option Explicit On
-
-Imports VB = Microsoft.VisualBasic
-Imports CheckBookLib
 
 Public Class ImportedTrx
     Inherits Trx

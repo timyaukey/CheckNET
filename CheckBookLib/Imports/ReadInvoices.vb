@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.IO
@@ -9,7 +9,7 @@ Public Class ReadInvoices
     Private mobjInput As TextReader
     Private mstrFile As String
     Private mastrLines() As String
-    Private mintNextIndex As Short
+    Private mintNextIndex As Integer
 
     Public Sub New(ByVal objInput As TextReader, ByVal strFile As String)
         mobjInput = objInput

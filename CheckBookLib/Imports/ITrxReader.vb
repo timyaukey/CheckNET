@@ -1,8 +1,5 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
-
-Imports VB = Microsoft.VisualBasic
-Imports CheckBookLib
 
 'This interface allows the application to retrieve a series
 'of new Trx objects from some external source.

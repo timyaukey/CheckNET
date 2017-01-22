@@ -1,11 +1,12 @@
-﻿Option Explicit On
-Option Strict On
+﻿Option Strict On
+Option Explicit On
 
 Public Class CheckImportStandard
     Inherits CheckImportPlugin
 
     Public Sub New(ByVal hostUI_ As IHostUI)
         MyBase.New(hostUI_)
+        SortCode = 1
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String

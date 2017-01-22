@@ -1,7 +1,5 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
-
-Imports CheckBookLib
 
 Public Class ImportUtilities
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -187,8 +185,8 @@ Public Class ImportUtilities
             End If
 
             objTrx = New ImportedTrx
-            objTrx.NewStartNormal(Nothing, strNumber, datDate, strDescription, strMemo, Trx.TrxStatus.glngTRXSTS_UNREC, _
-                                  mblnMakeFakeTrx, 0.0#, False, False, 0, strImportKey, "")
+            objTrx.NewStartNormal(Nothing, strNumber, datDate, strDescription, strMemo, Trx.TrxStatus.glngTRXSTS_UNREC,
+                                  mblnMakeFakeTrx, 0.0D, False, False, 0, strImportKey, "")
             objTrx.lngNarrowMethod = mlngNarrowMethod
             objTrx.curMatchMin = mcurMatchMin
             objTrx.curMatchMax = mcurMatchMax
@@ -212,12 +210,12 @@ Public Class ImportUtilities
             Dim strSqueezedInput As String
             Dim strNormalizedInput As String
             Dim blnFailMatch As Boolean
-            Dim vstrBefore As Object
-            Dim vstrAfter As Object
-            Dim vstrNumber As Object
-            Dim vintMinAfter As Object
+            Dim vstrBefore As String
+            Dim vstrAfter As String
+            Dim vstrNumber As String
+            Dim vintMinAfter As Integer
             Dim blnMatchAfter As Boolean
-            Dim intAfterLen As Short
+            Dim intAfterLen As Integer
             Dim strPayeeTrimmed As String
 
             strSqueezedInput = strSqueezeInput(mstrTrxPayee)
@@ -234,7 +232,7 @@ Public Class ImportUtilities
                 'and whichever is specified does not match the trx description.
                 blnFailMatch = False
                 'Check if starts with the ENTIRE  "Before" attribute.
-                vstrBefore = elmTrxType.GetAttribute("Before")
+                vstrBefore = CType(elmTrxType.GetAttribute("Before"), String)
                 If Not gblnXmlAttributeMissing(vstrBefore) Then
                     vstrBefore = strNormalizeInput(vstrBefore)
                     If Left(strNormalizedInput, Len(vstrBefore)) <> vstrBefore Then
@@ -242,9 +240,9 @@ Public Class ImportUtilities
                     End If
                 End If
                 'Check if ends with at least "n" characters from the start of the "After" attrib.
-                vstrAfter = elmTrxType.GetAttribute("After")
+                vstrAfter = CType(elmTrxType.GetAttribute("After"), String)
                 If Not gblnXmlAttributeMissing(vstrAfter) Then
-                    vintMinAfter = elmTrxType.GetAttribute("MinAfter")
+                    vintMinAfter = Integer.Parse(CType(elmTrxType.GetAttribute("MinAfter"), String))
                     If gblnXmlAttributeMissing(vintMinAfter) Then
                         vintMinAfter = 3
                     End If
@@ -285,7 +283,7 @@ Public Class ImportUtilities
                     strPayeeTrimmed = Trim(strPayeeTrimmed)
                     'If Number=(number), then the trimmed input is really a check
                     'number and we perform a sanity check to insure it really is a number.
-                    vstrNumber = elmTrxType.GetAttribute("Number")
+                    vstrNumber = CType(elmTrxType.GetAttribute("Number"), String)
                     If gblnXmlAttributeMissing(vstrNumber) Then
                         vstrNumber = ""
                     End If
@@ -357,7 +355,7 @@ Public Class ImportUtilities
             strOutputPayee = strTrimmedPayee
             objPayees = gdomTransTable.DocumentElement.SelectNodes("Payee")
             For Each elmPayee In objPayees
-                strInput = UCase(Trim(elmPayee.GetAttribute("Input")))
+                strInput = UCase(Trim(CType(elmPayee.GetAttribute("Input"), String)))
                 If (strInput <> "") And (InStr(UCase(strTrimmedPayee), strInput) > 0) Then
                     If Not gblnXmlAttributeMissing(elmPayee.GetAttribute("Min")) Then
                         curAmount = CDec(mstrTrxAmount)
@@ -373,16 +371,16 @@ Public Class ImportUtilities
                         blnMatch = True
                     End If
                     If blnMatch Then
-                        strOutputPayee = elmPayee.GetAttribute("Output")
-                        elmCategory = elmPayee.SelectSingleNode("Cat")
+                        strOutputPayee = CType(elmPayee.GetAttribute("Output"), String)
+                        elmCategory = CType(elmPayee.SelectSingleNode("Cat"), VB6XmlElement)
                         If Not elmCategory Is Nothing Then
                             mstrTrxCategory = elmCategory.Text
                         End If
-                        elmBudget = elmPayee.SelectSingleNode("Budget")
+                        elmBudget = CType(elmPayee.SelectSingleNode("Budget"), VB6XmlElement)
                         If Not elmBudget Is Nothing Then
                             mstrTrxBudget = elmBudget.Text
                         End If
-                        elmNarrowMethod = elmPayee.SelectSingleNode("NarrowMethod")
+                        elmNarrowMethod = CType(elmPayee.SelectSingleNode("NarrowMethod"), VB6XmlElement)
                         If Not elmNarrowMethod Is Nothing Then
                             Select Case elmNarrowMethod.Text.ToLower()
                                 Case "none", ""
@@ -396,7 +394,7 @@ Public Class ImportUtilities
                             End Select
                         End If
                         If mstrTrxNumber = "" Then
-                            elmTrxNum = elmPayee.SelectSingleNode("Num")
+                            elmTrxNum = CType(elmPayee.SelectSingleNode("Num"), VB6XmlElement)
                             If Not elmTrxNum Is Nothing Then
                                 If elmTrxNum.Text <> "" Then
                                     mstrTrxNumber = elmTrxNum.Text

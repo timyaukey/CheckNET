@@ -1,7 +1,5 @@
-﻿Option Strict Off
+﻿Option Strict On
 Option Explicit On
-
-Imports CheckBookLib
 
 Public Class ImportHandlerInvoices
     Implements IImportHandler
@@ -20,7 +18,7 @@ Public Class ImportHandlerInvoices
     Public Function blnAlternateAutoNewHandling(objImportedTrx As ImportedTrx, objReg As Register) As Boolean Implements IImportHandler.blnAlternateAutoNewHandling
         Dim objImportedSplit As TrxSplit
         Dim colPOMatches As ICollection(Of Integer) = Nothing
-        Dim vlngMatchedTrxIndex As Object
+        Dim vlngMatchedTrxIndex As Integer
         Dim objMatchedTrx As Trx
         Dim objMatchedSplit As TrxSplit
         Dim strPONumber As String

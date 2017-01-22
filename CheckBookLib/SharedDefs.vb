@@ -134,7 +134,7 @@ Public Module SharedDefs
 
     '$Description Path and name of trx type translation file.
 
-    Public Function gstrTrxTypeFilePath() As Object
+    Public Function gstrTrxTypeFilePath() As String
         gstrTrxTypeFilePath = gstrAddPath("QIFImportTrxTypes.xml")
     End Function
 

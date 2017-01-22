@@ -1,7 +1,5 @@
-﻿Option Strict Off
+﻿Option Strict On
 Option Explicit On
-
-Imports CheckBookLib
 
 Public Class ImportHandlerBank
     Implements IImportHandler
@@ -44,7 +42,7 @@ Public Class ImportHandlerBank
     End Sub
 
     Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of Trx), ByRef colUnusedMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
-        Dim lngNumber As Integer = Val(objImportedTrx.strNumber)
+        Dim lngNumber As Integer = CType(Val(objImportedTrx.strNumber), Integer)
         Dim colMatches As ICollection(Of Integer) = Nothing
         Dim colExactMatches As ICollection(Of Integer) = Nothing
         objReg.MatchCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
@@ -93,7 +91,7 @@ Public Class ImportHandlerBank
         If (objImportedTrx.curAmount <> objMatchedTrx.curAmount) And Not blnPreserveNumAmt Then
             If MsgBox("NOTE: The amount of the imported transaction is " & "different than the amount of the match you selected. " &
                 "Updating the matched transaction will change its amount to " & "equal the amount of the import." & vbCrLf & vbCrLf &
-                "Do you really want to do this?", MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                "Do you really want to do this?", MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
                 MsgBox("Update cancelled.", MsgBoxStyle.Information)
                 Return False
             End If

@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.IO
@@ -150,7 +150,7 @@ Public Class ReadBankOFX
     End Property
 
     Private Function strGetToken() As String
-        Dim intEndPos As Short
+        Dim intEndPos As Integer
         mstrInputLine = Trim(mstrInputLine)
         If mstrInputLine = "" Then
             mstrInputLine = mobjFile.ReadLine()

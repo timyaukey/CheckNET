@@ -1,5 +1,5 @@
-﻿Option Explicit On
-Option Strict On
+﻿Option Strict On
+Option Explicit On
 
 Public Interface IHostUI
     Function blnImportFormAlreadyOpen() As Boolean
@@ -7,4 +7,5 @@ Public Interface IHostUI
         ByVal objReader As ITrxReader, ByVal blnFake As Boolean)
     Function strChooseFile(ByVal strWindowCaption As String, ByVal strFileType As String,
         ByVal strSettingsKey As String) As String
+    Function objGetCurrentRegister() As Register
 End Interface

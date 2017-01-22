@@ -1,5 +1,5 @@
-﻿Option Explicit On
-Option Strict On
+﻿Option Strict On
+Option Explicit On
 
 Public Class ReadChecksSpec
 

@@ -132,6 +132,15 @@
     <Compile Include="ObjectEditorForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Plugins\AdjustBudgetsToCashflowPlugin.vb" />
+    <Compile Include="Plugins\CategoryReportPlugin.vb" />
+    <Compile Include="Plugins\DepositImportStandard.vb" />
+    <Compile Include="Plugins\FindLiveBudgetsPlugin.vb" />
+    <Compile Include="Plugins\ImportPlugins.vb" />
+    <Compile Include="Plugins\InvoiceImportStandard.vb" />
+    <Compile Include="Plugins\PayablesReportPlugin.vb" />
+    <Compile Include="Plugins\ReconcilePlugin.vb" />
+    <Compile Include="Plugins\ToolPlugins.vb" />
     <Compile Include="Reports\CategorySummary\CatSumRptForm.Designer.vb">
       <SubType>Code</SubType>
       <DependentUpon>CatSumRptForm.vb</DependentUpon>

@@ -88,8 +88,11 @@
     <Compile Include="Imports\CheckImportInsight.vb" />
     <Compile Include="Imports\CheckImportPlugin.vb" />
     <Compile Include="Imports\CheckImportStandard.vb" />
+    <Compile Include="Imports\DepositImportPlugin.vb" />
     <Compile Include="Imports\IHostUI.vb" />
     <Compile Include="Imports\IImportHandler.vb" />
+    <Compile Include="Imports\InvoiceImportPlugin.vb" />
+    <Compile Include="Imports\IPluginFactory.vb" />
     <Compile Include="Imports\ReadBankOFX.vb" />
     <Compile Include="Imports\ReadBankQIF.vb" />
     <Compile Include="Imports\ImportHandlerBank.vb" />
@@ -103,6 +106,7 @@
     <Compile Include="Imports\ReadInvoices.vb" />
     <Compile Include="Imports\ImportUtilities.vb" />
     <Compile Include="Imports\ITrxReader.vb" />
+    <Compile Include="Imports\ReportPlugin.vb" />
     <Compile Include="Imports\ToolPlugin.vb" />
     <Compile Include="Imports\TrxImportPlugin.vb" />
     <Compile Include="Logging\EventLog.vb" />

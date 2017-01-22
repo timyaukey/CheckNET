@@ -1,7 +1,5 @@
-﻿Option Strict Off
+﻿Option Strict On
 Option Explicit On
-
-Imports CheckBookLib
 
 Public Class ImportHandlerChecks
     Implements IImportHandler
@@ -33,7 +31,7 @@ Public Class ImportHandlerChecks
     End Sub
 
     Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of Trx), ByRef colUnusedMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
-        Dim lngNumber As Integer = Val(objImportedTrx.strNumber)
+        Dim lngNumber As Integer = CType(Val(objImportedTrx.strNumber), Integer)
         Dim colMatches As ICollection(Of Integer) = Nothing
         Dim colExactMatches As ICollection(Of Integer) = Nothing
         objReg.MatchCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
