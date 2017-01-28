@@ -238,7 +238,7 @@ Friend Class CBMainForm
         objReader As ITrxReader, blnFake As Boolean) Implements IHostUI.OpenImportForm
 
         Using frm As BankImportAcctSelectForm = New BankImportAcctSelectForm()
-            frm.ShowMe(strWindowCaption, objHandler, objReader, blnFake)
+            frm.ShowMe(strWindowCaption, objHandler, objReader, blnFake, Me)
         End Using
     End Sub
 
@@ -252,6 +252,10 @@ Friend Class CBMainForm
             Return Nothing
         End If
         Return CType(Me.ActiveMdiChild, RegisterForm).objReg
+    End Function
+
+    Public Function objGetMainForm() As Form Implements IHostUI.objGetMainForm
+        Return Me
     End Function
 
     Public Sub mnuListBudgets_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuListBudgets.Click
@@ -351,5 +355,4 @@ Friend Class CBMainForm
     Private Sub mobjEverything_SomethingModified() Handles mobjEverything.SomethingModified
         mnuFileSave.Enabled = True
     End Sub
-
 End Class

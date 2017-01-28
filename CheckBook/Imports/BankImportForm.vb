@@ -79,7 +79,8 @@ Friend Class BankImportForm
     Public Sub ShowMe(ByVal strTitle As String, ByVal objAccount As Account,
                       ByVal objImportHandler As IImportHandler,
                       ByVal objTrxReader As ITrxReader,
-                      ByVal blnFake As Boolean)
+                      ByVal blnFake As Boolean,
+                      ByVal objHostUI As IHostUI)
 
         Try
 
@@ -87,6 +88,14 @@ Friend Class BankImportForm
             mobjImportHandler = objImportHandler
             mobjTrxReader = objTrxReader
             mblnFake = blnFake
+
+            'This form is an MDI child.
+            'This code simulates the VB6 
+            ' functionality of automatically
+            ' loading and showing an MDI
+            ' child's parent.
+            Me.MdiParent = objHostUI.objGetMainForm()
+            objHostUI.objGetMainForm().Show()
 
             mstrImportSearchText = ""
             mintNextImportToSearch = 0

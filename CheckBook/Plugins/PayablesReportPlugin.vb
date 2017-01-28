@@ -14,7 +14,7 @@ Public Class PayablesReportPlugin
     Public Overrides Sub ClickHandler(sender As Object, e As EventArgs)
         Try
             Dim frmRpt As RptScanSplitsForm = New RptScanSplitsForm
-            frmRpt.ShowMe(RptScanSplitsForm.SplitReportType.glngSPLTRPT_PAYABLES)
+            frmRpt.ShowMe(RptScanSplitsForm.SplitReportType.glngSPLTRPT_PAYABLES, Me.HostUI)
             Exit Sub
         Catch ex As Exception
             gTopException(ex)

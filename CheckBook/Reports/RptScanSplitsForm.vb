@@ -17,6 +17,7 @@ Friend Class RptScanSplitsForm
 
     Private mlngRptType As SplitReportType
     Private mlngSplitCount As Integer
+    Private mobjHostUI As IHostUI
 
     'Array with elements corresponding to mobjCats elements.
     'For category summary report.
@@ -39,10 +40,17 @@ Friend Class RptScanSplitsForm
     Private mstrCatKey As String
     Private mdatReportDate As Date
 
-    Public Sub ShowMe(ByVal lngType As SplitReportType)
+    Public Sub ShowMe(ByVal lngType As SplitReportType, ByVal objHostUI As IHostUI)
         Try
 
             mlngRptType = lngType
+            'This form is an MDI child.
+            'This code simulates the VB6 
+            ' functionality of automatically
+            ' loading and showing an MDI child's parent.
+            mobjHostUI = objHostUI
+            Me.MdiParent = mobjHostUI.objGetMainForm()
+            mobjHostUI.objGetMainForm().Show()
             CustomizeForm()
             gLoadAccountListBox(lstAccounts)
             Me.Show()
@@ -365,7 +373,8 @@ Friend Class RptScanSplitsForm
             Select Case mlngRptType
                 Case SplitReportType.glngSPLTRPT_TOTALS
                     frmSumRpt = New CatSumRptForm
-                    frmSumRpt.ShowMe(maudtCatTotals, mcolSelectAccounts, gobjCategories, mdatStart, mdatEnd, mblnIncludeFake, mblnIncludeGenerated)
+                    frmSumRpt.ShowMe(maudtCatTotals, mcolSelectAccounts, gobjCategories, mdatStart, mdatEnd,
+                                     mblnIncludeFake, mblnIncludeGenerated, mobjHostUI)
                 Case SplitReportType.glngSPLTRPT_PAYABLES
                     strPayables = "Total payables as of " & gstrFormatDate(mdatReportDate) & " are $" & gstrFormatCurrency(mcurPayablesTotal) & vbCrLf & "Payables due in 30 days or less are $" & gstrFormatCurrency(mcurPayablesCurrent) & vbCrLf & "Payables more than 30 days out are $" & gstrFormatCurrency(mcurPayablesFuture)
                     curReconTotal = mcurPayablesCurrent + mcurPayablesFuture

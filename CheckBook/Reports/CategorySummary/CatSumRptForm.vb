@@ -22,7 +22,9 @@ Friend Class CatSumRptForm
 	
 	Private Const mintAMOUNT_WIDTH As Short = 24
 
-    Public Sub ShowMe(ByRef audtCatTotals() As PublicTypes.CategoryInfo, ByVal colSelectedAccounts As IEnumerable(Of Account), ByVal objCats As StringTranslator, ByVal datStart As Date, ByVal datEnd As Date, ByVal blnIncludeFake As Boolean, ByVal blnIncludeGenerated As Boolean)
+    Public Sub ShowMe(ByRef audtCatTotals() As PublicTypes.CategoryInfo, ByVal colSelectedAccounts As IEnumerable(Of Account),
+                      ByVal objCats As StringTranslator, ByVal datStart As Date, ByVal datEnd As Date,
+                      ByVal blnIncludeFake As Boolean, ByVal blnIncludeGenerated As Boolean, ByVal objHostUI As IHostUI)
 
         'maudtCatTotals = VB6.CopyArray(audtCatTotals)
         maudtCatTotals = audtCatTotals.Clone()
@@ -32,6 +34,14 @@ Friend Class CatSumRptForm
         mdatEnd = datEnd
         mblnIncludeFake = blnIncludeFake
         mblnIncludeGenerated = blnIncludeGenerated
+        'This form is an MDI child.
+        'This code simulates the VB6 
+        ' functionality of automatically
+        ' loading and showing an MDI
+        ' child's parent.
+        Me.MdiParent = objHostUI.objGetMainForm()
+        objHostUI.objGetMainForm().Show()
+
         Me.Show()
 
     End Sub

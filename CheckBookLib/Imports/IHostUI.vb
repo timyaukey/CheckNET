@@ -14,4 +14,5 @@ Public Interface IHostUI
     Function strChooseFile(ByVal strWindowCaption As String, ByVal strFileType As String,
         ByVal strSettingsKey As String) As String
     Function objGetCurrentRegister() As Register
+    Function objGetMainForm() As System.Windows.Forms.Form
 End Interface

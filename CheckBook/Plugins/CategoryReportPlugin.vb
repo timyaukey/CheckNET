@@ -14,7 +14,7 @@ Public Class CategoryReportPlugin
     Public Overrides Sub ClickHandler(sender As Object, e As EventArgs)
         Try
             Dim frmRpt As RptScanSplitsForm = New RptScanSplitsForm
-            frmRpt.ShowMe(RptScanSplitsForm.SplitReportType.glngSPLTRPT_TOTALS)
+            frmRpt.ShowMe(RptScanSplitsForm.SplitReportType.glngSPLTRPT_TOTALS, Me.HostUI)
             Exit Sub
         Catch ex As Exception
             gTopException(ex)
