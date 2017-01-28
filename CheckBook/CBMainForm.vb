@@ -2,6 +2,7 @@ Option Strict Off
 Option Explicit On
 
 Imports System.IO
+Imports System.Reflection
 Imports VB = Microsoft.VisualBasic
 Imports CheckBookLib
 
@@ -29,6 +30,9 @@ Friend Class CBMainForm
             frmStartup = New StartupForm
             frmStartup.Show()
             frmStartup.ShowStatus("Initializing")
+
+            LoadPlugins()
+
             'Look for locally recognized command line options
             Dim intIndex As Short
             Dim strArg As String
@@ -119,16 +123,6 @@ Friend Class CBMainForm
             frmStartup.Close()
             frmStartup = frmStartup
 
-            LoadPlugins(New ImportPlugins())
-            LoadPlugins(New ToolPlugins())
-
-            AddPluginsToMenu(mnuImportBank, colBankImportPlugins)
-            AddPluginsToMenu(mnuImportChecks, colCheckImportPlugins)
-            AddPluginsToMenu(mnuImportDeposits, colDepositImportPlugins)
-            AddPluginsToMenu(mnuImportInvoices, colInvoiceImportPlugins)
-            AddPluginsToMenu(mnuTools, colToolPlugins)
-            AddPluginsToMenu(mnuRpt, colReportPlugins)
-
         Catch ex As Exception
             gTopException(ex)
         End Try
@@ -141,7 +135,32 @@ Friend Class CBMainForm
     Private colToolPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
     Private colReportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
 
-    Private Sub LoadPlugins(ByVal objFactory As IPluginFactory)
+    Private Sub LoadPlugins()
+        LoadPluginsFromAssembly(Assembly.GetEntryAssembly())
+        Dim strEntryAssembly As String = Assembly.GetEntryAssembly().Location
+        Dim strEntryFolder As String = Path.GetDirectoryName(strEntryAssembly)
+        For Each strFile As String In Directory.EnumerateFiles(strEntryFolder, "*.dll")
+            Dim assembly As Assembly = Assembly.LoadFrom(strFile)
+            LoadPluginsFromAssembly(assembly)
+        Next
+        AddPluginsToMenu(mnuImportBank, colBankImportPlugins)
+        AddPluginsToMenu(mnuImportChecks, colCheckImportPlugins)
+        AddPluginsToMenu(mnuImportDeposits, colDepositImportPlugins)
+        AddPluginsToMenu(mnuImportInvoices, colInvoiceImportPlugins)
+        AddPluginsToMenu(mnuTools, colToolPlugins)
+        AddPluginsToMenu(mnuRpt, colReportPlugins)
+    End Sub
+
+    Private Sub LoadPluginsFromAssembly(ByVal objAssembly As Assembly)
+        For Each objAttrib As Object In objAssembly.GetCustomAttributes(GetType(PluginFactoryAttribute), False)
+            Dim objPluginFactoryAttr As PluginFactoryAttribute = CType(objAttrib, PluginFactoryAttribute)
+            Dim objFactoryType As Type = objPluginFactoryAttr.objFactoryType
+            Dim objFactory As IPluginFactory = System.Activator.CreateInstance(objFactoryType)
+            LoadPluginsFromFactory(objFactory)
+        Next
+    End Sub
+
+    Private Sub LoadPluginsFromFactory(ByVal objFactory As IPluginFactory)
         For Each objPlugin As ToolPlugin In objFactory.colGetPlugins(Me)
             If TypeOf objPlugin Is BankImportPlugin Then
                 colBankImportPlugins.Add(objPlugin)

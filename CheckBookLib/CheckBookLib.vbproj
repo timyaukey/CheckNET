@@ -118,6 +118,7 @@
     <Compile Include="Logging\ILogger.vb" />
     <Compile Include="Logging\ILogGroupEnd.vb" />
     <Compile Include="Logging\ILogGroupStart.vb" />
+    <Compile Include="PluginFactoryAttribute.vb" />
     <Compile Include="RepeatSummarizer.vb" />
     <Compile Include="RepeatUnitTypeConverter.vb" />
     <Compile Include="TrxGen\FilePersistableType.vb" />

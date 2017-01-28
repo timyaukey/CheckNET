@@ -3,6 +3,8 @@ Option Explicit On
 
 Imports CheckBookLib
 
+<Assembly: PluginFactory(GetType(ToolPlugins))>
+
 Public Class ToolPlugins
     Implements IPluginFactory
 
