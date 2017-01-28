@@ -89,10 +89,10 @@
     <Compile Include="Imports\CheckImportPlugin.vb" />
     <Compile Include="Imports\CheckImportStandard.vb" />
     <Compile Include="Imports\DepositImportPlugin.vb" />
-    <Compile Include="Imports\IHostUI.vb" />
+    <Compile Include="Plugins\IHostUI.vb" />
     <Compile Include="Imports\IImportHandler.vb" />
     <Compile Include="Imports\InvoiceImportPlugin.vb" />
-    <Compile Include="Imports\IPluginFactory.vb" />
+    <Compile Include="Plugins\IPluginFactory.vb" />
     <Compile Include="Imports\ReadBankOFX.vb" />
     <Compile Include="Imports\ReadBankQIF.vb" />
     <Compile Include="Imports\ImportHandlerBank.vb" />
@@ -106,9 +106,9 @@
     <Compile Include="Imports\ReadInvoices.vb" />
     <Compile Include="Imports\ImportUtilities.vb" />
     <Compile Include="Imports\ITrxReader.vb" />
-    <Compile Include="Imports\ReportPlugin.vb" />
-    <Compile Include="Imports\ToolPlugin.vb" />
-    <Compile Include="Imports\TrxImportPlugin.vb" />
+    <Compile Include="Plugins\ReportPlugin.vb" />
+    <Compile Include="Plugins\ToolPlugin.vb" />
+    <Compile Include="Plugins\TrxImportPlugin.vb" />
     <Compile Include="Logging\EventLog.vb" />
     <Compile Include="Everything.vb" />
     <Compile Include="Logging\ILogAction.vb" />
@@ -119,6 +119,9 @@
     <Compile Include="Logging\ILogGroupEnd.vb" />
     <Compile Include="Logging\ILogGroupStart.vb" />
     <Compile Include="PluginFactoryAttribute.vb" />
+    <Compile Include="Imports\DepositImportStandard.vb" />
+    <Compile Include="Plugins\ImportPlugins.vb" />
+    <Compile Include="Imports\InvoiceImportStandard.vb" />
     <Compile Include="RepeatSummarizer.vb" />
     <Compile Include="RepeatUnitTypeConverter.vb" />
     <Compile Include="TrxGen\FilePersistableType.vb" />
