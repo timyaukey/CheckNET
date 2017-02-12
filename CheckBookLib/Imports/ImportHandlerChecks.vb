@@ -26,8 +26,8 @@ Public Class ImportHandlerChecks
         Return objReg.lngMatchPaymentDetails(objImportedTrx.strNumber, objImportedTrx.datDate, 10, objImportedTrx.strDescription, objImportedTrx.curAmount)
     End Function
 
-    Public Sub BatchUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx, blnFake As Boolean) Implements IImportHandler.BatchUpdate
-        objMatchedReg.ImportUpdateNumAmt(lngMatchedRegIndex, objImportedTrx.strNumber, blnFake, objImportedTrx.curAmount)
+    Public Sub BatchUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx) Implements IImportHandler.BatchUpdate
+        objMatchedReg.ImportUpdateNumAmt(lngMatchedRegIndex, objImportedTrx.strNumber, objImportedTrx.curAmount)
     End Sub
 
     Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of Trx), ByRef colUnusedMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
@@ -72,8 +72,8 @@ Public Class ImportHandlerChecks
         objReg.PruneToNonImportedExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
     End Sub
 
-    Public Function blnIndividualUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx, blnFake As Boolean) As Boolean Implements IImportHandler.blnIndividualUpdate
-        objMatchedReg.ImportUpdateNumAmt(lngMatchedRegIndex, objImportedTrx.strNumber, blnFake, objImportedTrx.curAmount)
+    Public Function blnIndividualUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx) As Boolean Implements IImportHandler.blnIndividualUpdate
+        objMatchedReg.ImportUpdateNumAmt(lngMatchedRegIndex, objImportedTrx.strNumber, objImportedTrx.curAmount)
         Return True
     End Function
 End Class

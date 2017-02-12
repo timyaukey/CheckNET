@@ -525,9 +525,8 @@ Friend Class SearchForm
             Dim strOldCatKey As String = ""
             Dim strNewCatKey As String = ""
             Dim colTrx As ICollection(Of Trx)
-            Dim lngTrxIndex As Integer
             Dim objTrx As Trx
-            Dim objTrxOld As Trx
+            Dim objTrxManager As TrxManager
             Dim colSplits As IEnumerable(Of TrxSplit)
             Dim objSplit As TrxSplit
             Dim strCatKey As String
@@ -566,10 +565,10 @@ Friend Class SearchForm
 
             objStartLogger = mobjReg.objLogGroupStart("SearchForm.Recategorize")
             For Each objTrx In colTrx
-                objTrxOld = objTrx.objClone(Nothing)
-                lngTrxIndex = mobjReg.lngTrxIndex(objTrx)
+                objTrxManager = mobjReg.objGetTrxManager(objTrx)
                 colSplits = objTrx.colSplits
-                objTrx.UpdateStartNormal(mobjReg, objTrx)
+                objTrxManager.UpdateStart()
+                objTrx.ClearSplits()
                 For Each objSplit In colSplits
                     With objSplit
                         strCatKey = objSplit.strCategoryKey
@@ -579,7 +578,7 @@ Friend Class SearchForm
                         objTrx.AddSplit(.strMemo, strCatKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount, .strImageFiles)
                     End With
                 Next objSplit
-                mobjReg.UpdateEnd(lngTrxIndex, New LogChange, "SearchForm.Recategorize", objTrxOld)
+                objTrxManager.UpdateEnd(New LogChange, "SearchForm.Recategorize")
                 lngChgCount = lngChgCount + 1
             Next objTrx
             mobjReg.LogGroupEnd(objStartLogger)
@@ -665,14 +664,9 @@ Friend Class SearchForm
     Private Sub cmdMove_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdMove.Click
         Try
 
-            Dim lngTrxIndex As Integer
             Dim objTrxSrc As Trx
-            Dim objTrxOld As Trx
-            Dim objTrxNew As Trx
             Dim objTrxFirst As Trx = Nothing
             Dim colTrx As ICollection(Of Trx)
-            Dim colSplits As IEnumerable(Of TrxSplit)
-            Dim objSplit As TrxSplit
             Dim strNewDate As String = ""
             Dim objNewReg As Register = Nothing
             Dim datExplicitDate As Date
@@ -714,7 +708,6 @@ Friend Class SearchForm
             Dim objStartLogger As ILogGroupStart
             objStartLogger = mobjReg.objLogGroupStart("SearchForm.Move")
             For Each objTrxSrc In colTrx
-                lngTrxIndex = mobjReg.lngTrxIndex(objTrxSrc)
                 If blnUseDayOffset Then
                     datNewDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDayOffset, objTrxSrc.datDate)
                 Else
@@ -723,32 +716,24 @@ Friend Class SearchForm
                 With objTrxSrc
                     If objNewReg Is Nothing Then
                         'Changing date, not register.
-                        objTrxOld = objTrxSrc.objClone(Nothing)
-                        colSplits = objTrxSrc.colSplits
-                        'This will clear the splits collection.
-                        Dim objTempTrx As Trx = objTrxSrc.objClone(mobjReg)
-                        objTempTrx.SetDate(datNewDate)
-                        .UpdateStartNormal(mobjReg, objTempTrx)
-                        'Add the splits back.
-                        For Each objSplit In colSplits
-                            .objAddSplit(objSplit)
-                        Next objSplit
-                        mobjReg.UpdateEnd(lngTrxIndex, New LogMove, "SearchForm.MoveUpdate", objTrxOld)
+                        Dim objTrxManager As TrxManager = mobjReg.objGetTrxManager(objTrxSrc)
+                        objTrxManager.UpdateStart()
+                        objTrxManager.objTrx.datDate = datNewDate
+                        objTrxManager.UpdateEnd(New LogMove, "SearchForm.MoveUpdate")
                         If objTrxFirst Is Nothing Then
                             objTrxFirst = objTrxSrc
                         End If
                     Else
                         'Changing register, and possibly date.
-                        objTrxNew = New Trx
-                        Dim objTempTrx As Trx = objTrxSrc.objClone(mobjReg)
-                        objTempTrx.SetDate(datNewDate)
-                        objTrxNew.NewStartNormal(objNewReg, objTempTrx)
+                        Dim objTrxNew As Trx = New Trx
+                        objTrxNew.NewStartNormal(objNewReg, objTrxSrc)
+                        objTrxNew.datDate = datNewDate
                         .CopySplits(objTrxNew)
                         objNewReg.NewAddEnd(objTrxNew, New LogAdd, "SearchForm.MoveAdd")
                         If objTrxFirst Is Nothing Then
                             objTrxFirst = objTrxNew
                         End If
-                        mobjReg.Delete(lngTrxIndex, New LogDelete, "SearchForm.MoveDelete")
+                        mobjReg.Delete(mobjReg.lngFindTrx(objTrxSrc), New LogDelete, "SearchForm.MoveDelete")
                     End If
                 End With
             Next objTrxSrc

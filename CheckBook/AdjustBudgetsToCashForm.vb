@@ -419,20 +419,20 @@ Friend Class AdjustBudgetsToCashForm
 
     Private Sub UpdateBudget(ByVal lngIndex As Integer, ByVal curLimit As Decimal, ByVal intBudget As Short)
 
-        Dim objTrx As Trx
-        Dim objTrxOld As Trx
+        Dim objTrxManager As TrxManager
 
         Try
-
-            objTrx = mobjReg.objTrx(lngIndex)
-            objTrxOld = objTrx.objClone(Nothing)
-            If Not objTrx Is maobjRegTrx(intBudget) Then
+            objTrxManager = mobjReg.objGetTrxManager(lngIndex)
+            If Not objTrxManager.objTrx Is maobjRegTrx(intBudget) Then
                 gRaiseError("Trx is at wrong index")
             End If
-            With objTrx
-                .UpdateStartBudget(mobjReg, .datDate, .strDescription, .strMemo, .blnAwaitingReview, False, .intRepeatSeq, .strRepeatKey, curLimit, .datBudgetEnds, .strBudgetKey)
-                mobjReg.UpdateEnd(lngIndex, New LogChange, "AdjustBudgetsToCashForm.Update", objTrxOld)
+            objTrxManager.UpdateStart()
+            With objTrxManager.objTrx
+                .curBudgetLimit = curLimit
+                .SetAmountForBudget(mobjReg.datOldestBudgetEndAllowed)
+                .blnFake = False
             End With
+            objTrxManager.UpdateEnd(New LogChange, "AdjustBudgetsToCashForm.Update")
 
             Exit Sub
         Catch ex As Exception

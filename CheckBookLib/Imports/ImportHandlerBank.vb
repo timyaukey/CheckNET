@@ -37,8 +37,8 @@ Public Class ImportHandlerBank
         Return 0
     End Function
 
-    Public Sub BatchUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx, blnFake As Boolean) Implements IImportHandler.BatchUpdate
-        objMatchedReg.ImportUpdateBank(lngMatchedRegIndex, objImportedTrx.datDate, objMatchedTrx.strNumber, blnFake, objImportedTrx.curAmount, objImportedTrx.strImportKey)
+    Public Sub BatchUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx) Implements IImportHandler.BatchUpdate
+        objMatchedReg.ImportUpdateBank(lngMatchedRegIndex, objImportedTrx.datDate, objMatchedTrx.strNumber, objImportedTrx.curAmount, objImportedTrx.strImportKey)
     End Sub
 
     Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of Trx), ByRef colUnusedMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
@@ -83,7 +83,7 @@ Public Class ImportHandlerBank
         objReg.PruneToNonImportedExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
     End Sub
 
-    Public Function blnIndividualUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx, blnFake As Boolean) As Boolean Implements IImportHandler.blnIndividualUpdate
+    Public Function blnIndividualUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx) As Boolean Implements IImportHandler.blnIndividualUpdate
         Dim blnPreserveNumAmt As Boolean
         Dim strNewNumber As String
         Dim curNewAmount As Decimal
@@ -102,7 +102,7 @@ Public Class ImportHandlerBank
             strNewNumber = objMatchedTrx.strNumber
             curNewAmount = objMatchedTrx.curAmount
         End If
-        objMatchedReg.ImportUpdateBank(lngMatchedRegIndex, objImportedTrx.datDate, strNewNumber, blnFake, curNewAmount, objImportedTrx.strImportKey)
+        objMatchedReg.ImportUpdateBank(lngMatchedRegIndex, objImportedTrx.datDate, strNewNumber, curNewAmount, objImportedTrx.strImportKey)
         Return True
     End Function
 End Class

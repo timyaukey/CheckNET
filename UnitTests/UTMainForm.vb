@@ -664,7 +664,7 @@ Friend Class UTMainForm
 
         gUTSetSubTest("Test first import")
 
-        objUTReg.objReg.ImportUpdateBank(1, #4/3/2001#, "200", False, -25.0#, "importkey-1")
+        objUTReg.objReg.ImportUpdateBank(1, #4/3/2001#, "200", -25.0#, "importkey-1")
         objTrx = objUTReg.objReg.objTrx(1)
         With objTrx
             gUTAssert(.datDate = #4/3/2000#, "Bad date")
@@ -677,7 +677,7 @@ Friend Class UTMainForm
 
         gUTSetSubTest("Test second import")
 
-        objUTReg.objReg.ImportUpdateBank(2, #4/4/2000#, "201", False, -50.0#, "importkey-2")
+        objUTReg.objReg.ImportUpdateBank(2, #4/4/2000#, "201", -50.0#, "importkey-2")
         objTrx = objUTReg.objReg.objTrx(2)
         With objTrx
             gUTAssert(.datDate = #4/4/2000#, "Bad date")
@@ -689,7 +689,7 @@ Friend Class UTMainForm
 
         gUTSetSubTest("Test third import")
 
-        objUTReg.objReg.ImportUpdateBank(3, #4/15/2002#, "Pmt", False, -40.01, "importkey-3")
+        objUTReg.objReg.ImportUpdateBank(3, #4/15/2002#, "Pmt", -40.01, "importkey-3")
         objTrx = objUTReg.objReg.objTrx(3)
         With objTrx
             gUTAssert(.datDate = #4/15/2002#, "Bad date")

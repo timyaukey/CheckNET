@@ -180,6 +180,7 @@
     <Compile Include="TrxGen\TrxGenPeriod.vb" />
     <Compile Include="TrxGen\TrxGenRepeat.vb" />
     <Compile Include="Trx\TrxGenImportData.vb" />
+    <Compile Include="Trx\TrxManager.vb" />
     <Compile Include="UITypeEditors\DateConverter.vb" />
     <Compile Include="UITypeEditors\StringTranslatorUIEditor.vb" />
     <Compile Include="VB6Xml\VB6XmlDocument.vb" />

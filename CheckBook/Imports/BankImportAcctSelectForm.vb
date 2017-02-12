@@ -8,8 +8,8 @@ Friend Class BankImportAcctSelectForm
 
     Private mobjAccount As Account
 
-    Public Sub ShowMe(ByVal strTitle As String, ByVal objImportHandler As IImportHandler, ByVal objTrxReader As ITrxReader,
-                      ByVal blnFake As Boolean, ByVal objHostUI As IHostUI)
+    Public Sub ShowMe(ByVal strTitle As String, ByVal objImportHandler As IImportHandler,
+                      ByVal objTrxReader As ITrxReader, ByVal objHostUI As IHostUI)
 
         Dim frm As BankImportForm
         Try
@@ -20,7 +20,7 @@ Friend Class BankImportAcctSelectForm
             System.Windows.Forms.Application.DoEvents()
             If Not mobjAccount Is Nothing Then
                 frm = New BankImportForm
-                frm.ShowMe(strTitle, mobjAccount, objImportHandler, objTrxReader, blnFake, objHostUI)
+                frm.ShowMe(strTitle, mobjAccount, objImportHandler, objTrxReader, objHostUI)
             End If
             Exit Sub
         Catch ex As Exception

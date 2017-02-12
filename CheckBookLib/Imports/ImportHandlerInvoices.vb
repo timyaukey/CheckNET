@@ -70,7 +70,7 @@ Public Class ImportHandlerInvoices
         Return 0
     End Function
 
-    Public Sub BatchUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx, blnFake As Boolean) Implements IImportHandler.BatchUpdate
+    Public Sub BatchUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx) Implements IImportHandler.BatchUpdate
         'Do nothing for invoices.
     End Sub
 
@@ -101,7 +101,7 @@ Public Class ImportHandlerInvoices
         blnExactMatch = True
     End Sub
 
-    Public Function blnIndividualUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx, blnFake As Boolean) As Boolean Implements IImportHandler.blnIndividualUpdate
+    Public Function blnIndividualUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx) As Boolean Implements IImportHandler.blnIndividualUpdate
         'Do nothing
         Return False
     End Function

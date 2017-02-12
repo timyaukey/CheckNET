@@ -28,7 +28,7 @@ Public MustInherit Class TrxImportPlugin
             End If
             Dim objReader As ITrxReader = GetTrxReader()
             If Not objReader Is Nothing Then
-                HostUI.OpenImportForm(GetImportWindowCaption, GetImportHandler(), objReader, False)
+                HostUI.OpenImportForm(GetImportWindowCaption, GetImportHandler(), objReader)
             End If
             Exit Sub
         Catch ex As Exception

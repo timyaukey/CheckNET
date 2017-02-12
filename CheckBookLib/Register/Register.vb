@@ -613,63 +613,36 @@ Public Class Register
     '   updating an existing Trx, and be sure to pass the appropriate import key
     '   and say it is not fake.
 
-    Public Sub ImportUpdateBank(ByVal lngOldIndex As Integer, ByVal datDate As Date, ByVal strNumber As String, ByVal blnFake As Boolean,
+    Public Sub ImportUpdateBank(ByVal lngOldIndex As Integer, ByVal datDate As Date, ByVal strNumber As String,
                                 ByVal curAmount As Decimal, ByVal strImportKey As String)
 
-        Dim objTrx As Trx
-        Dim objOldTrx As Trx
-
-        If lngOldIndex < 1 Or lngOldIndex > mlngTrxUsed Then
-            gRaiseError("Invalid index " & lngOldIndex & " passed to Register.ImportUpdateBank")
-        End If
-        objTrx = Me.objTrx(lngOldIndex)
-        objOldTrx = objTrx.objClone(Nothing)
-        With objTrx
-            .UnApplyFromBudgets(Me)
-            .ImportUpdateBank(datDate, strNumber, blnFake, curAmount, strImportKey)
-        End With
-        UpdateEnd(lngOldIndex, New LogChange, "ImportUpdateBank", objOldTrx)
+        Dim objTrxManager As TrxManager = Me.objGetTrxManager(lngOldIndex)
+        objTrxManager.UpdateStart()
+        objTrxManager.objTrx.ImportUpdateBank(datDate, strNumber, curAmount, strImportKey)
+        objTrxManager.UpdateEnd(New LogChange, "ImportUpdateBank")
     End Sub
 
     '$Description Update an existing Trx with number and amount. Only for
     '   updating an existing Trx. Use the normal steps for adding a new Trx if not
     '   updating an existing Trx.
 
-    Public Sub ImportUpdateNumAmt(ByVal lngOldIndex As Integer, ByVal strNumber As String, ByVal blnFake As Boolean, ByVal curAmount As Decimal)
+    Public Sub ImportUpdateNumAmt(ByVal lngOldIndex As Integer, ByVal strNumber As String, ByVal curAmount As Decimal)
 
-        Dim objTrx As Trx
-        Dim objOldTrx As Trx
-
-        If lngOldIndex < 1 Or lngOldIndex > mlngTrxUsed Then
-            gRaiseError("Invalid index " & lngOldIndex & " passed to Register.ImportUpdateNumAmt")
-        End If
-        objTrx = Me.objTrx(lngOldIndex)
-        objOldTrx = objTrx.objClone(Nothing)
-        With objTrx
-            .UnApplyFromBudgets(Me)
-            .ImportUpdateNumAmt(strNumber, blnFake, curAmount)
-        End With
-        UpdateEnd(lngOldIndex, New LogChange, "ImportUpdateNumAmt", objOldTrx)
+        Dim objTrxManager As TrxManager = Me.objGetTrxManager(lngOldIndex)
+        objTrxManager.UpdateStart()
+        objTrxManager.objTrx.ImportUpdateNumAmt(strNumber, curAmount)
+        objTrxManager.UpdateEnd(New LogChange, "ImportUpdateNumAmt")
     End Sub
 
     '$Description Update an existing fake Trx with new amount and make it non-generated.
     '   Intended to update a generated Trx when the actual amount is known.
 
-    Public Sub ImportUpdateAmount(ByVal lngOldIndex As Integer, ByVal blnFake As Boolean, ByVal curAmount As Decimal)
+    Public Sub ImportUpdateAmount(ByVal lngOldIndex As Integer, ByVal curAmount As Decimal)
 
-        Dim objTrx As Trx
-        Dim objOldTrx As Trx
-
-        If lngOldIndex < 1 Or lngOldIndex > mlngTrxUsed Then
-            gRaiseError("Invalid index " & lngOldIndex & " passed to Register.ImportUpdateAmount")
-        End If
-        objTrx = Me.objTrx(lngOldIndex)
-        objOldTrx = objTrx.objClone(Nothing)
-        With objTrx
-            .UnApplyFromBudgets(Me)
-            .ImportUpdateAmount(blnFake, curAmount)
-        End With
-        UpdateEnd(lngOldIndex, New LogChange, "ImportUpdateAmount", objOldTrx)
+        Dim objTrxManager As TrxManager = Me.objGetTrxManager(lngOldIndex)
+        objTrxManager.UpdateStart()
+        objTrxManager.objTrx.ImportUpdateAmount(curAmount)
+        objTrxManager.UpdateEnd(New LogChange, "ImportUpdateAmount")
     End Sub
 
     '$Description Update a specified Split in existing Trx with a new invoice for
@@ -679,19 +652,10 @@ Public Class Register
 
     Public Sub ImportUpdatePurchaseOrder(ByVal lngOldIndex As Integer, ByVal objPOSplit As TrxSplit, ByVal objImportedSplit As TrxSplit)
 
-        Dim objTrx As Trx
-        Dim objOldTrx As Trx
-
-        If lngOldIndex < 1 Or lngOldIndex > mlngTrxUsed Then
-            gRaiseError("Invalid index " & lngOldIndex & " passed to Register.ImportUpdatePurchaseOrder")
-        End If
-        objTrx = Me.objTrx(lngOldIndex)
-        objOldTrx = objTrx.objClone(Nothing)
-        With objTrx
-            .UnApplyFromBudgets(Me)
-            .ImportUpdatePurchaseOrder(objPOSplit, objImportedSplit)
-        End With
-        UpdateEnd(lngOldIndex, New LogChange, "ImportUpdatePurchaseOrder", objOldTrx)
+        Dim objTrxManager As TrxManager = Me.objGetTrxManager(lngOldIndex)
+        objTrxManager.UpdateStart()
+        objTrxManager.objTrx.ImportUpdatePurchaseOrder(objPOSplit, objImportedSplit)
+        objTrxManager.UpdateEnd(New LogChange, "ImportUpdatePurchaseOrder")
     End Sub
 
     '$Description Find normal Trx objects which may be a match to arguments.
@@ -1115,6 +1079,30 @@ Public Class Register
         UpdateFirstAffected(lngIndex)
         RaiseEvent BudgetChanged(lngIndex, objBudgetTrx)
     End Sub
+
+    Public Function objGetTrxManager(ByVal lngIndex As Integer) As TrxManager
+        If lngIndex < 1 Or lngIndex > mlngTrxUsed Then
+            gRaiseError("Invalid index " & lngIndex & " passed to Register.objGetTrxManager")
+        End If
+        Return objGetTrxManager(lngIndex, objTrx(lngIndex))
+    End Function
+
+    Public Function objGetTrxManager(ByVal objTrx As Trx) As TrxManager
+        Return objGetTrxManager(Me.lngFindTrx(objTrx), objTrx)
+    End Function
+
+    Public Function objGetTrxManager(ByVal lngIndex As Integer, ByVal objTrx As Trx) As TrxManager
+        Select Case objTrx.lngType
+            Case Trx.TrxType.glngTRXTYP_NORMAL
+                Return New NormalTrxManager(Me, lngIndex, objTrx)
+            Case Trx.TrxType.glngTRXTYP_BUDGET
+                Return New BudgetTrxManager(Me, lngIndex, objTrx)
+            Case Trx.TrxType.glngTRXTYP_TRANSFER
+                Return New TransferTrxManager(Me, lngIndex, objTrx)
+            Case Else
+                Throw New Exception("Unrecognized Trx type")
+        End Select
+    End Function
 
     '$Description Determine the index at which the specified Trx exists.
     '   Optimized for case where Trx is near end of register.

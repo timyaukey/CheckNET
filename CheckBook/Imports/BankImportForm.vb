@@ -3,7 +3,6 @@ Option Explicit On
 
 Imports VB = Microsoft.VisualBasic
 Imports CheckBookLib
-Imports CheckBook
 
 Friend Class BankImportForm
     Inherits System.Windows.Forms.Form
@@ -12,7 +11,6 @@ Friend Class BankImportForm
     Private WithEvents mobjAccount As Account
     Private mobjImportHandler As IImportHandler
     Private mobjTrxReader As ITrxReader
-    Private mblnFake As Boolean
 
     Private Enum ImportStatus
         'Have not decided what to do with item yet.
@@ -79,7 +77,6 @@ Friend Class BankImportForm
     Public Sub ShowMe(ByVal strTitle As String, ByVal objAccount As Account,
                       ByVal objImportHandler As IImportHandler,
                       ByVal objTrxReader As ITrxReader,
-                      ByVal blnFake As Boolean,
                       ByVal objHostUI As IHostUI)
 
         Try
@@ -87,7 +84,6 @@ Friend Class BankImportForm
             mobjAccount = objAccount
             mobjImportHandler = objImportHandler
             mobjTrxReader = objTrxReader
-            mblnFake = blnFake
 
             'This form is an MDI child.
             'This code simulates the VB6 
@@ -204,7 +200,7 @@ Friend Class BankImportForm
                         If lngMatchedRegIndex = 0 Then
                             gRaiseError("Could not find matched Trx")
                         End If
-                        mobjImportHandler.BatchUpdate(.objMatchedReg, lngMatchedRegIndex, .objImportedTrx, .objMatchedTrx, mblnFake)
+                        mobjImportHandler.BatchUpdate(.objMatchedReg, lngMatchedRegIndex, .objImportedTrx, .objMatchedTrx)
                         .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
                         .objReg = .objMatchedReg
                         DisplayOneImportItem(objItem, intItemIndex)
@@ -1034,7 +1030,7 @@ Friend Class BankImportForm
                 objMatchedTrx = .objTrx
             End With
             With maudtItem(intSelectedItemIndex())
-                If mobjImportHandler.blnIndividualUpdate(objMatchedReg, lngMatchedRegIndex, .objImportedTrx, objMatchedTrx, mblnFake) Then
+                If mobjImportHandler.blnIndividualUpdate(objMatchedReg, lngMatchedRegIndex, .objImportedTrx, objMatchedTrx) Then
                     .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
                     .objReg = objMatchedReg
                 End If

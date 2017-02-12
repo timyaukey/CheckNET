@@ -235,10 +235,10 @@ Friend Class CBMainForm
     End Function
 
     Public Sub OpenImportForm(strWindowCaption As String, objHandler As IImportHandler,
-        objReader As ITrxReader, blnFake As Boolean) Implements IHostUI.OpenImportForm
+        objReader As ITrxReader) Implements IHostUI.OpenImportForm
 
         Using frm As BankImportAcctSelectForm = New BankImportAcctSelectForm()
-            frm.ShowMe(strWindowCaption, objHandler, objReader, blnFake, Me)
+            frm.ShowMe(strWindowCaption, objHandler, objReader, Me)
         End Using
     End Sub
 

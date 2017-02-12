@@ -21,7 +21,7 @@ Friend Class MoveDstForm
         mcolRegisters = colRegisters
         mobjOldReg = objOldReg
         cboRegister.Items.Add(gobjCreateListBoxItem("", -1))
-        For intRegIdx = 1 To mcolRegisters.Count()
+        For intRegIdx = 0 To mcolRegisters.Count() - 1
             objReg = mcolRegisters.Item(intRegIdx)
             cboRegister.Items.Add(gobjCreateListBoxItem(objReg.strTitle, intRegIdx))
         Next
