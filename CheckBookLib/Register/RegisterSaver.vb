@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Public Class RegisterSaver
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -50,10 +50,10 @@ Public Class RegisterSaver
 
         SaveTrxShared("TN")
         With mobjTrx
-            If Len(.strNumber) Then
+            If Len(.strNumber) > 0 Then
                 SaveLine("N#" & .strNumber)
             End If
-            If Len(.strImportKey) Then
+            If Len(.strImportKey) > 0 Then
                 SaveLine("KI" & .strImportKey)
             End If
             If .curNormalMatchRange <> 0 Then
@@ -62,13 +62,13 @@ Public Class RegisterSaver
             For Each objSplit In .colSplits
                 With objSplit
                     SaveLine("SC" & .strCategoryKey)
-                    If Len(.strMemo) Then
+                    If Len(.strMemo) > 0 Then
                         SaveLine("SM" & .strMemo)
                     End If
-                    If Len(.strPONumber) Then
+                    If Len(.strPONumber) > 0 Then
                         SaveLine("SP" & .strPONumber)
                     End If
-                    If Len(.strInvoiceNum) Then
+                    If Len(.strInvoiceNum) > 0 Then
                         SaveLine("SN" & .strInvoiceNum)
                     End If
                     If .datInvoiceDate <> System.DateTime.FromOADate(0) Then
@@ -77,14 +77,14 @@ Public Class RegisterSaver
                     If .datDueDate <> System.DateTime.FromOADate(0) Then
                         SaveLine("SD" & gstrFormatDate(.datDueDate))
                     End If
-                    If Len(.strTerms) Then
+                    If Len(.strTerms) > 0 Then
                         SaveLine("ST" & .strTerms)
                     End If
-                    If Len(.strBudgetKey) Then
+                    If Len(.strBudgetKey) > 0 Then
                         SaveLine("SB" & .strBudgetKey)
                     End If
                     SaveLine("SA" & gstrFormatCurrency(.curAmount))
-                    If Len(.strImageFiles) Then
+                    If Len(.strImageFiles) > 0 Then
                         SaveLine("SF" & .strImageFiles)
                     End If
                     SaveLine("SZ")
@@ -119,7 +119,7 @@ Public Class RegisterSaver
         With mobjTrx
             SaveLine(strFirstCmd & Mid("URNS", .lngStatus, 1) & .strDescription)
             SaveLine("DT" & gstrFormatDate(.datDate))
-            If Len(.strMemo) Then
+            If Len(.strMemo) > 0 Then
                 SaveLine("ME" & .strMemo)
             End If
             If .blnAwaitingReview Then
@@ -128,7 +128,7 @@ Public Class RegisterSaver
             If .intRepeatSeq <> 0 Then
                 SaveLine("RS" & .intRepeatSeq)
             End If
-            If Len(.strRepeatKey) Then
+            If Len(.strRepeatKey) > 0 Then
                 SaveLine("KR" & .strRepeatKey)
             End If
             If mblnForGenerating Then

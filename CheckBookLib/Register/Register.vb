@@ -1244,7 +1244,7 @@ Public Class Register
         mcolRepeatTrx.Item(objTrx.strRepeatId) = objTrx
     End Sub
 
-    Public Function objRepeatTrx(ByVal strRepeatKey As String, ByVal intRepeatSeq As Short) As Trx
+    Public Function objRepeatTrx(ByVal strRepeatKey As String, ByVal intRepeatSeq As Integer) As Trx
         Dim objTrx As Trx = Nothing
         If mcolRepeatTrx.TryGetValue(gstrMakeRepeatId(strRepeatKey, intRepeatSeq), objTrx) Then
             Return objTrx

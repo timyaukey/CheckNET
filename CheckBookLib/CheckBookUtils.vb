@@ -101,7 +101,7 @@ Public Module CheckBookUtils
         gstrEncodeCatKey = "(" & strCatKey & ")"
     End Function
 
-    Public Function gstrMakeRepeatId(ByVal strRepeatKey As String, ByVal intRepeatSeq As Short) As String
+    Public Function gstrMakeRepeatId(ByVal strRepeatKey As String, ByVal intRepeatSeq As Integer) As String
         gstrMakeRepeatId = "#" & strRepeatKey & "." & intRepeatSeq
     End Function
 
