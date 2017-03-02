@@ -124,9 +124,9 @@ Public Class ImportUtilities
         Dim datDate As Date
         Dim strImportKey As String
         Dim strCatKey As String = ""
-        Dim intCatIndex As Short
+        Dim intCatIndex As Integer
         Dim strBudKey As String = ""
-        Dim intBudIndex As Short
+        Dim intBudIndex As Integer
         Dim strDescription As String = ""
         Dim strMemo As String = ""
         Dim strNumber As String = ""

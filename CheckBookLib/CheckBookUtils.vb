@@ -1,6 +1,7 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Imports VB = Microsoft.VisualBasic
+
 Public Module CheckBookUtils
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
@@ -59,7 +60,7 @@ Public Module CheckBookUtils
     'Set gstrPlaceholderBudgetKey to the key of the budget whose name
     'is "(budget)", or set it to "---" if there is no such budget.
     Public Sub gFindPlaceholderBudget()
-        Dim intPlaceholderIndex As Short
+        Dim intPlaceholderIndex As Integer
         intPlaceholderIndex = gobjBudgets.intLookupValue1("(placeholder)")
         If intPlaceholderIndex > 0 Then
             gstrPlaceholderBudgetKey = gobjBudgets.strKey(intPlaceholderIndex)
@@ -73,7 +74,7 @@ Public Module CheckBookUtils
     'Set gstrShortTermsCatKeys by the heuristic of looking for
     'recognizable strings in the category names.
     Public Sub gBuildShortTermsCatKeys()
-        Dim intCatIndex As Short
+        Dim intCatIndex As Integer
         Dim strCatName As String
         Dim blnPossibleCredit As Boolean
         Dim blnPossibleUtility As Boolean
@@ -110,19 +111,19 @@ Public Module CheckBookUtils
 
         strBracket = gstrAgingBracketNotInvoiced()
         'If item was invoiced as of report date.
-        Dim intAgeInDays As Short
-        Dim intAgeBracket As Short
-        Dim intStartingAge As Short
-        Dim intEndingAge As Short
+        Dim intAgeInDays As Long
+        Dim intAgeBracket As Long
+        Dim intStartingAge As Long
+        Dim intEndingAge As Long
         If datInvDate <= datAgingDate Then
             'If item was not paid as of the report date.
             If blnFake Or (datTrxDate > datAgingDate) Then
-                intAgeInDays = DateDiff(Microsoft.VisualBasic.DateInterval.Day, datDueDate, datAgingDate)
+                intAgeInDays = DateDiff(DateInterval.Day, datDueDate, datAgingDate)
                 'If intBracketSize = 30:
                 '1 to 30 = bracket 0, 31 to 60 = bracket 1, etc.
                 '-29 to 0 = bracket -1, -59 to -30 = bracket -2, etc.
                 'int() always rounds down, so int(-5/30)=-1 and not 0.
-                intAgeBracket = Int((intAgeInDays - 1) / intBracketSize)
+                intAgeBracket = CLng(Int((intAgeInDays - 1) / intBracketSize))
                 intStartingAge = 1 + (intAgeBracket * intBracketSize)
                 intEndingAge = intStartingAge + intBracketSize - 1
                 If intAgeBracket = -1 Then
@@ -142,8 +143,8 @@ Public Module CheckBookUtils
 
     Public Function gstrMakeDateBracket(ByVal datInputDate As Date, ByVal intBracketSize As Short, ByVal datBaseDate As Date) As String
 
-        Dim intOffsetDays As Short
-        Dim intMonthPart As Short
+        Dim intOffsetDays As Long
+        Dim intMonthPart As Integer
         Dim datBracketDate As Date
 
         gstrMakeDateBracket = ""
@@ -151,13 +152,13 @@ Public Module CheckBookUtils
             If intBracketSize = -1 Then
                 gstrMakeDateBracket = gstrFormatDate(datInputDate, "yyyy/MM/01")
             ElseIf intBracketSize = -2 Then
-                intMonthPart = Int((VB.Day(datInputDate) - 1) / 15)
+                intMonthPart = CInt(Int((VB.Day(datInputDate) - 1) / 15))
                 If intMonthPart > 1 Then
                     intMonthPart = 1
                 End If
                 gstrMakeDateBracket = gstrFormatDate(datInputDate, "yyyy/MM/") & gstrFormatInteger(1 + intMonthPart * 15, "0#")
             ElseIf intBracketSize = -4 Then
-                intMonthPart = Int((VB.Day(datInputDate) - 1) / 8)
+                intMonthPart = CInt(Int((VB.Day(datInputDate) - 1) / 8))
                 gstrMakeDateBracket = gstrFormatDate(datInputDate, "yyyy/MM/") & gstrFormatInteger(1 + intMonthPart * 8, "0#")
             End If
         Else
@@ -180,11 +181,11 @@ Public Module CheckBookUtils
         gstrAgingBracketPaid = "Paid"
     End Function
 
-    Public Function gstrAgingBracketFuture(ByVal intStartingAge As Short, ByVal intEndingAge As Short) As String
+    Public Function gstrAgingBracketFuture(ByVal intStartingAge As Long, ByVal intEndingAge As Long) As String
         gstrAgingBracketFuture = "Due In " & gstrFormatInteger(-intEndingAge, "000") & "-" & gstrFormatInteger(-intStartingAge, "000") & " Days"
     End Function
 
-    Public Function gstrAgingBracketPastDue(ByVal intStartingAge As Short, ByVal intEndingAge As Short) As String
+    Public Function gstrAgingBracketPastDue(ByVal intStartingAge As Long, ByVal intEndingAge As Long) As String
         gstrAgingBracketPastDue = "Due " & gstrFormatInteger(intStartingAge, "000") & "-" & gstrFormatInteger(intEndingAge, "000") & " Days Ago"
     End Function
 End Module

@@ -1,5 +1,6 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
+
 Public Class Security
 
     Private mstrFilePath As String
@@ -89,7 +90,7 @@ Public Class Security
     End Sub
 
     Private Function strCreateUserSignature(ByVal elmUser As VB6XmlElement) As String
-        strCreateUserSignature = strMakeHash(elmUser.GetAttribute("login") & elmUser.GetAttribute("name") & ":isadmin=" & elmUser.GetAttribute("isadmin"))
+        strCreateUserSignature = strMakeHash(CStr(elmUser.GetAttribute("login")) & CStr(elmUser.GetAttribute("name")) & ":isadmin=" & CStr(elmUser.GetAttribute("isadmin")))
     End Function
 
     Public Sub Save()
@@ -108,7 +109,7 @@ Public Class Security
     End Sub
 
     Public Function blnFindUser(ByVal strLogin As String) As Boolean
-        melmUser = mdomSecurity.DocumentElement.SelectSingleNode("user[@login=""" & strLogin & """]")
+        melmUser = DirectCast(mdomSecurity.DocumentElement.SelectSingleNode("user[@login=""" & strLogin & """]"), VB6XmlElement)
         mstrLogin = strLogin
         blnFindUser = blnHaveUser
     End Function
@@ -116,11 +117,11 @@ Public Class Security
     Public Function blnUserSignatureIsValid() As Boolean
         Dim strComputedSignature As String
         strComputedSignature = strCreateUserSignature(melmUser)
-        blnUserSignatureIsValid = (strComputedSignature = melmUser.GetAttribute("signhash"))
+        blnUserSignatureIsValid = (strComputedSignature = CStr(melmUser.GetAttribute("signhash")))
     End Function
 
     Public Function blnPasswordMatches(ByVal strPassword As String) As Boolean
-        blnPasswordMatches = (melmUser.GetAttribute("passwordhash") = strMakeHash(strPassword))
+        blnPasswordMatches = (CStr(melmUser.GetAttribute("passwordhash")) = strMakeHash(strPassword))
     End Function
 
     Public Sub SetPassword(ByVal strPassword As String)
@@ -156,7 +157,7 @@ Public Class Security
                 Exit Do
             End If
             strChar = Mid(strInput, intIndex, 1)
-            intIndex = intIndex + 1
+            intIndex = intIndex + 1S
             lngHash = (lngHash + 1) * (Asc(strChar) + 1)
             lngHash = lngHash And &HFFFFFF
         Loop

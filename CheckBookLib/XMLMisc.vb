@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.Xml
@@ -19,7 +19,7 @@ Public Module XMLMisc
 
     Public Function gstrGetXMLChildText(ByVal objParent As VB6XmlElement, ByVal strChild As String) As String
         Dim objChild As VB6XmlElement
-        objChild = objParent.SelectSingleNode(strChild)
+        objChild = DirectCast(objParent.SelectSingleNode(strChild), VB6XmlElement)
         If objChild Is Nothing Then
             gstrGetXMLChildText = Nothing
             Exit Function
@@ -33,7 +33,7 @@ Public Module XMLMisc
             Exit Function
         End If
         If TypeOf objValue Is String Then
-            If objValue = "" Then
+            If DirectCast(objValue, String) = "" Then
                 gblnXmlAttributeMissing = True
                 Exit Function
             End If

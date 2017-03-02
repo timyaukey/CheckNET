@@ -1,4 +1,7 @@
-﻿Public Class CBListBoxItem
+﻿Option Strict On
+Option Explicit On
+
+Public Class CBListBoxItem
     Public Property intValue As Integer
     Public Property strName As String
 

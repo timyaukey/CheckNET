@@ -616,7 +616,7 @@ Public Module SharedDefs
         gblnValidAmount = True
     End Function
 
-    Public Function gstrFormatInteger(input As Integer, style As String) As String
+    Public Function gstrFormatInteger(input As Long, style As String) As String
         Dim result As String = input.ToString(style)
         Return result
     End Function

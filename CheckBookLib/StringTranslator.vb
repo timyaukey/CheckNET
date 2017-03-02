@@ -1,5 +1,6 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
+
 Public Class StringTranslator
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
@@ -21,7 +22,7 @@ Public Class StringTranslator
     End Class
 
     Private maudtElement() As Element '1 to mintElements
-    Private mintElements As Short
+    Private mintElements As Integer
 
     'maudtElement() indices, keyed by "#" & Element.strKey
     Private mdictKeyIndices As Dictionary(Of String, Integer)
@@ -49,10 +50,10 @@ Public Class StringTranslator
 
     Public Sub LoadFile(ByVal strPath As String)
 
-        Dim intFile As Short
+        Dim intFile As Integer
         Dim strLine As String
-        Dim intPos1 As Short
-        Dim intPos2 As Short
+        Dim intPos1 As Integer
+        Dim intPos2 As Integer
         Dim strSeparator As String
 
         Try
@@ -116,8 +117,8 @@ Public Class StringTranslator
     '   This may be passed to the strValue1() or strValue2() properties
     '   to retrieve values for that key string.
 
-    Public Function intLookupKey(ByVal strKey_ As String) As Short
-        Dim result As Short
+    Public Function intLookupKey(ByVal strKey_ As String) As Integer
+        Dim result As Integer
         If mdictKeyIndices.TryGetValue("#" & strKey_, result) Then
             Return result
         Else
@@ -142,25 +143,25 @@ Public Class StringTranslator
 
     '$Description The number of key strings in the list.
 
-    Public ReadOnly Property intElements() As Short
+    Public ReadOnly Property intElements() As Integer
         Get
             intElements = mintElements
         End Get
     End Property
 
-    Public ReadOnly Property strKey(ByVal intIndex As Short) As String
+    Public ReadOnly Property strKey(ByVal intIndex As Integer) As String
         Get
             strKey = maudtElement(intIndex).strKey
         End Get
     End Property
 
-    Public ReadOnly Property strValue1(ByVal intIndex As Short) As String
+    Public ReadOnly Property strValue1(ByVal intIndex As Integer) As String
         Get
             strValue1 = maudtElement(intIndex).strValue1
         End Get
     End Property
 
-    Public ReadOnly Property strValue2(ByVal intIndex As Short) As String
+    Public ReadOnly Property strValue2(ByVal intIndex As Integer) As String
         Get
             strValue2 = maudtElement(intIndex).strValue2
         End Get
@@ -168,8 +169,8 @@ Public Class StringTranslator
 
     '$Description Like intLookupKey(), but searches for a strValue1 match.
 
-    Public Function intLookupValue1(ByVal strValue1_ As String) As Short
-        Dim result As Short
+    Public Function intLookupValue1(ByVal strValue1_ As String) As Integer
+        Dim result As Integer
         If mdictValue1Indices.TryGetValue("#" & strValue1_, result) Then
             Return result
         Else

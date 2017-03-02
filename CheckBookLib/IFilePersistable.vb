@@ -1,4 +1,7 @@
-﻿Public Interface IFilePersistable
+﻿Option Strict On
+Option Explicit On
+
+Public Interface IFilePersistable
     'Returns Nothing if object valid, otherwise a diagnostic message.
     Function Validate() As String
     'Set object references to null as needed for serialization.
