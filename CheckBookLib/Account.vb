@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Public Class Account
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -20,7 +20,7 @@ Public Class Account
     'Account has unsaved changes.
     Private mblnUnsavedChanges As Boolean
     'File number for Save().
-    Private mintSaveFile As Short
+    Private mintSaveFile As Integer
     'RegisterLoader object used by LoadRegister().
     'Is Nothing unless LoadRegister() is on the call stack.
     Private WithEvents mobjLoader As RegisterLoader
@@ -55,7 +55,7 @@ Public Class Account
 
     Public Property strTitle() As String
         Get
-            If Len(mstrTitle) Then
+            If Len(mstrTitle) > 0 Then
                 strTitle = mstrTitle
             Else
                 strTitle = mstrFileLoaded
@@ -125,7 +125,7 @@ Public Class Account
     End Sub
 
     Private Sub LoadIndividual(strAcctFile As String, datRegisterEndDate As Date)
-        Dim intFile As Short
+        Dim intFile As Integer
         Dim strLine As String
         Dim lngLinesRead As Integer
         Dim strRegKey As String = ""
@@ -323,7 +323,7 @@ Public Class Account
         objEverything.FireSomethingModified()
     End Sub
 
-    Private Sub LoadRegister(ByVal strLine As String, ByVal blnFake As Boolean, ByVal intFile As Short, ByVal datRptEndMax As Date, ByRef lngLinesRead As Integer)
+    Private Sub LoadRegister(ByVal strLine As String, ByVal blnFake As Boolean, ByVal intFile As Integer, ByVal datRptEndMax As Date, ByRef lngLinesRead As Integer)
 
         Dim strSearchRegKey As String
         Dim objReg As Register
@@ -339,7 +339,7 @@ Public Class Account
         End If
     End Sub
 
-    Private Sub SkipLegacyRegister(ByVal intFile As Short)
+    Private Sub SkipLegacyRegister(ByVal intFile As Integer)
         Dim strLine As String
         Do
             If EOF(intFile) Then

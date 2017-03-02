@@ -4,7 +4,7 @@ Public Class RegisterSaver
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     'Write lines for non-fake Trx to this file.
-    Private mintRealFile As Short
+    Private mintRealFile As Integer
     'Append lines for fake non-generated Trx to this Collection.
     Private mcolFakeLines As ICollection(Of String)
     'True iff saving a Register to create generated Trx from.
@@ -16,7 +16,7 @@ Public Class RegisterSaver
     Private mblnFake As Boolean
     Private mobjTrx As Trx
 
-    Public Sub Save(ByVal objReg_ As Register, ByVal intRealFile_ As Short, ByVal colFakeLines_ As ICollection(Of String))
+    Public Sub Save(ByVal objReg_ As Register, ByVal intRealFile_ As Integer, ByVal colFakeLines_ As ICollection(Of String))
 
         Dim lngIndex As Integer
 
