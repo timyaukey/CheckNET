@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 Public Class Register
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -43,9 +43,6 @@ Public Class Register
     Private mobjLog As EventLog
     'True iff operator deleted register.
     Private mblnDeleted As Boolean
-
-    'Temp hack to assign initial sequence numbers.
-    Private maintNextSeq(200) As Short
 
     'Fired by NewAddEnd() when it adds a Trx to the register.
     'Intended to allow the UI to update itself.
@@ -115,12 +112,6 @@ Public Class Register
         mobjLog.Init(Me, gobjSecurity.strLogin)
 
     End Sub
-
-    'Temp hack to assign initial sequence numbers.
-    Public Function intGetNextRepeatSeq(ByVal intRepeatKey As Short) As Short
-        maintNextSeq(intRepeatKey) = maintNextSeq(intRepeatKey) + 1
-        intGetNextRepeatSeq = maintNextSeq(intRepeatKey)
-    End Function
 
     '$Description Add a Trx object to the register at the correct place in the sort order,
     '   as part of a register loading operation.
@@ -692,7 +683,7 @@ Public Class Register
                            ByVal strDescription As String, ByVal curAmount As Decimal, ByVal blnLooseMatch As Boolean,
                            ByRef colMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean)
         Dim colExactMatches As ICollection(Of Integer) = Nothing
-        MatchCore(lngNumber, datDate, intDateRange, strDescription, curAmount, 0.0#, 0.0#, blnLooseMatch, colMatches, colExactMatches, blnExactMatch)
+        MatchCore(lngNumber, datDate, intDateRange, strDescription, curAmount, 0.0D, 0.0D, blnLooseMatch, colMatches, colExactMatches, blnExactMatch)
         PruneToExactMatches(colExactMatches, datDate, colMatches, blnExactMatch)
     End Sub
 
@@ -739,7 +730,7 @@ Public Class Register
                         End If
                     End If
                     If blnLooseMatch Then
-                        curAmountRange = System.Math.Abs(curAmount * 0.2)
+                        curAmountRange = System.Math.Abs(curAmount * 0.2D)
                         If .curNormalMatchRange > curAmountRange Then
                             curAmountRange = .curNormalMatchRange
                         End If
@@ -749,7 +740,7 @@ Public Class Register
                     blnDescrMatches = (Left(LCase(.strDescription), intDescrMatchLen) = strDescrLC)
                     blnDateMatches = (System.Math.Abs(DateDiff(Microsoft.VisualBasic.DateInterval.Day, .datDate, datDate)) < 6)
                     blnAmountMatches = (System.Math.Abs(.curAmount - curAmount) <= curAmountRange)
-                    If (IIf(blnAmountMatches, 1, 0) + IIf(blnDateMatches, 1, 0)) >= IIf(blnLooseMatch, 1, 2) Then
+                    If (CInt(IIf(blnAmountMatches, 1, 0)) + CInt(IIf(blnDateMatches, 1, 0))) >= CInt(IIf(blnLooseMatch, 1, 2)) Then
                         blnMatched = True
                     End If
                     If blnMatched Or blnDescrMatches Then
@@ -1309,7 +1300,7 @@ Public Class Register
                 strPriorSortKey = .strSortKey
                 .Validate(Me, lngIndex)
                 If .intRepeatSeq > 0 Then
-                    intRepeatTrxCount = intRepeatTrxCount + 1
+                    intRepeatTrxCount = intRepeatTrxCount + 1S
                 End If
             End With
         Next

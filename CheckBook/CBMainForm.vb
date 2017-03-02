@@ -38,11 +38,6 @@ Friend Class CBMainForm
             Dim strArg As String
             For intIndex = LBound(gstrCmdLinArgs) To UBound(gstrCmdLinArgs)
                 strArg = gstrCmdLinArgs(intIndex)
-                If strArg = "/rptseq" Then
-                    gblnAssignRepeatSeq = True
-                    gstrCmdLinArgs(intIndex) = ""
-                    MsgBox("Assigning repeat sequence numbers")
-                End If
                 If VB.Left(strArg, 10) = "/security:" Then
                     strSecurityOption = Mid(strArg, 11)
                     gstrCmdLinArgs(intIndex) = ""

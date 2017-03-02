@@ -24,9 +24,6 @@ Public Module CheckBookUtils
     'Key of budget used as placeholder in fake trx.
     Public gstrPlaceholderBudgetKey As String
 
-    'Temp hack
-    Public gblnAssignRepeatSeq As Boolean
-
     Public Function gstrAccountPath() As String
         gstrAccountPath = gstrDataPath() & "\Accounts"
     End Function

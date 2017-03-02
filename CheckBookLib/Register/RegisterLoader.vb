@@ -382,9 +382,6 @@ Public Class RegisterLoader
             'Hack to assign initial repeat keys.
             Dim intRepeatKey As Short
             intRepeatKey = Val(mstrRepeatKey)
-            If intRepeatKey > 0 And gblnAssignRepeatSeq Then
-                mintRepeatSeq = objTargetReg.intGetNextRepeatSeq(intRepeatKey)
-            End If
 
             If mintRepeatSeq > 0 Then
                 mobjRepeatSummarizer.Define(mstrRepeatKey, mstrDescription, False)
