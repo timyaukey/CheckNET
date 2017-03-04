@@ -1,4 +1,4 @@
-﻿Option Strict Off
+﻿Option Strict On
 Option Explicit On
 
 Imports System.Xml
@@ -16,11 +16,11 @@ Public Class VB6XmlDocument
 
     Public Sub New(ByVal doc As XmlNode)
         MyBase.New(doc)
-        mDoc = doc
+        mDoc = DirectCast(doc, XmlDocument)
     End Sub
 
     Public Function CreateElement(ByVal strElementName As String) As VB6XmlElement
-        CreateElement = VB6XmlNode.Create(mDoc.CreateElement(strElementName))
+        Return DirectCast(VB6XmlNode.Create(mDoc.CreateElement(strElementName)), VB6XmlElement)
     End Function
 
     Public Sub Load(ByVal strFullPath As String)

@@ -1,4 +1,4 @@
-﻿Option Strict Off
+﻿Option Strict On
 Option Explicit On
 
 Imports System.Xml
@@ -11,9 +11,9 @@ Public Class VB6XmlNode
         If node Is Nothing Then
             Create = Nothing
         ElseIf TypeOf node Is XmlElement Then
-            Create = New VB6XmlElement(node)
+            Create = New VB6XmlElement(DirectCast(node, XmlElement))
         ElseIf TypeOf node Is XmlText Then
-            Create = New VB6XmlText(node)
+            Create = New VB6XmlText(DirectCast(node, XmlText))
         ElseIf TypeOf node Is XmlDocument Then
             Create = New VB6XmlDocument(node)
         Else

@@ -1,5 +1,5 @@
-﻿Option Explicit On
-Option Strict On
+﻿Option Strict On
+Option Explicit On
 
 'Base class for all exceptions thrown by TrxGeneratorBase
 'and all subclasses that might realistically happen, as opposed

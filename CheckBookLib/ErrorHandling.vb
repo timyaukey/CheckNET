@@ -1,5 +1,6 @@
 Option Strict On
 Option Explicit On
+
 Public Module ErrorHandling
 
     'Error handling utilities.

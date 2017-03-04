@@ -1,5 +1,6 @@
 Option Strict On
 Option Explicit On
+
 Public Class Everything
 
     Public Event SomethingModified()

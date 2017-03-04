@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.IO
@@ -74,7 +74,7 @@ Public Module SharedDefs
     'End Function
 
     Public Function gobjInitialize() As Everything
-        Dim intIndex As Short
+        Dim intIndex As Integer
         Dim strArg As String
         Dim strPath As String
         Dim objEverything As Everything
@@ -103,7 +103,7 @@ Public Module SharedDefs
     End Function
 
     Public Function gblnUnrecognizedArgs() As Boolean
-        Dim intIndex As Short
+        Dim intIndex As Integer
         Dim strArg As String
 
         gblnUnrecognizedArgs = True
@@ -410,12 +410,12 @@ Public Module SharedDefs
         'Do thousands (if >0, 1 to 999 "thousand")
         'Do remainder (0 to 999)
 
-        Dim intMillions As Short
-        intMillions = Fix(curAmount / 1000000.0#)
-        Dim intThousands As Short
-        intThousands = Fix((curAmount - intMillions * 1000000.0#) / 1000.0#)
-        Dim intRemainder As Short
-        intRemainder = Fix(curAmount - intMillions * 1000000.0# - intThousands * 1000.0#)
+        Dim intMillions As Integer
+        intMillions = CInt(Fix(curAmount / 1000000.0#))
+        Dim intThousands As Integer
+        intThousands = CInt(Fix((curAmount - intMillions * 1000000.0#) / 1000.0#))
+        Dim intRemainder As Integer
+        intRemainder = CInt(Fix(curAmount - intMillions * 1000000.0# - intThousands * 1000.0#))
 
         Dim strResult As String = ""
         If intRemainder > 0 Or (intMillions = 0 And intThousands = 0) Then
@@ -431,10 +431,10 @@ Public Module SharedDefs
         gstrAmountToWords = Trim(strResult)
     End Function
 
-    Private Function strWordsLessThan1000(ByVal intNumber As Short) As String
-        Dim intHundredMult As Short
-        Dim intRemainder As Short
-        intHundredMult = Fix(intNumber / 100)
+    Private Function strWordsLessThan1000(ByVal intNumber As Integer) As String
+        Dim intHundredMult As Integer
+        Dim intRemainder As Integer
+        intHundredMult = CInt(Fix(intNumber / 100))
         intRemainder = intNumber Mod 100
         If intHundredMult > 0 Then
             If intRemainder = 0 Then
@@ -447,13 +447,13 @@ Public Module SharedDefs
         End If
     End Function
 
-    Private Function strWordLessThan100(ByVal intNumber As Short) As String
-        Dim intTenMult As Short
-        Dim intRemainder As Short
+    Private Function strWordLessThan100(ByVal intNumber As Integer) As String
+        Dim intTenMult As Integer
+        Dim intRemainder As Integer
         If intNumber < 20 Then
             strWordLessThan100 = strWordLessThan20(intNumber)
         Else
-            intTenMult = Fix(intNumber / 10)
+            intTenMult = CInt(Fix(intNumber / 10))
             intRemainder = intNumber Mod 10
             If intRemainder > 0 Then
                 strWordLessThan100 = strWordMultipliedByTen(intTenMult) & " " & strWordLessThan20(intRemainder)
@@ -463,7 +463,7 @@ Public Module SharedDefs
         End If
     End Function
 
-    Private Function strWordLessThan20(ByVal intNumber As Short) As String
+    Private Function strWordLessThan20(ByVal intNumber As Integer) As String
         Select Case intNumber
             Case 0 : strWordLessThan20 = "zero"
             Case 1 : strWordLessThan20 = "one"
@@ -489,7 +489,7 @@ Public Module SharedDefs
         End Select
     End Function
 
-    Private Function strWordMultipliedByTen(ByVal intNumber As Short) As String
+    Private Function strWordMultipliedByTen(ByVal intNumber As Integer) As String
         Select Case intNumber
             Case 2 : strWordMultipliedByTen = "twenty"
             Case 3 : strWordMultipliedByTen = "thirty"
@@ -532,12 +532,12 @@ Public Module SharedDefs
 
         Try
 
-            gdomTransTableUCS = gdomTransTable.CloneNode(True)
+            gdomTransTableUCS = DirectCast(gdomTransTable.CloneNode(True), VB6XmlDocument)
             colPayees = gdomTransTableUCS.DocumentElement.SelectNodes("Payee")
             For Each elmPayee In colPayees
                 vntOutput = elmPayee.GetAttribute("Output")
                 If Not gblnXmlAttributeMissing(vntOutput) Then
-                    elmPayee.SetAttribute("OutputUCS", UCase(vntOutput))
+                    elmPayee.SetAttribute("OutputUCS", UCase(CStr(vntOutput)))
                 End If
             Next elmPayee
 
@@ -602,7 +602,7 @@ Public Module SharedDefs
     End Function
 
     Public Function gblnValidAmount(ByVal strAmount As String) As Boolean
-        Dim intDotPos As Short
+        Dim intDotPos As Integer
         gblnValidAmount = False
         If Not IsNumeric(strAmount) Then
             Exit Function

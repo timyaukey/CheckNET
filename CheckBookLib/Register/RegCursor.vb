@@ -1,5 +1,6 @@
 Option Strict On
 Option Explicit On
+
 Public Class RegCursor
 
     'A cursor for navigating through a Register and returning Trx from it.

@@ -1,5 +1,6 @@
 Option Strict On
 Option Explicit On
+
 Imports VB = Microsoft.VisualBasic
 
 Public Module CheckBookUtils
