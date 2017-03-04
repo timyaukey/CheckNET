@@ -1,9 +1,8 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
+
 Public Class LogMove
     Implements ILogChange
-    Implements ILogger
-
 
     Private mstrTitle As String
     Private mobjOldTrx As Trx

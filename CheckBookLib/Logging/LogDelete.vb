@@ -1,9 +1,8 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
-Public Class LogDelete
-    Implements ILogger
-    Implements ILogDelete
 
+Public Class LogDelete
+    Implements ILogDelete
 
     Private mstrTitle As String
     Private mobjOldTrx As Trx

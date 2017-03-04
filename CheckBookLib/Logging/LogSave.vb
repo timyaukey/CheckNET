@@ -1,9 +1,8 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
+
 Public Class LogSave
     Implements ILogAction
-    Implements ILogger
-
 
     Private mstrTitle As String
     Private mdatTimestamp As Date

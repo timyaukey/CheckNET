@@ -1,9 +1,8 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
-Public Class LogAdd
-    Implements ILogger
-    Implements ILogAdd
 
+Public Class LogAdd
+    Implements ILogAdd
 
     Private mstrTitle As String
     Private mobjAddTrx As Trx

@@ -1,9 +1,8 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
+
 Public Class LogGroupEnd
     Implements ILogGroupEnd
-    Implements ILogger
-
 
     Private Sub ILogGroupEnd_Init() Implements ILogGroupEnd.Init
 

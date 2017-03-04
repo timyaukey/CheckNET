@@ -1,5 +1,6 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
+
 Public Class EventLog
 
     'Collection of all ILogger objects passed to AddILogg???().
@@ -150,7 +151,7 @@ Public Class EventLog
             End If
             If objTrx.strRepeatKey <> "" Then
                 .SetAttribute("RptName", mobjRepeats.strKeyToValue1(objTrx.strRepeatKey))
-                .SetAttribute("RptSeq", objTrx.intRepeatSeq)
+                .SetAttribute("RptSeq", CStr(objTrx.intRepeatSeq))
             End If
             Select Case objTrx.lngType
                 Case Trx.TrxType.glngTRXTYP_NORMAL
@@ -209,6 +210,6 @@ Public Class EventLog
 
     'Called by ILogger objects.
     Public Sub GroupEnd()
-        melmEventContainer = melmEventContainer.ParentNode
+        melmEventContainer = DirectCast(melmEventContainer.ParentNode, VB6XmlElement)
     End Sub
 End Class

@@ -1,9 +1,8 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
+
 Public Class LogGroupStart
     Implements ILogGroupStart
-    Implements ILogger
-
 
     Private mstrTitle As String
 
