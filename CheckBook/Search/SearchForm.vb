@@ -568,7 +568,7 @@ Friend Class SearchForm
                 objTrxManager = mobjReg.objGetTrxManager(objTrx)
                 colSplits = objTrx.colSplits
                 objTrxManager.UpdateStart()
-                objTrx.ClearSplits()
+                DirectCast(objTrx, NormalTrx).ClearSplits()
                 For Each objSplit In colSplits
                     With objSplit
                         strCatKey = objSplit.strCategoryKey
@@ -725,7 +725,7 @@ Friend Class SearchForm
                         End If
                     Else
                         'Changing register, and possibly date.
-                        Dim objTrxNew As Trx = New NormalTrx
+                        Dim objTrxNew As NormalTrx = New NormalTrx
                         objTrxNew.NewStartNormal(objNewReg, objTrxSrc)
                         objTrxNew.datDate = datNewDate
                         .CopySplits(objTrxNew)
