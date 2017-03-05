@@ -1,5 +1,6 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
+
 Public Class TrxGenRepeat
     Implements ITrxGenerator
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -11,7 +12,7 @@ Public Class TrxGenRepeat
     Private mdatSequence As DateSequenceParams
     Private mdatTrxTemplate As TrxToCreate
     Private mstrRepeatKey As String
-    Private mintStartRepeatSeq As Short
+    Private mintStartRepeatSeq As Integer
 
     Public Function ITrxGenerator_strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String Implements ITrxGenerator.strLoad
 
@@ -36,7 +37,7 @@ Public Class TrxGenRepeat
             ITrxGenerator_strLoad = "Missing [amount] attribute"
             Exit Function
         End If
-        If Not gblnValidAmount(vntAttrib) Then
+        If Not gblnValidAmount(CStr(vntAttrib)) Then
             ITrxGenerator_strLoad = "Invalid [amount] attribute"
             Exit Function
         End If

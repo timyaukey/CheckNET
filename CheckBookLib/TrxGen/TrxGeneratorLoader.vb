@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Public Module TrxGeneratorLoader
@@ -126,10 +126,10 @@ Public Module TrxGeneratorLoader
     End Sub
 
     Public Sub ShowTrxGenLoadError(ByVal strDescription As String, ByVal strError As String)
-        MsgBox("Error loading transaction generator [" & strDescription & "]:" & vbCrLf & strError, MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Checkbook")
+        MsgBox("Error loading transaction generator [" & strDescription & "]:" & vbCrLf & strError, MsgBoxStyle.OkOnly Or MsgBoxStyle.Critical, "Checkbook")
     End Sub
 
-    Public Function gdatIncrementDate(ByVal datStart As Date, ByVal lngUnit As Trx.RepeatUnit, ByVal intNumber As Short) As Date
+    Public Function gdatIncrementDate(ByVal datStart As Date, ByVal lngUnit As Trx.RepeatUnit, ByVal intNumber As Integer) As Date
 
         Select Case lngUnit
             Case Trx.RepeatUnit.glngRPTUNT_DAY
@@ -174,7 +174,7 @@ Public Module TrxGeneratorLoader
     '$Returns A non-empty error message if bad or missing data was encountered,
     '   else an empty string.
 
-    Public Function gstrLoadTrxGeneratorCore(ByVal domDoc As VB6XmlDocument, ByRef blnEnabled As Boolean, ByRef strRepeatKey As String, ByRef intStartRepeatSeq As Short, ByRef strDescription As String, ByVal objAccount As Account) As String
+    Public Function gstrLoadTrxGeneratorCore(ByVal domDoc As VB6XmlDocument, ByRef blnEnabled As Boolean, ByRef strRepeatKey As String, ByRef intStartRepeatSeq As Integer, ByRef strDescription As String, ByVal objAccount As Account) As String
 
         Dim vntAttrib As Object
 
@@ -184,7 +184,7 @@ Public Module TrxGeneratorLoader
             gstrLoadTrxGeneratorCore = "Missing [enabled] attribute"
             Exit Function
         End If
-        If vntAttrib <> "true" And vntAttrib <> "false" Then
+        If CStr(vntAttrib) <> "true" And CStr(vntAttrib) <> "false" Then
             gstrLoadTrxGeneratorCore = "[enabled] attribute must be ""true"" or ""false"""
             Exit Function
         End If
@@ -239,7 +239,7 @@ Public Module TrxGeneratorLoader
 
         gstrGetDateSequenceParams = ""
 
-        elmChild = elmParent.SelectSingleNode(strChildName)
+        elmChild = DirectCast(elmParent.SelectSingleNode(strChildName), VB6XmlElement)
         If elmChild Is Nothing Then
             gstrGetDateSequenceParams = "Could not find <" & strChildName & "> element"
             Exit Function
@@ -250,7 +250,7 @@ Public Module TrxGeneratorLoader
             gstrGetDateSequenceParams = "Missing [unit] attribute"
             Exit Function
         End If
-        datParams.lngRptUnit = glngConvertRepeatUnit(UCase(vntAttrib))
+        datParams.lngRptUnit = glngConvertRepeatUnit(UCase(CStr(vntAttrib)))
         If datParams.lngRptUnit = Trx.RepeatUnit.glngRPTUNT_MISSING Then
             gstrGetDateSequenceParams = "Invalid [unit] attribute"
             Exit Function
@@ -304,14 +304,14 @@ Public Module TrxGeneratorLoader
     '   This allows a "for" loop from 1 to UBound(array) to interate the
     '   elements even if no SequencedTrx were created.
 
-    Public Function gdatLoadSequencedTrx(ByVal elmParent As VB6XmlElement, ByVal strChildName As String, ByVal dblDefaultPercentIncrease As Double, ByVal intStartRepeatSeq As Short, ByRef strError As String) As SequencedTrx()
+    Public Function gdatLoadSequencedTrx(ByVal elmParent As VB6XmlElement, ByVal strChildName As String, ByVal dblDefaultPercentIncrease As Double, ByVal intStartRepeatSeq As Integer, ByRef strError As String) As SequencedTrx()
 
         Dim colSeq As VB6XmlNodeList
         Dim elmSeq As VB6XmlElement
         Dim datResults() As SequencedTrx
-        Dim intResultIndex As Short
+        Dim intResultIndex As Integer
         Dim strErrorEnding As String
-        Dim intRepeatSeq As Short
+        Dim intRepeatSeq As Integer
 
         ReDim gdatLoadSequencedTrx(0)
         strError = ""
@@ -340,13 +340,13 @@ Public Module TrxGeneratorLoader
             intResultIndex = intResultIndex + 1
         Next elmSeq
 
-        gdatLoadSequencedTrx = datResults.Clone()
+        Return DirectCast(datResults.Clone(), SequencedTrx())
 
     End Function
 
     '$Description Create one SequencedTrx from attributes of an XML element.
 
-    Public Function gdatCreateOneSequencedTrx(ByVal elmSeq As VB6XmlElement, ByVal dblDefaultPercentIncrease As Double, ByVal intRepeatSeq As Short, ByVal strErrorEnding As String, ByRef strError As String) As SequencedTrx
+    Public Function gdatCreateOneSequencedTrx(ByVal elmSeq As VB6XmlElement, ByVal dblDefaultPercentIncrease As Double, ByVal intRepeatSeq As Integer, ByVal strErrorEnding As String, ByRef strError As String) As SequencedTrx
 
         Dim vntAttrib As Object
         Dim curAmount As Decimal
@@ -360,7 +360,7 @@ Public Module TrxGeneratorLoader
             strError = "Missing [date] attribute" & strErrorEnding
             Exit Function
         End If
-        If gblnValidDate(vntAttrib) Then
+        If gblnValidDate(CStr(vntAttrib)) Then
             datTrxDate = CDate(vntAttrib)
         Else
             strError = "Invalid [date] attribute" & strErrorEnding
@@ -370,7 +370,7 @@ Public Module TrxGeneratorLoader
         If gblnXmlAttributeMissing(vntAttrib) Then
             dblPercentIncrease = dblDefaultPercentIncrease
         Else
-            If Not gblnValidAmount(vntAttrib) Then
+            If Not gblnValidAmount(CStr(vntAttrib)) Then
                 strError = "Invalid [increasepercent] attribute" & strErrorEnding
                 Exit Function
             End If
@@ -381,8 +381,8 @@ Public Module TrxGeneratorLoader
             strError = "Missing [amount] attribute" & strErrorEnding
             Exit Function
         End If
-        If gblnValidAmount(vntAttrib) Then
-            curAmount = CDec(vntAttrib) * (1.0# + dblPercentIncrease)
+        If gblnValidAmount(CStr(vntAttrib)) Then
+            curAmount = CDec(vntAttrib) * CDec((1.0# + dblPercentIncrease))
         Else
             strError = "Invalid [amount] attribute" & strErrorEnding
             Exit Function
@@ -404,12 +404,12 @@ Public Module TrxGeneratorLoader
     '$Param The number of days in the longest period returned.
     '$Returns The new period and amount list.
 
-    Public Function gdatSplitSequencedTrx(ByVal datFirstPeriodStarts As Date, ByRef datPeriodEndings() As SequencedTrx, ByRef intLongestOutputPeriod As Short) As SequencedTrx()
+    Public Function gdatSplitSequencedTrx(ByVal datFirstPeriodStarts As Date, ByRef datPeriodEndings() As SequencedTrx, ByRef intLongestOutputPeriod As Integer) As SequencedTrx()
 
         Dim datResults() As SequencedTrx
-        Dim intInPeriods As Short
-        Dim intInIndex As Short
-        Dim intOutIndex As Short
+        Dim intInPeriods As Integer
+        Dim intInIndex As Integer
+        Dim intOutIndex As Integer
         Dim datPeriodStarts As Date
         Dim datNewEndDate As Date
         Dim curOldAmount As Decimal
@@ -417,9 +417,9 @@ Public Module TrxGeneratorLoader
         Dim curDiffAfter As Decimal
         Dim curFirstNewAmount As Decimal
         Dim curSecondNewAmount As Decimal
-        Dim intFirstHalfDays As Short
-        Dim intOldDays As Short
-        Dim intSecondHalfDays As Short
+        Dim intFirstHalfDays As Integer
+        Dim intOldDays As Integer
+        Dim intSecondHalfDays As Integer
         Dim objFirstNew As SequencedTrx
         Dim objSecondNew As SequencedTrx
         Dim curNetMove As Decimal
@@ -432,12 +432,12 @@ Public Module TrxGeneratorLoader
         datPeriodStarts = datFirstPeriodStarts
         intOutIndex = 1
         For intInIndex = 1 To intInPeriods
-            intOldDays = datPeriodEndings(intInIndex).datDate.ToOADate - datPeriodStarts.ToOADate + 1
+            intOldDays = CInt(datPeriodEndings(intInIndex).datDate.ToOADate - datPeriodStarts.ToOADate + 1)
             'Can old period be divided?
             If intOldDays > 1 Then
                 'Yes - so divide it.
                 'Compute length of each sub-period.
-                intFirstHalfDays = intOldDays / 2
+                intFirstHalfDays = CInt(intOldDays / 2)
                 intSecondHalfDays = intOldDays - intFirstHalfDays
                 'Remember length of longest period in output array.
                 If intFirstHalfDays > intLongestOutputPeriod Then
@@ -452,7 +452,7 @@ Public Module TrxGeneratorLoader
                 'First divide the amount of the old period proportionally
                 'to the number of days in each sub-period.
                 curOldAmount = datPeriodEndings(intInIndex).curAmount
-                curFirstNewAmount = System.Math.Round(curOldAmount * CDbl(intFirstHalfDays) / CDbl(intOldDays), 2)
+                curFirstNewAmount = CDec(System.Math.Round(curOldAmount * CDbl(intFirstHalfDays) / CDbl(intOldDays), 2))
                 curSecondNewAmount = curOldAmount - curFirstNewAmount
                 'Then move amount from one new split to the other based on
                 'the difference between the old amount and the amounts of the
@@ -476,7 +476,7 @@ Public Module TrxGeneratorLoader
                     'This is how we clamp curNetMove to zero when either of
                     'the adjacent splits is equal to the current split in amount.
                     dblMoveScale = System.Math.Abs(curDiffBefore * curDiffAfter) / ((dblTemp * dblTemp) / 4.0#)
-                    curNetMove = System.Math.Round(dblMoveScale * (curDiffBefore + curDiffAfter) / 8.0#, 2)
+                    curNetMove = CDec(System.Math.Round(dblMoveScale * (curDiffBefore + curDiffAfter) / 8.0#, 2))
                 End If
                 'Move curNetMove from first split to second.
                 curFirstNewAmount = curFirstNewAmount - curNetMove
@@ -500,8 +500,7 @@ Public Module TrxGeneratorLoader
 
         ReDim Preserve datResults(intOutIndex - 1)
 
-        'gdatSplitSequencedTrx = VB6.CopyArray(datResults)
-        gdatSplitSequencedTrx = datResults.Clone()
+        Return DirectCast(datResults.Clone(), SequencedTrx())
 
     End Function
 
@@ -523,11 +522,11 @@ Public Module TrxGeneratorLoader
         'LSet datTrxTemplate = mdatNullTrxToCreate
         datTrxTemplate = gdatCopyTrxToCreate(mdatNullTrxToCreate)
 
-        elmTrxTpt = domDoc.DocumentElement.SelectSingleNode("normaltrx")
+        elmTrxTpt = DirectCast(domDoc.DocumentElement.SelectSingleNode("normaltrx"), VB6XmlElement)
         If elmTrxTpt Is Nothing Then
-            elmTrxTpt = domDoc.DocumentElement.SelectSingleNode("budgettrx")
+            elmTrxTpt = DirectCast(domDoc.DocumentElement.SelectSingleNode("budgettrx"), VB6XmlElement)
             If elmTrxTpt Is Nothing Then
-                elmTrxTpt = domDoc.DocumentElement.SelectSingleNode("transfertrx")
+                elmTrxTpt = DirectCast(domDoc.DocumentElement.SelectSingleNode("transfertrx"), VB6XmlElement)
                 If elmTrxTpt Is Nothing Then
                     gstrGetTrxGenTemplate = "Unable to find <normaltrx>, <budgettrx> or <transfertrx> element"
                     Exit Function
@@ -585,7 +584,7 @@ Public Module TrxGeneratorLoader
             gstrGetTrxGenTemplateBudget = "Missing [budgetkey] attribute"
             Exit Function
         End If
-        If gobjBudgets.intLookupKey(vntAttrib) = 0 Then
+        If gobjBudgets.intLookupKey(CStr(vntAttrib)) = 0 Then
             gstrGetTrxGenTemplateBudget = "Invalid [budgetkey] attribute"
             Exit Function
         End If
@@ -596,7 +595,7 @@ Public Module TrxGeneratorLoader
             gstrGetTrxGenTemplateBudget = "Missing [budgetunit] attribute"
             Exit Function
         End If
-        datTrxTemplate.lngBudgetUnit = glngConvertRepeatUnit(UCase(vntAttrib))
+        datTrxTemplate.lngBudgetUnit = glngConvertRepeatUnit(UCase(CStr(vntAttrib)))
         If datTrxTemplate.lngBudgetUnit = Trx.RepeatUnit.glngRPTUNT_MISSING Then
             gstrGetTrxGenTemplateBudget = "Invalid [budgetunit] attribute"
             Exit Function
@@ -607,7 +606,7 @@ Public Module TrxGeneratorLoader
             gstrGetTrxGenTemplateBudget = "Missing [budgetnumber] attribute"
             Exit Function
         End If
-        datTrxTemplate.intBudgetNumber = gintConvertRepeatCount(vntAttrib)
+        datTrxTemplate.intBudgetNumber = gintConvertRepeatCount(CStr(vntAttrib))
         If datTrxTemplate.intBudgetNumber = 0 Then
             gstrGetTrxGenTemplateBudget = "Invalid [budgetnumber] attribute"
             Exit Function
@@ -643,7 +642,7 @@ Public Module TrxGeneratorLoader
             gstrGetTrxGenTemplateNormal = "Missing [number] attribute"
             Exit Function
         End If
-        If InStr("|pmt|ord|inv|dep|xfr|eft|crm|card|", "|" & LCase(vntAttrib) & "|") = 0 Then
+        If InStr("|pmt|ord|inv|dep|xfr|eft|crm|card|", "|" & LCase(CStr(vntAttrib)) & "|") = 0 Then
             gstrGetTrxGenTemplateNormal = "Invalid [number] attribute"
             Exit Function
         End If
@@ -654,7 +653,7 @@ Public Module TrxGeneratorLoader
             gstrGetTrxGenTemplateNormal = "Missing [catkey] attribute"
             Exit Function
         End If
-        If gobjCategories.intLookupKey(vntAttrib) = 0 Then
+        If gobjCategories.intLookupKey(CStr(vntAttrib)) = 0 Then
             gstrGetTrxGenTemplateNormal = "Invalid [catkey] attribute"
             Exit Function
         End If
@@ -662,7 +661,7 @@ Public Module TrxGeneratorLoader
         'Budget key.
         vntAttrib = elmTrxTpt.GetAttribute("budgetkey")
         If Not gblnXmlAttributeMissing(vntAttrib) Then
-            If gobjBudgets.intLookupKey(vntAttrib) = 0 Then
+            If gobjBudgets.intLookupKey(CStr(vntAttrib)) = 0 Then
                 gstrGetTrxGenTemplateNormal = "Invalid [budgetkey] attribute"
                 Exit Function
             End If
@@ -723,7 +722,7 @@ Public Module TrxGeneratorLoader
         If datInput.adatSplits Is Nothing Then
             gdatCopyTrxToCreate.adatSplits = Nothing
         Else
-            gdatCopyTrxToCreate.adatSplits = datInput.adatSplits.Clone()
+            gdatCopyTrxToCreate.adatSplits = DirectCast(datInput.adatSplits.Clone(), SplitToCreate())
         End If
     End Function
 End Module

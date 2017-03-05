@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 'This interface is used to generate lists of transactions by following
@@ -58,15 +58,15 @@ Public Structure TrxToCreate
     Dim blnAwaitingReview As Boolean
     Dim curNormalMatchRange As Decimal
     Dim strImportKey As String
-    Dim intRepeatSeq As Short
+    Dim intRepeatSeq As Integer
     Dim strRepeatKey As String
-    Dim intSplits As Short
+    Dim intSplits As Integer
     Dim adatSplits() As SplitToCreate
     Dim curAmount As Decimal
     Dim strBudgetKey As String
     Dim datBudgetEnds As Date
     Dim lngBudgetUnit As Trx.RepeatUnit
-    Dim intBudgetNumber As Short
+    Dim intBudgetNumber As Integer
     Dim strTransferKey As String
 End Structure
 

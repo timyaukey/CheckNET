@@ -1,5 +1,6 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
+
 Public Class TrxGenList
     Implements ITrxGenerator
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -8,7 +9,7 @@ Public Class TrxGenList
     Private mstrDescription As String
     Private mblnEnabled As Boolean
     Private mstrRepeatKey As String
-    Private mintStartRepeatSeq As Short
+    Private mintStartRepeatSeq As Integer
     Private maudtTrx() As TrxToCreate
 
     Public Function ITrxGenerator_strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String Implements ITrxGenerator.strLoad
@@ -19,10 +20,10 @@ Public Class TrxGenList
         Dim udtTrx As TrxToCreate = New TrxToCreate()
         Dim datDate As Date
         Dim curAmount As Decimal
-        Dim intCount As Short
+        Dim intCount As Integer
         Dim strMsg As String
         Dim blnAddTrx As Boolean
-        Dim intNextRepeatSeq As Short
+        Dim intNextRepeatSeq As Integer
 
         strError = gstrLoadTrxGeneratorCore(domDoc, mblnEnabled, mstrRepeatKey, mintStartRepeatSeq, mstrDescription, objAccount)
         If strError <> "" Then
@@ -35,7 +36,7 @@ Public Class TrxGenList
         ReDim maudtTrx(1)
         For Each nodeTrx In domDoc.DocumentElement.ChildNodes
             If TypeOf nodeTrx Is VB6XmlElement Then
-                elmTrx = nodeTrx
+                elmTrx = DirectCast(nodeTrx, VB6XmlElement)
                 blnAddTrx = False
                 'To allow budget and xfer trx all that should be necessary
                 'is to clone the "If" statement below for the appropriate element
@@ -78,7 +79,7 @@ Public Class TrxGenList
             strGetCommonFields = "Missing [date] attribute"
             Exit Function
         End If
-        If Not gblnValidDate(vntAttrib) Then
+        If Not gblnValidDate(CStr(vntAttrib)) Then
             strGetCommonFields = "Invalid [date] attribute"
             Exit Function
         End If
@@ -89,7 +90,7 @@ Public Class TrxGenList
             strGetCommonFields = "Missing [amount] attribute"
             Exit Function
         End If
-        If Not gblnValidAmount(vntAttrib) Then
+        If Not gblnValidAmount(CStr(vntAttrib)) Then
             strGetCommonFields = "Invalid [amount] attribute"
             Exit Function
         End If

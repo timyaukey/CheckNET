@@ -1,5 +1,6 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
+
 Public Class TrxGenPeriod
     Implements ITrxGenerator
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -12,7 +13,7 @@ Public Class TrxGenPeriod
     Private mdblDefaultPercentIncrease As Double
     Private mdatTrxTemplate As TrxToCreate
     Private mstrRepeatKey As String
-    Private mintStartRepeatSeq As Short
+    Private mintStartRepeatSeq As Integer
     Private mdblDOWUsage(7) As Double 'vbSunday to vbSaturday
 
     Public Function ITrxGenerator_strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String Implements ITrxGenerator.strLoad
@@ -22,7 +23,7 @@ Public Class TrxGenPeriod
         Dim elmDOWUsage As VB6XmlElement
         Dim elmScaling As VB6XmlElement
         Dim dblTotalDOWWeights As Double
-        Dim intIndex As Short
+        Dim intIndex As Integer
         Dim vntAttrib As Object
 
         strError = gstrLoadTrxGeneratorCore(domDoc, mblnEnabled, mstrRepeatKey, mintStartRepeatSeq, mstrDescription, objAccount)
@@ -32,7 +33,7 @@ Public Class TrxGenPeriod
         End If
 
         'Load <dowusage> element.
-        elmDOWUsage = domDoc.DocumentElement.SelectSingleNode("dowusage")
+        elmDOWUsage = DirectCast(domDoc.DocumentElement.SelectSingleNode("dowusage"), VB6XmlElement)
         If elmDOWUsage Is Nothing Then
             ITrxGenerator_strLoad = "Missing <dowusage> element"
             Exit Function
@@ -82,7 +83,7 @@ Public Class TrxGenPeriod
         Next
 
         'Load first period start date.
-        elmFirst = domDoc.DocumentElement.SelectSingleNode("firstperiodstarts")
+        elmFirst = DirectCast(domDoc.DocumentElement.SelectSingleNode("firstperiodstarts"), VB6XmlElement)
         If elmFirst Is Nothing Then
             ITrxGenerator_strLoad = "Missing <firstperiodstarts> element"
             Exit Function
@@ -92,14 +93,14 @@ Public Class TrxGenPeriod
             ITrxGenerator_strLoad = "Missing [date] attribute of <firstperiodstarts> element"
             Exit Function
         End If
-        If Not gblnValidDate(vntAttrib) Then
+        If Not gblnValidDate(CStr(vntAttrib)) Then
             ITrxGenerator_strLoad = "Invalid [date] attribute of <firstperiodstarts> element"
             Exit Function
         End If
         mdatFirstPeriodStarts = CDate(vntAttrib)
 
         'Load default amount scaling percentage.
-        elmScaling = domDoc.DocumentElement.SelectSingleNode("scaling")
+        elmScaling = DirectCast(domDoc.DocumentElement.SelectSingleNode("scaling"), VB6XmlElement)
         If elmScaling Is Nothing Then
             mdblDefaultPercentIncrease = 0.0#
         Else
@@ -108,7 +109,7 @@ Public Class TrxGenPeriod
                 ITrxGenerator_strLoad = "Missing [increasepercent] attribute of <scaling> element"
                 Exit Function
             End If
-            If gblnValidAmount(vntAttrib) Then
+            If gblnValidAmount(CStr(vntAttrib)) Then
                 mdblDefaultPercentIncrease = CDbl(vntAttrib) / 100.0#
             Else
                 ITrxGenerator_strLoad = "Invalid [increasepercent] attribute of <scaling> element"
@@ -170,21 +171,21 @@ Public Class TrxGenPeriod
     Public Function ITrxGenerator_colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As ICollection(Of TrxToCreate) Implements ITrxGenerator.colCreateTrx
 
         Dim datNewTrx() As SequencedTrx
-        Dim intLongestOutputPeriod As Short
-        Dim intIndex As Short
-        Dim intStartIndex As Short
-        Dim intStartDOW As Short
+        Dim intLongestOutputPeriod As Integer
+        Dim intIndex As Integer
+        Dim intStartIndex As Integer
+        Dim intStartDOW As Integer
         Dim curWeekTotal As Decimal
         Dim curWeekRemainder As Decimal
         Dim curDayAmount As Decimal
-        Dim intCurrentDOW As Short
-        Dim intRemainderIndex As Short
-        Dim intRepeatSeq As Short
+        Dim intCurrentDOW As Integer
+        Dim intRemainderIndex As Integer
+        Dim intRepeatSeq As Integer
 
         'Subdivide periods and totals using a distribution which approximates
         'a smooth curve, and repeat until all periods are one day in length.
         'datNewTrx = VB6.CopyArray(mdatPeriodEndings)
-        datNewTrx = mdatPeriodEndings.Clone()
+        datNewTrx = DirectCast(mdatPeriodEndings.Clone(), SequencedTrx())
         Do
             datNewTrx = gdatSplitSequencedTrx(mdatFirstPeriodStarts, datNewTrx, intLongestOutputPeriod)
             If intLongestOutputPeriod = 1 Then
@@ -217,7 +218,7 @@ Public Class TrxGenPeriod
             intRemainderIndex = intStartIndex
             intCurrentDOW = intStartDOW
             For intIndex = intStartIndex To intStartIndex + 6
-                curDayAmount = System.Math.Round(curWeekTotal * mdblDOWUsage(intCurrentDOW), 2)
+                curDayAmount = CDec(System.Math.Round(curWeekTotal * mdblDOWUsage(intCurrentDOW), 2))
                 If intCurrentDOW = FirstDayOfWeek.Saturday Then
                     intCurrentDOW = FirstDayOfWeek.Sunday
                 Else

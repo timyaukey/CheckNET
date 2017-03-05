@@ -1,5 +1,6 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
+
 Public Class TrxGenInterpolate
     Implements ITrxGenerator
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -11,7 +12,7 @@ Public Class TrxGenInterpolate
     Private mdatSamples() As SequencedTrx
     Private mdatTrxTemplate As TrxToCreate
     Private mstrRepeatKey As String
-    Private mintStartRepeatSeq As Short
+    Private mintStartRepeatSeq As Integer
 
     Public Function ITrxGenerator_strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String Implements ITrxGenerator.strLoad
 
