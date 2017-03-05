@@ -8,7 +8,7 @@ Option Explicit On
 ''' </summary>
 
 Public Class ImportedTrx
-    Inherits Trx
+    Inherits NormalTrx
 
     'Import match narrowing method
     Private mlngNarrowMethod As ImportMatchNarrowMethod

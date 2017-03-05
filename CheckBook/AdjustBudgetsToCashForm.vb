@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports CheckBookLib
@@ -141,9 +141,9 @@ Friend Class AdjustBudgetsToCashForm
     '$Description Validate the specifications, and set up mastrBudgetKey().
 
     Private Function blnValidate() As Boolean
-        Dim intTotalPercent As Short
-        Dim intIndex As Short
-        Dim intBudgetsSelected As Short
+        Dim intTotalPercent As Integer
+        Dim intIndex As Integer
+        Dim intBudgetsSelected As Integer
 
         Try
 
@@ -182,7 +182,7 @@ Friend Class AdjustBudgetsToCashForm
                 Exit Function
             End If
 
-            If MsgBox("Do you really want to fix these budgets?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+            If MsgBox("Do you really want to fix these budgets?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
                 Exit Function
             End If
 
@@ -194,7 +194,7 @@ Friend Class AdjustBudgetsToCashForm
         End Try
     End Function
 
-    Private Function blnBudgetUsed(ByVal intIndex As Short) As Boolean
+    Private Function blnBudgetUsed(ByVal intIndex As Integer) As Boolean
         blnBudgetUsed = (cboBudget(intIndex).SelectedIndex > 0)
     End Function
 
@@ -255,7 +255,7 @@ Friend Class AdjustBudgetsToCashForm
                     'Check against each budget key we are looking for.
                     For intBudget = 1 To mintNUM_BUDGETS
                         'Is this budget key specified?
-                        If Len(mastrBudgetKey(intBudget)) Then
+                        If Len(mastrBudgetKey(intBudget)) > 0 Then
                             'Does it match the current trx?
                             If mastrBudgetKey(intBudget) = strTrxBudgetKey Then
                                 'Remember where we found it. Note that this index
@@ -293,13 +293,13 @@ Friend Class AdjustBudgetsToCashForm
     '   Called once for each day found by blnScanWholeDaysForBudgets().
 
     Private Sub ZeroMatchedBudgets()
-        Dim intBudget As Short
+        Dim intBudget As Integer
 
         Try
 
             For intBudget = 1 To mintNUM_BUDGETS
-                If Len(mastrBudgetKey(intBudget)) Then
-                    If malngRegIndex(intBudget) Then
+                If Len(mastrBudgetKey(intBudget)) > 0 Then
+                    If malngRegIndex(intBudget) > 0 Then
                         UpdateBudget(malngRegIndex(intBudget), 0, intBudget)
                     End If
                 End If
@@ -321,14 +321,14 @@ Friend Class AdjustBudgetsToCashForm
 
     Private Sub SetBudgets(ByRef lngContinueIndex As Integer, ByVal datMatch As Date)
 
-        Dim intBudget As Short
+        Dim intBudget As Integer
         Dim lngUpdateIndex As Integer
-        Dim objTrx As Trx
+        Dim objBudgetTrx As BudgetTrx
         Dim datBudgetEnds As Date
         Dim acurNewLimit(mintNUM_BUDGETS) As Decimal
         Dim curTotalAvailable As Decimal
         Dim curRemainderAvailable As Decimal
-        Dim intLastSpecifiedBudget As Short
+        Dim intLastSpecifiedBudget As Integer
         Dim curAlreadySpent As Decimal
 
         Try
@@ -341,7 +341,7 @@ Friend Class AdjustBudgetsToCashForm
 
             'How much money do we have available?
             For intBudget = 1 To mintNUM_BUDGETS
-                If Len(mastrBudgetKey(intBudget)) Then
+                If Len(mastrBudgetKey(intBudget)) > 0 Then
                     'To avoid rounding problems, the last specified budget always gets
                     'what is left over rather than computing it as a percentage of the
                     'total available as we do for the others.
@@ -358,11 +358,11 @@ Friend Class AdjustBudgetsToCashForm
             'Divide it up.
             curRemainderAvailable = curTotalAvailable
             For intBudget = 1 To mintNUM_BUDGETS
-                If Len(mastrBudgetKey(intBudget)) Then
+                If Len(mastrBudgetKey(intBudget)) > 0 Then
                     If intBudget = intLastSpecifiedBudget Then
                         acurNewLimit(intBudget) = -curRemainderAvailable
                     Else
-                        acurNewLimit(intBudget) = -curTotalAvailable * (CDbl(txtPercent(intBudget).Text) / 100.0#)
+                        acurNewLimit(intBudget) = -curTotalAvailable * (CDec(txtPercent(intBudget).Text) / 100D)
                         curRemainderAvailable = curRemainderAvailable + acurNewLimit(intBudget)
                     End If
                 End If
@@ -376,30 +376,30 @@ Friend Class AdjustBudgetsToCashForm
             'the updates first means we won't break if that behavior
             'changes.
             For intBudget = 1 To mintNUM_BUDGETS
-                If Len(mastrBudgetKey(intBudget)) Then
+                If Len(mastrBudgetKey(intBudget)) > 0 Then
                     lngUpdateIndex = malngRegIndex(intBudget)
                     If lngUpdateIndex > 0 Then
                         UpdateBudget(lngUpdateIndex, acurNewLimit(intBudget), intBudget)
-                        objTrx = mobjReg.objTrx(lngUpdateIndex)
-                        ShowBudget(objTrx)
-                        If System.Math.Abs(objTrx.curBudgetApplied) > System.Math.Abs(objTrx.curBudgetLimit) Then
+                        objBudgetTrx = DirectCast(mobjReg.objTrx(lngUpdateIndex), BudgetTrx)
+                        ShowBudget(objBudgetTrx)
+                        If System.Math.Abs(objBudgetTrx.curBudgetApplied) > System.Math.Abs(objBudgetTrx.curBudgetLimit) Then
                             mblnAdjustedBudgetExceeded = True
                         End If
                         'Use the same budget ending date for new trx.
                         'Assume they all end on the same date.
-                        datBudgetEnds = objTrx.datBudgetEnds
+                        datBudgetEnds = objBudgetTrx.datBudgetEnds
                     End If
                 End If
             Next
 
             'Now add any missing budgets.
             For intBudget = 1 To mintNUM_BUDGETS
-                If Len(mastrBudgetKey(intBudget)) Then
+                If Len(mastrBudgetKey(intBudget)) > 0 Then
                     If malngRegIndex(intBudget) = 0 Then
-                        objTrx = New Trx
-                        objTrx.NewStartBudget(mobjReg, datMatch, txtPrefix.Text & mobjBudgets.strKeyToValue1(mastrBudgetKey(intBudget)), "", False, False, 0, "", acurNewLimit(intBudget), datBudgetEnds, mastrBudgetKey(intBudget))
-                        mobjReg.NewAddEnd(objTrx, New LogAdd, "AdjustBudgetsToCashForm.SetBudgets")
-                        ShowBudget(objTrx)
+                        objBudgetTrx = New BudgetTrx()
+                        objBudgetTrx.NewStartBudget(mobjReg, datMatch, txtPrefix.Text & mobjBudgets.strKeyToValue1(mastrBudgetKey(intBudget)), "", False, False, 0, "", acurNewLimit(intBudget), datBudgetEnds, mastrBudgetKey(intBudget))
+                        mobjReg.NewAddEnd(objBudgetTrx, New LogAdd, "AdjustBudgetsToCashForm.SetBudgets")
+                        ShowBudget(objBudgetTrx)
                         'The added budget by definition will be inserted
                         'above the continue point for the budget search,
                         'so increment that to keep it accurate.
@@ -417,7 +417,7 @@ Friend Class AdjustBudgetsToCashForm
     '$Description Update the limit of an existing budget, after confirming as a
     '   sanity check that it still has the expected register index.
 
-    Private Sub UpdateBudget(ByVal lngIndex As Integer, ByVal curLimit As Decimal, ByVal intBudget As Short)
+    Private Sub UpdateBudget(ByVal lngIndex As Integer, ByVal curLimit As Decimal, ByVal intBudget As Integer)
 
         Dim objTrxManager As TrxManager
 
@@ -443,26 +443,26 @@ Friend Class AdjustBudgetsToCashForm
     '$Description Show a budget transaction in the list of budgets affected by
     '   this form.
 
-    Private Sub ShowBudget(ByVal objTrx As Trx)
+    Private Sub ShowBudget(ByVal objBudgetTrx As BudgetTrx)
         Dim objItem As System.Windows.Forms.ListViewItem
 
         objItem = gobjListViewAdd(lvwResults)
         With objItem
-            .Text = gstrFormatDate(objTrx.datDate)
+            .Text = gstrFormatDate(objBudgetTrx.datDate)
             If objItem.SubItems.Count > 1 Then
-                objItem.SubItems(1).Text = objTrx.strDescription
+                objItem.SubItems(1).Text = objBudgetTrx.strDescription
             Else
-                objItem.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objTrx.strDescription))
+                objItem.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objBudgetTrx.strDescription))
             End If
             If objItem.SubItems.Count > 2 Then
-                objItem.SubItems(2).Text = gstrFormatCurrency(objTrx.curBudgetLimit)
+                objItem.SubItems(2).Text = gstrFormatCurrency(objBudgetTrx.curBudgetLimit)
             Else
-                objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objTrx.curBudgetLimit)))
+                objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objBudgetTrx.curBudgetLimit)))
             End If
             If objItem.SubItems.Count > 3 Then
-                objItem.SubItems(3).Text = gstrFormatCurrency(objTrx.curBudgetApplied)
+                objItem.SubItems(3).Text = gstrFormatCurrency(objBudgetTrx.curBudgetApplied)
             Else
-                objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objTrx.curBudgetApplied)))
+                objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objBudgetTrx.curBudgetApplied)))
             End If
         End With
     End Sub

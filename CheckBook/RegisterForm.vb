@@ -205,7 +205,7 @@ Friend Class RegisterForm
 
     Private Sub cmdNewNormal_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewNormal.Click
         Try
-            Dim objTrx As Trx = New Trx
+            Dim objTrx As NormalTrx = New NormalTrx
             objTrx.NewEmptyNormal(mobjReg, mdatDefaultNewDate)
             Using frm As TrxForm = frmCreateTrxForm()
                 If frm.blnAddNormal(mobjAccount, mobjReg, objTrx, mdatDefaultNewDate, True, "RegForm.NewNormal") Then
@@ -287,18 +287,18 @@ Friend Class RegisterForm
                 Function(objTrx As Trx) objTrx.curBalance.ToString(gstrFORMAT_CURRENCY), _
                 True)
         End If
-        ConfigGridCol(intCol, mintColCategory, "Category", 1800, _
-            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxCat(objTrx), ""))
-        ConfigGridCol(intCol, mintColPONumber, "PO#", 900, _
-            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxPONumber(objTrx), ""))
-        ConfigGridCol(intCol, mintColInvoiceNum, "Invoice#", 900, _
-            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxInvoiceNum(objTrx), ""))
-        ConfigGridCol(intCol, mintColInvoiceDate, "Inv. Date", 700, _
-            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxInvoiceDate(objTrx), ""))
-        ConfigGridCol(intCol, mintColDueDate, "Due Date", 700, _
-            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxDueDate(objTrx), ""))
-        ConfigGridCol(intCol, mintColTerms, "Terms", 800, _
-            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxTerms(objTrx), ""))
+        ConfigGridCol(intCol, mintColCategory, "Category", 1800,
+            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxCat(DirectCast(objTrx, NormalTrx)), ""))
+        ConfigGridCol(intCol, mintColPONumber, "PO#", 900,
+            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxPONumber(DirectCast(objTrx, NormalTrx)), ""))
+        ConfigGridCol(intCol, mintColInvoiceNum, "Invoice#", 900,
+            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxInvoiceNum(DirectCast(objTrx, NormalTrx)), ""))
+        ConfigGridCol(intCol, mintColInvoiceDate, "Inv. Date", 700,
+            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxInvoiceDate(DirectCast(objTrx, NormalTrx)), ""))
+        ConfigGridCol(intCol, mintColDueDate, "Due Date", 700,
+            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxDueDate(DirectCast(objTrx, NormalTrx)), ""))
+        ConfigGridCol(intCol, mintColTerms, "Terms", 800,
+            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxTerms(DirectCast(objTrx, NormalTrx)), ""))
         ConfigGridCol(intCol, mintColFake, "Fake", 500, _
             Function(objTrx As Trx) If(objTrx.lngType <> Trx.TrxType.glngTRXTYP_BUDGET, If(objTrx.blnFake, "Y", ""), "-"))
         If Not mobjReg.blnRepeat Then
@@ -313,8 +313,8 @@ Friend Class RegisterForm
         ConfigGridCol(intCol, mintColStatus, "Status", 600, _
             Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, _
                 "? RNS".Substring(objTrx.lngStatus, 1), ""))
-        ConfigGridCol(intCol, mintColBudgetKey, "Budget", 1200, _
-            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxBudget(objTrx), _
+        ConfigGridCol(intCol, mintColBudgetKey, "Budget", 1200,
+            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxBudget(DirectCast(objTrx, NormalTrx)),
                 If(objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET, gstrTranslateBudgetKey(objTrx.strBudgetKey), "")))
         ConfigGridCol(intCol, mintColMemo, "Memo", 2400, _
             Function(objTrx As Trx) objTrx.strMemo)

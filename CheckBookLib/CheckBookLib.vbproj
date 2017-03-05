@@ -168,10 +168,13 @@
     <Compile Include="TrxGen\TGENormalTrx.vb" />
     <Compile Include="TrxGen\TGEGeneratorRepeat.vb" />
     <Compile Include="TrxGen\TGETemplateBase.vb" />
+    <Compile Include="Trx\BudgetTrx.vb" />
+    <Compile Include="Trx\NormalTrx.vb" />
     <Compile Include="Trx\Split.vb" />
     <Compile Include="Trx\SplitData.vb" />
     <Compile Include="StringTranslator.vb" />
     <Compile Include="TransferManager.vb" />
+    <Compile Include="Trx\TransferTrx.vb" />
     <Compile Include="Trx\Trx.vb" />
     <Compile Include="TrxGen\TrxGenerator.vb" />
     <Compile Include="TrxGen\TrxGeneratorLoader.vb" />

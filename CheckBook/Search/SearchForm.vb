@@ -271,7 +271,7 @@ Friend Class SearchForm
 
         objItem = objAddNewMatch(lngIndex, objTrx, objTrx.curAmount)
         If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-            gSummarizeSplits(objTrx, strCategory, strPONumber, strInvoiceNum, strInvoiceDate, strDueDate, strTerms, strBudget, curAvailable)
+            gSummarizeSplits(DirectCast(objTrx, NormalTrx), strCategory, strPONumber, strInvoiceNum, strInvoiceDate, strDueDate, strTerms, strBudget, curAvailable)
             gAddListSubItem(objItem, 4, gstrFormatCurrency(curAvailable))
             gAddListSubItem(objItem, 5, strCategory)
             gAddListSubItem(objItem, 6, strPONumber)
@@ -432,7 +432,7 @@ Friend Class SearchForm
 
     Private Sub cmdNewNormal_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewNormal.Click
         Try
-            Dim objTrx As Trx = New Trx
+            Dim objTrx As NormalTrx = New NormalTrx
             objTrx.NewEmptyNormal(mobjReg, mdatDefaultDate)
             Using frm As TrxForm = frmCreateTrxForm()
                 If frm.blnAddNormal(mobjAccount, mobjReg, objTrx, mdatDefaultDate, True, "SearchForm.NewNormal") Then
@@ -594,8 +594,8 @@ Friend Class SearchForm
     Private Sub cmdCombine_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCombine.Click
         Try
 
-            Dim objNewTrx As Trx = Nothing
-            Dim objOldTrx As Trx
+            Dim objNewTrx As NormalTrx = Nothing
+            Dim objOldTrx As NormalTrx
             Dim colOldTrx As ICollection(Of Trx)
             Dim objOldSplit As TrxSplit
             Dim lngTrxIndex As Integer
@@ -613,7 +613,7 @@ Friend Class SearchForm
                 End If
                 'If we do not yet have a new trx, create it.
                 If objNewTrx Is Nothing Then
-                    objNewTrx = New Trx
+                    objNewTrx = New NormalTrx
                     datToday = Today
                     objNewTrx.NewStartNormal(mobjReg, "", datToday, objOldTrx.strDescription, objOldTrx.strMemo, Trx.TrxStatus.glngTRXSTS_UNREC, New TrxGenImportData())
                 End If
@@ -640,7 +640,7 @@ Friend Class SearchForm
                     Exit Sub
                 End If
             End Using
-            objNewTrx = mobjReg.objTrx(mobjReg.lngCurrentTrxIndex())
+            objNewTrx = DirectCast(mobjReg.objTrx(mobjReg.lngCurrentTrxIndex()), NormalTrx)
 
             'Now delete old trx.
             'Because we start from the Trx object instead of its index, we don't need
@@ -725,7 +725,7 @@ Friend Class SearchForm
                         End If
                     Else
                         'Changing register, and possibly date.
-                        Dim objTrxNew As Trx = New Trx
+                        Dim objTrxNew As Trx = New NormalTrx
                         objTrxNew.NewStartNormal(objNewReg, objTrxSrc)
                         objTrxNew.datDate = datNewDate
                         .CopySplits(objTrxNew)

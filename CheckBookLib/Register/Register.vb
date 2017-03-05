@@ -1084,16 +1084,7 @@ Public Class Register
     End Function
 
     Public Function objGetTrxManager(ByVal lngIndex As Integer, ByVal objTrx As Trx) As TrxManager
-        Select Case objTrx.lngType
-            Case Trx.TrxType.glngTRXTYP_NORMAL
-                Return New NormalTrxManager(Me, lngIndex, objTrx)
-            Case Trx.TrxType.glngTRXTYP_BUDGET
-                Return New BudgetTrxManager(Me, lngIndex, objTrx)
-            Case Trx.TrxType.glngTRXTYP_TRANSFER
-                Return New TransferTrxManager(Me, lngIndex, objTrx)
-            Case Else
-                Throw New Exception("Unrecognized Trx type")
-        End Select
+        Return objTrx.objGetTrxManager(Me, lngIndex)
     End Function
 
     '$Description Determine the index at which the specified Trx exists.

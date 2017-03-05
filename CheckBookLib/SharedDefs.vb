@@ -146,7 +146,7 @@ Public Module SharedDefs
 
     '$Description Return a string summarizing the categories used by a normal transaction.
 
-    Public Function gstrSummarizeTrxCat(ByVal objTrx As Trx) As String
+    Public Function gstrSummarizeTrxCat(ByVal objTrx As NormalTrx) As String
 
         Dim objSplit As TrxSplit
         Dim strCategoryKey As String = ""
@@ -165,7 +165,7 @@ Public Module SharedDefs
 
     '$Description Return a string summarizing the budgets used by a normal transaction.
 
-    Public Function gstrSummarizeTrxBudget(ByVal objTrx As Trx) As String
+    Public Function gstrSummarizeTrxBudget(ByVal objTrx As NormalTrx) As String
 
         Dim objSplit As TrxSplit
         Dim strBudgetKey As String = ""
@@ -184,7 +184,7 @@ Public Module SharedDefs
 
     '$Description Return a string summarizing the split due dates used by a normal transaction.
 
-    Public Function gstrSummarizeTrxDueDate(ByVal objTrx As Trx) As String
+    Public Function gstrSummarizeTrxDueDate(ByVal objTrx As NormalTrx) As String
 
         Dim objSplit As TrxSplit
         Dim datDueDate As Date = System.DateTime.FromOADate(0)
@@ -207,7 +207,7 @@ Public Module SharedDefs
 
     '$Description Return a string summarizing the split invoice dates used by a normal transaction.
 
-    Public Function gstrSummarizeTrxInvoiceDate(ByVal objTrx As Trx) As String
+    Public Function gstrSummarizeTrxInvoiceDate(ByVal objTrx As NormalTrx) As String
 
         Dim objSplit As TrxSplit
         Dim datInvoiceDate As Date = System.DateTime.FromOADate(0)
@@ -230,7 +230,7 @@ Public Module SharedDefs
 
     '$Description Return a string summarizing the PO numbers used by a normal transaction.
 
-    Public Function gstrSummarizeTrxPONumber(ByVal objTrx As Trx) As String
+    Public Function gstrSummarizeTrxPONumber(ByVal objTrx As NormalTrx) As String
 
         Dim objSplit As TrxSplit
         Dim strPONumber As String = ""
@@ -249,7 +249,7 @@ Public Module SharedDefs
 
     '$Description Return a string summarizing the terms used by a normal transaction.
 
-    Public Function gstrSummarizeTrxTerms(ByVal objTrx As Trx) As String
+    Public Function gstrSummarizeTrxTerms(ByVal objTrx As NormalTrx) As String
 
         Dim objSplit As TrxSplit
         Dim strTerms As String = ""
@@ -268,7 +268,7 @@ Public Module SharedDefs
 
     '$Description Return a string summarizing the invoice numbers used by a normal transaction.
 
-    Public Function gstrSummarizeTrxInvoiceNum(ByVal objTrx As Trx) As String
+    Public Function gstrSummarizeTrxInvoiceNum(ByVal objTrx As NormalTrx) As String
 
         Dim objSplit As TrxSplit
         Dim strInvNumber As String = ""
@@ -300,7 +300,7 @@ Public Module SharedDefs
 
     '$Description Like gstrSummarizeTrxCat(), but summarizes multiple split properties.
 
-    Public Sub gSummarizeSplits(ByVal objTrx As Trx, ByRef strCategory As String, ByRef strPONumber As String, ByRef strInvoiceNum As String, ByRef strInvoiceDate As String, ByRef strDueDate As String, ByRef strTerms As String, ByRef strBudget As String, ByRef curAvailable As Decimal)
+    Public Sub gSummarizeSplits(ByVal objTrx As NormalTrx, ByRef strCategory As String, ByRef strPONumber As String, ByRef strInvoiceNum As String, ByRef strInvoiceDate As String, ByRef strDueDate As String, ByRef strTerms As String, ByRef strBudget As String, ByRef curAvailable As Decimal)
 
         Dim objSplit As TrxSplit
         Dim strCatKey As String = ""
