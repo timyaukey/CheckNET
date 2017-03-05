@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports VB = Microsoft.VisualBasic
@@ -37,13 +37,13 @@ Friend Class BankImportForm
     End Structure
 
     'Column number in item list with index into maudtItem().
-    Private Const mintITMCOL_INDEX As Short = 7
+    Private Const mintITMCOL_INDEX As Integer = 7
     'Column number in match list with index into maudtMatch().
-    Private Const mintMCHCOL_INDEX As Short = 6
+    Private Const mintMCHCOL_INDEX As Integer = 6
 
     'Imported transaction information.
     Private maudtItem() As ImportItem '1 to mintItems
-    Private mintItems As Short
+    Private mintItems As Integer
 
     Private ReadOnly Iterator Property colAllMatchedTrx() As IEnumerable(Of Trx)
         Get
@@ -65,14 +65,14 @@ Friend Class BankImportForm
 
     'Matches to currently selected ImportItem.
     Private maudtMatch() As MatchItem '1 to mintMatches
-    Private mintMatches As Short
+    Private mintMatches As Integer
 
     'Register selected in cboRegister.
     Private mobjSelectedRegister As Register
 
     'String for matching import(s).
     Private mstrImportSearchText As String
-    Private mintNextImportToSearch As Short
+    Private mintNextImportToSearch As Integer
 
     Public Sub ShowMe(ByVal strTitle As String, ByVal objAccount As Account,
                       ByVal objImportHandler As IImportHandler,
@@ -138,8 +138,8 @@ Friend Class BankImportForm
         Try
 
             Dim objItem As System.Windows.Forms.ListViewItem
-            Dim intItemIndex As Short
-            Dim intFoundCount As Short
+            Dim intItemIndex As Integer
+            Dim intFoundCount As Integer
             Dim strFailReason As String = ""
 
             ClearUpdateMatches()
@@ -172,9 +172,9 @@ Friend Class BankImportForm
         Try
 
             Dim objItem As System.Windows.Forms.ListViewItem
-            Dim intItemIndex As Short
+            Dim intItemIndex As Integer
             Dim strFailReason As String = ""
-            Dim intUpdateCount As Short
+            Dim intUpdateCount As Integer
             Dim lngMatchedRegIndex As Integer
 
             ClearUpdateMatches()
@@ -227,7 +227,7 @@ Friend Class BankImportForm
         Next
     End Sub
 
-    Private Function blnValidForAutoUpdate(ByRef intItemIndex As Short, ByVal blnAllowNonExact As Boolean, ByRef strFailReason As String) As Boolean
+    Private Function blnValidForAutoUpdate(ByRef intItemIndex As Integer, ByVal blnAllowNonExact As Boolean, ByRef strFailReason As String) As Boolean
 
         Dim objImportedTrx As ImportedTrx
         Dim objReg As Register
@@ -235,7 +235,7 @@ Friend Class BankImportForm
         'Dim colExactMatches As ICollection(Of Integer) = Nothing
         Dim colUnusedMatches As ICollection(Of Integer) = Nothing
         Dim blnExactMatch As Boolean
-        Dim intExactCount As Short
+        Dim intExactCount As Integer
         Dim lngPossibleIndex As Integer
         Dim objPossibleMatchTrx As Trx
         Dim blnNonExactConfirmed As Boolean
@@ -262,7 +262,8 @@ Friend Class BankImportForm
                 If colUnusedMatches.Count() = 1 Then
                     blnNonExactConfirmed = False
                     If blnAllowNonExact And Not blnExactMatch Then
-                        If MsgBox(strDescribeItem(intItemIndex) & " is only a partial match. " & "Update it anyway?", MsgBoxStyle.YesNo + MsgBoxStyle.DefaultButton1, "Confirm") = MsgBoxResult.Yes Then
+                        If MsgBox(strDescribeItem(intItemIndex) & " is only a partial match. " & "Update it anyway?",
+                                  MsgBoxStyle.YesNo Or MsgBoxStyle.DefaultButton1, "Confirm") = MsgBoxResult.Yes Then
                             blnNonExactConfirmed = True
                         End If
                     End If
@@ -301,8 +302,8 @@ Friend Class BankImportForm
         Try
 
             Dim objItem As System.Windows.Forms.ListViewItem
-            Dim intItemIndex As Short
-            Dim intFoundCount As Short
+            Dim intItemIndex As Integer
+            Dim intFoundCount As Integer
             Dim strFailReason As String = ""
 
             intFoundCount = 0
@@ -333,11 +334,11 @@ Friend Class BankImportForm
         Try
 
             Dim objItem As System.Windows.Forms.ListViewItem
-            Dim intItemIndex As Short
-            Dim intCreateCount As Short
+            Dim intItemIndex As Integer
+            Dim intCreateCount As Integer
             Dim frm As TrxForm
             Dim datDummy As Date
-            Dim objImportedTrx As Trx
+            Dim objImportedTrx As ImportedTrx
             Dim blnItemImported As Boolean
             Dim blnAllowBankNonCard As Boolean
             Dim strFailReason As String = ""
@@ -347,7 +348,8 @@ Friend Class BankImportForm
                 Exit Sub
             End If
 
-            If MsgBox("Do you really want to create new transactions for everything" & " you have checked?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+            If MsgBox("Do you really want to create new transactions for everything" & " you have checked?",
+                      MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
                 Exit Sub
             End If
 
@@ -405,7 +407,7 @@ Friend Class BankImportForm
         End Try
     End Sub
 
-    Private Function blnValidForAutoNew(ByRef intItemIndex As Short, ByVal blnAllowBankNonCard As Boolean, ByVal blnSetMissingCategory As Boolean, ByRef strFailReason As String) As Boolean
+    Private Function blnValidForAutoNew(ByRef intItemIndex As Integer, ByVal blnAllowBankNonCard As Boolean, ByVal blnSetMissingCategory As Boolean, ByRef strFailReason As String) As Boolean
 
         Dim objReg As Register
         Dim objImportedTrx As ImportedTrx
@@ -536,9 +538,9 @@ Friend Class BankImportForm
     '$Description Display import items.
 
     Private Sub DisplayImportItems()
-        Dim intIndex As Short
+        Dim intIndex As Integer
         Dim blnShowCompleted As Boolean
-        Dim intOldSelectedIndex As Short
+        Dim intOldSelectedIndex As Integer
         Dim objNewItem As System.Windows.Forms.ListViewItem = Nothing
         Dim objNewSelectedItem As System.Windows.Forms.ListViewItem = Nothing
 
@@ -571,7 +573,7 @@ Friend Class BankImportForm
         End Try
     End Sub
 
-    Private Function objAddToImportList(ByVal intIndex As Short) As System.Windows.Forms.ListViewItem
+    Private Function objAddToImportList(ByVal intIndex As Integer) As System.Windows.Forms.ListViewItem
         Dim objItem As System.Windows.Forms.ListViewItem
 
         objAddToImportList = Nothing
@@ -587,7 +589,7 @@ Friend Class BankImportForm
         End Try
     End Function
 
-    Private Sub DisplayOneImportItem(ByVal objItem As System.Windows.Forms.ListViewItem, ByVal intIndex As Short)
+    Private Sub DisplayOneImportItem(ByVal objItem As System.Windows.Forms.ListViewItem, ByVal intIndex As Integer)
 
         Dim objTrx As ImportedTrx
         Dim strStatus As String = ""
@@ -627,7 +629,7 @@ Friend Class BankImportForm
 
     Private Sub LoadRegisterList()
         Dim objReg As Register
-        Dim intIndex As Short
+        Dim intIndex As Integer
 
         With cboRegister
             .Items.Clear()
@@ -640,7 +642,7 @@ Friend Class BankImportForm
     End Sub
 
     Private Sub BankImportForm_KeyPress(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.KeyPressEventArgs) Handles MyBase.KeyPress
-        Dim KeyAscii As Short = Asc(eventArgs.KeyChar)
+        Dim KeyAscii As Integer = Asc(eventArgs.KeyChar)
         Try
             If KeyAscii >= 32 And KeyAscii <= 126 Then
                 mstrImportSearchText = mstrImportSearchText & Chr(KeyAscii)
@@ -676,8 +678,8 @@ Friend Class BankImportForm
     End Sub
 
     Private Sub FindMatchingImport()
-        Dim intListItemIndex As Short
-        Dim intItemArrayIndex As Short
+        Dim intListItemIndex As Integer
+        Dim intItemArrayIndex As Integer
 
         If mstrImportSearchText = "" Then
             MsgBox("Type something to search for before pressing ^S to find it.")
@@ -816,7 +818,7 @@ Friend Class BankImportForm
     'Look for an existing transaction that matches the specified import item.
     'This sets the import status of the import item.
 
-    Private Function blnMatchImport(ByVal intItemIndex As Short) As Boolean
+    Private Function blnMatchImport(ByVal intItemIndex As Integer) As Boolean
         Dim objImportedTrx As ImportedTrx
         Dim objReg As Register
         Dim lngImportMatch As Integer
@@ -868,7 +870,7 @@ Friend Class BankImportForm
         Erase maudtMatch
     End Sub
 
-    Private Sub DisplayMatch(ByVal objTrx As Trx, ByVal intIndex As Short)
+    Private Sub DisplayMatch(ByVal objTrx As Trx, ByVal intIndex As Integer)
         Dim objItem As System.Windows.Forms.ListViewItem
         objItem = gobjListViewAdd(lvwMatches)
         SetTrxSubItems(objTrx, objItem, maudtMatch(intIndex).objReg, 5)
@@ -993,7 +995,7 @@ Friend Class BankImportForm
             '    frm.blnBypassConfirmation = True
             'End If
             With maudtItem(intSelectedItemIndex())
-                If MsgBox("Create transaction " & strDescribeTrx(.objImportedTrx) & "?", MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton1, "Create Transaction") <> MsgBoxResult.Ok Then
+                If MsgBox("Create transaction " & strDescribeTrx(.objImportedTrx) & "?", MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton1, "Create Transaction") <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
                 If frm.blnAddNormalSilent(mobjAccount, mobjSelectedRegister, .objImportedTrx, datDummy, True, "ImportNewSilent") Then
@@ -1054,7 +1056,8 @@ Friend Class BankImportForm
                 MsgBox("This import item has already been processed.", MsgBoxStyle.Critical)
                 Exit Function
             Case ImportStatus.mlngIMPSTS_PRIOR
-                If MsgBox("This item exactly matches an item imported in " & "a previous import session. Do you wish to import it anyway?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                If MsgBox("This item exactly matches an item imported in " & "a previous import session. Do you wish to import it anyway?",
+                          MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
                     Exit Function
                 End If
             Case Else
@@ -1104,11 +1107,11 @@ Friend Class BankImportForm
         End Try
     End Sub
 
-    Private Function strDescribeItem(ByRef intItemIndex As Short) As String
+    Private Function strDescribeItem(ByRef intItemIndex As Integer) As String
         strDescribeItem = strDescribeTrx(maudtItem(intItemIndex).objImportedTrx)
     End Function
 
-    Private Function strDescribeTrx(ByRef objTrx As Trx) As String
+    Private Function strDescribeTrx(ByRef objTrx As ImportedTrx) As String
         strDescribeTrx = "[ " & gstrFormatDate(objTrx.datDate) & " " & objTrx.strDescription & " $" & gstrFormatCurrency(objTrx.curAmount) & " ]"
     End Function
 End Class

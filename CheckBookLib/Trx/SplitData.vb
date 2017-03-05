@@ -16,7 +16,7 @@ Public Class SplitData
     Public strImageFiles As String
     Public blnChoose As Boolean
 
-    Public ReadOnly Property blnUsed() As Object
+    Public ReadOnly Property blnUsed() As Boolean
         Get
             blnUsed = (strCategoryKey <> "") Or (strPONumber <> "") Or (strInvoiceNum <> "") Or (strInvoiceDate <> "") Or (strDueDate <> "") Or (strTerms <> "") Or (strMemo <> "") Or (strBudgetKey <> "") Or (strAmount <> "") Or (strImageFiles <> "")
         End Get

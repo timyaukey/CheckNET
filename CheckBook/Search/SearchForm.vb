@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports CheckBookLib
@@ -126,8 +126,8 @@ Friend Class SearchForm
 
         Try
 
-            lngSearchType = gintVB6GetItemData(cboSearchType, cboSearchType.SelectedIndex)
-            lngSearchField = gintVB6GetItemData(cboSearchIn, cboSearchIn.SelectedIndex)
+            lngSearchType = CType(gintVB6GetItemData(cboSearchType, cboSearchType.SelectedIndex), Trx.TrxSearchType)
+            lngSearchField = CType(gintVB6GetItemData(cboSearchIn, cboSearchIn.SelectedIndex), Trx.TrxSearchField)
             Select Case lngSearchField
                 Case Trx.TrxSearchField.glngTRXSFL_CATKEY
                     If lngSearchType <> Trx.TrxSearchType.glngTRXSTP_EQUAL And lngSearchType <> Trx.TrxSearchType.glngTRXSTP_STARTS Then
@@ -217,7 +217,7 @@ Friend Class SearchForm
     Private Sub cmdAddToTotal_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdAddToTotal.Click
         Dim dblAmount As Double
         If blnValidAmount(dblAmount) Then
-            mcurAmountTotal = mcurAmountTotal + dblAmount
+            mcurAmountTotal = mcurAmountTotal + CDec(dblAmount)
             ShowTotals()
         End If
     End Sub
@@ -225,7 +225,7 @@ Friend Class SearchForm
     Private Sub cmdMultTotalBy_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdMultTotalBy.Click
         Dim dblAmount As Double
         If blnValidAmount(dblAmount) Then
-            mcurAmountTotal = mcurAmountTotal * dblAmount
+            mcurAmountTotal = mcurAmountTotal * CDec(dblAmount)
             ShowTotals()
         End If
     End Sub
@@ -482,7 +482,7 @@ Friend Class SearchForm
             Dim objTrx As Trx
             Dim colSplits As IEnumerable(Of TrxSplit)
             Dim objSplit As TrxSplit
-            Dim lngExportCount As Short
+            Dim lngExportCount As Integer
 
             If Not frmExport.blnGetSettings() Then
                 MsgBox("Export canceled.")
@@ -671,7 +671,7 @@ Friend Class SearchForm
             Dim objNewReg As Register = Nothing
             Dim datExplicitDate As Date
             Dim blnUseDayOffset As Boolean
-            Dim intDayOffset As Short
+            Dim intDayOffset As Integer
             Dim datNewDate As Date
             Dim frmMoveTo As MoveDstForm
 
@@ -695,7 +695,7 @@ Friend Class SearchForm
                 datExplicitDate = CDate(strNewDate)
                 blnUseDayOffset = False
             ElseIf IsNumeric(strNewDate) Or strNewDate = "" Then
-                intDayOffset = Val(strNewDate)
+                intDayOffset = CInt(Val(strNewDate))
                 blnUseDayOffset = True
             Else
                 'Should never get here.

@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports VB = Microsoft.VisualBasic
@@ -110,7 +110,7 @@ Friend Class ReconcileForm
 
     Private Sub DisplayTrx(ByVal objTrx As Trx)
         Dim objItem As System.Windows.Forms.ListViewItem
-        Dim intPipe2 As Short
+        Dim intPipe2 As Integer
         Dim datBankDate As DateTime
         Dim strBankDate As String
         Dim strSortableBankDate As String
@@ -122,7 +122,7 @@ Friend Class ReconcileForm
             AddSubItem(objItem, mintCOL_NUMBER, objTrx.strNumber)
             AddSubItem(objItem, mintCOL_DESCRIPTION, objTrx.strDescription)
             AddSubItem(objItem, mintCOL_AMOUNT, gstrFormatCurrency(objTrx.curAmount))
-            AddSubItem(objItem, mintCOL_IMPORTED, IIf(objTrx.strImportKey = "", "", "Y"))
+            AddSubItem(objItem, mintCOL_IMPORTED, CStr(IIf(objTrx.strImportKey = "", "", "Y")))
             intPipe2 = InStr(2, objTrx.strImportKey, "|")
             strSortableBankDate = ""
             If intPipe2 > 0 Then
@@ -215,7 +215,7 @@ Friend Class ReconcileForm
         Try
             Dim lvw As ListView
             Dim Item As ListViewItem
-            lvw = sender
+            lvw = DirectCast(sender, ListView)
             If lvw.SelectedIndices.Count > 0 Then
                 Item = lvw.FocusedItem
                 'Fires the "ItemCheck" event
@@ -270,7 +270,7 @@ Friend Class ReconcileForm
 
         For lngIndex = 1 To mlngTrxUsed
             With maudtTrx(lngIndex)
-                lngNewStatus = IIf(.blnSelected, lngSelectedStatus, Trx.TrxStatus.glngTRXSTS_UNREC)
+                lngNewStatus = CType(IIf(.blnSelected, lngSelectedStatus, Trx.TrxStatus.glngTRXSTS_UNREC), Trx.TrxStatus)
                 If .objReg.objTrx(.lngIndex).lngStatus <> lngNewStatus Then
                     .objReg.SetTrxStatus(.lngIndex, lngNewStatus, New LogStatus, "ReconcileForm.SaveChanges")
                 End If

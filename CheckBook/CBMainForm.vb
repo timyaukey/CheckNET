@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.IO
@@ -18,8 +18,8 @@ Friend Class CBMainForm
         Dim objAccount As Account
         Dim objReg As Register
         Dim astrFiles() As String = Nothing
-        Dim intFiles As Short
-        Dim vstrFile As Object
+        Dim intFiles As Integer
+        Dim strFile As String
         Dim strSecurityOption As String = ""
 
         Try
@@ -34,7 +34,7 @@ Friend Class CBMainForm
             LoadPlugins()
 
             'Look for locally recognized command line options
-            Dim intIndex As Short
+            Dim intIndex As Integer
             Dim strArg As String
             For intIndex = LBound(gstrCmdLinArgs) To UBound(gstrCmdLinArgs)
                 strArg = gstrCmdLinArgs(intIndex)
@@ -81,27 +81,27 @@ Friend Class CBMainForm
             End If
 
             'Find all ".act" files.
-            vstrFile = Dir(gstrAccountPath() & "\*.act")
-            If vstrFile = "" Then
+            strFile = Dir(gstrAccountPath() & "\*.act")
+            If strFile = "" Then
                 MsgBox("Creating first checking account...", MsgBoxStyle.Information)
                 gCreateAccount("Main", "Checking Account", "Main Register")
-                vstrFile = Dir(gstrAccountPath() & "\*.act")
+                strFile = Dir(gstrAccountPath() & "\*.act")
             End If
-            While vstrFile <> ""
+            While strFile <> ""
                 intFiles = intFiles + 1
                 ReDim Preserve astrFiles(intFiles - 1)
-                astrFiles(intFiles - 1) = vstrFile
-                vstrFile = Dir()
+                astrFiles(intFiles - 1) = strFile
+                strFile = Dir()
             End While
             'Load them all.
-            For Each vstrFile In astrFiles
+            For Each strFile In astrFiles
                 objAccount = New Account
                 objAccount.Init(mobjEverything)
                 frmStartup.Configure(objAccount)
-                objAccount.Load(vstrFile)
+                objAccount.Load(strFile)
                 gcolAccounts.Add(objAccount)
                 frmStartup.Configure(Nothing)
-            Next vstrFile
+            Next strFile
 
             frmStartup.ShowStatus("Loading main window")
 
@@ -150,7 +150,7 @@ Friend Class CBMainForm
         For Each objAttrib As Object In objAssembly.GetCustomAttributes(GetType(PluginFactoryAttribute), False)
             Dim objPluginFactoryAttr As PluginFactoryAttribute = CType(objAttrib, PluginFactoryAttribute)
             Dim objFactoryType As Type = objPluginFactoryAttr.objFactoryType
-            Dim objFactory As IPluginFactory = System.Activator.CreateInstance(objFactoryType)
+            Dim objFactory As IPluginFactory = DirectCast(System.Activator.CreateInstance(objFactoryType), IPluginFactory)
             LoadPluginsFromFactory(objFactory)
         Next
     End Sub
