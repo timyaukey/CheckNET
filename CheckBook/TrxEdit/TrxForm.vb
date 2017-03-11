@@ -997,16 +997,6 @@ Friend Class TrxForm
                 Exit Function
             End If
         End If
-        If mobjReg.blnNonBank Then
-            If Not chkFake.CheckState = System.Windows.Forms.CheckState.Checked Then
-                ValidationError("Only fake transactions are allowed in a non-bank register.")
-                Exit Function
-            End If
-            If Trim(txtRepeatSeq.Text) <> "" Then
-                ValidationError("Transactions in a non-bank register may not belong to a repeating sequence.")
-                Exit Function
-            End If
-        End If
         blnValidateShared = False
     End Function
 

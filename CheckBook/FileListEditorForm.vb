@@ -29,6 +29,9 @@ Public Class FileListEditorForm
         Dim item As ListViewItem
 
         lvwFiles.Items.Clear()
+        If Not Directory.Exists(mstrFolder) Then
+            Directory.CreateDirectory(mstrFolder)
+        End If
         For Each strFile In Directory.EnumerateFiles(mstrFolder)
             Dim file As FileInfo
             Dim subItems(3) As String

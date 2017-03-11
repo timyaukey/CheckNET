@@ -2,14 +2,15 @@ Option Strict On
 Option Explicit On
 
 Public Class Account
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
-
     'The master Everything object.
     Private mobjEverything As Everything
     'Path passed to Load().
     Private mstrFileLoaded As String
     'Account title.
     Private mstrTitle As String
+    'Unique number identifying this Account from others loaded at the same time.
+    Private mintKey As Integer
+    Private mlngType As AccountType
     'Repeat key list for account.
     Private mobjRepeats As StringTranslator
     Private mobjRepeatSummarizer As RepeatSummarizer
@@ -25,6 +26,13 @@ Public Class Account
     'RegisterLoader object used by LoadRegister().
     'Is Nothing unless LoadRegister() is on the call stack.
     Private WithEvents mobjLoader As RegisterLoader
+
+    Public Enum AccountType
+        Unspecified = 0
+        Asset = 1
+        Liability = 2
+        Equity = 3
+    End Enum
 
     'Fired when ChangeMade() is called. Used by clients
     'sensitive to changes in the Account as a whole,
@@ -68,9 +76,25 @@ Public Class Account
         End Set
     End Property
 
+    Public ReadOnly Property intKey() As Integer
+        Get
+            Return mintKey
+        End Get
+    End Property
+
+    Public Property lngType() As AccountType
+        Get
+            Return mlngType
+        End Get
+        Set(value As AccountType)
+            mlngType = value
+            SetChanged()
+        End Set
+    End Property
+
     Public ReadOnly Property colRegisters() As List(Of Register)
         Get
-            colRegisters = mcolRegisters
+            Return mcolRegisters
         End Get
     End Property
 
@@ -132,7 +156,7 @@ Public Class Account
         Dim strRegKey As String = ""
         Dim strRegTitle As String = ""
         Dim blnRegShow As Boolean
-        Dim blnRegNonBank As Boolean
+        Dim blnAccountPropertiesValidated As Boolean
 
         Try
 
@@ -153,6 +177,7 @@ Public Class Account
             mobjRepeatSummarizer = New RepeatSummarizer()
             'mstrRepeatsFile = gstrAccountPath() & "\" & Replace(LCase(strAcctFile), ".act", ".rep")
             'mobjRepeats.LoadFile(mstrRepeatsFile)
+            mlngType = AccountType.Unspecified
 
             Do
                 strLine = LineInput(intFile)
@@ -160,20 +185,47 @@ Public Class Account
                 Select Case Left(strLine, 2)
                     Case "AT"
                         mstrTitle = Mid(strLine, 3)
+                    Case "AK"
+                        Dim intNewKey As Integer = CInt(Mid(strLine, 3))
+                        If mobjEverything.blnAccountKeyUsed(intNewKey) Then
+                            Throw New Exception("Duplicate use of account key " & intNewKey)
+                        End If
+                        mintKey = intNewKey
+                    Case "AY"
+                        Select Case Mid(strLine, 3, 1)
+                            Case "A"
+                                mlngType = AccountType.Asset
+                            Case "L"
+                                mlngType = AccountType.Liability
+                            Case "E"
+                                mlngType = AccountType.Equity
+                            Case Else
+                                Throw New Exception("Unrecognized account type")
+                        End Select
                     Case "RK"
+                        If Not blnAccountPropertiesValidated Then
+                            'The lines that set these properties come before the first "RK" line.
+                            If mintKey = 0 Then
+                                Throw New Exception("Account key not specified")
+                            End If
+                            If mlngType = AccountType.Unspecified Then
+                                Throw New Exception("Account type not specified")
+                            End If
+                            blnAccountPropertiesValidated = True
+                        End If
                         strRegKey = Mid(strLine, 3)
                     Case "RT"
                         strRegTitle = Mid(strLine, 3)
                     Case "RS"
                         blnRegShow = True
                     Case "RN"
-                        blnRegNonBank = True
+                        'Ignore this for backward compatibility until all .act files are resaved without it.
+                        'blnRegNonBank = True
                     Case "RI"
-                        CreateRegister(strRegKey, strRegTitle, blnRegShow, blnRegNonBank)
+                        CreateRegister(strRegKey, strRegTitle, blnRegShow)
                         strRegKey = ""
                         strRegTitle = ""
                         blnRegShow = False
-                        blnRegNonBank = False
                     Case "RL"
                         'Load individual non-fake Trx into Register.
                         LoadRegister(strLine, False, intFile, datRegisterEndDate, lngLinesRead)
@@ -273,7 +325,7 @@ Public Class Account
 
     End Sub
 
-    Public Sub CreateRegister(ByVal strRegKey As String, ByVal strRegTitle As String, ByVal blnRegShow As Boolean, ByVal blnRegNonBank As Boolean)
+    Public Sub CreateRegister(ByVal strRegKey As String, ByVal strRegTitle As String, ByVal blnRegShow As Boolean)
 
         Dim objReg As Register
 
@@ -287,7 +339,7 @@ Public Class Account
             gRaiseError("Reg key already used in RI line")
         End If
         objReg = New Register
-        objReg.Init(strRegTitle, strRegKey, blnRegShow, blnRegNonBank, 32, DateAdd(Microsoft.VisualBasic.DateInterval.Day, -1, Today), False)
+        objReg.Init(strRegTitle, strRegKey, blnRegShow, 32, DateAdd(Microsoft.VisualBasic.DateInterval.Day, -1, Today))
         mcolRegisters.Add(objReg)
         AddHandler objReg.StatusChanged, AddressOf objReg_StatusChanged
         AddHandler objReg.TrxAdded, AddressOf objReg_TrxAdded
@@ -382,6 +434,7 @@ Public Class Account
     Public Sub Save(ByVal strPath_ As String)
         Dim blnFileOpen As Boolean
         Dim objReg As Register
+        Dim strAcctType As String
 
         Try
 
@@ -393,6 +446,18 @@ Public Class Account
             If mstrTitle <> "" Then
                 SaveLine("AT" & mstrTitle)
             End If
+            SaveLine("AK" & CStr(mintKey))
+            Select Case mlngType
+                Case AccountType.Asset
+                    strAcctType = "A"
+                Case AccountType.Liability
+                    strAcctType = "L"
+                Case AccountType.Equity
+                    strAcctType = "E"
+                Case Else
+                    Throw New Exception("Unrecognized account type")
+            End Select
+            SaveLine("AY" & strAcctType)
             'Define each register at the top of the file.
             For Each objReg In mcolRegisters
                 If Not objReg.blnDeleted Then
@@ -426,9 +491,6 @@ Public Class Account
             SaveLine("RT" & .strTitle)
             If .blnShowInitially Then
                 SaveLine("RS")
-            End If
-            If .blnNonBank Then
-                SaveLine("RN")
             End If
             SaveLine("RI")
         End With

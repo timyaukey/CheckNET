@@ -48,7 +48,7 @@ Public Class UTRegister
 
     Public Sub Init(ByVal strRegisterKey As String)
         mobjReg = New Register
-        mobjReg.Init("title", strRegisterKey, False, False, 3, DateAdd(Microsoft.VisualBasic.DateInterval.Year, -20, Today), False)
+        mobjReg.Init("title", strRegisterKey, False, 3, DateAdd(Microsoft.VisualBasic.DateInterval.Year, -20, Today))
     End Sub
 
     'The Register managed by this UTRegister.

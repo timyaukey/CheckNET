@@ -1,19 +1,36 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports CheckBookLib
 
 Friend Class ShowRegisterForm
     Inherits System.Windows.Forms.Form
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     Private Structure ShowRegElement
         Dim objAccount As Account
         Dim objReg As Register
+
+        Public ReadOnly Property objSelectedReg() As Register
+            Get
+                If Not objReg Is Nothing Then
+                    Return objReg
+                End If
+                If objAccount.colRegisters.Count = 1 Then
+                    Return objAccount.colRegisters(0)
+                End If
+                Return Nothing
+            End Get
+        End Property
     End Structure
 
+    Private mobjEverything As Everything
     Private maudtElement() As ShowRegElement
-    Private mintElements As Short
+    Private mintElements As Integer
+
+    Public Sub ShowWindow(ByVal objEverything As Everything)
+        mobjEverything = objEverything
+        Me.Show()
+    End Sub
 
     Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCancel.Click
         Me.Close()
@@ -39,7 +56,7 @@ Friend Class ShowRegisterForm
             End If
 
             With maudtElement(lstRegisters.SelectedIndex)
-                If .objReg Is Nothing Then
+                If .objSelectedReg Is Nothing Then
                     MsgBox("You must select a register, not an account.", MsgBoxStyle.Information)
                     Exit Sub
                 End If
@@ -51,11 +68,11 @@ Friend Class ShowRegisterForm
                     MsgBox("You may not delete the last register from an account.", MsgBoxStyle.Critical)
                     Exit Sub
                 End If
-                objReg = .objReg
-                If MsgBox("Do you really want to delete register """ & objReg.strTitle & """?", MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                objReg = .objSelectedReg
+                If MsgBox("Do you really want to delete register """ & objReg.strTitle & """?", MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
-                If MsgBox("Are you really sure you want to delete it?", MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                If MsgBox("Are you really sure you want to delete it?", MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
                 MsgBox("Will delete all transfers to/from other registers.", MsgBoxStyle.Information)
@@ -83,7 +100,7 @@ Friend Class ShowRegisterForm
                     End If
                     lngTrxIdx = lngTrxIdx + 1
                 Loop
-                .objReg.blnDeleted = True
+                objReg.blnDeleted = True
                 .objAccount.SetChanged()
             End With
             MsgBox("Register deleted. Will quit program now, to save this change to the account.", MsgBoxStyle.Information)
@@ -103,7 +120,7 @@ Friend Class ShowRegisterForm
                 Exit Sub
             End If
 
-            If gblnAskAndCreateAccount() Then
+            If gblnAskAndCreateAccount(mobjEverything) Then
                 MsgBox("Account will appear the next time you start the software.", MsgBoxStyle.Information)
             End If
 
@@ -130,10 +147,10 @@ Friend Class ShowRegisterForm
 
             With maudtElement(lstRegisters.SelectedIndex)
                 strNameRoot = Replace(LCase(.objAccount.strFileLoaded), ".act", "")
-                If MsgBox("Are you sure you want to delete account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                If MsgBox("Are you sure you want to delete account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
-                If MsgBox("Are you REALLY, REALLY, SURE you want to delete account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                If MsgBox("Are you REALLY, REALLY, SURE you want to delete account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
             End With
@@ -180,7 +197,7 @@ Friend Class ShowRegisterForm
 
     Private Sub cmdNewRegister_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewRegister.Click
         Dim strName As String
-        Dim intHighestKey As Short
+        Dim intHighestKey As Integer
         Dim objReg As Register
 
         Try
@@ -196,15 +213,15 @@ Friend Class ShowRegisterForm
             End If
 
             With maudtElement(lstRegisters.SelectedIndex)
-                If MsgBox("Do you really want to create a new register named """ & strName & """ in account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question + MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                If MsgBox("Do you really want to create a new register named """ & strName & """ in account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
                 For Each objReg In .objAccount.colRegisters
-                    If Val(objReg.strRegisterKey) > intHighestKey Then
-                        intHighestKey = Val(objReg.strRegisterKey)
+                    If CInt(Val(objReg.strRegisterKey)) > intHighestKey Then
+                        intHighestKey = CInt(Val(objReg.strRegisterKey))
                     End If
                 Next objReg
-                .objAccount.CreateRegister(CStr(intHighestKey + 1), strName, True, False)
+                .objAccount.CreateRegister(CStr(intHighestKey + 1), strName, True)
                 .objAccount.SetChanged()
                 MsgBox("New register has been added to account and will appear the " & "next time you start the software.", MsgBoxStyle.Information)
             End With
@@ -215,24 +232,23 @@ Friend Class ShowRegisterForm
         End Try
     End Sub
 
-    Private Sub cmdSetAccountName_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSetAccountName.Click
-        Dim strName As String
+    Private Sub cmdSetAccountProperties_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSetAccountProperties.Click
+        Dim strTitle As String
+        Dim strFileName As String
+        Dim lngType As Account.AccountType
 
         Try
 
-            If Not gobjSecurity.blnIsAdministrator Then
-                MsgBox("Your login is not authorized to set the account name.")
-                Exit Sub
-            End If
-
             With maudtElement(lstRegisters.SelectedIndex)
-                strName = .objAccount.strTitle
-                strName = InputBox("Enter new account title:", "Account Title", strName)
-                If strName = "" Then
-                    Exit Sub
-                End If
-                .objAccount.strTitle = strName
-                MsgBox("Account title change will take effect the next time " & "you start the software.", MsgBoxStyle.Information)
+                strTitle = .objAccount.strTitle
+                strFileName = .objAccount.strFileLoaded
+                lngType = .objAccount.lngType
+                Using frm As AccountForm = New AccountForm
+                    If frm.ShowDialog(strTitle, strFileName, lngType, True, Not gobjSecurity.blnIsAdministrator) = DialogResult.OK Then
+                        .objAccount.strTitle = strTitle
+                        MsgBox("Account property changes will take effect the next time you start the software.", MsgBoxStyle.Information)
+                    End If
+                End Using
             End With
 
             Exit Sub
@@ -250,11 +266,11 @@ Friend Class ShowRegisterForm
             End If
 
             With maudtElement(lstRegisters.SelectedIndex)
-                If .objReg Is Nothing Then
+                If .objSelectedReg Is Nothing Then
                     MsgBox("You must select a register, not an account.", MsgBoxStyle.Information)
                     Exit Sub
                 End If
-                gShowRegister(.objAccount, .objReg, Nothing)
+                gShowRegister(.objAccount, .objSelectedReg, Nothing)
             End With
             Me.Close()
 
@@ -269,23 +285,18 @@ Friend Class ShowRegisterForm
 
         Try
 
-            If Not gobjSecurity.blnIsAdministrator Then
-                MsgBox("Your login is not authorized to set register properties.")
-                Exit Sub
-            End If
-
             If lstRegisters.SelectedIndex < 0 Then
                 MsgBox("Please select a register first.", MsgBoxStyle.Critical)
                 Exit Sub
             End If
 
             With maudtElement(lstRegisters.SelectedIndex)
-                If .objReg Is Nothing Then
+                If .objSelectedReg Is Nothing Then
                     MsgBox("You must select a register, not an account.", MsgBoxStyle.Information)
                     Exit Sub
                 End If
                 objProps = New RegPropertiesForm
-                objProps.ShowModal(.objReg)
+                objProps.ShowModal(.objSelectedReg, Not gobjSecurity.blnIsAdministrator)
             End With
 
             Exit Sub
@@ -347,21 +358,21 @@ Friend Class ShowRegisterForm
                 ReDim Preserve maudtElement(mintElements - 1)
                 With maudtElement(mintElements - 1)
                     .objAccount = objAccount
-                    'UPGRADE_NOTE: Object maudtElement().objReg may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
                     .objReg = Nothing
-                    'UPGRADE_NOTE: Object maudtElement().objLoaded may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
                     .objReg = Nothing
-                    lstRegisters.Items.Add("--- Registers in Account " & objAccount.strTitle & " ---")
+                    lstRegisters.Items.Add(objAccount.strTitle)
                 End With
-                For Each objReg In objAccount.colRegisters
-                    mintElements = mintElements + 1
-                    ReDim Preserve maudtElement(mintElements - 1)
-                    With maudtElement(mintElements - 1)
-                        .objAccount = objAccount
-                        .objReg = objReg
-                        lstRegisters.Items.Add(.objReg.strTitle)
-                    End With
-                Next objReg
+                If objAccount.colRegisters.Count > 1 Then
+                    For Each objReg In objAccount.colRegisters
+                        mintElements = mintElements + 1
+                        ReDim Preserve maudtElement(mintElements - 1)
+                        With maudtElement(mintElements - 1)
+                            .objAccount = objAccount
+                            .objReg = objReg
+                            lstRegisters.Items.Add("-- " & .objReg.strTitle)
+                        End With
+                    Next objReg
+                End If
             Next objAccount
 
             Exit Sub
@@ -372,18 +383,20 @@ Friend Class ShowRegisterForm
 
     Private Sub lstRegisters_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles lstRegisters.SelectedIndexChanged
         Dim blnRegisterSelected As Boolean
+        Dim blnOneRegister As Boolean
 
         Try
 
             blnRegisterSelected = Not (maudtElement(lstRegisters.SelectedIndex).objReg Is Nothing)
-            cmdSetAccountName.Enabled = Not blnRegisterSelected
+            blnOneRegister = (maudtElement(lstRegisters.SelectedIndex).objAccount.colRegisters.Count = 1)
+            cmdSetAccountProperties.Enabled = Not blnRegisterSelected
             cmdDeleteAccount.Enabled = Not blnRegisterSelected
             cmdRegen.Enabled = Not blnRegisterSelected
-            cmdShowRegister.Enabled = blnRegisterSelected
+            cmdShowRegister.Enabled = blnRegisterSelected Or blnOneRegister
             cmdDeleteRegister.Enabled = blnRegisterSelected
-            cmdEditGenerators.Enabled = blnRegisterSelected
+            cmdEditGenerators.Enabled = blnRegisterSelected Or blnOneRegister
             cmdNewRegister.Enabled = Not blnRegisterSelected
-            cmdRegProperties.Enabled = blnRegisterSelected
+            cmdRegProperties.Enabled = blnRegisterSelected Or blnOneRegister
 
             Exit Sub
         Catch ex As Exception
@@ -399,7 +412,7 @@ Friend Class ShowRegisterForm
         With maudtElement(lstRegisters.SelectedIndex)
 
             Using frm As New FileListEditorForm
-                frm.ShowDialogForPath("Transaction Generators", gstrGeneratorPath(.objAccount, .objReg), _
+                frm.ShowDialogForPath("Transaction Generators", gstrGeneratorPath(.objAccount, .objSelectedReg),
                     "gen", New TrxGenFilePersister())
             End Using
         End With

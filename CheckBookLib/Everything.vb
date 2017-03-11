@@ -17,6 +17,25 @@ Public Class Everything
         End Get
     End Property
 
+    Public Function blnAccountKeyUsed(ByVal intKey As Integer) As Boolean
+        For Each act As Account In mcolAccounts
+            If act.intKey = intKey Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
+
+    Public Function intGetUnusedAccountKey() As Integer
+        Dim intMaxKey As Integer = 0
+        For Each act As Account In mcolAccounts
+            If act.intKey > intMaxKey Then
+                intMaxKey = act.intKey
+            End If
+        Next
+        Return intMaxKey + 1
+    End Function
+
     Public Sub FireSomethingModified()
         RaiseEvent SomethingModified()
     End Sub

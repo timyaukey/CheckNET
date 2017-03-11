@@ -8,7 +8,7 @@ Friend Class RegPropertiesForm
 
     Private mobjReg As Register
 
-    Public Sub ShowModal(ByVal objReg As Register)
+    Public Sub ShowModal(ByVal objReg As Register, ByVal blnReadOnly As Boolean)
         Dim frm As System.Windows.Forms.Form
         For Each frm In gcolForms()
             If Not (TypeOf frm Is ShowRegisterForm) And Not (TypeOf frm Is CBMainForm) Then
@@ -18,8 +18,10 @@ Friend Class RegPropertiesForm
         Next frm
         mobjReg = objReg
         txtTitle.Text = mobjReg.strTitle
-        chkShowInitially.CheckState = IIf(mobjReg.blnShowInitially, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
-        chkNonBank.CheckState = IIf(mobjReg.blnNonBank, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
+        txtTitle.Enabled = Not blnReadOnly
+        chkShowInitially.CheckState = IIf(mobjReg.blnShowInitially, CheckState.Checked, CheckState.Unchecked)
+        chkShowInitially.Enabled = Not blnReadOnly
+        cmdOkay.Enabled = Not blnReadOnly
         Me.ShowDialog()
     End Sub
 
@@ -34,7 +36,6 @@ Friend Class RegPropertiesForm
         End If
         mobjReg.strTitle = Trim(txtTitle.Text)
         mobjReg.blnShowInitially = (chkShowInitially.CheckState = System.Windows.Forms.CheckState.Checked)
-        mobjReg.blnNonBank = (chkNonBank.CheckState = System.Windows.Forms.CheckState.Checked)
         Me.Close()
     End Sub
 End Class

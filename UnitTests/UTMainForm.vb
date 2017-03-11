@@ -920,7 +920,7 @@ Friend Class UTMainForm
 
         objLoader = New RegisterLoader
         objReg = New Register
-        objReg.Init("Regular", "reg", False, False, 3, System.DateTime.FromOADate(0), False)
+        objReg.Init("Regular", "reg", False, 3, System.DateTime.FromOADate(0))
         objRepeatSummarizer = New RepeatSummarizer()
         lngLinesRead = 0
         objLoader.LoadFileUT(objReg, objRepeatSummarizer, gstrAddPath("UTData\" & strFileName), False, #1/1/1980#, lngLinesRead)

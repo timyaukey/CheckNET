@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports CheckBookLib
@@ -14,10 +14,10 @@ Public Module CBMain
 
     'Lowest index in a ListView ListItem collection.
     'Will be 0 in .NET, 1 in VB6.
-    Public Const gintLISTITEM_LOWINDEX As Short = 0
+    Public Const gintLISTITEM_LOWINDEX As Integer = 0
 
     Private Class BackupPurgeDay
-        Public colInstances As ICollection(Of BackupInstance)
+        Public colInstances As List(Of BackupInstance)
     End Class
 
     Private Class BackupInstance
@@ -122,7 +122,7 @@ Public Module CBMain
 
         For Each frm In gcolForms()
             If TypeOf frm Is RegisterForm Then
-                frmReg = frm
+                frmReg = DirectCast(frm, RegisterForm)
                 If frmReg.objReg Is objReg Then
                     frmReg.Show()
                     frmReg.Activate()
@@ -141,7 +141,7 @@ Public Module CBMain
         For Each objAccount In gcolAccounts
             If objAccount.blnUnsavedChanges Then
                 strBackupFile = gstrBackupPath() & "\" & objAccount.strFileLoaded & "." & Now.ToString("MM$dd$yy$hh$mm")
-                If Len(Dir(strBackupFile)) Then
+                If Len(Dir(strBackupFile)) > 0 Then
                     Kill(strBackupFile)
                 End If
                 Rename(gstrAccountPath() & "\" & objAccount.strFileLoaded, strBackupFile)
@@ -159,9 +159,9 @@ Public Module CBMain
         Dim strParsableDate As String
         Dim datCreateDate As Date
         Dim strEncodedDate As String
-        Dim intIndex As Short
-        Dim intBackupsToKeep As Short
-        Dim intAgeInDays As Short
+        Dim intIndex As Integer
+        Dim intBackupsToKeep As Integer
+        Dim intAgeInDays As Integer
         Dim colInstances As List(Of BackupInstance)
         Dim colOlderFiles As List(Of String) = New List(Of String)
 
@@ -177,7 +177,7 @@ Public Module CBMain
                 strEncodedDate = Mid(strBackup, InStr(UCase(strBackup), ".ACT.") + 5)
                 strParsableDate = "20" & Mid(strEncodedDate, 7, 2) & "/" & Mid(strEncodedDate, 1, 2) & "/" & Mid(strEncodedDate, 4, 2) & " " & Mid(strEncodedDate, 10, 2) & ":" & Mid(strEncodedDate, 13, 2)
                 datCreateDate = CDate(strParsableDate)
-                intAgeInDays = DateDiff(Microsoft.VisualBasic.DateInterval.Day, datCreateDate, Today)
+                intAgeInDays = CInt(DateDiff(Microsoft.VisualBasic.DateInterval.Day, datCreateDate, Today))
                 If intAgeInDays <= UBound(adatDays) Then
                     Dim inst As BackupInstance = New BackupInstance()
                     inst.datCreate = datCreateDate
@@ -219,37 +219,48 @@ Public Module CBMain
         End Try
     End Sub
 
-    Private Function BackupInstanceComparer(ByVal i1 As BackupInstance, ByVal i2 As BackupInstance)
+    Private Function BackupInstanceComparer(ByVal i1 As BackupInstance, ByVal i2 As BackupInstance) As Integer
         Return i1.datCreate.CompareTo(i2.datCreate)
     End Function
 
-    Public Function gblnAskAndCreateAccount() As Boolean
-        Dim strFileRoot As String
+    Public Function gblnAskAndCreateAccount(ByVal objEverything As Everything) As Boolean
+        Dim strTitle As String = ""
+        Dim strFileRoot As String = ""
         Dim strFile As String
-        Dim strAcctName As String
+        Dim lngType As Account.AccountType = Account.AccountType.Asset
 
-        strFileRoot = InputBox("File name for new account:", "New Account")
-        If strFileRoot = "" Then
-            Exit Function
-        End If
-        strFile = gstrAccountPath() & "\" & strFileRoot & ".act"
-        If Dir(strFile) <> "" Then
-            MsgBox("Account file already exists with that name.", MsgBoxStyle.Critical)
-            Exit Function
-        End If
-        strAcctName = InputBox("Title for new account:", "New Account")
-        If strAcctName = "" Then
-            Exit Function
-        End If
-        gCreateAccount(strFileRoot, strAcctName, "Main Register")
-        gblnAskAndCreateAccount = True
-
+        Using frm As AccountForm = New AccountForm()
+            If frm.ShowDialog(strTitle, strFileRoot, lngType, False, False) = DialogResult.OK Then
+                strFile = gstrAccountPath() & "\" & strFileRoot & ".act"
+                If Dir(strFile) <> "" Then
+                    MsgBox("Account file already exists with that name.", MsgBoxStyle.Critical)
+                    Exit Function
+                End If
+                gCreateAccount(strFileRoot, strTitle, strTitle,
+                               objEverything.intGetUnusedAccountKey(), lngType)
+                Return True
+            End If
+        End Using
+        Return False
     End Function
 
-    Public Sub gCreateAccount(ByVal strFileRoot As String, ByVal strAcctTitle As String, ByVal strRegTitle As String)
+    Public Sub gCreateAccount(ByVal strFileRoot As String, ByVal strAcctTitle As String, ByVal strRegTitle As String,
+                              ByVal intKey As Integer, ByVal lngType As Account.AccountType)
 
-        Dim intFile As Short
+        Dim intFile As Integer
         Dim strFile As String
+        Dim strAccountType As String
+
+        Select Case lngType
+            Case Account.AccountType.Asset
+                strAccountType = "A"
+            Case Account.AccountType.Liability
+                strAccountType = "L"
+            Case Account.AccountType.Equity
+                strAccountType = "E"
+            Case Else
+                Throw New Exception("Unrecognized account type")
+        End Select
 
         strFile = gstrAccountPath() & "\" & strFileRoot & ".act"
         intFile = FreeFile()
@@ -257,6 +268,8 @@ Public Module CBMain
 
         PrintLine(intFile, "FHCKBK2")
         PrintLine(intFile, "AT" & strAcctTitle)
+        PrintLine(intFile, "AK" & CStr(intKey))
+        PrintLine(intFile, "AY" & strAccountType)
         PrintLine(intFile, "RK1")
         PrintLine(intFile, "RT" & strRegTitle)
         PrintLine(intFile, "RS")
@@ -342,7 +355,7 @@ Public Module CBMain
 
     Public Sub gCreateStandardFiles()
         Dim strFile As String
-        Dim intFile As Short
+        Dim intFile As Integer
 
         Try
 
@@ -471,7 +484,7 @@ Public Module CBMain
         Dim elmNum As VB6XmlElement
         Dim strNum As String
 
-        elmNum = elmPayee.SelectSingleNode("Num")
+        elmNum = DirectCast(elmPayee.SelectSingleNode("Num"), VB6XmlElement)
         If elmNum Is Nothing Then
             strNum = ""
         Else
@@ -481,9 +494,9 @@ Public Module CBMain
         objItem = lvwPayees.Items.Add(strNum)
         objItem.Tag = CStr(intIndex)
         If objItem.SubItems.Count > 1 Then
-            objItem.SubItems(1).Text = elmPayee.GetAttribute("Output")
+            objItem.SubItems(1).Text = CStr(elmPayee.GetAttribute("Output"))
         Else
-            objItem.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, elmPayee.GetAttribute("Output")))
+            objItem.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, CStr(elmPayee.GetAttribute("Output"))))
         End If
         SetPayeeSubItem(objItem, 2, elmPayee, "Cat")
         SetPayeeSubItem(objItem, 3, elmPayee, "Amount")
@@ -497,7 +510,7 @@ Public Module CBMain
         Dim elmChild As VB6XmlElement
         Dim strText As String
 
-        elmChild = elmPayee.SelectSingleNode(strChildName)
+        elmChild = DirectCast(elmPayee.SelectSingleNode(strChildName), VB6XmlElement)
         If elmChild Is Nothing Then
             strText = ""
         Else
@@ -514,7 +527,7 @@ Public Module CBMain
 
         Try
 
-            Dim intIndex As Short
+            Dim intIndex As Integer
             With cbo
                 .Items.Clear()
                 If blnAddEmpty Then

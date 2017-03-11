@@ -28,7 +28,7 @@
 	Public WithEvents cmdDeleteAccount As System.Windows.Forms.Button
 	Public WithEvents cmdDeleteRegister As System.Windows.Forms.Button
 	Public WithEvents cmdRegProperties As System.Windows.Forms.Button
-	Public WithEvents cmdSetAccountName As System.Windows.Forms.Button
+	Public WithEvents cmdSetAccountProperties As System.Windows.Forms.Button
 	Public WithEvents cmdNewAccount As System.Windows.Forms.Button
 	Public WithEvents cmdNewRegister As System.Windows.Forms.Button
 	Public WithEvents cmdCancel As System.Windows.Forms.Button
@@ -44,7 +44,7 @@
         Me.cmdDeleteAccount = New System.Windows.Forms.Button()
         Me.cmdDeleteRegister = New System.Windows.Forms.Button()
         Me.cmdRegProperties = New System.Windows.Forms.Button()
-        Me.cmdSetAccountName = New System.Windows.Forms.Button()
+        Me.cmdSetAccountProperties = New System.Windows.Forms.Button()
         Me.cmdNewAccount = New System.Windows.Forms.Button()
         Me.cmdNewRegister = New System.Windows.Forms.Button()
         Me.cmdCancel = New System.Windows.Forms.Button()
@@ -117,21 +117,21 @@
         Me.cmdRegProperties.Text = "Register Properties"
         Me.cmdRegProperties.UseVisualStyleBackColor = False
         '
-        'cmdSetAccountName
+        'cmdSetAccountProperties
         '
-        Me.cmdSetAccountName.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.cmdSetAccountName.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdSetAccountName.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdSetAccountName.Enabled = False
-        Me.cmdSetAccountName.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdSetAccountName.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdSetAccountName.Location = New System.Drawing.Point(12, 283)
-        Me.cmdSetAccountName.Name = "cmdSetAccountName"
-        Me.cmdSetAccountName.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdSetAccountName.Size = New System.Drawing.Size(171, 23)
-        Me.cmdSetAccountName.TabIndex = 2
-        Me.cmdSetAccountName.Text = "Set Account Title"
-        Me.cmdSetAccountName.UseVisualStyleBackColor = False
+        Me.cmdSetAccountProperties.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.cmdSetAccountProperties.BackColor = System.Drawing.SystemColors.Control
+        Me.cmdSetAccountProperties.Cursor = System.Windows.Forms.Cursors.Default
+        Me.cmdSetAccountProperties.Enabled = False
+        Me.cmdSetAccountProperties.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdSetAccountProperties.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.cmdSetAccountProperties.Location = New System.Drawing.Point(12, 283)
+        Me.cmdSetAccountProperties.Name = "cmdSetAccountProperties"
+        Me.cmdSetAccountProperties.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cmdSetAccountProperties.Size = New System.Drawing.Size(171, 23)
+        Me.cmdSetAccountProperties.TabIndex = 2
+        Me.cmdSetAccountProperties.Text = "Account Properties"
+        Me.cmdSetAccountProperties.UseVisualStyleBackColor = False
         '
         'cmdNewAccount
         '
@@ -241,7 +241,7 @@
         Me.Controls.Add(Me.cmdDeleteAccount)
         Me.Controls.Add(Me.cmdDeleteRegister)
         Me.Controls.Add(Me.cmdRegProperties)
-        Me.Controls.Add(Me.cmdSetAccountName)
+        Me.Controls.Add(Me.cmdSetAccountProperties)
         Me.Controls.Add(Me.cmdNewAccount)
         Me.Controls.Add(Me.cmdNewRegister)
         Me.Controls.Add(Me.cmdCancel)

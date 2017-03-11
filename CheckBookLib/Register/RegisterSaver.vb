@@ -8,11 +8,6 @@ Public Class RegisterSaver
     Private mintRealFile As Integer
     'Append lines for fake non-generated Trx to this Collection.
     Private mcolFakeLines As ICollection(Of String)
-    'True iff saving a Register to create generated Trx from.
-    'Controls how a few Trx properties are saved, like budget ending date,
-    'and whether properties specific to repeating Trx are saved (unit type,
-    'number of units, etc.)
-    Private mblnForGenerating As Boolean
     'The Trx currently being saved.
     Private mblnFake As Boolean
     Private mobjTrx As Trx
@@ -23,7 +18,6 @@ Public Class RegisterSaver
 
         mintRealFile = intRealFile_
         mcolFakeLines = colFakeLines_
-        mblnForGenerating = objReg_.blnRepeat
         For lngIndex = 1 To objReg_.lngTrxCount
             SaveTrx(objReg_.objTrx(lngIndex))
         Next
@@ -97,12 +91,7 @@ Public Class RegisterSaver
     Private Sub SaveTrxBudget()
         SaveTrxShared("TB")
         With mobjTrx
-            If mblnForGenerating Then
-                SaveLine("BU" & strConvertRepeatUnit(.lngBudgetPeriodUnit))
-                SaveLine("BN" & .intBudgetPeriodNumber)
-            Else
-                SaveLine("BE" & gstrFormatDate(.datBudgetEnds))
-            End If
+            SaveLine("BE" & gstrFormatDate(.datBudgetEnds))
             SaveLine("KB" & .strBudgetKey)
             SaveLine("A$" & gstrFormatCurrency(.curBudgetLimit))
         End With
@@ -131,11 +120,6 @@ Public Class RegisterSaver
             End If
             If Len(.strRepeatKey) > 0 Then
                 SaveLine("KR" & .strRepeatKey)
-            End If
-            If mblnForGenerating Then
-                SaveLine("GU" & strConvertRepeatUnit(.lngRptUnit))
-                SaveLine("GN" & .intRptNumber)
-                SaveLine("GE" & gstrFormatDate(.datRptEnd))
             End If
         End With
     End Sub

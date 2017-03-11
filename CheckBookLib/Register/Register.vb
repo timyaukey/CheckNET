@@ -27,8 +27,6 @@ Public Class Register
     Private mlngAllocationUnit As Integer
     'Show this register initially in the UI.
     Private mblnShowInitially As Boolean
-    'Register contains only trx not known to the bank (all fake, no running balance).
-    Private mblnNonBank As Boolean
     'Index of current Trx. Used only by the UI.
     Private mlngTrxCurrent As Integer
     'Date of oldest fake normal Trx found in LoadPostProcessing().
@@ -38,8 +36,6 @@ Public Class Register
     'Collection of all Trx that are part of a repeating sequence,
     'keyed by "#" & strRepeatKey & "." & intRepeatSeq.
     Private mcolRepeatTrx As Dictionary(Of String, Trx)
-    'Register is to define repeating Trx.
-    Private mblnRepeat As Boolean
     'EventLog for Register.
     Private mobjLog As EventLog
     'True iff operator deleted register.
@@ -90,20 +86,18 @@ Public Class Register
     'error is detected.
     Public Event ValidationError(ByVal lngIndex As Integer, ByVal strMsg As String)
 
-    Public Sub Init(ByVal strTitle_ As String, ByVal strRegisterKey_ As String, ByVal blnShowInitially_ As Boolean, ByVal blnNonBank_ As Boolean, ByVal lngAllocationUnit_ As Integer, ByVal datOldestBudgetEndAllowed_ As Date, ByVal blnRepeat_ As Boolean)
+    Public Sub Init(ByVal strTitle_ As String, ByVal strRegisterKey_ As String, ByVal blnShowInitially_ As Boolean, ByVal lngAllocationUnit_ As Integer, ByVal datOldestBudgetEndAllowed_ As Date)
 
         mstrTitle = strTitle_
         mstrRegisterKey = strRegisterKey_
         mlngAllocationUnit = lngAllocationUnit_
         mblnShowInitially = blnShowInitially_
-        mblnNonBank = blnNonBank_
         If mstrRegisterKey = "" Then
             gRaiseError("Missing register key in Register.Init")
         End If
         mdatOldestFakeNormal = System.DateTime.FromOADate(0)
         mdatOldestBudgetEndAllowed = datOldestBudgetEndAllowed_
         mcolRepeatTrx = New Dictionary(Of String, Trx)
-        mblnRepeat = blnRepeat_
         Erase maobjTrx
         mlngTrxAllocated = 0
         mlngTrxUsed = 0
@@ -1178,23 +1172,6 @@ Public Class Register
         End Set
     End Property
 
-
-    Public Property blnNonBank() As Boolean
-        Get
-            blnNonBank = mblnNonBank
-        End Get
-        Set(ByVal Value As Boolean)
-            mblnNonBank = Value
-            RaiseEvent MiscChange()
-        End Set
-    End Property
-
-    Public ReadOnly Property blnRepeat() As Boolean
-        Get
-            blnRepeat = mblnRepeat
-        End Get
-    End Property
-
     Public Property blnDeleted() As Boolean
         Get
             blnDeleted = mblnDeleted
@@ -1280,10 +1257,8 @@ Public Class Register
         For lngIndex = 1 To mlngTrxUsed
             objTrx = Me.objTrx(lngIndex)
             With objTrx
-                If Not mblnRepeat Then
-                    If .curBalance <> (curPriorBalance + .curAmount) Then
-                        RaiseValidationError(lngIndex, "Incorrect balance")
-                    End If
+                If .curBalance <> (curPriorBalance + .curAmount) Then
+                    RaiseValidationError(lngIndex, "Incorrect balance")
                 End If
                 curPriorBalance = .curBalance
                 If .strSortKey < strPriorSortKey Then

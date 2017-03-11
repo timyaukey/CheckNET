@@ -84,7 +84,7 @@ Friend Class CBMainForm
             strFile = Dir(gstrAccountPath() & "\*.act")
             If strFile = "" Then
                 MsgBox("Creating first checking account...", MsgBoxStyle.Information)
-                gCreateAccount("Main", "Checking Account", "Main Register")
+                gCreateAccount("Main", "Checking Account", "Main Register", mobjEverything.intGetUnusedAccountKey(), Account.AccountType.Asset)
                 strFile = Dir(gstrAccountPath() & "\*.act")
             End If
             While strFile <> ""
@@ -339,7 +339,7 @@ Friend Class CBMainForm
             Next frm2
 
             frm = New ShowRegisterForm
-            frm.Show()
+            frm.ShowWindow(mobjEverything)
 
             Exit Sub
         Catch ex As Exception

@@ -98,6 +98,12 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountForm.Designer.vb">
+      <DependentUpon>AccountForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AccountForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="AdjustBudgetsToCashForm.Designer.vb">
       <SubType>Code</SubType>
       <DependentUpon>AdjustBudgetsToCashForm.vb</DependentUpon>
@@ -302,6 +308,9 @@
     <Compile Include="TrxTypeListForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <EmbeddedResource Include="AccountForm.resx">
+      <DependentUpon>AccountForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AdjustBudgetsToCashForm.resX">
       <DependentUpon>AdjustBudgetsToCashForm.vb</DependentUpon>
       <SubType>Designer</SubType>
