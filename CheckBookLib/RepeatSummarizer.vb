@@ -34,8 +34,8 @@ Public Class RepeatSummarizer
         sum.Define(key, name, fromGenerator)
     End Sub
 
-    Public Function BuildStringTranslator() As StringTranslator
-        Dim trans As StringTranslator = New StringTranslator()
+    Public Function BuildStringTranslator() As SimpleStringTranslator
+        Dim trans As SimpleStringTranslator = New SimpleStringTranslator()
         Dim keySum As KeySummary
         Dim names As Dictionary(Of String, NameSummary)
         Dim nameSum As NameSummary = Nothing
@@ -64,7 +64,7 @@ Public Class RepeatSummarizer
             If Not keySum.FromGenerator Then
                 repeatName += " (old)"
             End If
-            trans.Add(keySum.Key, repeatName, repeatName)
+            trans.Add(New StringTransElement(keySum.Key, repeatName, repeatName))
         Next
         BuildStringTranslator = trans
     End Function

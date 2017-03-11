@@ -22,7 +22,7 @@ Public Class EventLog
     'Date and time Init() was called.
     Private mdatStart As Date
     'List of repeat keys
-    Private mobjRepeats As StringTranslator
+    Private mobjRepeats As IStringTranslator
 
     Public Sub Init(ByVal objReg As Register, ByVal strLogin As String)
         mcolLoggers = New List(Of ILogger)
@@ -34,7 +34,7 @@ Public Class EventLog
         mdatStart = Now
     End Sub
 
-    Public Sub WriteAll(ByVal strAccountTitle As String, ByVal objRepeats As StringTranslator)
+    Public Sub WriteAll(ByVal strAccountTitle As String, ByVal objRepeats As IStringTranslator)
         Dim objLogger As ILogger
         Dim objParseError As VB6XmlParseError
         Dim strLogFolder As String

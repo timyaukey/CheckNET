@@ -15,7 +15,7 @@ Friend Class AdjustBudgetsToCashForm
     'day will be adjusted to achieve the desired target balance.
 
     Private mobjReg As Register
-    Private mobjBudgets As StringTranslator
+    Private mobjBudgets As IStringTranslator
 
     Private Const mintNUM_BUDGETS As Short = 5
 
@@ -36,7 +36,7 @@ Friend Class AdjustBudgetsToCashForm
     Private Const mstrREG_MINBAL As String = "MinBalance"
     Private Const mstrREG_NAMEPRE As String = "NamePrefix"
 
-    Public Sub ShowModal(ByVal objReg_ As Register, ByVal objBudgets_ As StringTranslator)
+    Public Sub ShowModal(ByVal objReg_ As Register, ByVal objBudgets_ As IStringTranslator)
         Try
 
             cboBudget(1) = _cboBudget_1
@@ -525,7 +525,7 @@ Friend Class AdjustBudgetsToCashForm
         End Try
     End Sub
 
-    Private Function strGetStringTranslatorKeyFromCombo(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As StringTranslator) As String
+    Private Function strGetStringTranslatorKeyFromCombo(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As IStringTranslator) As String
 
         Dim lngItemData As Integer
 

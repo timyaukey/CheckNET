@@ -1308,7 +1308,7 @@ Public Class Register
         mobjLog.AddILogGroupEnd(New LogGroupEnd, objStartLogger)
     End Sub
 
-    Public Sub WriteEventLog(ByVal strAccountTitle As String, ByVal objRepeats As StringTranslator)
+    Public Sub WriteEventLog(ByVal strAccountTitle As String, ByVal objRepeats As IStringTranslator)
         mobjLog.WriteAll(strAccountTitle, objRepeats)
     End Sub
 

@@ -523,7 +523,7 @@ Public Module CBMain
         End If
     End Sub
 
-    Public Sub gLoadComboFromStringTranslator(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As StringTranslator, ByVal blnAddEmpty As Boolean)
+    Public Sub gLoadComboFromStringTranslator(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As IStringTranslator, ByVal blnAddEmpty As Boolean)
 
         Try
 

@@ -505,7 +505,7 @@ Friend Class TrxForm
         End With
     End Sub
 
-    Private Sub SetComboFromStringTranslator(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As StringTranslator, ByVal strKey As String)
+    Private Sub SetComboFromStringTranslator(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As IStringTranslator, ByVal strKey As String)
         Dim strValue1 As String
         Dim intIndex As Integer
         'Apparently you cannot assign a zero length string to a combo box
@@ -2128,7 +2128,7 @@ Friend Class TrxForm
         End If
     End Sub
 
-    Private Function strGetStringTranslatorKeyFromCombo(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As StringTranslator) As String
+    Private Function strGetStringTranslatorKeyFromCombo(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As IStringTranslator) As String
 
         Dim lngItemData As Integer
 

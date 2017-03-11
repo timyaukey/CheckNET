@@ -929,13 +929,13 @@ Friend Class UTMainForm
     End Function
 
     Private Sub TestStringTranslator()
-        Dim objString As StringTranslator
+        Dim objString As SimpleStringTranslator
 
         gUTSetTestTitle("TestStringTranslator")
 
         gUTSetSubTest("Load")
 
-        objString = New StringTranslator
+        objString = New SimpleStringTranslator()
         objString.LoadFile(gstrAddPath("UTData\UTStringTran1.txt"))
 
         gUTSetSubTest("Verify")

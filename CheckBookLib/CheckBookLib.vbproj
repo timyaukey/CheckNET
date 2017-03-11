@@ -75,6 +75,8 @@
   <ItemGroup>
     <Compile Include="Account.vb" />
     <Compile Include="BooleanStringTypeConverter.vb" />
+    <Compile Include="BudgetTranslator.vb" />
+    <Compile Include="CategoryTranslator.vb" />
     <Compile Include="CBListBoxItem.vb" />
     <Compile Include="CheckBookUtils.vb" />
     <Compile Include="ErrorHandling.vb" />
@@ -89,6 +91,8 @@
     <Compile Include="Imports\CheckImportPlugin.vb" />
     <Compile Include="Imports\CheckImportStandard.vb" />
     <Compile Include="Imports\DepositImportPlugin.vb" />
+    <Compile Include="IStringTranslator.vb" />
+    <Compile Include="LineStringTranslator.vb" />
     <Compile Include="Plugins\IHostUI.vb" />
     <Compile Include="Imports\IImportHandler.vb" />
     <Compile Include="Imports\InvoiceImportPlugin.vb" />
@@ -124,6 +128,8 @@
     <Compile Include="Imports\InvoiceImportStandard.vb" />
     <Compile Include="RepeatSummarizer.vb" />
     <Compile Include="RepeatUnitTypeConverter.vb" />
+    <Compile Include="StringTransElement.vb" />
+    <Compile Include="SimpleStringTranslator.vb" />
     <Compile Include="TrxGen\FilePersistableType.vb" />
     <Compile Include="TrxGen\TGEBudgetTrx.vb" />
     <Compile Include="TrxGen\TGEGeneratorInterpolate.vb" />

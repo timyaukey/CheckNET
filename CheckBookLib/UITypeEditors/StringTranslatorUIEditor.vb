@@ -16,7 +16,7 @@ Public MustInherit Class StringTranslatorUIEditor
     Public Overrides Function EditValue(context As ITypeDescriptorContext, provider As IServiceProvider, value As Object) As Object
         Dim editorService As IWindowsFormsEditorService
         Dim selectionControl As ListBoxUIEditor
-        Dim objTranslator As StringTranslator
+        Dim objTranslator As IStringTranslator
         Dim strCatName As String
         Dim i As Integer
 
@@ -45,14 +45,14 @@ Public MustInherit Class StringTranslatorUIEditor
         Return String.Empty
     End Function
 
-    Protected MustOverride Function GetStringTranslator() As StringTranslator
+    Protected MustOverride Function GetStringTranslator() As IStringTranslator
 
 End Class
 
 Public Class CategoryUIEditor
     Inherits StringTranslatorUIEditor
 
-    Protected Overrides Function GetStringTranslator() As StringTranslator
+    Protected Overrides Function GetStringTranslator() As IStringTranslator
         Return gobjCategories
     End Function
 End Class
@@ -60,7 +60,7 @@ End Class
 Public Class BudgetUIEditor
     Inherits StringTranslatorUIEditor
 
-    Protected Overrides Function GetStringTranslator() As StringTranslator
+    Protected Overrides Function GetStringTranslator() As IStringTranslator
         Return gobjBudgets
     End Function
 End Class

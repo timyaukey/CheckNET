@@ -98,7 +98,7 @@ Friend Class SearchForm
         End With
     End Sub
 
-    Private Sub LoadComboFromStringTranslator(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As StringTranslator)
+    Private Sub LoadComboFromStringTranslator(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As IStringTranslator)
 
         gLoadComboFromStringTranslator(cbo, objList, False)
         With cbo

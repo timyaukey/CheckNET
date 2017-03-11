@@ -8,9 +8,9 @@ Friend Class LiveBudgetListForm
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     Private mobjReg As Register
-    Private mobjBudgets As StringTranslator
+    Private mobjBudgets As IStringTranslator
 
-    Public Sub ShowModal(ByVal objReg_ As Register, ByVal objBudgets_ As StringTranslator)
+    Public Sub ShowModal(ByVal objReg_ As Register, ByVal objBudgets_ As IStringTranslator)
 
         mobjReg = objReg_
         mobjBudgets = objBudgets_

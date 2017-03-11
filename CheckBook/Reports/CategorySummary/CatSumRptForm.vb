@@ -10,8 +10,8 @@ Friend Class CatSumRptForm
 	
 	Private maudtCatTotals() As PublicTypes.CategoryInfo 'Indexed by index in gobjCategories.
     Private mcolSelectedAccounts As IEnumerable(Of Account)
-    Private mobjCats As StringTranslator
-	Private mdatStart As Date
+    Private mobjCats As IStringTranslator
+    Private mdatStart As Date
 	Private mdatEnd As Date
 	Private mblnIncludeFake As Boolean
 	Private mblnIncludeGenerated As Boolean
@@ -23,7 +23,7 @@ Friend Class CatSumRptForm
 	Private Const mintAMOUNT_WIDTH As Short = 24
 
     Public Sub ShowMe(ByRef audtCatTotals() As PublicTypes.CategoryInfo, ByVal colSelectedAccounts As IEnumerable(Of Account),
-                      ByVal objCats As StringTranslator, ByVal datStart As Date, ByVal datEnd As Date,
+                      ByVal objCats As IStringTranslator, ByVal datStart As Date, ByVal datEnd As Date,
                       ByVal blnIncludeFake As Boolean, ByVal blnIncludeGenerated As Boolean, ByVal objHostUI As IHostUI)
 
         'maudtCatTotals = VB6.CopyArray(audtCatTotals)

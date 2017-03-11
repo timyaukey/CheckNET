@@ -15,8 +15,8 @@ Public Module CheckBookUtils
     Public gcolAccounts As List(Of Account)
 
     'Global category and budget lists.
-    Public gobjCategories As StringTranslator
-    Public gobjBudgets As StringTranslator
+    Public gobjCategories As CategoryTranslator
+    Public gobjBudgets As BudgetTranslator
 
     'Category keys of categories which typically have due dates
     '14 days or less after invoice or billing dates. Category
@@ -45,9 +45,9 @@ Public Module CheckBookUtils
     Public Sub gLoadGlobalLists()
         Try
 
-            gobjBudgets = New StringTranslator
+            gobjBudgets = New BudgetTranslator()
             gobjBudgets.LoadFile(gstrAddPath("Shared.bud"))
-            gobjCategories = New StringTranslator
+            gobjCategories = New CategoryTranslator()
             gobjCategories.LoadFile(gstrAddPath("Shared.cat"))
             gBuildShortTermsCatKeys()
             gFindPlaceholderBudget()

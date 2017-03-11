@@ -12,7 +12,7 @@ Public Class Account
     Private mintKey As Integer
     Private mlngType As AccountType
     'Repeat key list for account.
-    Private mobjRepeats As StringTranslator
+    Private mobjRepeats As SimpleStringTranslator
     Private mobjRepeatSummarizer As RepeatSummarizer
     'File mobjRepeats was loaded from.
     'Private mstrRepeatsFile As String
@@ -98,7 +98,7 @@ Public Class Account
         End Get
     End Property
 
-    Public ReadOnly Property objRepeats() As StringTranslator
+    Public ReadOnly Property objRepeats() As SimpleStringTranslator
         Get
             objRepeats = mobjRepeats
         End Get
@@ -416,13 +416,13 @@ Public Class Account
         objFindReg = Nothing
     End Function
 
-    Public Function objRegisterList() As StringTranslator
+    Public Function objRegisterList() As SimpleStringTranslator
         Dim objReg As Register
-        Dim objResult As StringTranslator
+        Dim objResult As SimpleStringTranslator
 
-        objResult = New StringTranslator
+        objResult = New SimpleStringTranslator
         For Each objReg In mcolRegisters
-            objResult.Add(objReg.strRegisterKey, objReg.strTitle, objReg.strTitle)
+            objResult.Add(New StringTransElement(objReg.strRegisterKey, objReg.strTitle, objReg.strTitle))
         Next objReg
         objRegisterList = objResult
     End Function

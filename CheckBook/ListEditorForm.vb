@@ -9,7 +9,7 @@ Friend Class ListEditorForm
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     Private mlngListType As ListType
-    Private mobjList As StringTranslator
+    Private mobjList As SimpleStringTranslator
     Private mstrFile As String
     'If not Nothing, list is private to this account.
     Private mobjAccount As Account
@@ -21,7 +21,7 @@ Friend Class ListEditorForm
         glngLIST_TYPE_REPEAT = 3
     End Enum
 
-    Public Sub ShowMe(ByVal lngListType As ListType, ByVal strFile As String, ByVal objList As StringTranslator, ByVal strCaption As String, ByVal objAccount As Account)
+    Public Sub ShowMe(ByVal lngListType As ListType, ByVal strFile As String, ByVal objList As SimpleStringTranslator, ByVal strCaption As String, ByVal objAccount As Account)
 
         Dim frm As System.Windows.Forms.Form
 
@@ -398,7 +398,7 @@ Friend Class ListEditorForm
                 Else
                     strName2 = strName1
                 End If
-                mobjList.Add(strKey, strName1, strName2)
+                mobjList.Add(New StringTransElement(strKey, strName1, strName2))
             Next
 
             Exit Sub
