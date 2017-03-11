@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports CheckBookLib
@@ -19,7 +19,7 @@ Friend Class RegPropertiesForm
         mobjReg = objReg
         txtTitle.Text = mobjReg.strTitle
         txtTitle.Enabled = Not blnReadOnly
-        chkShowInitially.CheckState = IIf(mobjReg.blnShowInitially, CheckState.Checked, CheckState.Unchecked)
+        chkShowInitially.CheckState = DirectCast(IIf(mobjReg.blnShowInitially, CheckState.Checked, CheckState.Unchecked), CheckState)
         chkShowInitially.Enabled = Not blnReadOnly
         cmdOkay.Enabled = Not blnReadOnly
         Me.ShowDialog()

@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports CheckBookLib
@@ -80,7 +80,7 @@ Friend Class TrxTypeListForm
     End Sub
 
     Private Sub cmdMoveUp_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdMoveUp.Click
-        Dim intNewIndex As Short
+        Dim intNewIndex As Integer
 
         Try
 
@@ -104,7 +104,7 @@ Friend Class TrxTypeListForm
     End Sub
 
     Private Sub cmdMoveDown_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdMoveDown.Click
-        Dim intNewIndex As Short
+        Dim intNewIndex As Integer
 
         Try
 
@@ -214,7 +214,7 @@ Friend Class TrxTypeListForm
 
     Private Sub ShowTrxTypeList()
         Dim elmTrxType As VB6XmlElement
-        Dim intIndex As Short
+        Dim intIndex As Integer
         Dim objFirst As System.Windows.Forms.ListViewItem
 
         Try
@@ -222,7 +222,7 @@ Friend Class TrxTypeListForm
             lvwTrxTypes.Items.Clear()
             mcolTrxTypes = melmTypeTable.SelectNodes("TrxType")
             For intIndex = 1 To mcolTrxTypes.Length
-                elmTrxType = mcolTrxTypes.Item(intIndex - 1)
+                elmTrxType = DirectCast(mcolTrxTypes.Item(intIndex - 1), VB6XmlElement)
                 objCreateTrxTypeListItem(elmTrxType, intIndex - 1)
             Next
             System.Windows.Forms.Application.DoEvents()
@@ -266,7 +266,7 @@ Friend Class TrxTypeListForm
         Try
 
             mobjDisplayedTrxType = lvwTrxTypes.FocusedItem
-            melmTrxTypeToSave = mcolTrxTypes.Item(CShort(mobjDisplayedTrxType.Tag))
+            melmTrxTypeToSave = DirectCast(mcolTrxTypes.Item(CShort(mobjDisplayedTrxType.Tag)), VB6XmlElement)
             txtNumber.Text = strTrxTypeAttrib(melmTrxTypeToSave, "Number")
             txtBefore.Text = strTrxTypeAttrib(melmTrxTypeToSave, "Before")
             txtAfter.Text = strTrxTypeAttrib(melmTrxTypeToSave, "After")
@@ -286,7 +286,7 @@ Friend Class TrxTypeListForm
         If gblnXmlAttributeMissing(vstrValue) Then
             vstrValue = ""
         End If
-        strTrxTypeAttrib = vstrValue
+        strTrxTypeAttrib = CStr(vstrValue)
     End Function
 
     Private Function blnValidateAndCopyTrxTypeToXML() As Boolean
@@ -381,7 +381,7 @@ Friend Class TrxTypeListForm
         End Try
     End Sub
 
-    Private Function objCreateTrxTypeListItem(ByVal elmTrxType As VB6XmlElement, ByVal intDOMIndex As Short) As System.Windows.Forms.ListViewItem
+    Private Function objCreateTrxTypeListItem(ByVal elmTrxType As VB6XmlElement, ByVal intDOMIndex As Integer) As System.Windows.Forms.ListViewItem
         Dim objItem As System.Windows.Forms.ListViewItem
 
         objCreateTrxTypeListItem = Nothing
