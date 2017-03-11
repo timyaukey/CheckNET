@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports CheckBookLib
@@ -195,77 +195,77 @@ Friend Class UTMainForm
         Dim objUTReg As UTRegister
         objUTReg = gobjUTNewReg()
         If intTrxCount >= 1 Then
-            objUTReg.LoadNormal("1000", #4/1/2000#, 100.0#)
+            objUTReg.LoadNormal("1000", #4/1/2000#, 100D)
         End If
         If intTrxCount >= 2 Then
-            objUTReg.LoadNormal("1001", #3/1/2000#, 200.0#)
+            objUTReg.LoadNormal("1001", #3/1/2000#, 200D)
         End If
         If intTrxCount >= 3 Then
-            objUTReg.LoadNormal("1002", #5/1/2000#, -50.99)
+            objUTReg.LoadNormal("1002", #5/1/2000#, -50.99D)
         End If
         If intTrxCount >= 4 Then
-            objUTReg.LoadBudget(#4/10/2000#, -200.0#, #4/20/2000#, "bud1")
+            objUTReg.LoadBudget(#4/10/2000#, -200D, #4/20/2000#, "bud1")
         End If
         If intTrxCount >= 5 Then
             'One day before start of budget range, so won't apply to #4.
-            objUTReg.LoadNormal("Card", #4/9/2000#, -10.0#, strBudgetKey:="bud1")
+            objUTReg.LoadNormal("Card", #4/9/2000#, -10D, strBudgetKey:="bud1")
         End If
         If intTrxCount >= 6 Then
             'One day after end of budget range, so won't apply to #4.
-            objUTReg.LoadNormal("Card", #4/21/2000#, -10.0#, strBudgetKey:="bud1")
+            objUTReg.LoadNormal("Card", #4/21/2000#, -10D, strBudgetKey:="bud1")
         End If
         If intTrxCount >= 7 Then
             '#5 will be applied to this. Is a one day budget date range, so
             'now we've tested before and after the beginning and ending dates.
-            objUTReg.LoadBudget(#4/9/2000#, -15.0#, #4/9/2000#, "bud1")
-            objUTReg.SetTrxAmount(7, -5.0#)
+            objUTReg.LoadBudget(#4/9/2000#, -15D, #4/9/2000#, "bud1")
+            objUTReg.SetTrxAmount(7, -5D)
         End If
         If intTrxCount >= 8 Then
             'Won't apply this until #10 is loaded.
-            objUTReg.LoadNormal("1500", #4/11/2000#, -20.0#, strBudgetKey:="bud2")
+            objUTReg.LoadNormal("1500", #4/11/2000#, -20D, strBudgetKey:="bud2")
         End If
         If intTrxCount >= 9 Then
             'Will apply this to the budget in #4.
-            objUTReg.LoadNormal("1499", #4/11/2000#, -21.0#, strBudgetKey:="bud1")
-            objUTReg.SetTrxAmount(4, -179.0#)
+            objUTReg.LoadNormal("1499", #4/11/2000#, -21D, strBudgetKey:="bud1")
+            objUTReg.SetTrxAmount(4, -179D)
         End If
         If intTrxCount >= 10 Then
             '#8 will be applied to this.
-            objUTReg.LoadBudget(#4/10/2000#, -100.0#, #4/20/2000#, "bud2")
-            objUTReg.SetTrxAmount(10, -80.0#)
+            objUTReg.LoadBudget(#4/10/2000#, -100D, #4/20/2000#, "bud2")
+            objUTReg.SetTrxAmount(10, -80D)
         End If
         If intTrxCount >= 11 Then
             'Cause budget in #10 to be used up exactly.
             'This also tests multiple splits applied to a single budget.
-            objUTReg.LoadNormal("1501", #4/13/2000#, -80.0#, strBudgetKey:="bud2")
-            objUTReg.SetTrxAmount(10, 0.0#)
+            objUTReg.LoadNormal("1501", #4/13/2000#, -80D, strBudgetKey:="bud2")
+            objUTReg.SetTrxAmount(10, 0.0D)
         End If
         If intTrxCount >= 12 Then
             'Cause budget in #10 to be exceeded.
-            objUTReg.LoadNormal("1502", #4/13/2000#, -2.0#, strBudgetKey:="bud2")
+            objUTReg.LoadNormal("1502", #4/13/2000#, -2D, strBudgetKey:="bud2")
         End If
         If intTrxCount >= 13 Then
-            objUTReg.LoadBudget(#4/14/2000#, -50.0#, #4/17/2000#, "bud3")
+            objUTReg.LoadBudget(#4/14/2000#, -50D, #4/17/2000#, "bud3")
         End If
         If intTrxCount >= 14 Then
             'Splits applied to different budgets.
-            objUTReg.LoadNormal("1503", #4/15/2000#, -10.0#, strBudgetKey:="bud1", vcurAmount2:=-7.3, strBudgetKey2:="bud3")
-            objUTReg.SetTrxAmount(4, -169.0#)
-            objUTReg.SetTrxAmount(13, -42.7)
+            objUTReg.LoadNormal("1503", #4/15/2000#, -10D, strBudgetKey:="bud1", vcurAmount2:=-7.3, strBudgetKey2:="bud3")
+            objUTReg.SetTrxAmount(4, -169D)
+            objUTReg.SetTrxAmount(13, -42.7D)
         End If
         If intTrxCount >= 15 Then
             'Credit budget.
-            objUTReg.LoadBudget(#4/10/2000#, 100.0#, #4/20/2000#, "bud4")
+            objUTReg.LoadBudget(#4/10/2000#, 100D, #4/20/2000#, "bud4")
         End If
         If intTrxCount >= 16 Then
             'Apply to credit budget.
-            objUTReg.LoadNormal("DEP", #4/19/2000#, 0.21, strBudgetKey:="bud4")
-            objUTReg.SetTrxAmount(15, 99.79)
+            objUTReg.LoadNormal("DEP", #4/19/2000#, 0.21D, strBudgetKey:="bud4")
+            objUTReg.SetTrxAmount(15, 99.79D)
         End If
         If intTrxCount >= 17 Then
             'Exceed credit budget.
-            objUTReg.LoadNormal("DEP", #4/19/2000#, 120.0#, strBudgetKey:="bud4")
-            objUTReg.SetTrxAmount(15, 0.0#)
+            objUTReg.LoadNormal("DEP", #4/19/2000#, 120D, strBudgetKey:="bud4")
+            objUTReg.SetTrxAmount(15, 0.0D)
         End If
         objUTReg.objReg.LoadPostProcessing()
         objLoadBuild = objUTReg
@@ -285,20 +285,20 @@ Friend Class UTMainForm
 
             gUTSetSubTest("Test add for sort order")
 
-            .AddNormal("1500", #6/1/2000#, -50.75, "First add", 1, 1, 1)
+            .AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1)
             .Validate("", 1)
 
-            .AddNormal("1501", #6/1/2000#, -24.95, "Second add", 2, 2, 2)
+            .AddNormal("1501", #6/1/2000#, -24.95D, "Second add", 2, 2, 2)
             .Validate("", 1, 2)
             gUTAssert(.strBudgetsChanged = "", "Expected no budgets to change")
 
-            .AddNormal("1502", #6/1/2000#, -20.0#, "Third add", 3, 3, 3)
+            .AddNormal("1502", #6/1/2000#, -20D, "Third add", 3, 3, 3)
             .Validate("", 1, 2, 3)
 
-            .AddNormal("DEP", #6/1/2000#, 400.0#, "Fourth add", 1, 1, 4)
+            .AddNormal("DEP", #6/1/2000#, 400D, "Fourth add", 1, 1, 4)
             .Validate("", 4, 1, 2, 3)
 
-            .AddNormal("1499", #6/1/2000#, -10.0#, "Fifth", 2, 2, 5)
+            .AddNormal("1499", #6/1/2000#, -10D, "Fifth", 2, 2, 5)
             .Validate("", 4, 5, 1, 2, 3)
 
             'Next we test sort order and balances (no budgets) during updates.
@@ -310,62 +310,62 @@ Friend Class UTMainForm
 
             'Move first register entry up and change amount.
             'No change to position, but all balances change.
-            .SetTrxAmount(4, 399.0#)
+            .SetTrxAmount(4, 399D)
             .SetTrxNumber(4, "DP2")
             .SetTrxDate(4, #5/1/2000#)
-            .UpdateNormal("DP2", #5/1/2000#, 399.0#, "First upd", 1, 1, 1, 5)
+            .UpdateNormal("DP2", #5/1/2000#, 399D, "First upd", 1, 1, 1, 5)
             .Validate("", 4, 5, 1, 2, 3)
 
             'Move last register entry down.
             'No change to position.
             .SetTrxDate(3, #6/15/2000#)
-            .UpdateNormal("1502", #6/15/2000#, -20.0#, "Second upd", 5, 5, 5, 5)
+            .UpdateNormal("1502", #6/15/2000#, -20D, "Second upd", 5, 5, 5, 5)
             .Validate("", 4, 5, 1, 2, 3)
 
             'Move middle register entry down one line.
             .SetTrxDate(1, #6/5/2000#)
-            .SetTrxAmount(1, -49.0#)
-            .UpdateNormal("1500", #6/5/2000#, -49.0#, "Third upd", 3, 4, 3, 5)
+            .SetTrxAmount(1, -49D)
+            .UpdateNormal("1500", #6/5/2000#, -49D, "Third upd", 3, 4, 3, 5)
             .Validate("", 4, 5, 2, 1, 3)
 
             'Move middle register entry to end of registry.
             .SetTrxDate(2, #6/16/2000#)
-            .UpdateNormal("1501", #6/16/2000#, -24.95, "Fourth upd", 3, 5, 3, 5)
+            .UpdateNormal("1501", #6/16/2000#, -24.95D, "Fourth upd", 3, 5, 3, 5)
             .Validate("", 4, 5, 1, 3, 2)
 
             'Move second register entry down two lines.
             .SetTrxDate(5, #6/15/2000#)
             .SetTrxNumber(5, "1503")
-            .UpdateNormal("1503", #6/15/2000#, -10.0#, "Fifth upd", 2, 4, 2, 4)
+            .UpdateNormal("1503", #6/15/2000#, -10D, "Fifth upd", 2, 4, 2, 4)
             .Validate("", 4, 1, 3, 5, 2)
 
             'Move first register entry to end of registry.
             .SetTrxDate(4, #7/1/2000#)
-            .UpdateNormal("DP2", #7/1/2000#, 399.0#, "Sixth upd", 1, 5, 1, 5)
+            .UpdateNormal("DP2", #7/1/2000#, 399D, "Sixth upd", 1, 5, 1, 5)
             .Validate("", 1, 3, 5, 2, 4)
 
             'Make change that doesn't affect sort order.
-            .SetTrxAmount(3, -21.0#)
-            .UpdateNormal("1502", #6/15/2000#, -21.0#, "Seventh upd", 2, 2, 2, 5)
+            .SetTrxAmount(3, -21D)
+            .UpdateNormal("1502", #6/15/2000#, -21D, "Seventh upd", 2, 2, 2, 5)
             .Validate("", 1, 3, 5, 2, 4)
 
             'Now test budgets.
 
             gUTSetSubTest("Test add for budgets")
 
-            .AddBudget(#6/16/2000#, -50.0#, #6/20/2000#, "bud1", "First add", 4, 4, 6)
+            .AddBudget(#6/16/2000#, -50D, #6/20/2000#, "bud1", "First add", 4, 4, 6)
             .Validate("", 1, 3, 5, 6, 2, 4)
             gUTAssert(.strBudgetsChanged = "", "Did not expect budgets to change")
 
-            .SetTrxAmount(6, -46.0#)
-            .AddNormal("Card", #6/17/2000#, -4.0#, "Second add", 6, 4, 6, strBudgetKey:="bud1")
+            .SetTrxAmount(6, -46D)
+            .AddNormal("Card", #6/17/2000#, -4D, "Second add", 6, 4, 6, strBudgetKey:="bud1")
             .Validate("", 1, 3, 5, 6, 2, 7, 4)
             gUTAssert(.strBudgetsChanged = ",4", "Expected budgets to change")
 
             gUTSetSubTest("Test update for budgets")
 
             'Add a second budget trx
-            .AddBudget(#6/17/2000#, -100.0#, #6/17/2000#, "bud2", "First add", 6, 6, 8)
+            .AddBudget(#6/17/2000#, -100D, #6/17/2000#, "bud2", "First add", 6, 6, 8)
             .Validate("", 1, 3, 5, 6, 2, 8, 7, 4)
 
             'Update the normal trx currently applied to the first budget,
@@ -374,15 +374,15 @@ Friend Class UTMainForm
             'even though we change the trx amount both the new and old amounts
             'come out of budgets (though different budgets) so it nets out the
             'same in the end.
-            .SetTrxAmount(6, -28.0#)
-            .SetTrxAmount(8, -82.5)
-            .SetTrxAmount(7, -39.5)
-            .UpdateNormal("Card", #6/17/2000#, -22.0#, "Second add", 7, 7, 4, 7, strBudgetKey:="bud1", vcurAmount2:=-17.5, strBudgetKey2:="bud2")
+            .SetTrxAmount(6, -28D)
+            .SetTrxAmount(8, -82.5D)
+            .SetTrxAmount(7, -39.5D)
+            .UpdateNormal("Card", #6/17/2000#, -22D, "Second add", 7, 7, 4, 7, strBudgetKey:="bud1", vcurAmount2:=-17.5, strBudgetKey2:="bud2")
             .Validate("", 1, 3, 5, 6, 2, 8, 7, 4)
             gUTAssert(.strBudgetsChanged = ",4,4,6", "Expected 3 budget changes")
 
             'Reduce the limit of the first budget to cause it to be exhausted.
-            .SetTrxAmount(6, 0.0#)
+            .SetTrxAmount(6, 0.0D)
             .UpdateBudget(#6/16/2000#, -21.94, #6/20/2000#, "bud1", "Third update", 4, 4, 4, 8)
             .Validate("", 1, 3, 5, 6, 2, 8, 7, 4)
 
@@ -406,7 +406,7 @@ Friend Class UTMainForm
             gUTAssert(objTrx.objSecondSplit.objBudget Is Nothing, "Expected split to be un-applied")
 
             'Delete a normal trx applied to a budget, to show it un-applies.
-            .SetTrxAmount(6, -21.94)
+            .SetTrxAmount(6, -21.94D)
             .DeleteEntry(4, 3, 3, "Fifth delete")
             .Validate("", 3, 5, 6)
 
@@ -436,10 +436,10 @@ Friend Class UTMainForm
 
         objUTReg1 = gobjUTNewReg(strRegisterKey:="reg1")
         With objUTReg1
-            .AddNormal("DEP", #4/1/2000#, 2000.0#, "Add1", 1, 1, 1)
-            .AddNormal("100", #4/3/2000#, -25.0#, "Add2", 2, 2, 2)
-            .AddNormal("101", #4/5/2000#, -37.0#, "Add3", 3, 3, 3)
-            .AddNormal("102", #4/7/2000#, -45.3, "Add4", 4, 4, 4)
+            .AddNormal("DEP", #4/1/2000#, 2000D, "Add1", 1, 1, 1)
+            .AddNormal("100", #4/3/2000#, -25D, "Add2", 2, 2, 2)
+            .AddNormal("101", #4/5/2000#, -37D, "Add3", 3, 3, 3)
+            .AddNormal("102", #4/7/2000#, -45.3D, "Add4", 4, 4, 4)
             .Validate("", 1, 2, 3, 4)
         End With
 
@@ -447,16 +447,16 @@ Friend Class UTMainForm
 
         objUTReg2 = gobjUTNewReg(strRegisterKey:="reg2")
         With objUTReg2
-            .AddNormal("DEP", #4/1/2000#, 3000.0#, "Add1", 1, 1, 1)
-            .AddNormal("200", #4/3/2000#, -25.0#, "Add2", 2, 2, 2)
-            .AddNormal("201", #4/15/2000#, -37.0#, "Add3", 3, 3, 3)
-            .AddNormal("202", #4/17/2000#, -45.3, "Add4", 4, 4, 4)
+            .AddNormal("DEP", #4/1/2000#, 3000D, "Add1", 1, 1, 1)
+            .AddNormal("200", #4/3/2000#, -25D, "Add2", 2, 2, 2)
+            .AddNormal("201", #4/15/2000#, -37D, "Add3", 3, 3, 3)
+            .AddNormal("202", #4/17/2000#, -45.3D, "Add4", 4, 4, 4)
             .Validate("", 1, 2, 3, 4)
         End With
 
         gUTSetSubTest("Create transfer")
 
-        objXfr.AddTransfer(objUTReg1.objReg, objUTReg2.objReg, #4/4/2000#, "xfer1", "", False, 100.39, "", False, False, 0)
+        objXfr.AddTransfer(objUTReg1.objReg, objUTReg2.objReg, #4/4/2000#, "xfer1", "", False, 100.39D, "", False, False, 0)
 
         objUTReg1.AddTrx(objUTReg1.objReg.objTrx(3))
         objUTReg1.Validate("Transfer added to 1", 1, 2, 5, 3, 4)
@@ -466,13 +466,13 @@ Friend Class UTMainForm
 
         gUTSetSubTest("Update transfer")
 
-        objXfr.UpdateTransfer(objUTReg1.objReg, 3, objUTReg2.objReg, #4/6/2000#, "xfer1", "", False, 29.95, "", False, False, 0)
+        objXfr.UpdateTransfer(objUTReg1.objReg, 3, objUTReg2.objReg, #4/6/2000#, "xfer1", "", False, 29.95D, "", False, False, 0)
 
-        objUTReg1.SetTrxAmount(5, 29.95)
+        objUTReg1.SetTrxAmount(5, 29.95D)
         objUTReg1.SetTrxDate(5, #4/6/2000#)
         objUTReg1.Validate("Transfer changed 1", 1, 2, 3, 5, 4)
 
-        objUTReg2.SetTrxAmount(5, -29.95)
+        objUTReg2.SetTrxAmount(5, -29.95D)
         objUTReg2.SetTrxDate(5, #4/6/2000#)
         objUTReg2.Validate("Transfer changed 2", 1, 2, 5, 3, 4)
 
@@ -488,10 +488,10 @@ Friend Class UTMainForm
 
         objUTReg1 = gobjUTNewReg(strRegisterKey:="reg1")
         With objUTReg1
-            .AddNormal("DEP", #4/1/2000#, 2000.0#, "Add1", 1, 1, 1)
-            .AddNormal("100", #4/3/2000#, -25.0#, "Add2", 2, 2, 2)
-            .AddNormal("101", #4/5/2000#, -37.0#, "Add3", 3, 3, 3, strRepeatKey:="r1", intRepeatSeq:=1)
-            .AddNormal("102", #4/7/2000#, -45.3, "Add4", 4, 4, 4)
+            .AddNormal("DEP", #4/1/2000#, 2000D, "Add1", 1, 1, 1)
+            .AddNormal("100", #4/3/2000#, -25D, "Add2", 2, 2, 2)
+            .AddNormal("101", #4/5/2000#, -37D, "Add3", 3, 3, 3, strRepeatKey:="r1", intRepeatSeq:=1)
+            .AddNormal("102", #4/7/2000#, -45.3D, "Add4", 4, 4, 4)
             .Validate("", 1, 2, 3, 4)
         End With
 
@@ -499,16 +499,16 @@ Friend Class UTMainForm
 
         objUTReg2 = gobjUTNewReg(strRegisterKey:="reg2")
         With objUTReg2
-            .AddNormal("DEP", #4/1/2000#, 3000.0#, "Add1", 1, 1, 1)
-            .AddNormal("200", #4/3/2000#, -25.0#, "Add2", 2, 2, 2)
-            .AddNormal("201", #4/15/2000#, -37.0#, "Add3", 3, 3, 3)
-            .AddNormal("202", #4/17/2000#, -45.3, "Add4", 4, 4, 4)
+            .AddNormal("DEP", #4/1/2000#, 3000D, "Add1", 1, 1, 1)
+            .AddNormal("200", #4/3/2000#, -25D, "Add2", 2, 2, 2)
+            .AddNormal("201", #4/15/2000#, -37D, "Add3", 3, 3, 3)
+            .AddNormal("202", #4/17/2000#, -45.3D, "Add4", 4, 4, 4)
             .Validate("", 1, 2, 3, 4)
         End With
 
         gUTSetSubTest("Create transfer (repeat)")
 
-        objXfr.AddTransfer(objUTReg1.objReg, objUTReg2.objReg, #4/4/2000#, "xfer1", "", False, 100.39, "r2", False, False, 2)
+        objXfr.AddTransfer(objUTReg1.objReg, objUTReg2.objReg, #4/4/2000#, "xfer1", "", False, 100.39D, "r2", False, False, 2)
 
         objUTReg1.AddTrx(objUTReg1.objReg.objTrx(3))
         objUTReg1.Validate("Transfer added to 1", 1, 2, 5, 3, 4)
@@ -519,16 +519,16 @@ Friend Class UTMainForm
 
         gUTSetSubTest("Update transfer (repeat)")
 
-        objXfr.UpdateTransfer(objUTReg1.objReg, 3, objUTReg2.objReg, #4/6/2000#, "xfer1", "", False, 29.95, "r3", False, False, 3)
+        objXfr.UpdateTransfer(objUTReg1.objReg, 3, objUTReg2.objReg, #4/6/2000#, "xfer1", "", False, 29.95D, "r3", False, False, 3)
 
-        objUTReg1.SetTrxAmount(5, 29.95)
+        objUTReg1.SetTrxAmount(5, 29.95D)
         objUTReg1.SetTrxDate(5, #4/6/2000#)
         objUTReg1.SetTrxRepeatKey(5, "r3")
         objUTReg1.SetTrxRepeatSeq(5, 3)
         objUTReg1.Validate("Transfer changed 1", 1, 2, 3, 5, 4)
         gUTAssert(objUTReg1.objReg.colDbgRepeatTrx.Count() = 2, "")
 
-        objUTReg2.SetTrxAmount(5, -29.95)
+        objUTReg2.SetTrxAmount(5, -29.95D)
         objUTReg2.SetTrxDate(5, #4/6/2000#)
         objUTReg2.SetTrxRepeatKey(5, "r3")
         objUTReg2.SetTrxRepeatSeq(5, 3)
@@ -555,84 +555,84 @@ Friend Class UTMainForm
 
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("DEP", #4/1/2000#, 2000.0#, "Add1", 1, 1, 1, strDescription:="Descr1")
-            .AddNormal("100", #4/3/2000#, -25.0#, "Add2", 2, 2, 2, strDescription:="Descr2")
-            .AddNormal("101", #4/5/2000#, -37.0#, "Add3", 3, 3, 3, strDescription:="Descr3", curNormalMatchRange:=1.0#)
-            .AddNormal("Pmt", #4/5/2000#, -37.0#, "Add4", 4, 4, 4, strDescription:="Descr4")
-            .AddNormal("102", #4/12/2000#, -45.3, "Add4", 5, 5, 5, strDescription:="Descr5")
-            .AddNormal("Pmt", #4/18/2000#, -100.0#, "Add5", 6, 6, 6, strDescription:="Descr6")
+            .AddNormal("DEP", #4/1/2000#, 2000D, "Add1", 1, 1, 1, strDescription:="Descr1")
+            .AddNormal("100", #4/3/2000#, -25D, "Add2", 2, 2, 2, strDescription:="Descr2")
+            .AddNormal("101", #4/5/2000#, -37D, "Add3", 3, 3, 3, strDescription:="Descr3", curNormalMatchRange:=1D)
+            .AddNormal("Pmt", #4/5/2000#, -37D, "Add4", 4, 4, 4, strDescription:="Descr4")
+            .AddNormal("102", #4/12/2000#, -45.3D, "Add4", 5, 5, 5, strDescription:="Descr5")
+            .AddNormal("Pmt", #4/18/2000#, -100D, "Add5", 6, 6, 6, strDescription:="Descr6")
         End With
 
         gUTSetSubTest("Search register")
 
         With objUTReg.objReg
-            .MatchNormal(101, #4/1/2000#, 20, "", 555.0#, False, colMatches, blnExactMatch)
+            .MatchNormal(101, #4/1/2000#, 20, "", 555D, False, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = ";3", "Didn't find 101 (number only match)")
             'Verify date range filtering. Number, amount and descr always match,
             'so date filter is the only way to fail.
             'Date out of range before.
-            .MatchNormal(100, #4/2/2000#, 0, "Descr2", -25.0#, False, colMatches, blnExactMatch)
+            .MatchNormal(100, #4/2/2000#, 0, "Descr2", -25D, False, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = "", "Found 100 when out of date range before")
             'Date in range before.
-            .MatchNormal(100, #4/2/2000#, 1, "Descr2", -25.0#, False, colMatches, blnExactMatch)
+            .MatchNormal(100, #4/2/2000#, 1, "Descr2", -25D, False, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = ";2", "Expected to find 100-A")
             'Date out of range after.
-            .MatchNormal(100, #4/4/2000#, 0, "Descr2", -25.0#, False, colMatches, blnExactMatch)
+            .MatchNormal(100, #4/4/2000#, 0, "Descr2", -25D, False, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = "", "Found 100 when out of date range-B")
             'Date in range after.
-            .MatchNormal(100, #4/4/2000#, 1, "Descr2", -25.0#, False, colMatches, blnExactMatch)
+            .MatchNormal(100, #4/4/2000#, 1, "Descr2", -25D, False, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = ";2", "Expected to find 100-B")
             'End of date range filter checking.
             'Look for 101 without using trx number.
             'Two trx match that date and amount, because one of them
             'has an amount match range=1, but one is an exact match so only that is returned.
-            .MatchNormal(0, #4/5/2000#, 10, "Descr3", -37.0#, False, colMatches, blnExactMatch)
+            .MatchNormal(0, #4/5/2000#, 10, "Descr3", -37D, False, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = ";3", "Expected to find 101-A")
             'Match all 3 properties.
-            .MatchNormal(0, #4/5/2000#, 10, "Descr3", -38.0#, False, colMatches, blnExactMatch)
+            .MatchNormal(0, #4/5/2000#, 10, "Descr3", -38D, False, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = ";3", "Expected to find 101-B")
             'All the ways of matching 2 of 3 properties.
             'Descr+amount
-            .MatchNormal(0, #4/4/2000#, 10, "Descr3", -38.0#, False, colMatches, blnExactMatch)
+            .MatchNormal(0, #4/4/2000#, 10, "Descr3", -38D, False, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = ";3", "Expected to find 101-D")
             'Date+amount, date+descr
-            .MatchNormal(0, #4/5/2000#, 10, "Descr2", -38.0#, False, colMatches, blnExactMatch)
+            .MatchNormal(0, #4/5/2000#, 10, "Descr2", -38D, False, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = ";2;3", "Expected to find 100,101-E")
             'Date+descr
-            .MatchNormal(0, #4/5/2000#, 10, "Descr3", -40.0#, False, colMatches, blnExactMatch)
+            .MatchNormal(0, #4/5/2000#, 10, "Descr3", -40D, False, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = ";3", "Expected to find 101-F")
             'Date only, so fail.
-            .MatchNormal(0, #4/5/2000#, 0, "Descr2", -40.0#, False, colMatches, blnExactMatch)
+            .MatchNormal(0, #4/5/2000#, 0, "Descr2", -40D, False, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = "", "Did not expect to find 101-G")
             'Date only, so succeed in loose search.
-            .MatchNormal(0, #4/5/2000#, 10, "Descr2", -40.0#, True, colMatches, blnExactMatch)
+            .MatchNormal(0, #4/5/2000#, 10, "Descr2", -40D, True, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = ";1;2;3;4;5", "Did not expect to find 101-H")
             'Close date only, so succeed in loose search.
-            .MatchNormal(0, #4/16/2000#, 10, "zzzz", -40000.0#, True, colMatches, blnExactMatch)
+            .MatchNormal(0, #4/16/2000#, 10, "zzzz", -40000D, True, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = ";5;6", "Expected to find Pmt-I")
             'Close date only, so succeed in loose search.
-            .MatchNormal(0, #4/20/2000#, 10, "zzzz", -40000.0#, True, colMatches, blnExactMatch)
+            .MatchNormal(0, #4/20/2000#, 10, "zzzz", -40000D, True, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = ";6", "Expected to find Pmt-J1")
             'Close date only, so fail in strict search.
-            .MatchNormal(0, #4/20/2000#, 10, "zzzz", -40000.0#, False, colMatches, blnExactMatch)
+            .MatchNormal(0, #4/20/2000#, 10, "zzzz", -40000D, False, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = "", "Did not expect to find anything-J2")
             'Just outside date, so fail in loose search.
-            .MatchNormal(0, #4/28/2000#, 10, "zzzz", -40000.0#, True, colMatches, blnExactMatch)
+            .MatchNormal(0, #4/28/2000#, 10, "zzzz", -40000D, True, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = "", "Did not expect to find anything-K")
             'Just outside date, so fail in loose search.
-            .MatchNormal(0, #3/20/2000#, 10, "zzzz", -40000.0#, True, colMatches, blnExactMatch)
+            .MatchNormal(0, #3/20/2000#, 10, "zzzz", -40000D, True, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = "", "Did not expect to find anything-L")
             'Amount within 20%.
-            .MatchNormal(0, #4/24/2000#, 10, "zzzz", -125.0#, True, colMatches, blnExactMatch)
+            .MatchNormal(0, #4/24/2000#, 10, "zzzz", -125D, True, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = ";6", "Expected to find Pmt-M1")
             'Amount within 20%.
-            .MatchNormal(0, #4/24/2000#, 10, "zzzz", -84.0#, True, colMatches, blnExactMatch)
+            .MatchNormal(0, #4/24/2000#, 10, "zzzz", -84D, True, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = ";6", "Expected to find Pmt-M2")
             'Amount not within 20%.
-            .MatchNormal(0, #4/24/2000#, 10, "zzzz", -126.0#, True, colMatches, blnExactMatch)
+            .MatchNormal(0, #4/24/2000#, 10, "zzzz", -126D, True, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = "", "Did not expect to find anything-O1")
             'Amount not within 20%.
-            .MatchNormal(0, #4/24/2000#, 10, "zzzz", -82.0#, True, colMatches, blnExactMatch)
+            .MatchNormal(0, #4/24/2000#, 10, "zzzz", -82D, True, colMatches, blnExactMatch)
             gUTAssert(strConcatMatchResults(colMatches) = "", "Did not expect to find anything-O2")
         End With
 
@@ -657,19 +657,19 @@ Friend Class UTMainForm
 
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("100", #4/3/2000#, -25.0#, "Add1", 1, 1, 1, strDescription:="Descr1", blnFake:=True, blnAutoGenerated:=True)
-            .AddNormal("101", #4/4/2000#, -30.2, "Add2", 2, 2, 2, strDescription:="Descr2", vcurAmount2:=-10.0#)
-            .AddNormal("Pmt", #4/5/2000#, -20.99, "Add3", 3, 3, 3, strDescription:="Descr3")
+            .AddNormal("100", #4/3/2000#, -25D, "Add1", 1, 1, 1, strDescription:="Descr1", blnFake:=True, blnAutoGenerated:=True)
+            .AddNormal("101", #4/4/2000#, -30.2D, "Add2", 2, 2, 2, strDescription:="Descr2", vcurAmount2:=-10D)
+            .AddNormal("Pmt", #4/5/2000#, -20.99D, "Add3", 3, 3, 3, strDescription:="Descr3")
         End With
 
         gUTSetSubTest("Test first import")
 
-        objUTReg.objReg.ImportUpdateBank(1, #4/3/2001#, "200", -25.0#, "importkey-1")
+        objUTReg.objReg.ImportUpdateBank(1, #4/3/2001#, "200", -25D, "importkey-1")
         objTrx = objUTReg.objReg.objTrx(1)
         With objTrx
             gUTAssert(.datDate = #4/3/2000#, "Bad date")
             gUTAssert(.strNumber = "200", "Bad number")
-            gUTAssert(.curAmount = -25.0#, "Bad amount")
+            gUTAssert(.curAmount = -25D, "Bad amount")
             gUTAssert(.strImportKey = "importkey-1", "Bad import key")
             gUTAssert(.blnFake = False, "Bad blnFake")
             gUTAssert(.blnAutoGenerated = False, "Bad auto generated")
@@ -677,19 +677,19 @@ Friend Class UTMainForm
 
         gUTSetSubTest("Test second import")
 
-        objUTReg.objReg.ImportUpdateBank(2, #4/4/2000#, "201", -50.0#, "importkey-2")
+        objUTReg.objReg.ImportUpdateBank(2, #4/4/2000#, "201", -50D, "importkey-2")
         objTrx = objUTReg.objReg.objTrx(2)
         With objTrx
             gUTAssert(.datDate = #4/4/2000#, "Bad date")
             gUTAssert(.strNumber = "201", "Bad number")
-            gUTAssert(.curAmount = -50.0#, "Bad amount " & .curAmount)
+            gUTAssert(.curAmount = -50D, "Bad amount " & .curAmount)
             gUTAssert(.blnFake = False, "Bad blnFake")
             gUTAssert(.blnAutoGenerated = False, "Bad auto generated")
         End With
 
         gUTSetSubTest("Test third import")
 
-        objUTReg.objReg.ImportUpdateBank(3, #4/15/2002#, "Pmt", -40.01, "importkey-3")
+        objUTReg.objReg.ImportUpdateBank(3, #4/15/2002#, "Pmt", -40.01D, "importkey-3")
         objTrx = objUTReg.objReg.objTrx(3)
         With objTrx
             gUTAssert(.datDate = #4/15/2002#, "Bad date")
@@ -709,10 +709,10 @@ Friend Class UTMainForm
 
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("100", #4/1/2000#, -2000.0#, "Add1", 1, 1, 1, strImportKey:="imp1")
-            .AddNormal("101", #4/3/2000#, -25.0#, "Add2", 2, 2, 2, strImportKey:="imp2", blnFake:=True)
-            .AddNormal("102", #4/3/2000#, -26.0#, "Add2", 3, 3, 3)
-            .AddNormal("103", #4/3/2000#, -27.0#, "Add2", 4, 4, 4, strImportKey:="imp4")
+            .AddNormal("100", #4/1/2000#, -2000D, "Add1", 1, 1, 1, strImportKey:="imp1")
+            .AddNormal("101", #4/3/2000#, -25D, "Add2", 2, 2, 2, strImportKey:="imp2", blnFake:=True)
+            .AddNormal("102", #4/3/2000#, -26D, "Add2", 3, 3, 3)
+            .AddNormal("103", #4/3/2000#, -27D, "Add2", 4, 4, 4, strImportKey:="imp4")
             lngMatchIndex = .objReg.lngMatchImportKey("imp1")
             gUTAssert(lngMatchIndex = 1, "Did not find 100")
             lngMatchIndex = .objReg.lngMatchImportKey("imp2")
@@ -735,10 +735,10 @@ Friend Class UTMainForm
 
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("100", #4/1/2000#, -2000.0#, "Add1", 1, 1, 1, strDescription:="payee1")
-            .AddNormal("101", #4/3/2000#, -25.0#, "Add2", 2, 2, 2, strDescription:="company2")
-            .AddNormal("102", #4/5/2000#, -26.0#, "Add2", 3, 3, 3, strDescription:="payee1")
-            .AddNormal("103", #4/7/2000#, -27.0#, "Add2", 4, 4, 4, strDescription:="payee1")
+            .AddNormal("100", #4/1/2000#, -2000D, "Add1", 1, 1, 1, strDescription:="payee1")
+            .AddNormal("101", #4/3/2000#, -25D, "Add2", 2, 2, 2, strDescription:="company2")
+            .AddNormal("102", #4/5/2000#, -26D, "Add2", 3, 3, 3, strDescription:="payee1")
+            .AddNormal("103", #4/7/2000#, -27D, "Add2", 4, 4, 4, strDescription:="payee1")
 
             .objReg.MatchPayee(#4/3/2000#, 1, "company2", True, colMatches, blnExactMatch)
             gUTAssert(colMatches.Count() = 1, "company2 fail")
@@ -768,10 +768,10 @@ Friend Class UTMainForm
 
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("100", #4/1/2000#, -2000.0#, "Add1", 1, 1, 1, strDescription:="payee1", strInvoiceNum:="I1000")
-            .AddNormal("101", #4/3/2000#, -25.0#, "Add2", 2, 2, 2, strDescription:="company2", strInvoiceNum:="I1000", vcurAmount2:=-10.0#, strInvoiceNum2:="I1001")
-            .AddNormal("102", #4/5/2000#, -26.0#, "Add2", 3, 3, 3, strDescription:="payee1", strInvoiceNum:="I1001")
-            .AddNormal("103", #4/7/2000#, -27.0#, "Add2", 4, 4, 4, strDescription:="payee1", strInvoiceNum:="I1002")
+            .AddNormal("100", #4/1/2000#, -2000D, "Add1", 1, 1, 1, strDescription:="payee1", strInvoiceNum:="I1000")
+            .AddNormal("101", #4/3/2000#, -25D, "Add2", 2, 2, 2, strDescription:="company2", strInvoiceNum:="I1000", vcurAmount2:=-10D, strInvoiceNum2:="I1001")
+            .AddNormal("102", #4/5/2000#, -26D, "Add2", 3, 3, 3, strDescription:="payee1", strInvoiceNum:="I1001")
+            .AddNormal("103", #4/7/2000#, -27D, "Add2", 4, 4, 4, strDescription:="payee1", strInvoiceNum:="I1002")
 
             .objReg.MatchInvoice(#4/3/2000#, 10, "company2", "I1000", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 I1000 fail")
@@ -803,10 +803,10 @@ Friend Class UTMainForm
 
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("100", #4/1/2000#, -2000.0#, "Add1", 1, 1, 1, strDescription:="payee1", strPONumber:="P1")
-            .AddNormal("101", #4/3/2000#, -25.0#, "Add2", 2, 2, 2, strDescription:="company2", strPONumber:="P1", vcurAmount2:=-10.0#, strPONumber2:="P2")
-            .AddNormal("102", #4/5/2000#, -26.0#, "Add2", 3, 3, 3, strDescription:="payee1", strPONumber:="P2")
-            .AddNormal("103", #4/7/2000#, -27.0#, "Add2", 4, 4, 4, strDescription:="payee1", strPONumber:="P3")
+            .AddNormal("100", #4/1/2000#, -2000D, "Add1", 1, 1, 1, strDescription:="payee1", strPONumber:="P1")
+            .AddNormal("101", #4/3/2000#, -25D, "Add2", 2, 2, 2, strDescription:="company2", strPONumber:="P1", vcurAmount2:=-10D, strPONumber2:="P2")
+            .AddNormal("102", #4/5/2000#, -26D, "Add2", 3, 3, 3, strDescription:="payee1", strPONumber:="P2")
+            .AddNormal("103", #4/7/2000#, -27D, "Add2", 4, 4, 4, strDescription:="payee1", strPONumber:="P3")
 
             .objReg.MatchPONumber(#4/3/2000#, 10, "company2", "P1", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 P1 fail")
@@ -861,10 +861,10 @@ Friend Class UTMainForm
             gUTAssert(.lngType = Trx.TrxType.glngTRXTYP_BUDGET, "Wrong type")
             gUTAssert(.datDate = #4/10/2000#, "Wrong date")
             gUTAssert(.strDescription = "General household", "Wrong description")
-            gUTAssert(.curAmount = (-150.0# + 10.99), "Wrong amount")
+            gUTAssert(.curAmount = (-150D + 10.99), "Wrong amount")
             gUTAssert(.datBudgetEnds = #4/16/2000#, "Wrong budget end date")
             gUTAssert(.strBudgetKey = "bud1", "Wrong budget key")
-            gUTAssert(.curBudgetLimit = -150.0#, "Wrong budget limit")
+            gUTAssert(.curBudgetLimit = -150D, "Wrong budget limit")
         End With
 
         gUTSetSubTest("Verify 2")
@@ -1018,7 +1018,7 @@ Friend Class UTMainForm
         objUTReg = gobjUTNewReg()
         objReg = objUTReg.objReg
 
-        objUTReg.LoadNormal("1001", Now, 100.25)
+        objUTReg.LoadNormal("1001", Now, 100.25D)
 
         gUTAssert(objReg.lngTrxCount = 1, "Expected to have one Trx")
         objCursor = objReg.objGetCursor()
@@ -1079,8 +1079,8 @@ Friend Class UTMainForm
         objUTReg = gobjUTNewReg()
         objReg = objUTReg.objReg
 
-        objUTReg.LoadNormal("2001", Now, 201.25)
-        objUTReg.LoadNormal("2002", Now, 202.25)
+        objUTReg.LoadNormal("2001", Now, 201.25D)
+        objUTReg.LoadNormal("2002", Now, 202.25D)
 
         gUTAssert(objReg.lngTrxCount = 2, "Expected to have two Trx")
         objCursor = objReg.objGetCursor()
@@ -1149,9 +1149,9 @@ Friend Class UTMainForm
         objUTReg = gobjUTNewReg()
         objReg = objUTReg.objReg
 
-        objUTReg.LoadNormal("3001", Now, 301.25)
-        objUTReg.LoadNormal("3002", Now, 302.25)
-        objUTReg.LoadNormal("3003", Now, 303.25)
+        objUTReg.LoadNormal("3001", Now, 301.25D)
+        objUTReg.LoadNormal("3002", Now, 302.25D)
+        objUTReg.LoadNormal("3003", Now, 303.25D)
 
         gUTAssert(objReg.lngTrxCount = 3, "Expected to have three Trx")
         objCursor = objReg.objGetCursor()
@@ -1234,21 +1234,21 @@ Friend Class UTMainForm
         objUTReg = gobjUTNewReg()
         objReg = objUTReg.objReg
 
-        objUTReg.LoadNormal("3001", Now, 301.25)
-        objUTReg.LoadNormal("3003", Now, 303.25)
-        objUTReg.LoadNormal("3005", Now, 305.25)
+        objUTReg.LoadNormal("3001", Now, 301.25D)
+        objUTReg.LoadNormal("3003", Now, 303.25D)
+        objUTReg.LoadNormal("3005", Now, 305.25D)
 
         gUTAssert(objReg.lngTrxCount = 3, "Expected to have three Trx")
         objCursor = objReg.objGetCursor()
 
         objCursor.MoveNext()
-        objUTReg.AddNormal("3000", Now, 300.25, "", 1, 1, 4)
+        objUTReg.AddNormal("3000", Now, 300.25D, "", 1, 1, 4)
         objTrx = objCursor.objCurrent
         gUTAssert(objTrx.strNumber = "3001", "Did not adjust position on add at current index")
-        objUTReg.AddNormal("2999", Now, 299.25, "", 1, 1, 5)
+        objUTReg.AddNormal("2999", Now, 299.25D, "", 1, 1, 5)
         objTrx = objCursor.objCurrent
         gUTAssert(objTrx.strNumber = "3001", "Did not adjust position on add before current index")
-        objUTReg.AddNormal("3002", Now, 302.25, "", 4, 4, 6)
+        objUTReg.AddNormal("3002", Now, 302.25D, "", 4, 4, 6)
         objTrx = objCursor.objCurrent
         gUTAssert(objTrx.strNumber = "3001", "Adjusted position on add after current index")
         objTrx = objCursor.objGetNext()
@@ -1262,7 +1262,7 @@ Friend Class UTMainForm
         objUTReg.DeleteEntry(3, 3, 3, "")
         objTrx = objCursor.objCurrent
         gUTAssert(objTrx.strNumber = "3005", "Did not move next when deleting current")
-        objUTReg.AddNormal("2998", Now, 298.25, "", 1, 1, 4)
+        objUTReg.AddNormal("2998", Now, 298.25D, "", 1, 1, 4)
         objTrx = objCursor.objCurrent
         gUTAssert(objTrx.strNumber = "3005", "Did not move next last when adding trx at front")
         objUTReg.DeleteEntry(4, 0, 0, "")
@@ -1277,9 +1277,9 @@ Friend Class UTMainForm
         objUTReg = gobjUTNewReg()
         objReg = objUTReg.objReg
 
-        objUTReg.LoadNormal("3001", Now, 301.25)
-        objUTReg.LoadNormal("3003", Now, 303.25)
-        objUTReg.LoadNormal("3005", Now, 305.25)
+        objUTReg.LoadNormal("3001", Now, 301.25D)
+        objUTReg.LoadNormal("3003", Now, 303.25D)
+        objUTReg.LoadNormal("3005", Now, 305.25D)
 
         gUTAssert(objReg.lngTrxCount = 3, "Expected to have three Trx")
         objCursor = objReg.objGetCursor()
@@ -1413,7 +1413,7 @@ Friend Class UTMainForm
         'One repeating trx.
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .LoadNormal("1500", #6/1/2000#, -50.75, strRepeatKey:="r1", intRepeatSeq:=1)
+            .LoadNormal("1500", #6/1/2000#, -50.75D, strRepeatKey:="r1", intRepeatSeq:=1)
             .objReg.LoadPostProcessing()
             .Validate("", 1)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 1, "count")
@@ -1422,8 +1422,8 @@ Friend Class UTMainForm
         'Two repeating trx in one sequence.
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .LoadNormal("1500", #6/1/2000#, -50.75, strRepeatKey:="r1", intRepeatSeq:=1)
-            .LoadNormal("1501", #6/2/2000#, -10.0#, strRepeatKey:="r1", intRepeatSeq:=2)
+            .LoadNormal("1500", #6/1/2000#, -50.75D, strRepeatKey:="r1", intRepeatSeq:=1)
+            .LoadNormal("1501", #6/2/2000#, -10D, strRepeatKey:="r1", intRepeatSeq:=2)
             .objReg.LoadPostProcessing()
             .Validate("", 1, 2)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
@@ -1432,10 +1432,10 @@ Friend Class UTMainForm
         'Three repeating trx in two sequences.
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .LoadNormal("1500", #6/1/2000#, -50.75, strRepeatKey:="r1", intRepeatSeq:=1)
-            .LoadNormal("1501", #6/2/2000#, -10.0#, strRepeatKey:="r1", intRepeatSeq:=2)
-            .LoadNormal("1499", #6/30/2000#, -10.0#, strRepeatKey:="r2", intRepeatSeq:=1)
-            .LoadNormal("1502", #7/1/2000#, -20.0#)
+            .LoadNormal("1500", #6/1/2000#, -50.75D, strRepeatKey:="r1", intRepeatSeq:=1)
+            .LoadNormal("1501", #6/2/2000#, -10D, strRepeatKey:="r1", intRepeatSeq:=2)
+            .LoadNormal("1499", #6/30/2000#, -10D, strRepeatKey:="r2", intRepeatSeq:=1)
+            .LoadNormal("1502", #7/1/2000#, -20D)
             .objReg.LoadPostProcessing()
             .Validate("", 1, 2, 3, 4)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 3, "count")
@@ -1446,7 +1446,7 @@ Friend Class UTMainForm
         'One repeating trx.
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("1500", #6/1/2000#, -50.75, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
+            .AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
             .Validate("", 1)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 1, "count")
         End With
@@ -1454,8 +1454,8 @@ Friend Class UTMainForm
         'One repeating and one non-repeating trx.
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("1500", #6/1/2000#, -50.75, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
-            .AddNormal("1501", #6/2/2000#, -10.0#, "Second add", 2, 2, 2)
+            .AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
+            .AddNormal("1501", #6/2/2000#, -10D, "Second add", 2, 2, 2)
             .Validate("", 1, 2)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 1, "count")
         End With
@@ -1463,8 +1463,8 @@ Friend Class UTMainForm
         'Two repeating trx in one sequence.
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("1500", #6/1/2000#, -50.75, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
-            .AddNormal("1501", #6/2/2000#, -10.0#, "Second add", 2, 2, 2, strRepeatKey:="r1", intRepeatSeq:=2)
+            .AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
+            .AddNormal("1501", #6/2/2000#, -10D, "Second add", 2, 2, 2, strRepeatKey:="r1", intRepeatSeq:=2)
             .Validate("", 1, 2)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
         End With
@@ -1472,9 +1472,9 @@ Friend Class UTMainForm
         'Three repeating trx in two sequences.
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("1500", #6/1/2000#, -50.75, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
-            .AddNormal("1501", #6/2/2000#, -10.0#, "Second add", 2, 2, 2, strRepeatKey:="r1", intRepeatSeq:=2)
-            .AddNormal("1499", #5/30/2000#, -10.0#, "Third add", 1, 1, 3, strRepeatKey:="r2", intRepeatSeq:=1)
+            .AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
+            .AddNormal("1501", #6/2/2000#, -10D, "Second add", 2, 2, 2, strRepeatKey:="r1", intRepeatSeq:=2)
+            .AddNormal("1499", #5/30/2000#, -10D, "Third add", 1, 1, 3, strRepeatKey:="r2", intRepeatSeq:=1)
             .Validate("", 3, 1, 2)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 3, "count")
         End With
@@ -1484,13 +1484,13 @@ Friend Class UTMainForm
         'One repeating and one non-repeating trx.
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("1500", #6/1/2000#, -50.75, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
-            .AddNormal("1501", #6/2/2000#, -10.0#, "Second add", 2, 2, 2)
+            .AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
+            .AddNormal("1501", #6/2/2000#, -10D, "Second add", 2, 2, 2)
             'Change the repeating trx to a different key and seq.
-            .SetTrxAmount(1, 399.0#)
+            .SetTrxAmount(1, 399D)
             .SetTrxRepeatKey(1, "R4")
             .SetTrxRepeatSeq(1, 3)
-            .UpdateNormal("1500", #6/1/2000#, 399.0#, "First upd", 1, 1, 1, 2, strRepeatKey:="R4", intRepeatSeq:=3)
+            .UpdateNormal("1500", #6/1/2000#, 399D, "First upd", 1, 1, 1, 2, strRepeatKey:="R4", intRepeatSeq:=3)
             .Validate("", 1, 2)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 1, "count")
         End With
@@ -1498,13 +1498,13 @@ Friend Class UTMainForm
         'One repeating and one non-repeating trx (2).
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("1500", #6/1/2000#, -50.75, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
-            .AddNormal("1501", #6/2/2000#, -10.0#, "Second add", 2, 2, 2)
+            .AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
+            .AddNormal("1501", #6/2/2000#, -10D, "Second add", 2, 2, 2)
             'Change the non-repeating trx to repeating.
-            .SetTrxAmount(2, 399.0#)
+            .SetTrxAmount(2, 399D)
             .SetTrxRepeatKey(2, "R4")
             .SetTrxRepeatSeq(2, 3)
-            .UpdateNormal("1501", #6/2/2000#, 399.0#, "First upd", 2, 2, 2, 2, strRepeatKey:="R4", intRepeatSeq:=3)
+            .UpdateNormal("1501", #6/2/2000#, 399D, "First upd", 2, 2, 2, 2, strRepeatKey:="R4", intRepeatSeq:=3)
             .Validate("", 1, 2)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
         End With
@@ -1512,12 +1512,12 @@ Friend Class UTMainForm
         'Two repeating, change one to a different key.
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("1500", #6/1/2000#, -50.75, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
-            .AddNormal("1501", #6/2/2000#, -10.0#, "Second add", 2, 2, 2, strRepeatKey:="r2", intRepeatSeq:=1)
+            .AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
+            .AddNormal("1501", #6/2/2000#, -10D, "Second add", 2, 2, 2, strRepeatKey:="r2", intRepeatSeq:=1)
             'Change the second.
             .SetTrxRepeatKey(2, "R4")
             .SetTrxRepeatSeq(2, 3)
-            .UpdateNormal("1501", #6/2/2000#, -10.0#, "First upd", 2, 2, 2, 2, strRepeatKey:="R4", intRepeatSeq:=3)
+            .UpdateNormal("1501", #6/2/2000#, -10D, "First upd", 2, 2, 2, 2, strRepeatKey:="R4", intRepeatSeq:=3)
             .Validate("", 1, 2)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
         End With
@@ -1525,11 +1525,11 @@ Friend Class UTMainForm
         'Two repeating, change one to a different seq.
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("1500", #6/1/2000#, -50.75, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
-            .AddNormal("1501", #6/2/2000#, -10.0#, "Second add", 2, 2, 2, strRepeatKey:="r2", intRepeatSeq:=1)
+            .AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
+            .AddNormal("1501", #6/2/2000#, -10D, "Second add", 2, 2, 2, strRepeatKey:="r2", intRepeatSeq:=1)
             'Change the second.
             .SetTrxRepeatSeq(2, 3)
-            .UpdateNormal("1501", #6/2/2000#, -10.0#, "First upd", 2, 2, 2, 2, strRepeatKey:="r2", intRepeatSeq:=3)
+            .UpdateNormal("1501", #6/2/2000#, -10D, "First upd", 2, 2, 2, 2, strRepeatKey:="r2", intRepeatSeq:=3)
             .Validate("", 1, 2)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
         End With
@@ -1539,8 +1539,8 @@ Friend Class UTMainForm
         'Two repeating trx, then delete one.
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("1500", #6/1/2000#, -50.75, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
-            .AddNormal("1501", #6/2/2000#, -10.0#, "Second add", 2, 2, 2, strRepeatKey:="t2", intRepeatSeq:=1)
+            .AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
+            .AddNormal("1501", #6/2/2000#, -10D, "Second add", 2, 2, 2, strRepeatKey:="t2", intRepeatSeq:=1)
             'Delete the second trx.
             .DeleteEntry(2, 0, 0, "delete")
             .Validate("", 1)
@@ -1552,47 +1552,47 @@ Friend Class UTMainForm
         'Long list with many changes.
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .AddNormal("1500", #6/1/2000#, -50.75, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
-            .AddNormal("1501", #6/2/2000#, -10.0#, "Second add", 2, 2, 2, strRepeatKey:="r2", intRepeatSeq:=1)
-            .AddNormal("Pmt", #6/4/2000#, -10.0#, "payee", 3, 3, 3)
-            .AddNormal("Pmt", #6/15/2000#, -11.0#, "payee", 4, 4, 4)
-            .AddNormal("Pmt", #6/16/2000#, -12.0#, "payee", 5, 5, 5)
-            .AddNormal("Pmt", #6/17/2000#, -13.0#, "payee", 6, 6, 6)
+            .AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
+            .AddNormal("1501", #6/2/2000#, -10D, "Second add", 2, 2, 2, strRepeatKey:="r2", intRepeatSeq:=1)
+            .AddNormal("Pmt", #6/4/2000#, -10D, "payee", 3, 3, 3)
+            .AddNormal("Pmt", #6/15/2000#, -11D, "payee", 4, 4, 4)
+            .AddNormal("Pmt", #6/16/2000#, -12D, "payee", 5, 5, 5)
+            .AddNormal("Pmt", #6/17/2000#, -13D, "payee", 6, 6, 6)
             .Validate("", 1, 2, 3, 4, 5, 6)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
             'Change the second.
             .SetTrxRepeatKey(2, "r3")
             .SetTrxRepeatSeq(2, 3)
             .SetTrxDate(2, #6/14/2000#)
-            .UpdateNormal("1501", #6/14/2000#, -10.0#, "First upd", 2, 3, 2, 3, strRepeatKey:="r3", intRepeatSeq:=3)
+            .UpdateNormal("1501", #6/14/2000#, -10D, "First upd", 2, 3, 2, 3, strRepeatKey:="r3", intRepeatSeq:=3)
             .Validate("", 1, 3, 2, 4, 5, 6)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
             .DeleteEntry(4, 4, 5, "delete")
             .Validate("", 1, 3, 2, 5, 6)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
-            .UpdateNormal("Pmt", #6/16/2000#, -11.0#, "update", 4, 4, 4, 5)
-            .SetTrxAmount(5, -11.0#)
+            .UpdateNormal("Pmt", #6/16/2000#, -11D, "update", 4, 4, 4, 5)
+            .SetTrxAmount(5, -11D)
             .Validate("", 1, 3, 2, 5, 6)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
-            .AddNormal("Inv", #7/1/2000#, -100.0#, "payee", 6, 6, 6, strRepeatKey:="r3", intRepeatSeq:=1)
+            .AddNormal("Inv", #7/1/2000#, -100D, "payee", 6, 6, 6, strRepeatKey:="r3", intRepeatSeq:=1)
             .Validate("", 1, 3, 2, 5, 6, 7)
         End With
 
         'Test budget trx
         objUTReg = gobjUTNewReg()
         With objUTReg
-            .LoadNormal("1500", #6/1/2000#, -10.0#)
-            .LoadNormal("1501", #6/1/2000#, -20.0#, strRepeatKey:="r1", intRepeatSeq:=1)
-            .LoadBudget(#5/15/2000#, -1000.0#, #6/10/2000#, "01")
-            .LoadBudget(#5/20/2000#, -500.0#, #6/12/2000#, "02", strRepeatKey:="r2", intRepeatSeq:=1)
+            .LoadNormal("1500", #6/1/2000#, -10D)
+            .LoadNormal("1501", #6/1/2000#, -20D, strRepeatKey:="r1", intRepeatSeq:=1)
+            .LoadBudget(#5/15/2000#, -1000D, #6/10/2000#, "01")
+            .LoadBudget(#5/20/2000#, -500D, #6/12/2000#, "02", strRepeatKey:="r2", intRepeatSeq:=1)
             .objReg.LoadPostProcessing()
             .Validate("", 3, 4, 1, 2)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
-            .AddBudget(#6/3/2000#, -100.0#, #6/20/2000#, "03", "", 5, 5, 5, strRepeatKey:="r2", intRepeatSeq:=2)
+            .AddBudget(#6/3/2000#, -100D, #6/20/2000#, "03", "", 5, 5, 5, strRepeatKey:="r2", intRepeatSeq:=2)
             .Validate("", 3, 4, 1, 2, 5)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 3, "count")
-            .UpdateBudget(#7/1/2000#, -100.0#, #7/10/2000#, "01", "", 1, 5, 1, 5)
-            .SetTrxAmount(3, -100.0#)
+            .UpdateBudget(#7/1/2000#, -100D, #7/10/2000#, "01", "", 1, 5, 1, 5)
+            .SetTrxAmount(3, -100D)
             .SetTrxDate(3, #7/1/2000#)
             .Validate("", 4, 1, 2, 5, 3)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 3, "count")
@@ -1609,12 +1609,12 @@ Friend Class UTMainForm
 
         TestOneAmountToWords(0, "zero")
         TestOneAmountToWords(1, "one")
-        TestOneAmountToWords(1.1, "one")
-        TestOneAmountToWords(1.9, "one")
+        TestOneAmountToWords(1.1D, "one")
+        TestOneAmountToWords(1.9D, "one")
         TestOneAmountToWords(2, "two")
         TestOneAmountToWords(3, "three")
-        TestOneAmountToWords(3.01, "three")
-        TestOneAmountToWords(3.99, "three")
+        TestOneAmountToWords(3.01D, "three")
+        TestOneAmountToWords(3.99D, "three")
         TestOneAmountToWords(4, "four")
         TestOneAmountToWords(5, "five")
         TestOneAmountToWords(6, "six")

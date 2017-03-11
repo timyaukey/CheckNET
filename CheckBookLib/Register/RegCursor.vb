@@ -50,7 +50,7 @@ Public Class RegCursor
     '   didn't just call MoveBeforeFirst(), MoveAfterLast(), or step past
     '   the last Trx or before the first Trx.
 
-    Public ReadOnly Property blnHasCurrent() As Object
+    Public ReadOnly Property blnHasCurrent() As Boolean
         Get
             blnHasCurrent = (mlngIndex > 0) And (mlngIndex <= mlngCount)
         End Get
@@ -59,7 +59,7 @@ Public Class RegCursor
     '$Description Return the current Trx, or Nothing if positioned before the
     '   first Trx or after the last Trx.
 
-    Public ReadOnly Property objCurrent() As Object
+    Public ReadOnly Property objCurrent() As Trx
         Get
             If mlngIndex > 0 And mlngIndex <= mlngCount Then
                 objCurrent = mobjReg.objTrx(mlngIndex)
