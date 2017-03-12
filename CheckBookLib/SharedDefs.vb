@@ -41,6 +41,7 @@ Public Module SharedDefs
     Public gcolAccounts As List(Of Account)
 
     'Global category and budget lists.
+    Public gobjIncExpAccounts As CategoryTranslator
     Public gobjCategories As CategoryTranslator
     Public gobjBudgets As BudgetTranslator
 
@@ -144,20 +145,45 @@ Public Module SharedDefs
         gstrImageFilePath = gstrDataPath() & "\ImageFiles"
     End Function
 
-    Public Sub gLoadGlobalLists()
+    Public Sub gLoadGlobalLists(ByVal objEverything As Everything)
         Try
 
             gobjBudgets = New BudgetTranslator()
             gobjBudgets.LoadFile(gstrAddPath("Shared.bud"))
+            gobjIncExpAccounts = New CategoryTranslator()
+            gobjIncExpAccounts.LoadFile(gstrAddPath("Shared.cat"))
             gobjCategories = New CategoryTranslator()
-            gobjCategories.LoadFile(gstrAddPath("Shared.cat"))
-            gBuildShortTermsCatKeys()
+            gLoadCategories(objEverything)  'Will not include asset, liability and equity accounts, but that's okay at this point.
             gFindPlaceholderBudget()
 
             Exit Sub
         Catch ex As Exception
             gNestedException(ex)
         End Try
+    End Sub
+
+    Public Sub gLoadCategories(ByVal objEverything As Everything)
+        Dim intIndex As Integer
+        gobjCategories.Init()
+        For intIndex = 1 To gobjIncExpAccounts.intElements
+            gobjCategories.Add(gobjIncExpAccounts.objElement(intIndex))
+        Next
+        AddAccountTypeToCategories(objEverything, Account.AccountType.Asset, "A")
+        AddAccountTypeToCategories(objEverything, Account.AccountType.Liability, "L")
+        AddAccountTypeToCategories(objEverything, Account.AccountType.Equity, "Q")
+        gBuildShortTermsCatKeys()
+    End Sub
+
+    Private Sub AddAccountTypeToCategories(ByVal objEverything As Everything, ByVal lngType As Account.AccountType, ByVal strPrefix As String)
+        For Each objAccount As Account In objEverything.colAccounts
+            If objAccount.lngType = lngType Then
+                For Each objReg As Register In objAccount.colRegisters
+                    Dim strKey As String = objAccount.intKey.ToString() + "." + objReg.strRegisterKey
+                    Dim elm As StringTransElement = New StringTransElement(strKey, strPrefix + ":" + objReg.strTitle, " " + objReg.strTitle)
+                    gobjCategories.Add(elm)
+                Next
+            End If
+        Next
     End Sub
 
     'Set gstrPlaceholderBudgetKey to the key of the budget whose name

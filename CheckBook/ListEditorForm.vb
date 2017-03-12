@@ -21,7 +21,8 @@ Friend Class ListEditorForm
         glngLIST_TYPE_REPEAT = 3
     End Enum
 
-    Public Sub ShowMe(ByVal lngListType As ListType, ByVal strFile As String, ByVal objList As SimpleStringTranslator, ByVal strCaption As String, ByVal objAccount As Account)
+    Public Function ShowMe(ByVal lngListType As ListType, ByVal strFile As String, ByVal objList As SimpleStringTranslator,
+                           ByVal strCaption As String, ByVal objAccount As Account) As DialogResult
 
         Dim frm As System.Windows.Forms.Form
 
@@ -34,7 +35,7 @@ Friend Class ListEditorForm
                     '
                 Else
                     MsgBox("Lists may not be edited if any windows other than registers " & "are open.", MsgBoxStyle.Critical)
-                    Exit Sub
+                    Return DialogResult.Cancel
                 End If
             Next frm
             Me.Text = strCaption
@@ -47,13 +48,13 @@ Friend Class ListEditorForm
                 gRaiseError("Invalid account passed as arg")
             End If
             LoadList()
-            Me.ShowDialog()
+            Return Me.ShowDialog()
 
-            Exit Sub
+            Exit Function
         Catch ex As Exception
             gNestedException(ex)
         End Try
-    End Sub
+    End Function
 
     Private Sub cmdSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSave.Click
         Try

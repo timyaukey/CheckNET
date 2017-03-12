@@ -72,7 +72,7 @@ Friend Class CBMainForm
 
             gCreateStandardFolders()
             gCreateStandardFiles()
-            gLoadGlobalLists()
+            gLoadGlobalLists(mobjEverything)
             gLoadTransTable()
 
             If Not gblnUserAuthenticated() Then
@@ -102,6 +102,8 @@ Friend Class CBMainForm
                 gcolAccounts.Add(objAccount)
                 frmStartup.Configure(Nothing)
             Next strFile
+
+            gLoadCategories(mobjEverything)
 
             frmStartup.ShowStatus("Loading main window")
 
@@ -273,7 +275,10 @@ Friend Class CBMainForm
         Try
 
             frm = New ListEditorForm
-            frm.ShowMe(ListEditorForm.ListType.glngLIST_TYPE_CATEGORY, gstrAddPath("Shared.cat"), gobjCategories, "Category List", Nothing)
+            If frm.ShowMe(ListEditorForm.ListType.glngLIST_TYPE_CATEGORY, gstrAddPath("Shared.cat"), gobjIncExpAccounts,
+                          "Category List", Nothing) <> DialogResult.Cancel Then
+                gLoadCategories(mobjEverything)
+            End If
 
             Exit Sub
         Catch ex As Exception

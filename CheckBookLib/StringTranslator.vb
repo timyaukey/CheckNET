@@ -6,7 +6,7 @@ Public MustInherit Class StringTranslator(Of TElement As StringTransElement)
 
     'Encapsulate a searchable list of TElement objects.
 
-    Private maudtElement() As TElement '1 to mintElements
+    Private maudtElement() As TElement '1 to mintElements. Zeroeth element is unused.
     Private mintElements As Integer
 
     'maudtElement() indices, keyed by "#" & Element.strKey
@@ -79,25 +79,31 @@ Public MustInherit Class StringTranslator(Of TElement As StringTransElement)
 
     Public ReadOnly Property intElements() As Integer Implements IStringTranslator.intElements
         Get
-            intElements = mintElements
+            Return mintElements
         End Get
     End Property
 
     Public ReadOnly Property strKey(ByVal intIndex As Integer) As String Implements IStringTranslator.strKey
         Get
-            strKey = maudtElement(intIndex).strKey
+            Return maudtElement(intIndex).strKey
         End Get
     End Property
 
     Public ReadOnly Property strValue1(ByVal intIndex As Integer) As String Implements IStringTranslator.strValue1
         Get
-            strValue1 = maudtElement(intIndex).strValue1
+            Return maudtElement(intIndex).strValue1
         End Get
     End Property
 
     Public ReadOnly Property strValue2(ByVal intIndex As Integer) As String Implements IStringTranslator.strValue2
         Get
-            strValue2 = maudtElement(intIndex).strValue2
+            Return maudtElement(intIndex).strValue2
+        End Get
+    End Property
+
+    Public ReadOnly Property objElement(ByVal intIndex As Integer) As TElement
+        Get
+            Return maudtElement(intIndex)
         End Get
     End Property
 

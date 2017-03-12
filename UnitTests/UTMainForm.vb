@@ -1784,7 +1784,8 @@ Friend Class UTMainForm
         If gblnUnrecognizedArgs() Then
             Exit Sub
         End If
-        gLoadGlobalLists()
+        gLoadGlobalLists(mobjEverything)
+        gLoadCategories(mobjEverything)
         gobjSecurity = New Security
         gobjSecurity.CreateEmpty("")
     End Sub
