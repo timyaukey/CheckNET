@@ -78,7 +78,7 @@
     <Compile Include="BudgetTranslator.vb" />
     <Compile Include="CategoryTranslator.vb" />
     <Compile Include="CBListBoxItem.vb" />
-    <Compile Include="CheckBookUtils.vb" />
+    <Compile Include="AgingUtils.vb" />
     <Compile Include="ErrorHandling.vb" />
     <Compile Include="FilePersisterExceptions.vb" />
     <Compile Include="IFilePersister.vb" />

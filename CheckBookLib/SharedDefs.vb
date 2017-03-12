@@ -34,44 +34,20 @@ Public Module SharedDefs
     Public gstrCmdLinArgs() As String
     Public gstrDataPathValue As String
 
-    'Public Declare Function CopyFile Lib "kernel32" Alias _
-    ''    "CopyFileA" (ByVal lpExistingFileName As String, _
-    ''    ByVal lpNewFileName As String, ByVal bFailIfExists As Long) As Long
+    'Global security context.
+    Public gobjSecurity As Security
+
+    'Collection of loaded Account objects.
+    Public gcolAccounts As List(Of Account)
+
+    'Global category and budget lists.
+    Public gobjCategories As CategoryTranslator
+    Public gobjBudgets As BudgetTranslator
 
     'Table with memorized payees.
     Public gdomTransTable As VB6XmlDocument
     'Above with Output attributes of Payee elements converted to upper case.
     Public gdomTransTableUCS As VB6XmlDocument
-
-    'Public Declare Function FormatMessage Lib "kernel32" Alias _
-    ''    "FormatMessageA" (ByVal dwFlags As Long, lpSource As Any, _
-    ''    ByVal dwMessageId As Long, ByVal dwLanguageId As Long, _
-    ''    ByVal lpBuffer As String, ByVal nSize As Long, Arguments As Long) As Long
-
-    'Public Const FORMAT_MESSAGE_IGNORE_INSERTS = &H200
-    'Public Const FORMAT_MESSAGE_FROM_SYSTEM = &H1000
-
-    'Public Function gstrWin32ErrorText(ByVal lngDLLError As Long) As String
-    '
-    '    Dim lngResult As Long
-    '    Dim strError As String
-    '
-    '    strError = Space$(200)
-    '    lngResult = FormatMessage(FORMAT_MESSAGE_IGNORE_INSERTS Or FORMAT_MESSAGE_FROM_SYSTEM, _
-    ''        0, lngDLLError, 0, strError, Len(strError), 0)
-    '    If lngResult > 0 Then
-    '        If Mid$(strError, lngResult - 1, 2) = vbCrLf Then
-    '            strError = Left$(strError, lngResult - 2)
-    '        Else
-    '            strError = Left$(strError, lngResult)
-    '        End If
-    '    Else
-    '        strError = "Could not translate Win32 error code " & lngDLLError & " decimal"
-    '    End If
-    '
-    '    gstrWin32ErrorText = strError
-    '
-    'End Function
 
     Public Function gobjInitialize() As Everything
         Dim intIndex As Integer
@@ -142,6 +118,95 @@ Public Module SharedDefs
 
     Public Function gstrPayeeFilePath() As String
         gstrPayeeFilePath = gstrAddPath("PayeeList.xml")
+    End Function
+
+    'Category keys of categories which typically have due dates
+    '14 days or less after invoice or billing dates. Category
+    'keys have "(" and ")" around them.
+    Public gstrShortTermsCatKeys As String
+
+    'Key of budget used as placeholder in fake trx.
+    Public gstrPlaceholderBudgetKey As String
+
+    Public Function gstrAccountPath() As String
+        gstrAccountPath = gstrDataPath() & "\Accounts"
+    End Function
+
+    Public Function gstrReportPath() As String
+        gstrReportPath = gstrDataPath() & "\Reports"
+    End Function
+
+    Public Function gstrBackupPath() As String
+        gstrBackupPath = gstrDataPath() & "\Backup"
+    End Function
+
+    Public Function gstrImageFilePath() As String
+        gstrImageFilePath = gstrDataPath() & "\ImageFiles"
+    End Function
+
+    Public Sub gLoadGlobalLists()
+        Try
+
+            gobjBudgets = New BudgetTranslator()
+            gobjBudgets.LoadFile(gstrAddPath("Shared.bud"))
+            gobjCategories = New CategoryTranslator()
+            gobjCategories.LoadFile(gstrAddPath("Shared.cat"))
+            gBuildShortTermsCatKeys()
+            gFindPlaceholderBudget()
+
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
+    End Sub
+
+    'Set gstrPlaceholderBudgetKey to the key of the budget whose name
+    'is "(budget)", or set it to "---" if there is no such budget.
+    Public Sub gFindPlaceholderBudget()
+        Dim intPlaceholderIndex As Integer
+        intPlaceholderIndex = gobjBudgets.intLookupValue1("(placeholder)")
+        If intPlaceholderIndex > 0 Then
+            gstrPlaceholderBudgetKey = gobjBudgets.strKey(intPlaceholderIndex)
+        Else
+            'Don't use empty string, because that's the key used
+            'if a split doesn't use a budget.
+            gstrPlaceholderBudgetKey = "---"
+        End If
+    End Sub
+
+    'Set gstrShortTermsCatKeys by the heuristic of looking for
+    'recognizable strings in the category names.
+    Public Sub gBuildShortTermsCatKeys()
+        Dim intCatIndex As Integer
+        Dim strCatName As String
+        Dim blnPossibleCredit As Boolean
+        Dim blnPossibleUtility As Boolean
+
+        gstrShortTermsCatKeys = ""
+        For intCatIndex = 1 To gobjCategories.intElements
+            strCatName = LCase(gobjCategories.strValue1(intCatIndex))
+
+            blnPossibleUtility = blnHasWord(strCatName, "util") Or blnHasWord(strCatName, "phone") Or blnHasWord(strCatName, "trash") Or blnHasWord(strCatName, "garbage") Or blnHasWord(strCatName, "oil") Or blnHasWord(strCatName, "heat") Or blnHasWord(strCatName, "electric") Or blnHasWord(strCatName, "cable") Or blnHasWord(strCatName, "comcast") Or blnHasWord(strCatName, "web") Or blnHasWord(strCatName, "internet") Or blnHasWord(strCatName, "qwest") Or blnHasWord(strCatName, "verizon")
+
+            blnPossibleCredit = blnHasWord(strCatName, "card") Or blnHasWord(strCatName, "bank") Or blnHasWord(strCatName, "loan") Or blnHasWord(strCatName, "auto") Or blnHasWord(strCatName, "car") Or blnHasWord(strCatName, "truck") Or blnHasWord(strCatName, "mortgage") Or blnHasWord(strCatName, "house")
+
+            If blnPossibleCredit Or blnPossibleUtility Then
+                gstrShortTermsCatKeys = gstrShortTermsCatKeys & gstrEncodeCatKey(gobjCategories.strKey(intCatIndex))
+            End If
+        Next
+
+    End Sub
+
+    Private Function blnHasWord(ByVal strCatName As String, ByVal strPrefix As String) As Boolean
+        blnHasWord = (InStr(strCatName, ":" & strPrefix) > 0) Or (InStr(strCatName, " " & strPrefix) > 0)
+    End Function
+
+    Public Function gstrEncodeCatKey(ByVal strCatKey As String) As String
+        gstrEncodeCatKey = "(" & strCatKey & ")"
+    End Function
+
+    Public Function gstrMakeRepeatId(ByVal strRepeatKey As String, ByVal intRepeatSeq As Integer) As String
+        gstrMakeRepeatId = "#" & strRepeatKey & "." & intRepeatSeq
     End Function
 
     '$Description Return a string summarizing the categories used by a normal transaction.
