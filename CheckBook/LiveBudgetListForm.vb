@@ -36,8 +36,8 @@ Friend Class LiveBudgetListForm
             lvwMatches.Items.Clear()
             For lngIndex = 1 To mobjReg.lngTrxCount
                 objTrx = mobjReg.objTrx(lngIndex)
-                With objTrx
-                    If .lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
+                If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
+                    With DirectCast(objTrx, BudgetTrx)
                         If .datDate <= datTarget And .datBudgetEnds >= datTarget Then
                             objItem = gobjListViewAdd(lvwMatches)
                             objItem.Text = gstrFormatDate(.datDate)
@@ -72,8 +72,8 @@ Friend Class LiveBudgetListForm
                                 objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(.curAmount)))
                             End If
                         End If
-                    End If
-                End With
+                    End With
+                End If
             Next
 
             Exit Sub

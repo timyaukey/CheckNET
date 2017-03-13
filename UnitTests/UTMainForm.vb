@@ -857,7 +857,7 @@ Friend Class UTMainForm
         gUTSetSubTest("Verify 1")
 
         objTrx = objReg.objTrx(1)
-        With objTrx
+        With DirectCast(objTrx, BudgetTrx)
             gUTAssert(.lngType = Trx.TrxType.glngTRXTYP_BUDGET, "Wrong type")
             gUTAssert(.datDate = #4/10/2000#, "Wrong date")
             gUTAssert(.strDescription = "General household", "Wrong description")
@@ -902,7 +902,7 @@ Friend Class UTMainForm
         gUTSetSubTest("Verify 4")
 
         objTrx = objReg.objTrx(4)
-        With objTrx
+        With DirectCast(objTrx, TransferTrx)
             gUTAssert(.lngType = Trx.TrxType.glngTRXTYP_TRANSFER, "Wrong type")
             gUTAssert(.datDate = #4/20/2000#, "Wrong date")
             gUTAssert(.strTransferKey = "xfr55", "Wrong transfer key")

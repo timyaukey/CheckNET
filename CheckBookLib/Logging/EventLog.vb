@@ -188,9 +188,10 @@ Public Class EventLog
                         End With
                     Next objSplit
                 Case Trx.TrxType.glngTRXTYP_BUDGET
+                    Dim objBudgetTrx As BudgetTrx = DirectCast(objTrx, BudgetTrx)
                     .SetAttribute("Type", "Budget")
-                    .SetAttribute("BudgetLimit", gstrFormatCurrency(objTrx.curBudgetLimit))
-                    .SetAttribute("BudgetName", gobjBudgets.strKeyToValue1(objTrx.strBudgetKey))
+                    .SetAttribute("BudgetLimit", gstrFormatCurrency(objBudgetTrx.curBudgetLimit))
+                    .SetAttribute("BudgetName", gobjBudgets.strKeyToValue1(objBudgetTrx.strBudgetKey))
                 Case Trx.TrxType.glngTRXTYP_TRANSFER
                     .SetAttribute("Type", "Transfer")
                 Case Else

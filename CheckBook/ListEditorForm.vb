@@ -504,7 +504,7 @@ Friend Class ListEditorForm
                     Next
                 ElseIf mlngListType = ListType.glngLIST_TYPE_BUDGET Then
                     If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
-                        If objTrx.strBudgetKey = strKey Then
+                        If DirectCast(objTrx, BudgetTrx).strBudgetKey = strKey Then
                             blnElementIsUsedInRegister = True
                             Exit Function
                         End If

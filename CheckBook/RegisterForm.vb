@@ -116,7 +116,7 @@ Friend Class RegisterForm
             'a budget is applied.
             If objTrx.lngType = Trx.TrxType.glngTRXTYP_TRANSFER Then
                 objXfer = New TransferManager
-                objOtherReg = mobjAccount.objFindReg(objTrx.strTransferKey)
+                objOtherReg = mobjAccount.objFindReg(DirectCast(objTrx, TransferTrx).strTransferKey)
                 objXfer.DeleteTransfer(mobjReg, intIndex, objOtherReg)
             Else
                 mobjReg.Delete(intIndex, New LogDelete, "RegisterForm.Delete")

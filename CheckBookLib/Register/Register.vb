@@ -369,17 +369,22 @@ Public Class Register
     Public Sub Delete(ByVal lngIndex As Integer, ByVal objDeleteLogger As ILogDelete, ByVal strTitle As String)
         Dim lngMoveIndex As Integer
         Dim objTrxOld As Trx
+        Dim objTrx As Trx
         If lngIndex < 1 Or lngIndex > mlngTrxUsed Then
             gRaiseError("Register.Delete passed invalid index=" & lngIndex)
         End If
         ClearFirstAffected()
-        With Me.objTrx(lngIndex)
+        objTrx = Me.objTrx(lngIndex)
+        With objTrx
             objTrxOld = .objClone(Nothing)
             'Budget Trx always come before any Split objects applied to
             'them, so deleting a normal Trx cannot change the index of
             'any budget Trx affected by the following statement.
             .UnApplyFromBudgets(Me)
-            .DestroyThisBudget()
+            If TypeOf objTrx Is BudgetTrx Then
+                Dim objBudgetTrx As BudgetTrx = DirectCast(objTrx, BudgetTrx)
+                objBudgetTrx.DestroyThisBudget()
+            End If
             If .strRepeatKey <> "" Then
                 RemoveRepeatTrx(maobjTrx(lngIndex))
             End If
@@ -488,7 +493,7 @@ Public Class Register
                 lngOutIndex = lngOutIndex + 1
                 maobjTrx(lngOutIndex) = objTrx
                 If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
-                    objTrx.ClearThisBudget()
+                    DirectCast(objTrx, BudgetTrx).ClearThisBudget()
                 ElseIf objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
                     For Each objSplit In objTrx.colSplits
                         objSplit.ClearBudgetReference()
@@ -1002,14 +1007,16 @@ Public Class Register
     Public Function lngMatchTransfer(ByVal datDate As Date, ByVal strTransferKey_ As String, ByVal curAmount As Decimal) As Integer
 
         Dim lngIndex As Integer
+        Dim objTrx As Trx
 
         lngMatchTransfer = 0
 
         For lngIndex = mlngTrxUsed To 1 Step -1
-            With Me.objTrx(lngIndex)
-                If .datDate < datDate Then
-                    Exit Function
-                End If
+            objTrx = Me.objTrx(lngIndex)
+            If objTrx.datDate < datDate Then
+                Exit Function
+            End If
+            With DirectCast(objTrx, TransferTrx)
                 If .lngType = Trx.TrxType.glngTRXTYP_TRANSFER Then
                     If .datDate = datDate Then
                         If .curAmount = curAmount Then
@@ -1037,20 +1044,24 @@ Public Class Register
     Public Function lngMatchBudget(ByVal datDate As Date, ByVal strBudgetKey As String, ByRef blnNoMatch As Boolean) As Integer
 
         Dim lngIndex As Integer
+        Dim objTrx As Trx
 
         lngMatchBudget = 0
         blnNoMatch = False
         For lngIndex = mlngTrxUsed To 1 Step -1
-            With Me.objTrx(lngIndex)
-                If .lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
-                    If datDate >= .datDate And datDate <= .datBudgetEnds Then
-                        If strBudgetKey = .strBudgetKey Then
-                            lngMatchBudget = lngIndex
-                            Exit Function
+            objTrx = Me.objTrx(lngIndex)
+            If TypeOf objTrx Is BudgetTrx Then
+                With DirectCast(objTrx, BudgetTrx)
+                    If .lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
+                        If datDate >= .datDate And datDate <= .datBudgetEnds Then
+                            If strBudgetKey = .strBudgetKey Then
+                                lngMatchBudget = lngIndex
+                                Exit Function
+                            End If
                         End If
                     End If
-                End If
-            End With
+                End With
+            End If
         Next
         blnNoMatch = True
 

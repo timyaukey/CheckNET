@@ -24,7 +24,7 @@ Friend Class AdjustBudgetsToCashForm
     'Register index of budget Trx with budget in cboBudget(i).
     Private malngRegIndex(mintNUM_BUDGETS) As Integer
     'Trx objects referenced by malngRegIndex(). Used for sanity check.
-    Private maobjRegTrx(mintNUM_BUDGETS) As Trx
+    Private maobjRegTrx(mintNUM_BUDGETS) As BudgetTrx
     'Budget key of budget Trx with budget in cboBudget(i).
     Private mastrBudgetKey(mintNUM_BUDGETS) As String
 
@@ -212,6 +212,7 @@ Friend Class AdjustBudgetsToCashForm
         Dim lngTrxCount As Integer
         Dim datPrev As Date
         Dim objTrx As Trx
+        Dim objBudget As BudgetTrx
         Dim blnAnyMatches As Boolean
         Dim intBudget As Short
         Dim strTrxBudgetKey As String
@@ -251,7 +252,8 @@ Friend Class AdjustBudgetsToCashForm
                 End If
                 'If this is a budget trx, see if it matches anything we are looking for.
                 If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
-                    strTrxBudgetKey = objTrx.strBudgetKey
+                    objBudget = DirectCast(objTrx, BudgetTrx)
+                    strTrxBudgetKey = objBudget.strBudgetKey
                     'Check against each budget key we are looking for.
                     For intBudget = 1 To mintNUM_BUDGETS
                         'Is this budget key specified?
@@ -270,7 +272,7 @@ Friend Class AdjustBudgetsToCashForm
                                 'Will confirm this later during the update as a sanity
                                 'check to insure intervening activity has not caused
                                 'the Trx to move in the register.
-                                maobjRegTrx(intBudget) = objTrx
+                                maobjRegTrx(intBudget) = objBudget
                                 blnAnyMatches = True
                             End If
                         End If
@@ -427,7 +429,7 @@ Friend Class AdjustBudgetsToCashForm
                 gRaiseError("Trx is at wrong index")
             End If
             objTrxManager.UpdateStart()
-            With objTrxManager.objTrx
+            With DirectCast(objTrxManager.objTrx, BudgetTrx)
                 .curBudgetLimit = curLimit
                 .SetAmountForBudget(mobjReg.datOldestBudgetEndAllowed)
                 .blnFake = False

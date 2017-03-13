@@ -27,7 +27,7 @@ Public Class TrxSplit
     Private mstrImageFiles As String
 
     'Reference to budget Trx for this Split.
-    Private mobjBudget As Trx
+    Private mobjBudget As BudgetTrx
 
     '$Description Initialize a new Split object.
 
@@ -120,7 +120,7 @@ Public Class TrxSplit
         End Get
     End Property
 
-    Public ReadOnly Property objBudget() As Trx
+    Public ReadOnly Property objBudget() As BudgetTrx
         Get
             objBudget = mobjBudget
         End Get
@@ -168,7 +168,7 @@ Public Class TrxSplit
         If lngMatchIndex = 0 Then
             Exit Sub
         End If
-        mobjBudget = objReg.objTrx(lngMatchIndex)
+        mobjBudget = DirectCast(objReg.objTrx(lngMatchIndex), BudgetTrx)
         mobjBudget.ApplyToThisBudget(Me, objReg)
 
     End Sub

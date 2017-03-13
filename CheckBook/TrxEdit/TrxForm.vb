@@ -195,7 +195,7 @@ Friend Class TrxForm
                 Case Trx.TrxType.glngTRXTYP_BUDGET
                     ConfigBudgetControls()
                     SetBudgetControls(DirectCast(objTrx, BudgetTrx))
-                    ShowBudgetApplied(objTrx, lngIndex_)
+                    ShowBudgetApplied(DirectCast(objTrx, BudgetTrx), lngIndex_)
                 Case Trx.TrxType.glngTRXTYP_TRANSFER
                     ConfigTransferControls()
                     SetTransferControls(DirectCast(objTrx, TransferTrx))
@@ -342,7 +342,7 @@ Friend Class TrxForm
         End With
     End Sub
 
-    Private Sub ShowBudgetApplied(ByVal objBudget As Trx, ByVal lngIndex_ As Integer)
+    Private Sub ShowBudgetApplied(ByVal objBudget As BudgetTrx, ByVal lngIndex_ As Integer)
         Dim lngCurrent As Integer
         Dim objCurrent As Trx
         Dim objSplit As TrxSplit

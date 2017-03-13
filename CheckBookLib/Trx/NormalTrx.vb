@@ -81,17 +81,9 @@ Public Class NormalTrx
     End Sub
 
     Private Sub ClearNormal()
-        mstrTransferKey = ""
-        mcurTransferAmount = 0
-        mcurBudgetLimit = 0
-        mdatBudgetEnds = System.DateTime.FromOADate(0)
-        mcurBudgetApplied = 0
-
         mcurAmount = 0
         mcurBalance = 0
 
-        'UPGRADE_NOTE: Object mcolAppliedSplits may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        mcolAppliedSplits = Nothing
         mcolSplits = New List(Of TrxSplit)
     End Sub
 
@@ -189,24 +181,6 @@ Public Class NormalTrx
             If mlngStatus <> TrxStatus.glngTRXSTS_UNREC Then
                 objReg.RaiseValidationError(lngIndex, "Normal trx must be unreconciled if it is fake")
             End If
-        End If
-        If mstrBudgetKey <> "" Then
-            objReg.RaiseValidationError(lngIndex, "Normal trx cannot have budget key")
-        End If
-        If mcurBudgetLimit <> 0 Then
-            objReg.RaiseValidationError(lngIndex, "Normal trx cannot have budget limit")
-        End If
-        If mcurBudgetApplied <> 0 Then
-            objReg.RaiseValidationError(lngIndex, "Normal trx cannot have budget applied")
-        End If
-        If Not mcolAppliedSplits Is Nothing Then
-            objReg.RaiseValidationError(lngIndex, "Normal trx cannot have applied splits collection")
-        End If
-        If mstrTransferKey <> "" Then
-            objReg.RaiseValidationError(lngIndex, "Normal trx cannot have transfer key")
-        End If
-        If mcurTransferAmount <> 0 Then
-            objReg.RaiseValidationError(lngIndex, "Normal trx cannot have transfer amount")
         End If
     End Sub
 End Class

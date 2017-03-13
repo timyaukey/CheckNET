@@ -4,6 +4,28 @@ Option Explicit On
 Public Class BudgetTrx
     Inherits Trx
 
+    'Original budget amount, or zero if mblnBudget=False.
+    'Is NOT changed as other Trx are applied and unapplied to this one.
+    'Sign has the same meaning as Split.curAmount, so is normally negative.
+    Protected mcurBudgetLimit As Decimal
+    'Last date in the budget period. Budget period starts at mdatDate.
+    Protected mdatBudgetEnds As Date
+    'For budget Trx, a unique ID for that budget. All budget Trx in a repeating
+    'budget will have the same mstrBudgetKey, and the appropriate one for applying
+    'Trx will be chosen by the budget period. Is a foreign key into some external
+    'database defining how to create budget Trx.
+    Protected mstrBudgetKey As String
+    'Unit of time to which mintBudgetPeriodNumber applies.
+    Protected mlngBudgetPeriodUnit As RepeatUnit
+    'Number of mlngBudgetPeriodUnit in budget period.
+    Protected mintBudgetPeriodNumber As Short
+    'Amount applied toward budget. Magnitude may be greater than mcurBudgetLimit,
+    'in which case mcurAmount will equal zero instead of a credit.
+    Protected mcurBudgetApplied As Decimal
+    'Collection of Split objects belonging to other Trx and applied to this
+    'budget Trx. Nothing if this is not a budget Trx.
+    Protected mcolAppliedSplits As List(Of TrxSplit)
+
     '$Description Initialize a new budget Trx object. Normally followed by
     '   Register.NewLoadEnd() or Register.NewAddEnd().
 
@@ -26,8 +48,6 @@ Public Class BudgetTrx
         mstrImportKey = ""
         mstrRepeatKey = strRepeatKey_
 
-        mstrTransferKey = ""
-        mcurTransferAmount = 0
         mcurBudgetLimit = curBudgetLimit_
         mdatBudgetEnds = datBudgetEnds_
         mstrBudgetKey = strBudgetKey_
@@ -86,6 +106,130 @@ Public Class BudgetTrx
         End Get
     End Property
 
+    Public Property curBudgetLimit() As Decimal
+        Get
+            curBudgetLimit = mcurBudgetLimit
+        End Get
+        Set(value As Decimal)
+            mcurBudgetLimit = value
+        End Set
+    End Property
+
+    Public ReadOnly Property datBudgetEnds() As Date
+        Get
+            datBudgetEnds = mdatBudgetEnds
+        End Get
+    End Property
+
+    Public ReadOnly Property strBudgetKey() As String
+        Get
+            strBudgetKey = mstrBudgetKey
+        End Get
+    End Property
+
+    Public ReadOnly Property lngBudgetPeriodUnit() As RepeatUnit
+        Get
+            lngBudgetPeriodUnit = mlngBudgetPeriodUnit
+        End Get
+    End Property
+
+    Public ReadOnly Property intBudgetPeriodNumber() As Short
+        Get
+            intBudgetPeriodNumber = mintBudgetPeriodNumber
+        End Get
+    End Property
+
+    Public ReadOnly Property curBudgetApplied() As Decimal
+        Get
+            curBudgetApplied = mcurBudgetApplied
+        End Get
+    End Property
+
+    Protected Sub RaiseErrorOnBadBudget(ByVal strRoutine As String)
+        If mstrBudgetKey = "" Then
+            gRaiseError("Missing budget key in " & strRoutine)
+        End If
+        If mdatBudgetEnds = System.DateTime.FromOADate(0) Then
+            gRaiseError("Missing budget end date in " & strRoutine)
+        End If
+        If mdatBudgetEnds < mdatDate Then
+            gRaiseError("Budget period ends before it begins")
+        End If
+    End Sub
+
+    '$Description Set all repeating Trx properties exclusive to budget Trx.
+
+    Public Sub SetBudgetRptProps(ByVal lngBudgetPeriodUnit_ As RepeatUnit, ByVal intBudgetPeriodNumber_ As Short)
+
+        mlngBudgetPeriodUnit = lngBudgetPeriodUnit_
+        mintBudgetPeriodNumber = intBudgetPeriodNumber_
+    End Sub
+
+    '$Description Set mcurAmount for a budget Trx. Called whenever
+    '   mcurBudgetApplied or mcurBudgetLimit changes.
+
+    Public Sub SetAmountForBudget(ByVal datOldestEnd As Date)
+        If System.Math.Abs(mcurBudgetApplied) > System.Math.Abs(mcurBudgetLimit) Or mdatBudgetEnds < datOldestEnd Then
+            mcurAmount = 0
+        Else
+            mcurAmount = mcurBudgetLimit - mcurBudgetApplied
+        End If
+    End Sub
+
+    '$Description Apply a Split to the budget Trx which is ourself.
+    '   Called only by Split.ApplyToBudget().
+
+    Public Sub ApplyToThisBudget(ByVal objSplit As TrxSplit, ByVal objReg As Register)
+
+        If lngType <> TrxType.glngTRXTYP_BUDGET Then
+            gRaiseError("Trx.ApplyToThisBudget only allowed on budget transaction")
+        End If
+
+        mcolAppliedSplits.Add(objSplit)
+        mcurBudgetApplied = mcurBudgetApplied + objSplit.curAmount
+        SetAmountForBudget(objReg.datOldestBudgetEndAllowed)
+        objReg.RaiseBudgetChanged(Me)
+    End Sub
+
+    '$Description Un-apply a Split from the budget Trx which is ourself.
+    '   Called only by Split.UnApplyFromBudget().
+
+    Public Sub UnApplyFromThisBudget(ByVal objSplit As TrxSplit, ByVal objReg As Register)
+        If lngType <> TrxType.glngTRXTYP_BUDGET Then
+            gRaiseError("Trx.UnApplyFromThisBudget only allowed on budget transaction")
+        End If
+
+        If Not mcolAppliedSplits.Remove(objSplit) Then
+            gRaiseError("Could not find split in Trx.UnApplyFromThisBudget")
+        End If
+
+        mcurBudgetApplied = mcurBudgetApplied - objSplit.curAmount
+        SetAmountForBudget(objReg.datOldestBudgetEndAllowed)
+        objReg.RaiseBudgetChanged(Me)
+    End Sub
+
+    '$Description Un-apply all splits applied to this budget Trx. Must be done
+    '   for any budget being deleted from the register. Does nothing if this Trx
+    '   is not a budget.
+
+    Public Sub DestroyThisBudget()
+        Dim objSplit As TrxSplit
+        If lngType = TrxType.glngTRXTYP_BUDGET Then
+            For Each objSplit In mcolAppliedSplits
+                objSplit.ClearBudgetReference()
+            Next objSplit
+            'UPGRADE_NOTE: Object mcolAppliedSplits may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+            mcolAppliedSplits = Nothing
+        End If
+    End Sub
+
+    Public Sub ClearThisBudget()
+        If lngType = TrxType.glngTRXTYP_BUDGET Then
+            mcurBudgetApplied = 0
+            mcolAppliedSplits = New List(Of TrxSplit)
+        End If
+    End Sub
+
     Public Overrides Function objClone(objReg As Register) As Trx
         Dim objBudgetTrx As BudgetTrx = New BudgetTrx()
         objBudgetTrx.NewStartBudget(objReg, mdatDate, mstrDescription, mstrMemo, mblnAwaitingReview, mblnAutoGenerated, mintRepeatSeq, mstrRepeatKey, mcurBudgetLimit, mdatBudgetEnds, mstrBudgetKey)
@@ -121,12 +265,6 @@ Public Class BudgetTrx
             If curTotal <> mcurBudgetApplied Then
                 objReg.RaiseValidationError(lngIndex, "Budget trx applied splits add up wrong")
             End If
-        End If
-        If mstrTransferKey <> "" Then
-            objReg.RaiseValidationError(lngIndex, "Budget trx cannot have transfer key")
-        End If
-        If mcurTransferAmount <> 0 Then
-            objReg.RaiseValidationError(lngIndex, "Budget trx cannot have transfer amount")
         End If
         If Not mblnFake Then
             objReg.RaiseValidationError(lngIndex, "Budget trx must be fake")
