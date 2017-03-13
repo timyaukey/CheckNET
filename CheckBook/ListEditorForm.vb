@@ -6,28 +6,25 @@ Imports CheckBookLib
 
 Friend Class ListEditorForm
     Inherits System.Windows.Forms.Form
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     Private mlngListType As ListType
     Private mobjList As SimpleStringTranslator
     Private mstrFile As String
-    'If not Nothing, list is private to this account.
-    Private mobjAccount As Account
+    Private mobjEverything As Everything
     Private mblnModified As Boolean
+    Private mblnSaved As Boolean
 
     Public Enum ListType
         glngLIST_TYPE_CATEGORY = 1
         glngLIST_TYPE_BUDGET = 2
-        glngLIST_TYPE_REPEAT = 3
     End Enum
 
-    Public Function ShowMe(ByVal lngListType As ListType, ByVal strFile As String, ByVal objList As SimpleStringTranslator,
-                           ByVal strCaption As String, ByVal objAccount As Account) As DialogResult
+    Public Function blnShowMe(ByVal objEverything As Everything, ByVal lngListType As ListType, ByVal strFile As String,
+                              ByVal objList As SimpleStringTranslator, ByVal strCaption As String) As Boolean
 
         Dim frm As System.Windows.Forms.Form
 
         Try
-
             For Each frm In gcolForms()
                 If TypeOf frm Is RegisterForm Then
                     '
@@ -35,20 +32,19 @@ Friend Class ListEditorForm
                     '
                 Else
                     MsgBox("Lists may not be edited if any windows other than registers " & "are open.", MsgBoxStyle.Critical)
-                    Return DialogResult.Cancel
+                    Return False
                 End If
             Next frm
             Me.Text = strCaption
+            mobjEverything = objEverything
             mlngListType = lngListType
             mobjList = objList
             mstrFile = strFile
             mblnModified = False
-            mobjAccount = objAccount
-            If (mobjAccount Is Nothing) <> (mlngListType <> ListType.glngLIST_TYPE_REPEAT) Then
-                gRaiseError("Invalid account passed as arg")
-            End If
+            mblnSaved = False
             LoadList()
-            Return Me.ShowDialog()
+            Me.ShowDialog()
+            Return mblnSaved
 
             Exit Function
         Catch ex As Exception
@@ -62,10 +58,11 @@ Friend Class ListEditorForm
             gSaveChangedAccounts()
             RebuildTranslator()
             WriteFile()
-            gBuildShortTermsCatKeys()
-            gFindPlaceholderBudget()
+            gBuildShortTermsCatKeys(mobjEverything)
+            gFindPlaceholderBudget(mobjEverything)
             MsgBox("Updated list has been saved. The new names will not appear in " & "register windows until you close and re-open those windows.", MsgBoxStyle.Information)
             mblnModified = False
+            mblnSaved = True
             Me.Close()
 
             Exit Sub
@@ -79,20 +76,18 @@ Friend Class ListEditorForm
     End Sub
 
     Private Sub ListEditorForm_FormClosing(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-        Dim Cancel As Boolean = eventArgs.Cancel
-        Dim UnloadMode As System.Windows.Forms.CloseReason = eventArgs.CloseReason
         Try
 
             If mblnModified Then
                 If MsgBox("Do you wish to discard changes made on this window?", MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
-                    Cancel = 1
+                    eventArgs.Cancel = 1
                     Exit Sub
                 End If
             End If
 
             Exit Sub
         Catch ex As Exception
-            eventArgs.Cancel = Cancel
+            eventArgs.Cancel = 1
             gTopException(ex)
         End Try
     End Sub
@@ -448,17 +443,13 @@ Friend Class ListEditorForm
         Try
 
             strKey = strMakeKey(gintVB6GetItemData(lstElements, intListIndex))
-            If mobjAccount Is Nothing Then
-                For Each objAccount In gcolAccounts
-                    If blnElementIsUsedInAccount(objAccount, strKey) Then
-                        blnElementIsUsed = True
-                        Exit Function
-                    End If
-                Next objAccount
-                blnElementIsUsed = False
-            Else
-                blnElementIsUsed = blnElementIsUsedInAccount(mobjAccount, strKey)
-            End If
+            For Each objAccount In mobjEverything.colAccounts
+                If blnElementIsUsedInAccount(objAccount, strKey) Then
+                    blnElementIsUsed = True
+                    Exit Function
+                End If
+            Next objAccount
+            blnElementIsUsed = False
 
             Exit Function
         Catch ex As Exception
@@ -495,34 +486,27 @@ Friend Class ListEditorForm
 
             For lngIndex = 1 To objReg.lngTrxCount
                 objTrx = objReg.objTrx(lngIndex)
-                If mlngListType = ListType.glngLIST_TYPE_REPEAT Then
-                    If objTrx.strRepeatKey = strKey Then
-                        blnElementIsUsedInRegister = True
-                        Exit Function
-                    End If
-                Else
-                    If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                        For Each objSplit In objTrx.colSplits
-                            If mlngListType = ListType.glngLIST_TYPE_CATEGORY Then
-                                If objSplit.strCategoryKey = strKey Then
-                                    blnElementIsUsedInRegister = True
-                                    Exit Function
-                                End If
-                            ElseIf mlngListType = ListType.glngLIST_TYPE_BUDGET Then
-                                If objSplit.strBudgetKey = strKey Then
-                                    blnElementIsUsedInRegister = True
-                                    Exit Function
-                                End If
-                            Else
-                                gRaiseError("Unsupported list type")
-                            End If
-                        Next
-                    ElseIf mlngListType = ListType.glngLIST_TYPE_BUDGET Then
-                        If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
-                            If objTrx.strBudgetKey = strKey Then
+                If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
+                    For Each objSplit In objTrx.colSplits
+                        If mlngListType = ListType.glngLIST_TYPE_CATEGORY Then
+                            If objSplit.strCategoryKey = strKey Then
                                 blnElementIsUsedInRegister = True
                                 Exit Function
                             End If
+                        ElseIf mlngListType = ListType.glngLIST_TYPE_BUDGET Then
+                            If objSplit.strBudgetKey = strKey Then
+                                blnElementIsUsedInRegister = True
+                                Exit Function
+                            End If
+                        Else
+                            gRaiseError("Unsupported list type")
+                        End If
+                    Next
+                ElseIf mlngListType = ListType.glngLIST_TYPE_BUDGET Then
+                    If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
+                        If objTrx.strBudgetKey = strKey Then
+                            blnElementIsUsedInRegister = True
+                            Exit Function
                         End If
                     End If
                 End If

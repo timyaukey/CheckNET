@@ -99,7 +99,7 @@ Friend Class CBMainForm
                 objAccount.Init(mobjEverything)
                 frmStartup.Configure(objAccount)
                 objAccount.Load(strFile)
-                gcolAccounts.Add(objAccount)
+                mobjEverything.colAccounts.Add(objAccount)
                 frmStartup.Configure(Nothing)
             Next strFile
 
@@ -109,7 +109,7 @@ Friend Class CBMainForm
 
             mblnCancelStart = False
 
-            For Each objAccount In gcolAccounts
+            For Each objAccount In mobjEverything.colAccounts
                 For Each objReg In objAccount.colRegisters
                     If objReg.blnShowInitially Then
                         gShowRegister(objAccount, objReg, frmStartup)
@@ -261,7 +261,7 @@ Friend Class CBMainForm
         Try
 
             frm = New ListEditorForm
-            frm.ShowMe(ListEditorForm.ListType.glngLIST_TYPE_BUDGET, gstrAddPath("Shared.bud"), gobjBudgets, "Budget List", Nothing)
+            frm.blnShowMe(mobjEverything, ListEditorForm.ListType.glngLIST_TYPE_BUDGET, gstrAddPath("Shared.bud"), gobjBudgets, "Budget List")
 
             Exit Sub
         Catch ex As Exception
@@ -273,10 +273,9 @@ Friend Class CBMainForm
         Dim frm As ListEditorForm
 
         Try
-
             frm = New ListEditorForm
-            If frm.ShowMe(ListEditorForm.ListType.glngLIST_TYPE_CATEGORY, gstrAddPath("Shared.cat"), gobjIncExpAccounts,
-                          "Category List", Nothing) <> DialogResult.Cancel Then
+            If frm.blnShowMe(mobjEverything, ListEditorForm.ListType.glngLIST_TYPE_CATEGORY, gstrAddPath("Shared.cat"),
+                             mobjEverything.objIncExpAccounts, "Category List") Then
                 gLoadCategories(mobjEverything)
             End If
 

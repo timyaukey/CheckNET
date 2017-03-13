@@ -5,20 +5,25 @@ Public Class Everything
 
     Public Event SomethingModified()
 
-    Private mcolAccounts As List(Of Account)
+    Public ReadOnly colAccounts As List(Of Account)
+    Public ReadOnly objCategories As CategoryTranslator
+    Public ReadOnly objIncExpAccounts As CategoryTranslator
+    Public ReadOnly objBudgets As BudgetTranslator
 
-    Public Sub Init()
-        mcolAccounts = New List(Of Account)
+    Dim mintMaxAccountKey As Integer
+
+    Public Sub New()
+        colAccounts = New List(Of Account)
+        objCategories = New CategoryTranslator()
+        objIncExpAccounts = New CategoryTranslator()
+        objBudgets = New BudgetTranslator()
     End Sub
 
-    Public ReadOnly Property colAccounts() As List(Of Account)
-        Get
-            colAccounts = mcolAccounts
-        End Get
-    End Property
-
     Public Function blnAccountKeyUsed(ByVal intKey As Integer) As Boolean
-        For Each act As Account In mcolAccounts
+        For Each act As Account In colAccounts
+            If act.intKey > mintMaxAccountKey Then
+                mintMaxAccountKey = act.intKey
+            End If
             If act.intKey = intKey Then
                 Return True
             End If
@@ -27,13 +32,11 @@ Public Class Everything
     End Function
 
     Public Function intGetUnusedAccountKey() As Integer
-        Dim intMaxKey As Integer = 0
-        For Each act As Account In mcolAccounts
-            If act.intKey > intMaxKey Then
-                intMaxKey = act.intKey
-            End If
-        Next
-        Return intMaxKey + 1
+        'We cannot just check colAccounts, because a new Account
+        'object is not immediately created when the user creates a new account in the UI.
+        'So we need to keep track of account keys created here, by incrementing.
+        mintMaxAccountKey += 1
+        Return mintMaxAccountKey
     End Function
 
     Public Sub FireSomethingModified()
@@ -42,7 +45,7 @@ Public Class Everything
 
     Public Sub Teardown()
         Dim objAccount As Account
-        For Each objAccount In mcolAccounts
+        For Each objAccount In colAccounts
             objAccount.Teardown()
         Next objAccount
     End Sub

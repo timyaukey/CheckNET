@@ -56,8 +56,7 @@ Public Module SharedDefs
         Dim strPath As String
         Dim objEverything As Everything
 
-        objEverything = New Everything
-        objEverything.Init()
+        objEverything = New Everything()
         gstrCmdLinArgs = gaSplit(VB.Command(), " ")
         gstrDataPathValue = My.Application.Info.DirectoryPath & "\Data"
         For intIndex = LBound(gstrCmdLinArgs) To UBound(gstrCmdLinArgs)
@@ -148,13 +147,13 @@ Public Module SharedDefs
     Public Sub gLoadGlobalLists(ByVal objEverything As Everything)
         Try
 
-            gobjBudgets = New BudgetTranslator()
+            gobjBudgets = objEverything.objBudgets
             gobjBudgets.LoadFile(gstrAddPath("Shared.bud"))
-            gobjIncExpAccounts = New CategoryTranslator()
+            gobjIncExpAccounts = objEverything.objIncExpAccounts
             gobjIncExpAccounts.LoadFile(gstrAddPath("Shared.cat"))
-            gobjCategories = New CategoryTranslator()
+            gobjCategories = objEverything.objCategories
             gLoadCategories(objEverything)  'Will not include asset, liability and equity accounts, but that's okay at this point.
-            gFindPlaceholderBudget()
+            gFindPlaceholderBudget(objEverything)
 
             Exit Sub
         Catch ex As Exception
@@ -164,35 +163,45 @@ Public Module SharedDefs
 
     Public Sub gLoadCategories(ByVal objEverything As Everything)
         Dim intIndex As Integer
-        gobjCategories.Init()
-        For intIndex = 1 To gobjIncExpAccounts.intElements
-            gobjCategories.Add(gobjIncExpAccounts.objElement(intIndex))
+        objEverything.objCategories.Init()
+        For intIndex = 1 To objEverything.objIncExpAccounts.intElements
+            objEverything.objCategories.Add(objEverything.objIncExpAccounts.objElement(intIndex))
         Next
         AddAccountTypeToCategories(objEverything, Account.AccountType.Asset, "A")
         AddAccountTypeToCategories(objEverything, Account.AccountType.Liability, "L")
         AddAccountTypeToCategories(objEverything, Account.AccountType.Equity, "Q")
-        gBuildShortTermsCatKeys()
+        gBuildShortTermsCatKeys(objEverything)
     End Sub
 
     Private Sub AddAccountTypeToCategories(ByVal objEverything As Everything, ByVal lngType As Account.AccountType, ByVal strPrefix As String)
+        Dim objCats As List(Of StringTransElement) = New List(Of StringTransElement)
+        Dim elm As StringTransElement
         For Each objAccount As Account In objEverything.colAccounts
             If objAccount.lngType = lngType Then
                 For Each objReg As Register In objAccount.colRegisters
                     Dim strKey As String = objAccount.intKey.ToString() + "." + objReg.strRegisterKey
-                    Dim elm As StringTransElement = New StringTransElement(strKey, strPrefix + ":" + objReg.strTitle, " " + objReg.strTitle)
-                    gobjCategories.Add(elm)
+                    elm = New StringTransElement(strKey, strPrefix + ":" + objReg.strTitle, " " + objReg.strTitle)
+                    objCats.Add(elm)
                 Next
             End If
         Next
+        objCats.Sort(AddressOf intCategoryComparer)
+        For Each elm In objCats
+            objEverything.objCategories.Add(elm)
+        Next
     End Sub
+
+    Private Function intCategoryComparer(ByVal cat1 As StringTransElement, ByVal cat2 As StringTransElement) As Integer
+        Return cat1.strValue1.CompareTo(cat2.strValue1)
+    End Function
 
     'Set gstrPlaceholderBudgetKey to the key of the budget whose name
     'is "(budget)", or set it to "---" if there is no such budget.
-    Public Sub gFindPlaceholderBudget()
+    Public Sub gFindPlaceholderBudget(ByVal objEverything As Everything)
         Dim intPlaceholderIndex As Integer
-        intPlaceholderIndex = gobjBudgets.intLookupValue1("(placeholder)")
+        intPlaceholderIndex = objEverything.objBudgets.intLookupValue1("(placeholder)")
         If intPlaceholderIndex > 0 Then
-            gstrPlaceholderBudgetKey = gobjBudgets.strKey(intPlaceholderIndex)
+            gstrPlaceholderBudgetKey = objEverything.objBudgets.strKey(intPlaceholderIndex)
         Else
             'Don't use empty string, because that's the key used
             'if a split doesn't use a budget.
@@ -202,22 +211,30 @@ Public Module SharedDefs
 
     'Set gstrShortTermsCatKeys by the heuristic of looking for
     'recognizable strings in the category names.
-    Public Sub gBuildShortTermsCatKeys()
+    Public Sub gBuildShortTermsCatKeys(ByVal objEverything As Everything)
         Dim intCatIndex As Integer
         Dim strCatName As String
         Dim blnPossibleCredit As Boolean
         Dim blnPossibleUtility As Boolean
 
         gstrShortTermsCatKeys = ""
-        For intCatIndex = 1 To gobjCategories.intElements
-            strCatName = LCase(gobjCategories.strValue1(intCatIndex))
+        For intCatIndex = 1 To objEverything.objCategories.intElements
+            strCatName = LCase(objEverything.objCategories.strValue1(intCatIndex))
 
-            blnPossibleUtility = blnHasWord(strCatName, "util") Or blnHasWord(strCatName, "phone") Or blnHasWord(strCatName, "trash") Or blnHasWord(strCatName, "garbage") Or blnHasWord(strCatName, "oil") Or blnHasWord(strCatName, "heat") Or blnHasWord(strCatName, "electric") Or blnHasWord(strCatName, "cable") Or blnHasWord(strCatName, "comcast") Or blnHasWord(strCatName, "web") Or blnHasWord(strCatName, "internet") Or blnHasWord(strCatName, "qwest") Or blnHasWord(strCatName, "verizon")
+            blnPossibleUtility = blnHasWord(strCatName, "util") Or blnHasWord(strCatName, "phone") Or
+                blnHasWord(strCatName, "trash") Or blnHasWord(strCatName, "garbage") Or
+                blnHasWord(strCatName, "oil") Or blnHasWord(strCatName, "heat") Or
+                blnHasWord(strCatName, "electric") Or blnHasWord(strCatName, "cable") Or
+                blnHasWord(strCatName, "comcast") Or blnHasWord(strCatName, "web") Or
+                blnHasWord(strCatName, "internet") Or blnHasWord(strCatName, "qwest") Or blnHasWord(strCatName, "verizon")
 
-            blnPossibleCredit = blnHasWord(strCatName, "card") Or blnHasWord(strCatName, "bank") Or blnHasWord(strCatName, "loan") Or blnHasWord(strCatName, "auto") Or blnHasWord(strCatName, "car") Or blnHasWord(strCatName, "truck") Or blnHasWord(strCatName, "mortgage") Or blnHasWord(strCatName, "house")
+            blnPossibleCredit = blnHasWord(strCatName, "card") Or blnHasWord(strCatName, "bank") Or
+                blnHasWord(strCatName, "loan") Or blnHasWord(strCatName, "auto") Or
+                blnHasWord(strCatName, "car") Or blnHasWord(strCatName, "truck") Or
+                blnHasWord(strCatName, "mortgage") Or blnHasWord(strCatName, "house")
 
             If blnPossibleCredit Or blnPossibleUtility Then
-                gstrShortTermsCatKeys = gstrShortTermsCatKeys & gstrEncodeCatKey(gobjCategories.strKey(intCatIndex))
+                gstrShortTermsCatKeys = gstrShortTermsCatKeys & gstrEncodeCatKey(objEverything.objCategories.strKey(intCatIndex))
             End If
         Next
 
