@@ -287,7 +287,7 @@ Friend Class RptScanSplitsForm
     End Sub
 
     Private Sub ProcessSplit(ByVal objReg As Register, ByRef objTrx As Trx, ByVal objSplit As TrxSplit)
-        Dim intCatIndex As Short
+        Dim intCatIndex As Integer
 
         Try
 

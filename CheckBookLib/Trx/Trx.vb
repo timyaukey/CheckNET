@@ -375,8 +375,6 @@ Public MustInherit Class Trx
 
     End Function
 
-    Public MustOverride Function objGetTrxManager(ByVal objReg As Register, ByVal lngIndex As Integer) As TrxManager
-
     '$Description Check for validation errors for Register.Validate().
 
     Public Overridable Sub Validate(ByVal objReg As Register, ByVal lngIndex As Integer)

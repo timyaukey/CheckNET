@@ -612,9 +612,9 @@ Public Class Register
     Public Sub ImportUpdateBank(ByVal lngOldIndex As Integer, ByVal datDate As Date, ByVal strNumber As String,
                                 ByVal curAmount As Decimal, ByVal strImportKey As String)
 
-        Dim objTrxManager As TrxManager = Me.objGetTrxManager(lngOldIndex)
+        Dim objTrxManager As NormalTrxManager = Me.objGetNormalTrxManager(lngOldIndex)
         objTrxManager.UpdateStart()
-        DirectCast(objTrxManager.objTrx, NormalTrx).ImportUpdateBank(datDate, strNumber, curAmount, strImportKey)
+        objTrxManager.objTrx.ImportUpdateBank(datDate, strNumber, curAmount, strImportKey)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdateBank")
     End Sub
 
@@ -624,9 +624,9 @@ Public Class Register
 
     Public Sub ImportUpdateNumAmt(ByVal lngOldIndex As Integer, ByVal strNumber As String, ByVal curAmount As Decimal)
 
-        Dim objTrxManager As TrxManager = Me.objGetTrxManager(lngOldIndex)
+        Dim objTrxManager As NormalTrxManager = Me.objGetNormalTrxManager(lngOldIndex)
         objTrxManager.UpdateStart()
-        DirectCast(objTrxManager.objTrx, NormalTrx).ImportUpdateNumAmt(strNumber, curAmount)
+        objTrxManager.objTrx.ImportUpdateNumAmt(strNumber, curAmount)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdateNumAmt")
     End Sub
 
@@ -635,9 +635,9 @@ Public Class Register
 
     Public Sub ImportUpdateAmount(ByVal lngOldIndex As Integer, ByVal curAmount As Decimal)
 
-        Dim objTrxManager As TrxManager = Me.objGetTrxManager(lngOldIndex)
+        Dim objTrxManager As NormalTrxManager = Me.objGetNormalTrxManager(lngOldIndex)
         objTrxManager.UpdateStart()
-        DirectCast(objTrxManager.objTrx, NormalTrx).ImportUpdateAmount(curAmount)
+        objTrxManager.objTrx.ImportUpdateAmount(curAmount)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdateAmount")
     End Sub
 
@@ -648,9 +648,9 @@ Public Class Register
 
     Public Sub ImportUpdatePurchaseOrder(ByVal lngOldIndex As Integer, ByVal objPOSplit As TrxSplit, ByVal objImportedSplit As TrxSplit)
 
-        Dim objTrxManager As TrxManager = Me.objGetTrxManager(lngOldIndex)
+        Dim objTrxManager As NormalTrxManager = Me.objGetNormalTrxManager(lngOldIndex)
         objTrxManager.UpdateStart()
-        DirectCast(objTrxManager.objTrx, NormalTrx).ImportUpdatePurchaseOrder(objPOSplit, objImportedSplit)
+        objTrxManager.objTrx.ImportUpdatePurchaseOrder(objPOSplit, objImportedSplit)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdatePurchaseOrder")
     End Sub
 
@@ -1089,19 +1089,16 @@ Public Class Register
         RaiseEvent BudgetChanged(lngIndex, objBudgetTrx)
     End Sub
 
-    Public Function objGetTrxManager(ByVal lngIndex As Integer) As TrxManager
-        If lngIndex < 1 Or lngIndex > mlngTrxUsed Then
-            gRaiseError("Invalid index " & lngIndex & " passed to Register.objGetTrxManager")
-        End If
-        Return objGetTrxManager(lngIndex, objTrx(lngIndex))
+    Public Function objGetNormalTrxManager(ByVal lngIndex As Integer) As NormalTrxManager
+        Return Me.objNormalTrx(lngIndex).objGetTrxManager(Me, lngIndex)
     End Function
 
-    Public Function objGetTrxManager(ByVal objTrx As Trx) As TrxManager
-        Return objGetTrxManager(Me.lngFindTrx(objTrx), objTrx)
+    Public Function objGetBudgetTrxManager(ByVal lngIndex As Integer) As BudgetTrxManager
+        Return Me.objBudgetTrx(lngIndex).objGetTrxManager(Me, lngIndex)
     End Function
 
-    Public Function objGetTrxManager(ByVal lngIndex As Integer, ByVal objTrx As Trx) As TrxManager
-        Return objTrx.objGetTrxManager(Me, lngIndex)
+    Public Function objGetTransferTrxManager(ByVal lngIndex As Integer) As TransferTrxManager
+        Return Me.objTransferTrx(lngIndex).objGetTrxManager(Me, lngIndex)
     End Function
 
     '$Description Determine the index at which the specified Trx exists.
@@ -1141,6 +1138,24 @@ Public Class Register
                 gRaiseError("Invalid index " & lngIndex & " in Register.objTrx")
             End If
             objTrx = maobjTrx(lngIndex)
+        End Get
+    End Property
+
+    Public ReadOnly Property objNormalTrx(ByVal lngIndex As Integer) As NormalTrx
+        Get
+            Return DirectCast(objTrx(lngIndex), NormalTrx)
+        End Get
+    End Property
+
+    Public ReadOnly Property objBudgetTrx(ByVal lngIndex As Integer) As BudgetTrx
+        Get
+            Return DirectCast(objTrx(lngIndex), BudgetTrx)
+        End Get
+    End Property
+
+    Public ReadOnly Property objTransferTrx(ByVal lngIndex As Integer) As TransferTrx
+        Get
+            Return DirectCast(objTrx(lngIndex), TransferTrx)
         End Get
     End Property
 

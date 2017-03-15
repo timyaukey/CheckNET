@@ -37,7 +37,7 @@ Public Class ImportHandlerInvoices
                 'and use the first one with a split with no invoice number. That split
                 'represents the uninvoiced part of the purchase order due on that date.
                 For Each vlngMatchedTrxIndex In colPOMatches
-                    objMatchedTrx = DirectCast(objReg.objTrx(vlngMatchedTrxIndex), NormalTrx)
+                    objMatchedTrx = objReg.objNormalTrx(vlngMatchedTrxIndex)
                     For Each objMatchedSplit In objMatchedTrx.colSplits
                         If objMatchedSplit.strPONumber = strPONumber And objMatchedSplit.strInvoiceNum = "" Then
                             'Add the imported Trx as a new split in objMatchedTrx,

@@ -185,12 +185,12 @@ Friend Class ReconcileForm
     Private Sub lvwTrx_ItemCheck(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.ItemCheckEventArgs) Handles lvwTrx.ItemCheck
         Dim Item As System.Windows.Forms.ListViewItem = lvwTrx.Items(eventArgs.Index)
         Dim lngArrayIndex As Integer
-        Dim objTrx As Trx
+        Dim objTrx As NormalTrx
 
         Try
             lngArrayIndex = CInt(Item.SubItems(mintCOL_ARRAY_INDEX).Text)
             With maudtTrx(lngArrayIndex)
-                objTrx = .objReg.objTrx(.lngIndex)
+                objTrx = .objReg.objNormalTrx(.lngIndex)
                 'Item.Checked still has the OLD value, unlike in VB6.
                 If Not Item.Checked Then
                     mcurClearedBalance = mcurClearedBalance + objTrx.curAmount

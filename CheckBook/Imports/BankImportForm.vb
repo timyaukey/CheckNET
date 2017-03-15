@@ -33,7 +33,7 @@ Friend Class BankImportForm
         'If set, identifies an exact match to the imported
         'trx in some register.
         Dim objMatchedReg As Register
-        Dim objMatchedTrx As Trx
+        Dim objMatchedTrx As NormalTrx
     End Structure
 
     'Column number in item list with index into maudtItem().
@@ -45,7 +45,7 @@ Friend Class BankImportForm
     Private maudtItem() As ImportItem '1 to mintItems
     Private mintItems As Integer
 
-    Private ReadOnly Iterator Property colAllMatchedTrx() As IEnumerable(Of Trx)
+    Private ReadOnly Iterator Property colAllMatchedTrx() As IEnumerable(Of NormalTrx)
         Get
             Dim item As ImportItem
             For Each item In maudtItem
@@ -58,7 +58,7 @@ Friend Class BankImportForm
 
     'Match to an item in maudtItem().
     Private Structure MatchItem
-        Dim objTrx As Trx
+        Dim objTrx As NormalTrx
         Dim objReg As Register
         Dim lngRegIndex As Integer
     End Structure
@@ -268,7 +268,7 @@ Friend Class BankImportForm
                         End If
                     End If
                     lngPossibleIndex = gdatFirstElement(colUnusedMatches)
-                    objPossibleMatchTrx = DirectCast(objReg.objTrx(lngPossibleIndex), NormalTrx)
+                    objPossibleMatchTrx = objReg.objNormalTrx(lngPossibleIndex)
                     blnCheckWithoutAmount = False
                     'A check in the register with a zero amount means we didn't know the amount when we entered it, or imported it.
                     If Val(objPossibleMatchTrx.strNumber) > 0 And objPossibleMatchTrx.curAmount = 0.0# Then
@@ -756,11 +756,11 @@ Friend Class BankImportForm
     Private Sub SearchForMatches()
         Dim objImportedTrx As ImportedTrx
         Dim objReg As Register
-        Dim intItemIndex As Short
+        Dim intItemIndex As Integer
         Dim colMatches As ICollection(Of Integer) = Nothing
         Dim blnExactMatch As Boolean
         Dim lngRegIndex As Integer
-        Dim objMatchedTrx As Trx
+        Dim objMatchedTrx As NormalTrx
 
         Try
             ClearCurrentItemMatches()
@@ -789,12 +789,12 @@ Friend Class BankImportForm
                     chkLooseMatch.CheckState = System.Windows.Forms.CheckState.Checked,
                     colMatches, blnExactMatch)
                 For Each lngRegIndex In colMatches
-                    objMatchedTrx = objReg.objTrx(lngRegIndex)
+                    objMatchedTrx = objReg.objNormalTrx(lngRegIndex)
                     'Show the match if it hasn't been imported before,
                     'or we're importing a fake trx. We allow fake trx to be imported
                     'so we can import document information for them - we don't save
                     'their amount or trx number if matched to a real trx.
-                    If (Len(DirectCast(objMatchedTrx, NormalTrx).strImportKey) = 0 Or objImportedTrx.blnFake) And objMatchedTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
+                    If (Len(objMatchedTrx.strImportKey) = 0 Or objImportedTrx.blnFake) And objMatchedTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
                         mintMatches = mintMatches + 1
                         ReDim Preserve maudtMatch(mintMatches)
                         With maudtMatch(mintMatches)
@@ -870,7 +870,7 @@ Friend Class BankImportForm
         Erase maudtMatch
     End Sub
 
-    Private Sub DisplayMatch(ByVal objTrx As Trx, ByVal intIndex As Integer)
+    Private Sub DisplayMatch(ByVal objTrx As NormalTrx, ByVal intIndex As Integer)
         Dim objItem As System.Windows.Forms.ListViewItem
         objItem = gobjListViewAdd(lvwMatches)
         SetTrxSubItems(objTrx, objItem, maudtMatch(intIndex).objReg, 5)
@@ -882,7 +882,7 @@ Friend Class BankImportForm
         End If
     End Sub
 
-    Private Sub SetTrxSubItems(ByVal objTrx As Trx, ByVal objItem As System.Windows.Forms.ListViewItem, ByVal objReg As Register, ByVal intRegColumn As Short)
+    Private Sub SetTrxSubItems(ByVal objTrx As NormalTrx, ByVal objItem As System.Windows.Forms.ListViewItem, ByVal objReg As Register, ByVal intRegColumn As Short)
 
         Dim strRegTitle As String
         With objItem
@@ -907,9 +907,9 @@ Friend Class BankImportForm
             End If
 
             If objItem.SubItems.Count > 4 Then
-                objItem.SubItems(4).Text = strSummarizeTrxCat(DirectCast(objTrx, NormalTrx))
+                objItem.SubItems(4).Text = strSummarizeTrxCat(objTrx)
             Else
-                objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strSummarizeTrxCat(DirectCast(objTrx, NormalTrx))))
+                objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strSummarizeTrxCat(objTrx)))
             End If
             'For .NET compatibility: You can only set an index immediately after
             'the last existing index, and intRegColumn can be either 5 or 6.
@@ -1015,7 +1015,7 @@ Friend Class BankImportForm
     Private Sub cmdUpdateExisting_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdUpdateExisting.Click
         Dim objMatchedReg As Register
         Dim lngMatchedRegIndex As Integer
-        Dim objMatchedTrx As Trx
+        Dim objMatchedTrx As NormalTrx
 
         Try
             If Not blnValidImportItemSelected() Then
@@ -1070,11 +1070,11 @@ Friend Class BankImportForm
         DisplayOneImportItem(lvwTrx.FocusedItem, intSelectedItemIndex())
     End Sub
 
-    Private Function intSelectedItemIndex() As Short
+    Private Function intSelectedItemIndex() As Integer
         intSelectedItemIndex = CShort(lvwTrx.FocusedItem.SubItems(mintITMCOL_INDEX).Text)
     End Function
 
-    Private Function intSelectedMatchIndex() As Short
+    Private Function intSelectedMatchIndex() As Integer
         intSelectedMatchIndex = CShort(lvwMatches.FocusedItem.SubItems(mintMCHCOL_INDEX).Text)
     End Function
 

@@ -421,10 +421,10 @@ Friend Class AdjustBudgetsToCashForm
 
     Private Sub UpdateBudget(ByVal lngIndex As Integer, ByVal curLimit As Decimal, ByVal intBudget As Integer)
 
-        Dim objTrxManager As TrxManager
+        Dim objTrxManager As BudgetTrxManager
 
         Try
-            objTrxManager = mobjReg.objGetTrxManager(lngIndex)
+            objTrxManager = mobjReg.objGetBudgetTrxManager(lngIndex)
             If Not objTrxManager.objTrx Is maobjRegTrx(intBudget) Then
                 gRaiseError("Trx is at wrong index")
             End If

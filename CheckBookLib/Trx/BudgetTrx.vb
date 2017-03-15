@@ -233,7 +233,11 @@ Public Class BudgetTrx
         Return objBudgetTrx
     End Function
 
-    Public Overrides Function objGetTrxManager(objReg As Register, lngIndex As Integer) As TrxManager
+    Public Function objGetTrxManager(objReg As Register) As BudgetTrxManager
+        Return New BudgetTrxManager(objReg, objReg.lngTrxIndex(Me), Me)
+    End Function
+
+    Public Function objGetTrxManager(objReg As Register, lngIndex As Integer) As BudgetTrxManager
         Return New BudgetTrxManager(objReg, lngIndex, Me)
     End Function
 

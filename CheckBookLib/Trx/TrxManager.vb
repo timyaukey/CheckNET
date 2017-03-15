@@ -11,21 +11,22 @@ Option Explicit On
 ''' will only be partly updated.
 ''' </summary>
 
-Public MustInherit Class TrxManager
+Public MustInherit Class TrxManager(Of TTrx As Trx)
+
     Protected mobjReg As Register
     Protected mlngTrxIndex As Integer
-    Public ReadOnly objTrx As Trx
-    Protected ReadOnly mobjOriginalLogTrx As Trx
+    Public ReadOnly objTrx As TTrx
+    Protected ReadOnly mobjOriginalLogTrx As TTrx
     Protected mblnUpdateStarted As Boolean
 
-    Public Sub New(ByVal objReg As Register, ByVal lngTrxIndex As Integer, ByVal objTrx As Trx)
+    Public Sub New(ByVal objReg As Register, ByVal lngTrxIndex As Integer, ByVal objTrx As TTrx)
         mobjReg = objReg
         mlngTrxIndex = lngTrxIndex
         If Not objTrx Is mobjReg.objTrx(mlngTrxIndex) Then
             Throw New Exception("Trx passed to TrxManager must be at the specified index of the Register passed")
         End If
         Me.objTrx = objTrx
-        mobjOriginalLogTrx = objTrx.objClone(Nothing)
+        mobjOriginalLogTrx = DirectCast(objTrx.objClone(Nothing), TTrx)
         mblnUpdateStarted = False
     End Sub
 
@@ -42,9 +43,9 @@ Public MustInherit Class TrxManager
 End Class
 
 Public Class NormalTrxManager
-    Inherits TrxManager
+    Inherits TrxManager(Of NormalTrx)
 
-    Public Sub New(ByVal objReg As Register, ByVal lngTrxIndex As Integer, ByVal objTrx As Trx)
+    Public Sub New(ByVal objReg As Register, ByVal lngTrxIndex As Integer, ByVal objTrx As NormalTrx)
         MyBase.New(objReg, lngTrxIndex, objTrx)
     End Sub
 
@@ -55,16 +56,16 @@ Public Class NormalTrxManager
         mobjReg.ClearFirstAffected()
         'These next two lines are why if you call UpdateStart(),
         'you must finish by calling UpdateEnd() to keep the Register in good condition.
-        DirectCast(objTrx, NormalTrx).UnApplyFromBudgets(mobjReg)
+        objTrx.UnApplyFromBudgets(mobjReg)
         objTrx.ClearRepeatTrx(mobjReg)
         mblnUpdateStarted = True
     End Sub
 End Class
 
 Public Class BudgetTrxManager
-    Inherits TrxManager
+    Inherits TrxManager(Of BudgetTrx)
 
-    Public Sub New(ByVal objReg As Register, ByVal lngTrxIndex As Integer, ByVal objTrx As Trx)
+    Public Sub New(ByVal objReg As Register, ByVal lngTrxIndex As Integer, ByVal objTrx As BudgetTrx)
         MyBase.New(objReg, lngTrxIndex, objTrx)
     End Sub
 
@@ -80,9 +81,9 @@ Public Class BudgetTrxManager
 End Class
 
 Public Class TransferTrxManager
-    Inherits TrxManager
+    Inherits TrxManager(Of TransferTrx)
 
-    Public Sub New(ByVal objReg As Register, ByVal lngTrxIndex As Integer, ByVal objTrx As Trx)
+    Public Sub New(ByVal objReg As Register, ByVal lngTrxIndex As Integer, ByVal objTrx As TransferTrx)
         MyBase.New(objReg, lngTrxIndex, objTrx)
     End Sub
 
