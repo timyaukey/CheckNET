@@ -44,7 +44,7 @@ Public Class RegisterSaver
         Dim objSplit As TrxSplit
 
         SaveTrxShared("TN")
-        With mobjTrx
+        With DirectCast(mobjTrx, NormalTrx)
             If Len(.strNumber) > 0 Then
                 SaveLine("N#" & .strNumber)
             End If

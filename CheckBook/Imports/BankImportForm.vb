@@ -237,7 +237,7 @@ Friend Class BankImportForm
         Dim blnExactMatch As Boolean
         Dim intExactCount As Integer
         Dim lngPossibleIndex As Integer
-        Dim objPossibleMatchTrx As Trx
+        Dim objPossibleMatchTrx As NormalTrx
         Dim blnNonExactConfirmed As Boolean
         Dim blnCheckWithoutAmount As Boolean
 
@@ -268,7 +268,7 @@ Friend Class BankImportForm
                         End If
                     End If
                     lngPossibleIndex = gdatFirstElement(colUnusedMatches)
-                    objPossibleMatchTrx = objReg.objTrx(lngPossibleIndex)
+                    objPossibleMatchTrx = DirectCast(objReg.objTrx(lngPossibleIndex), NormalTrx)
                     blnCheckWithoutAmount = False
                     'A check in the register with a zero amount means we didn't know the amount when we entered it, or imported it.
                     If Val(objPossibleMatchTrx.strNumber) > 0 And objPossibleMatchTrx.curAmount = 0.0# Then
@@ -794,7 +794,7 @@ Friend Class BankImportForm
                     'or we're importing a fake trx. We allow fake trx to be imported
                     'so we can import document information for them - we don't save
                     'their amount or trx number if matched to a real trx.
-                    If (Len(objMatchedTrx.strImportKey) = 0 Or objImportedTrx.blnFake) And objMatchedTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
+                    If (Len(DirectCast(objMatchedTrx, NormalTrx).strImportKey) = 0 Or objImportedTrx.blnFake) And objMatchedTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
                         mintMatches = mintMatches + 1
                         ReDim Preserve maudtMatch(mintMatches)
                         With maudtMatch(mintMatches)
@@ -907,9 +907,9 @@ Friend Class BankImportForm
             End If
 
             If objItem.SubItems.Count > 4 Then
-                objItem.SubItems(4).Text = strSummarizeTrxCat(objTrx)
+                objItem.SubItems(4).Text = strSummarizeTrxCat(DirectCast(objTrx, NormalTrx))
             Else
-                objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strSummarizeTrxCat(objTrx)))
+                objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strSummarizeTrxCat(DirectCast(objTrx, NormalTrx))))
             End If
             'For .NET compatibility: You can only set an index immediately after
             'the last existing index, and intRegColumn can be either 5 or 6.
@@ -933,7 +933,7 @@ Friend Class BankImportForm
         End With
     End Sub
 
-    Private Function strSummarizeTrxCat(ByVal objTrx As Trx) As String
+    Private Function strSummarizeTrxCat(ByVal objTrx As NormalTrx) As String
 
         If objTrx.lngSplits = 1 Then
             strSummarizeTrxCat = gobjCategories.strKeyToValue1(objTrx.objFirstSplit.strCategoryKey)

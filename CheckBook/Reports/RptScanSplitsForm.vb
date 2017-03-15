@@ -270,7 +270,7 @@ Friend Class RptScanSplitsForm
                                 End If
                             End If
                             If blnInclude Then
-                                For Each objSplit In objTrx.colSplits
+                                For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
                                     mlngSplitCount = mlngSplitCount + 1
                                     ProcessSplit(objReg, objTrx, objSplit)
                                 Next objSplit

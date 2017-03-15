@@ -139,7 +139,9 @@ Public Class Register
         If objNew Is Nothing Then
             gRaiseError("objNew is Nothing in Register.NewAddEnd")
         End If
-        objNew.ApplyToBudgets(Me)
+        If objNew.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
+            DirectCast(objNew, NormalTrx).ApplyToBudgets(Me)
+        End If
         lngIndex = lngNewInsert(objNew)
         mlngTrxCurrent = lngIndex
         RaiseEvent TrxAdded(lngIndex, objNew)
@@ -266,7 +268,9 @@ Public Class Register
             If objTrx.intRepeatSeq > 0 Then
                 SetRepeatTrx(objTrx)
             End If
-            objTrx.ApplyToBudgets(Me)
+            If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
+                DirectCast(objTrx, NormalTrx).ApplyToBudgets(Me)
+            End If
             lngNewIndex = lngUpdateMove(lngOldIndex)
             mlngTrxCurrent = lngNewIndex
             RaiseEvent TrxUpdated(lngOldIndex, lngNewIndex, objTrx)
@@ -380,10 +384,11 @@ Public Class Register
             'Budget Trx always come before any Split objects applied to
             'them, so deleting a normal Trx cannot change the index of
             'any budget Trx affected by the following statement.
-            .UnApplyFromBudgets(Me)
+            If TypeOf objTrx Is NormalTrx Then
+                DirectCast(objTrx, NormalTrx).UnApplyFromBudgets(Me)
+            End If
             If TypeOf objTrx Is BudgetTrx Then
-                Dim objBudgetTrx As BudgetTrx = DirectCast(objTrx, BudgetTrx)
-                objBudgetTrx.DestroyThisBudget()
+                DirectCast(objTrx, BudgetTrx).DestroyThisBudget()
             End If
             If .strRepeatKey <> "" Then
                 RemoveRepeatTrx(maobjTrx(lngIndex))
@@ -453,18 +458,18 @@ Public Class Register
     Public Sub LoadPostProcessing()
 
         Dim lngIndex As Integer
+        Dim objTrx As Trx
 
         For lngIndex = 1 To mlngTrxUsed
-            With Me.objTrx(lngIndex)
-                .ApplyToBudgets(Me)
-                If .lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                    If .blnFake Then
-                        If mdatOldestFakeNormal = System.DateTime.FromOADate(0) Then
-                            mdatOldestFakeNormal = .datDate
-                        End If
+            objTrx = Me.objTrx(lngIndex)
+            If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
+                DirectCast(objTrx, NormalTrx).ApplyToBudgets(Me)
+                If objTrx.blnFake Then
+                    If mdatOldestFakeNormal = System.DateTime.FromOADate(0) Then
+                        mdatOldestFakeNormal = objTrx.datDate
                     End If
                 End If
-            End With
+            End If
         Next
         lngFixBalances(1)
 
@@ -495,7 +500,7 @@ Public Class Register
                 If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
                     DirectCast(objTrx, BudgetTrx).ClearThisBudget()
                 ElseIf objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                    For Each objSplit In objTrx.colSplits
+                    For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
                         objSplit.ClearBudgetReference()
                     Next objSplit
                 End If
@@ -538,14 +543,14 @@ Public Class Register
 
     Public Function lngMatchImportKey(ByVal strImportKey As String) As Integer
         Dim lngIndex As Integer
+        Dim objTrx As Trx
         For lngIndex = mlngTrxUsed To 1 Step -1
-            With Me.objTrx(lngIndex)
-                If .lngType = Trx.TrxType.glngTRXTYP_NORMAL And Not .blnFake Then
-                    If .strImportKey = strImportKey Then
-                        Return lngIndex
-                    End If
+            objTrx = Me.objTrx(lngIndex)
+            If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL And Not objTrx.blnFake Then
+                If DirectCast(objTrx, NormalTrx).strImportKey = strImportKey Then
+                    Return lngIndex
                 End If
-            End With
+            End If
         Next
         Return 0
     End Function
@@ -609,7 +614,7 @@ Public Class Register
 
         Dim objTrxManager As TrxManager = Me.objGetTrxManager(lngOldIndex)
         objTrxManager.UpdateStart()
-        objTrxManager.objTrx.ImportUpdateBank(datDate, strNumber, curAmount, strImportKey)
+        DirectCast(objTrxManager.objTrx, NormalTrx).ImportUpdateBank(datDate, strNumber, curAmount, strImportKey)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdateBank")
     End Sub
 
@@ -621,7 +626,7 @@ Public Class Register
 
         Dim objTrxManager As TrxManager = Me.objGetTrxManager(lngOldIndex)
         objTrxManager.UpdateStart()
-        objTrxManager.objTrx.ImportUpdateNumAmt(strNumber, curAmount)
+        DirectCast(objTrxManager.objTrx, NormalTrx).ImportUpdateNumAmt(strNumber, curAmount)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdateNumAmt")
     End Sub
 
@@ -632,7 +637,7 @@ Public Class Register
 
         Dim objTrxManager As TrxManager = Me.objGetTrxManager(lngOldIndex)
         objTrxManager.UpdateStart()
-        objTrxManager.objTrx.ImportUpdateAmount(curAmount)
+        DirectCast(objTrxManager.objTrx, NormalTrx).ImportUpdateAmount(curAmount)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdateAmount")
     End Sub
 
@@ -645,7 +650,7 @@ Public Class Register
 
         Dim objTrxManager As TrxManager = Me.objGetTrxManager(lngOldIndex)
         objTrxManager.UpdateStart()
-        objTrxManager.objTrx.ImportUpdatePurchaseOrder(objPOSplit, objImportedSplit)
+        DirectCast(objTrxManager.objTrx, NormalTrx).ImportUpdatePurchaseOrder(objPOSplit, objImportedSplit)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdatePurchaseOrder")
     End Sub
 
@@ -723,41 +728,43 @@ Public Class Register
                     Exit Do
                 End If
                 If .lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                    blnMatched = False
-                    If lngNumber <> 0 Then
-                        If .strNumber = strNumber Then
-                            blnMatched = True
+                    With DirectCast(objTrx, NormalTrx)
+                        blnMatched = False
+                        If lngNumber <> 0 Then
+                            If .strNumber = strNumber Then
+                                blnMatched = True
+                            End If
                         End If
-                    End If
-                    If blnLooseMatch Then
-                        curAmountRange = System.Math.Abs(curAmount * 0.2D)
-                        If .curNormalMatchRange > curAmountRange Then
-                            curAmountRange = .curNormalMatchRange
-                        End If
-                    Else
-                        curAmountRange = .curNormalMatchRange
-                    End If
-                    blnDescrMatches = (Left(LCase(.strDescription), intDescrMatchLen) = strDescrLC)
-                    blnDateMatches = (System.Math.Abs(DateDiff(Microsoft.VisualBasic.DateInterval.Day, .datDate, datDate)) < 6)
-                    blnAmountMatches = (System.Math.Abs(.curAmount - curAmount) <= curAmountRange)
-                    If (CInt(IIf(blnAmountMatches, 1, 0)) + CInt(IIf(blnDateMatches, 1, 0))) >= CInt(IIf(blnLooseMatch, 1, 2)) Then
-                        blnMatched = True
-                    End If
-                    If blnMatched Or blnDescrMatches Then
-                        'If min/max were specified this is a mandatory amount filter, separate from blnAmountMatches.
-                        If curMatchMin <> 0.0# And curMatchMax <> 0.0# Then
-                            If (.curAmount >= curMatchMin) And (.curAmount <= curMatchMax) Then
-                                colMatches.Add(lngIndex)
+                        If blnLooseMatch Then
+                            curAmountRange = System.Math.Abs(curAmount * 0.2D)
+                            If .curNormalMatchRange > curAmountRange Then
+                                curAmountRange = .curNormalMatchRange
                             End If
                         Else
-                            colMatches.Add(lngIndex)
+                            curAmountRange = .curNormalMatchRange
                         End If
-                    End If
-                    If .curAmount = curAmount Then
-                        If (blnDescrMatches And blnDateMatches) Or (.strNumber = CStr(lngNumber)) Then
-                            colExactMatches.Add(lngIndex)
+                        blnDescrMatches = (Left(LCase(.strDescription), intDescrMatchLen) = strDescrLC)
+                        blnDateMatches = (System.Math.Abs(DateDiff(Microsoft.VisualBasic.DateInterval.Day, .datDate, datDate)) < 6)
+                        blnAmountMatches = (System.Math.Abs(.curAmount - curAmount) <= curAmountRange)
+                        If (CInt(IIf(blnAmountMatches, 1, 0)) + CInt(IIf(blnDateMatches, 1, 0))) >= CInt(IIf(blnLooseMatch, 1, 2)) Then
+                            blnMatched = True
                         End If
-                    End If
+                        If blnMatched Or blnDescrMatches Then
+                            'If min/max were specified this is a mandatory amount filter, separate from blnAmountMatches.
+                            If curMatchMin <> 0.0# And curMatchMax <> 0.0# Then
+                                If (.curAmount >= curMatchMin) And (.curAmount <= curMatchMax) Then
+                                    colMatches.Add(lngIndex)
+                                End If
+                            Else
+                                colMatches.Add(lngIndex)
+                            End If
+                        End If
+                        If .curAmount = curAmount Then
+                            If (blnDescrMatches And blnDateMatches) Or (.strNumber = CStr(lngNumber)) Then
+                                colExactMatches.Add(lngIndex)
+                            End If
+                        End If
+                    End With
                 End If
             End With
             lngIndex = lngIndex + 1
@@ -841,8 +848,10 @@ Public Class Register
                            Function(objTrx As Trx) As Boolean
                                If objTrx.datDate = datDate Then
                                    If objTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
-                                       If String.IsNullOrEmpty(objTrx.strImportKey) Then
-                                           Return True
+                                       If TypeOf objTrx Is NormalTrx Then
+                                           If String.IsNullOrEmpty(DirectCast(objTrx, NormalTrx).strImportKey) Then
+                                               Return True
+                                           End If
                                        End If
                                    End If
                                End If
@@ -865,8 +874,8 @@ Public Class Register
 
         Dim lngIndex As Integer
         Dim datEnd As Date
-        '    Dim strNumber As String
         Dim blnImportOkay As Boolean
+        Dim objTrx As Trx
 
         colMatches = New List(Of Integer)
         blnExactMatch = False
@@ -876,17 +885,16 @@ Public Class Register
             If lngIndex > mlngTrxUsed Then
                 Exit Do
             End If
-            With Me.objTrx(lngIndex)
-                If .datDate > datEnd Then
-                    Exit Do
+            objTrx = Me.objTrx(lngIndex)
+            If objTrx.datDate > datEnd Then
+                Exit Do
+            End If
+            If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
+                blnImportOkay = (DirectCast(objTrx, NormalTrx).strImportKey = "") Or (blnMatchImportedFromBank) 'Used to be (not blnMatchImportedFromBank)
+                If objTrx.strDescription = strDescription And blnImportOkay Then
+                    colMatches.Add(lngIndex)
                 End If
-                If .lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                    blnImportOkay = (.strImportKey = "") Or (blnMatchImportedFromBank) 'Used to be (not blnMatchImportedFromBank)
-                    If .strDescription = strDescription And blnImportOkay Then
-                        colMatches.Add(lngIndex)
-                    End If
-                End If
-            End With
+            End If
             lngIndex = lngIndex + 1
         Loop
         If colMatches.Count() = 1 Then
@@ -909,6 +917,7 @@ Public Class Register
         Dim lngIndex As Integer
         Dim datEnd As Date
         Dim objSplit As TrxSplit
+        Dim objTrx As Trx
 
         colMatches = New List(Of Integer)
         lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1
@@ -917,13 +926,14 @@ Public Class Register
             If lngIndex > mlngTrxUsed Then
                 Exit Do
             End If
-            With Me.objTrx(lngIndex)
+            objTrx = Me.objTrx(lngIndex)
+            With objTrx
                 If .datDate > datEnd Then
                     Exit Do
                 End If
                 If .lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
                     If .strDescription = strPayee Then
-                        For Each objSplit In .colSplits
+                        For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
                             If objSplit.strInvoiceNum = strInvoiceNum Then
                                 colMatches.Add(lngIndex)
                             End If
@@ -950,6 +960,7 @@ Public Class Register
         Dim lngIndex As Integer
         Dim datEnd As Date
         Dim objSplit As TrxSplit
+        Dim objTrx As Trx
 
         colMatches = New List(Of Integer)
         lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1
@@ -958,13 +969,14 @@ Public Class Register
             If lngIndex > mlngTrxUsed Then
                 Exit Do
             End If
-            With Me.objTrx(lngIndex)
+            objTrx = Me.objTrx(lngIndex)
+            With objTrx
                 If .datDate > datEnd Then
                     Exit Do
                 End If
                 If .lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
                     If .strDescription = strPayee Then
-                        For Each objSplit In .colSplits
+                        For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
                             If objSplit.strPONumber = strPONumber Then
                                 colMatches.Add(lngIndex)
                             End If
@@ -1016,18 +1028,18 @@ Public Class Register
             If objTrx.datDate < datDate Then
                 Exit Function
             End If
-            With DirectCast(objTrx, TransferTrx)
-                If .lngType = Trx.TrxType.glngTRXTYP_TRANSFER Then
-                    If .datDate = datDate Then
+            If objTrx.lngType = Trx.TrxType.glngTRXTYP_TRANSFER Then
+                If objTrx.datDate = datDate Then
+                    With DirectCast(objTrx, TransferTrx)
                         If .curAmount = curAmount Then
                             If .strTransferKey = strTransferKey_ Then
                                 lngMatchTransfer = lngIndex
                                 Exit Function
                             End If
                         End If
-                    End If
+                    End With
                 End If
-            End With
+            End If
         Next
 
     End Function

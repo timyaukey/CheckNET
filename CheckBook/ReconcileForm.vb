@@ -94,7 +94,7 @@ Friend Class ReconcileForm
                                     curSelectedTotal = curSelectedTotal + objTrx.curAmount
                                 End If
                             End With
-                            DisplayTrx(objTrx)
+                            DisplayTrx(DirectCast(objTrx, NormalTrx))
                         End If
                     End If
                 End With
@@ -108,7 +108,7 @@ Friend Class ReconcileForm
 
     End Sub
 
-    Private Sub DisplayTrx(ByVal objTrx As Trx)
+    Private Sub DisplayTrx(ByVal objTrx As NormalTrx)
         Dim objItem As System.Windows.Forms.ListViewItem
         Dim intPipe2 As Integer
         Dim datBankDate As DateTime
@@ -141,7 +141,7 @@ Friend Class ReconcileForm
                 strSortableNumber = objTrx.strNumber.ToUpper()
             End If
             AddSubItem(objItem, mintCOL_SORTABLE_NUMBER, strSortableNumber)
-            AddSubItem(objItem, mintcol_SORTABLE_BANK_DATE, strSortableBankDate)
+            AddSubItem(objItem, mintCOL_SORTABLE_BANK_DATE, strSortableBankDate)
             AddSubItem(objItem, mintCOL_ARRAY_INDEX, CStr(mlngTrxUsed))
             .Checked = (objTrx.lngStatus = Trx.TrxStatus.glngTRXSTS_SELECTED)
         End With

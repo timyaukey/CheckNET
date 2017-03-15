@@ -446,7 +446,7 @@ Public Class ImportUtilities
                                                 ByRef blnExactMatch As Boolean) _
                                                 As ICollection(Of Integer)
         Dim colResult As ICollection(Of Integer)
-        Dim objPossibleMatchTrx As Trx
+        Dim objPossibleMatchTrx As NormalTrx
         Dim intPossibleIndex As Integer
         Dim datTargetDate As Date
         Dim dblBestDistance As Double
@@ -471,7 +471,7 @@ Public Class ImportUtilities
 
         blnHaveFirstMatch = False
         For Each intPossibleIndex In colInputMatches
-            objPossibleMatchTrx = objReg.objTrx(intPossibleIndex)
+            objPossibleMatchTrx = DirectCast(objReg.objTrx(intPossibleIndex), NormalTrx)
             If String.IsNullOrEmpty(objPossibleMatchTrx.strImportKey) And (objPossibleMatchTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON) Then
                 dblCurrentDistance = Math.Abs(objPossibleMatchTrx.datDate.Subtract(datTargetDate).TotalDays)
                 If (Not blnHaveFirstMatch) Or (dblCurrentDistance < dblBestDistance) Then

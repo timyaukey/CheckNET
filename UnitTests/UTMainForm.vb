@@ -400,10 +400,10 @@ Friend Class UTMainForm
 
             'Delete one of the budgets, to show the applied splits are un-applied.
             objTrx = objUTReg.objReg.objTrx(5)
-            gUTAssert(Not objTrx.objSecondSplit.objBudget Is Nothing, "Expected split to be applied")
+            gUTAssert(Not DirectCast(objTrx, NormalTrx).objSecondSplit.objBudget Is Nothing, "Expected split to be applied")
             .DeleteEntry(4, 4, 4, "Fourth delete")
             .Validate("", 3, 5, 6, 7)
-            gUTAssert(objTrx.objSecondSplit.objBudget Is Nothing, "Expected split to be un-applied")
+            gUTAssert(DirectCast(objTrx, NormalTrx).objSecondSplit.objBudget Is Nothing, "Expected split to be un-applied")
 
             'Delete a normal trx applied to a budget, to show it un-applies.
             .SetTrxAmount(6, -21.94D)
@@ -666,7 +666,7 @@ Friend Class UTMainForm
 
         objUTReg.objReg.ImportUpdateBank(1, #4/3/2001#, "200", -25D, "importkey-1")
         objTrx = objUTReg.objReg.objTrx(1)
-        With objTrx
+        With DirectCast(objTrx, NormalTrx)
             gUTAssert(.datDate = #4/3/2000#, "Bad date")
             gUTAssert(.strNumber = "200", "Bad number")
             gUTAssert(.curAmount = -25D, "Bad amount")
@@ -870,7 +870,7 @@ Friend Class UTMainForm
         gUTSetSubTest("Verify 2")
 
         objTrx = objReg.objTrx(2)
-        With objTrx
+        With DirectCast(objTrx, NormalTrx)
             gUTAssert(.lngType = Trx.TrxType.glngTRXTYP_NORMAL, "Wrong type")
             gUTAssert(.datDate = #4/13/2000#, "Wrong date")
             gUTAssert(.strDescription = "Hadley Garden Center", "Wrong description")
@@ -890,7 +890,7 @@ Friend Class UTMainForm
         gUTSetSubTest("Verify 3")
 
         objTrx = objReg.objTrx(3)
-        With objTrx
+        With DirectCast(objTrx, NormalTrx)
             gUTAssert(.lngType = Trx.TrxType.glngTRXTYP_NORMAL, "Wrong type")
             gUTAssert(.datDate = #4/15/2000#, "Wrong date")
             gUTAssert(.strNumber = "1001", "Wrong number")

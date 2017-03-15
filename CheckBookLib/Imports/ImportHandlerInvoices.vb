@@ -19,7 +19,7 @@ Public Class ImportHandlerInvoices
         Dim objImportedSplit As TrxSplit
         Dim colPOMatches As ICollection(Of Integer) = Nothing
         Dim vlngMatchedTrxIndex As Integer
-        Dim objMatchedTrx As Trx
+        Dim objMatchedTrx As NormalTrx
         Dim objMatchedSplit As TrxSplit
         Dim strPONumber As String
         'Check if we are importing an invoice that can be matched to a purchase order.
@@ -37,7 +37,7 @@ Public Class ImportHandlerInvoices
                 'and use the first one with a split with no invoice number. That split
                 'represents the uninvoiced part of the purchase order due on that date.
                 For Each vlngMatchedTrxIndex In colPOMatches
-                    objMatchedTrx = objReg.objTrx(vlngMatchedTrxIndex)
+                    objMatchedTrx = DirectCast(objReg.objTrx(vlngMatchedTrxIndex), NormalTrx)
                     For Each objMatchedSplit In objMatchedTrx.colSplits
                         If objMatchedSplit.strPONumber = strPONumber And objMatchedSplit.strInvoiceNum = "" Then
                             'Add the imported Trx as a new split in objMatchedTrx,

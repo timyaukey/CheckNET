@@ -138,6 +138,7 @@ Public Class EventLog
         Dim elmTrx As VB6XmlElement
         Dim objSplit As TrxSplit
         Dim elmSplitParent As VB6XmlElement
+        Dim objNormalTrx As NormalTrx
         elmTrx = mdomOutput.CreateElement(strName)
         melmEvent.AppendChild(elmTrx)
         With elmTrx
@@ -157,14 +158,15 @@ Public Class EventLog
                 Case Trx.TrxType.glngTRXTYP_NORMAL
                     .SetAttribute("Type", "Normal")
                     elmSplitParent = elmTrx
-                    For Each objSplit In objTrx.colSplits
-                        If objTrx.lngSplits > 1 Then
+                    objNormalTrx = DirectCast(objTrx, NormalTrx)
+                    For Each objSplit In objNormalTrx.colSplits
+                        If objNormalTrx.lngSplits > 1 Then
                             elmSplitParent = mdomOutput.CreateElement("Split")
                             elmTrx.AppendChild(elmSplitParent)
                         End If
                         With elmSplitParent
                             .SetAttribute("CatName", gobjCategories.strKeyToValue1(objSplit.strCategoryKey))
-                            If objTrx.lngSplits > 1 Then
+                            If objNormalTrx.lngSplits > 1 Then
                                 .SetAttribute("Amount", gstrFormatCurrency(objSplit.curAmount))
                             End If
                             If objSplit.strPONumber <> "" Then

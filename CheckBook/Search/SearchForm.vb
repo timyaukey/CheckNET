@@ -298,7 +298,7 @@ Friend Class SearchForm
     Private Sub AddSearchMatchAllSplits(ByVal objTrx As Trx, ByVal lngIndex As Integer)
 
         Dim objSplit As TrxSplit
-        For Each objSplit In objTrx.colSplits
+        For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
             AddSearchMatchSplit(objTrx, lngIndex, objSplit)
         Next
 
@@ -496,7 +496,7 @@ Friend Class SearchForm
                 'Ignore budgets and transfers instead of showing an error, because
                 'it is common to export all trx in a date range except these.
                 If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                    colSplits = objTrx.colSplits
+                    colSplits = DirectCast(objTrx, NormalTrx).colSplits
                     For Each objSplit In colSplits
                         frmExport.WriteSplit(objTrx, objSplit)
                         lngExportCount = lngExportCount + 1
@@ -548,7 +548,7 @@ Friend Class SearchForm
                     MsgBox("Generated transactions may not be recategorized.", MsgBoxStyle.Critical)
                     Exit Sub
                 End If
-                colSplits = objTrx.colSplits
+                colSplits = DirectCast(objTrx, NormalTrx).colSplits
                 For Each objSplit In colSplits
                     With objSplit
                         If objSplit.strCategoryKey = strOldCatKey Then
@@ -566,7 +566,7 @@ Friend Class SearchForm
             objStartLogger = mobjReg.objLogGroupStart("SearchForm.Recategorize")
             For Each objTrx In colTrx
                 objTrxManager = mobjReg.objGetTrxManager(objTrx)
-                colSplits = objTrx.colSplits
+                colSplits = DirectCast(objTrx, NormalTrx).colSplits
                 objTrxManager.UpdateStart()
                 DirectCast(objTrx, NormalTrx).ClearSplits()
                 For Each objSplit In colSplits
@@ -575,7 +575,7 @@ Friend Class SearchForm
                         If strCatKey = strOldCatKey Then
                             strCatKey = strNewCatKey
                         End If
-                        objTrx.AddSplit(.strMemo, strCatKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount, .strImageFiles)
+                        DirectCast(objTrx, NormalTrx).AddSplit(.strMemo, strCatKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount, .strImageFiles)
                     End With
                 Next objSplit
                 objTrxManager.UpdateEnd(New LogChange, "SearchForm.Recategorize")
@@ -664,8 +664,8 @@ Friend Class SearchForm
     Private Sub cmdMove_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdMove.Click
         Try
 
-            Dim objTrxSrc As Trx
-            Dim objTrxFirst As Trx = Nothing
+            Dim objTrxSrc As NormalTrx
+            Dim objTrxFirst As NormalTrx = Nothing
             Dim colTrx As ICollection(Of Trx)
             Dim strNewDate As String = ""
             Dim objNewReg As Register = Nothing

@@ -487,7 +487,7 @@ Friend Class ListEditorForm
             For lngIndex = 1 To objReg.lngTrxCount
                 objTrx = objReg.objTrx(lngIndex)
                 If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                    For Each objSplit In objTrx.colSplits
+                    For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
                         If mlngListType = ListType.glngLIST_TYPE_CATEGORY Then
                             If objSplit.strCategoryKey = strKey Then
                                 blnElementIsUsedInRegister = True

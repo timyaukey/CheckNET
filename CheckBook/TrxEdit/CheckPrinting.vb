@@ -158,7 +158,7 @@ Module CheckPrinting
 
     End Sub
 
-    Private Sub PrintInvoiceNumbers(ByVal domCheckFormat As VB6XmlDocument, ByVal strItemName As String, ByVal objTrx As Trx, ByVal dblLineHeight As Double, ByVal ev As PrintPageEventArgs)
+    Private Sub PrintInvoiceNumbers(ByVal domCheckFormat As VB6XmlDocument, ByVal strItemName As String, ByVal objTrx As NormalTrx, ByVal dblLineHeight As Double, ByVal ev As PrintPageEventArgs)
 
         Dim elmInvoiceList As VB6XmlElement
         Dim dblX As Double
