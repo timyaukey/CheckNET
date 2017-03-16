@@ -88,14 +88,12 @@ Public Class NormalTrx
         mintRepeatSeq = 0
         mstrImportKey = ""
         mstrRepeatKey = ""
-
         ClearNormal()
     End Sub
 
     Private Sub ClearNormal()
         mcurAmount = 0
         mcurBalance = 0
-
         mcolSplits = New List(Of TrxSplit)
     End Sub
 
@@ -169,9 +167,6 @@ Public Class NormalTrx
 
     Public ReadOnly Property lngSplits() As Integer
         Get
-            If lngType <> TrxType.glngTRXTYP_NORMAL Then
-                gRaiseError("Trx.intSplits only allowed on normal transaction")
-            End If
             lngSplits = mcolSplits.Count()
         End Get
     End Property
@@ -198,16 +193,13 @@ Public Class NormalTrx
     '   Does nothing except for normal Trx.
 
     Public Sub ApplyToBudgets(ByVal objReg As Register)
-
         Dim objSplit As TrxSplit
         Dim blnNoMatch As Boolean
         mblnAnyUnmatchedBudget = False
-        If lngType = TrxType.glngTRXTYP_NORMAL Then
-            For Each objSplit In mcolSplits
-                objSplit.ApplyToBudget(objReg, mdatDate, blnNoMatch)
-                mblnAnyUnmatchedBudget = mblnAnyUnmatchedBudget Or blnNoMatch
-            Next objSplit
-        End If
+        For Each objSplit In mcolSplits
+            objSplit.ApplyToBudget(objReg, mdatDate, blnNoMatch)
+            mblnAnyUnmatchedBudget = mblnAnyUnmatchedBudget Or blnNoMatch
+        Next objSplit
     End Sub
 
     '$Description If Split objects for this Trx have been applied to any budgets,
@@ -216,18 +208,14 @@ Public Class NormalTrx
 
     Public Sub UnApplyFromBudgets(ByVal objReg As Register)
         Dim objSplit As TrxSplit
-
-        If lngType = TrxType.glngTRXTYP_NORMAL Then
-            For Each objSplit In mcolSplits
-                objSplit.UnApplyFromBudget(objReg)
-            Next objSplit
-        End If
+        For Each objSplit In mcolSplits
+            objSplit.UnApplyFromBudget(objReg)
+        Next objSplit
     End Sub
 
     '$Description Update a Trx as a result of matching it to imported bank data.
 
     Public Sub ImportUpdateBank(ByVal datDate_ As Date, ByVal strNumber_ As String, ByVal curAmount_ As Decimal, ByVal strImportKey_ As String)
-
         ImportUpdateShared()
         If Not IsNumeric(strNumber_) Then
             mdatDate = datDate_
@@ -235,26 +223,21 @@ Public Class NormalTrx
         mstrNumber = strNumber_
         AdjustSplitsProportionally(curAmount_)
         mstrImportKey = strImportKey_
-
     End Sub
 
     '$Description Update a Trx with new number and amount.
 
     Public Sub ImportUpdateNumAmt(ByVal strNumber_ As String, ByVal curAmount_ As Decimal)
-
         ImportUpdateShared()
         mstrNumber = strNumber_
         AdjustSplitsProportionally(curAmount_)
-
     End Sub
 
     '$Description Update a generated Trx with new amount, and make it non-generated.
 
     Public Sub ImportUpdateAmount(ByVal curAmount_ As Decimal)
-
         ImportUpdateShared()
         AdjustSplitsProportionally(curAmount_)
-
     End Sub
 
     Protected Sub ImportUpdateShared()
@@ -275,9 +258,6 @@ Public Class NormalTrx
         Dim lngSplit As Integer
         Dim curThisSplit As Decimal
 
-        If lngType <> TrxType.glngTRXTYP_NORMAL Then
-            gRaiseError("AdjustSplitsProportionally used for wrong transaction type")
-        End If
         If curNewAmount = mcurAmount Then
             Exit Sub
         End If
@@ -334,12 +314,14 @@ Public Class NormalTrx
         With objImportedSplit
             objPOSplit.AdjustAmount(objPOSplit.curAmount - .curAmount)
             mcurAmount = mcurAmount - .curAmount
-            AddSplit(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, objPOSplit.strBudgetKey, .curAmount, .strImageFiles)
+            AddSplit(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate,
+                     .strTerms, objPOSplit.strBudgetKey, .curAmount, .strImageFiles)
         End With
 
     End Sub
 
-    Private Sub SetSplitDocInfo(ByVal strPONumber_ As String, ByVal strInvoiceNum_ As String, ByVal datInvoiceDate_ As Date, ByVal datDueDate_ As Date, ByVal strTerms_ As String, ByVal strImageFiles_ As String)
+    Private Sub SetSplitDocInfo(ByVal strPONumber_ As String, ByVal strInvoiceNum_ As String, ByVal datInvoiceDate_ As Date,
+                                ByVal datDueDate_ As Date, ByVal strTerms_ As String, ByVal strImageFiles_ As String)
         Dim objSplit As TrxSplit
         For Each objSplit In mcolSplits
             With objSplit
@@ -357,14 +339,12 @@ Public Class NormalTrx
     '   but does not apply to budget because the budget Trx may not exist yet.
     '   This is the only valid way to modify the splits, or the Trx amount.
 
-    Public Sub AddSplit(ByVal strMemo_ As String, ByVal strCategoryKey_ As String, ByVal strPONumber_ As String, ByVal strInvoiceNum_ As String, ByVal datInvoiceDate_ As Date, ByVal datDueDate_ As Date, ByVal strTerms_ As String, ByVal strBudgetKey_ As String, ByVal curAmount_ As Decimal, ByVal strImageFiles_ As String)
+    Public Sub AddSplit(ByVal strMemo_ As String, ByVal strCategoryKey_ As String, ByVal strPONumber_ As String,
+                        ByVal strInvoiceNum_ As String, ByVal datInvoiceDate_ As Date, ByVal datDueDate_ As Date,
+                        ByVal strTerms_ As String, ByVal strBudgetKey_ As String, ByVal curAmount_ As Decimal,
+                        ByVal strImageFiles_ As String)
 
         Dim objSplit As TrxSplit
-
-        If lngType <> TrxType.glngTRXTYP_NORMAL Then
-            gRaiseError("Trx.AddSplit only allowed on normal transaction")
-        End If
-
         objSplit = New TrxSplit
         objSplit.Init(strMemo_, strCategoryKey_, strPONumber_, strInvoiceNum_, datInvoiceDate_, datDueDate_, strTerms_, strBudgetKey_, curAmount_, strImageFiles_)
         mcolSplits.Add(objSplit)
@@ -376,18 +356,12 @@ Public Class NormalTrx
 
     Public Function objAddSplit(ByVal objSrcSplit As TrxSplit) As TrxSplit
         Dim objDstSplit As TrxSplit
-
-        If lngType <> TrxType.glngTRXTYP_NORMAL Then
-            gRaiseError("Trx.AddSplit only allowed on normal transaction")
-        End If
-
         objDstSplit = New TrxSplit
         With objSrcSplit
             objDstSplit.Init(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount, .strImageFiles)
             mcolSplits.Add(objDstSplit)
             mcurAmount = mcurAmount + .curAmount
         End With
-
         objAddSplit = objDstSplit
     End Function
 
