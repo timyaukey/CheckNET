@@ -45,6 +45,8 @@ Public MustInherit Class Trx
         glngTRXTYP_BUDGET = 2
         'Transfer transaction.
         glngTRXTYP_TRANSFER = 3
+        'Replica transaction.
+        glngTRXTYP_REPLICA = 4
     End Enum
 
     Public Enum TrxSearchField

@@ -208,9 +208,9 @@ Public Class Register
             gRaiseError("Register.lngMoveUp did not move far enough")
         End If
         For lngMoveIndex = lngEndIndex To lngFirstLesser + 1 Step -1
-            maobjTrx(lngMoveIndex + 1) = maobjTrx(lngMoveIndex)
+            SetTrx(lngMoveIndex + 1, maobjTrx(lngMoveIndex))
         Next
-        maobjTrx(lngFirstLesser + 1) = objTrx
+        SetTrx(lngFirstLesser + 1, objTrx)
     End Function
 
     '$Description Like lngMoveUp(), but moves a Trx the shortest distance possible
@@ -242,9 +242,9 @@ Public Class Register
             gRaiseError("Register.lngMoveDown lngFirstGreater=" & lngFirstGreater & " is smaller than lngStartIndex=" & lngStartIndex)
         End If
         For lngMoveIndex = lngStartIndex To lngFirstGreater - 1
-            maobjTrx(lngMoveIndex - 1) = maobjTrx(lngMoveIndex)
+            SetTrx(lngMoveIndex - 1, maobjTrx(lngMoveIndex))
         Next
-        maobjTrx(lngFirstGreater - 1) = objTrx
+        SetTrx(lngFirstGreater - 1, objTrx)
         lngMoveDown = lngFirstGreater - 1
     End Function
 
@@ -395,7 +395,7 @@ Public Class Register
             End If
         End With
         For lngMoveIndex = lngIndex + 1 To mlngTrxUsed
-            maobjTrx(lngMoveIndex - 1) = maobjTrx(lngMoveIndex)
+            SetTrx(lngMoveIndex - 1, maobjTrx(lngMoveIndex))
         Next
         'UPGRADE_NOTE: Object maobjTrx() may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         maobjTrx(mlngTrxUsed) = Nothing
@@ -496,7 +496,7 @@ Public Class Register
                 End If
             Else
                 lngOutIndex = lngOutIndex + 1
-                maobjTrx(lngOutIndex) = objTrx
+                SetTrx(lngOutIndex, objTrx)
                 If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
                     DirectCast(objTrx, BudgetTrx).ClearThisBudget()
                 ElseIf objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
@@ -1140,6 +1140,10 @@ Public Class Register
             objTrx = maobjTrx(lngIndex)
         End Get
     End Property
+
+    Private Sub SetTrx(lngIndex As Integer, ByVal objTrx As Trx)
+        maobjTrx(lngIndex) = objTrx
+    End Sub
 
     Public ReadOnly Property objNormalTrx(ByVal lngIndex As Integer) As NormalTrx
         Get

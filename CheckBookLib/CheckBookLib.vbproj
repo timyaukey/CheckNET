@@ -176,6 +176,7 @@
     <Compile Include="TrxGen\TGETemplateBase.vb" />
     <Compile Include="Trx\BudgetTrx.vb" />
     <Compile Include="Trx\NormalTrx.vb" />
+    <Compile Include="Trx\ReplicaTrx.vb" />
     <Compile Include="Trx\Split.vb" />
     <Compile Include="Trx\SplitData.vb" />
     <Compile Include="StringTranslator.vb" />

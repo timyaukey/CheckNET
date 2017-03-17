@@ -50,9 +50,6 @@ Public Class NormalTrxManager
     End Sub
 
     Public Overrides Sub UpdateStart()
-        If objTrx.lngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
-            gRaiseError("NormalTrxManager.UpdateStart used for wrong transaction type")
-        End If
         mobjReg.ClearFirstAffected()
         'These next two lines are why if you call UpdateStart(),
         'you must finish by calling UpdateEnd() to keep the Register in good condition.
@@ -70,9 +67,6 @@ Public Class BudgetTrxManager
     End Sub
 
     Public Overrides Sub UpdateStart()
-        If objTrx.lngType <> Trx.TrxType.glngTRXTYP_BUDGET Then
-            gRaiseError("BudgetTrxManager.UpdateStart used for wrong transaction type")
-        End If
         mobjReg.ClearFirstAffected()
         'objTrx.UnApplyFromBudgets(mobjReg)
         objTrx.ClearRepeatTrx(mobjReg)
@@ -88,12 +82,24 @@ Public Class TransferTrxManager
     End Sub
 
     Public Overrides Sub UpdateStart()
-        If objTrx.lngType <> Trx.TrxType.glngTRXTYP_TRANSFER Then
-            gRaiseError("TransferTrxManager.UpdateStart used for wrong transaction type")
-        End If
         mobjReg.ClearFirstAffected()
         'objTrx.UnApplyFromBudgets(mobjReg)
         objTrx.ClearRepeatTrx(mobjReg)
+        mblnUpdateStarted = True
+    End Sub
+End Class
+
+Public Class ReplicaTrxManager
+    Inherits TrxManager(Of ReplicaTrx)
+
+    Public Sub New(ByVal objReg As Register, ByVal lngTrxIndex As Integer, ByVal objTrx As ReplicaTrx)
+        MyBase.New(objReg, lngTrxIndex, objTrx)
+    End Sub
+
+    Public Overrides Sub UpdateStart()
+        mobjReg.ClearFirstAffected()
+        'objTrx.UnApplyFromBudgets(mobjReg)
+        'objTrx.ClearRepeatTrx(mobjReg)
         mblnUpdateStarted = True
     End Sub
 End Class
