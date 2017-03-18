@@ -234,10 +234,10 @@ Public Class BudgetTrx
         Return New BudgetTrxManager(objReg, lngIndex, Me)
     End Function
 
-    Public Overrides Sub Validate(objReg As Register, lngIndex As Integer)
+    Public Overrides Sub Validate()
         Dim objSplit As TrxSplit
         Dim curTotal As Decimal
-        MyBase.Validate(objReg, lngIndex)
+        MyBase.Validate()
         If mstrBudgetKey = "" Then
             objReg.RaiseValidationError(lngIndex, "Budget trx requires budget key")
             Exit Sub

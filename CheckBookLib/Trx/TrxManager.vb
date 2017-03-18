@@ -53,8 +53,8 @@ Public Class NormalTrxManager
         mobjReg.ClearFirstAffected()
         'These next two lines are why if you call UpdateStart(),
         'you must finish by calling UpdateEnd() to keep the Register in good condition.
-        objTrx.UnApplyFromBudgets(mobjReg)
-        objTrx.ClearRepeatTrx(mobjReg)
+        objTrx.UnApplyFromBudgets()
+        objTrx.ClearRepeatTrx()
         mblnUpdateStarted = True
     End Sub
 End Class
@@ -68,8 +68,8 @@ Public Class BudgetTrxManager
 
     Public Overrides Sub UpdateStart()
         mobjReg.ClearFirstAffected()
-        'objTrx.UnApplyFromBudgets(mobjReg)
-        objTrx.ClearRepeatTrx(mobjReg)
+        'objTrx.UnApplyFromBudgets()
+        objTrx.ClearRepeatTrx()
         mblnUpdateStarted = True
     End Sub
 End Class
@@ -83,8 +83,8 @@ Public Class TransferTrxManager
 
     Public Overrides Sub UpdateStart()
         mobjReg.ClearFirstAffected()
-        'objTrx.UnApplyFromBudgets(mobjReg)
-        objTrx.ClearRepeatTrx(mobjReg)
+        'objTrx.UnApplyFromBudgets()
+        objTrx.ClearRepeatTrx()
         mblnUpdateStarted = True
     End Sub
 End Class
@@ -98,8 +98,8 @@ Public Class ReplicaTrxManager
 
     Public Overrides Sub UpdateStart()
         mobjReg.ClearFirstAffected()
-        'objTrx.UnApplyFromBudgets(mobjReg)
-        'objTrx.ClearRepeatTrx(mobjReg)
+        'objTrx.UnApplyFromBudgets()
+        'objTrx.ClearRepeatTrx()
         mblnUpdateStarted = True
     End Sub
 End Class

@@ -140,7 +140,7 @@ Public Class Register
             gRaiseError("objNew is Nothing in Register.NewAddEnd")
         End If
         If objNew.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-            DirectCast(objNew, NormalTrx).ApplyToBudgets(Me)
+            DirectCast(objNew, NormalTrx).ApplyToBudgets()
         End If
         lngIndex = lngNewInsert(objNew)
         mlngTrxCurrent = lngIndex
@@ -269,7 +269,7 @@ Public Class Register
                 SetRepeatTrx(objTrx)
             End If
             If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                DirectCast(objTrx, NormalTrx).ApplyToBudgets(Me)
+                DirectCast(objTrx, NormalTrx).ApplyToBudgets()
             End If
             lngNewIndex = lngUpdateMove(lngOldIndex)
             mlngTrxCurrent = lngNewIndex
@@ -385,7 +385,7 @@ Public Class Register
             'them, so deleting a normal Trx cannot change the index of
             'any budget Trx affected by the following statement.
             If TypeOf objTrx Is NormalTrx Then
-                DirectCast(objTrx, NormalTrx).UnApplyFromBudgets(Me)
+                DirectCast(objTrx, NormalTrx).UnApplyFromBudgets()
             End If
             If TypeOf objTrx Is BudgetTrx Then
                 DirectCast(objTrx, BudgetTrx).DestroyThisBudget()
@@ -463,7 +463,7 @@ Public Class Register
         For lngIndex = 1 To mlngTrxUsed
             objTrx = Me.objTrx(lngIndex)
             If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                DirectCast(objTrx, NormalTrx).ApplyToBudgets(Me)
+                DirectCast(objTrx, NormalTrx).ApplyToBudgets()
                 If objTrx.blnFake Then
                     If mdatOldestFakeNormal = System.DateTime.FromOADate(0) Then
                         mdatOldestFakeNormal = objTrx.datDate
@@ -1308,7 +1308,7 @@ Public Class Register
                     RaiseValidationError(lngIndex, "Not in correct sort order")
                 End If
                 strPriorSortKey = .strSortKey
-                .Validate(Me, lngIndex)
+                .Validate()
                 If .intRepeatSeq > 0 Then
                     intRepeatTrxCount = intRepeatTrxCount + 1S
                 End If

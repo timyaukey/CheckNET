@@ -107,8 +107,8 @@ Public Class TransferTrx
         Return New TransferTrxManager(objReg, lngIndex, Me)
     End Function
 
-    Public Overrides Sub Validate(objReg As Register, lngIndex As Integer)
-        MyBase.Validate(objReg, lngIndex)
+    Public Overrides Sub Validate()
+        MyBase.Validate()
         If mstrTransferKey = "" Then
             objReg.RaiseValidationError(lngIndex, "Transfer trx requires transfer key")
         End If

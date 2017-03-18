@@ -196,7 +196,7 @@ Public Class NormalTrx
     '$Description Apply the Split objects in this Trx to any matching budgets.
     '   Does nothing except for normal Trx.
 
-    Public Sub ApplyToBudgets(ByVal objReg As Register)
+    Public Sub ApplyToBudgets()
         Dim objSplit As TrxSplit
         Dim blnNoMatch As Boolean
         mblnAnyUnmatchedBudget = False
@@ -210,7 +210,7 @@ Public Class NormalTrx
     '   un-apply them from those budgets. No error or other reporting if Split objects
     '   not currently applied to budgets. Does nothing except for normal Trx.
 
-    Public Sub UnApplyFromBudgets(ByVal objReg As Register)
+    Public Sub UnApplyFromBudgets()
         Dim objSplit As TrxSplit
         For Each objSplit In mcolSplits
             objSplit.UnApplyFromBudget(objReg)
@@ -391,10 +391,10 @@ Public Class NormalTrx
         Return New NormalTrxManager(objReg, lngIndex, Me)
     End Function
 
-    Public Overrides Sub Validate(objReg As Register, lngIndex As Integer)
+    Public Overrides Sub Validate()
         Dim objSplit As TrxSplit
         Dim curTotal As Decimal
-        MyBase.Validate(objReg, lngIndex)
+        MyBase.Validate()
         If mcolSplits Is Nothing Then
             objReg.RaiseValidationError(lngIndex, "Missing split collection")
         Else
