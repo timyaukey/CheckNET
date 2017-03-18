@@ -13,16 +13,12 @@ Option Explicit On
 
 Public MustInherit Class TrxManager(Of TTrx As Trx)
 
-    Protected mobjReg As Register
-    Protected mlngTrxIndex As Integer
     Public ReadOnly objTrx As TTrx
     Protected ReadOnly mobjOriginalLogTrx As TTrx
     Protected mblnUpdateStarted As Boolean
 
-    Public Sub New(ByVal objReg As Register, ByVal lngTrxIndex As Integer, ByVal objTrx As TTrx)
-        mobjReg = objReg
-        mlngTrxIndex = lngTrxIndex
-        If Not objTrx Is mobjReg.objTrx(mlngTrxIndex) Then
+    Public Sub New(ByVal objTrx As TTrx)
+        If Not objTrx Is objTrx.objReg.objTrx(objTrx.lngIndex) Then
             Throw New Exception("Trx passed to TrxManager must be at the specified index of the Register passed")
         End If
         Me.objTrx = objTrx
@@ -36,21 +32,19 @@ Public MustInherit Class TrxManager(Of TTrx As Trx)
         If Not mblnUpdateStarted Then
             Throw New Exception("TrxManager.UpdateStart() not called before UpdateEnd()")
         End If
-        'TO DO: Make sure objTrx is still at index mlngTrxIndex, and if not
-        'find the index it is currently stored at and use that instead.
-        mobjReg.UpdateEnd(mlngTrxIndex, objLogger, strTitle, mobjOriginalLogTrx)
+        objTrx.objReg.UpdateEnd(objTrx.lngIndex, objLogger, strTitle, mobjOriginalLogTrx)
     End Sub
 End Class
 
 Public Class NormalTrxManager
     Inherits TrxManager(Of NormalTrx)
 
-    Public Sub New(ByVal objReg As Register, ByVal lngTrxIndex As Integer, ByVal objTrx As NormalTrx)
-        MyBase.New(objReg, lngTrxIndex, objTrx)
+    Public Sub New(ByVal objTrx As NormalTrx)
+        MyBase.New(objTrx)
     End Sub
 
     Public Overrides Sub UpdateStart()
-        mobjReg.ClearFirstAffected()
+        objTrx.objReg.ClearFirstAffected()
         'These next two lines are why if you call UpdateStart(),
         'you must finish by calling UpdateEnd() to keep the Register in good condition.
         objTrx.UnApplyFromBudgets()
@@ -62,12 +56,12 @@ End Class
 Public Class BudgetTrxManager
     Inherits TrxManager(Of BudgetTrx)
 
-    Public Sub New(ByVal objReg As Register, ByVal lngTrxIndex As Integer, ByVal objTrx As BudgetTrx)
-        MyBase.New(objReg, lngTrxIndex, objTrx)
+    Public Sub New(ByVal objTrx As BudgetTrx)
+        MyBase.New(objTrx)
     End Sub
 
     Public Overrides Sub UpdateStart()
-        mobjReg.ClearFirstAffected()
+        objTrx.objReg.ClearFirstAffected()
         'objTrx.UnApplyFromBudgets()
         objTrx.ClearRepeatTrx()
         mblnUpdateStarted = True
@@ -77,12 +71,12 @@ End Class
 Public Class TransferTrxManager
     Inherits TrxManager(Of TransferTrx)
 
-    Public Sub New(ByVal objReg As Register, ByVal lngTrxIndex As Integer, ByVal objTrx As TransferTrx)
-        MyBase.New(objReg, lngTrxIndex, objTrx)
+    Public Sub New(ByVal objTrx As TransferTrx)
+        MyBase.New(objTrx)
     End Sub
 
     Public Overrides Sub UpdateStart()
-        mobjReg.ClearFirstAffected()
+        objTrx.objReg.ClearFirstAffected()
         'objTrx.UnApplyFromBudgets()
         objTrx.ClearRepeatTrx()
         mblnUpdateStarted = True
@@ -92,12 +86,12 @@ End Class
 Public Class ReplicaTrxManager
     Inherits TrxManager(Of ReplicaTrx)
 
-    Public Sub New(ByVal objReg As Register, ByVal lngTrxIndex As Integer, ByVal objTrx As ReplicaTrx)
-        MyBase.New(objReg, lngTrxIndex, objTrx)
+    Public Sub New(ByVal objTrx As ReplicaTrx)
+        MyBase.New(objTrx)
     End Sub
 
     Public Overrides Sub UpdateStart()
-        mobjReg.ClearFirstAffected()
+        objTrx.objReg.ClearFirstAffected()
         'objTrx.UnApplyFromBudgets()
         'objTrx.ClearRepeatTrx()
         mblnUpdateStarted = True

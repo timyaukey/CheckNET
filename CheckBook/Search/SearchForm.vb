@@ -566,7 +566,7 @@ Friend Class SearchForm
 
             objStartLogger = mobjReg.objLogGroupStart("SearchForm.Recategorize")
             For Each objNormalTrx In colTrx
-                objTrxManager = objNormalTrx.objGetTrxManager(mobjReg, mobjReg.lngTrxIndex(objNormalTrx))
+                objTrxManager = objNormalTrx.objGetTrxManager()
                 colSplits = objNormalTrx.colSplits
                 objTrxManager.UpdateStart()
                 objNormalTrx.ClearSplits()
@@ -717,7 +717,7 @@ Friend Class SearchForm
                 With objTrxSrc
                     If objNewReg Is Nothing Then
                         'Changing date, not register.
-                        Dim objTrxManager As NormalTrxManager = objTrxSrc.objGetTrxManager(mobjReg)
+                        Dim objTrxManager As NormalTrxManager = objTrxSrc.objGetTrxManager()
                         objTrxManager.UpdateStart()
                         objTrxManager.objTrx.datDate = datNewDate
                         objTrxManager.UpdateEnd(New LogMove, "SearchForm.MoveUpdate")

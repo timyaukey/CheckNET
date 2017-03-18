@@ -1315,7 +1315,7 @@ Friend Class TrxForm
     End Sub
 
     Private Function objUpdateStartNormal() As NormalTrxManager
-        Dim objTrxManager As NormalTrxManager = mobjReg.objNormalTrx(mlngIndex).objGetTrxManager(mobjReg, mlngIndex)
+        Dim objTrxManager As NormalTrxManager = mobjReg.objGetNormalTrxManager(mlngIndex)
 
         objTrxManager.UpdateStart()
         objTrxManager.objTrx.UpdateStartNormal(txtNumber.Text, CDate(txtDate.Text), txtDescription.Text, txtMemo.Text, lngTrxStatus(),

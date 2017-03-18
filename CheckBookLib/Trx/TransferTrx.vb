@@ -99,12 +99,8 @@ Public Class TransferTrx
         Return objXferTrx
     End Function
 
-    Public Function objGetTrxManager(objReg As Register) As TransferTrxManager
-        Return New TransferTrxManager(objReg, objReg.lngTrxIndex(Me), Me)
-    End Function
-
-    Public Function objGetTrxManager(objReg As Register, lngIndex As Integer) As TransferTrxManager
-        Return New TransferTrxManager(objReg, lngIndex, Me)
+    Public Function objGetTrxManager() As TransferTrxManager
+        Return New TransferTrxManager(Me)
     End Function
 
     Public Overrides Sub Validate()

@@ -383,12 +383,8 @@ Public Class NormalTrx
         Return objNormalTrx
     End Function
 
-    Public Function objGetTrxManager(objReg As Register) As NormalTrxManager
-        Return New NormalTrxManager(objReg, objReg.lngTrxIndex(Me), Me)
-    End Function
-
-    Public Function objGetTrxManager(objReg As Register, lngIndex As Integer) As NormalTrxManager
-        Return New NormalTrxManager(objReg, lngIndex, Me)
+    Public Function objGetTrxManager() As NormalTrxManager
+        Return New NormalTrxManager(Me)
     End Function
 
     Public Overrides Sub Validate()

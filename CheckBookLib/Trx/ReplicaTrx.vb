@@ -41,11 +41,7 @@ Public Class ReplicaTrx
         Return objReplicaTrx
     End Function
 
-    Public Function objGetTrxManager(objReg As Register) As ReplicaTrxManager
-        Return New ReplicaTrxManager(objReg, objReg.lngTrxIndex(Me), Me)
-    End Function
-
-    Public Function objGetTrxManager(objReg As Register, lngIndex As Integer) As ReplicaTrxManager
-        Return New ReplicaTrxManager(objReg, lngIndex, Me)
+    Public Function objGetTrxManager() As ReplicaTrxManager
+        Return New ReplicaTrxManager(Me)
     End Function
 End Class

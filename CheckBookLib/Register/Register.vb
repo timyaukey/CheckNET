@@ -1090,15 +1090,15 @@ Public Class Register
     End Sub
 
     Public Function objGetNormalTrxManager(ByVal lngIndex As Integer) As NormalTrxManager
-        Return Me.objNormalTrx(lngIndex).objGetTrxManager(Me, lngIndex)
+        Return Me.objNormalTrx(lngIndex).objGetTrxManager()
     End Function
 
     Public Function objGetBudgetTrxManager(ByVal lngIndex As Integer) As BudgetTrxManager
-        Return Me.objBudgetTrx(lngIndex).objGetTrxManager(Me, lngIndex)
+        Return Me.objBudgetTrx(lngIndex).objGetTrxManager()
     End Function
 
     Public Function objGetTransferTrxManager(ByVal lngIndex As Integer) As TransferTrxManager
-        Return Me.objTransferTrx(lngIndex).objGetTrxManager(Me, lngIndex)
+        Return Me.objTransferTrx(lngIndex).objGetTrxManager()
     End Function
 
     '$Description Determine the index at which the specified Trx exists.
