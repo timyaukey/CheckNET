@@ -85,9 +85,9 @@ Public Class ReadInvoices
         strCatName = astrParts(8)
         strCatKey = gobjCategories.strKey(gobjCategories.intLookupValue1(strCatName))
 
-        objTrx = New ImportedTrx
+        objTrx = New ImportedTrx(Nothing)
 
-        objTrx.NewStartNormal(Nothing, strTrxNum, datDate, strDescription, "", Trx.TrxStatus.glngTRXSTS_UNREC, TrxGenImportData.NewFake(True))
+        objTrx.NewStartNormal(False, strTrxNum, datDate, strDescription, "", Trx.TrxStatus.glngTRXSTS_UNREC, TrxGenImportData.NewFake(True))
         objTrx.AddSplit("", strCatKey, strPONumber, strInvNumber, datInvDate, datDueDate, strTerms, "", curAmount, "")
 
         objNextTrx = objTrx

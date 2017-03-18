@@ -398,8 +398,8 @@ Friend Class AdjustBudgetsToCashForm
             For intBudget = 1 To mintNUM_BUDGETS
                 If Len(mastrBudgetKey(intBudget)) > 0 Then
                     If malngRegIndex(intBudget) = 0 Then
-                        objBudgetTrx = New BudgetTrx()
-                        objBudgetTrx.NewStartBudget(mobjReg, datMatch, txtPrefix.Text & mobjBudgets.strKeyToValue1(mastrBudgetKey(intBudget)), "", False, False, 0, "", acurNewLimit(intBudget), datBudgetEnds, mastrBudgetKey(intBudget))
+                        objBudgetTrx = New BudgetTrx(mobjReg)
+                        objBudgetTrx.NewStartBudget(True, datMatch, txtPrefix.Text & mobjBudgets.strKeyToValue1(mastrBudgetKey(intBudget)), "", False, False, 0, "", acurNewLimit(intBudget), datBudgetEnds, mastrBudgetKey(intBudget))
                         mobjReg.NewAddEnd(objBudgetTrx, New LogAdd, "AdjustBudgetsToCashForm.SetBudgets")
                         ShowBudget(objBudgetTrx)
                         'The added budget by definition will be inserted

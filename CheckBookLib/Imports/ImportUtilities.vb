@@ -184,8 +184,8 @@ Public Class ImportUtilities
                 strImportKey = strSqueezeInput("|" & gstrFormatDate(datDate) & "|" & strUniqueKey)
             End If
 
-            objTrx = New ImportedTrx
-            objTrx.NewStartNormal(Nothing, strNumber, datDate, strDescription, strMemo, Trx.TrxStatus.glngTRXSTS_UNREC,
+            objTrx = New ImportedTrx(Nothing)
+            objTrx.NewStartNormal(False, strNumber, datDate, strDescription, strMemo, Trx.TrxStatus.glngTRXSTS_UNREC,
                                   mblnMakeFakeTrx, 0.0D, False, False, 0, strImportKey, "")
             objTrx.lngNarrowMethod = mlngNarrowMethod
             objTrx.curMatchMin = mcurMatchMin

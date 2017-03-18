@@ -4,17 +4,21 @@ Option Explicit On
 Public Class ReplicaTrx
     Inherits Trx
 
+    Public Sub New(ByVal objReg_ As Register)
+        MyBase.New(objReg_)
+    End Sub
+
     Public Overrides ReadOnly Property lngType As TrxType
         Get
             Return Trx.TrxType.glngTRXTYP_REPLICA
         End Get
     End Property
 
-    Public Sub NewStartReplica(ByVal objReg As Register, ByVal datDate_ As Date, ByVal strDescription_ As String,
+    Public Sub NewStartReplica(ByVal blnWillAddToRegister As Boolean, ByVal datDate_ As Date, ByVal strDescription_ As String,
                               ByVal strMemo_ As String, ByVal curAmount_ As Decimal)
 
-        If Not objReg Is Nothing Then
-            objReg.ClearFirstAffected()
+        If blnWillAddToRegister Then
+            mobjReg.ClearFirstAffected()
         End If
 
         mstrNumber = "Repl"
@@ -31,9 +35,9 @@ Public Class ReplicaTrx
 
     End Sub
 
-    Public Overrides Function objClone(objReg As Register) As Trx
-        Dim objReplicaTrx As ReplicaTrx = New ReplicaTrx()
-        objReplicaTrx.NewStartReplica(objReg, mdatDate, mstrDescription, mstrMemo, mcurAmount)
+    Public Overrides Function objClone(ByVal blnWillAddToRegister As Boolean) As Trx
+        Dim objReplicaTrx As ReplicaTrx = New ReplicaTrx(mobjReg)
+        objReplicaTrx.NewStartReplica(blnWillAddToRegister, mdatDate, mstrDescription, mstrMemo, mcurAmount)
         Return objReplicaTrx
     End Function
 

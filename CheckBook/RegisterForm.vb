@@ -197,8 +197,8 @@ Friend Class RegisterForm
 
     Private Sub cmdNewNormal_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewNormal.Click
         Try
-            Dim objTrx As NormalTrx = New NormalTrx
-            objTrx.NewEmptyNormal(mobjReg, mdatDefaultNewDate)
+            Dim objTrx As NormalTrx = New NormalTrx(mobjReg)
+            objTrx.NewEmptyNormal(mdatDefaultNewDate)
             Using frm As TrxForm = frmCreateTrxForm()
                 If frm.blnAddNormal(mobjAccount, mobjReg, objTrx, mdatDefaultNewDate, True, "RegForm.NewNormal") Then
                     MsgBox("Canceled.")

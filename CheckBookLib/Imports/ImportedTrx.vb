@@ -16,7 +16,8 @@ Public Class ImportedTrx
     Private mcurMatchMin As Decimal
     Private mcurMatchMax As Decimal
 
-    Public Sub New()
+    Public Sub New(ByVal objReg_ As Register)
+        MyBase.New(objReg_)
         mlngNarrowMethod = ImportMatchNarrowMethod.None
     End Sub
 

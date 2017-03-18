@@ -432,8 +432,8 @@ Friend Class SearchForm
 
     Private Sub cmdNewNormal_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewNormal.Click
         Try
-            Dim objTrx As NormalTrx = New NormalTrx
-            objTrx.NewEmptyNormal(mobjReg, mdatDefaultDate)
+            Dim objTrx As NormalTrx = New NormalTrx(mobjReg)
+            objTrx.NewEmptyNormal(mdatDefaultDate)
             Using frm As TrxForm = frmCreateTrxForm()
                 If frm.blnAddNormal(mobjAccount, mobjReg, objTrx, mdatDefaultDate, True, "SearchForm.NewNormal") Then
                     MsgBox("Canceled.")
@@ -614,9 +614,9 @@ Friend Class SearchForm
                 End If
                 'If we do not yet have a new trx, create it.
                 If objNewTrx Is Nothing Then
-                    objNewTrx = New NormalTrx
+                    objNewTrx = New NormalTrx(mobjReg)
                     datToday = Today
-                    objNewTrx.NewStartNormal(mobjReg, "", datToday, objOldTrx.strDescription, objOldTrx.strMemo, Trx.TrxStatus.glngTRXSTS_UNREC, New TrxGenImportData())
+                    objNewTrx.NewStartNormal(True, "", datToday, objOldTrx.strDescription, objOldTrx.strMemo, Trx.TrxStatus.glngTRXSTS_UNREC, New TrxGenImportData())
                 End If
                 'Remember the old Trx to delete later if the new Trx is saved.
                 'Remember the Trx object instead of its index because the index may change
@@ -726,8 +726,8 @@ Friend Class SearchForm
                         End If
                     Else
                         'Changing register, and possibly date.
-                        Dim objTrxNew As NormalTrx = New NormalTrx
-                        objTrxNew.NewStartNormal(objNewReg, objTrxSrc)
+                        Dim objTrxNew As NormalTrx = New NormalTrx(objNewReg)
+                        objTrxNew.NewStartNormal(True, objTrxSrc)
                         objTrxNew.datDate = datNewDate
                         .CopySplits(objTrxNew)
                         objNewReg.NewAddEnd(objTrxNew, New LogAdd, "SearchForm.MoveAdd")

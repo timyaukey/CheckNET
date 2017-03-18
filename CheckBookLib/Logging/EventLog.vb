@@ -84,17 +84,17 @@ Public Class EventLog
     End Sub
 
     Public Sub AddILogAdd(ByVal objAddLogger As ILogAdd, ByVal strTitle As String, ByVal objNewTrx As Trx)
-        objAddLogger.Init(strTitle, objNewTrx.objClone(Nothing))
+        objAddLogger.Init(strTitle, objNewTrx.objClone(False))
         mcolLoggers.Add(objAddLogger)
     End Sub
 
     Public Sub AddILogChange(ByVal objChangeLogger As ILogChange, ByVal strTitle As String, ByVal objNewTrx As Trx, ByVal objOldTrx As Trx)
-        objChangeLogger.Init(strTitle, objNewTrx.objClone(Nothing), objOldTrx.objClone(Nothing))
+        objChangeLogger.Init(strTitle, objNewTrx.objClone(False), objOldTrx.objClone(False))
         mcolLoggers.Add(objChangeLogger)
     End Sub
 
     Public Sub AddILogDelete(ByVal objDeleteLogger As ILogDelete, ByVal strTitle As String, ByVal objOldTrx As Trx)
-        objDeleteLogger.Init(strTitle, objOldTrx.objClone(Nothing))
+        objDeleteLogger.Init(strTitle, objOldTrx.objClone(False))
         mcolLoggers.Add(objDeleteLogger)
     End Sub
 

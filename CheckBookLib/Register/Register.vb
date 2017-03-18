@@ -380,7 +380,7 @@ Public Class Register
         ClearFirstAffected()
         objTrx = Me.objTrx(lngIndex)
         With objTrx
-            objTrxOld = .objClone(Nothing)
+            objTrxOld = .objClone(False)
             'Budget Trx always come before any Split objects applied to
             'them, so deleting a normal Trx cannot change the index of
             'any budget Trx affected by the following statement.
@@ -1141,8 +1141,9 @@ Public Class Register
         End Get
     End Property
 
-    Private Sub SetTrx(lngIndex As Integer, ByVal objTrx As Trx)
-        maobjTrx(lngIndex) = objTrx
+    Private Sub SetTrx(lngIndex As Integer, ByVal objTrx_ As Trx)
+        maobjTrx(lngIndex) = objTrx_
+        objTrx_.lngIndex = lngIndex
     End Sub
 
     Public ReadOnly Property objNormalTrx(ByVal lngIndex As Integer) As NormalTrx

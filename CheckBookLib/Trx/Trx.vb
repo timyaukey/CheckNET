@@ -72,8 +72,10 @@ Public MustInherit Class Trx
         glngRPTUNT_MONTH = 3
     End Enum
 
-    'Editable properties.
-
+    'Register this Trx belongs to.
+    Protected mobjReg As Register
+    'Index of this Trx in mobjReg.objTrx().
+    Protected mlngIndex As Integer
     'Transaction number.
     Protected mstrNumber As String
     'Transaction date.
@@ -97,16 +99,23 @@ Public MustInherit Class Trx
     'All fake and real Trx originating from the same generated sequence
     'have the same value.
     Protected mstrRepeatKey As String
-
-    'Computed properties.
-
-    'Is computed from the sum of the Split amounts.
-    'Changes when this Trx is a budget Trx, and other Trx are applied and unapplied.
+    'Computed from the sum of the Split amounts for normal trx.
+    'Set directly for other trx types.
     Protected mcurAmount As Decimal
     'Register balance after mcurAmount added.
     Protected mcurBalance As Decimal
     'Key for sorting register entries.
     Protected mstrSortKey As String
+
+    Public Sub New(ByVal objReg_ As Register)
+        mobjReg = objReg_
+    End Sub
+
+    Public ReadOnly Property objReg() As Register
+        Get
+            Return mobjReg
+        End Get
+    End Property
 
     Public Sub ClearRepeatTrx(ByVal objReg As Register)
         If mintRepeatSeq > 0 Then
@@ -116,6 +125,15 @@ Public MustInherit Class Trx
             objReg.RemoveRepeatTrx(Me)
         End If
     End Sub
+
+    Public Property lngIndex() As Integer
+        Set(value As Integer)
+            mlngIndex = value
+        End Set
+        Get
+            Return mlngIndex
+        End Get
+    End Property
 
     Public ReadOnly Property strRepeatKey() As String
         Get
@@ -402,7 +420,7 @@ Public MustInherit Class Trx
         End If
     End Sub
 
-    Public MustOverride Function objClone(ByVal objReg As Register) As Trx
+    Public MustOverride Function objClone(ByVal blnWillAddToRegister As Boolean) As Trx
 
     Public Overrides Function ToString() As String
         Return Me.datDate.ToShortDateString() + " " + Me.strDescription + " " + Me.curAmount.ToString()

@@ -62,9 +62,9 @@ Public Class ReadDeposits
         strDescription = Replace(astrParts(1), "_", " ")
         curAmount = CDec(astrParts(2))
 
-        objTrx = New ImportedTrx
+        objTrx = New ImportedTrx(Nothing)
 
-        objTrx.NewStartNormal(Nothing, "", datDate, strDescription, "", Trx.TrxStatus.glngTRXSTS_UNREC, New TrxGenImportData())
+        objTrx.NewStartNormal(False, "", datDate, strDescription, "", Trx.TrxStatus.glngTRXSTS_UNREC, New TrxGenImportData())
         objTrx.AddSplit("", "", "", "", datNull, datNull, "", "", curAmount, "")
 
         objNextTrx = objTrx
