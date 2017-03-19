@@ -10,7 +10,7 @@ Public Class ImportHandlerChecks
         End Get
     End Property
 
-    Public Sub AutoNewSearch(objImportedTrx As ImportedTrx, objReg As Register, ByRef colMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean) Implements IImportHandler.AutoNewSearch
+    Public Sub AutoNewSearch(objImportedTrx As ImportedTrx, objReg As Register, ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.AutoNewSearch
 
     End Sub
 
@@ -22,19 +22,19 @@ Public Class ImportHandlerChecks
         Return Nothing
     End Function
 
-    Public Function lngStatusSearch(objImportedTrx As ImportedTrx, objReg As Register) As Integer Implements IImportHandler.lngStatusSearch
-        Return objReg.lngMatchPaymentDetails(objImportedTrx.strNumber, objImportedTrx.datDate, 10, objImportedTrx.strDescription, objImportedTrx.curAmount)
+    Public Function objStatusSearch(objImportedTrx As ImportedTrx, objReg As Register) As NormalTrx Implements IImportHandler.objStatusSearch
+        Return objReg.objMatchPaymentDetails(objImportedTrx.strNumber, objImportedTrx.datDate, 10, objImportedTrx.strDescription, objImportedTrx.curAmount)
     End Function
 
     Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx) Implements IImportHandler.BatchUpdate
         objMatchedTrx.objReg.ImportUpdateNumAmt(objMatchedTrx.lngIndex, objImportedTrx.strNumber, objImportedTrx.curAmount)
     End Sub
 
-    Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of NormalTrx), ByRef colUnusedMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
+    Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of NormalTrx), ByRef colUnusedMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
         Dim lngNumber As Integer = CType(Val(objImportedTrx.strNumber), Integer)
-        Dim colMatches As ICollection(Of Integer) = Nothing
-        Dim colExactMatches As ICollection(Of Integer) = Nothing
-        objReg.MatchCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
+        Dim colMatches As ICollection(Of NormalTrx) = Nothing
+        Dim colExactMatches As ICollection(Of NormalTrx) = Nothing
+        objReg.MatchNormalCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
                          objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
         objReg.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
         colUnusedMatches = ImportUtilities.colRemoveAlreadyMatched(objReg, colMatches, colAllMatchedTrx)
@@ -59,15 +59,15 @@ Public Class ImportHandlerChecks
         End Get
     End Property
 
-    Public Sub IndividualSearch(objReg As Register, objImportedTrx As ImportedTrx, blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean) Implements IImportHandler.IndividualSearch
-        Dim colExactMatches As ICollection(Of Integer) = Nothing
+    Public Sub IndividualSearch(objReg As Register, objImportedTrx As ImportedTrx, blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.IndividualSearch
+        Dim colExactMatches As ICollection(Of NormalTrx) = Nothing
         Dim lngNumber As Integer
         If IsNumeric(objImportedTrx.strNumber) Then
             lngNumber = CInt(objImportedTrx.strNumber)
         Else
             lngNumber = 0
         End If
-        objReg.MatchCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
+        objReg.MatchNormalCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
             objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, blnLooseMatch, colMatches, colExactMatches, blnExactMatch)
         objReg.PruneToNonImportedExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
     End Sub

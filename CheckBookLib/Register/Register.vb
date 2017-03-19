@@ -531,7 +531,7 @@ Public Class Register
         RaiseEvent RedisplayTrx()
     End Sub
 
-    '$Description Find Trx object already in register with the specified strImportKey.
+    '$Description Find NormalTrx object already in register with the specified strImportKey.
     '   Used to determine if a transaction has already been imported. Will only
     '   search real and normal Trx objects, because all imported Trx are real and
     '   normal. The usual procedure for importing a Trx is to first call this method
@@ -541,18 +541,18 @@ Public Class Register
     '$Param strImportKey The import key to match.
     '$Returns The index of the matching Trx, or zero if there is no match.
 
-    Public Function lngMatchImportKey(ByVal strImportKey As String) As Integer
+    Public Function objMatchImportKey(ByVal strImportKey As String) As NormalTrx
         Dim lngIndex As Integer
         Dim objTrx As Trx
         For lngIndex = mlngTrxUsed To 1 Step -1
             objTrx = Me.objTrx(lngIndex)
             If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL And Not objTrx.blnFake Then
                 If DirectCast(objTrx, NormalTrx).strImportKey = strImportKey Then
-                    Return lngIndex
+                    Return DirectCast(objTrx, NormalTrx)
                 End If
             End If
         Next
-        Return 0
+        Return Nothing
     End Function
 
     '$Description Find Trx object already in register matching all the arguments.
@@ -564,8 +564,8 @@ Public Class Register
     '   procedure for adding a Trx.
     '$Returns The index of the matching Trx, or zero if there is no match.
 
-    Public Function lngMatchPaymentDetails(ByVal strNumber As String, ByVal datDate As Date, ByVal intDateRange As Short,
-                                           ByVal strDescription As String, ByVal curAmount As Decimal) As Integer
+    Public Function objMatchPaymentDetails(ByVal strNumber As String, ByVal datDate As Date, ByVal intDateRange As Short,
+                                           ByVal strDescription As String, ByVal curAmount As Decimal) As NormalTrx
         Dim lngIndex As Integer
         Dim datEarliestMatch As Date
         Dim datLatestMatch As Date
@@ -580,14 +580,14 @@ Public Class Register
                     If .lngType = Trx.TrxType.glngTRXTYP_NORMAL And Not .blnFake Then
                         If .strNumber = strNumber And (.curAmount = curAmount Or curAmount = 0.0#) Then
                             If Left(.strDescription, 10).ToLower() = Left(strDescription, 10).ToLower() Then
-                                Return lngIndex
+                                Return DirectCast(Me.objTrx(lngIndex), NormalTrx)
                             End If
                         End If
                     End If
                 End If
             End With
         Next
-        Return 0
+        Return Nothing
     End Function
 
     '$Description Update an existing Trx with information from a bank import. Only for
@@ -670,19 +670,19 @@ Public Class Register
     '   indices of all possible (or a single exact) matching Trx objects.
     '$Param blnExactMatch True iff there is exactly one very reliable match in colMatches.
 
-    Public Sub MatchNormal(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDateRange As Short,
+    Public Sub MatchNormal(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDateRange As Integer,
                            ByVal strDescription As String, ByVal curAmount As Decimal, ByVal blnLooseMatch As Boolean,
-                           ByRef colMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean)
-        Dim colExactMatches As ICollection(Of Integer) = Nothing
-        MatchCore(lngNumber, datDate, intDateRange, strDescription, curAmount, 0.0D, 0.0D, blnLooseMatch, colMatches, colExactMatches, blnExactMatch)
+                           ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)
+        Dim colExactMatches As ICollection(Of NormalTrx) = Nothing
+        MatchNormalCore(lngNumber, datDate, intDateRange, strDescription, curAmount, 0.0D, 0.0D, blnLooseMatch, colMatches, colExactMatches, blnExactMatch)
         PruneToExactMatches(colExactMatches, datDate, colMatches, blnExactMatch)
     End Sub
 
-    Public Sub MatchCore(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDateRange As Short,
+    Public Sub MatchNormalCore(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDateRange As Integer,
                          ByVal strDescription As String, ByVal curAmount As Decimal,
                          ByVal curMatchMin As Decimal, ByVal curMatchMax As Decimal,
-                         ByVal blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of Integer),
-                         ByRef colExactMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean)
+                         ByVal blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of NormalTrx),
+                         ByRef colExactMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)
 
         Dim lngIndex As Integer
         Dim datEnd As Date
@@ -693,12 +693,13 @@ Public Class Register
         Dim blnDescrMatches As Boolean
         Dim blnDateMatches As Boolean
         Dim blnAmountMatches As Boolean
-        Dim intDescrMatchLen As Short
+        Dim intDescrMatchLen As Integer
         Dim objTrx As Trx
+        Dim objNormalTrx As NormalTrx
 
-        colMatches = New List(Of Integer)
+        colMatches = New List(Of NormalTrx)
         blnExactMatch = False
-        colExactMatches = New List(Of Integer)
+        colExactMatches = New List(Of NormalTrx)
         intDescrMatchLen = 10
         lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
@@ -714,7 +715,8 @@ Public Class Register
                     Exit Do
                 End If
                 If .lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                    With DirectCast(objTrx, NormalTrx)
+                    objNormalTrx = DirectCast(objTrx, NormalTrx)
+                    With objNormalTrx
                         blnMatched = False
                         If lngNumber <> 0 Then
                             If .strNumber = strNumber Then
@@ -739,15 +741,15 @@ Public Class Register
                             'If min/max were specified this is a mandatory amount filter, separate from blnAmountMatches.
                             If curMatchMin <> 0.0# And curMatchMax <> 0.0# Then
                                 If (.curAmount >= curMatchMin) And (.curAmount <= curMatchMax) Then
-                                    colMatches.Add(lngIndex)
+                                    colMatches.Add(objNormalTrx)
                                 End If
                             Else
-                                colMatches.Add(lngIndex)
+                                colMatches.Add(objNormalTrx)
                             End If
                         End If
                         If .curAmount = curAmount Then
                             If (blnDescrMatches And blnDateMatches) Or (.strNumber = CStr(lngNumber)) Then
-                                colExactMatches.Add(lngIndex)
+                                colExactMatches.Add(objNormalTrx)
                             End If
                         End If
                     End With
@@ -769,23 +771,21 @@ Public Class Register
     ''' <param name="blnExactMatch"></param>
     ''' <param name="blnTrxPruner"></param>
     ''' <remarks></remarks>
-    Public Sub PruneSearchMatches(ByVal colExactMatches As ICollection(Of Integer), ByRef colMatches As ICollection(Of Integer),
+    Public Sub PruneSearchMatches(ByVal colExactMatches As ICollection(Of NormalTrx), ByRef colMatches As ICollection(Of NormalTrx),
                                   ByRef blnExactMatch As Boolean, ByVal blnTrxPruner As PruneMatchesTrx)
-        Dim lngIndex As Integer
-        Dim lngPerfectMatchIndex As Integer
+        Dim objPerfectMatch As NormalTrx
         Dim datFirstMatch As DateTime
         Dim datLastMatch As DateTime
         Dim blnFirstIteration As Boolean
-        Dim objTrx As Trx
+        Dim objTrx As NormalTrx
 
         'If we have multiple exact matches, see if all are within a range of 5 days
         'and one passes the test of blnTrxPruner(). If so use that one alone as the
         'list of exact matches.
         If colExactMatches.Count() > 1 Then
-            lngPerfectMatchIndex = -1
+            objPerfectMatch = Nothing
             blnFirstIteration = True
-            For Each lngIndex In colExactMatches
-                objTrx = Me.objTrx(lngIndex)
+            For Each objTrx In colExactMatches
                 If blnFirstIteration Then
                     datFirstMatch = objTrx.datDate
                     datLastMatch = objTrx.datDate
@@ -799,15 +799,15 @@ Public Class Register
                     End If
                 End If
                 If blnTrxPruner(objTrx) Then
-                    If lngPerfectMatchIndex = -1 Then
-                        lngPerfectMatchIndex = lngIndex
+                    If objPerfectMatch Is Nothing Then
+                        objPerfectMatch = objTrx
                     End If
                     Exit For
                 End If
             Next
-            If lngPerfectMatchIndex <> -1 And datLastMatch.Subtract(datFirstMatch).TotalDays <= 2D Then
-                colExactMatches = New List(Of Integer)
-                colExactMatches.Add(lngPerfectMatchIndex)
+            If (Not objPerfectMatch Is Nothing) And datLastMatch.Subtract(datFirstMatch).TotalDays <= 2D Then
+                colExactMatches = New List(Of NormalTrx)
+                colExactMatches.Add(objPerfectMatch)
             End If
         End If
 
@@ -822,13 +822,13 @@ Public Class Register
 
     End Sub
 
-    Public Sub PruneToExactMatches(ByVal colExactMatches As ICollection(Of Integer), ByVal datDate As Date, ByRef colMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean)
+    Public Sub PruneToExactMatches(ByVal colExactMatches As ICollection(Of NormalTrx), ByVal datDate As Date, ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)
 
         PruneSearchMatches(colExactMatches, colMatches, blnExactMatch, Function(objTrx As Trx) objTrx.datDate = datDate)
 
     End Sub
 
-    Public Sub PruneToNonImportedExactMatches(ByVal colExactMatches As ICollection(Of Integer), ByVal datDate As Date, ByRef colMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean)
+    Public Sub PruneToNonImportedExactMatches(ByVal colExactMatches As ICollection(Of NormalTrx), ByVal datDate As Date, ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)
 
         PruneSearchMatches(colExactMatches, colMatches, blnExactMatch,
                            Function(objTrx As Trx) As Boolean
@@ -856,14 +856,15 @@ Public Class Register
     '   indices of all possible (or a single exact) matching Trx objects.
     '$Param blnExactMatch True iff there is exactly one match in colMatches.
 
-    Public Sub MatchPayee(ByVal datDate As Date, ByVal intDateRange As Short, ByVal strDescription As String, ByVal blnMatchImportedFromBank As Boolean, ByRef colMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean)
+    Public Sub MatchPayee(ByVal datDate As Date, ByVal intDateRange As Short, ByVal strDescription As String, ByVal blnMatchImportedFromBank As Boolean, ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)
 
         Dim lngIndex As Integer
         Dim datEnd As Date
         Dim blnImportOkay As Boolean
         Dim objTrx As Trx
+        Dim objNormalTrx As NormalTrx
 
-        colMatches = New List(Of Integer)
+        colMatches = New List(Of NormalTrx)
         blnExactMatch = False
         lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
@@ -876,9 +877,10 @@ Public Class Register
                 Exit Do
             End If
             If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                blnImportOkay = (DirectCast(objTrx, NormalTrx).strImportKey = "") Or (blnMatchImportedFromBank) 'Used to be (not blnMatchImportedFromBank)
-                If objTrx.strDescription = strDescription And blnImportOkay Then
-                    colMatches.Add(lngIndex)
+                objNormalTrx = DirectCast(objTrx, NormalTrx)
+                blnImportOkay = (objNormalTrx.strImportKey = "") Or (blnMatchImportedFromBank) 'Used to be (not blnMatchImportedFromBank)
+                If objNormalTrx.strDescription = strDescription And blnImportOkay Then
+                    colMatches.Add(objNormalTrx)
                 End If
             End If
             lngIndex = lngIndex + 1
@@ -898,14 +900,14 @@ Public Class Register
     '$Param colMatches A new Collection object created by this method, containing
     '   indices of all matching Trx objects.
 
-    Public Sub MatchInvoice(ByVal datDate As Date, ByVal intDateRange As Short, ByVal strPayee As String, ByVal strInvoiceNum As String, ByRef colMatches As ICollection(Of Integer))
+    Public Sub MatchInvoice(ByVal datDate As Date, ByVal intDateRange As Short, ByVal strPayee As String, ByVal strInvoiceNum As String, ByRef colMatches As ICollection(Of NormalTrx))
 
         Dim lngIndex As Integer
         Dim datEnd As Date
         Dim objSplit As TrxSplit
         Dim objTrx As Trx
 
-        colMatches = New List(Of Integer)
+        colMatches = New List(Of NormalTrx)
         lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
         Do
@@ -921,7 +923,7 @@ Public Class Register
                     If .strDescription = strPayee Then
                         For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
                             If objSplit.strInvoiceNum = strInvoiceNum Then
-                                colMatches.Add(lngIndex)
+                                colMatches.Add(DirectCast(objTrx, NormalTrx))
                             End If
                         Next objSplit
                     End If
@@ -941,14 +943,14 @@ Public Class Register
     '$Param colMatches A new Collection object created by this method, containing
     '   indices of all matching Trx objects.
 
-    Public Sub MatchPONumber(ByVal datDate As Date, ByVal intDateRange As Short, ByVal strPayee As String, ByVal strPONumber As String, ByRef colMatches As ICollection(Of Integer))
+    Public Sub MatchPONumber(ByVal datDate As Date, ByVal intDateRange As Short, ByVal strPayee As String, ByVal strPONumber As String, ByRef colMatches As ICollection(Of NormalTrx))
 
         Dim lngIndex As Integer
         Dim datEnd As Date
         Dim objSplit As TrxSplit
         Dim objTrx As Trx
 
-        colMatches = New List(Of Integer)
+        colMatches = New List(Of NormalTrx)
         lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
         Do
@@ -964,7 +966,7 @@ Public Class Register
                     If .strDescription = strPayee Then
                         For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
                             If objSplit.strPONumber = strPONumber Then
-                                colMatches.Add(lngIndex)
+                                colMatches.Add(DirectCast(objTrx, NormalTrx))
                             End If
                         Next objSplit
                     End If

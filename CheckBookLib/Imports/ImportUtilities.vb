@@ -414,18 +414,16 @@ Public Class ImportUtilities
 
     'Filter out trx that are already matched to something in maudtItem().
     Public Shared Function colRemoveAlreadyMatched(ByVal objReg As Register,
-                                                   ByVal colInputMatches As ICollection(Of Integer),
+                                                   ByVal colInputMatches As ICollection(Of NormalTrx),
                                                    ByVal colAllMatchedTrx As IEnumerable(Of NormalTrx)) _
-                                                   As ICollection(Of Integer)
-        Dim colUnusedMatches As ICollection(Of Integer)
+                                                   As ICollection(Of NormalTrx)
+        Dim colUnusedMatches As ICollection(Of NormalTrx)
         Dim blnAlreadyMatched As Boolean
-        Dim objPossibleMatchTrx As Trx
-        Dim intPossibleIndex As Integer
+        Dim objPossibleMatchTrx As NormalTrx
         Dim objMatchedTrx As Trx
 
-        colUnusedMatches = New List(Of Integer)
-        For Each intPossibleIndex In colInputMatches
-            objPossibleMatchTrx = objReg.objTrx(intPossibleIndex)
+        colUnusedMatches = New List(Of NormalTrx)
+        For Each objPossibleMatchTrx In colInputMatches
             blnAlreadyMatched = False
             For Each objMatchedTrx In colAllMatchedTrx
                 If objMatchedTrx Is objPossibleMatchTrx Then
@@ -434,7 +432,7 @@ Public Class ImportUtilities
                 End If
             Next
             If Not blnAlreadyMatched Then
-                colUnusedMatches.Add(intPossibleIndex)
+                colUnusedMatches.Add(objPossibleMatchTrx)
             End If
         Next
         Return colUnusedMatches
@@ -442,16 +440,15 @@ Public Class ImportUtilities
 
     Public Shared Function colApplyNarrowMethod(ByVal objReg As Register,
                                                 ByVal objTrx As ImportedTrx,
-                                                ByVal colInputMatches As ICollection(Of Integer),
+                                                ByVal colInputMatches As ICollection(Of NormalTrx),
                                                 ByRef blnExactMatch As Boolean) _
-                                                As ICollection(Of Integer)
-        Dim colResult As ICollection(Of Integer)
+                                                As ICollection(Of NormalTrx)
+        Dim colResult As ICollection(Of NormalTrx)
         Dim objPossibleMatchTrx As NormalTrx
-        Dim intPossibleIndex As Integer
         Dim datTargetDate As Date
         Dim dblBestDistance As Double
         Dim dblCurrentDistance As Double
-        Dim lngBestMatch As Integer
+        Dim objBestMatch As NormalTrx = Nothing
         Dim blnHaveFirstMatch As Boolean
 
         If colInputMatches.Count = 0 Then
@@ -470,20 +467,19 @@ Public Class ImportUtilities
         End Select
 
         blnHaveFirstMatch = False
-        For Each intPossibleIndex In colInputMatches
-            objPossibleMatchTrx = objReg.objNormalTrx(intPossibleIndex)
+        For Each objPossibleMatchTrx In colInputMatches
             If String.IsNullOrEmpty(objPossibleMatchTrx.strImportKey) And (objPossibleMatchTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON) Then
                 dblCurrentDistance = Math.Abs(objPossibleMatchTrx.datDate.Subtract(datTargetDate).TotalDays)
                 If (Not blnHaveFirstMatch) Or (dblCurrentDistance < dblBestDistance) Then
                     dblBestDistance = dblCurrentDistance
-                    lngBestMatch = intPossibleIndex
+                    objBestMatch = objPossibleMatchTrx
                     blnHaveFirstMatch = True
                 End If
             End If
         Next
         blnExactMatch = True
-        colResult = New List(Of Integer)
-        colResult.Add(lngBestMatch)
+        colResult = New List(Of NormalTrx)
+        colResult.Add(objBestMatch)
         Return colResult
 
     End Function

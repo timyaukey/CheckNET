@@ -304,20 +304,19 @@ Public MustInherit Class Trx
         mcurBalance = curNewBal
     End Sub
 
-    Public Delegate Sub AddSearchMaxTrxDelegate(ByVal objTrx As Trx, ByVal lngIndex As Integer)
-    Public Delegate Sub AddSearchMaxSplitDelegate(ByVal objTrx As Trx, ByVal lngIndex As Integer, ByVal objSplit As TrxSplit)
+    Public Delegate Sub AddSearchMaxTrxDelegate(ByVal objTrx As Trx)
+    Public Delegate Sub AddSearchMaxSplitDelegate(ByVal objTrx As Trx, ByVal objSplit As TrxSplit)
 
-    '$Description Determine if this NormalTrx is a match to search criteria.
+    '$Description Determine if this Trx is a match to search criteria.
     '$Param lngSearchField Which Trx data to search.
     '$Param strSearchFor What you are searching for. For category searches
     '   is the category key, not the text, and the search succeeds if any
     '   Split for the Trx has this category key.
-    '$Param lngSearchType What kind of comparison to do. Ignored for category
-    '   searches, which are always for equality.
+    '$Param lngSearchType What kind of comparison to do.
 
     Public Sub CheckSearchMatch(
         ByVal lngSearchField As TrxSearchField, ByVal strSearchFor As String,
-        ByVal lngSearchType As TrxSearchType, ByVal lngIndex As Integer,
+        ByVal lngSearchType As TrxSearchType,
         ByVal dlgAddTrxResult As AddSearchMaxTrxDelegate,
         ByVal dlgAddSplitResult As AddSearchMaxSplitDelegate)
 
@@ -331,12 +330,12 @@ Public MustInherit Class Trx
                     For Each objSplit In DirectCast(Me, NormalTrx).colSplits
                         If lngSearchType = TrxSearchType.glngTRXSTP_EQUAL Then
                             If objSplit.strCategoryKey = strSearchFor Then
-                                dlgAddSplitResult(DirectCast(Me, NormalTrx), lngIndex, objSplit)
+                                dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
                             End If
                         Else
                             strCatName = gobjCategories.strKeyToValue1(objSplit.strCategoryKey)
                             If (Left(strCatName, Len(strSearchFor) + 1) = (strSearchFor & ":")) Or (strCatName = strSearchFor) Then
-                                dlgAddSplitResult(DirectCast(Me, NormalTrx), lngIndex, objSplit)
+                                dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
                             End If
                         End If
                     Next
@@ -346,7 +345,7 @@ Public MustInherit Class Trx
                 If lngType = TrxType.glngTRXTYP_NORMAL Then
                     For Each objSplit In DirectCast(Me, NormalTrx).colSplits
                         If blnIsStringMatch(lngSearchType, (objSplit.strInvoiceNum), strSearchFor) Then
-                            dlgAddSplitResult(DirectCast(Me, NormalTrx), lngIndex, objSplit)
+                            dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
                         End If
                     Next
                 End If
@@ -355,7 +354,7 @@ Public MustInherit Class Trx
                 If lngType = TrxType.glngTRXTYP_NORMAL Then
                     For Each objSplit In DirectCast(Me, NormalTrx).colSplits
                         If blnIsStringMatch(lngSearchType, (objSplit.strPONumber), strSearchFor) Then
-                            dlgAddSplitResult(DirectCast(Me, NormalTrx), lngIndex, objSplit)
+                            dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
                         End If
                     Next
                 End If
@@ -373,9 +372,9 @@ Public MustInherit Class Trx
         End Select
 
         'All the searches that check and report individual splits report their 
-        'results and exit before here.
+        'results and exit BEFORE here.
         If blnIsStringMatch(lngSearchType, strTrxData, strSearchFor) Then
-            dlgAddTrxResult(Me, lngIndex)
+            dlgAddTrxResult(Me)
         End If
 
     End Sub

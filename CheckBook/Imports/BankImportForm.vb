@@ -219,12 +219,9 @@ Friend Class BankImportForm
 
         Dim objImportedTrx As ImportedTrx
         Dim objReg As Register
-        'Dim colMatches As ICollection(Of Integer) = Nothing
-        'Dim colExactMatches As ICollection(Of Integer) = Nothing
-        Dim colUnusedMatches As ICollection(Of Integer) = Nothing
+        Dim colUnusedMatches As ICollection(Of NormalTrx) = Nothing
         Dim blnExactMatch As Boolean
         Dim intExactCount As Integer
-        Dim lngPossibleIndex As Integer
         Dim objPossibleMatchTrx As NormalTrx
         Dim blnNonExactConfirmed As Boolean
         Dim blnCheckWithoutAmount As Boolean
@@ -255,8 +252,7 @@ Friend Class BankImportForm
                             blnNonExactConfirmed = True
                         End If
                     End If
-                    lngPossibleIndex = gdatFirstElement(colUnusedMatches)
-                    objPossibleMatchTrx = objReg.objNormalTrx(lngPossibleIndex)
+                    objPossibleMatchTrx = gdatFirstElement(colUnusedMatches)
                     blnCheckWithoutAmount = False
                     'A check in the register with a zero amount means we didn't know the amount when we entered it, or imported it.
                     If Val(objPossibleMatchTrx.strNumber) > 0 And objPossibleMatchTrx.curAmount = 0.0# Then
@@ -400,7 +396,7 @@ Friend Class BankImportForm
         Dim objReg As Register
         Dim objImportedTrx As ImportedTrx
         Dim objSplit As TrxSplit
-        Dim colMatches As ICollection(Of Integer) = Nothing
+        Dim colMatches As ICollection(Of NormalTrx) = Nothing
         Dim blnExactMatch As Boolean
         Dim lngCatIdx As Integer
         Dim strDefaultCatKey As String
@@ -444,7 +440,7 @@ Friend Class BankImportForm
         End If
 
         For Each objReg In mobjAccount.colRegisters
-            colMatches = New List(Of Integer)
+            colMatches = New List(Of NormalTrx)
             blnExactMatch = False
             mobjImportHandler.AutoNewSearch(objImportedTrx, objReg, colMatches, blnExactMatch)
             If colMatches.Count() > 0 And blnExactMatch Then
@@ -745,9 +741,8 @@ Friend Class BankImportForm
         Dim objImportedTrx As ImportedTrx
         Dim objReg As Register
         Dim intItemIndex As Integer
-        Dim colMatches As ICollection(Of Integer) = Nothing
+        Dim colMatches As ICollection(Of NormalTrx) = Nothing
         Dim blnExactMatch As Boolean
-        Dim lngRegIndex As Integer
         Dim objMatchedTrx As NormalTrx
 
         Try
@@ -776,8 +771,7 @@ Friend Class BankImportForm
                 mobjImportHandler.IndividualSearch(objReg, objImportedTrx,
                     chkLooseMatch.CheckState = System.Windows.Forms.CheckState.Checked,
                     colMatches, blnExactMatch)
-                For Each lngRegIndex In colMatches
-                    objMatchedTrx = objReg.objNormalTrx(lngRegIndex)
+                For Each objMatchedTrx In colMatches
                     'Show the match if it hasn't been imported before,
                     'or we're importing a fake trx. We allow fake trx to be imported
                     'so we can import document information for them - we don't save
@@ -805,7 +799,7 @@ Friend Class BankImportForm
     Private Function blnMatchImport(ByVal intItemIndex As Integer) As Boolean
         Dim objImportedTrx As ImportedTrx
         Dim objReg As Register
-        Dim lngImportMatch As Integer
+        Dim objImportMatch As NormalTrx
         Dim lngNumber As Integer
 
         Try
@@ -821,8 +815,8 @@ Friend Class BankImportForm
             'Look for an import match in ALL registers, not just the selected register.
             'If found, update maudtItem() and redisplay it with the match info.
             For Each objReg In mobjAccount.colRegisters
-                lngImportMatch = mobjImportHandler.lngStatusSearch(objImportedTrx, objReg)
-                If lngImportMatch > 0 Then
+                objImportMatch = mobjImportHandler.objStatusSearch(objImportedTrx, objReg)
+                If Not objImportMatch Is Nothing Then
                     maudtItem(intItemIndex).lngStatus = ImportStatus.mlngIMPSTS_PRIOR
                     maudtItem(intItemIndex).objReg = objReg
                     blnMatchImport = True

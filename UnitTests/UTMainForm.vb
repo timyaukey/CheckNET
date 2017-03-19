@@ -546,7 +546,7 @@ Friend Class UTMainForm
 
     Private Sub TestMatchNormal()
         Dim objUTReg As UTRegister
-        Dim colMatches As ICollection(Of Integer) = Nothing
+        Dim colMatches As ICollection(Of NormalTrx) = Nothing
         Dim blnExactMatch As Boolean
 
         gUTSetTestTitle("Test MatchNormal")
@@ -638,11 +638,11 @@ Friend Class UTMainForm
 
     End Sub
 
-    Private Function strConcatMatchResults(ByVal colMatches As ICollection(Of Integer)) As String
-        Dim intElement As Integer
+    Private Function strConcatMatchResults(ByVal colMatches As ICollection(Of NormalTrx)) As String
+        Dim objElement As NormalTrx
         Dim strResult As String = ""
-        For Each intElement In colMatches
-            strResult = strResult & ";" & intElement
+        For Each objElement In colMatches
+            strResult = strResult & ";" & objElement.lngIndex
         Next
         strConcatMatchResults = strResult
     End Function
@@ -701,7 +701,7 @@ Friend Class UTMainForm
 
     Private Sub TestMatchImportKey()
         Dim objUTReg As UTRegister
-        Dim lngMatchIndex As Integer
+        Dim objMatch As NormalTrx
 
         gUTSetTestTitle("Test MatchImportKey")
 
@@ -713,21 +713,21 @@ Friend Class UTMainForm
             .AddNormal("101", #4/3/2000#, -25D, "Add2", 2, 2, 2, strImportKey:="imp2", blnFake:=True)
             .AddNormal("102", #4/3/2000#, -26D, "Add2", 3, 3, 3)
             .AddNormal("103", #4/3/2000#, -27D, "Add2", 4, 4, 4, strImportKey:="imp4")
-            lngMatchIndex = .objReg.lngMatchImportKey("imp1")
-            gUTAssert(lngMatchIndex = 1, "Did not find 100")
-            lngMatchIndex = .objReg.lngMatchImportKey("imp2")
-            gUTAssert(lngMatchIndex = 0, "Did not expect to find 101")
-            lngMatchIndex = .objReg.lngMatchImportKey("imp4")
-            gUTAssert(lngMatchIndex = 4, "Did not find 103")
+            objMatch = .objReg.objMatchImportKey("imp1")
+            gUTAssert(objMatch.lngIndex = 1, "Did not find 100")
+            objMatch = .objReg.objMatchImportKey("imp2")
+            gUTAssert(objMatch Is Nothing, "Did not expect to find 101")
+            objMatch = .objReg.objMatchImportKey("imp4")
+            gUTAssert(objMatch.lngIndex = 4, "Did not find 103")
         End With
 
     End Sub
 
     Private Sub TestMatchPayee()
         Dim objUTReg As UTRegister
-        Dim colMatches As ICollection(Of Integer) = Nothing
+        Dim colMatches As ICollection(Of NormalTrx) = Nothing
         Dim blnExactMatch As Boolean
-        Dim objTrx As Trx
+        Dim objTrx As NormalTrx
 
         gUTSetTestTitle("Test MatchPayee")
 
@@ -742,17 +742,17 @@ Friend Class UTMainForm
 
             .objReg.MatchPayee(#4/3/2000#, 1, "company2", True, colMatches, blnExactMatch)
             gUTAssert(colMatches.Count() = 1, "company2 fail")
-            objTrx = .objReg.objTrx(gdatFirstElement(colMatches))
-            gUTAssert(gdatFirstElement(colMatches) = 2, "company2 index fail")
+            objTrx = gdatFirstElement(colMatches)
+            gUTAssert(gdatFirstElement(colMatches).lngIndex = 2, "company2 index fail")
             gUTAssert(objTrx.strDescription = "company2", "company2 name fail")
             gUTAssert(objTrx.datDate = #4/3/2000#, "company2 date fail")
             gUTAssert(blnExactMatch = True, "company2 exact fail")
 
             .objReg.MatchPayee(#4/6/2000#, 1, "payee1", True, colMatches, blnExactMatch)
             gUTAssert(colMatches.Count() = 2, "payee1 fail")
-            objTrx = .objReg.objTrx(gdatFirstElement(colMatches))
-            gUTAssert(gdatFirstElement(colMatches) = 3, "payee1#1 index fail")
-            gUTAssert(gdatSecondElement(colMatches) = 4, "payee1#2 index fail")
+            objTrx = gdatFirstElement(colMatches)
+            gUTAssert(gdatFirstElement(colMatches).lngIndex = 3, "payee1#1 index fail")
+            gUTAssert(gdatSecondElement(colMatches).lngIndex = 4, "payee1#2 index fail")
             gUTAssert(blnExactMatch = False, "payee#1 exact fail")
         End With
 
@@ -760,7 +760,7 @@ Friend Class UTMainForm
 
     Private Sub TestMatchInvoice()
         Dim objUTReg As UTRegister
-        Dim colMatches As ICollection(Of Integer) = Nothing
+        Dim colMatches As ICollection(Of NormalTrx) = Nothing
 
         gUTSetTestTitle("Test MatchInvoice")
 
@@ -775,11 +775,11 @@ Friend Class UTMainForm
 
             .objReg.MatchInvoice(#4/3/2000#, 10, "company2", "I1000", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 I1000 fail")
-            gUTAssert(gdatFirstElement(colMatches) = 2, "company2 I1000 index fail")
+            gUTAssert(gdatFirstElement(colMatches).lngIndex = 2, "company2 I1000 index fail")
 
             .objReg.MatchInvoice(#4/3/2000#, 10, "company2", "I1001", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 I1001 fail")
-            gUTAssert(gdatFirstElement(colMatches) = 2, "company2 I1001 index fail")
+            gUTAssert(gdatFirstElement(colMatches).lngIndex = 2, "company2 I1001 index fail")
 
             .objReg.MatchInvoice(#4/5/2000#, 1, "company2", "I1000", colMatches)
             gUTAssert(colMatches.Count() = 0, "company2 I1000 -2 fail")
@@ -795,7 +795,7 @@ Friend Class UTMainForm
 
     Private Sub TestMatchPONumber()
         Dim objUTReg As UTRegister
-        Dim colMatches As ICollection(Of Integer) = Nothing
+        Dim colMatches As ICollection(Of NormalTrx) = Nothing
 
         gUTSetTestTitle("Test MatchPONumber")
 
@@ -810,11 +810,11 @@ Friend Class UTMainForm
 
             .objReg.MatchPONumber(#4/3/2000#, 10, "company2", "P1", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 P1 fail")
-            gUTAssert(gdatFirstElement(colMatches) = 2, "company2 P1 index fail")
+            gUTAssert(gdatFirstElement(colMatches).lngIndex = 2, "company2 P1 index fail")
 
             .objReg.MatchPONumber(#4/3/2000#, 10, "company2", "P2", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 P2 fail")
-            gUTAssert(gdatFirstElement(colMatches) = 2, "company2 I1001 index fail")
+            gUTAssert(gdatFirstElement(colMatches).lngIndex = 2, "company2 I1001 index fail")
 
             .objReg.MatchPONumber(#4/5/2000#, 1, "company2", "P1", colMatches)
             gUTAssert(colMatches.Count() = 0, "company2 P1 -2 fail")
