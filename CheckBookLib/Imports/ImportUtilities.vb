@@ -415,7 +415,7 @@ Public Class ImportUtilities
     'Filter out trx that are already matched to something in maudtItem().
     Public Shared Function colRemoveAlreadyMatched(ByVal objReg As Register,
                                                    ByVal colInputMatches As ICollection(Of Integer),
-                                                   ByVal colAllMatchedTrx As IEnumerable(Of Trx)) _
+                                                   ByVal colAllMatchedTrx As IEnumerable(Of NormalTrx)) _
                                                    As ICollection(Of Integer)
         Dim colUnusedMatches As ICollection(Of Integer)
         Dim blnAlreadyMatched As Boolean

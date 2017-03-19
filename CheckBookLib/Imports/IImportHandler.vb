@@ -12,14 +12,12 @@ Public Interface IImportHandler
 
     ReadOnly Property strBatchUpdateFields() As String
     ReadOnly Property blnAllowBatchUpdates() As Boolean
-    Sub BatchUpdate(ByVal objMatchedReg As Register, ByVal lngMatchedRegIndex As Integer, ByVal objImportedTrx As ImportedTrx,
-        ByVal objMatchedTrx As Trx)
+    Sub BatchUpdate(ByVal objImportedTrx As ImportedTrx, ByVal objMatchedTrx As NormalTrx)
     Sub BatchUpdateSearch(ByVal objReg As Register, ByVal objImportedTrx As ImportedTrx,
-        ByVal colAllMatchedTrx As IEnumerable(Of Trx), ByRef colUnusedMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean)
+        ByVal colAllMatchedTrx As IEnumerable(Of NormalTrx), ByRef colUnusedMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean)
 
     ReadOnly Property blnAllowIndividualUpdates() As Boolean
     Sub IndividualSearch(ByVal objReg As Register, ByVal objImportedTrx As ImportedTrx,
         ByVal blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean)
-    Function blnIndividualUpdate(ByVal objMatchedReg As Register, ByVal lngMatchedRegIndex As Integer,
-        ByVal objImportedTrx As ImportedTrx, ByVal objMatchedTrx As Trx) As Boolean
+    Function blnIndividualUpdate(ByVal objImportedTrx As ImportedTrx, ByVal objMatchedTrx As NormalTrx) As Boolean
 End Interface

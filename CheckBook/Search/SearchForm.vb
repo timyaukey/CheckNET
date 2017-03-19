@@ -648,12 +648,12 @@ Friend Class SearchForm
             'to worry if saving the new trx or a prior delete changed the index of a Trx.
             objStartLogger = mobjReg.objLogGroupStart("SearchForm.CombineDelete")
             For Each objOldTrx In colOldTrx
-                lngTrxIndex = mobjReg.lngTrxIndex(objOldTrx)
+                lngTrxIndex = objOldTrx.lngIndex
                 mobjReg.Delete(lngTrxIndex, New LogDelete, "SearchForm.CombineDeleteTrx")
             Next objOldTrx
             mobjReg.LogGroupEnd(objStartLogger)
 
-            mobjReg.SetCurrent(mobjReg.lngTrxIndex(objNewTrx))
+            mobjReg.SetCurrent(objNewTrx.lngIndex)
             mobjReg.RaiseShowCurrent()
 
             Exit Sub
@@ -734,7 +734,7 @@ Friend Class SearchForm
                         If objTrxFirst Is Nothing Then
                             objTrxFirst = objTrxNew
                         End If
-                        mobjReg.Delete(mobjReg.lngFindTrx(objTrxSrc), New LogDelete, "SearchForm.MoveDelete")
+                        mobjReg.Delete(objTrxSrc.lngIndex, New LogDelete, "SearchForm.MoveDelete")
                     End If
                 End With
             Next objTrxSrc
@@ -744,10 +744,10 @@ Friend Class SearchForm
 
             If Not objTrxFirst Is Nothing Then
                 If objNewReg Is Nothing Then
-                    mobjReg.SetCurrent(mobjReg.lngTrxIndex(objTrxFirst))
+                    mobjReg.SetCurrent(objTrxFirst.lngIndex)
                     mobjReg.RaiseShowCurrent()
                 Else
-                    objNewReg.SetCurrent(objNewReg.lngTrxIndex(objTrxFirst))
+                    objNewReg.SetCurrent(objTrxFirst.lngIndex)
                     objNewReg.RaiseShowCurrent()
                 End If
             End If

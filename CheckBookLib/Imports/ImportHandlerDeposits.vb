@@ -36,11 +36,11 @@ Public Class ImportHandlerDeposits
         Return 0
     End Function
 
-    Public Sub BatchUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx) Implements IImportHandler.BatchUpdate
-        objMatchedReg.ImportUpdateAmount(lngMatchedRegIndex, objImportedTrx.curAmount)
+    Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx) Implements IImportHandler.BatchUpdate
+        objMatchedTrx.objReg.ImportUpdateAmount(objMatchedTrx.lngIndex, objImportedTrx.curAmount)
     End Sub
 
-    Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of Trx), ByRef colUnusedMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
+    Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of NormalTrx), ByRef colUnusedMatches As ICollection(Of Integer), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
         Dim colMatches As ICollection(Of Integer) = Nothing
         objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, False, colMatches, blnExactMatch)
         colUnusedMatches = ImportUtilities.colRemoveAlreadyMatched(objReg, colMatches, colAllMatchedTrx)
@@ -68,8 +68,8 @@ Public Class ImportHandlerDeposits
         objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, False, colMatches, blnExactMatch)
     End Sub
 
-    Public Function blnIndividualUpdate(objMatchedReg As Register, lngMatchedRegIndex As Integer, objImportedTrx As ImportedTrx, objMatchedTrx As Trx) As Boolean Implements IImportHandler.blnIndividualUpdate
-        objMatchedReg.ImportUpdateAmount(lngMatchedRegIndex, objImportedTrx.curAmount)
+    Public Function blnIndividualUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx) As Boolean Implements IImportHandler.blnIndividualUpdate
+        objMatchedTrx.objReg.ImportUpdateAmount(objMatchedTrx.lngIndex, objImportedTrx.curAmount)
         Return True
     End Function
 End Class

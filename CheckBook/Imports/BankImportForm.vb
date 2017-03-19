@@ -56,15 +56,8 @@ Friend Class BankImportForm
         End Get
     End Property
 
-    'Match to an item in maudtItem().
-    Private Structure MatchItem
-        Dim objTrx As NormalTrx
-        Dim objReg As Register
-        Dim lngRegIndex As Integer
-    End Structure
-
     'Matches to currently selected ImportItem.
-    Private maudtMatch() As MatchItem '1 to mintMatches
+    Private maudtMatch() As NormalTrx '1 to mintMatches
     Private mintMatches As Integer
 
     'Register selected in cboRegister.
@@ -175,7 +168,6 @@ Friend Class BankImportForm
             Dim intItemIndex As Integer
             Dim strFailReason As String = ""
             Dim intUpdateCount As Integer
-            Dim lngMatchedRegIndex As Integer
 
             ClearUpdateMatches()
             For Each objItem In lvwTrx.Items
@@ -196,11 +188,7 @@ Friend Class BankImportForm
 
                     intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
                     With maudtItem(intItemIndex)
-                        lngMatchedRegIndex = .objMatchedReg.lngFindTrx(.objMatchedTrx)
-                        If lngMatchedRegIndex = 0 Then
-                            gRaiseError("Could not find matched Trx")
-                        End If
-                        mobjImportHandler.BatchUpdate(.objMatchedReg, lngMatchedRegIndex, .objImportedTrx, .objMatchedTrx)
+                        mobjImportHandler.BatchUpdate(.objImportedTrx, .objMatchedTrx)
                         .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
                         .objReg = .objMatchedReg
                         DisplayOneImportItem(objItem, intItemIndex)
@@ -797,11 +785,7 @@ Friend Class BankImportForm
                     If (Len(objMatchedTrx.strImportKey) = 0 Or objImportedTrx.blnFake) And objMatchedTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
                         mintMatches = mintMatches + 1
                         ReDim Preserve maudtMatch(mintMatches)
-                        With maudtMatch(mintMatches)
-                            .objReg = objReg
-                            .objTrx = objMatchedTrx
-                            .lngRegIndex = lngRegIndex
-                        End With
+                        maudtMatch(mintMatches) = objMatchedTrx
                         DisplayMatch(objMatchedTrx, mintMatches)
                     End If
                 Next
@@ -1013,8 +997,6 @@ Friend Class BankImportForm
     End Sub
 
     Private Sub cmdUpdateExisting_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdUpdateExisting.Click
-        Dim objMatchedReg As Register
-        Dim lngMatchedRegIndex As Integer
         Dim objMatchedTrx As NormalTrx
 
         Try
@@ -1026,15 +1008,11 @@ Friend Class BankImportForm
                 Exit Sub
             End If
 
-            With maudtMatch(intSelectedMatchIndex())
-                objMatchedReg = .objReg
-                lngMatchedRegIndex = .lngRegIndex
-                objMatchedTrx = .objTrx
-            End With
+            objMatchedTrx = maudtMatch(intSelectedMatchIndex())
             With maudtItem(intSelectedItemIndex())
-                If mobjImportHandler.blnIndividualUpdate(objMatchedReg, lngMatchedRegIndex, .objImportedTrx, objMatchedTrx) Then
+                If mobjImportHandler.blnIndividualUpdate(.objImportedTrx, objMatchedTrx) Then
                     .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
-                    .objReg = objMatchedReg
+                    .objReg = objMatchedTrx.objReg
                 End If
             End With
             RedisplaySelectedItem()

@@ -555,20 +555,6 @@ Public Class Register
         Return 0
     End Function
 
-    '$Description Find the register index of the specified Trx object.
-    '$Param objTrx The Trx object to find.
-    '$Returns The index of objTrx in this register, or zero if not found.
-
-    Public Function lngFindTrx(ByVal objTrx As Trx) As Integer
-        Dim lngIndex As Integer
-        For lngIndex = mlngTrxUsed To 1 Step -1
-            If Me.objTrx(lngIndex) Is objTrx Then
-                Return lngIndex
-            End If
-        Next
-        Return 0
-    End Function
-
     '$Description Find Trx object already in register matching all the arguments.
     '   Used to determine if a transaction has already been imported. Will only
     '   search real and normal Trx objects, because all imported Trx are real and
@@ -1083,10 +1069,8 @@ Public Class Register
     '   case balances need to be updated.
 
     Public Sub RaiseBudgetChanged(ByVal objBudgetTrx As Trx)
-        Dim lngIndex As Integer
-        lngIndex = lngTrxIndex(objBudgetTrx)
-        UpdateFirstAffected(lngIndex)
-        RaiseEvent BudgetChanged(lngIndex, objBudgetTrx)
+        UpdateFirstAffected(objBudgetTrx.lngIndex)
+        RaiseEvent BudgetChanged(objBudgetTrx.lngIndex, objBudgetTrx)
     End Sub
 
     Public Function objGetNormalTrxManager(ByVal lngIndex As Integer) As NormalTrxManager
@@ -1099,22 +1083,6 @@ Public Class Register
 
     Public Function objGetTransferTrxManager(ByVal lngIndex As Integer) As TransferTrxManager
         Return Me.objTransferTrx(lngIndex).objGetTrxManager()
-    End Function
-
-    '$Description Determine the index at which the specified Trx exists.
-    '   Optimized for case where Trx is near end of register.
-    '$Param objTrx The Trx to search for.
-    '$Returns The index of that Trx, or zero if Trx not found in register.
-
-    Public Function lngTrxIndex(ByVal objTrx As Trx) As Integer
-        Dim lngIndex As Integer
-        For lngIndex = mlngTrxUsed To 1 Step -1
-            If maobjTrx(lngIndex) Is objTrx Then
-                lngTrxIndex = lngIndex
-                Exit Function
-            End If
-        Next
-        lngTrxIndex = 0
     End Function
 
     '$Description Return the Trx object at the specified row of the register.
