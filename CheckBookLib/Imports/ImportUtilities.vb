@@ -135,7 +135,6 @@ Public Class ImportUtilities
         Dim datSplitInvoiceDate As Date
         Dim datSplitDueDate As Date
         Dim strSplitTerms As String = ""
-        Dim strSplitImageFiles As String = ""
         Dim curAmount As Decimal
         Dim strUniqueKey As String = ""
 
@@ -190,7 +189,7 @@ Public Class ImportUtilities
             objTrx.lngNarrowMethod = mlngNarrowMethod
             objTrx.curMatchMin = mcurMatchMin
             objTrx.curMatchMax = mcurMatchMax
-            objTrx.AddSplit("", strCatKey, strSplitPONumber, strSplitInvoiceNum, datSplitInvoiceDate, datSplitDueDate, strSplitTerms, strBudKey, curAmount, strSplitImageFiles)
+            objTrx.AddSplit("", strCatKey, strSplitPONumber, strSplitInvoiceNum, datSplitInvoiceDate, datSplitDueDate, strSplitTerms, strBudKey, curAmount)
             objMakeTrx = objTrx
 
             Exit Function

@@ -23,15 +23,13 @@ Public Class TrxSplit
     Private mstrBudgetKey As String
     'Amount of this Split.
     Private mcurAmount As Decimal
-    'List of image files, separated by semicolons.
-    Private mstrImageFiles As String
 
     'Reference to budget Trx for this Split.
     Private mobjBudget As BudgetTrx
 
     '$Description Initialize a new Split object.
 
-    Public Sub Init(ByVal strMemo_ As String, ByVal strCategoryKey_ As String, ByVal strPONumber_ As String, ByVal strInvoiceNum_ As String, ByVal datInvoiceDate_ As Date, ByVal datDueDate_ As Date, ByVal strTerms_ As String, ByVal strBudgetKey_ As String, ByVal curAmount_ As Decimal, ByVal strImageFiles_ As String)
+    Public Sub Init(ByVal strMemo_ As String, ByVal strCategoryKey_ As String, ByVal strPONumber_ As String, ByVal strInvoiceNum_ As String, ByVal datInvoiceDate_ As Date, ByVal datDueDate_ As Date, ByVal strTerms_ As String, ByVal strBudgetKey_ As String, ByVal curAmount_ As Decimal)
 
         mstrMemo = strMemo_
         mstrCategoryKey = strCategoryKey_
@@ -42,8 +40,6 @@ Public Class TrxSplit
         mstrTerms = strTerms_
         mstrBudgetKey = strBudgetKey_
         mcurAmount = curAmount_
-        mstrImageFiles = strImageFiles_
-        'UPGRADE_NOTE: Object mobjBudget may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         mobjBudget = Nothing
 
     End Sub
@@ -130,16 +126,6 @@ Public Class TrxSplit
         Get
             curAmount = mcurAmount
         End Get
-    End Property
-
-
-    Public Property strImageFiles() As String
-        Get
-            strImageFiles = mstrImageFiles
-        End Get
-        Set(ByVal Value As String)
-            mstrImageFiles = Value
-        End Set
     End Property
 
     '$Description Adjust the amount of an existing split.

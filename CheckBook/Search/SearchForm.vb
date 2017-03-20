@@ -34,8 +34,6 @@ Friend Class SearchForm
     Private mdatLastEnd As Date
     Private mblnLastIncludeGenerated As Boolean
 
-    Private Const mintHIDDEN_COL As Short = 12
-
     Public Sub ShowMe(ByVal objReg_ As Register, ByVal objAccount_ As Account, ByVal frmReg_ As RegisterForm)
 
         mobjReg = objReg_
@@ -290,7 +288,7 @@ Friend Class SearchForm
             gAddListSubItem(objItem, 10, "")
             gAddListSubItem(objItem, 11, "")
         End If
-        gAddListSubItem(objItem, mintHIDDEN_COL, CStr(mlngMatchesUsed))
+        objItem.Tag = mlngMatchesUsed
         mcurAmountMatched = mcurAmountMatched + objTrx.curAmount
 
     End Sub
@@ -335,7 +333,7 @@ Friend Class SearchForm
         gAddListSubItem(objItem, 9, strDueDate)
         gAddListSubItem(objItem, 10, objSplit.strTerms)
         gAddListSubItem(objItem, 11, objTrx.strFakeStatus)
-        gAddListSubItem(objItem, mintHIDDEN_COL, CStr(mlngMatchesUsed))
+        objItem.Tag = mlngMatchesUsed
         mcurAmountMatched = mcurAmountMatched + objSplit.curAmount
 
     End Sub
@@ -370,7 +368,7 @@ Friend Class SearchForm
             If lvwMatches.FocusedItem Is Nothing Then
                 Exit Sub
             End If
-            lngResultIndex = CInt(lvwMatches.FocusedItem.SubItems(mintHIDDEN_COL).Text)
+            lngResultIndex = CInt(lvwMatches.FocusedItem.Tag)
             mobjReg.SetCurrent(maudtMatches(lngResultIndex).lngRegIndex)
             mobjReg.RaiseShowCurrent()
             RememberSelectedTrx()
@@ -415,7 +413,7 @@ Friend Class SearchForm
             If lvwMatches.FocusedItem Is Nothing Then
                 Exit Sub
             End If
-            Dim lngResultIndex As Integer = CInt(lvwMatches.FocusedItem.SubItems(mintHIDDEN_COL).Text)
+            Dim lngResultIndex As Integer = CInt(lvwMatches.FocusedItem.Tag)
             Dim lngRegSelect As Integer = maudtMatches(lngResultIndex).lngRegIndex
             Using frmEdit As TrxForm = frmCreateTrxForm()
                 If frmEdit.blnUpdate(mobjAccount, lngRegSelect, mobjReg, mdatDefaultDate, "SearchForm.Edit") Then
@@ -464,7 +462,7 @@ Friend Class SearchForm
         Dim objLastTrx As Trx = Nothing
         For Each objItem In lvwMatches.Items
             If objItem.Checked Then
-                lngTrxIndex = maudtMatches(CInt(objItem.SubItems(mintHIDDEN_COL).Text)).lngRegIndex
+                lngTrxIndex = maudtMatches(CInt(objItem.Tag)).lngRegIndex
                 objTrx = mobjReg.objTrx(lngTrxIndex)
                 If Not objTrx Is objLastTrx Then
                     objLastTrx = objTrx
@@ -576,7 +574,7 @@ Friend Class SearchForm
                         If strCatKey = strOldCatKey Then
                             strCatKey = strNewCatKey
                         End If
-                        objNormalTrx.AddSplit(.strMemo, strCatKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount, .strImageFiles)
+                        objNormalTrx.AddSplit(.strMemo, strCatKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount)
                     End With
                 Next objSplit
                 objTrxManager.UpdateEnd(New LogChange, "SearchForm.Recategorize")
@@ -625,7 +623,7 @@ Friend Class SearchForm
                 'Clone all the splits in old trx and add them to new trx.
                 For Each objOldSplit In objOldTrx.colSplits
                     With objOldSplit
-                        objNewTrx.AddSplit(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount, .strImageFiles)
+                        objNewTrx.AddSplit(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount)
                     End With
                 Next objOldSplit
             Next
@@ -824,7 +822,7 @@ Friend Class SearchForm
         If Not mblnSkipRemember Then
             objSelectedTrx = Nothing
             If Not lvwMatches.FocusedItem Is Nothing Then
-                lngTrxIndex = maudtMatches(CInt(lvwMatches.FocusedItem.SubItems(mintHIDDEN_COL).Text)).lngRegIndex
+                lngTrxIndex = maudtMatches(CInt(lvwMatches.FocusedItem.Tag)).lngRegIndex
                 objSelectedTrx = mobjReg.objTrx(lngTrxIndex)
             End If
         End If
@@ -841,7 +839,7 @@ Friend Class SearchForm
             mblnSkipRemember = True
             For Each objItem In lvwMatches.Items
 
-                lngTrxIndex = maudtMatches(CInt(objItem.SubItems(mintHIDDEN_COL).Text)).lngRegIndex
+                lngTrxIndex = maudtMatches(CInt(objItem.Tag)).lngRegIndex
                 objTrx = mobjReg.objTrx(lngTrxIndex)
                 For Each objCheckedTrx In colCheckedTrx
                     If objCheckedTrx Is objTrx Then

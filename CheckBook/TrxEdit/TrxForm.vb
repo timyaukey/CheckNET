@@ -564,7 +564,6 @@ Friend Class TrxForm
                 .strTerms = objSplit.strTerms
                 .strBudgetKey = objSplit.strBudgetKey
                 .strAmount = gstrFormatCurrency(objSplit.curAmount)
-                .strImageFiles = objSplit.strImageFiles
             End With
         Next objSplit
     End Sub
@@ -1359,7 +1358,7 @@ Friend Class TrxForm
                 Else
                     datDueDate = CDate(.strDueDate)
                 End If
-                objTrx.AddSplit(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, datInvoiceDate, datDueDate, .strTerms, .strBudgetKey, CDec(.strAmount), .strImageFiles)
+                objTrx.AddSplit(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, datInvoiceDate, datDueDate, .strTerms, .strBudgetKey, CDec(.strAmount))
             End With
         End If
     End Sub
@@ -1990,7 +1989,6 @@ Friend Class TrxForm
             End If
             objNewSplit.strMemo = objOldSplit.strMemo
             objNewSplit.strTerms = objOldSplit.strTerms
-            objNewSplit.strImageFiles = objOldSplit.strImageFiles
             objOldSplit.strAmount = gstrFormatCurrency(curSplitAmount - curNewAmount)
             objNewSplit.strAmount = gstrFormatCurrency(curNewAmount)
 

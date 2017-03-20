@@ -52,7 +52,6 @@ Public Class RegisterLoader
     Private mstrSTerms As String
     Private mstrSBudgetKey As String
     Private mcurSAmount As Decimal
-    Private mstrSImageFiles As String
     Private mcolSplits As ICollection(Of TrxSplit)
 
     '$Description Load transactions into an existing register from an open file handle.
@@ -264,16 +263,13 @@ Public Class RegisterLoader
                 End If
                 mcurSAmount = CDec(Mid(mstrLine, 3))
             Case "SF"
-                If mlngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
-                    RaiseErrorInLoad("SF only allowed for normal Trx")
-                End If
-                mstrSImageFiles = Mid(mstrLine, 3)
+                'Ignore this. Used to be file list, and a few old trx still have this data field.
             Case "SZ"
                 If mlngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
                     RaiseErrorInLoad("SZ only allowed for normal Trx")
                 End If
                 objSplit = New TrxSplit
-                objSplit.Init(mstrSMemo, mstrSCategoryKey, mstrSPONumber, mstrSInvoiceNum, mdatSInvoiceDate, mdatSDueDate, mstrSTerms, mstrSBudgetKey, mcurSAmount, mstrSImageFiles)
+                objSplit.Init(mstrSMemo, mstrSCategoryKey, mstrSPONumber, mstrSInvoiceNum, mdatSInvoiceDate, mdatSDueDate, mstrSTerms, mstrSBudgetKey, mcurSAmount)
                 mcolSplits.Add(objSplit)
                 ClearSplitData()
             Case Else
@@ -318,7 +314,6 @@ Public Class RegisterLoader
         mstrSTerms = ""
         mstrSBudgetKey = ""
         mcurSAmount = 0
-        mstrSImageFiles = ""
     End Sub
 
     Private Sub RaiseError(ByVal strRoutine As String, ByVal strMsg As String)
@@ -398,7 +393,7 @@ Public Class RegisterLoader
                                           mstrImportKey, mstrRepeatKey)
                     For Each objSplit In mcolSplits
                         With objSplit
-                            objNormalTrx.AddSplit(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount, .strImageFiles)
+                            objNormalTrx.AddSplit(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount)
                         End With
                     Next objSplit
                     objTargetReg.NewLoadEnd(objNormalTrx)

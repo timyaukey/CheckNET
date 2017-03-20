@@ -319,13 +319,13 @@ Public Class NormalTrx
             objPOSplit.AdjustAmount(objPOSplit.curAmount - .curAmount)
             mcurAmount = mcurAmount - .curAmount
             AddSplit(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate,
-                     .strTerms, objPOSplit.strBudgetKey, .curAmount, .strImageFiles)
+                     .strTerms, objPOSplit.strBudgetKey, .curAmount)
         End With
 
     End Sub
 
     Private Sub SetSplitDocInfo(ByVal strPONumber_ As String, ByVal strInvoiceNum_ As String, ByVal datInvoiceDate_ As Date,
-                                ByVal datDueDate_ As Date, ByVal strTerms_ As String, ByVal strImageFiles_ As String)
+                                ByVal datDueDate_ As Date, ByVal strTerms_ As String)
         Dim objSplit As TrxSplit
         For Each objSplit In mcolSplits
             With objSplit
@@ -334,7 +334,6 @@ Public Class NormalTrx
                 .datInvoiceDate = datInvoiceDate_
                 .datDueDate = datDueDate_
                 .strTerms = strTerms_
-                .strImageFiles = strImageFiles_
             End With
         Next objSplit
     End Sub
@@ -345,12 +344,11 @@ Public Class NormalTrx
 
     Public Sub AddSplit(ByVal strMemo_ As String, ByVal strCategoryKey_ As String, ByVal strPONumber_ As String,
                         ByVal strInvoiceNum_ As String, ByVal datInvoiceDate_ As Date, ByVal datDueDate_ As Date,
-                        ByVal strTerms_ As String, ByVal strBudgetKey_ As String, ByVal curAmount_ As Decimal,
-                        ByVal strImageFiles_ As String)
+                        ByVal strTerms_ As String, ByVal strBudgetKey_ As String, ByVal curAmount_ As Decimal)
 
         Dim objSplit As TrxSplit
         objSplit = New TrxSplit
-        objSplit.Init(strMemo_, strCategoryKey_, strPONumber_, strInvoiceNum_, datInvoiceDate_, datDueDate_, strTerms_, strBudgetKey_, curAmount_, strImageFiles_)
+        objSplit.Init(strMemo_, strCategoryKey_, strPONumber_, strInvoiceNum_, datInvoiceDate_, datDueDate_, strTerms_, strBudgetKey_, curAmount_)
         mcolSplits.Add(objSplit)
         mcurAmount = mcurAmount + curAmount_
 
@@ -362,7 +360,7 @@ Public Class NormalTrx
         Dim objDstSplit As TrxSplit
         objDstSplit = New TrxSplit
         With objSrcSplit
-            objDstSplit.Init(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount, .strImageFiles)
+            objDstSplit.Init(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount)
             mcolSplits.Add(objDstSplit)
             mcurAmount = mcurAmount + .curAmount
         End With

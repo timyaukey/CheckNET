@@ -82,7 +82,7 @@ Module TrxGenerator
                                       c.strImportKey, c.strRepeatKey)
                 For intSplitIndex = 1 To c.intSplits
                     With c.adatSplits(intSplitIndex)
-                        objNormalTrx.AddSplit(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount, "")
+                        objNormalTrx.AddSplit(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount)
                     End With
                 Next
                 objTargetReg.NewLoadEnd(objNormalTrx)

@@ -79,9 +79,6 @@ Public Class RegisterSaver
                         SaveLine("SB" & .strBudgetKey)
                     End If
                     SaveLine("SA" & gstrFormatCurrency(.curAmount))
-                    If Len(.strImageFiles) > 0 Then
-                        SaveLine("SF" & .strImageFiles)
-                    End If
                     SaveLine("SZ")
                 End With
             Next objSplit

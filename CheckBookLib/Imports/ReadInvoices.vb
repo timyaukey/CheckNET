@@ -88,7 +88,7 @@ Public Class ReadInvoices
         objTrx = New ImportedTrx(Nothing)
 
         objTrx.NewStartNormal(False, strTrxNum, datDate, strDescription, "", Trx.TrxStatus.glngTRXSTS_UNREC, TrxGenImportData.NewFake(True))
-        objTrx.AddSplit("", strCatKey, strPONumber, strInvNumber, datInvDate, datDueDate, strTerms, "", curAmount, "")
+        objTrx.AddSplit("", strCatKey, strPONumber, strInvNumber, datInvDate, datDueDate, strTerms, "", curAmount)
 
         objNextTrx = objTrx
     End Function
