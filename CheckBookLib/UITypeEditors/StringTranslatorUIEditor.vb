@@ -9,6 +9,8 @@ Imports System.Windows.Forms.Design
 Public MustInherit Class StringTranslatorUIEditor
     Inherits UITypeEditor
 
+    Public Shared objCompany As Company
+
     Public Overrides Function GetEditStyle(context As ITypeDescriptorContext) As UITypeEditorEditStyle
         Return UITypeEditorEditStyle.DropDown
     End Function
@@ -53,7 +55,7 @@ Public Class CategoryUIEditor
     Inherits StringTranslatorUIEditor
 
     Protected Overrides Function GetStringTranslator() As IStringTranslator
-        Return gobjCategories
+        Return objCompany.objCategories
     End Function
 End Class
 
@@ -61,7 +63,7 @@ Public Class BudgetUIEditor
     Inherits StringTranslatorUIEditor
 
     Protected Overrides Function GetStringTranslator() As IStringTranslator
-        Return gobjBudgets
+        Return objCompany.objBudgets
     End Function
 End Class
 
@@ -92,7 +94,7 @@ Public Class CategoryConverter
 
     Public Overrides Function ConvertTo(context As ITypeDescriptorContext, culture As Globalization.CultureInfo, value As Object, destinationType As Type) As Object
         If destinationType Is GetType(String) And TypeOf value Is String Then
-            Return gobjCategories.strKeyToValue1(CType(value, String))
+            Return StringTranslatorUIEditor.objCompany.objCategories.strKeyToValue1(CType(value, String))
         End If
 
         Return MyBase.ConvertTo(context, culture, value, destinationType)
@@ -111,7 +113,7 @@ Public Class BudgetConverter
 
     Public Overrides Function ConvertTo(context As ITypeDescriptorContext, culture As Globalization.CultureInfo, value As Object, destinationType As Type) As Object
         If destinationType Is GetType(String) And TypeOf value Is String Then
-            Return gobjBudgets.strKeyToValue1(CType(value, String))
+            Return StringTranslatorUIEditor.objCompany.objBudgets.strKeyToValue1(CType(value, String))
         End If
 
         Return MyBase.ConvertTo(context, culture, value, destinationType)

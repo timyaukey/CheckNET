@@ -37,7 +37,7 @@ Public Class TrxGenInterpolate
             Exit Function
         End If
 
-        ITrxGenerator_strLoad = gstrGetTrxGenTemplate(domDoc, mstrRepeatKey, 0, mdatTrxTemplate)
+        ITrxGenerator_strLoad = gstrGetTrxGenTemplate(objAccount.objCompany, domDoc, mstrRepeatKey, 0, mdatTrxTemplate)
     End Function
 
     Public ReadOnly Property ITrxGenerator_strDescription() As String Implements ITrxGenerator.strDescription

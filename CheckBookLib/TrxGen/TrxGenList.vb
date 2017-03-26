@@ -47,7 +47,7 @@ Public Class TrxGenList
                         ITrxGenerator_strLoad = strMsg
                         Exit Function
                     End If
-                    strMsg = gstrGetTrxGenTemplateNormal(elmTrx, mstrRepeatKey, curAmount, udtTrx)
+                    strMsg = gstrGetTrxGenTemplateNormal(objAccount.objCompany, elmTrx, mstrRepeatKey, curAmount, udtTrx)
                     If strMsg <> "" Then
                         ITrxGenerator_strLoad = strMsg
                         Exit Function

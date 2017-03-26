@@ -7,11 +7,10 @@ Friend Class RegisterForm
 	Inherits System.Windows.Forms.Form
 
     Private mfrmStartup As StartupForm
-	
-	Private WithEvents mobjReg As Register
-	
-	Private mobjAccount As Account
-	Private mblnLoadComplete As Boolean
+    Private mobjCompany As Company
+    Private mobjAccount As Account
+    Private WithEvents mobjReg As Register
+    Private mblnLoadComplete As Boolean
     Private mdatDefaultNewDate As Date
     Private WithEvents mfrmSearch As SearchForm
     Private mblnOldVisible As Boolean
@@ -45,6 +44,7 @@ Friend Class RegisterForm
 
         mobjAccount = objReg_.objAccount
         mobjReg = objReg_
+        mobjCompany = mobjAccount.objCompany
         mdatDefaultNewDate = Today
 
         mfrmStartup = frmStartup
@@ -152,7 +152,7 @@ Friend Class RegisterForm
             Exit Sub
         End If
         Using frm As TrxForm = frmCreateTrxForm()
-            If frm.blnUpdate(mobjAccount, lngIndex, mobjReg, mdatDefaultNewDate, "RegForm.Edit") Then
+            If frm.blnUpdate(lngIndex, mobjReg, mdatDefaultNewDate, "RegForm.Edit") Then
                 Exit Sub
             End If
         End Using
@@ -163,7 +163,7 @@ Friend Class RegisterForm
         Try
             If mfrmSearch Is Nothing Then
                 mfrmSearch = New SearchForm
-                mfrmSearch.ShowMe(mobjReg, mobjAccount, Me)
+                mfrmSearch.ShowMe(mobjReg, Me)
             Else
                 mfrmSearch.Show()
                 mfrmSearch.Activate()
@@ -207,7 +207,7 @@ Friend Class RegisterForm
             Dim objTrx As NormalTrx = New NormalTrx(mobjReg)
             objTrx.NewEmptyNormal(mdatDefaultNewDate)
             Using frm As TrxForm = frmCreateTrxForm()
-                If frm.blnAddNormal(mobjAccount, mobjReg, objTrx, mdatDefaultNewDate, True, "RegForm.NewNormal") Then
+                If frm.blnAddNormal(mobjReg, objTrx, mdatDefaultNewDate, True, "RegForm.NewNormal") Then
                     MsgBox("Canceled.")
                 End If
             End Using
@@ -220,7 +220,7 @@ Friend Class RegisterForm
     Private Sub cmdNewBudget_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewBudget.Click
         Try
             Using frm As TrxForm = frmCreateTrxForm()
-                If frm.blnAddBudget(mobjAccount, mobjReg, mdatDefaultNewDate, "RegForm.NewBudget") Then
+                If frm.blnAddBudget(mobjReg, mdatDefaultNewDate, "RegForm.NewBudget") Then
                     MsgBox("Canceled.")
                 End If
             End Using
@@ -234,7 +234,7 @@ Friend Class RegisterForm
     Private Sub cmdNewXfer_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewXfer.Click
         Try
             Using frm As TrxForm = frmCreateTrxForm()
-                If frm.blnAddTransfer(mobjAccount, mobjReg, mdatDefaultNewDate, "RegForm.NewXfer") Then
+                If frm.blnAddTransfer(mobjReg, mdatDefaultNewDate, "RegForm.NewXfer") Then
                     MsgBox("Canceled.")
                 End If
             End Using
@@ -283,7 +283,7 @@ Friend Class RegisterForm
         ConfigGridCol(intCol, mintColBalance, "Balance", 900,
             Function(objTrx As Trx) objTrx.curBalance.ToString(gstrFORMAT_CURRENCY), True)
         ConfigGridCol(intCol, mintColCategory, "Category", 1800,
-            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxCat(DirectCast(objTrx, NormalTrx)), ""))
+            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxCat(mobjCompany.objCategories, DirectCast(objTrx, NormalTrx)), ""))
         ConfigGridCol(intCol, mintColPONumber, "PO#", 900,
             Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxPONumber(DirectCast(objTrx, NormalTrx)), ""))
         ConfigGridCol(intCol, mintColInvoiceNum, "Invoice#", 900,

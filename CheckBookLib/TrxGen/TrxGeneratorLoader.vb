@@ -514,7 +514,7 @@ Public Module TrxGeneratorLoader
     '$Returns A non-empty error message if bad or missing data was encountered,
     '   else an empty string.
 
-    Public Function gstrGetTrxGenTemplate(ByRef domDoc As VB6XmlDocument, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
+    Public Function gstrGetTrxGenTemplate(ByVal objCompany As Company, ByRef domDoc As VB6XmlDocument, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim elmTrxTpt As VB6XmlElement
 
@@ -536,11 +536,11 @@ Public Module TrxGeneratorLoader
                 End If
             Else
                 'Set budget trx fields.
-                gstrGetTrxGenTemplate = gstrGetTrxGenTemplateBudget(elmTrxTpt, strRepeatKey, curAmount, datTrxTemplate)
+                gstrGetTrxGenTemplate = gstrGetTrxGenTemplateBudget(objCompany, elmTrxTpt, strRepeatKey, curAmount, datTrxTemplate)
             End If
         Else
             'Set normal trx fields.
-            gstrGetTrxGenTemplate = gstrGetTrxGenTemplateNormal(elmTrxTpt, strRepeatKey, curAmount, datTrxTemplate)
+            gstrGetTrxGenTemplate = gstrGetTrxGenTemplateNormal(objCompany, elmTrxTpt, strRepeatKey, curAmount, datTrxTemplate)
         End If
 
     End Function
@@ -572,7 +572,7 @@ Public Module TrxGeneratorLoader
     '$Description Set fields of a TrxToCreate structure that are used by a budget Trx,
     '   from the arguments passed in.
 
-    Public Function gstrGetTrxGenTemplateBudget(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
+    Public Function gstrGetTrxGenTemplateBudget(ByVal objCompany As Company, ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim vntAttrib As Object
 
@@ -584,7 +584,7 @@ Public Module TrxGeneratorLoader
             gstrGetTrxGenTemplateBudget = "Missing [budgetkey] attribute"
             Exit Function
         End If
-        If gobjBudgets.intLookupKey(CStr(vntAttrib)) = 0 Then
+        If objCompany.objBudgets.intLookupKey(CStr(vntAttrib)) = 0 Then
             gstrGetTrxGenTemplateBudget = "Invalid [budgetkey] attribute"
             Exit Function
         End If
@@ -622,7 +622,7 @@ Public Module TrxGeneratorLoader
     '$Description Set fields of a TrxToCreate structure that are used by a normal Trx,
     '   from the arguments passed in.
 
-    Public Function gstrGetTrxGenTemplateNormal(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
+    Public Function gstrGetTrxGenTemplateNormal(ByVal objCompany As Company, ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim vntAttrib As Object
         Dim datSplit As SplitToCreate = Nothing
@@ -653,7 +653,7 @@ Public Module TrxGeneratorLoader
             gstrGetTrxGenTemplateNormal = "Missing [catkey] attribute"
             Exit Function
         End If
-        If gobjCategories.intLookupKey(CStr(vntAttrib)) = 0 Then
+        If objCompany.objCategories.intLookupKey(CStr(vntAttrib)) = 0 Then
             gstrGetTrxGenTemplateNormal = "Invalid [catkey] attribute"
             Exit Function
         End If
@@ -661,7 +661,7 @@ Public Module TrxGeneratorLoader
         'Budget key.
         vntAttrib = elmTrxTpt.GetAttribute("budgetkey")
         If Not gblnXmlAttributeMissing(vntAttrib) Then
-            If gobjBudgets.intLookupKey(CStr(vntAttrib)) = 0 Then
+            If objCompany.objBudgets.intLookupKey(CStr(vntAttrib)) = 0 Then
                 gstrGetTrxGenTemplateNormal = "Invalid [budgetkey] attribute"
                 Exit Function
             End If

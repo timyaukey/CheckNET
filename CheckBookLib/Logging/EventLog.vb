@@ -17,6 +17,8 @@ Public Class EventLog
     Private melmEvent As VB6XmlElement
     'Register this log is for.
     Private mobjReg As Register
+    'Company this log is for.
+    Private mobjCompany As Company
     'Login name of user operating the software.
     Private mstrLogin As String
     'Date and time Init() was called.
@@ -31,8 +33,15 @@ Public Class EventLog
         mdomOutput = Nothing
         mstrLogin = strLogin
         mobjReg = objReg
+        mobjCompany = mobjReg.objAccount.objCompany
         mdatStart = Now
     End Sub
+
+    Public ReadOnly Property objCompany() As Company
+        Get
+            Return mobjCompany
+        End Get
+    End Property
 
     Public Sub WriteAll(ByVal strAccountTitle As String, ByVal objRepeats As IStringTranslator)
         Dim objLogger As ILogger
@@ -165,7 +174,7 @@ Public Class EventLog
                             elmTrx.AppendChild(elmSplitParent)
                         End If
                         With elmSplitParent
-                            .SetAttribute("CatName", gobjCategories.strKeyToValue1(objSplit.strCategoryKey))
+                            .SetAttribute("CatName", mobjCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey))
                             If objNormalTrx.lngSplits > 1 Then
                                 .SetAttribute("Amount", gstrFormatCurrency(objSplit.curAmount))
                             End If
@@ -185,7 +194,7 @@ Public Class EventLog
                                 .SetAttribute("Terms", objSplit.strTerms)
                             End If
                             If objSplit.strBudgetKey <> "" Then
-                                .SetAttribute("BudgetName", gobjBudgets.strKeyToValue1(objSplit.strBudgetKey))
+                                .SetAttribute("BudgetName", mobjCompany.objBudgets.strKeyToValue1(objSplit.strBudgetKey))
                             End If
                         End With
                     Next objSplit
@@ -193,7 +202,7 @@ Public Class EventLog
                     Dim objBudgetTrx As BudgetTrx = DirectCast(objTrx, BudgetTrx)
                     .SetAttribute("Type", "Budget")
                     .SetAttribute("BudgetLimit", gstrFormatCurrency(objBudgetTrx.curBudgetLimit))
-                    .SetAttribute("BudgetName", gobjBudgets.strKeyToValue1(objBudgetTrx.strBudgetKey))
+                    .SetAttribute("BudgetName", mobjCompany.objBudgets.strKeyToValue1(objBudgetTrx.strBudgetKey))
                 Case Trx.TrxType.glngTRXTYP_TRANSFER
                     .SetAttribute("Type", "Transfer")
                 Case Else

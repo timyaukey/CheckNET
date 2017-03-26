@@ -43,7 +43,7 @@ Public Class TrxGenRepeat
         End If
         mcurAmount = CDec(vntAttrib)
 
-        ITrxGenerator_strLoad = gstrGetTrxGenTemplate(domDoc, mstrRepeatKey, mcurAmount, mdatTrxTemplate)
+        ITrxGenerator_strLoad = gstrGetTrxGenTemplate(objAccount.objCompany, domDoc, mstrRepeatKey, mcurAmount, mdatTrxTemplate)
     End Function
 
     Public ReadOnly Property ITrxGenerator_strDescription() As String Implements ITrxGenerator.strDescription

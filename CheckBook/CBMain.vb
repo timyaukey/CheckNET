@@ -135,10 +135,10 @@ Public Module CBMain
         frmReg.ShowMe(objReg, frmStartup)
     End Sub
 
-    Public Sub gSaveChangedAccounts()
+    Public Sub gSaveChangedAccounts(ByVal objCompany As Company)
         Dim objAccount As Account
         Dim strBackupFile As String
-        For Each objAccount In gcolAccounts
+        For Each objAccount In objCompany.colAccounts
             If objAccount.blnUnsavedChanges Then
                 strBackupFile = gstrBackupPath() & "\" & objAccount.strFileLoaded & "." & Now.ToString("MM$dd$yy$hh$mm")
                 If Len(Dir(strBackupFile)) > 0 Then
@@ -309,24 +309,24 @@ Public Module CBMain
 
     End Sub
 
-    Public Sub gLoadAccountListBox(ByVal lst As System.Windows.Forms.ListBox)
+    Public Sub gLoadAccountListBox(ByVal lst As System.Windows.Forms.ListBox, ByVal objCompany As Company)
         Dim objAccount As Account
 
         With lst
             .Items.Clear()
-            For Each objAccount In gcolAccounts
+            For Each objAccount In objCompany.colAccounts
                 .Items.Add(objAccount.strTitle)
             Next objAccount
         End With
     End Sub
 
-    Public Function gobjGetSelectedAccountAndUnload(ByVal lst As System.Windows.Forms.ListBox, ByVal frm As System.Windows.Forms.Form) As Account
+    Public Function gobjGetSelectedAccountAndUnload(ByVal lst As ListBox, ByVal frm As Form, ByVal objCompany As Company) As Account
 
         If lst.SelectedIndex = -1 Then
             gobjGetSelectedAccountAndUnload = Nothing
             Exit Function
         End If
-        gobjGetSelectedAccountAndUnload = gcolAccounts.Item(lst.SelectedIndex)
+        gobjGetSelectedAccountAndUnload = objCompany.colAccounts.Item(lst.SelectedIndex)
         frm.Close()
         System.Windows.Forms.Application.DoEvents()
     End Function
@@ -574,7 +574,7 @@ Public Module CBMain
                 intDaysBack = 25
             Else
                 'Is the category one we guessed to have short terms?
-                If InStr(gstrShortTermsCatKeys, gstrEncodeCatKey(objSplit.strCategoryKey)) > 0 Then
+                If InStr(gstrShortTermsCatKeys, Company.strEncodeCatKey(objSplit.strCategoryKey)) > 0 Then
                     intDaysBack = 14
                 Else
                     intDaysBack = 30

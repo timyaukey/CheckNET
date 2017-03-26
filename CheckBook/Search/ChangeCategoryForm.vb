@@ -5,24 +5,26 @@ Imports CheckBookLib
 
 Friend Class ChangeCategoryForm
 	Inherits System.Windows.Forms.Form
-	
-	Private mblnSuccess As Boolean
-	Private mstrOldCatKey As String
+
+    Private mobjCompany As Company
+    Private mblnSuccess As Boolean
+    Private mstrOldCatKey As String
 	Private mstrNewCatKey As String
-	
-	Public Function blnGetCategories(ByRef strOldCatKey As String, ByRef strNewCatKey As String) As Boolean
-		
-		gLoadComboFromStringTranslator(cboOldCategory, gobjCategories, True)
-		gLoadComboFromStringTranslator(cboNewCategory, gobjCategories, True)
-		mblnSuccess = False
-		ShowDialog()
-		strOldCatKey = mstrOldCatKey
-		strNewCatKey = mstrNewCatKey
-		blnGetCategories = mblnSuccess
-		
-	End Function
-	
-	Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCancel.Click
+
+    Public Function blnGetCategories(ByVal objCompany As Company, ByRef strOldCatKey As String, ByRef strNewCatKey As String) As Boolean
+
+        mobjCompany = objCompany
+        gLoadComboFromStringTranslator(cboOldCategory, mobjCompany.objCategories, True)
+        gLoadComboFromStringTranslator(cboNewCategory, mobjCompany.objCategories, True)
+        mblnSuccess = False
+        ShowDialog()
+        strOldCatKey = mstrOldCatKey
+        strNewCatKey = mstrNewCatKey
+        blnGetCategories = mblnSuccess
+
+    End Function
+
+    Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCancel.Click
 		Me.Close()
 	End Sub
 	
@@ -44,12 +46,12 @@ Friend Class ChangeCategoryForm
 		End If
 		
         lngItemData = gintVB6GetItemData(cboOldCategory, cboOldCategory.SelectedIndex)
-		mstrOldCatKey = gobjCategories.strKey(lngItemData)
-		
+        mstrOldCatKey = mobjCompany.objCategories.strKey(lngItemData)
+
         lngItemData = gintVB6GetItemData(cboNewCategory, cboNewCategory.SelectedIndex)
-		mstrNewCatKey = gobjCategories.strKey(lngItemData)
-		
-		mblnSuccess = True
+        mstrNewCatKey = mobjCompany.objCategories.strKey(lngItemData)
+
+        mblnSuccess = True
 		Me.Close()
 	End Sub
 End Class

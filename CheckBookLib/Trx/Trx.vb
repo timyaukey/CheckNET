@@ -318,6 +318,7 @@ Public MustInherit Class Trx
     '$Param lngSearchType What kind of comparison to do.
 
     Public Sub CheckSearchMatch(
+        ByVal objCompany As Company,
         ByVal lngSearchField As TrxSearchField, ByVal strSearchFor As String,
         ByVal lngSearchType As TrxSearchType,
         ByVal dlgAddTrxResult As AddSearchMaxTrxDelegate,
@@ -336,7 +337,7 @@ Public MustInherit Class Trx
                                 dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
                             End If
                         Else
-                            strCatName = gobjCategories.strKeyToValue1(objSplit.strCategoryKey)
+                            strCatName = objCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey)
                             If (Left(strCatName, Len(strSearchFor) + 1) = (strSearchFor & ":")) Or (strCatName = strSearchFor) Then
                                 dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
                             End If

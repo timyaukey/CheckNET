@@ -10,6 +10,7 @@ Friend Class SearchForm
     Private mfrmReg As RegisterForm
     Private WithEvents mobjReg As Register
     Private mobjAccount As Account
+    Private mobjCompany As Company
     Private mdatDefaultDate As Date
 
     Private Structure SearchMatch
@@ -34,10 +35,11 @@ Friend Class SearchForm
     Private mdatLastEnd As Date
     Private mblnLastIncludeGenerated As Boolean
 
-    Public Sub ShowMe(ByVal objReg_ As Register, ByVal objAccount_ As Account, ByVal frmReg_ As RegisterForm)
+    Public Sub ShowMe(ByVal objReg_ As Register, ByVal frmReg_ As RegisterForm)
 
         mobjReg = objReg_
-        mobjAccount = objAccount_
+        mobjAccount = mobjReg.objAccount
+        mobjCompany = mobjAccount.objCompany
         mfrmReg = frmReg_
         colCheckedTrx = New List(Of Trx)
         mcurAmountMatched = 0
@@ -48,7 +50,7 @@ Friend Class SearchForm
         txtEndDate.Text = gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Month, 6, Today))
         LoadSearchIn()
         LoadSearchType()
-        LoadComboFromStringTranslator(cboSearchCats, gobjCategories)
+        LoadComboFromStringTranslator(cboSearchCats, mobjCompany.objCategories)
         cboSearchIn.SelectedIndex = 0
         cboSearchType.SelectedIndex = 2
         txtSearchFor.Focus()
@@ -137,9 +139,9 @@ Friend Class SearchForm
                         Exit Sub
                     Else
                         lngItemData = gintVB6GetItemData(cboSearchCats, cboSearchCats.SelectedIndex)
-                        strSearchFor = gobjCategories.strKey(lngItemData)
+                        strSearchFor = mobjCompany.objCategories.strKey(lngItemData)
                         If lngSearchType = Trx.TrxSearchType.glngTRXSTP_STARTS Then
-                            strSearchFor = gobjCategories.strKeyToValue1(strSearchFor)
+                            strSearchFor = mobjCompany.objCategories.strKeyToValue1(strSearchFor)
                         End If
                     End If
                 Case Else
@@ -203,7 +205,7 @@ Friend Class SearchForm
                     Else
                         dlgTrx = AddressOf AddSearchMatchTrx
                     End If
-                    objTrx.CheckSearchMatch(mlngLastSearchField, mstrLastSearchFor, mlngLastSearchType,
+                    objTrx.CheckSearchMatch(mobjCompany, mlngLastSearchField, mstrLastSearchFor, mlngLastSearchType,
                        dlgTrx, AddressOf AddSearchMatchSplit)
                 End If
             Next
@@ -269,7 +271,7 @@ Friend Class SearchForm
 
         objItem = objAddNewMatch(objTrx, objTrx.curAmount)
         If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-            gSummarizeSplits(DirectCast(objTrx, NormalTrx), strCategory, strPONumber, strInvoiceNum, strInvoiceDate, strDueDate, strTerms, strBudget, curAvailable)
+            gSummarizeSplits(mobjCompany, DirectCast(objTrx, NormalTrx), strCategory, strPONumber, strInvoiceNum, strInvoiceDate, strDueDate, strTerms, strBudget, curAvailable)
             gAddListSubItem(objItem, 4, gstrFormatCurrency(curAvailable))
             gAddListSubItem(objItem, 5, strCategory)
             gAddListSubItem(objItem, 6, strPONumber)
@@ -326,7 +328,7 @@ Friend Class SearchForm
             strDueDate = gstrFormatDate(objSplit.datDueDate)
         End If
         gAddListSubItem(objItem, 4, gstrFormatCurrency(curAvailable))
-        gAddListSubItem(objItem, 5, gstrTranslateCatKey(objSplit.strCategoryKey))
+        gAddListSubItem(objItem, 5, gstrTranslateCatKey(mobjCompany.objCategories, objSplit.strCategoryKey))
         gAddListSubItem(objItem, 6, objSplit.strPONumber)
         gAddListSubItem(objItem, 7, objSplit.strInvoiceNum)
         gAddListSubItem(objItem, 8, strInvoiceDate)
@@ -416,7 +418,7 @@ Friend Class SearchForm
             Dim lngResultIndex As Integer = CInt(lvwMatches.FocusedItem.Tag)
             Dim lngRegSelect As Integer = maudtMatches(lngResultIndex).lngRegIndex
             Using frmEdit As TrxForm = frmCreateTrxForm()
-                If frmEdit.blnUpdate(mobjAccount, lngRegSelect, mobjReg, mdatDefaultDate, "SearchForm.Edit") Then
+                If frmEdit.blnUpdate(lngRegSelect, mobjReg, mdatDefaultDate, "SearchForm.Edit") Then
                     Exit Sub
                 End If
             End Using
@@ -433,7 +435,7 @@ Friend Class SearchForm
             Dim objTrx As NormalTrx = New NormalTrx(mobjReg)
             objTrx.NewEmptyNormal(mdatDefaultDate)
             Using frm As TrxForm = frmCreateTrxForm()
-                If frm.blnAddNormal(mobjAccount, mobjReg, objTrx, mdatDefaultDate, True, "SearchForm.NewNormal") Then
+                If frm.blnAddNormal(mobjReg, objTrx, mdatDefaultDate, True, "SearchForm.NewNormal") Then
                     MsgBox("Canceled.")
                 End If
             End Using
@@ -482,7 +484,7 @@ Friend Class SearchForm
             Dim objSplit As TrxSplit
             Dim lngExportCount As Integer
 
-            If Not frmExport.blnGetSettings() Then
+            If Not frmExport.blnGetSettings(mobjCompany) Then
                 MsgBox("Export canceled.")
                 Exit Sub
             End If
@@ -533,7 +535,7 @@ Friend Class SearchForm
             Dim objStartLogger As ILogGroupStart
 
             frmArgs = New ChangeCategoryForm
-            If Not frmArgs.blnGetCategories(strOldCatKey, strNewCatKey) Then
+            If Not frmArgs.blnGetCategories(mobjCompany, strOldCatKey, strNewCatKey) Then
                 Exit Sub
             End If
 
@@ -634,7 +636,7 @@ Friend Class SearchForm
 
             'Now let them edit it and possibly save it.
             Using frmTrx As TrxForm = frmCreateTrxForm()
-                If frmTrx.blnAddNormal(mobjAccount, mobjReg, objNewTrx, datResult, False, "SearchForm.CombineNew") Then
+                If frmTrx.blnAddNormal(mobjReg, objNewTrx, datResult, False, "SearchForm.CombineNew") Then
                     'They did not save it.
                     Exit Sub
                 End If

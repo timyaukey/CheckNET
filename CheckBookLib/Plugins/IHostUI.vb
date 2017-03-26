@@ -8,6 +8,7 @@ Option Explicit On
 ''' </summary>
 
 Public Interface IHostUI
+    ReadOnly Property objCompany() As Company
     Function blnImportFormAlreadyOpen() As Boolean
     Sub OpenImportForm(ByVal strWindowCaption As String, ByVal objHandler As IImportHandler,
         ByVal objReader As ITrxReader)

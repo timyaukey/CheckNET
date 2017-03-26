@@ -30,7 +30,7 @@ Public Class LogMove
         objLog.WriteValue("Payee", mobjOldTrx.strDescription)
         objLog.WriteValue("DueDate", gstrSummarizeTrxDueDate(mobjOldTrx))
         objLog.WriteValue("Amount", gstrFormatCurrency(mobjOldTrx.curAmount))
-        objLog.WriteValue("CatName", gstrSummarizeTrxCat(mobjOldTrx))
+        objLog.WriteValue("CatName", gstrSummarizeTrxCat(objLog.objCompany.objCategories, mobjOldTrx))
         objLog.EventEnd()
     End Sub
 End Class

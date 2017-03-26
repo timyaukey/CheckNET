@@ -6,8 +6,8 @@ Imports VB = Microsoft.VisualBasic
 
 Friend Class TrxForm
     Inherits System.Windows.Forms.Form
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
+    Private mobjCompany As Company
     Private mobjAccount As Account
     Private mobjReg As Register
     Private mlngIndex As Integer
@@ -67,11 +67,11 @@ Friend Class TrxForm
     '$Description Enter a new normal Trx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddNormal(ByVal objAccount_ As Account, ByVal objReg_ As Register, ByVal objTrx_ As NormalTrx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
+    Public Function blnAddNormal(ByVal objReg_ As Register, ByVal objTrx_ As NormalTrx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
 
         Try
 
-            Init(objAccount_, objReg_, False, 0, Trx.TrxType.glngTRXTYP_NORMAL, blnCheckInvoiceNum_, strLogTitle)
+            Init(objReg_, False, 0, Trx.TrxType.glngTRXTYP_NORMAL, blnCheckInvoiceNum_, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             SetSharedControls(objTrx_)
@@ -93,11 +93,11 @@ Friend Class TrxForm
     '   has validation errors.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddNormalSilent(ByVal objAccount_ As Account, ByVal objReg_ As Register, ByVal objTrx_ As NormalTrx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
+    Public Function blnAddNormalSilent(ByVal objReg_ As Register, ByVal objTrx_ As NormalTrx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
 
         Try
 
-            Init(objAccount_, objReg_, False, 0, Trx.TrxType.glngTRXTYP_NORMAL, blnCheckInvoiceNum_, strLogTitle)
+            Init(objReg_, False, 0, Trx.TrxType.glngTRXTYP_NORMAL, blnCheckInvoiceNum_, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             SetSharedControls(objTrx_)
@@ -122,11 +122,11 @@ Friend Class TrxForm
     '$Description Enter a new budget Trx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddBudget(ByVal objAccount_ As Account, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
+    Public Function blnAddBudget(ByVal objReg_ As Register, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
 
         Try
 
-            Init(objAccount_, objReg_, False, 0, Trx.TrxType.glngTRXTYP_BUDGET, False, strLogTitle)
+            Init(objReg_, False, 0, Trx.TrxType.glngTRXTYP_BUDGET, False, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             ClearSharedControls()
@@ -148,11 +148,11 @@ Friend Class TrxForm
     '$Description Enter a new transfer Trx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddTransfer(ByVal objAccount_ As Account, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
+    Public Function blnAddTransfer(ByVal objReg_ As Register, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
 
         Try
 
-            Init(objAccount_, objReg_, False, 0, Trx.TrxType.glngTRXTYP_TRANSFER, False, strLogTitle)
+            Init(objReg_, False, 0, Trx.TrxType.glngTRXTYP_TRANSFER, False, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             ClearSharedControls()
@@ -173,14 +173,14 @@ Friend Class TrxForm
     '$Description Edit and existing Trx in the Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnUpdate(ByVal objAccount_ As Account, ByVal lngIndex_ As Integer, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
+    Public Function blnUpdate(ByVal lngIndex_ As Integer, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
 
         Dim objTrx As Trx
 
         Try
 
             objTrx = objReg_.objTrx(lngIndex_)
-            Init(objAccount_, objReg_, True, lngIndex_, objTrx.lngType, True, strLogTitle)
+            Init(objReg_, True, lngIndex_, objTrx.lngType, True, strLogTitle)
             ConfigSharedControls()
             SetSharedControls(objTrx)
             mstrOldRepeatKey = objTrx.strRepeatKey
@@ -249,8 +249,8 @@ Friend Class TrxForm
         EnableStatus()
         chkFake.Visible = True
         For intIndex = 0 To mintSPLIT_CTRL_ARRAY_SIZE - 1
-            gLoadComboFromStringTranslator(cboSplitCategory(intIndex), gobjCategories, True)
-            gLoadComboFromStringTranslator(cboSplitBudget(intIndex), gobjBudgets, True)
+            gLoadComboFromStringTranslator(cboSplitCategory(intIndex), mobjCompany.objCategories, True)
+            gLoadComboFromStringTranslator(cboSplitBudget(intIndex), mobjCompany.objBudgets, True)
         Next
         ShowFrame(frmNormal)
     End Sub
@@ -322,7 +322,7 @@ Friend Class TrxForm
         txtBudgetEnds.Visible = True
         chkFake.Visible = False
         cmdCopyInvoiceNumbers.Visible = False
-        gLoadComboFromStringTranslator(cboBudgetName, gobjBudgets, True)
+        gLoadComboFromStringTranslator(cboBudgetName, mobjCompany.objBudgets, True)
         ShowFrame(frmBudget)
     End Sub
 
@@ -336,7 +336,7 @@ Friend Class TrxForm
     Private Sub SetBudgetControls(ByVal objTrx As BudgetTrx)
         With objTrx
             txtBudgetLimit.Text = gstrFormatCurrency(.curBudgetLimit)
-            SetComboFromStringTranslator(cboBudgetName, gobjBudgets, .strBudgetKey)
+            SetComboFromStringTranslator(cboBudgetName, mobjCompany.objBudgets, .strBudgetKey)
             txtBudgetApplied.Text = gstrFormatCurrency(.curBudgetApplied)
             txtBudgetEnds.Text = gstrFormatDate(.datBudgetEnds)
         End With
@@ -409,9 +409,10 @@ Friend Class TrxForm
                             End If
                             curTotalApplied = curTotalApplied + objSplit.curAmount
                             If objItem.SubItems.Count > 6 Then
-                                objItem.SubItems(6).Text = gstrTranslateCatKey(objSplit.strCategoryKey)
+                                objItem.SubItems(6).Text = gstrTranslateCatKey(mobjCompany.objCategories, objSplit.strCategoryKey)
                             Else
-                                objItem.SubItems.Insert(6, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrTranslateCatKey(objSplit.strCategoryKey)))
+                                objItem.SubItems.Insert(6, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing,
+                                    gstrTranslateCatKey(mobjCompany.objCategories, objSplit.strCategoryKey)))
                             End If
                         End With
                     End If
@@ -461,7 +462,7 @@ Friend Class TrxForm
         End With
     End Sub
 
-    Private Sub Init(ByVal objAccount_ As Account, ByVal objReg_ As Register, ByVal blnEditMode_ As Boolean, ByVal lngIndex_ As Integer, ByVal lngType_ As Trx.TrxType, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String)
+    Private Sub Init(ByVal objReg_ As Register, ByVal blnEditMode_ As Boolean, ByVal lngIndex_ As Integer, ByVal lngType_ As Trx.TrxType, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String)
 
         cboSplitCategory = {_cboSplitCategory_0, _cboSplitCategory_1, _cboSplitCategory_2, _cboSplitCategory_3, _cboSplitCategory_4, _cboSplitCategory_5, _cboSplitCategory_6, _cboSplitCategory_7, _cboSplitCategory_8, _cboSplitCategory_9}
         cboSplitBudget = {_cboSplitBudget_0, _cboSplitBudget_1, _cboSplitBudget_2, _cboSplitBudget_3, _cboSplitBudget_4, _cboSplitBudget_5, _cboSplitBudget_6, _cboSplitBudget_7, _cboSplitBudget_8, _cboSplitBudget_9}
@@ -475,8 +476,9 @@ Friend Class TrxForm
         txtSplitPONum = {_txtSplitPONum_0, _txtSplitPONum_1, _txtSplitPONum_2, _txtSplitPONum_3, _txtSplitPONum_4, _txtSplitPONum_5, _txtSplitPONum_6, _txtSplitPONum_7, _txtSplitPONum_8, _txtSplitPONum_9}
         txtSplitTerms = {_txtSplitTerms_0, _txtSplitTerms_1, _txtSplitTerms_2, _txtSplitTerms_3, _txtSplitTerms_4, _txtSplitTerms_5, _txtSplitTerms_6, _txtSplitTerms_7, _txtSplitTerms_8, _txtSplitTerms_9}
 
-        mobjAccount = objAccount_
         mobjReg = objReg_
+        mobjAccount = mobjReg.objAccount
+        mobjCompany = mobjAccount.objCompany
         mblnEditMode = blnEditMode_
         mlngIndex = lngIndex_
         mlngType = lngType_
@@ -597,13 +599,13 @@ Friend Class TrxForm
             For intIndex = 0 To mintSPLIT_CTRL_ARRAY_SIZE - 1
                 With maudtSplits(intIndex + mintSplitOffset + 1)
                     lblSplitNumber(intIndex).Text = gstrFormatInteger(intIndex + 1 + mintSplitOffset, "##0") & "."
-                    SetComboFromStringTranslator(cboSplitCategory(intIndex), gobjCategories, .strCategoryKey)
+                    SetComboFromStringTranslator(cboSplitCategory(intIndex), mobjCompany.objCategories, .strCategoryKey)
                     txtSplitPONum(intIndex).Text = .strPONumber
                     txtSplitInvoiceNum(intIndex).Text = .strInvoiceNum
                     txtSplitInvoiceDate(intIndex).Text = .strInvoiceDate
                     txtSplitDueDate(intIndex).Text = .strDueDate
                     txtSplitTerms(intIndex).Text = .strTerms
-                    SetComboFromStringTranslator(cboSplitBudget(intIndex), gobjBudgets, .strBudgetKey)
+                    SetComboFromStringTranslator(cboSplitBudget(intIndex), mobjCompany.objBudgets, .strBudgetKey)
                     txtSplitMemo(intIndex).Text = .strMemo
                     mblnSuppressPlaceholderAdjustment = True
                     txtSplitAmount(intIndex).Text = .strAmount
@@ -1534,8 +1536,8 @@ Friend Class TrxForm
             intSplitIndex = intControlIndex + mintSplitOffset + 1
             If intSplitIndex <= mintSplits Then
                 With maudtSplits(intSplitIndex)
-                    SetComboFromStringTranslator(cboSplitCategory(intControlIndex), gobjCategories, .strCategoryKey)
-                    SetComboFromStringTranslator(cboSplitBudget(intControlIndex), gobjBudgets, .strBudgetKey)
+                    SetComboFromStringTranslator(cboSplitCategory(intControlIndex), mobjCompany.objCategories, .strCategoryKey)
+                    SetComboFromStringTranslator(cboSplitBudget(intControlIndex), mobjCompany.objBudgets, .strBudgetKey)
                 End With
             End If
         Next
@@ -2071,7 +2073,7 @@ Friend Class TrxForm
         Dim objTrxManager As BudgetTrxManager
         Dim strBudgetKey As String
         Dim datBudgetEnds As Date
-        strBudgetKey = strGetStringTranslatorKeyFromCombo(cboBudgetName, gobjBudgets)
+        strBudgetKey = strGetStringTranslatorKeyFromCombo(cboBudgetName, mobjCompany.objBudgets)
         datBudgetEnds = CDate(txtBudgetEnds.Text)
         If mblnEditMode Then
             objTrxManager = mobjReg.objGetBudgetTrxManager(mlngIndex)
@@ -2214,7 +2216,8 @@ Friend Class TrxForm
             Dim index As Integer = CShort(CType(sender, ComboBox).Tag)
             If Not cboSplitCategory Is Nothing Then
                 If Not mblnInDisplaySplits Then
-                    maudtSplits(index + 1 + mintSplitOffset).strCategoryKey = strGetStringTranslatorKeyFromCombo(cboSplitCategory(index), gobjCategories)
+                    maudtSplits(index + 1 + mintSplitOffset).strCategoryKey = strGetStringTranslatorKeyFromCombo(cboSplitCategory(index),
+                        mobjCompany.objCategories)
                 End If
             End If
             Exit Sub
@@ -2282,7 +2285,7 @@ Friend Class TrxForm
             Dim index As Short = CShort(CType(sender, ComboBox).Tag)
             If Not cboSplitBudget Is Nothing Then
                 If Not mblnInDisplaySplits Then
-                    maudtSplits(index + 1 + mintSplitOffset).strBudgetKey = strGetStringTranslatorKeyFromCombo(cboSplitBudget(index), gobjBudgets)
+                    maudtSplits(index + 1 + mintSplitOffset).strBudgetKey = strGetStringTranslatorKeyFromCombo(cboSplitBudget(index), mobjCompany.objBudgets)
                     CheckForPlaceholderBudget()
                 End If
             End If

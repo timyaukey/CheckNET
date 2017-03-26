@@ -21,12 +21,12 @@ Friend Class PayeeListForm
     'True iff Form_Activate event has fired.
     Private mblnActivated As Boolean
 
-    Public Sub ShowMe()
+    Public Sub ShowMe(ByVal objCompany As Company)
         Try
 
             LoadSharedDocument()
-            gLoadComboFromStringTranslator(cboCategory, gobjCategories, True)
-            gLoadComboFromStringTranslator(cboBudget, gobjBudgets, True)
+            gLoadComboFromStringTranslator(cboCategory, objCompany.objCategories, True)
+            gLoadComboFromStringTranslator(cboBudget, objCompany.objBudgets, True)
             gLoadMatchNarrowingMethods(cboNarrowMethod)
             Me.ShowDialog()
 

@@ -18,7 +18,7 @@ Public Class FindLiveBudgetsPlugin
                 Exit Sub
             End If
             Dim frmFind As LiveBudgetListForm = New LiveBudgetListForm
-            frmFind.ShowModal(objReg, gobjBudgets)
+            frmFind.ShowModal(objReg, HostUI.objCompany.objBudgets)
             Exit Sub
         Catch ex As Exception
             gTopException(ex)

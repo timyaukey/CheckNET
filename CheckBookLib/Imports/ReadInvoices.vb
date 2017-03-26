@@ -6,12 +6,14 @@ Imports System.IO
 Public Class ReadInvoices
     Implements ITrxReader
 
+    Private mobjCompany As Company
     Private mobjInput As TextReader
     Private mstrFile As String
     Private mastrLines() As String
     Private mintNextIndex As Integer
 
-    Public Sub New(ByVal objInput As TextReader, ByVal strFile As String)
+    Public Sub New(ByVal objCompany As Company, ByVal objInput As TextReader, ByVal strFile As String)
+        mobjCompany = objCompany
         mobjInput = objInput
         mstrFile = strFile
     End Sub
@@ -83,7 +85,7 @@ Public Class ReadInvoices
             strTrxNum = "Crm"
         End If
         strCatName = astrParts(8)
-        strCatKey = gobjCategories.strKey(gobjCategories.intLookupValue1(strCatName))
+        strCatKey = mobjCompany.objCategories.strKey(mobjCompany.objCategories.intLookupValue1(strCatName))
 
         objTrx = New ImportedTrx(Nothing)
 

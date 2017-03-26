@@ -55,11 +55,11 @@ Friend Class ListEditorForm
     Private Sub cmdSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSave.Click
         Try
 
-            gSaveChangedAccounts()
+            gSaveChangedAccounts(mobjCompany)
             RebuildTranslator()
             WriteFile()
-            gBuildShortTermsCatKeys(mobjCompany)
-            gFindPlaceholderBudget(mobjCompany)
+            mobjCompany.BuildShortTermsCatKeys()
+            mobjCompany.FindPlaceholderBudget()
             MsgBox("Updated list has been saved. The new names will not appear in " & "register windows until you close and re-open those windows.", MsgBoxStyle.Information)
             mblnModified = False
             mblnSaved = True

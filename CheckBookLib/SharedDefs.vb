@@ -37,14 +37,6 @@ Public Module SharedDefs
     'Global security context.
     Public gobjSecurity As Security
 
-    'Collection of loaded Account objects.
-    Public gcolAccounts As List(Of Account)
-
-    'Global category and budget lists.
-    Public gobjIncExpAccounts As CategoryTranslator
-    Public gobjCategories As CategoryTranslator
-    Public gobjBudgets As BudgetTranslator
-
     'Table with memorized payees.
     Public gdomTransTable As VB6XmlDocument
     'Above with Output attributes of Payee elements converted to upper case.
@@ -144,117 +136,13 @@ Public Module SharedDefs
         gstrImageFilePath = gstrDataPath() & "\ImageFiles"
     End Function
 
-    Public Sub gLoadGlobalLists(ByVal objCompany As Company)
-        Try
-
-            gobjBudgets = objCompany.objBudgets
-            gobjBudgets.LoadFile(gstrAddPath("Shared.bud"))
-            gobjIncExpAccounts = objCompany.objIncExpAccounts
-            gobjIncExpAccounts.LoadFile(gstrAddPath("Shared.cat"))
-            gobjCategories = objCompany.objCategories
-            gLoadCategories(objCompany)  'Will not include asset, liability and equity accounts, but that's okay at this point.
-            gFindPlaceholderBudget(objCompany)
-
-            Exit Sub
-        Catch ex As Exception
-            gNestedException(ex)
-        End Try
-    End Sub
-
-    Public Sub gLoadCategories(ByVal objCompany As Company)
-        Dim intIndex As Integer
-        objCompany.objCategories.Init()
-        For intIndex = 1 To objCompany.objIncExpAccounts.intElements
-            objCompany.objCategories.Add(objCompany.objIncExpAccounts.objElement(intIndex))
-        Next
-        AddAccountTypeToCategories(objCompany, Account.AccountType.Asset, "A")
-        AddAccountTypeToCategories(objCompany, Account.AccountType.Liability, "L")
-        AddAccountTypeToCategories(objCompany, Account.AccountType.Equity, "Q")
-        gBuildShortTermsCatKeys(objCompany)
-    End Sub
-
-    Private Sub AddAccountTypeToCategories(ByVal objCompany As Company, ByVal lngType As Account.AccountType, ByVal strPrefix As String)
-        Dim objCats As List(Of StringTransElement) = New List(Of StringTransElement)
-        Dim elm As StringTransElement
-        For Each objAccount As Account In objCompany.colAccounts
-            If objAccount.lngType = lngType Then
-                For Each objReg As Register In objAccount.colRegisters
-                    Dim strKey As String = objAccount.intKey.ToString() + "." + objReg.strRegisterKey
-                    elm = New StringTransElement(strKey, strPrefix + ":" + objReg.strTitle, " " + objReg.strTitle)
-                    objCats.Add(elm)
-                Next
-            End If
-        Next
-        objCats.Sort(AddressOf intCategoryComparer)
-        For Each elm In objCats
-            objCompany.objCategories.Add(elm)
-        Next
-    End Sub
-
-    Private Function intCategoryComparer(ByVal cat1 As StringTransElement, ByVal cat2 As StringTransElement) As Integer
-        Return cat1.strValue1.CompareTo(cat2.strValue1)
-    End Function
-
-    'Set gstrPlaceholderBudgetKey to the key of the budget whose name
-    'is "(budget)", or set it to "---" if there is no such budget.
-    Public Sub gFindPlaceholderBudget(ByVal objCompany As Company)
-        Dim intPlaceholderIndex As Integer
-        intPlaceholderIndex = objCompany.objBudgets.intLookupValue1("(placeholder)")
-        If intPlaceholderIndex > 0 Then
-            gstrPlaceholderBudgetKey = objCompany.objBudgets.strKey(intPlaceholderIndex)
-        Else
-            'Don't use empty string, because that's the key used
-            'if a split doesn't use a budget.
-            gstrPlaceholderBudgetKey = "---"
-        End If
-    End Sub
-
-    'Set gstrShortTermsCatKeys by the heuristic of looking for
-    'recognizable strings in the category names.
-    Public Sub gBuildShortTermsCatKeys(ByVal objCompany As Company)
-        Dim intCatIndex As Integer
-        Dim strCatName As String
-        Dim blnPossibleCredit As Boolean
-        Dim blnPossibleUtility As Boolean
-
-        gstrShortTermsCatKeys = ""
-        For intCatIndex = 1 To objCompany.objCategories.intElements
-            strCatName = LCase(objCompany.objCategories.strValue1(intCatIndex))
-
-            blnPossibleUtility = blnHasWord(strCatName, "util") Or blnHasWord(strCatName, "phone") Or
-                blnHasWord(strCatName, "trash") Or blnHasWord(strCatName, "garbage") Or
-                blnHasWord(strCatName, "oil") Or blnHasWord(strCatName, "heat") Or
-                blnHasWord(strCatName, "electric") Or blnHasWord(strCatName, "cable") Or
-                blnHasWord(strCatName, "comcast") Or blnHasWord(strCatName, "web") Or
-                blnHasWord(strCatName, "internet") Or blnHasWord(strCatName, "qwest") Or blnHasWord(strCatName, "verizon")
-
-            blnPossibleCredit = blnHasWord(strCatName, "card") Or blnHasWord(strCatName, "bank") Or
-                blnHasWord(strCatName, "loan") Or blnHasWord(strCatName, "auto") Or
-                blnHasWord(strCatName, "car") Or blnHasWord(strCatName, "truck") Or
-                blnHasWord(strCatName, "mortgage") Or blnHasWord(strCatName, "house")
-
-            If blnPossibleCredit Or blnPossibleUtility Then
-                gstrShortTermsCatKeys = gstrShortTermsCatKeys & gstrEncodeCatKey(objCompany.objCategories.strKey(intCatIndex))
-            End If
-        Next
-
-    End Sub
-
-    Private Function blnHasWord(ByVal strCatName As String, ByVal strPrefix As String) As Boolean
-        blnHasWord = (InStr(strCatName, ":" & strPrefix) > 0) Or (InStr(strCatName, " " & strPrefix) > 0)
-    End Function
-
-    Public Function gstrEncodeCatKey(ByVal strCatKey As String) As String
-        gstrEncodeCatKey = "(" & strCatKey & ")"
-    End Function
-
     Public Function gstrMakeRepeatId(ByVal strRepeatKey As String, ByVal intRepeatSeq As Integer) As String
         gstrMakeRepeatId = "#" & strRepeatKey & "." & intRepeatSeq
     End Function
 
     '$Description Return a string summarizing the categories used by a normal transaction.
 
-    Public Function gstrSummarizeTrxCat(ByVal objTrx As NormalTrx) As String
+    Public Function gstrSummarizeTrxCat(ByVal objCategories As CategoryTranslator, ByVal objTrx As NormalTrx) As String
 
         Dim objSplit As TrxSplit
         Dim strCategoryKey As String = ""
@@ -267,13 +155,13 @@ Public Module SharedDefs
                 Exit Function
             End If
         Next objSplit
-        gstrSummarizeTrxCat = gstrTranslateCatKey(strCategoryKey)
+        gstrSummarizeTrxCat = gstrTranslateCatKey(objCategories, strCategoryKey)
 
     End Function
 
     '$Description Return a string summarizing the budgets used by a normal transaction.
 
-    Public Function gstrSummarizeTrxBudget(ByVal objTrx As NormalTrx) As String
+    Public Function gstrSummarizeTrxBudget(ByVal objCompany As Company, ByVal objTrx As NormalTrx) As String
 
         Dim objSplit As TrxSplit
         Dim strBudgetKey As String = ""
@@ -286,7 +174,7 @@ Public Module SharedDefs
                 Exit Function
             End If
         Next objSplit
-        gstrSummarizeTrxBudget = gstrTranslateBudgetKey(strBudgetKey)
+        gstrSummarizeTrxBudget = gstrTranslateBudgetKey(objCompany, strBudgetKey)
 
     End Function
 
@@ -393,14 +281,14 @@ Public Module SharedDefs
 
     End Function
 
-    Public Function gstrTranslateCatKey(ByVal strKey As String) As String
+    Public Function gstrTranslateCatKey(ByVal objCategories As CategoryTranslator, ByVal strKey As String) As String
         Dim strName As String
         Dim strRoot As String
-        strName = gobjCategories.strKeyToValue1(strKey)
+        strName = objCategories.strKeyToValue1(strKey)
         If strName = "" Then
             strRoot = "TmpCat#" & strKey
             strName = "E:" & strRoot
-            gobjCategories.Add(New StringTransElement(strKey, strName, " " & strRoot))
+            objCategories.Add(New StringTransElement(strKey, strName, " " & strRoot))
             MsgBox("Error: Could not find code " & strKey & " in category " & "list. Have assigned it temporary category name " & strName & ", which " & "you will probably want to edit to make this category " & "permanent.", MsgBoxStyle.Information)
         End If
         gstrTranslateCatKey = strName
@@ -408,7 +296,8 @@ Public Module SharedDefs
 
     '$Description Like gstrSummarizeTrxCat(), but summarizes multiple split properties.
 
-    Public Sub gSummarizeSplits(ByVal objTrx As NormalTrx, ByRef strCategory As String, ByRef strPONumber As String, ByRef strInvoiceNum As String, ByRef strInvoiceDate As String, ByRef strDueDate As String, ByRef strTerms As String, ByRef strBudget As String, ByRef curAvailable As Decimal)
+    Public Sub gSummarizeSplits(ByVal objCompany As Company, ByVal objTrx As NormalTrx, ByRef strCategory As String, ByRef strPONumber As String,
+                                ByRef strInvoiceNum As String, ByRef strInvoiceDate As String, ByRef strDueDate As String, ByRef strTerms As String, ByRef strBudget As String, ByRef curAvailable As Decimal)
 
         Dim objSplit As TrxSplit
         Dim strCatKey As String = ""
@@ -436,7 +325,7 @@ Public Module SharedDefs
                 strTerms2 = objSplit.strTerms
                 strBudgetKey = objSplit.strBudgetKey
                 'Format fields from the first split.
-                strCategory = gstrTranslateCatKey(strCatKey)
+                strCategory = gstrTranslateCatKey(objCompany.objCategories, strCatKey)
                 strInvoiceNum = strInvoiceNum2
                 strPONumber = strPONumber2
                 If datInvoiceDate = System.DateTime.FromOADate(0) Then
@@ -450,7 +339,7 @@ Public Module SharedDefs
                     strDueDate = gstrFormatDate(datDueDate)
                 End If
                 strTerms = strTerms2
-                strBudget = gstrTranslateBudgetKey(strBudgetKey)
+                strBudget = gstrTranslateBudgetKey(objCompany, strBudgetKey)
                 blnFirstSplit = False
             Else
                 If strCatKey <> objSplit.strCategoryKey Then
@@ -479,14 +368,14 @@ Public Module SharedDefs
 
     End Sub
 
-    Public Function gstrTranslateBudgetKey(ByVal strKey As String) As String
+    Public Function gstrTranslateBudgetKey(ByVal objCompany As Company, ByVal strKey As String) As String
         Dim strName As String
         gstrTranslateBudgetKey = ""
         If strKey <> "" Then
-            strName = gobjBudgets.strKeyToValue1(strKey)
+            strName = objCompany.objBudgets.strKeyToValue1(strKey)
             If strName = "" Then
                 strName = "TmpBud#" & strKey
-                gobjBudgets.Add(New StringTransElement(strKey, strName, strName))
+                objCompany.objBudgets.Add(New StringTransElement(strKey, strName, strName))
                 MsgBox("Error: Could not find code " & strKey & " in budget " & "list. Have assigned it temporary budget name " & strName & ", which " & "you will probably want to edit to make this budget " & "permanent.", MsgBoxStyle.Information)
             End If
             gstrTranslateBudgetKey = strName

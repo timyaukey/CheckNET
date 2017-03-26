@@ -26,7 +26,6 @@ Friend Class CBMainForm
             mblnCancelStart = True
 
             mobjCompany = gobjInitialize()
-            gcolAccounts = mobjCompany.colAccounts
             frmStartup = New StartupForm
             frmStartup.Show()
             frmStartup.ShowStatus("Initializing")
@@ -72,7 +71,7 @@ Friend Class CBMainForm
 
             gCreateStandardFolders()
             gCreateStandardFiles()
-            gLoadGlobalLists(mobjCompany)
+            mobjCompany.LoadGlobalLists()
             gLoadTransTable()
 
             If Not gblnUserAuthenticated() Then
@@ -105,7 +104,7 @@ Friend Class CBMainForm
             Next strFile
 
             'With all Account objects loaded we can add them to the category list.
-            gLoadCategories(mobjCompany)
+            mobjCompany.LoadCategories()
 
             'Load generated transactions for all of them.
             For Each objAccount In mobjCompany.colAccounts
@@ -234,7 +233,7 @@ Friend Class CBMainForm
         Try
 
             If Not mblnCancelStart Then
-                gSaveChangedAccounts()
+                gSaveChangedAccounts(mobjCompany)
             End If
             mobjCompany.Teardown()
 
@@ -261,7 +260,7 @@ Friend Class CBMainForm
         objReader As ITrxReader) Implements IHostUI.OpenImportForm
 
         Using frm As BankImportAcctSelectForm = New BankImportAcctSelectForm()
-            frm.ShowMe(strWindowCaption, objHandler, objReader, Me)
+            frm.ShowMe(mobjCompany, strWindowCaption, objHandler, objReader, Me)
         End Using
     End Sub
 
@@ -281,13 +280,19 @@ Friend Class CBMainForm
         Return Me
     End Function
 
+    Public ReadOnly Property objCompany() As Company Implements IHostUI.objCompany
+        Get
+            Return mobjCompany
+        End Get
+    End Property
+
     Public Sub mnuListBudgets_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuListBudgets.Click
         Dim frm As ListEditorForm
 
         Try
 
             frm = New ListEditorForm
-            frm.blnShowMe(mobjCompany, ListEditorForm.ListType.glngLIST_TYPE_BUDGET, gstrAddPath("Shared.bud"), gobjBudgets, "Budget List")
+            frm.blnShowMe(mobjCompany, ListEditorForm.ListType.glngLIST_TYPE_BUDGET, gstrAddPath("Shared.bud"), mobjCompany.objBudgets, "Budget List")
 
             Exit Sub
         Catch ex As Exception
@@ -302,7 +307,7 @@ Friend Class CBMainForm
             frm = New ListEditorForm
             If frm.blnShowMe(mobjCompany, ListEditorForm.ListType.glngLIST_TYPE_CATEGORY, gstrAddPath("Shared.cat"),
                              mobjCompany.objIncExpAccounts, "Category List") Then
-                gLoadCategories(mobjCompany)
+                mobjCompany.LoadCategories()
             End If
 
             Exit Sub
@@ -317,7 +322,7 @@ Friend Class CBMainForm
         Try
 
             frm = New PayeeListForm
-            frm.ShowMe()
+            frm.ShowMe(mobjCompany)
 
             Exit Sub
         Catch ex As Exception
@@ -346,7 +351,7 @@ Friend Class CBMainForm
     Public Sub mnuFileSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileSave.Click
         Try
 
-            gSaveChangedAccounts()
+            gSaveChangedAccounts(mobjCompany)
             mnuFileSave.Enabled = False
 
             Exit Sub

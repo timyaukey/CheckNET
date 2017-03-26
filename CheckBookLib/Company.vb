@@ -52,4 +52,105 @@ Public Class Company
             objAccount.Teardown()
         Next objAccount
     End Sub
+
+    Public Sub LoadGlobalLists()
+        Try
+
+            objBudgets.LoadFile(gstrAddPath("Shared.bud"))
+            objIncExpAccounts.LoadFile(gstrAddPath("Shared.cat"))
+            LoadCategories()  'Will not include asset, liability and equity accounts, but that's okay at this point.
+            FindPlaceholderBudget()
+
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
+    End Sub
+
+    Public Sub LoadCategories()
+        Dim intIndex As Integer
+        objCategories.Init()
+        For intIndex = 1 To objIncExpAccounts.intElements
+            objCategories.Add(objIncExpAccounts.objElement(intIndex))
+        Next
+        AddAccountTypeToCategories(Account.AccountType.Asset, "A")
+        AddAccountTypeToCategories(Account.AccountType.Liability, "L")
+        AddAccountTypeToCategories(Account.AccountType.Equity, "Q")
+        BuildShortTermsCatKeys()
+    End Sub
+
+    Private Sub AddAccountTypeToCategories(ByVal lngType As Account.AccountType, ByVal strPrefix As String)
+        Dim objCats As List(Of StringTransElement) = New List(Of StringTransElement)
+        Dim elm As StringTransElement
+        For Each objAccount As Account In colAccounts
+            If objAccount.lngType = lngType Then
+                For Each objReg As Register In objAccount.colRegisters
+                    Dim strKey As String = objAccount.intKey.ToString() + "." + objReg.strRegisterKey
+                    elm = New StringTransElement(strKey, strPrefix + ":" + objReg.strTitle, " " + objReg.strTitle)
+                    objCats.Add(elm)
+                Next
+            End If
+        Next
+        objCats.Sort(AddressOf intCategoryComparer)
+        For Each elm In objCats
+            objCategories.Add(elm)
+        Next
+    End Sub
+
+    Private Function intCategoryComparer(ByVal cat1 As StringTransElement, ByVal cat2 As StringTransElement) As Integer
+        Return cat1.strValue1.CompareTo(cat2.strValue1)
+    End Function
+
+    'Set gstrPlaceholderBudgetKey to the key of the budget whose name
+    'is "(budget)", or set it to "---" if there is no such budget.
+    Public Sub FindPlaceholderBudget()
+        Dim intPlaceholderIndex As Integer
+        intPlaceholderIndex = objBudgets.intLookupValue1("(placeholder)")
+        If intPlaceholderIndex > 0 Then
+            gstrPlaceholderBudgetKey = objBudgets.strKey(intPlaceholderIndex)
+        Else
+            'Don't use empty string, because that's the key used
+            'if a split doesn't use a budget.
+            gstrPlaceholderBudgetKey = "---"
+        End If
+    End Sub
+
+    'Set gstrShortTermsCatKeys by the heuristic of looking for
+    'recognizable strings in the category names.
+    Public Sub BuildShortTermsCatKeys()
+        Dim intCatIndex As Integer
+        Dim strCatName As String
+        Dim blnPossibleCredit As Boolean
+        Dim blnPossibleUtility As Boolean
+
+        gstrShortTermsCatKeys = ""
+        For intCatIndex = 1 To objCategories.intElements
+            strCatName = LCase(objCategories.strValue1(intCatIndex))
+
+            blnPossibleUtility = blnHasWord(strCatName, "util") Or blnHasWord(strCatName, "phone") Or
+                blnHasWord(strCatName, "trash") Or blnHasWord(strCatName, "garbage") Or
+                blnHasWord(strCatName, "oil") Or blnHasWord(strCatName, "heat") Or
+                blnHasWord(strCatName, "electric") Or blnHasWord(strCatName, "cable") Or
+                blnHasWord(strCatName, "comcast") Or blnHasWord(strCatName, "web") Or
+                blnHasWord(strCatName, "internet") Or blnHasWord(strCatName, "qwest") Or blnHasWord(strCatName, "verizon")
+
+            blnPossibleCredit = blnHasWord(strCatName, "card") Or blnHasWord(strCatName, "bank") Or
+                blnHasWord(strCatName, "loan") Or blnHasWord(strCatName, "auto") Or
+                blnHasWord(strCatName, "car") Or blnHasWord(strCatName, "truck") Or
+                blnHasWord(strCatName, "mortgage") Or blnHasWord(strCatName, "house")
+
+            If blnPossibleCredit Or blnPossibleUtility Then
+                gstrShortTermsCatKeys = gstrShortTermsCatKeys & strEncodeCatKey(objCategories.strKey(intCatIndex))
+            End If
+        Next
+
+    End Sub
+
+    Private Function blnHasWord(ByVal strCatName As String, ByVal strPrefix As String) As Boolean
+        blnHasWord = (InStr(strCatName, ":" & strPrefix) > 0) Or (InStr(strCatName, " " & strPrefix) > 0)
+    End Function
+
+    Public Shared Function strEncodeCatKey(ByVal strCatKey As String) As String
+        Return "(" & strCatKey & ")"
+    End Function
 End Class

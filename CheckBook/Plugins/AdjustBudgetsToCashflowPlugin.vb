@@ -18,7 +18,7 @@ Public Class AdjustBudgetsToCashflowPlugin
                 Exit Sub
             End If
             Dim frmAdjust As AdjustBudgetsToCashForm = New AdjustBudgetsToCashForm
-            frmAdjust.ShowModal(objReg, gobjBudgets)
+            frmAdjust.ShowModal(objReg, HostUI.objCompany.objBudgets)
             Exit Sub
         Catch ex As Exception
             gTopException(ex)

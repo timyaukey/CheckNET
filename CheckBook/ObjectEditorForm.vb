@@ -7,8 +7,9 @@ Public Class ObjectEditorForm
 
     Private mobjData As IFilePersistable
 
-    Public Function ShowEditor(ByVal objData As IFilePersistable, ByVal strTitle As String) As Boolean
+    Public Function ShowEditor(ByVal objCompany As Company, ByVal objData As IFilePersistable, ByVal strTitle As String) As Boolean
         Dim result As DialogResult
+        StringTranslatorUIEditor.objCompany = objCompany
         mobjData = objData
         grdData.SelectedObject = mobjData
         Me.Text = strTitle

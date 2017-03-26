@@ -14,6 +14,7 @@ Public Class ReconcilePlugin
     Public Overrides Sub ClickHandler(sender As Object, e As EventArgs)
         Try
             Dim frm As ReconAcctSelectForm = New ReconAcctSelectForm
+            frm.Init(HostUI.objCompany)
             frm.ShowDialog()
             Exit Sub
         Catch ex As Exception

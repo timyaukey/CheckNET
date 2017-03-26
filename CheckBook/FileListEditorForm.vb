@@ -6,12 +6,14 @@ Imports CheckBookLib
 
 Public Class FileListEditorForm
 
+    Private mobjCompany As Company
     Private mstrFolder As String
     Private mstrFileType As String
     Private mobjPersister As IFilePersister
 
-    Public Sub ShowDialogForPath(ByVal strTitle As String, ByVal strFolder As String, _
+    Public Sub ShowDialogForPath(ByVal objCompany As Company, ByVal strTitle As String, ByVal strFolder As String,
         ByVal strFileType As String, ByVal objPersister As IFilePersister)
+        mobjCompany = objCompany
         Me.Text = strTitle
         mstrFolder = strFolder
         mstrFileType = strFileType
@@ -76,7 +78,7 @@ Public Class FileListEditorForm
             Try
                 objData = mobjPersister.Load(strFile)
                 Using frm As New ObjectEditorForm
-                    If frm.ShowEditor(objData, Path.GetFileNameWithoutExtension(strFile)) Then
+                    If frm.ShowEditor(mobjCompany, objData, Path.GetFileNameWithoutExtension(strFile)) Then
                         objData.CleanForSave()
                         mobjPersister.Save(objData, strFile)
                         MsgBox("File saved.", MsgBoxStyle.Information)
@@ -101,7 +103,7 @@ Public Class FileListEditorForm
         End If
         objData = mobjPersister.Create(DirectCast(cboNewType.SelectedItem, FilePersistableType).strType, strFile)
         Using frm As New ObjectEditorForm
-            If frm.ShowEditor(objData, Path.GetFileNameWithoutExtension(strFile)) Then
+            If frm.ShowEditor(mobjCompany, objData, Path.GetFileNameWithoutExtension(strFile)) Then
                 objData.CleanForSave()
                 mobjPersister.Save(objData, strFile)
                 MsgBox("File saved.", MsgBoxStyle.Information)

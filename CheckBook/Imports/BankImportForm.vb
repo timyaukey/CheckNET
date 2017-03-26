@@ -9,6 +9,7 @@ Friend Class BankImportForm
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     Private WithEvents mobjAccount As Account
+    Private mobjCompany As Company
     Private mobjImportHandler As IImportHandler
     Private mobjTrxReader As ITrxReader
 
@@ -75,6 +76,7 @@ Friend Class BankImportForm
         Try
 
             mobjAccount = objAccount
+            mobjCompany = mobjAccount.objCompany
             mobjImportHandler = objImportHandler
             mobjTrxReader = objTrxReader
 
@@ -94,7 +96,7 @@ Friend Class BankImportForm
             End If
             DisplayImportItems()
             LoadRegisterList()
-            gLoadComboFromStringTranslator(cboDefaultCategory, gobjCategories, True)
+            gLoadComboFromStringTranslator(cboDefaultCategory, mobjCompany.objCategories, True)
 
             Me.Text = strTitle
             ConfigureButtons()
@@ -361,7 +363,7 @@ Friend Class BankImportForm
                     'If we did not use alternate handling.
                     If Not blnItemImported Then
                         frm = New TrxForm
-                        If Not frm.blnAddNormalSilent(mobjAccount, mobjSelectedRegister, objImportedTrx, datDummy, True, "ImportNewBatch") Then
+                        If Not frm.blnAddNormalSilent(mobjSelectedRegister, objImportedTrx, datDummy, True, "ImportNewBatch") Then
                             'Either the Trx was silently added, or TrxForm was displayed because
                             'of a validation error and the user successfully fixed the problem
                             'and saved the Trx.
@@ -424,7 +426,7 @@ Friend Class BankImportForm
             If cboDefaultCategory.SelectedIndex <> -1 Then
                 lngCatIdx = gintVB6GetItemData(cboDefaultCategory, cboDefaultCategory.SelectedIndex)
                 If lngCatIdx > 0 Then
-                    strDefaultCatKey = gobjCategories.strKey(lngCatIdx)
+                    strDefaultCatKey = mobjCompany.objCategories.strKey(lngCatIdx)
                     objSplit.strCategoryKey = strDefaultCatKey
                 End If
             End If
@@ -914,7 +916,7 @@ Friend Class BankImportForm
     Private Function strSummarizeTrxCat(ByVal objTrx As NormalTrx) As String
 
         If objTrx.lngSplits = 1 Then
-            strSummarizeTrxCat = gobjCategories.strKeyToValue1(objTrx.objFirstSplit.strCategoryKey)
+            strSummarizeTrxCat = mobjCompany.objCategories.strKeyToValue1(objTrx.objFirstSplit.strCategoryKey)
         Else
             strSummarizeTrxCat = "(split)"
         End If
@@ -940,7 +942,7 @@ Friend Class BankImportForm
             '    frm.blnBypassConfirmation = True
             'End If
             With maudtItem(intSelectedItemIndex())
-                If frm.blnAddNormal(mobjAccount, mobjSelectedRegister, .objImportedTrx, datDummy, True, "Import.CreateNew") Then
+                If frm.blnAddNormal(mobjSelectedRegister, .objImportedTrx, datDummy, True, "Import.CreateNew") Then
                     Exit Sub
                 End If
                 .lngStatus = ImportStatus.mlngIMPSTS_NEW
@@ -976,7 +978,7 @@ Friend Class BankImportForm
                 If MsgBox("Create transaction " & strDescribeTrx(.objImportedTrx) & "?", MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton1, "Create Transaction") <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
-                If frm.blnAddNormalSilent(mobjAccount, mobjSelectedRegister, .objImportedTrx, datDummy, True, "ImportNewSilent") Then
+                If frm.blnAddNormalSilent(mobjSelectedRegister, .objImportedTrx, datDummy, True, "ImportNewSilent") Then
                     Exit Sub
                 End If
                 .lngStatus = ImportStatus.mlngIMPSTS_NEW

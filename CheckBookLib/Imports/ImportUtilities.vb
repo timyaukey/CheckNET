@@ -2,12 +2,12 @@ Option Strict On
 Option Explicit On
 
 Public Class ImportUtilities
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     'Helper class for importing transaction information from a bank download file.
     'The caller must parse the information, this class only receives the information
     'and makes Trx objects from it.
 
+    Private mobjCompany As Company
     Private mobjAccount As Account
     Private mblnMakeFakeTrx As Boolean
     Private mblnNoImportKey As Boolean
@@ -37,6 +37,7 @@ Public Class ImportUtilities
 
     Public Sub Init(ByVal objAccount_ As Account)
         mobjAccount = objAccount_
+        mobjCompany = mobjAccount.objCompany
     End Sub
 
     Public Sub LoadTrxTypeTable()
@@ -149,13 +150,13 @@ Public Class ImportUtilities
             strMemo = Trim(mstrTrxMemo)
             datSplitInvoiceDate = System.DateTime.FromOADate(0)
             datSplitDueDate = System.DateTime.FromOADate(0)
-            With gobjCategories
+            With mobjCompany.objCategories
                 intCatIndex = .intLookupValue1(mstrTrxCategory)
                 If intCatIndex > 0 Then
                     strCatKey = .strKey(intCatIndex)
                 End If
             End With
-            With gobjBudgets
+            With mobjCompany.objBudgets
                 intBudIndex = .intLookupValue1(mstrTrxBudget)
                 If intBudIndex > 0 Then
                     strBudKey = .strKey(intBudIndex)

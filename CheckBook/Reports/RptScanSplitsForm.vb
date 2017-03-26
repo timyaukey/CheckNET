@@ -5,7 +5,6 @@ Imports CheckBookLib
 
 Friend Class RptScanSplitsForm
     Inherits System.Windows.Forms.Form
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     'Form to iterate transaction splits for selected accounts in a transaction date
     'range, and process them in some way typically a report or other summary.
@@ -15,6 +14,7 @@ Friend Class RptScanSplitsForm
         glngSPLTRPT_PAYABLES = 2
     End Enum
 
+    Private mobjCompany As Company
     Private mlngRptType As SplitReportType
     Private mlngSplitCount As Integer
     Private mobjHostUI As IHostUI
@@ -42,7 +42,7 @@ Friend Class RptScanSplitsForm
 
     Public Sub ShowMe(ByVal lngType As SplitReportType, ByVal objHostUI As IHostUI)
         Try
-
+            mobjCompany = objHostUI.objCompany
             mlngRptType = lngType
             'This form is an MDI child.
             'This code simulates the VB6 
@@ -52,7 +52,7 @@ Friend Class RptScanSplitsForm
             Me.MdiParent = mobjHostUI.objGetMainForm()
             mobjHostUI.objGetMainForm().Show()
             CustomizeForm()
-            gLoadAccountListBox(lstAccounts)
+            gLoadAccountListBox(lstAccounts, mobjCompany)
             Me.Show()
 
             Exit Sub
@@ -76,7 +76,7 @@ Friend Class RptScanSplitsForm
                     Me.Text = "Accounts Payable Report"
                     lblCategory.Visible = True
                     cboCategory.Visible = True
-                    gLoadComboFromStringTranslator(cboCategory, gobjCategories, True)
+                    gLoadComboFromStringTranslator(cboCategory, mobjCompany.objCategories, True)
                     lblReportDate.Visible = True
                     txtReportDate.Visible = True
                 Case Else
@@ -155,7 +155,7 @@ Friend Class RptScanSplitsForm
                     'MsgBox "You must select a category.", vbCritical
                     'Exit Function
                 Else
-                    mstrCatKey = gobjCategories.strKey(gintVB6GetItemData(cboCategory, cboCategory.SelectedIndex))
+                    mstrCatKey = mobjCompany.objCategories.strKey(gintVB6GetItemData(cboCategory, cboCategory.SelectedIndex))
                 End If
             End If
 
@@ -185,9 +185,9 @@ Friend Class RptScanSplitsForm
 
         Try
 
-            ReDim maudtCatTotals(gobjCategories.intElements)
-            For intCatIndex = 1 To gobjCategories.intElements
-                strCatName = gobjCategories.strValue1(intCatIndex)
+            ReDim maudtCatTotals(mobjCompany.objCategories.intElements)
+            For intCatIndex = 1 To mobjCompany.objCategories.intElements
+                strCatName = mobjCompany.objCategories.strValue1(intCatIndex)
                 For intCharPos = 1 To Len(strCatName)
                     If Mid(strCatName, intCharPos, 1) = ":" Then
                         maudtCatTotals(intCatIndex).intNestingLevel = maudtCatTotals(intCatIndex).intNestingLevel + 1
@@ -212,7 +212,7 @@ Friend Class RptScanSplitsForm
             mlngSplitCount = 0
             For intAcctIdx = 0 To lstAccounts.Items.Count - 1
                 If lstAccounts.GetSelected(intAcctIdx) Then
-                    objAcct = gcolAccounts.Item(intAcctIdx)
+                    objAcct = mobjCompany.colAccounts.Item(intAcctIdx)
                     mcolSelectAccounts.Add(objAcct)
                     For Each objReg In objAcct.colRegisters
                         ScanRegister(objReg)
@@ -297,7 +297,7 @@ Friend Class RptScanSplitsForm
             Dim intAgeBracket As Short
             Select Case mlngRptType
                 Case SplitReportType.glngSPLTRPT_TOTALS
-                    intCatIndex = gobjCategories.intLookupKey(objSplit.strCategoryKey)
+                    intCatIndex = mobjCompany.objCategories.intLookupKey(objSplit.strCategoryKey)
                     If intCatIndex = 0 Then
                         MsgBox("Could not find category key " & objSplit.strCategoryKey & " for " & "trx dated " & gstrFormatDate(objTrx.datDate) & " " & "in register " & objReg.strTitle)
                     Else
@@ -373,7 +373,7 @@ Friend Class RptScanSplitsForm
             Select Case mlngRptType
                 Case SplitReportType.glngSPLTRPT_TOTALS
                     frmSumRpt = New CatSumRptForm
-                    frmSumRpt.ShowMe(maudtCatTotals, mcolSelectAccounts, gobjCategories, mdatStart, mdatEnd,
+                    frmSumRpt.ShowMe(maudtCatTotals, mcolSelectAccounts, mobjCompany.objCategories, mdatStart, mdatEnd,
                                      mblnIncludeFake, mblnIncludeGenerated, mobjHostUI)
                 Case SplitReportType.glngSPLTRPT_PAYABLES
                     strPayables = "Total payables as of " & gstrFormatDate(mdatReportDate) & " are $" & gstrFormatCurrency(mcurPayablesTotal) & vbCrLf & "Payables due in 30 days or less are $" & gstrFormatCurrency(mcurPayablesCurrent) & vbCrLf & "Payables more than 30 days out are $" & gstrFormatCurrency(mcurPayablesFuture)

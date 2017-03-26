@@ -355,7 +355,7 @@ Friend Class ShowRegisterForm
             mintElements = 0
             lstRegisters.Items.Clear()
 
-            For Each objAccount In gcolAccounts
+            For Each objAccount In mobjCompany.colAccounts
                 mintElements = mintElements + 1
                 ReDim Preserve maudtElement(mintElements - 1)
                 With maudtElement(mintElements - 1)
@@ -413,7 +413,7 @@ Friend Class ShowRegisterForm
         With maudtElement(lstRegisters.SelectedIndex)
 
             Using frm As New FileListEditorForm
-                frm.ShowDialogForPath("Transaction Generators", gstrGeneratorPath(.objAccount, .objSelectedReg),
+                frm.ShowDialogForPath(mobjCompany, "Transaction Generators", gstrGeneratorPath(.objAccount, .objSelectedReg),
                     "gen", New TrxGenFilePersister())
             End Using
         End With

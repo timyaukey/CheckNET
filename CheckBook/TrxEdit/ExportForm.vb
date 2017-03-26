@@ -7,6 +7,8 @@ Friend Class ExportForm
     Inherits System.Windows.Forms.Form
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
+    Private mobjCompany As Company
+
     Private mblnCancel As Short
     Private mstrOutputFile As String
     Private mintOutputFile As Short
@@ -27,7 +29,8 @@ Friend Class ExportForm
     Private mdatInvDate As Date
     Private mintInvDays As Short
 
-    Public Function blnGetSettings() As Boolean
+    Public Function blnGetSettings(ByVal objCompany As Company) As Boolean
+        mobjCompany = objCompany
         mblnCancel = True
         mstrOutputFile = gstrReportPath() & "\ExportSplits.csv"
         lblOutputFile.Text = "Will output to " & mstrOutputFile
@@ -153,7 +156,7 @@ Friend Class ExportForm
             End If
 
             strLine = gstrFormatDate(objTrx.datDate) & "," & objTrx.strNumber & ",""" & objTrx.strDescription & """," _
-                & gstrFormatCurrency(objSplit.curAmount) & ",""" & gobjCategories.strKeyToValue1(objSplit.strCategoryKey) _
+                & gstrFormatCurrency(objSplit.curAmount) & ",""" & mobjCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey) _
                 & """," & strDueDate & "," & gstrFormatDate(datDueToUse) & "," & strInvDate & "," _
                 & gstrFormatDate(datInvToUse) & ",""" & objSplit.strPONumber & """,""" & objSplit.strInvoiceNum & """,""" & objSplit.strTerms & """"
 

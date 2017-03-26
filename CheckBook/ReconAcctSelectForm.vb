@@ -6,6 +6,12 @@ Imports CheckBookLib
 Friend Class ReconAcctSelectForm
     Inherits System.Windows.Forms.Form
 
+    Private mobjCompany As Company
+
+    Public Sub Init(ByVal objCompany As Company)
+        mobjCompany = objCompany
+    End Sub
+
     Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCancel.Click
         Me.Close()
     End Sub
@@ -16,7 +22,7 @@ Friend Class ReconAcctSelectForm
 
         Try
 
-            objAccount = gobjGetSelectedAccountAndUnload(lstAccounts, Me)
+            objAccount = gobjGetSelectedAccountAndUnload(lstAccounts, Me, mobjCompany)
             If objAccount Is Nothing Then
                 MsgBox("Please select the account to reconcile.", MsgBoxStyle.Critical)
                 Exit Sub
@@ -34,7 +40,7 @@ Friend Class ReconAcctSelectForm
     Private Sub ReconAcctSelectForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Try
 
-            gLoadAccountListBox(lstAccounts)
+            gLoadAccountListBox(lstAccounts, mobjCompany)
 
             Exit Sub
         Catch ex As Exception
