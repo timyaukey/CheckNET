@@ -132,7 +132,7 @@ Public Module CBMain
         Next frm
 
         frmReg = New RegisterForm
-        frmReg.ShowMe(objAccount, objReg, frmStartup)
+        frmReg.ShowMe(objReg, frmStartup)
     End Sub
 
     Public Sub gSaveChangedAccounts()

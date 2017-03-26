@@ -92,6 +92,14 @@ Public Class TransferTrx
         End Get
     End Property
 
+    Public Overrides Sub UnApply()
+        'Do nothing for TransferTrx
+    End Sub
+
+    Public Overrides Sub Apply(ByVal blnLoading As Boolean)
+        'Do nothing for TransferTrx
+    End Sub
+
     Public Overrides Function objClone(ByVal blnWillAddToRegister As Boolean) As Trx
         Dim objXferTrx As TransferTrx = New TransferTrx(mobjReg)
         objXferTrx.NewStartTransfer(blnWillAddToRegister, mdatDate, mstrDescription, mstrMemo, mblnFake, mblnAwaitingReview,

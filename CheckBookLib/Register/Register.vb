@@ -9,6 +9,8 @@ Public Class Register
     'registers must have those registers loaded as well, which generally means all
     'registers must be loaded.
 
+    'Parent Account.
+    Private mobjAccount As Account
     'Number of elements allocated in maobjTrx().
     Private mlngTrxAllocated As Integer
     'Number of elements used in maobjTrx(). May be < mlngTrxAllocated.
@@ -29,8 +31,6 @@ Public Class Register
     Private mblnShowInitially As Boolean
     'Index of current Trx. Used only by the UI.
     Private mlngTrxCurrent As Integer
-    'Date of oldest fake normal Trx found in LoadPostProcessing().
-    Private mdatOldestFakeNormal As Date
     'Budget Trx with ending date older than this are always zero amount.
     Private mdatOldestBudgetEndAllowed As Date
     'Collection of all Trx that are part of a repeating sequence,
@@ -86,8 +86,9 @@ Public Class Register
     'error is detected.
     Public Event ValidationError(ByVal lngIndex As Integer, ByVal strMsg As String)
 
-    Public Sub Init(ByVal strTitle_ As String, ByVal strRegisterKey_ As String, ByVal blnShowInitially_ As Boolean, ByVal lngAllocationUnit_ As Integer, ByVal datOldestBudgetEndAllowed_ As Date)
+    Public Sub Init(ByVal objAccount_ As Account, ByVal strTitle_ As String, ByVal strRegisterKey_ As String, ByVal blnShowInitially_ As Boolean, ByVal lngAllocationUnit_ As Integer, ByVal datOldestBudgetEndAllowed_ As Date)
 
+        mobjAccount = objAccount_
         mstrTitle = strTitle_
         mstrRegisterKey = strRegisterKey_
         mlngAllocationUnit = lngAllocationUnit_
@@ -95,7 +96,6 @@ Public Class Register
         If mstrRegisterKey = "" Then
             gRaiseError("Missing register key in Register.Init")
         End If
-        mdatOldestFakeNormal = System.DateTime.FromOADate(0)
         mdatOldestBudgetEndAllowed = datOldestBudgetEndAllowed_
         mcolRepeatTrx = New Dictionary(Of String, Trx)
         Erase maobjTrx
@@ -132,20 +132,19 @@ Public Class Register
     '$Param objNew Trx object to add. This actual object instance will
     '   become the register entry, rather than making a copy of it.
 
-    Public Sub NewAddEnd(ByVal objNew As Trx, ByVal objAddLogger As ILogAdd, ByVal strTitle As String)
-
-        Dim lngIndex As Integer
+    Public Sub NewAddEnd(ByVal objNew As Trx, ByVal objAddLogger As ILogAdd, ByVal strTitle As String,
+                         Optional ByVal blnSetChanged As Boolean = True)
 
         If objNew Is Nothing Then
             gRaiseError("objNew is Nothing in Register.NewAddEnd")
         End If
-        If objNew.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-            DirectCast(objNew, NormalTrx).ApplyToBudgets()
+        mlngTrxCurrent = lngNewInsert(objNew)
+        objNew.Apply(False)
+        RaiseEvent TrxAdded(mlngTrxCurrent, objNew)
+        If blnSetChanged Then
+            mobjAccount.SetChanged()
         End If
-        lngIndex = lngNewInsert(objNew)
-        mlngTrxCurrent = lngIndex
-        RaiseEvent TrxAdded(lngIndex, objNew)
-        UpdateFirstAffected(lngIndex)
+        UpdateFirstAffected(mlngTrxCurrent)
         If objNew.intRepeatSeq > 0 Then
             SetRepeatTrx(objNew)
         End If
@@ -253,29 +252,21 @@ Public Class Register
     '   Is optimized for the case where position in the sort order is not changed much.
     '$Param lngIndex The index of the Trx object in the register to move.
 
-    Public Sub UpdateEnd(ByVal lngOldIndex As Integer, ByVal objChangeLogger As ILogChange, ByVal strTitle As String, ByVal objOldTrx As Trx)
+    Public Sub UpdateEnd(ByVal objTrx As Trx, ByVal objChangeLogger As ILogChange, ByVal strTitle As String, ByVal objOldTrx As Trx)
 
-        Dim lngNewIndex As Integer
-        Dim objTrx As Trx
+        Dim lngOldIndex As Integer = objTrx.lngIndex
 
-        'Hack error trap
         Try
 
-            If lngOldIndex < 1 Or lngOldIndex > mlngTrxUsed Then
-                gRaiseError("Invalid index " & lngOldIndex & " passed to Register.UpdateEnd")
-            End If
-            objTrx = Me.objTrx(lngOldIndex)
             If objTrx.intRepeatSeq > 0 Then
                 SetRepeatTrx(objTrx)
             End If
-            If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                DirectCast(objTrx, NormalTrx).ApplyToBudgets()
-            End If
-            lngNewIndex = lngUpdateMove(lngOldIndex)
-            mlngTrxCurrent = lngNewIndex
-            RaiseEvent TrxUpdated(lngOldIndex, lngNewIndex, objTrx)
+            objTrx.Apply(False)
+            mlngTrxCurrent = lngUpdateMove(lngOldIndex)
+            RaiseEvent TrxUpdated(lngOldIndex, mlngTrxCurrent, objTrx)
+            mobjAccount.SetChanged()
             UpdateFirstAffected(lngOldIndex)
-            UpdateFirstAffected(lngNewIndex)
+            UpdateFirstAffected(mlngTrxCurrent)
             FixBalancesAndRefreshUI()
             mobjLog.AddILogChange(objChangeLogger, strTitle, objTrx, objOldTrx)
 
@@ -328,7 +319,7 @@ Public Class Register
     End Sub
 
     Private Sub UpdateFirstAffected(ByVal lngIndex As Integer)
-        If lngIndex < mlngFirstAffected Then
+        If lngIndex < mlngFirstAffected And lngIndex <= mlngTrxUsed Then
             mlngFirstAffected = lngIndex
         End If
     End Sub
@@ -360,6 +351,7 @@ Public Class Register
         objStatusTrx = Me.objTrx(lngIndex)
         objStatusTrx.SetStatus(lngStatus)
         RaiseEvent StatusChanged(lngIndex)
+        mobjAccount.SetChanged()
         'Use an ILogAdd instead of a specialized logger because it's a cheap
         'hack to reuse an existing type with the correct signature rather than
         'define an entire new one solely for this purpose.
@@ -370,7 +362,8 @@ Public Class Register
     '$Description Delete a transaction from the register.
     '$Param lngIndex The index of the Trx to delete.
 
-    Public Sub Delete(ByVal lngIndex As Integer, ByVal objDeleteLogger As ILogDelete, ByVal strTitle As String)
+    Public Sub Delete(ByVal lngIndex As Integer, ByVal objDeleteLogger As ILogDelete, ByVal strTitle As String,
+                      Optional ByVal blnSetChanged As Boolean = True)
         Dim lngMoveIndex As Integer
         Dim objTrxOld As Trx
         Dim objTrx As Trx
@@ -381,15 +374,7 @@ Public Class Register
         objTrx = Me.objTrx(lngIndex)
         With objTrx
             objTrxOld = .objClone(False)
-            'Budget Trx always come before any Split objects applied to
-            'them, so deleting a normal Trx cannot change the index of
-            'any budget Trx affected by the following statement.
-            If TypeOf objTrx Is NormalTrx Then
-                DirectCast(objTrx, NormalTrx).UnApplyFromBudgets()
-            End If
-            If TypeOf objTrx Is BudgetTrx Then
-                DirectCast(objTrx, BudgetTrx).DestroyThisBudget()
-            End If
+            objTrx.UnApply()
             If .strRepeatKey <> "" Then
                 RemoveRepeatTrx(maobjTrx(lngIndex))
             End If
@@ -397,10 +382,17 @@ Public Class Register
         For lngMoveIndex = lngIndex + 1 To mlngTrxUsed
             SetTrx(lngMoveIndex - 1, maobjTrx(lngMoveIndex))
         Next
-        'UPGRADE_NOTE: Object maobjTrx() may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         maobjTrx(mlngTrxUsed) = Nothing
         mlngTrxUsed = mlngTrxUsed - 1
+        If mlngFirstAffected > mlngTrxUsed Then
+            'Will happen when deleting the last Trx in the register,
+            'because will call UnApply() on that Trx.
+            mlngFirstAffected = mlngNO_TRX_AFFECTED
+        End If
         RaiseEvent TrxDeleted(lngIndex)
+        If blnSetChanged Then
+            mobjAccount.SetChanged()
+        End If
         mlngTrxCurrent = lngIndex
         'Condition will be false if last trx deleted.
         If lngIndex <= mlngTrxUsed Then
@@ -450,29 +442,25 @@ Public Class Register
         lngFixBalances = lngLastChange
     End Function
 
-    '$Description Perform all post processing steps after this Register is
-    '   loaded with Trx objects from an external database. Applies everything to
-    '   appropriate budgets, and computes balances.
+    '$Description Call Trx.Apply() on all Trx in this Register after this Register is
+    '   loaded with Trx objects from an external database. This may create additional Trx.
+    '   Must be done for all Trx in all Registers in all Accounts before calling
+    '   LoadFinish() for any Registers in any Accounts.
+
+    Public Sub LoadApply()
+
+        For lngIndex As Integer = 1 To mlngTrxUsed
+            Me.objTrx(lngIndex).Apply(True)
+        Next
+
+    End Sub
+
+    '$Description Perform final post processing steps after this Register is
+    '   loaded and LoadApply() is called. Computes balances.
     '   The register is ready to display in a UI after this.
 
-    Public Sub LoadPostProcessing()
-
-        Dim lngIndex As Integer
-        Dim objTrx As Trx
-
-        For lngIndex = 1 To mlngTrxUsed
-            objTrx = Me.objTrx(lngIndex)
-            If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                DirectCast(objTrx, NormalTrx).ApplyToBudgets()
-                If objTrx.blnFake Then
-                    If mdatOldestFakeNormal = System.DateTime.FromOADate(0) Then
-                        mdatOldestFakeNormal = objTrx.datDate
-                    End If
-                End If
-            End If
-        Next
+    Public Sub LoadFinish()
         lngFixBalances(1)
-
     End Sub
 
     '$Description Remove all generated Trx from the Register, and clear
@@ -482,7 +470,7 @@ Public Class Register
         Dim lngInIndex As Integer
         Dim lngOutIndex As Integer
         Dim objTrx As Trx
-        Dim objSplit As TrxSplit
+        'Dim objSplit As TrxSplit
 
         If mlngTrxUsed = 0 Then
             Exit Sub
@@ -490,6 +478,7 @@ Public Class Register
         lngOutIndex = 0
         For lngInIndex = 1 To mlngTrxUsed
             objTrx = maobjTrx(lngInIndex)
+            objTrx.UnApply()
             If objTrx.blnAutoGenerated Then
                 If objTrx.strRepeatKey <> "" Then
                     RemoveRepeatTrx(objTrx)
@@ -498,11 +487,11 @@ Public Class Register
                 lngOutIndex = lngOutIndex + 1
                 SetTrx(lngOutIndex, objTrx)
                 If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
-                    DirectCast(objTrx, BudgetTrx).ClearThisBudget()
+                    'DirectCast(objTrx, BudgetTrx).ClearThisBudget()
                 ElseIf objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-                    For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
-                        objSplit.ClearBudgetReference()
-                    Next objSplit
+                    'For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
+                    '    objSplit.ClearBudgetReference()
+                    'Next objSplit
                 End If
             End If
         Next
@@ -1041,29 +1030,24 @@ Public Class Register
     '   will be the latest dated budget Trx whose budget period includes datDate,
     '   and with the exact same strBudgetKey value.
 
-    Public Function lngMatchBudget(ByVal datDate As Date, ByVal strBudgetKey As String, ByRef blnNoMatch As Boolean) As Integer
+    Public Function objMatchBudget(ByVal datDate As Date, ByVal strBudgetKey As String, ByRef blnNoMatch As Boolean) As BudgetTrx
 
         Dim lngIndex As Integer
-        Dim objTrx As Trx
+        Dim objBudgetTrx As BudgetTrx
 
-        lngMatchBudget = 0
         blnNoMatch = False
         For lngIndex = mlngTrxUsed To 1 Step -1
-            objTrx = Me.objTrx(lngIndex)
-            If TypeOf objTrx Is BudgetTrx Then
-                With DirectCast(objTrx, BudgetTrx)
-                    If .lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
-                        If datDate >= .datDate And datDate <= .datBudgetEnds Then
-                            If strBudgetKey = .strBudgetKey Then
-                                lngMatchBudget = lngIndex
-                                Exit Function
-                            End If
-                        End If
+            objBudgetTrx = TryCast(Me.objTrx(lngIndex), BudgetTrx)
+            If Not objBudgetTrx Is Nothing Then
+                If datDate >= objBudgetTrx.datDate And datDate <= objBudgetTrx.datBudgetEnds Then
+                    If strBudgetKey = objBudgetTrx.strBudgetKey Then
+                        Return objBudgetTrx
                     End If
-                End With
+                End If
             End If
         Next
         blnNoMatch = True
+        Return Nothing
 
     End Function
 
@@ -1151,6 +1135,11 @@ Public Class Register
         End Get
     End Property
 
+    Public ReadOnly Property objAccount() As Account
+        Get
+            Return mobjAccount
+        End Get
+    End Property
 
     Public Property strTitle() As String
         Get
@@ -1159,6 +1148,7 @@ Public Class Register
         Set(ByVal Value As String)
             mstrTitle = Value
             RaiseEvent MiscChange()
+            mobjAccount.SetChanged()
         End Set
     End Property
 
@@ -1168,13 +1158,6 @@ Public Class Register
         End Get
     End Property
 
-    Public ReadOnly Property datOldestFakeNormal() As Date
-        Get
-            datOldestFakeNormal = mdatOldestFakeNormal
-        End Get
-    End Property
-
-
     Public Property blnShowInitially() As Boolean
         Get
             blnShowInitially = mblnShowInitially
@@ -1182,6 +1165,7 @@ Public Class Register
         Set(ByVal Value As Boolean)
             mblnShowInitially = Value
             RaiseEvent MiscChange()
+            mobjAccount.SetChanged()
         End Set
     End Property
 

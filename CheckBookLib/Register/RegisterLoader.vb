@@ -32,16 +32,6 @@ Public Class RegisterLoader
     Private mstrRepeatKey As String
     Private mblnFake As Boolean
 
-    'Generate Trx repeat specifications.
-    'Unit the repeat interval is stated in.
-    Private mlngRptUnit As Trx.RepeatUnit
-    'Number of units in repeat interval.
-    Private mintRptNumber As Short
-    'Ending date of this repeat series.
-    Private mdatRptEnd As Date
-    'Max ending date of any repeat series.
-    Private mdatRptEndMax As Date
-
     'Split data.
     Private mstrSMemo As String
     Private mstrSCategoryKey As String
@@ -67,11 +57,11 @@ Public Class RegisterLoader
     '   this method.
 
     Public Sub LoadFile(ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer,
-            ByVal intFile As Integer, ByVal blnFake As Boolean, ByVal datRptEndMax_ As Date, ByRef lngLinesRead As Integer)
+            ByVal intFile As Integer, ByVal blnFake As Boolean, ByRef lngLinesRead As Integer)
 
         Try
 
-            LoadInit(objReg, objRepeatSummarizer, blnFake, datRptEndMax_, lngLinesRead)
+            LoadInit(objReg, objRepeatSummarizer, blnFake, lngLinesRead)
 
             Do
                 If EOF(intFile) Then
@@ -98,17 +88,16 @@ Public Class RegisterLoader
 
         intFile = FreeFile()
         FileOpen(intFile, strFile, OpenMode.Input)
-        LoadFile(objReg, objRepeatSummarizer, intFile, False, #1/1/1980#, lngLinesRead)
+        LoadFile(objReg, objRepeatSummarizer, intFile, False, lngLinesRead)
         FileClose(intFile)
 
     End Sub
 
-    Private Sub LoadInit(ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer, ByVal blnFake As Boolean, ByVal datRptEndMax_ As Date, ByRef lngLinesRead As Integer)
+    Private Sub LoadInit(ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer, ByVal blnFake As Boolean, ByRef lngLinesRead As Integer)
 
         mobjReg = objReg
         mobjRepeatSummarizer = objRepeatSummarizer
         mblnFake = blnFake
-        mdatRptEndMax = datRptEndMax_
         mlngLinesRead = lngLinesRead
         ClearTrxData()
     End Sub
@@ -205,15 +194,15 @@ Public Class RegisterLoader
             Case ".T"
                 CreateTrx()
                 ClearTrxData()
-            Case "GU"
-                'This line will be ignored in contexts where it is not used.
-                mlngRptUnit = lngConvertRepeatUnit(Mid(mstrLine, 3), "GU line")
-            Case "GN"
-                'This line will be ignored in contexts where it is not used.
-                mintRptNumber = intConvertRepeatCount(Mid(mstrLine, 3), "GN line")
-            Case "GE"
-                'This line will be ignored in contexts where it is not used.
-                mdatRptEnd = datConvertInput(Mid(mstrLine, 3), "repeat sequence end")
+            'Case "GU"
+            '    'This line will be ignored in contexts where it is not used.
+            '    mlngRptUnit = lngConvertRepeatUnit(Mid(mstrLine, 3), "GU line")
+            'Case "GN"
+            '    'This line will be ignored in contexts where it is not used.
+            '    mintRptNumber = intConvertRepeatCount(Mid(mstrLine, 3), "GN line")
+            'Case "GE"
+            '    'This line will be ignored in contexts where it is not used.
+            '    mdatRptEnd = datConvertInput(Mid(mstrLine, 3), "repeat sequence end")
             Case "SM"
                 If mlngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
                     RaiseErrorInLoad("SM only allowed for normal Trx")
@@ -295,10 +284,6 @@ Public Class RegisterLoader
         mstrBudgetKey = ""
         mintRepeatSeq = 0
         mstrRepeatKey = ""
-
-        mlngRptUnit = Trx.RepeatUnit.glngRPTUNT_MISSING
-        mintRptNumber = 0
-        mdatRptEnd = System.DateTime.FromOADate(0)
 
         ClearSplitData()
         mcolSplits = New List(Of TrxSplit)

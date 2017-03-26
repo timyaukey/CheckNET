@@ -93,29 +93,55 @@ Friend Class CBMainForm
                 astrFiles(intFiles - 1) = strFile
                 strFile = Dir()
             End While
-            'Load them all.
+
+            'Load real trx, and non-generated fake trx, for all of them.
             For Each strFile In astrFiles
                 objAccount = New Account
                 objAccount.Init(mobjEverything)
                 frmStartup.Configure(objAccount)
-                objAccount.Load(strFile)
+                objAccount.LoadStart(strFile)
                 mobjEverything.colAccounts.Add(objAccount)
                 frmStartup.Configure(Nothing)
             Next strFile
 
+            'With all Account objects loaded we can add them to the category list.
             gLoadCategories(mobjEverything)
+
+            'Load generated transactions for all of them.
+            For Each objAccount In mobjEverything.colAccounts
+                frmStartup.Configure(objAccount)
+                objAccount.LoadGenerated()
+                frmStartup.Configure(Nothing)
+            Next
+
+            'Call Trx.Apply() for all Trx loaded above.
+            'This will create ReplicaTrx.
+            For Each objAccount In mobjEverything.colAccounts
+                frmStartup.Configure(objAccount)
+                objAccount.LoadApply()
+                frmStartup.Configure(Nothing)
+            Next
+
+            'Perform final steps after all Trx exist, including computing running balances.
+            For Each objAccount In mobjEverything.colAccounts
+                frmStartup.Configure(objAccount)
+                objAccount.LoadFinish()
+                frmStartup.Configure(Nothing)
+            Next
 
             frmStartup.ShowStatus("Loading main window")
 
             mblnCancelStart = False
 
             For Each objAccount In mobjEverything.colAccounts
+                frmStartup.Configure(objAccount)
                 For Each objReg In objAccount.colRegisters
                     If objReg.blnShowInitially Then
                         gShowRegister(objAccount, objReg, frmStartup)
                     End If
-                Next objReg
-            Next objAccount
+                Next
+                frmStartup.Configure(Nothing)
+            Next
 
             frmStartup.Close()
             frmStartup = frmStartup

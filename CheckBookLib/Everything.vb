@@ -21,15 +21,18 @@ Public Class Everything
 
     Public Function blnAccountKeyUsed(ByVal intKey As Integer) As Boolean
         For Each act As Account In colAccounts
-            If act.intKey > mintMaxAccountKey Then
-                mintMaxAccountKey = act.intKey
-            End If
             If act.intKey = intKey Then
                 Return True
             End If
         Next
         Return False
     End Function
+
+    Public Sub UseAccountKey(ByVal intKey As Integer)
+        If intKey > mintMaxAccountKey Then
+            mintMaxAccountKey = intKey
+        End If
+    End Sub
 
     Public Function intGetUnusedAccountKey() As Integer
         'We cannot just check colAccounts, because a new Account

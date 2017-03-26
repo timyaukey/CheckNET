@@ -24,8 +24,10 @@ Public Class TrxSplit
     'Amount of this Split.
     Private mcurAmount As Decimal
 
-    'Reference to budget Trx for this Split.
+    'Possible reference to BudgetTrx for this TrxSplit.
     Private mobjBudget As BudgetTrx
+    'Possible reference to ReplicaTrxManager for this TrxSplit.
+    Private mobjReplicaManager As ReplicaTrxManager
 
     '$Description Initialize a new Split object.
 
@@ -116,10 +118,13 @@ Public Class TrxSplit
         End Get
     End Property
 
-    Public ReadOnly Property objBudget() As BudgetTrx
+    Public Property objBudget() As BudgetTrx
         Get
-            objBudget = mobjBudget
+            Return mobjBudget
         End Get
+        Set(ByVal Value As BudgetTrx)
+            mobjBudget = Value
+        End Set
     End Property
 
     Public ReadOnly Property curAmount() As Decimal
@@ -142,7 +147,7 @@ Public Class TrxSplit
 
     Public Sub ApplyToBudget(ByVal objReg As Register, ByVal datDate As Date, ByRef blnNoMatch As Boolean)
 
-        Dim lngMatchIndex As Integer
+        Dim objBudgetTrx As BudgetTrx
 
         'UPGRADE_NOTE: Object mobjBudget may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         mobjBudget = Nothing
@@ -150,12 +155,10 @@ Public Class TrxSplit
         If mstrBudgetKey = "" Or mstrBudgetKey = gstrPlaceholderBudgetKey Then
             Exit Sub
         End If
-        lngMatchIndex = objReg.lngMatchBudget(datDate, mstrBudgetKey, blnNoMatch)
-        If lngMatchIndex = 0 Then
-            Exit Sub
+        objBudgetTrx = objReg.objMatchBudget(datDate, mstrBudgetKey, blnNoMatch)
+        If Not objBudgetTrx Is Nothing Then
+            objBudgetTrx.ApplyToThisBudget(Me)
         End If
-        mobjBudget = DirectCast(objReg.objTrx(lngMatchIndex), BudgetTrx)
-        mobjBudget.ApplyToThisBudget(Me, objReg)
 
     End Sub
 
@@ -165,16 +168,39 @@ Public Class TrxSplit
 
     Friend Sub UnApplyFromBudget(ByVal objReg As Register)
         If Not mobjBudget Is Nothing Then
-            mobjBudget.UnApplyFromThisBudget(Me, objReg)
-            ClearBudgetReference()
+            mobjBudget.UnApplyFromThisBudget(Me)
+            mobjBudget = Nothing
         End If
     End Sub
 
-    '$Description Clear any reference to a budget Trx.
-    '   Used outside this class only by Trx.DestroyThisBudget().
+    Friend Sub CreateReplicaTrx(ByVal objEverything_ As Everything, ByVal objNormalTrx As NormalTrx, ByVal blnLoading As Boolean)
+        Dim intDotOffset As Integer = mstrCategoryKey.IndexOf("."c)
+        If intDotOffset > 0 Then
+            Dim intAccountKey As Integer = Integer.Parse(mstrCategoryKey.Substring(0, intDotOffset))
+            For Each objAccount In objEverything_.colAccounts
+                If objAccount.intKey = intAccountKey Then
+                    Dim strRegKey As String = mstrCategoryKey.Substring(intDotOffset + 1)
+                    For Each objReg In objAccount.colRegisters
+                        If objReg.strRegisterKey = strRegKey Then
+                            Dim objReplicaTrx As ReplicaTrx = New ReplicaTrx(objReg)
+                            objReplicaTrx.NewStartReplica(True, objNormalTrx.datDate, objNormalTrx.strDescription, -mcurAmount, objNormalTrx.blnFake)
+                            If blnLoading Then
+                                objReg.NewLoadEnd(objReplicaTrx)
+                            Else
+                                objReg.NewAddEnd(objReplicaTrx, New LogAddNull(), "", blnSetChanged:=False)
+                            End If
+                            mobjReplicaManager = objReplicaTrx.objGetTrxManager()
+                        End If
+                    Next
+                End If
+            Next
+        End If
+    End Sub
 
-    Friend Sub ClearBudgetReference()
-        'UPGRADE_NOTE: Object mobjBudget may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        mobjBudget = Nothing
+    Friend Sub DeleteReplicaTrx()
+        If Not mobjReplicaManager Is Nothing Then
+            mobjReplicaManager.objTrx.objReg.Delete(mobjReplicaManager.objTrx.lngIndex, New LogDeleteNull(), "", blnSetChanged:=False)
+            mobjReplicaManager = Nothing
+        End If
     End Sub
 End Class

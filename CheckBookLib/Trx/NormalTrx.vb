@@ -193,17 +193,38 @@ Public Class NormalTrx
         End Get
     End Property
 
+    Public Overrides Sub UnApply()
+        'Regenerating generated Trx must cause this and Apply() to be called.
+        UnApplyFromBudgets()
+        DeleteReplicaTrx()
+    End Sub
+
+    Public Overrides Sub Apply(ByVal blnLoading As Boolean)
+        ApplyToBudgets()
+        CreateReplicaTrx(blnLoading)
+    End Sub
+
     '$Description Apply the Split objects in this Trx to any matching budgets.
     '   Does nothing except for normal Trx.
 
     Public Sub ApplyToBudgets()
-        Dim objSplit As TrxSplit
         Dim blnNoMatch As Boolean
         mblnAnyUnmatchedBudget = False
-        For Each objSplit In mcolSplits
-            objSplit.ApplyToBudget(objReg, mdatDate, blnNoMatch)
-            mblnAnyUnmatchedBudget = mblnAnyUnmatchedBudget Or blnNoMatch
-        Next objSplit
+        For Each objSplit As TrxSplit In mcolSplits
+            If objSplit.objBudget Is Nothing Then
+                objSplit.ApplyToBudget(objReg, mdatDate, blnNoMatch)
+                mblnAnyUnmatchedBudget = mblnAnyUnmatchedBudget Or blnNoMatch
+            End If
+        Next
+    End Sub
+
+    Public Sub CreateReplicaTrx(ByVal blnLoading As Boolean)
+        If Not objReg.objAccount Is Nothing Then
+            Dim objEverything As Everything = objReg.objAccount.objEverything
+            For Each objSplit As TrxSplit In mcolSplits
+                objSplit.CreateReplicaTrx(objEverything, Me, blnLoading)
+            Next
+        End If
     End Sub
 
     '$Description If Split objects for this Trx have been applied to any budgets,
@@ -211,10 +232,15 @@ Public Class NormalTrx
     '   not currently applied to budgets. Does nothing except for normal Trx.
 
     Public Sub UnApplyFromBudgets()
-        Dim objSplit As TrxSplit
-        For Each objSplit In mcolSplits
+        For Each objSplit As TrxSplit In mcolSplits
             objSplit.UnApplyFromBudget(objReg)
         Next objSplit
+    End Sub
+
+    Public Sub DeleteReplicaTrx()
+        For Each objSplit As TrxSplit In mcolSplits
+            objSplit.DeleteReplicaTrx()
+        Next
     End Sub
 
     '$Description Update a Trx as a result of matching it to imported bank data.

@@ -58,7 +58,6 @@
         Me.cmdRegen.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.cmdRegen.BackColor = System.Drawing.SystemColors.Control
         Me.cmdRegen.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdRegen.Enabled = False
         Me.cmdRegen.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdRegen.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdRegen.Location = New System.Drawing.Point(12, 341)

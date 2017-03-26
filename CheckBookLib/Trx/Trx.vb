@@ -304,6 +304,9 @@ Public MustInherit Class Trx
         mcurBalance = curNewBal
     End Sub
 
+    Public MustOverride Sub UnApply()
+    Public MustOverride Sub Apply(ByVal blnLoading As Boolean)
+
     Public Delegate Sub AddSearchMaxTrxDelegate(ByVal objTrx As Trx)
     Public Delegate Sub AddSearchMaxSplitDelegate(ByVal objTrx As Trx, ByVal objSplit As TrxSplit)
 

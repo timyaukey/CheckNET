@@ -93,6 +93,8 @@
     <Compile Include="Imports\DepositImportPlugin.vb" />
     <Compile Include="IStringTranslator.vb" />
     <Compile Include="LineStringTranslator.vb" />
+    <Compile Include="Logging\LogAddNull.vb" />
+    <Compile Include="Logging\LogDeleteNull.vb" />
     <Compile Include="Plugins\IHostUI.vb" />
     <Compile Include="Imports\IImportHandler.vb" />
     <Compile Include="Imports\InvoiceImportPlugin.vb" />

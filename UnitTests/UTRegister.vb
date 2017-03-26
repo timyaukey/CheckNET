@@ -27,6 +27,8 @@ Public Class UTRegister
     Private maudtTrx() As UTTrx
     Public intTrx As Integer
 
+    Private mobjEverything As Everything
+    Private mobjAccount As Account
     'The Register managed by this UTRegister.
     Private WithEvents mobjReg As Register
 
@@ -47,8 +49,11 @@ Public Class UTRegister
     'Initialize a new UTRegister with an empty Register.
 
     Public Sub Init(ByVal strRegisterKey As String)
+        mobjEverything = New Everything()
+        mobjAccount = New Account()
+        mobjAccount.Init(mobjEverything)
         mobjReg = New Register
-        mobjReg.Init("title", strRegisterKey, False, 3, DateAdd(Microsoft.VisualBasic.DateInterval.Year, -20, Today))
+        mobjReg.Init(mobjAccount, "title", strRegisterKey, False, 3, DateAdd(Microsoft.VisualBasic.DateInterval.Year, -20, Today))
     End Sub
 
     'The Register managed by this UTRegister.

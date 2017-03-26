@@ -267,7 +267,8 @@ Friend Class UTMainForm
             objUTReg.LoadNormal("DEP", #4/19/2000#, 120D, strBudgetKey:="bud4")
             objUTReg.SetTrxAmount(15, 0.0D)
         End If
-        objUTReg.objReg.LoadPostProcessing()
+        objUTReg.objReg.LoadApply()
+        objUTReg.objReg.LoadFinish()
         objLoadBuild = objUTReg
 
     End Function
@@ -842,6 +843,8 @@ Friend Class UTMainForm
     End Sub
 
     Private Sub TestFileLoad1()
+        Dim objEverything As Everything
+        Dim objAccount As Account
         Dim objReg As Register
         Dim objTrx As Trx
         Dim objSplit As TrxSplit
@@ -849,7 +852,10 @@ Friend Class UTMainForm
         gUTSetTestTitle("TestFileLoad1")
 
         gUTSetSubTest("Load")
-        objReg = objLoadFile("UTRegLoad1.txt")
+        objEverything = New Everything()
+        objAccount = New Account()
+        objAccount.Init(objEverything)
+        objReg = objLoadFile(objAccount, "UTRegLoad1.txt")
         If objReg.lngTrxCount <> 4 Then
             Exit Sub
         End If
@@ -911,7 +917,7 @@ Friend Class UTMainForm
 
     End Sub
 
-    Private Function objLoadFile(ByVal strFileName As String) As Register
+    Private Function objLoadFile(ByVal objAccount As Account, ByVal strFileName As String) As Register
         Dim objLoader As RegisterLoader
         'Dim intFile As Short
         Dim objReg As Register
@@ -920,11 +926,12 @@ Friend Class UTMainForm
 
         objLoader = New RegisterLoader
         objReg = New Register
-        objReg.Init("Regular", "reg", False, 3, System.DateTime.FromOADate(0))
+        objReg.Init(objAccount, "Regular", "reg", False, 3, System.DateTime.FromOADate(0))
         objRepeatSummarizer = New RepeatSummarizer()
         lngLinesRead = 0
         objLoader.LoadFileUT(objReg, objRepeatSummarizer, gstrAddPath("UTData\" & strFileName), False, #1/1/1980#, lngLinesRead)
-        objReg.LoadPostProcessing()
+        objReg.LoadApply()
+        objReg.LoadFinish()
         objLoadFile = objReg
     End Function
 
@@ -1414,7 +1421,8 @@ Friend Class UTMainForm
         objUTReg = gobjUTNewReg()
         With objUTReg
             .LoadNormal("1500", #6/1/2000#, -50.75D, strRepeatKey:="r1", intRepeatSeq:=1)
-            .objReg.LoadPostProcessing()
+            .objReg.LoadApply()
+            .objReg.LoadFinish()
             .Validate("", 1)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 1, "count")
         End With
@@ -1424,7 +1432,8 @@ Friend Class UTMainForm
         With objUTReg
             .LoadNormal("1500", #6/1/2000#, -50.75D, strRepeatKey:="r1", intRepeatSeq:=1)
             .LoadNormal("1501", #6/2/2000#, -10D, strRepeatKey:="r1", intRepeatSeq:=2)
-            .objReg.LoadPostProcessing()
+            .objReg.LoadApply()
+            .objReg.LoadFinish()
             .Validate("", 1, 2)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
         End With
@@ -1436,7 +1445,8 @@ Friend Class UTMainForm
             .LoadNormal("1501", #6/2/2000#, -10D, strRepeatKey:="r1", intRepeatSeq:=2)
             .LoadNormal("1499", #6/30/2000#, -10D, strRepeatKey:="r2", intRepeatSeq:=1)
             .LoadNormal("1502", #7/1/2000#, -20D)
-            .objReg.LoadPostProcessing()
+            .objReg.LoadApply()
+            .objReg.LoadFinish()
             .Validate("", 1, 2, 3, 4)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 3, "count")
         End With
@@ -1585,7 +1595,8 @@ Friend Class UTMainForm
             .LoadNormal("1501", #6/1/2000#, -20D, strRepeatKey:="r1", intRepeatSeq:=1)
             .LoadBudget(#5/15/2000#, -1000D, #6/10/2000#, "01")
             .LoadBudget(#5/20/2000#, -500D, #6/12/2000#, "02", strRepeatKey:="r2", intRepeatSeq:=1)
-            .objReg.LoadPostProcessing()
+            .objReg.LoadApply()
+            .objReg.LoadFinish()
             .Validate("", 3, 4, 1, 2)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
             .AddBudget(#6/3/2000#, -100D, #6/20/2000#, "03", "", 5, 5, 5, strRepeatKey:="r2", intRepeatSeq:=2)

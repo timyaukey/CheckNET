@@ -135,21 +135,17 @@ Public Class Account
     '   Must always be called immediately after Init().
     '$Param strAcctFile Name of account file, without path.
 
-    Public Sub Load(ByVal strAcctFile As String)
-        Dim datRegisterEndDate As Date
+    Public Sub LoadStart(ByVal strAcctFile As String)
 
         RaiseEvent LoadStatus("Loading " & strAcctFile)
         mstrFileLoaded = strAcctFile
         mblnUnsavedChanges = False
-        datRegisterEndDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, 45, Today)
         mcolRegisters = New List(Of Register)
-        LoadIndividual(strAcctFile, datRegisterEndDate)
-        LoadGenerated(strAcctFile, datRegisterEndDate)
-        LoadFinish(strAcctFile)
-        RaiseEvent LoadStatus("Load complete")
+        LoadIndividual()
+        'LoadGenerated()
     End Sub
 
-    Private Sub LoadIndividual(strAcctFile As String, datRegisterEndDate As Date)
+    Private Sub LoadIndividual()
         Dim intFile As Integer
         Dim strLine As String
         Dim lngLinesRead As Integer
@@ -161,7 +157,7 @@ Public Class Account
         Try
 
             intFile = FreeFile()
-            FileOpen(intFile, gstrAccountPath() & "\" & strAcctFile, OpenMode.Input)
+            FileOpen(intFile, gstrAccountPath() & "\" & mstrFileLoaded, OpenMode.Input)
 
             strLine = LineInput(intFile)
             lngLinesRead = lngLinesRead + 1
@@ -191,6 +187,7 @@ Public Class Account
                             Throw New Exception("Duplicate use of account key " & intNewKey)
                         End If
                         mintKey = intNewKey
+                        mobjEverything.UseAccountKey(mintKey)
                     Case "AY"
                         Select Case Mid(strLine, 3, 1)
                             Case "A"
@@ -228,10 +225,10 @@ Public Class Account
                         blnRegShow = False
                     Case "RL"
                         'Load individual non-fake Trx into Register.
-                        LoadRegister(strLine, False, intFile, datRegisterEndDate, lngLinesRead)
+                        LoadRegister(strLine, False, intFile, lngLinesRead)
                     Case "RF"
                         'Load individual fake Trx into Register.
-                        LoadRegister(strLine, True, intFile, datRegisterEndDate, lngLinesRead)
+                        LoadRegister(strLine, True, intFile, lngLinesRead)
                     Case "RR"
                         'Was the repeating register
                         SkipLegacyRegister(intFile)
@@ -245,29 +242,42 @@ Public Class Account
             FileClose(intFile)
         Catch ex As Exception
             FileClose(intFile)
-            Throw New Exception("Error in Account.LoadIndividual(" & strAcctFile & ";" & lngLinesRead & ")", ex)
+            Throw New Exception("Error in Account.LoadIndividual(" & mstrFileLoaded & ";" & lngLinesRead & ")", ex)
         End Try
     End Sub
 
-    Private Sub LoadGenerated(strAcctFile As String, datRegisterEndDate As Date)
+    Public Sub LoadGenerated()
         Dim objReg As Register
 
         Try
+            Dim datRegisterEndDate As Date = DateAdd(Microsoft.VisualBasic.DateInterval.Day, 45, Today)
             'Create generated Trx.
             'Have to generate for all registers before computing
             'balances or doing any post processing for any of them,
             'because generating a transfer adds Trx to two registers.
-            RaiseEvent LoadStatus("Creating generated transactions")
+            RaiseEvent LoadStatus("Generate for " + mstrTitle)
             For Each objReg In mcolRegisters
                 gCreateGeneratedTrx(Me, objReg, datRegisterEndDate)
             Next objReg
         Catch ex As Exception
-            Throw New Exception("Error in Account.LoadGenerated(" & strAcctFile & ")", ex)
+            Throw New Exception("Error in Account.LoadGenerated(" & mstrFileLoaded & ")", ex)
         End Try
     End Sub
 
-    Private Sub LoadFinish(strAcctFile As String)
-        Dim objReg As Register
+    Public Sub LoadApply()
+        Try
+            RaiseEvent LoadStatus("Apply for " + mstrTitle)
+            For Each objReg As Register In mcolRegisters
+                objReg.LoadApply()
+            Next
+
+            Exit Sub
+        Catch ex As Exception
+            Throw New Exception("Error in Account.LoadApply(" & mstrFileLoaded & ")", ex)
+        End Try
+    End Sub
+
+    Public Sub LoadFinish()
         Try
 
             'Construct repeat key StringTranslator from actual transaction
@@ -275,15 +285,14 @@ Public Class Account
             mobjRepeats = mobjRepeatSummarizer.BuildStringTranslator()
 
             'Call LoadPostProcessing after everything has been loaded.
-            RaiseEvent LoadStatus("Load postprocessing")
-            For Each objReg In mcolRegisters
-                objReg.LoadPostProcessing()
-            Next objReg
+            RaiseEvent LoadStatus("Finish " + mstrTitle)
+            For Each objReg As Register In mcolRegisters
+                objReg.LoadFinish()
+            Next
 
             Exit Sub
-
         Catch ex As Exception
-            Throw New Exception("Error in Account.LoadFinish(" & strAcctFile & ")", ex)
+            Throw New Exception("Error in Account.LoadFinish(" & mstrFileLoaded & ")", ex)
         End Try
     End Sub
 
@@ -315,12 +324,7 @@ Public Class Account
 
         'Compute budgets and balances.
         For Each objReg In mcolRegisters
-            objReg.LoadPostProcessing()
-        Next objReg
-
-        'Tell all register windows to refresh themselves.
-        For Each objReg In mcolRegisters
-            objReg.FireRedisplayTrx()
+            objReg.LoadApply()
         Next objReg
 
     End Sub
@@ -339,35 +343,8 @@ Public Class Account
             gRaiseError("Reg key already used in RI line")
         End If
         objReg = New Register
-        objReg.Init(strRegTitle, strRegKey, blnRegShow, 32, DateAdd(Microsoft.VisualBasic.DateInterval.Day, -1, Today))
+        objReg.Init(Me, strRegTitle, strRegKey, blnRegShow, 32, DateAdd(Microsoft.VisualBasic.DateInterval.Day, -1, Today))
         mcolRegisters.Add(objReg)
-        AddHandler objReg.StatusChanged, AddressOf objReg_StatusChanged
-        AddHandler objReg.TrxAdded, AddressOf objReg_TrxAdded
-        AddHandler objReg.TrxDeleted, AddressOf objReg_TrxDeleted
-        AddHandler objReg.TrxUpdated, AddressOf objReg_TrxUpdated
-        AddHandler objReg.MiscChange, AddressOf objReg_MiscChange
-    End Sub
-
-    Private Sub objReg_StatusChanged(ByVal lngIndex As Integer)
-        SetChanged()
-    End Sub
-
-    Private Sub objReg_TrxAdded(ByVal lngIndex As Integer, ByVal objTrx As Trx)
-        If Not objTrx.blnAutoGenerated Then
-            SetChanged()
-        End If
-    End Sub
-
-    Private Sub objReg_TrxDeleted(ByVal lngIndex As Integer)
-        SetChanged()
-    End Sub
-
-    Private Sub objReg_TrxUpdated(ByVal lngOldIndex As Integer, ByVal lngNewIndex As Integer, ByVal objTrx As Trx)
-        SetChanged()
-    End Sub
-
-    Private Sub objReg_MiscChange()
-        SetChanged()
     End Sub
 
     Public Sub SetChanged()
@@ -376,7 +353,7 @@ Public Class Account
         objEverything.FireSomethingModified()
     End Sub
 
-    Private Sub LoadRegister(ByVal strLine As String, ByVal blnFake As Boolean, ByVal intFile As Integer, ByVal datRptEndMax As Date, ByRef lngLinesRead As Integer)
+    Private Sub LoadRegister(ByVal strLine As String, ByVal blnFake As Boolean, ByVal intFile As Integer, ByRef lngLinesRead As Integer)
 
         Dim strSearchRegKey As String
         Dim objReg As Register
@@ -387,7 +364,7 @@ Public Class Account
             gRaiseError("Register key " & strSearchRegKey & " not found in " & Left(strLine, 2) & " line")
         Else
             mobjLoader = New RegisterLoader
-            mobjLoader.LoadFile(objReg, mobjRepeatSummarizer, intFile, blnFake, datRptEndMax, lngLinesRead)
+            mobjLoader.LoadFile(objReg, mobjRepeatSummarizer, intFile, blnFake, lngLinesRead)
             mobjLoader = Nothing
         End If
     End Sub

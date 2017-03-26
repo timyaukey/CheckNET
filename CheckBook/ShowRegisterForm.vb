@@ -306,32 +306,34 @@ Friend Class ShowRegisterForm
     End Sub
 
     Private Sub cmdRegen_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRegen.Click
-        Dim strRegisterEndDate As String
 
         Try
 
-            If lstRegisters.SelectedIndex < 0 Then
-                MsgBox("Please select an account first.", MsgBoxStyle.Critical)
-                Exit Sub
+            Dim strRegisterEndDate As String = InputBox("Enter ending date to generate transactions through:",
+                "Ending Date", gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, 90, Now)))
+            If strRegisterEndDate <> "" Then
+                If gblnValidDate(strRegisterEndDate) Then
+                    Dim objAccount As Account
+                    System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor
+                    'Need to do all accounts, not just the selected account, because there may be many, many
+                    'accounts and even there are only a few each one can create trx in others through
+                    'balance sheet categories in trx.
+                    For Each objAccount In mobjEverything.colAccounts
+                        objAccount.RecreateGeneratedTrx(CDate(strRegisterEndDate))
+                    Next
+                    For Each objAccount In mobjEverything.colAccounts
+                        'Tell all register windows to refresh themselves.
+                        For Each objReg As Register In objAccount.colRegisters
+                            'Recompute the running balances, because replica trx can be added anywhere.
+                            objReg.LoadFinish()
+                            objReg.FireRedisplayTrx()
+                        Next objReg
+                    Next
+                    System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
+                Else
+                    MsgBox("Invalid date.")
+                End If
             End If
-
-            With maudtElement(lstRegisters.SelectedIndex)
-                If Not .objReg Is Nothing Then
-                    MsgBox("You must select an account, not a register.", MsgBoxStyle.Information)
-                    Exit Sub
-                End If
-                strRegisterEndDate = InputBox("Enter ending date to generate transactions through:", "Ending Date", gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, 90, Now)))
-                If strRegisterEndDate <> "" Then
-                    If gblnValidDate(strRegisterEndDate) Then
-                        System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor
-                        .objAccount.RecreateGeneratedTrx(CDate(strRegisterEndDate))
-                        Me.Activate()
-                        System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
-                    Else
-                        MsgBox("Invalid date.")
-                    End If
-                End If
-            End With
 
             Exit Sub
         Catch ex As Exception
@@ -391,7 +393,6 @@ Friend Class ShowRegisterForm
             blnOneRegister = (maudtElement(lstRegisters.SelectedIndex).objAccount.colRegisters.Count = 1)
             cmdSetAccountProperties.Enabled = Not blnRegisterSelected
             cmdDeleteAccount.Enabled = Not blnRegisterSelected
-            cmdRegen.Enabled = Not blnRegisterSelected
             cmdShowRegister.Enabled = blnRegisterSelected Or blnOneRegister
             cmdDeleteRegister.Enabled = blnRegisterSelected
             cmdEditGenerators.Enabled = blnRegisterSelected Or blnOneRegister

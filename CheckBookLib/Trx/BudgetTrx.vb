@@ -179,43 +179,62 @@ Public Class BudgetTrx
         End If
     End Sub
 
-    '$Description Apply a Split to the budget Trx which is ourself.
-    '   Called only by Split.ApplyToBudget().
-
-    Public Sub ApplyToThisBudget(ByVal objSplit As TrxSplit, ByVal objReg As Register)
-        mcolAppliedSplits.Add(objSplit)
-        mcurBudgetApplied = mcurBudgetApplied + objSplit.curAmount
-        SetAmountForBudget(objReg.datOldestBudgetEndAllowed)
-        objReg.RaiseBudgetChanged(Me)
+    Public Overrides Sub UnApply()
+        For Each objSplit As TrxSplit In mcolAppliedSplits
+            objSplit.objBudget = Nothing
+        Next objSplit
+        mcolAppliedSplits = New List(Of TrxSplit)()
+        mcurBudgetApplied = 0D
+        SetAmountForBudget(mobjReg.datOldestBudgetEndAllowed)
+        mobjReg.RaiseBudgetChanged(Me)
     End Sub
 
-    '$Description Un-apply a Split from the budget Trx which is ourself.
-    '   Called only by Split.UnApplyFromBudget().
+    Public Overrides Sub Apply(ByVal blnLoading As Boolean)
+        Dim blnAnyApplied As Boolean = False
+        For lngScanIndex As Integer = Me.lngIndex To mobjReg.lngTrxCount
+            Dim objScanTrx As Trx = mobjReg.objTrx(lngScanIndex)
+            If objScanTrx.datDate > mdatBudgetEnds Then
+                Exit For
+            End If
+            If objScanTrx.lngType = TrxType.glngTRXTYP_NORMAL Then
+                Dim objNormalTrx As NormalTrx = DirectCast(objScanTrx, NormalTrx)
+                For Each objSplit As TrxSplit In objNormalTrx.colSplits
+                    If objSplit.objBudget Is Nothing Then
+                        If objSplit.strBudgetKey = Me.strBudgetKey Then
+                            mcolAppliedSplits.Add(objSplit)
+                            objSplit.objBudget = Me
+                            mcurBudgetApplied = mcurBudgetApplied + objSplit.curAmount
+                            blnAnyApplied = True
+                        End If
+                    End If
+                Next
+            End If
+        Next
+        If blnAnyApplied Then
+            SetAmountForBudget(mobjReg.datOldestBudgetEndAllowed)
+            mobjReg.RaiseBudgetChanged(Me)
+        End If
+    End Sub
 
-    Public Sub UnApplyFromThisBudget(ByVal objSplit As TrxSplit, ByVal objReg As Register)
+    '$Description Apply a Split to this BudgetTrx.
+
+    Public Sub ApplyToThisBudget(ByVal objSplit As TrxSplit)
+        mcolAppliedSplits.Add(objSplit)
+        objSplit.objBudget = Me
+        mcurBudgetApplied = mcurBudgetApplied + objSplit.curAmount
+        SetAmountForBudget(mobjReg.datOldestBudgetEndAllowed)
+        mobjReg.RaiseBudgetChanged(Me)
+    End Sub
+
+    '$Description Un-apply a Split from this BudgetTrx.
+
+    Public Sub UnApplyFromThisBudget(ByVal objSplit As TrxSplit)
         If Not mcolAppliedSplits.Remove(objSplit) Then
             gRaiseError("Could not find split in Trx.UnApplyFromThisBudget")
         End If
         mcurBudgetApplied = mcurBudgetApplied - objSplit.curAmount
-        SetAmountForBudget(objReg.datOldestBudgetEndAllowed)
-        objReg.RaiseBudgetChanged(Me)
-    End Sub
-
-    '$Description Un-apply all splits applied to this budget Trx. Must be done
-    '   for any budget being deleted from the register. Does nothing if this Trx
-    '   is not a budget.
-
-    Public Sub DestroyThisBudget()
-        Dim objSplit As TrxSplit
-        For Each objSplit In mcolAppliedSplits
-            objSplit.ClearBudgetReference()
-        Next objSplit
-        mcolAppliedSplits = Nothing
-    End Sub
-
-    Public Sub ClearThisBudget()
-        mcurBudgetApplied = 0
-        mcolAppliedSplits = New List(Of TrxSplit)
+        SetAmountForBudget(mobjReg.datOldestBudgetEndAllowed)
+        mobjReg.RaiseBudgetChanged(Me)
     End Sub
 
     Public Overrides Function objClone(ByVal blnWillAddToRegister As Boolean) As Trx
