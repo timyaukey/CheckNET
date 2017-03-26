@@ -116,7 +116,7 @@
     <Compile Include="Plugins\ToolPlugin.vb" />
     <Compile Include="Plugins\TrxImportPlugin.vb" />
     <Compile Include="Logging\EventLog.vb" />
-    <Compile Include="Everything.vb" />
+    <Compile Include="Company.vb" />
     <Compile Include="Logging\ILogAction.vb" />
     <Compile Include="Logging\ILogAdd.vb" />
     <Compile Include="Logging\ILogChange.vb" />
