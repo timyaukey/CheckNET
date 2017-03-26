@@ -6,7 +6,7 @@ Imports CheckBookLib
 Friend Class UTMainForm
     Inherits System.Windows.Forms.Form
 
-    Private mobjEverything As Everything
+    Private mobjCompany As Company
 
     Private Sub cmdRunBasic_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRunBasic.Click
         Try
@@ -843,7 +843,7 @@ Friend Class UTMainForm
     End Sub
 
     Private Sub TestFileLoad1()
-        Dim objEverything As Everything
+        Dim objCompany As Company
         Dim objAccount As Account
         Dim objReg As Register
         Dim objTrx As Trx
@@ -852,9 +852,9 @@ Friend Class UTMainForm
         gUTSetTestTitle("TestFileLoad1")
 
         gUTSetSubTest("Load")
-        objEverything = New Everything()
+        objCompany = New Company()
         objAccount = New Account()
-        objAccount.Init(objEverything)
+        objAccount.Init(objCompany)
         objReg = objLoadFile(objAccount, "UTRegLoad1.txt")
         If objReg.lngTrxCount <> 4 Then
             Exit Sub
@@ -1791,17 +1791,17 @@ Friend Class UTMainForm
     End Sub
 
     Private Sub UTMainForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        mobjEverything = gobjInitialize()
+        mobjCompany = gobjInitialize()
         If gblnUnrecognizedArgs() Then
             Exit Sub
         End If
-        gLoadGlobalLists(mobjEverything)
-        gLoadCategories(mobjEverything)
+        gLoadGlobalLists(mobjCompany)
+        gLoadCategories(mobjCompany)
         gobjSecurity = New Security
         gobjSecurity.CreateEmpty("")
     End Sub
 
     Private Sub UTMainForm_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
-        mobjEverything.Teardown()
+        mobjCompany.Teardown()
     End Sub
 End Class

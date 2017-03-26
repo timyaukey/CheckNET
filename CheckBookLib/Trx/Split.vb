@@ -173,11 +173,11 @@ Public Class TrxSplit
         End If
     End Sub
 
-    Friend Sub CreateReplicaTrx(ByVal objEverything_ As Everything, ByVal objNormalTrx As NormalTrx, ByVal blnLoading As Boolean)
+    Friend Sub CreateReplicaTrx(ByVal objCompany_ As Company, ByVal objNormalTrx As NormalTrx, ByVal blnLoading As Boolean)
         Dim intDotOffset As Integer = mstrCategoryKey.IndexOf("."c)
         If intDotOffset > 0 Then
             Dim intAccountKey As Integer = Integer.Parse(mstrCategoryKey.Substring(0, intDotOffset))
-            For Each objAccount In objEverything_.colAccounts
+            For Each objAccount In objCompany_.colAccounts
                 If objAccount.intKey = intAccountKey Then
                     Dim strRegKey As String = mstrCategoryKey.Substring(intDotOffset + 1)
                     For Each objReg In objAccount.colRegisters

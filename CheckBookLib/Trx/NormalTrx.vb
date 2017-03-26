@@ -220,9 +220,9 @@ Public Class NormalTrx
 
     Public Sub CreateReplicaTrx(ByVal blnLoading As Boolean)
         If Not objReg.objAccount Is Nothing Then
-            Dim objEverything As Everything = objReg.objAccount.objEverything
+            Dim objCompany As Company = objReg.objAccount.objCompany
             For Each objSplit As TrxSplit In mcolSplits
-                objSplit.CreateReplicaTrx(objEverything, Me, blnLoading)
+                objSplit.CreateReplicaTrx(objCompany, Me, blnLoading)
             Next
         End If
     End Sub

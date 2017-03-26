@@ -10,7 +10,7 @@ Friend Class ListEditorForm
     Private mlngListType As ListType
     Private mobjList As SimpleStringTranslator
     Private mstrFile As String
-    Private mobjEverything As Everything
+    Private mobjCompany As Company
     Private mblnModified As Boolean
     Private mblnSaved As Boolean
 
@@ -19,7 +19,7 @@ Friend Class ListEditorForm
         glngLIST_TYPE_BUDGET = 2
     End Enum
 
-    Public Function blnShowMe(ByVal objEverything As Everything, ByVal lngListType As ListType, ByVal strFile As String,
+    Public Function blnShowMe(ByVal objCompany As Company, ByVal lngListType As ListType, ByVal strFile As String,
                               ByVal objList As SimpleStringTranslator, ByVal strCaption As String) As Boolean
 
         Dim frm As System.Windows.Forms.Form
@@ -36,7 +36,7 @@ Friend Class ListEditorForm
                 End If
             Next frm
             Me.Text = strCaption
-            mobjEverything = objEverything
+            mobjCompany = objCompany
             mlngListType = lngListType
             mobjList = objList
             mstrFile = strFile
@@ -58,8 +58,8 @@ Friend Class ListEditorForm
             gSaveChangedAccounts()
             RebuildTranslator()
             WriteFile()
-            gBuildShortTermsCatKeys(mobjEverything)
-            gFindPlaceholderBudget(mobjEverything)
+            gBuildShortTermsCatKeys(mobjCompany)
+            gFindPlaceholderBudget(mobjCompany)
             MsgBox("Updated list has been saved. The new names will not appear in " & "register windows until you close and re-open those windows.", MsgBoxStyle.Information)
             mblnModified = False
             mblnSaved = True
@@ -443,7 +443,7 @@ Friend Class ListEditorForm
         Try
 
             strKey = strMakeKey(gintVB6GetItemData(lstElements, intListIndex))
-            For Each objAccount In mobjEverything.colAccounts
+            For Each objAccount In mobjCompany.colAccounts
                 If blnElementIsUsedInAccount(objAccount, strKey) Then
                     blnElementIsUsed = True
                     Exit Function

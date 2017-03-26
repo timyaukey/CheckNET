@@ -2,8 +2,8 @@ Option Strict On
 Option Explicit On
 
 Public Class Account
-    'The master Everything object.
-    Private mobjEverything As Everything
+    'The master Company object.
+    Private mobjCompany As Company
     'Path passed to Load().
     Private mstrFileLoaded As String
     'Account title.
@@ -46,13 +46,13 @@ Public Class Account
     '$Description Initialize a new instance.
     '   Must always be the first member used for a new instance.
 
-    Public Sub Init(ByVal objEverything As Everything)
-        mobjEverything = objEverything
+    Public Sub Init(ByVal objCompany As Company)
+        mobjCompany = objCompany
     End Sub
 
-    Public ReadOnly Property objEverything() As Everything
+    Public ReadOnly Property objCompany() As Company
         Get
-            objEverything = mobjEverything
+            objCompany = mobjCompany
         End Get
     End Property
 
@@ -127,8 +127,8 @@ Public Class Account
     End Sub
 
     Public Sub Teardown()
-        'UPGRADE_NOTE: Object mobjEverything may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-        mobjEverything = Nothing
+        'UPGRADE_NOTE: Object mobjCompany may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+        mobjCompany = Nothing
     End Sub
 
     '$Description Load a new instance from an account file.
@@ -183,11 +183,11 @@ Public Class Account
                         mstrTitle = Mid(strLine, 3)
                     Case "AK"
                         Dim intNewKey As Integer = CInt(Mid(strLine, 3))
-                        If mobjEverything.blnAccountKeyUsed(intNewKey) Then
+                        If mobjCompany.blnAccountKeyUsed(intNewKey) Then
                             Throw New Exception("Duplicate use of account key " & intNewKey)
                         End If
                         mintKey = intNewKey
-                        mobjEverything.UseAccountKey(mintKey)
+                        mobjCompany.UseAccountKey(mintKey)
                     Case "AY"
                         Select Case Mid(strLine, 3, 1)
                             Case "A"
@@ -350,7 +350,7 @@ Public Class Account
     Public Sub SetChanged()
         mblnUnsavedChanges = True
         RaiseEvent ChangeMade()
-        objEverything.FireSomethingModified()
+        objCompany.FireSomethingModified()
     End Sub
 
     Private Sub LoadRegister(ByVal strLine As String, ByVal blnFake As Boolean, ByVal intFile As Integer, ByRef lngLinesRead As Integer)

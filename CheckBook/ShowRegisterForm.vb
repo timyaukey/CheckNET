@@ -23,12 +23,12 @@ Friend Class ShowRegisterForm
         End Property
     End Structure
 
-    Private mobjEverything As Everything
+    Private mobjCompany As Company
     Private maudtElement() As ShowRegElement
     Private mintElements As Integer
 
-    Public Sub ShowWindow(ByVal objEverything As Everything)
-        mobjEverything = objEverything
+    Public Sub ShowWindow(ByVal objCompany As Company)
+        mobjCompany = objCompany
         Me.Show()
     End Sub
 
@@ -120,7 +120,7 @@ Friend Class ShowRegisterForm
                 Exit Sub
             End If
 
-            If gblnAskAndCreateAccount(mobjEverything) Then
+            If gblnAskAndCreateAccount(mobjCompany) Then
                 MsgBox("Account will appear the next time you start the software.", MsgBoxStyle.Information)
             End If
 
@@ -318,10 +318,10 @@ Friend Class ShowRegisterForm
                     'Need to do all accounts, not just the selected account, because there may be many, many
                     'accounts and even there are only a few each one can create trx in others through
                     'balance sheet categories in trx.
-                    For Each objAccount In mobjEverything.colAccounts
+                    For Each objAccount In mobjCompany.colAccounts
                         objAccount.RecreateGeneratedTrx(CDate(strRegisterEndDate))
                     Next
-                    For Each objAccount In mobjEverything.colAccounts
+                    For Each objAccount In mobjCompany.colAccounts
                         'Tell all register windows to refresh themselves.
                         For Each objReg As Register In objAccount.colRegisters
                             'Recompute the running balances, because replica trx can be added anywhere.

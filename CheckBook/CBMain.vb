@@ -223,7 +223,7 @@ Public Module CBMain
         Return i1.datCreate.CompareTo(i2.datCreate)
     End Function
 
-    Public Function gblnAskAndCreateAccount(ByVal objEverything As Everything) As Boolean
+    Public Function gblnAskAndCreateAccount(ByVal objCompany As Company) As Boolean
         Dim strTitle As String = ""
         Dim strFileRoot As String = ""
         Dim strFile As String
@@ -237,7 +237,7 @@ Public Module CBMain
                     Exit Function
                 End If
                 gCreateAccount(strFileRoot, strTitle, strTitle,
-                               objEverything.intGetUnusedAccountKey(), lngType)
+                               objCompany.intGetUnusedAccountKey(), lngType)
                 Return True
             End If
         End Using

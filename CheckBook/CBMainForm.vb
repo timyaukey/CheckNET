@@ -12,7 +12,7 @@ Friend Class CBMainForm
 
     Private frmStartup As StartupForm
     Private mblnCancelStart As Boolean
-    Private WithEvents mobjEverything As Everything
+    Private WithEvents mobjCompany As Company
 
     Private Sub CBMainForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Dim objAccount As Account
@@ -25,8 +25,8 @@ Friend Class CBMainForm
         Try
             mblnCancelStart = True
 
-            mobjEverything = gobjInitialize()
-            gcolAccounts = mobjEverything.colAccounts
+            mobjCompany = gobjInitialize()
+            gcolAccounts = mobjCompany.colAccounts
             frmStartup = New StartupForm
             frmStartup.Show()
             frmStartup.ShowStatus("Initializing")
@@ -72,7 +72,7 @@ Friend Class CBMainForm
 
             gCreateStandardFolders()
             gCreateStandardFiles()
-            gLoadGlobalLists(mobjEverything)
+            gLoadGlobalLists(mobjCompany)
             gLoadTransTable()
 
             If Not gblnUserAuthenticated() Then
@@ -84,7 +84,7 @@ Friend Class CBMainForm
             strFile = Dir(gstrAccountPath() & "\*.act")
             If strFile = "" Then
                 MsgBox("Creating first checking account...", MsgBoxStyle.Information)
-                gCreateAccount("Main", "Checking Account", "Main Register", mobjEverything.intGetUnusedAccountKey(), Account.AccountType.Asset)
+                gCreateAccount("Main", "Checking Account", "Main Register", mobjCompany.intGetUnusedAccountKey(), Account.AccountType.Asset)
                 strFile = Dir(gstrAccountPath() & "\*.act")
             End If
             While strFile <> ""
@@ -97,18 +97,18 @@ Friend Class CBMainForm
             'Load real trx, and non-generated fake trx, for all of them.
             For Each strFile In astrFiles
                 objAccount = New Account
-                objAccount.Init(mobjEverything)
+                objAccount.Init(mobjCompany)
                 frmStartup.Configure(objAccount)
                 objAccount.LoadStart(strFile)
-                mobjEverything.colAccounts.Add(objAccount)
+                mobjCompany.colAccounts.Add(objAccount)
                 frmStartup.Configure(Nothing)
             Next strFile
 
             'With all Account objects loaded we can add them to the category list.
-            gLoadCategories(mobjEverything)
+            gLoadCategories(mobjCompany)
 
             'Load generated transactions for all of them.
-            For Each objAccount In mobjEverything.colAccounts
+            For Each objAccount In mobjCompany.colAccounts
                 frmStartup.Configure(objAccount)
                 objAccount.LoadGenerated()
                 frmStartup.Configure(Nothing)
@@ -116,14 +116,14 @@ Friend Class CBMainForm
 
             'Call Trx.Apply() for all Trx loaded above.
             'This will create ReplicaTrx.
-            For Each objAccount In mobjEverything.colAccounts
+            For Each objAccount In mobjCompany.colAccounts
                 frmStartup.Configure(objAccount)
                 objAccount.LoadApply()
                 frmStartup.Configure(Nothing)
             Next
 
             'Perform final steps after all Trx exist, including computing running balances.
-            For Each objAccount In mobjEverything.colAccounts
+            For Each objAccount In mobjCompany.colAccounts
                 frmStartup.Configure(objAccount)
                 objAccount.LoadFinish()
                 frmStartup.Configure(Nothing)
@@ -133,7 +133,7 @@ Friend Class CBMainForm
 
             mblnCancelStart = False
 
-            For Each objAccount In mobjEverything.colAccounts
+            For Each objAccount In mobjCompany.colAccounts
                 frmStartup.Configure(objAccount)
                 For Each objReg In objAccount.colRegisters
                     If objReg.blnShowInitially Then
@@ -236,7 +236,7 @@ Friend Class CBMainForm
             If Not mblnCancelStart Then
                 gSaveChangedAccounts()
             End If
-            mobjEverything.Teardown()
+            mobjCompany.Teardown()
 
             Exit Sub
         Catch ex As Exception
@@ -287,7 +287,7 @@ Friend Class CBMainForm
         Try
 
             frm = New ListEditorForm
-            frm.blnShowMe(mobjEverything, ListEditorForm.ListType.glngLIST_TYPE_BUDGET, gstrAddPath("Shared.bud"), gobjBudgets, "Budget List")
+            frm.blnShowMe(mobjCompany, ListEditorForm.ListType.glngLIST_TYPE_BUDGET, gstrAddPath("Shared.bud"), gobjBudgets, "Budget List")
 
             Exit Sub
         Catch ex As Exception
@@ -300,9 +300,9 @@ Friend Class CBMainForm
 
         Try
             frm = New ListEditorForm
-            If frm.blnShowMe(mobjEverything, ListEditorForm.ListType.glngLIST_TYPE_CATEGORY, gstrAddPath("Shared.cat"),
-                             mobjEverything.objIncExpAccounts, "Category List") Then
-                gLoadCategories(mobjEverything)
+            If frm.blnShowMe(mobjCompany, ListEditorForm.ListType.glngLIST_TYPE_CATEGORY, gstrAddPath("Shared.cat"),
+                             mobjCompany.objIncExpAccounts, "Category List") Then
+                gLoadCategories(mobjCompany)
             End If
 
             Exit Sub
@@ -369,7 +369,7 @@ Friend Class CBMainForm
             Next frm2
 
             frm = New ShowRegisterForm
-            frm.ShowWindow(mobjEverything)
+            frm.ShowWindow(mobjCompany)
 
             Exit Sub
         Catch ex As Exception
@@ -377,7 +377,7 @@ Friend Class CBMainForm
         End Try
     End Sub
 
-    Private Sub mobjEverything_SomethingModified() Handles mobjEverything.SomethingModified
+    Private Sub mobjCompany_SomethingModified() Handles mobjCompany.SomethingModified
         mnuFileSave.Enabled = True
     End Sub
 End Class
