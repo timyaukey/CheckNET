@@ -78,6 +78,8 @@
         Me.txtNumber = New System.Windows.Forms.TextBox()
         Me.lvwPayees = New System.Windows.Forms.ListView()
         Me.fraImport = New System.Windows.Forms.GroupBox()
+        Me.cboNarrowMethod = New System.Windows.Forms.ComboBox()
+        Me.lblMatchMethod = New System.Windows.Forms.Label()
         Me.txtMaxAmount = New System.Windows.Forms.TextBox()
         Me.txtMinAmount = New System.Windows.Forms.TextBox()
         Me.txtBank = New System.Windows.Forms.TextBox()
@@ -96,8 +98,6 @@
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.cboNarrowMethod = New System.Windows.Forms.ComboBox()
-        Me.lblMatchMethod = New System.Windows.Forms.Label()
         Me.fraImport.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -112,7 +112,7 @@
         Me.txtAccount.MaxLength = 0
         Me.txtAccount.Name = "txtAccount"
         Me.txtAccount.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtAccount.Size = New System.Drawing.Size(77, 23)
+        Me.txtAccount.Size = New System.Drawing.Size(77, 20)
         Me.txtAccount.TabIndex = 12
         '
         'txtZip
@@ -126,7 +126,7 @@
         Me.txtZip.MaxLength = 0
         Me.txtZip.Name = "txtZip"
         Me.txtZip.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtZip.Size = New System.Drawing.Size(81, 23)
+        Me.txtZip.Size = New System.Drawing.Size(81, 20)
         Me.txtZip.TabIndex = 18
         '
         'txtState
@@ -140,7 +140,7 @@
         Me.txtState.MaxLength = 0
         Me.txtState.Name = "txtState"
         Me.txtState.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtState.Size = New System.Drawing.Size(39, 23)
+        Me.txtState.Size = New System.Drawing.Size(39, 20)
         Me.txtState.TabIndex = 17
         '
         'txtCity
@@ -154,7 +154,7 @@
         Me.txtCity.MaxLength = 0
         Me.txtCity.Name = "txtCity"
         Me.txtCity.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtCity.Size = New System.Drawing.Size(187, 23)
+        Me.txtCity.Size = New System.Drawing.Size(187, 20)
         Me.txtCity.TabIndex = 16
         '
         'txtAddress2
@@ -168,7 +168,7 @@
         Me.txtAddress2.MaxLength = 0
         Me.txtAddress2.Name = "txtAddress2"
         Me.txtAddress2.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtAddress2.Size = New System.Drawing.Size(313, 23)
+        Me.txtAddress2.Size = New System.Drawing.Size(313, 20)
         Me.txtAddress2.TabIndex = 14
         '
         'txtAddress1
@@ -182,7 +182,7 @@
         Me.txtAddress1.MaxLength = 0
         Me.txtAddress1.Name = "txtAddress1"
         Me.txtAddress1.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtAddress1.Size = New System.Drawing.Size(313, 23)
+        Me.txtAddress1.Size = New System.Drawing.Size(313, 20)
         Me.txtAddress1.TabIndex = 10
         '
         'cmdDiscardChanges
@@ -282,7 +282,7 @@
         Me.txtMemo.MaxLength = 0
         Me.txtMemo.Name = "txtMemo"
         Me.txtMemo.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtMemo.Size = New System.Drawing.Size(313, 23)
+        Me.txtMemo.Size = New System.Drawing.Size(313, 20)
         Me.txtMemo.TabIndex = 20
         '
         'txtAmount
@@ -296,7 +296,7 @@
         Me.txtAmount.MaxLength = 0
         Me.txtAmount.Name = "txtAmount"
         Me.txtAmount.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtAmount.Size = New System.Drawing.Size(77, 23)
+        Me.txtAmount.Size = New System.Drawing.Size(77, 20)
         Me.txtAmount.TabIndex = 8
         '
         'txtPayee
@@ -310,7 +310,7 @@
         Me.txtPayee.MaxLength = 0
         Me.txtPayee.Name = "txtPayee"
         Me.txtPayee.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtPayee.Size = New System.Drawing.Size(313, 23)
+        Me.txtPayee.Size = New System.Drawing.Size(313, 20)
         Me.txtPayee.TabIndex = 6
         '
         'txtNumber
@@ -324,7 +324,7 @@
         Me.txtNumber.MaxLength = 0
         Me.txtNumber.Name = "txtNumber"
         Me.txtNumber.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtNumber.Size = New System.Drawing.Size(61, 23)
+        Me.txtNumber.Size = New System.Drawing.Size(61, 20)
         Me.txtNumber.TabIndex = 4
         '
         'lvwPayees
@@ -363,6 +363,33 @@
         Me.fraImport.TabStop = False
         Me.fraImport.Text = "Information Used When Importing Transactions"
         '
+        'cboNarrowMethod
+        '
+        Me.cboNarrowMethod.BackColor = System.Drawing.SystemColors.Window
+        Me.cboNarrowMethod.Cursor = System.Windows.Forms.Cursors.Default
+        Me.cboNarrowMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboNarrowMethod.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboNarrowMethod.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.cboNarrowMethod.Location = New System.Drawing.Point(171, 79)
+        Me.cboNarrowMethod.Name = "cboNarrowMethod"
+        Me.cboNarrowMethod.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cboNarrowMethod.Size = New System.Drawing.Size(299, 22)
+        Me.cboNarrowMethod.TabIndex = 33
+        '
+        'lblMatchMethod
+        '
+        Me.lblMatchMethod.BackColor = System.Drawing.SystemColors.Control
+        Me.lblMatchMethod.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblMatchMethod.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblMatchMethod.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.lblMatchMethod.Location = New System.Drawing.Point(20, 82)
+        Me.lblMatchMethod.Name = "lblMatchMethod"
+        Me.lblMatchMethod.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblMatchMethod.Size = New System.Drawing.Size(145, 19)
+        Me.lblMatchMethod.TabIndex = 32
+        Me.lblMatchMethod.Text = "Match Narrowing Method:"
+        Me.lblMatchMethod.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
         'txtMaxAmount
         '
         Me.txtMaxAmount.AcceptsReturn = True
@@ -374,7 +401,7 @@
         Me.txtMaxAmount.MaxLength = 0
         Me.txtMaxAmount.Name = "txtMaxAmount"
         Me.txtMaxAmount.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtMaxAmount.Size = New System.Drawing.Size(77, 23)
+        Me.txtMaxAmount.Size = New System.Drawing.Size(77, 20)
         Me.txtMaxAmount.TabIndex = 31
         '
         'txtMinAmount
@@ -388,7 +415,7 @@
         Me.txtMinAmount.MaxLength = 0
         Me.txtMinAmount.Name = "txtMinAmount"
         Me.txtMinAmount.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtMinAmount.Size = New System.Drawing.Size(77, 23)
+        Me.txtMinAmount.Size = New System.Drawing.Size(77, 20)
         Me.txtMinAmount.TabIndex = 29
         '
         'txtBank
@@ -402,7 +429,7 @@
         Me.txtBank.MaxLength = 0
         Me.txtBank.Name = "txtBank"
         Me.txtBank.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtBank.Size = New System.Drawing.Size(299, 23)
+        Me.txtBank.Size = New System.Drawing.Size(299, 20)
         Me.txtBank.TabIndex = 27
         '
         'Label10
@@ -512,7 +539,7 @@
         Me.Label11.Location = New System.Drawing.Point(8, 4)
         Me.Label11.Name = "Label11"
         Me.Label11.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label11.Size = New System.Drawing.Size(689, 31)
+        Me.Label11.Size = New System.Drawing.Size(664, 31)
         Me.Label11.TabIndex = 0
         Me.Label11.Text = resources.GetString("Label11.Text")
         '
@@ -525,7 +552,7 @@
         Me.Label8.Location = New System.Drawing.Point(8, 40)
         Me.Label8.Name = "Label8"
         Me.Label8.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label8.Size = New System.Drawing.Size(689, 49)
+        Me.Label8.Size = New System.Drawing.Size(664, 49)
         Me.Label8.TabIndex = 1
         Me.Label8.Text = resources.GetString("Label8.Text")
         '
@@ -613,33 +640,6 @@
         Me.Label1.Text = "Number:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
-        'cboMatchMethod
-        '
-        Me.cboNarrowMethod.BackColor = System.Drawing.SystemColors.Window
-        Me.cboNarrowMethod.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cboNarrowMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cboNarrowMethod.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboNarrowMethod.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboNarrowMethod.Location = New System.Drawing.Point(171, 79)
-        Me.cboNarrowMethod.Name = "cboMatchMethod"
-        Me.cboNarrowMethod.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cboNarrowMethod.Size = New System.Drawing.Size(299, 22)
-        Me.cboNarrowMethod.TabIndex = 33
-        '
-        'lblMatchMethod
-        '
-        Me.lblMatchMethod.BackColor = System.Drawing.SystemColors.Control
-        Me.lblMatchMethod.Cursor = System.Windows.Forms.Cursors.Default
-        Me.lblMatchMethod.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblMatchMethod.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblMatchMethod.Location = New System.Drawing.Point(20, 82)
-        Me.lblMatchMethod.Name = "lblMatchMethod"
-        Me.lblMatchMethod.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblMatchMethod.Size = New System.Drawing.Size(145, 19)
-        Me.lblMatchMethod.TabIndex = 32
-        Me.lblMatchMethod.Text = "Match Narrowing Method:"
-        Me.lblMatchMethod.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
         'PayeeListForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 14.0!)
@@ -689,7 +689,9 @@
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Memorized Transaction List"
         Me.fraImport.ResumeLayout(False)
+        Me.fraImport.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Public WithEvents cboNarrowMethod As System.Windows.Forms.ComboBox

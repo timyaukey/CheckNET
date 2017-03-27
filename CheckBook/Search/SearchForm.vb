@@ -14,7 +14,7 @@ Friend Class SearchForm
     Private mdatDefaultDate As Date
 
     Private Structure SearchMatch
-        Dim lngRegIndex As Integer
+        Dim objTrx As Trx
     End Structure
 
     Private maudtMatches() As SearchMatch
@@ -346,7 +346,7 @@ Friend Class SearchForm
             ReDim Preserve maudtMatches(mlngMatchesAlloc)
         End If
         mlngMatchesUsed = mlngMatchesUsed + 1
-        maudtMatches(mlngMatchesUsed).lngRegIndex = objTrx.lngIndex
+        maudtMatches(mlngMatchesUsed).objTrx = objTrx
         Dim objItem As ListViewItem = gobjListViewAdd(lvwMatches)
         objItem.Text = gstrFormatDate(objTrx.datDate)
         gAddListSubItem(objItem, 1, objTrx.strNumber)
@@ -371,7 +371,7 @@ Friend Class SearchForm
                 Exit Sub
             End If
             lngResultIndex = CInt(lvwMatches.FocusedItem.Tag)
-            mobjReg.SetCurrent(maudtMatches(lngResultIndex).lngRegIndex)
+            mobjReg.SetCurrent(maudtMatches(lngResultIndex).objTrx.lngIndex)
             mobjReg.RaiseShowCurrent()
             RememberSelectedTrx()
 
@@ -416,7 +416,7 @@ Friend Class SearchForm
                 Exit Sub
             End If
             Dim lngResultIndex As Integer = CInt(lvwMatches.FocusedItem.Tag)
-            Dim lngRegSelect As Integer = maudtMatches(lngResultIndex).lngRegIndex
+            Dim lngRegSelect As Integer = maudtMatches(lngResultIndex).objTrx.lngIndex
             Using frmEdit As TrxForm = frmCreateTrxForm()
                 If frmEdit.blnUpdate(lngRegSelect, mobjReg, mdatDefaultDate, "SearchForm.Edit") Then
                     Exit Sub
@@ -459,13 +459,11 @@ Friend Class SearchForm
     ''' <returns></returns>
     Private Iterator Function colGetCheckedTrx() As IEnumerable(Of Trx)
         Dim objItem As ListViewItem
-        Dim lngTrxIndex As Integer
         Dim objTrx As Trx
         Dim objLastTrx As Trx = Nothing
         For Each objItem In lvwMatches.Items
             If objItem.Checked Then
-                lngTrxIndex = maudtMatches(CInt(objItem.Tag)).lngRegIndex
-                objTrx = mobjReg.objTrx(lngTrxIndex)
+                objTrx = maudtMatches(CInt(objItem.Tag)).objTrx
                 If Not objTrx Is objLastTrx Then
                     objLastTrx = objTrx
                     Yield objTrx
@@ -820,12 +818,10 @@ Friend Class SearchForm
     End Sub
 
     Private Sub RememberSelectedTrx()
-        Dim lngTrxIndex As Integer
         If Not mblnSkipRemember Then
             objSelectedTrx = Nothing
             If Not lvwMatches.FocusedItem Is Nothing Then
-                lngTrxIndex = maudtMatches(CInt(lvwMatches.FocusedItem.Tag)).lngRegIndex
-                objSelectedTrx = mobjReg.objTrx(lngTrxIndex)
+                objSelectedTrx = maudtMatches(CInt(lvwMatches.FocusedItem.Tag)).objTrx
             End If
         End If
     End Sub
@@ -833,7 +829,6 @@ Friend Class SearchForm
     Private Sub RestoreCheckedAndSelected()
 
         Dim objItem As System.Windows.Forms.ListViewItem
-        Dim lngTrxIndex As Integer
         Dim objTrx As Trx
         Dim objCheckedTrx As Trx
 
@@ -841,8 +836,7 @@ Friend Class SearchForm
             mblnSkipRemember = True
             For Each objItem In lvwMatches.Items
 
-                lngTrxIndex = maudtMatches(CInt(objItem.Tag)).lngRegIndex
-                objTrx = mobjReg.objTrx(lngTrxIndex)
+                objTrx = maudtMatches(CInt(objItem.Tag)).objTrx
                 For Each objCheckedTrx In colCheckedTrx
                     If objCheckedTrx Is objTrx Then
                         objItem.Checked = True

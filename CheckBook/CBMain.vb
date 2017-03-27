@@ -456,8 +456,8 @@ Public Module CBMain
         With lvwPayees
             .Columns.Clear()
             .Columns.Add("", "Number", 55)
-            .Columns.Add("", "Name/Description", 235)
-            .Columns.Add("", "Category", 235)
+            .Columns.Add("", "Name/Description", 200)
+            .Columns.Add("", "Category", 160)
             .Columns.Add("", "Amount", 65)
             .Columns.Add("", "Budget", 130)
             .Columns.Add("", "Memo", 200)
