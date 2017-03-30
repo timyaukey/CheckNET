@@ -13,13 +13,11 @@ Friend Class SearchForm
     Private mobjCompany As Company
     Private mdatDefaultDate As Date
 
-    Private Structure SearchMatch
-        Dim objTrx As Trx
-    End Structure
+    Private Class SearchMatch
+        Public objTrx As Trx
+    End Class
 
-    Private maudtMatches() As SearchMatch
-    Private mlngMatchesUsed As Integer
-    Private mlngMatchesAlloc As Integer
+    Private mintMatchCount As Integer
     Private mcurAmountMatched As Decimal
     Private mcurAmountTotal As Decimal
     Private mblnIgnoreTrxUpdates As Boolean
@@ -177,7 +175,7 @@ Friend Class SearchForm
 
             mcurAmountTotal = mcurAmountTotal + mcurAmountMatched
             ShowTotals()
-            MsgBox(mlngMatchesUsed & " matches found.", MsgBoxStyle.Information)
+            MsgBox(mintMatchCount & " matches found.", MsgBoxStyle.Information)
 
             Exit Sub
         Catch ex As Exception
@@ -290,7 +288,6 @@ Friend Class SearchForm
             gAddListSubItem(objItem, 10, "")
             gAddListSubItem(objItem, 11, "")
         End If
-        objItem.Tag = mlngMatchesUsed
         mcurAmountMatched = mcurAmountMatched + objTrx.curAmount
 
     End Sub
@@ -335,43 +332,37 @@ Friend Class SearchForm
         gAddListSubItem(objItem, 9, strDueDate)
         gAddListSubItem(objItem, 10, objSplit.strTerms)
         gAddListSubItem(objItem, 11, objTrx.strFakeStatus)
-        objItem.Tag = mlngMatchesUsed
         mcurAmountMatched = mcurAmountMatched + objSplit.curAmount
 
     End Sub
 
     Private Function objAddNewMatch(ByVal objTrx As Trx, ByVal curMatchAmount As Decimal) As ListViewItem
-        If mlngMatchesUsed >= mlngMatchesAlloc Then
-            mlngMatchesAlloc = mlngMatchesAlloc + 5
-            ReDim Preserve maudtMatches(mlngMatchesAlloc)
-        End If
-        mlngMatchesUsed = mlngMatchesUsed + 1
-        maudtMatches(mlngMatchesUsed).objTrx = objTrx
         Dim objItem As ListViewItem = gobjListViewAdd(lvwMatches)
         objItem.Text = gstrFormatDate(objTrx.datDate)
         gAddListSubItem(objItem, 1, objTrx.strNumber)
         gAddListSubItem(objItem, 2, objTrx.strDescription)
         gAddListSubItem(objItem, 3, gstrFormatCurrency(curMatchAmount))
+        Dim objMatch As SearchMatch = New SearchMatch()
+        objMatch.objTrx = objTrx
+        objItem.Tag = objMatch
+        mintMatchCount = mintMatchCount + 1
         Return objItem
     End Function
 
     Private Sub ClearResults()
         lvwMatches.Items.Clear()
-        mlngMatchesUsed = 0
-        mlngMatchesAlloc = 0
+        mintMatchCount = 0
         mcurAmountMatched = 0
     End Sub
 
     Private Sub lvwMatches_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles lvwMatches.Click
-        Dim lngResultIndex As Integer
-
         Try
 
             If lvwMatches.FocusedItem Is Nothing Then
                 Exit Sub
             End If
-            lngResultIndex = CInt(lvwMatches.FocusedItem.Tag)
-            mobjReg.SetCurrent(maudtMatches(lngResultIndex).objTrx.lngIndex)
+            Dim objMatch As SearchMatch = DirectCast(lvwMatches.FocusedItem.Tag, SearchMatch)
+            mobjReg.SetCurrent(objMatch.objTrx.lngIndex)
             mobjReg.RaiseShowCurrent()
             RememberSelectedTrx()
 
@@ -412,13 +403,19 @@ Friend Class SearchForm
 
     Private Sub cmdEditTrx_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdEditTrx.Click
         Try
+            Dim objTrx As Trx
+            Dim objMatch As SearchMatch
             If lvwMatches.FocusedItem Is Nothing Then
                 Exit Sub
             End If
-            Dim lngResultIndex As Integer = CInt(lvwMatches.FocusedItem.Tag)
-            Dim lngRegSelect As Integer = maudtMatches(lngResultIndex).objTrx.lngIndex
+            objMatch = DirectCast(lvwMatches.FocusedItem.Tag, SearchMatch)
+            objTrx = objMatch.objTrx
+            If objTrx.lngType = Trx.TrxType.glngTRXTYP_REPLICA Then
+                MsgBox("You may not edit a replica transaction directly. Instead edit the split it was created from in another transaction.", MsgBoxStyle.Critical)
+                Exit Sub
+            End If
             Using frmEdit As TrxForm = frmCreateTrxForm()
-                If frmEdit.blnUpdate(lngRegSelect, mobjReg, mdatDefaultDate, "SearchForm.Edit") Then
+                If frmEdit.blnUpdate(objTrx.lngIndex, mobjReg, mdatDefaultDate, "SearchForm.Edit") Then
                     Exit Sub
                 End If
             End Using
@@ -463,7 +460,7 @@ Friend Class SearchForm
         Dim objLastTrx As Trx = Nothing
         For Each objItem In lvwMatches.Items
             If objItem.Checked Then
-                objTrx = maudtMatches(CInt(objItem.Tag)).objTrx
+                objTrx = DirectCast(objItem.Tag, SearchMatch).objTrx
                 If Not objTrx Is objLastTrx Then
                     objLastTrx = objTrx
                     Yield objTrx
@@ -821,7 +818,7 @@ Friend Class SearchForm
         If Not mblnSkipRemember Then
             objSelectedTrx = Nothing
             If Not lvwMatches.FocusedItem Is Nothing Then
-                objSelectedTrx = maudtMatches(CInt(lvwMatches.FocusedItem.Tag)).objTrx
+                objSelectedTrx = DirectCast(lvwMatches.FocusedItem.Tag, SearchMatch).objTrx
             End If
         End If
     End Sub
@@ -836,7 +833,7 @@ Friend Class SearchForm
             mblnSkipRemember = True
             For Each objItem In lvwMatches.Items
 
-                objTrx = maudtMatches(CInt(objItem.Tag)).objTrx
+                objTrx = DirectCast(objItem.Tag, SearchMatch).objTrx
                 For Each objCheckedTrx In colCheckedTrx
                     If objCheckedTrx Is objTrx Then
                         objItem.Checked = True
