@@ -193,6 +193,12 @@ Public Class NormalTrx
         End Get
     End Property
 
+    Public Overrides ReadOnly Property strCategory As String
+        Get
+            Return gstrSummarizeTrxCat(mobjReg.objAccount.objCompany.objCategories, DirectCast(Me, NormalTrx))
+        End Get
+    End Property
+
     Public Overrides Sub UnApply()
         'Regenerating generated Trx must cause this and Apply() to be called.
         UnApplyFromBudgets()

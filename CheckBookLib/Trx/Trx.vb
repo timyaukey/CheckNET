@@ -187,6 +187,8 @@ Public MustInherit Class Trx
         End Get
     End Property
 
+    Public MustOverride ReadOnly Property strCategory() As String
+
     Public ReadOnly Property strMemo() As String
         Get
             strMemo = mstrMemo

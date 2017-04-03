@@ -148,6 +148,12 @@ Public Class BudgetTrx
         End Get
     End Property
 
+    Public Overrides ReadOnly Property strCategory As String
+        Get
+            Return ""
+        End Get
+    End Property
+
     Protected Sub RaiseErrorOnBadBudget(ByVal strRoutine As String)
         If mstrBudgetKey = "" Then
             gRaiseError("Missing budget key in " & strRoutine)

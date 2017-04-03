@@ -4,6 +4,8 @@ Option Explicit On
 Public Class ReplicaTrx
     Inherits Trx
 
+    Private mstrCatKey As String
+
     Public Sub New(ByVal objReg_ As Register)
         MyBase.New(objReg_)
     End Sub
@@ -14,8 +16,14 @@ Public Class ReplicaTrx
         End Get
     End Property
 
+    Public Overrides ReadOnly Property strCategory As String
+        Get
+            Return gstrTranslateCatKey(mobjReg.objAccount.objCompany.objCategories, mstrCatKey)
+        End Get
+    End Property
+
     Public Sub NewStartReplica(ByVal blnWillAddToRegister As Boolean, ByVal datDate_ As Date, ByVal strDescription_ As String,
-                              ByVal curAmount_ As Decimal, ByVal blnFake_ As Boolean)
+                              ByVal strCatKey_ As String, ByVal curAmount_ As Decimal, ByVal blnFake_ As Boolean)
 
         If blnWillAddToRegister Then
             mobjReg.ClearFirstAffected()
@@ -24,6 +32,7 @@ Public Class ReplicaTrx
         mstrNumber = "Repl"
         mdatDate = datDate_
         mstrDescription = strDescription_
+        mstrCatKey = strCatKey_
         mstrMemo = ""
         mlngStatus = TrxStatus.glngTRXSTS_NONBANK
         mblnFake = blnFake_
@@ -45,7 +54,7 @@ Public Class ReplicaTrx
 
     Public Overrides Function objClone(ByVal blnWillAddToRegister As Boolean) As Trx
         Dim objReplicaTrx As ReplicaTrx = New ReplicaTrx(mobjReg)
-        objReplicaTrx.NewStartReplica(blnWillAddToRegister, mdatDate, mstrDescription, mcurAmount, mblnFake)
+        objReplicaTrx.NewStartReplica(blnWillAddToRegister, mdatDate, mstrDescription, mstrCatKey, mcurAmount, mblnFake)
         Return objReplicaTrx
     End Function
 

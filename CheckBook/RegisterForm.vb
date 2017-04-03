@@ -283,7 +283,7 @@ Friend Class RegisterForm
         ConfigGridCol(intCol, mintColBalance, "Balance", 900,
             Function(objTrx As Trx) objTrx.curBalance.ToString(gstrFORMAT_CURRENCY), True)
         ConfigGridCol(intCol, mintColCategory, "Category", 1800,
-            Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxCat(mobjCompany.objCategories, DirectCast(objTrx, NormalTrx)), ""))
+            Function(objTrx As Trx) objTrx.strCategory)
         ConfigGridCol(intCol, mintColPONumber, "PO#", 900,
             Function(objTrx As Trx) If(objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL, gstrSummarizeTrxPONumber(DirectCast(objTrx, NormalTrx)), ""))
         ConfigGridCol(intCol, mintColInvoiceNum, "Invoice#", 900,

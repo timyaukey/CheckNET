@@ -92,6 +92,12 @@ Public Class TransferTrx
         End Get
     End Property
 
+    Public Overrides ReadOnly Property strCategory As String
+        Get
+            Return ""
+        End Get
+    End Property
+
     Public Overrides Sub UnApply()
         'Do nothing for TransferTrx
     End Sub
