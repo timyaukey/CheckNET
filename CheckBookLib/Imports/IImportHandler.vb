@@ -5,7 +5,7 @@ Public Interface IImportHandler
     Function objStatusSearch(ByVal objImportedTrx As ImportedTrx, ByVal objReg As Register) As NormalTrx
 
     ReadOnly Property blnAllowNew() As Boolean
-    Function strAutoNewValidationError(ByVal objImportedTrx As ImportedTrx, ByVal blnAllowBankNonCard As Boolean) As String
+    Function strAutoNewValidationError(ByVal objImportedTrx As ImportedTrx, ByVal objAccount As Account, ByVal blnManualSelectionAllowed As Boolean) As String
     Function blnAlternateAutoNewHandling(ByVal objImportedTrx As ImportedTrx, ByVal objReg As Register) As Boolean
     Sub AutoNewSearch(ByVal objImportedTrx As ImportedTrx, ByVal objReg As Register,
         ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)

@@ -326,7 +326,7 @@ Friend Class BankImportForm
             Dim datDummy As Date
             Dim objImportedTrx As ImportedTrx
             Dim blnItemImported As Boolean
-            Dim blnAllowBankNonCard As Boolean
+            Dim blnManualSelectionAllowed As Boolean
             Dim strFailReason As String = ""
 
             If mobjSelectedRegister Is Nothing Then
@@ -339,13 +339,13 @@ Friend Class BankImportForm
                 Exit Sub
             End If
 
-            blnAllowBankNonCard = (chkAllowManualBatchNew.CheckState = System.Windows.Forms.CheckState.Checked)
+            blnManualSelectionAllowed = (chkAllowManualBatchNew.CheckState = System.Windows.Forms.CheckState.Checked)
 
             For Each objItem In lvwTrx.Items
                 If objItem.Checked Then
 
                     intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
-                    If Not blnValidForAutoNew(intItemIndex, blnAllowBankNonCard, True, strFailReason) Then
+                    If Not blnValidForAutoNew(intItemIndex, blnManualSelectionAllowed, True, strFailReason) Then
                         MsgBox("Skipping and unchecking " & strDescribeItem(intItemIndex) & " because: " & strFailReason & ".")
                         objItem.Checked = False
                     End If
@@ -393,7 +393,7 @@ Friend Class BankImportForm
         End Try
     End Sub
 
-    Private Function blnValidForAutoNew(ByRef intItemIndex As Integer, ByVal blnAllowBankNonCard As Boolean, ByVal blnSetMissingCategory As Boolean, ByRef strFailReason As String) As Boolean
+    Private Function blnValidForAutoNew(ByRef intItemIndex As Integer, ByVal blnManualSelectionAllowed As Boolean, ByVal blnSetMissingCategory As Boolean, ByRef strFailReason As String) As Boolean
 
         Dim objReg As Register
         Dim objImportedTrx As ImportedTrx
@@ -436,7 +436,7 @@ Friend Class BankImportForm
             Return False
         End If
 
-        strFailReason = mobjImportHandler.strAutoNewValidationError(objImportedTrx, blnAllowBankNonCard)
+        strFailReason = mobjImportHandler.strAutoNewValidationError(objImportedTrx, mobjAccount, blnManualSelectionAllowed)
         If Not String.IsNullOrEmpty(strFailReason) Then
             Return False
         End If
@@ -512,6 +512,8 @@ Friend Class BankImportForm
                 End With
             Loop
 
+            Array.Sort(Of ImportItem)(maudtItem, AddressOf ImportItemComparer)
+
             mobjTrxReader.CloseSource()
 
             Exit Function
@@ -519,6 +521,28 @@ Friend Class BankImportForm
             mobjTrxReader.CloseSource()
             gNestedException(ex)
         End Try
+    End Function
+
+    Private Function ImportItemComparer(ByVal objItem1 As ImportItem, ByVal objItem2 As ImportItem) As Integer
+        Dim intResult As Integer
+        If objItem1.objImportedTrx Is Nothing Then
+            If objItem2.objImportedTrx Is Nothing Then
+                Return 0
+            End If
+            Return -1
+        End If
+        If objItem2.objImportedTrx Is Nothing Then
+            Return 1
+        End If
+        intResult = objItem1.objImportedTrx.datDate.CompareTo(objItem2.objImportedTrx.datDate)
+        If intResult <> 0 Then
+            Return intResult
+        End If
+        intResult = objItem1.objImportedTrx.strNumber.CompareTo(objItem2.objImportedTrx.strNumber)
+        If intResult <> 0 Then
+            Return intResult
+        End If
+        Return objItem1.objImportedTrx.strDescription.CompareTo(objItem2.objImportedTrx.strDescription)
     End Function
 
     '$Description Display import items.

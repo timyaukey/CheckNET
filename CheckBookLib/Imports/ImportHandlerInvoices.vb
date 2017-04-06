@@ -52,7 +52,7 @@ Public Class ImportHandlerInvoices
         Return False
     End Function
 
-    Public Function strAutoNewValidationError(objImportedTrx As ImportedTrx, blnAllowBankNonCard As Boolean) As String Implements IImportHandler.strAutoNewValidationError
+    Public Function strAutoNewValidationError(objImportedTrx As ImportedTrx, ByVal objAccount As Account, blnManualSelectionAllowed As Boolean) As String Implements IImportHandler.strAutoNewValidationError
         Dim strTrxNum As String = LCase(objImportedTrx.strNumber)
         If strTrxNum <> "inv" And strTrxNum <> "crm" Then
             Return "Transaction is not an invoice or credit memo"

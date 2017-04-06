@@ -22,11 +22,19 @@ Public Class ImportHandlerBank
         Return False
     End Function
 
-    Public Function strAutoNewValidationError(objImportedTrx As ImportedTrx, blnAllowBankNonCard As Boolean) As String Implements IImportHandler.strAutoNewValidationError
-        Dim strTrxNum As String = LCase(objImportedTrx.strNumber)
-        If (strTrxNum <> "card") And Not blnAllowBankNonCard Then
-            Return "Transaction is not a credit or debit card use"
+    Public Function strAutoNewValidationError(objImportedTrx As ImportedTrx, ByVal objAccount As Account, blnManualSelectionAllowed As Boolean) As String Implements IImportHandler.strAutoNewValidationError
+        If blnManualSelectionAllowed Then
+            Return Nothing
         End If
+        Dim intCompareLen As Integer = 8
+        Dim strImportName As String = objImportedTrx.strDescription
+        For Each objReg As Register In objAccount.colRegisters
+            For Each objTrx As Trx In objReg.colDbgRepeatTrx.Values
+                If String.Compare(objTrx.strDescription, 0, strImportName, 0, intCompareLen, True) = 0 Then
+                    Return "There is a repeating transaction with a similar name"
+                End If
+            Next
+        Next
         Return Nothing
     End Function
 
