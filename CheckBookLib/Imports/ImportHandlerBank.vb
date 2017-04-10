@@ -13,9 +13,9 @@ Public Class ImportHandlerBank
     Public Sub AutoNewSearch(ByVal objImportedTrx As ImportedTrx, ByVal objReg As Register, ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.AutoNewSearch
         Dim lngNumber As Integer = 0
         Dim colExactMatches As ICollection(Of NormalTrx) = Nothing
-        objReg.MatchNormalCore(lngNumber, objImportedTrx.datDate, 60, objImportedTrx.strDescription, objImportedTrx.curAmount,
+        objReg.MatchNormalCore(lngNumber, objImportedTrx.datDate, 60, 60, objImportedTrx.strDescription, objImportedTrx.curAmount,
                                      objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
-        objReg.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
+        SearchUtilities.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
     End Sub
 
     Public Function blnAlternateAutoNewHandling(objImportedTrx As ImportedTrx, objReg As Register) As Boolean Implements IImportHandler.blnAlternateAutoNewHandling
@@ -53,9 +53,9 @@ Public Class ImportHandlerBank
         Dim lngNumber As Integer = CType(Val(objImportedTrx.strNumber), Integer)
         Dim colMatches As ICollection(Of NormalTrx) = Nothing
         Dim colExactMatches As ICollection(Of NormalTrx) = Nothing
-        objReg.MatchNormalCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
+        objReg.MatchNormalCore(lngNumber, objImportedTrx.datDate, 120, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
                          objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
-        objReg.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
+        SearchUtilities.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
         colUnusedMatches = ImportUtilities.colRemoveAlreadyMatched(objReg, colMatches, colAllMatchedTrx)
         colUnusedMatches = ImportUtilities.colApplyNarrowMethod(objReg, objImportedTrx, colUnusedMatches, blnExactMatch)
     End Sub
@@ -86,9 +86,9 @@ Public Class ImportHandlerBank
         Else
             lngNumber = 0
         End If
-        objReg.MatchNormalCore(lngNumber, objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
+        objReg.MatchNormalCore(lngNumber, objImportedTrx.datDate, 90, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
             objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, blnLooseMatch, colMatches, colExactMatches, blnExactMatch)
-        objReg.PruneToNonImportedExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
+        SearchUtilities.PruneToNonImportedExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
     End Sub
 
     Public Function blnIndividualUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx) As Boolean Implements IImportHandler.blnIndividualUpdate

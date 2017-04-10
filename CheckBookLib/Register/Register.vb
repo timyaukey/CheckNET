@@ -663,12 +663,12 @@ Public Class Register
                            ByVal strDescription As String, ByVal curAmount As Decimal, ByVal blnLooseMatch As Boolean,
                            ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)
         Dim colExactMatches As ICollection(Of NormalTrx) = Nothing
-        MatchNormalCore(lngNumber, datDate, intDateRange, strDescription, curAmount, 0.0D, 0.0D, blnLooseMatch, colMatches, colExactMatches, blnExactMatch)
-        PruneToExactMatches(colExactMatches, datDate, colMatches, blnExactMatch)
+        MatchNormalCore(lngNumber, datDate, intDateRange, intDateRange, strDescription, curAmount, 0.0D, 0.0D, blnLooseMatch, colMatches, colExactMatches, blnExactMatch)
+        SearchUtilities.PruneToExactMatches(colExactMatches, datDate, colMatches, blnExactMatch)
     End Sub
 
-    Public Sub MatchNormalCore(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDateRange As Integer,
-                         ByVal strDescription As String, ByVal curAmount As Decimal,
+    Public Sub MatchNormalCore(ByVal lngNumber As Integer, ByVal datDate As Date, ByVal intDaysBefore As Integer,
+                         ByVal intDaysAfter As Integer, ByVal strDescription As String, ByVal curAmount As Decimal,
                          ByVal curMatchMin As Decimal, ByVal curMatchMax As Decimal,
                          ByVal blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of NormalTrx),
                          ByRef colExactMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)
@@ -690,8 +690,8 @@ Public Class Register
         blnExactMatch = False
         colExactMatches = New List(Of NormalTrx)
         intDescrMatchLen = 10
-        lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1
-        datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
+        lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDaysBefore, datDate)) + 1
+        datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDaysAfter, datDate)
         strNumber = CStr(lngNumber)
         strDescrLC = Left(LCase(strDescription), intDescrMatchLen)
         Do
@@ -747,91 +747,6 @@ Public Class Register
             lngIndex = lngIndex + 1
         Loop
 
-    End Sub
-
-    Delegate Function PruneMatchesTrx(ByVal objTrx As Trx) As Boolean
-
-    ''' <summary>
-    ''' Narrow down the results to one or more Trx in colExactMatches if 
-    ''' there is anything in colExactMatches.
-    ''' </summary>
-    ''' <param name="colExactMatches"></param>
-    ''' <param name="colMatches"></param>
-    ''' <param name="blnExactMatch"></param>
-    ''' <param name="blnTrxPruner"></param>
-    ''' <remarks></remarks>
-    Public Sub PruneSearchMatches(ByVal colExactMatches As ICollection(Of NormalTrx), ByRef colMatches As ICollection(Of NormalTrx),
-                                  ByRef blnExactMatch As Boolean, ByVal blnTrxPruner As PruneMatchesTrx)
-        Dim objPerfectMatch As NormalTrx
-        Dim datFirstMatch As DateTime
-        Dim datLastMatch As DateTime
-        Dim blnFirstIteration As Boolean
-        Dim objTrx As NormalTrx
-
-        'If we have multiple exact matches, see if all are within a range of 5 days
-        'and one passes the test of blnTrxPruner(). If so use that one alone as the
-        'list of exact matches.
-        If colExactMatches.Count() > 1 Then
-            objPerfectMatch = Nothing
-            blnFirstIteration = True
-            For Each objTrx In colExactMatches
-                If blnFirstIteration Then
-                    datFirstMatch = objTrx.datDate
-                    datLastMatch = objTrx.datDate
-                    blnFirstIteration = False
-                Else
-                    If objTrx.datDate < datFirstMatch Then
-                        datFirstMatch = objTrx.datDate
-                    End If
-                    If objTrx.datDate > datLastMatch Then
-                        datLastMatch = objTrx.datDate
-                    End If
-                End If
-                If blnTrxPruner(objTrx) Then
-                    If objPerfectMatch Is Nothing Then
-                        objPerfectMatch = objTrx
-                    End If
-                    Exit For
-                End If
-            Next
-            If (Not objPerfectMatch Is Nothing) And datLastMatch.Subtract(datFirstMatch).TotalDays <= 2D Then
-                colExactMatches = New List(Of NormalTrx)
-                colExactMatches.Add(objPerfectMatch)
-            End If
-        End If
-
-        'If have exact matches, return them only.
-        If colExactMatches.Count > 0 Then
-            colMatches = colExactMatches
-            'If we have one exact match, say we have only one.
-            If colExactMatches.Count = 1 Then
-                blnExactMatch = True
-            End If
-        End If
-
-    End Sub
-
-    Public Sub PruneToExactMatches(ByVal colExactMatches As ICollection(Of NormalTrx), ByVal datDate As Date, ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)
-
-        PruneSearchMatches(colExactMatches, colMatches, blnExactMatch, Function(objTrx As Trx) objTrx.datDate = datDate)
-
-    End Sub
-
-    Public Sub PruneToNonImportedExactMatches(ByVal colExactMatches As ICollection(Of NormalTrx), ByVal datDate As Date, ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)
-
-        PruneSearchMatches(colExactMatches, colMatches, blnExactMatch,
-                           Function(objTrx As Trx) As Boolean
-                               If objTrx.datDate = datDate Then
-                                   If objTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
-                                       If TypeOf objTrx Is NormalTrx Then
-                                           If String.IsNullOrEmpty(DirectCast(objTrx, NormalTrx).strImportKey) Then
-                                               Return True
-                                           End If
-                                       End If
-                                   End If
-                               End If
-                               Return False
-                           End Function)
     End Sub
 
     '$Description Find all normal Trx objects which are an exact match to the description

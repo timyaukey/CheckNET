@@ -130,6 +130,7 @@
     <Compile Include="Imports\InvoiceImportStandard.vb" />
     <Compile Include="RepeatSummarizer.vb" />
     <Compile Include="RepeatUnitTypeConverter.vb" />
+    <Compile Include="SearchUtilities.vb" />
     <Compile Include="StringTransElement.vb" />
     <Compile Include="SimpleStringTranslator.vb" />
     <Compile Include="TrxGen\FilePersistableType.vb" />

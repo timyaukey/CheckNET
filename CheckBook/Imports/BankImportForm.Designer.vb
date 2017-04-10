@@ -28,13 +28,13 @@
 	Public WithEvents chkHideCompleted As System.Windows.Forms.CheckBox
 	Public WithEvents cmdClose As System.Windows.Forms.Button
 	Public WithEvents cmdUpdateExisting As System.Windows.Forms.Button
-	Public WithEvents _lvwMatches_ColumnHeader_1 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_2 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_3 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_4 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_5 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_6 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_7 As System.Windows.Forms.ColumnHeader
+	Public WithEvents _lvwMatches_CH_Date As System.Windows.Forms.ColumnHeader
+	Public WithEvents _lvwMatches_CH_Number As System.Windows.Forms.ColumnHeader
+	Public WithEvents _lvwMatches_CH_Descr As System.Windows.Forms.ColumnHeader
+	Public WithEvents _lvwMatches_CH_Amount As System.Windows.Forms.ColumnHeader
+	Public WithEvents _lvwMatches_CH_Category As System.Windows.Forms.ColumnHeader
+	Public WithEvents _lvwMatches_CH_Register As System.Windows.Forms.ColumnHeader
+	Public WithEvents _lvwMatches_CH_Hidden As System.Windows.Forms.ColumnHeader
 	Public WithEvents lvwMatches As System.Windows.Forms.ListView
 	Public WithEvents cmdRepeatSearch As System.Windows.Forms.Button
 	Public WithEvents cmdCreateNew As System.Windows.Forms.Button
@@ -72,13 +72,17 @@
         Me.cmdClose = New System.Windows.Forms.Button()
         Me.cmdUpdateExisting = New System.Windows.Forms.Button()
         Me.lvwMatches = New System.Windows.Forms.ListView()
-        Me._lvwMatches_ColumnHeader_1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me._lvwMatches_ColumnHeader_2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me._lvwMatches_ColumnHeader_3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me._lvwMatches_ColumnHeader_4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me._lvwMatches_ColumnHeader_5 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me._lvwMatches_ColumnHeader_6 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me._lvwMatches_ColumnHeader_7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwMatches_CH_Date = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwMatches_CH_Number = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwMatches_CH_Descr = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwMatches_CH_Amount = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwMatches_CH_Category = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwMatches_CH_DueDate = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwMatches_CH_Fake = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwMatches_CH_Gen = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwMatches_CH_Imported = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwMatches_CH_Register = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwMatches_CH_Hidden = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.cmdRepeatSearch = New System.Windows.Forms.Button()
         Me.cmdCreateNew = New System.Windows.Forms.Button()
         Me.cboRegister = New System.Windows.Forms.ComboBox()
@@ -101,11 +105,12 @@
         '
         'chkAllowManualBatchNew
         '
+        Me.chkAllowManualBatchNew.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkAllowManualBatchNew.BackColor = System.Drawing.SystemColors.Control
         Me.chkAllowManualBatchNew.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkAllowManualBatchNew.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkAllowManualBatchNew.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkAllowManualBatchNew.Location = New System.Drawing.Point(458, 442)
+        Me.chkAllowManualBatchNew.Location = New System.Drawing.Point(724, 478)
         Me.chkAllowManualBatchNew.Name = "chkAllowManualBatchNew"
         Me.chkAllowManualBatchNew.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkAllowManualBatchNew.Size = New System.Drawing.Size(281, 16)
@@ -115,12 +120,13 @@
         '
         'cboDefaultCategory
         '
+        Me.cboDefaultCategory.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cboDefaultCategory.BackColor = System.Drawing.SystemColors.Window
         Me.cboDefaultCategory.Cursor = System.Windows.Forms.Cursors.Default
         Me.cboDefaultCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboDefaultCategory.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboDefaultCategory.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboDefaultCategory.Location = New System.Drawing.Point(564, 460)
+        Me.cboDefaultCategory.Location = New System.Drawing.Point(830, 496)
         Me.cboDefaultCategory.Name = "cboDefaultCategory"
         Me.cboDefaultCategory.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboDefaultCategory.Size = New System.Drawing.Size(176, 22)
@@ -128,11 +134,12 @@
         '
         'cmdBatchNew
         '
+        Me.cmdBatchNew.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.cmdBatchNew.BackColor = System.Drawing.SystemColors.Control
         Me.cmdBatchNew.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdBatchNew.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdBatchNew.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdBatchNew.Location = New System.Drawing.Point(248, 457)
+        Me.cmdBatchNew.Location = New System.Drawing.Point(248, 493)
         Me.cmdBatchNew.Name = "cmdBatchNew"
         Me.cmdBatchNew.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdBatchNew.Size = New System.Drawing.Size(120, 23)
@@ -142,11 +149,12 @@
         '
         'cmdFindUpdates
         '
+        Me.cmdFindUpdates.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.cmdFindUpdates.BackColor = System.Drawing.SystemColors.Control
         Me.cmdFindUpdates.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdFindUpdates.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdFindUpdates.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdFindUpdates.Location = New System.Drawing.Point(126, 482)
+        Me.cmdFindUpdates.Location = New System.Drawing.Point(126, 518)
         Me.cmdFindUpdates.Name = "cmdFindUpdates"
         Me.cmdFindUpdates.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdFindUpdates.Size = New System.Drawing.Size(120, 23)
@@ -156,11 +164,12 @@
         '
         'cmdBatchUpdates
         '
+        Me.cmdBatchUpdates.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.cmdBatchUpdates.BackColor = System.Drawing.SystemColors.Control
         Me.cmdBatchUpdates.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdBatchUpdates.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdBatchUpdates.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdBatchUpdates.Location = New System.Drawing.Point(248, 482)
+        Me.cmdBatchUpdates.Location = New System.Drawing.Point(248, 518)
         Me.cmdBatchUpdates.Name = "cmdBatchUpdates"
         Me.cmdBatchUpdates.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdBatchUpdates.Size = New System.Drawing.Size(120, 23)
@@ -170,11 +179,12 @@
         '
         'cmdFindNew
         '
+        Me.cmdFindNew.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.cmdFindNew.BackColor = System.Drawing.SystemColors.Control
         Me.cmdFindNew.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdFindNew.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdFindNew.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdFindNew.Location = New System.Drawing.Point(126, 457)
+        Me.cmdFindNew.Location = New System.Drawing.Point(126, 493)
         Me.cmdFindNew.Name = "cmdFindNew"
         Me.cmdFindNew.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdFindNew.Size = New System.Drawing.Size(120, 23)
@@ -226,11 +236,12 @@
         '
         'cmdClose
         '
+        Me.cmdClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmdClose.BackColor = System.Drawing.SystemColors.Control
         Me.cmdClose.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdClose.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdClose.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdClose.Location = New System.Drawing.Point(748, 482)
+        Me.cmdClose.Location = New System.Drawing.Point(1014, 518)
         Me.cmdClose.Name = "cmdClose"
         Me.cmdClose.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdClose.Size = New System.Drawing.Size(79, 23)
@@ -240,11 +251,12 @@
         '
         'cmdUpdateExisting
         '
+        Me.cmdUpdateExisting.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.cmdUpdateExisting.BackColor = System.Drawing.SystemColors.Control
         Me.cmdUpdateExisting.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdUpdateExisting.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdUpdateExisting.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdUpdateExisting.Location = New System.Drawing.Point(8, 482)
+        Me.cmdUpdateExisting.Location = New System.Drawing.Point(8, 518)
         Me.cmdUpdateExisting.Name = "cmdUpdateExisting"
         Me.cmdUpdateExisting.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdUpdateExisting.Size = New System.Drawing.Size(104, 23)
@@ -254,8 +266,11 @@
         '
         'lvwMatches
         '
+        Me.lvwMatches.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lvwMatches.BackColor = System.Drawing.SystemColors.Window
-        Me.lvwMatches.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me._lvwMatches_ColumnHeader_1, Me._lvwMatches_ColumnHeader_2, Me._lvwMatches_ColumnHeader_3, Me._lvwMatches_ColumnHeader_4, Me._lvwMatches_ColumnHeader_5, Me._lvwMatches_ColumnHeader_6, Me._lvwMatches_ColumnHeader_7})
+        Me.lvwMatches.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me._lvwMatches_CH_Date, Me._lvwMatches_CH_Number, Me._lvwMatches_CH_Descr, Me._lvwMatches_CH_Amount, Me._lvwMatches_CH_Category, Me._lvwMatches_CH_DueDate, Me._lvwMatches_CH_Fake, Me._lvwMatches_CH_Gen, Me._lvwMatches_CH_Imported, Me._lvwMatches_CH_Register, Me._lvwMatches_CH_Hidden})
         Me.lvwMatches.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lvwMatches.ForeColor = System.Drawing.SystemColors.WindowText
         Me.lvwMatches.FullRowSelect = True
@@ -263,53 +278,74 @@
         Me.lvwMatches.HideSelection = False
         Me.lvwMatches.Location = New System.Drawing.Point(5, 318)
         Me.lvwMatches.Name = "lvwMatches"
-        Me.lvwMatches.Size = New System.Drawing.Size(822, 118)
+        Me.lvwMatches.Size = New System.Drawing.Size(1088, 154)
         Me.lvwMatches.TabIndex = 9
         Me.lvwMatches.UseCompatibleStateImageBehavior = False
         Me.lvwMatches.View = System.Windows.Forms.View.Details
         '
-        '_lvwMatches_ColumnHeader_1
+        '_lvwMatches_CH_Date
         '
-        Me._lvwMatches_ColumnHeader_1.Text = "Date"
-        Me._lvwMatches_ColumnHeader_1.Width = 72
+        Me._lvwMatches_CH_Date.Text = "Date"
+        Me._lvwMatches_CH_Date.Width = 72
         '
-        '_lvwMatches_ColumnHeader_2
+        '_lvwMatches_CH_Number
         '
-        Me._lvwMatches_ColumnHeader_2.Text = "Number"
-        Me._lvwMatches_ColumnHeader_2.Width = 65
+        Me._lvwMatches_CH_Number.Text = "Number"
+        Me._lvwMatches_CH_Number.Width = 65
         '
-        '_lvwMatches_ColumnHeader_3
+        '_lvwMatches_CH_Descr
         '
-        Me._lvwMatches_ColumnHeader_3.Text = "Description"
-        Me._lvwMatches_ColumnHeader_3.Width = 195
+        Me._lvwMatches_CH_Descr.Text = "Description"
+        Me._lvwMatches_CH_Descr.Width = 243
         '
-        '_lvwMatches_ColumnHeader_4
+        '_lvwMatches_CH_Amount
         '
-        Me._lvwMatches_ColumnHeader_4.Text = "Amount"
-        Me._lvwMatches_ColumnHeader_4.Width = 63
+        Me._lvwMatches_CH_Amount.Text = "Amount"
+        Me._lvwMatches_CH_Amount.Width = 63
         '
-        '_lvwMatches_ColumnHeader_5
+        '_lvwMatches_CH_Category
         '
-        Me._lvwMatches_ColumnHeader_5.Text = "Category"
-        Me._lvwMatches_ColumnHeader_5.Width = 134
+        Me._lvwMatches_CH_Category.Text = "Category"
+        Me._lvwMatches_CH_Category.Width = 193
         '
-        '_lvwMatches_ColumnHeader_6
+        '_lvwMatches_CH_DueDate
         '
-        Me._lvwMatches_ColumnHeader_6.Text = "Register"
-        Me._lvwMatches_ColumnHeader_6.Width = 185
+        Me._lvwMatches_CH_DueDate.Text = "Due Date"
+        Me._lvwMatches_CH_DueDate.Width = 70
         '
-        '_lvwMatches_ColumnHeader_7
+        '_lvwMatches_CH_Fake
         '
-        Me._lvwMatches_ColumnHeader_7.Text = "Hidden Index"
-        Me._lvwMatches_ColumnHeader_7.Width = 0
+        Me._lvwMatches_CH_Fake.Text = "Fake"
+        Me._lvwMatches_CH_Fake.Width = 40
+        '
+        '_lvwMatches_CH_Gen
+        '
+        Me._lvwMatches_CH_Gen.Text = "Gen"
+        Me._lvwMatches_CH_Gen.Width = 40
+        '
+        '_lvwMatches_CH_Imported
+        '
+        Me._lvwMatches_CH_Imported.Text = "Imported"
+        Me._lvwMatches_CH_Imported.Width = 70
+        '
+        '_lvwMatches_CH_Register
+        '
+        Me._lvwMatches_CH_Register.Text = "Register"
+        Me._lvwMatches_CH_Register.Width = 198
+        '
+        '_lvwMatches_CH_Hidden
+        '
+        Me._lvwMatches_CH_Hidden.Text = "Hidden Index"
+        Me._lvwMatches_CH_Hidden.Width = 0
         '
         'cmdRepeatSearch
         '
+        Me.cmdRepeatSearch.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmdRepeatSearch.BackColor = System.Drawing.SystemColors.Control
         Me.cmdRepeatSearch.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdRepeatSearch.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdRepeatSearch.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdRepeatSearch.Location = New System.Drawing.Point(722, 294)
+        Me.cmdRepeatSearch.Location = New System.Drawing.Point(988, 294)
         Me.cmdRepeatSearch.Name = "cmdRepeatSearch"
         Me.cmdRepeatSearch.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdRepeatSearch.Size = New System.Drawing.Size(104, 23)
@@ -319,11 +355,12 @@
         '
         'cmdCreateNew
         '
+        Me.cmdCreateNew.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.cmdCreateNew.BackColor = System.Drawing.SystemColors.Control
         Me.cmdCreateNew.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdCreateNew.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdCreateNew.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdCreateNew.Location = New System.Drawing.Point(8, 457)
+        Me.cmdCreateNew.Location = New System.Drawing.Point(8, 493)
         Me.cmdCreateNew.Name = "cmdCreateNew"
         Me.cmdCreateNew.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdCreateNew.Size = New System.Drawing.Size(104, 23)
@@ -333,12 +370,13 @@
         '
         'cboRegister
         '
+        Me.cboRegister.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cboRegister.BackColor = System.Drawing.SystemColors.Window
         Me.cboRegister.Cursor = System.Windows.Forms.Cursors.Default
         Me.cboRegister.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboRegister.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboRegister.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboRegister.Location = New System.Drawing.Point(564, 484)
+        Me.cboRegister.Location = New System.Drawing.Point(830, 520)
         Me.cboRegister.Name = "cboRegister"
         Me.cboRegister.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboRegister.Size = New System.Drawing.Size(176, 22)
@@ -346,6 +384,8 @@
         '
         'lvwTrx
         '
+        Me.lvwTrx.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lvwTrx.BackColor = System.Drawing.SystemColors.Window
         Me.lvwTrx.CheckBoxes = True
         Me.lvwTrx.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me._lvwTrx_ColumnHeader_1, Me._lvwTrx_ColumnHeader_2, Me._lvwTrx_ColumnHeader_3, Me._lvwTrx_ColumnHeader_4, Me._lvwTrx_ColumnHeader_5, Me._lvwTrx_ColumnHeader_6, Me._lvwTrx_ColumnHeader_7, Me._lvwTrx_ColumnHeader_8})
@@ -357,7 +397,7 @@
         Me.lvwTrx.Location = New System.Drawing.Point(5, 42)
         Me.lvwTrx.Name = "lvwTrx"
         Me.lvwTrx.ShowItemToolTips = True
-        Me.lvwTrx.Size = New System.Drawing.Size(822, 250)
+        Me.lvwTrx.Size = New System.Drawing.Size(1088, 250)
         Me.lvwTrx.TabIndex = 5
         Me.lvwTrx.UseCompatibleStateImageBehavior = False
         Me.lvwTrx.View = System.Windows.Forms.View.Details
@@ -375,7 +415,7 @@
         '_lvwTrx_ColumnHeader_3
         '
         Me._lvwTrx_ColumnHeader_3.Text = "Description"
-        Me._lvwTrx_ColumnHeader_3.Width = 195
+        Me._lvwTrx_ColumnHeader_3.Width = 336
         '
         '_lvwTrx_ColumnHeader_4
         '
@@ -386,7 +426,7 @@
         '_lvwTrx_ColumnHeader_5
         '
         Me._lvwTrx_ColumnHeader_5.Text = "Category"
-        Me._lvwTrx_ColumnHeader_5.Width = 134
+        Me._lvwTrx_ColumnHeader_5.Width = 194
         '
         '_lvwTrx_ColumnHeader_6
         '
@@ -396,20 +436,21 @@
         '_lvwTrx_ColumnHeader_7
         '
         Me._lvwTrx_ColumnHeader_7.Text = "Register"
-        Me._lvwTrx_ColumnHeader_7.Width = 185
+        Me._lvwTrx_ColumnHeader_7.Width = 220
         '
         '_lvwTrx_ColumnHeader_8
         '
         Me._lvwTrx_ColumnHeader_8.Text = "Hidden Index"
-        Me._lvwTrx_ColumnHeader_8.Width = 1
+        Me._lvwTrx_ColumnHeader_8.Width = 0
         '
         'lblDefaultCategory
         '
+        Me.lblDefaultCategory.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblDefaultCategory.BackColor = System.Drawing.SystemColors.Control
         Me.lblDefaultCategory.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblDefaultCategory.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblDefaultCategory.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblDefaultCategory.Location = New System.Drawing.Point(458, 464)
+        Me.lblDefaultCategory.Location = New System.Drawing.Point(724, 500)
         Me.lblDefaultCategory.Name = "lblDefaultCategory"
         Me.lblDefaultCategory.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblDefaultCategory.Size = New System.Drawing.Size(101, 15)
@@ -418,11 +459,12 @@
         '
         'lblSearchFor
         '
+        Me.lblSearchFor.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblSearchFor.BackColor = System.Drawing.SystemColors.Control
         Me.lblSearchFor.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblSearchFor.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblSearchFor.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSearchFor.Location = New System.Drawing.Point(292, 296)
+        Me.lblSearchFor.Location = New System.Drawing.Point(558, 296)
         Me.lblSearchFor.Name = "lblSearchFor"
         Me.lblSearchFor.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblSearchFor.Size = New System.Drawing.Size(425, 15)
@@ -432,14 +474,16 @@
         '
         'lblDoubleClickHint
         '
+        Me.lblDoubleClickHint.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblDoubleClickHint.BackColor = System.Drawing.SystemColors.Control
         Me.lblDoubleClickHint.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblDoubleClickHint.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblDoubleClickHint.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblDoubleClickHint.Location = New System.Drawing.Point(511, 25)
+        Me.lblDoubleClickHint.Location = New System.Drawing.Point(777, 25)
         Me.lblDoubleClickHint.Name = "lblDoubleClickHint"
         Me.lblDoubleClickHint.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblDoubleClickHint.Size = New System.Drawing.Size(312, 16)
+        Me.lblDoubleClickHint.Size = New System.Drawing.Size(312, 52)
         Me.lblDoubleClickHint.TabIndex = 4
         Me.lblDoubleClickHint.Text = "Double-click a row to create a quick transaction from it"
         Me.lblDoubleClickHint.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -459,11 +503,12 @@
         '
         'Label1
         '
+        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label1.BackColor = System.Drawing.SystemColors.Control
         Me.Label1.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label1.Location = New System.Drawing.Point(458, 488)
+        Me.Label1.Location = New System.Drawing.Point(724, 524)
         Me.Label1.Name = "Label1"
         Me.Label1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label1.Size = New System.Drawing.Size(101, 15)
@@ -488,7 +533,7 @@
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(833, 512)
+        Me.ClientSize = New System.Drawing.Size(1099, 548)
         Me.Controls.Add(Me.chkAllowManualBatchNew)
         Me.Controls.Add(Me.cboDefaultCategory)
         Me.Controls.Add(Me.cmdBatchNew)
@@ -513,7 +558,6 @@
         Me.Controls.Add(Me.lblReadFrom)
         Me.Cursor = System.Windows.Forms.Cursors.Default
         Me.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.KeyPreview = True
         Me.Location = New System.Drawing.Point(2, 22)
         Me.MaximizeBox = False
@@ -526,5 +570,10 @@
         Me.ResumeLayout(False)
 
     End Sub
-#End Region 
+
+    Friend WithEvents _lvwMatches_CH_Fake As ColumnHeader
+    Friend WithEvents _lvwMatches_CH_Gen As ColumnHeader
+    Friend WithEvents _lvwMatches_CH_Imported As ColumnHeader
+    Friend WithEvents _lvwMatches_CH_DueDate As ColumnHeader
+#End Region
 End Class

@@ -40,7 +40,7 @@ Friend Class BankImportForm
     'Column number in item list with index into maudtItem().
     Private Const mintITMCOL_INDEX As Integer = 7
     'Column number in match list with index into maudtMatch().
-    Private Const mintMCHCOL_INDEX As Integer = 6
+    Private Const mintMCHCOL_INDEX As Integer = 10
 
     'Imported transaction information.
     Private maudtItem() As ImportItem '1 to mintItems
@@ -601,34 +601,33 @@ Friend Class BankImportForm
 
     Private Sub DisplayOneImportItem(ByVal objItem As System.Windows.Forms.ListViewItem, ByVal intIndex As Integer)
 
-        Dim objTrx As ImportedTrx
+        Dim objTrx As ImportedTrx = maudtItem(intIndex).objImportedTrx
+        Dim objReg As Register = maudtItem(intIndex).objReg
         Dim strStatus As String = ""
+        Dim strRegTitle As String = ""
 
         Try
 
-            objTrx = maudtItem(intIndex).objImportedTrx
-            SetTrxSubItems(objTrx, objItem, maudtItem(intIndex).objReg, 6)
+            Select Case maudtItem(intIndex).lngStatus
+                Case ImportStatus.mlngIMPSTS_PRIOR
+                    strStatus = "Prior"
+                Case ImportStatus.mlngIMPSTS_NEW
+                    strStatus = "New"
+                Case ImportStatus.mlngIMPSTS_UPDATE
+                    strStatus = "Update"
+            End Select
             With objItem
-                Select Case maudtItem(intIndex).lngStatus
-                    Case ImportStatus.mlngIMPSTS_PRIOR
-                        strStatus = "Prior"
-                    Case ImportStatus.mlngIMPSTS_NEW
-                        strStatus = "New"
-                    Case ImportStatus.mlngIMPSTS_UPDATE
-                        strStatus = "Update"
-                End Select
-
-                If objItem.SubItems.Count > 5 Then
-                    objItem.SubItems(5).Text = strStatus
-                Else
-                    objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strStatus))
+                .Text = gstrFormatDate(objTrx.datDate)
+                .SubItems.Insert(1, New ListViewItem.ListViewSubItem(Nothing, objTrx.strNumber))
+                .SubItems.Insert(2, New ListViewItem.ListViewSubItem(Nothing, objTrx.strDescription))
+                .SubItems.Insert(3, New ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objTrx.curAmount)))
+                .SubItems.Insert(4, New ListViewItem.ListViewSubItem(Nothing, strSummarizeTrxCat(objTrx)))
+                .SubItems.Insert(5, New ListViewItem.ListViewSubItem(Nothing, strStatus))
+                If Not objReg Is Nothing Then
+                    strRegTitle = objReg.strTitle
                 End If
-
-                If objItem.SubItems.Count > mintITMCOL_INDEX Then
-                    objItem.SubItems(mintITMCOL_INDEX).Text = CStr(intIndex)
-                Else
-                    objItem.SubItems.Insert(mintITMCOL_INDEX, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, CStr(intIndex)))
-                End If
+                .SubItems.Insert(6, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strRegTitle))
+                .SubItems.Insert(mintITMCOL_INDEX, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, CStr(intIndex)))
             End With
 
             Exit Sub
@@ -726,8 +725,8 @@ Friend Class BankImportForm
     End Sub
 
     Private Sub BankImportForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        Me.Width = 849
-        Me.Height = 551
+        Me.Width = 1115
+        Me.Height = 587
     End Sub
 
     Private Sub lvwTrx_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles lvwTrx.Click
@@ -798,20 +797,38 @@ Friend Class BankImportForm
                     chkLooseMatch.CheckState = System.Windows.Forms.CheckState.Checked,
                     colMatches, blnExactMatch)
                 For Each objMatchedTrx In colMatches
-                    'Show the match if it hasn't been imported before,
-                    'or we're importing a fake trx. We allow fake trx to be imported
-                    'so we can import document information for them - we don't save
-                    'their amount or trx number if matched to a real trx.
-                    If (Len(objMatchedTrx.strImportKey) = 0 Or objImportedTrx.blnFake) And objMatchedTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
-                        mintMatches = mintMatches + 1
-                        ReDim Preserve maudtMatch(mintMatches)
-                        maudtMatch(mintMatches) = objMatchedTrx
-                        DisplayMatch(objMatchedTrx, mintMatches)
-                    End If
+                    mintMatches = mintMatches + 1
+                    ReDim Preserve maudtMatch(mintMatches)
+                    maudtMatch(mintMatches) = objMatchedTrx
+                    DisplayMatch(objMatchedTrx, mintMatches)
                 Next
             Next objReg
+
             'Deselect everything in list (the first item is selected by default).
             ClearLvwSelection(lvwMatches)
+            'Select the first matched trx which is not already imported,
+            'then make a trx a few rows below visible to scroll the first
+            'non-imported to the middle of the list control.
+            Dim objMatchItem As ListViewItem
+            Dim objMatchTrx As NormalTrx
+            Dim blnFoundNonImported As Boolean = False
+            Dim intNumberVisible As Integer = 0
+            For Each objMatchItem In lvwMatches.Items
+                objMatchTrx = maudtMatch(CInt(objMatchItem.SubItems(mintMCHCOL_INDEX).Text))
+                If objMatchTrx.strImportKey = "" Then
+                    If Not blnFoundNonImported Then
+                        objMatchItem.Selected = True
+                        blnFoundNonImported = True
+                    End If
+                End If
+                If blnFoundNonImported Then
+                    objMatchItem.EnsureVisible()
+                    intNumberVisible = intNumberVisible + 1
+                    If intNumberVisible >= 4 Then
+                        Exit For
+                    End If
+                End If
+            Next
 
             Exit Sub
         Catch ex As Exception
@@ -875,66 +892,34 @@ Friend Class BankImportForm
     End Sub
 
     Private Sub DisplayMatch(ByVal objTrx As NormalTrx, ByVal intIndex As Integer)
-        Dim objItem As System.Windows.Forms.ListViewItem
-        objItem = gobjListViewAdd(lvwMatches)
-        SetTrxSubItems(objTrx, objItem, maudtMatch(intIndex).objReg, 5)
 
-        If objItem.SubItems.Count > mintMCHCOL_INDEX Then
-            objItem.SubItems(mintMCHCOL_INDEX).Text = CStr(intIndex)
-        Else
-            objItem.SubItems.Insert(mintMCHCOL_INDEX, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, CStr(intIndex)))
+        Dim objItem As ListViewItem = gobjListViewAdd(lvwMatches)
+        Dim strFake As String = ""
+        Dim strGen As String = ""
+        Dim strImport As String = ""
+        If objTrx.blnFake Then
+            strFake = "Y"
         End If
-    End Sub
-
-    Private Sub SetTrxSubItems(ByVal objTrx As NormalTrx, ByVal objItem As System.Windows.Forms.ListViewItem, ByVal objReg As Register, ByVal intRegColumn As Short)
-
-        Dim strRegTitle As String
+        If objTrx.blnAutoGenerated Then
+            strGen = "Y"
+        End If
+        If objTrx.strImportKey <> "" Then
+            strImport = "Y"
+        End If
         With objItem
             .Text = gstrFormatDate(objTrx.datDate)
-
-            If objItem.SubItems.Count > 1 Then
-                objItem.SubItems(1).Text = objTrx.strNumber
-            Else
-                objItem.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objTrx.strNumber))
-            End If
-
-            If objItem.SubItems.Count > 2 Then
-                objItem.SubItems(2).Text = objTrx.strDescription
-            Else
-                objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objTrx.strDescription))
-            End If
-
-            If objItem.SubItems.Count > 3 Then
-                objItem.SubItems(3).Text = gstrFormatCurrency(objTrx.curAmount)
-            Else
-                objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objTrx.curAmount)))
-            End If
-
-            If objItem.SubItems.Count > 4 Then
-                objItem.SubItems(4).Text = strSummarizeTrxCat(objTrx)
-            Else
-                objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strSummarizeTrxCat(objTrx)))
-            End If
-            'For .NET compatibility: You can only set an index immediately after
-            'the last existing index, and intRegColumn can be either 5 or 6.
-
-            If objItem.SubItems.Count > 5 Then
-                objItem.SubItems(5).Text = ""
-            Else
-                objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, ""))
-            End If
-            If objReg Is Nothing Then
-                strRegTitle = ""
-            Else
-                strRegTitle = objReg.strTitle
-            End If
-
-            If objItem.SubItems.Count > intRegColumn Then
-                objItem.SubItems(intRegColumn).Text = strRegTitle
-            Else
-                objItem.SubItems.Insert(intRegColumn, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strRegTitle))
-            End If
+            .SubItems.Insert(1, New ListViewItem.ListViewSubItem(Nothing, objTrx.strNumber))
+            .SubItems.Insert(2, New ListViewItem.ListViewSubItem(Nothing, objTrx.strDescription))
+            .SubItems.Insert(3, New ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objTrx.curAmount)))
+            .SubItems.Insert(4, New ListViewItem.ListViewSubItem(Nothing, strSummarizeTrxCat(objTrx)))
+            .SubItems.Insert(5, New ListViewItem.ListViewSubItem(Nothing, gstrSummarizeTrxDueDate(objTrx)))
+            .SubItems.Insert(6, New ListViewItem.ListViewSubItem(Nothing, strFake))
+            .SubItems.Insert(7, New ListViewItem.ListViewSubItem(Nothing, strGen))
+            .SubItems.Insert(8, New ListViewItem.ListViewSubItem(Nothing, strImport))
+            .SubItems.Insert(9, New ListViewItem.ListViewSubItem(Nothing, objTrx.objReg.strTitle))
+            .SubItems.Insert(mintMCHCOL_INDEX, New ListViewItem.ListViewSubItem(Nothing, CStr(intIndex)))
         End With
+
     End Sub
 
     Private Function strSummarizeTrxCat(ByVal objTrx As NormalTrx) As String
@@ -1029,6 +1014,10 @@ Friend Class BankImportForm
             End If
 
             objMatchedTrx = maudtMatch(intSelectedMatchIndex())
+            If objMatchedTrx.strImportKey <> "" Then
+                MsgBox("You may not update a transaction that has already been imported.", MsgBoxStyle.Critical)
+                Exit Sub
+            End If
             With maudtItem(intSelectedItemIndex())
                 If mobjImportHandler.blnIndividualUpdate(.objImportedTrx, objMatchedTrx) Then
                     .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
@@ -1073,7 +1062,7 @@ Friend Class BankImportForm
     End Function
 
     Private Function intSelectedMatchIndex() As Integer
-        intSelectedMatchIndex = CShort(lvwMatches.FocusedItem.SubItems(mintMCHCOL_INDEX).Text)
+        intSelectedMatchIndex = CInt(lvwMatches.FocusedItem.SubItems(mintMCHCOL_INDEX).Text)
     End Function
 
     Private Sub cboRegister_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboRegister.SelectedIndexChanged
