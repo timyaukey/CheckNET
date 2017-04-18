@@ -1,5 +1,6 @@
 ﻿Option Strict On
 Option Explicit On
+Imports CheckBookLib
 
 Public Class ImportHandlerBank
     Implements IImportHandler
@@ -45,8 +46,17 @@ Public Class ImportHandlerBank
         Return Nothing
     End Function
 
-    Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx) Implements IImportHandler.BatchUpdate
-        objMatchedTrx.objReg.ImportUpdateBank(objMatchedTrx.lngIndex, objImportedTrx.datDate, objMatchedTrx.strNumber, objImportedTrx.curAmount, objImportedTrx.strImportKey)
+    Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx, ByVal intSeqNumber As Integer) Implements IImportHandler.BatchUpdate
+        Dim strImportKey As String
+        Dim curAmount As Decimal
+        If intSeqNumber = 0 Then
+            strImportKey = objImportedTrx.strImportKey
+            curAmount = objImportedTrx.curAmount
+        Else
+            strImportKey = objImportedTrx.strImportKey + "-" + intSeqNumber.ToString()
+            curAmount = 0D
+        End If
+        objMatchedTrx.objReg.ImportUpdateBank(objMatchedTrx.lngIndex, objImportedTrx.datDate, objMatchedTrx.strNumber, curAmount, strImportKey)
     End Sub
 
     Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of NormalTrx), ByRef colUnusedMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
@@ -73,6 +83,12 @@ Public Class ImportHandlerBank
     End Property
 
     Public ReadOnly Property blnAllowIndividualUpdates As Boolean Implements IImportHandler.blnAllowIndividualUpdates
+        Get
+            Return True
+        End Get
+    End Property
+
+    Public ReadOnly Property blnAllowMultiPartMatches As Boolean Implements IImportHandler.blnAllowMultiPartMatches
         Get
             Return True
         End Get

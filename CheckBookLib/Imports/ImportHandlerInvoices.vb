@@ -1,5 +1,6 @@
 ﻿Option Strict On
 Option Explicit On
+Imports CheckBookLib
 
 Public Class ImportHandlerInvoices
     Implements IImportHandler
@@ -69,7 +70,7 @@ Public Class ImportHandlerInvoices
         Return Nothing
     End Function
 
-    Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx) Implements IImportHandler.BatchUpdate
+    Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx, ByVal intSeqNumber As Integer) Implements IImportHandler.BatchUpdate
         'Do nothing for invoices.
     End Sub
 
@@ -90,6 +91,12 @@ Public Class ImportHandlerInvoices
     End Property
 
     Public ReadOnly Property blnAllowIndividualUpdates As Boolean Implements IImportHandler.blnAllowIndividualUpdates
+        Get
+            Return False
+        End Get
+    End Property
+
+    Public ReadOnly Property blnAllowMultiPartMatches As Boolean Implements IImportHandler.blnAllowMultiPartMatches
         Get
             Return False
         End Get

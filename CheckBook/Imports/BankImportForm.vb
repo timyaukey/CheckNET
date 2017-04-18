@@ -6,12 +6,12 @@ Imports CheckBookLib
 
 Friend Class BankImportForm
     Inherits System.Windows.Forms.Form
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     Private WithEvents mobjAccount As Account
     Private mobjCompany As Company
     Private mobjImportHandler As IImportHandler
     Private mobjTrxReader As ITrxReader
+    Private mblnIgnoreItemCheckedEvents As Boolean
 
     Private Enum ImportStatus
         'Have not decided what to do with item yet.
@@ -25,17 +25,60 @@ Friend Class BankImportForm
     End Enum
 
     'Item obtained from ITrxReader.
-    Private Structure ImportItem
+    Private Class ImportItem
         'ImportedTrx created by ITrxReader.
-        Dim objImportedTrx As ImportedTrx
-        'Register it was added to or updated in.
-        Dim objReg As Register
-        Dim lngStatus As ImportStatus
-        'If set, identifies an exact match to the imported
-        'trx in some register.
-        Dim objMatchedReg As Register
-        Dim objMatchedTrx As NormalTrx
-    End Structure
+        Public objImportedTrx As ImportedTrx
+        'Register objImportedTrx was added to or updated in.
+        Public objReg As Register
+        'The status of this ImportItem.
+        Public lngStatus As ImportStatus
+        'If this is not Nothing then objImportedTrx will be inserted or updated in objMatchedReg.
+        Public objMatchedReg As Register
+        'If set, identifies an exact match to be updated in objMatchedReg.
+        'If not set, but objMatchedReg is set, then objImportedTrx will be inserted in objMatchedReg.
+        Public objMatchedTrx As NormalTrx
+        'Additional NormalTrx objImportedTrx is matched to as part of
+        'a multi-part import match. These will get their amounts set to zero,
+        'and modified versions of objImportedTrx.strImportKey.
+        Public colExtraMatchedTrx As List(Of NormalTrx) = New List(Of NormalTrx)()
+        'If not Nothing, this ImportItem is part of the indicated MultiPartMatch.
+        'Multiple ImportItems may share the same MultiPartMatch object.
+        Public objMultiPart As MultiPartMatch
+        'If true, and objMultiPart is not Nothing, then this ImportItem is the one that
+        'resulted in the multi-part match.
+        Public blnMultiPartPrimary As Boolean
+
+        Public Overrides Function ToString() As String
+            With objImportedTrx
+                Return gstrFormatDate(.datDate) + " " + .strDescription + " " + gstrFormatCurrency(.curAmount)
+            End With
+        End Function
+    End Class
+
+    Private Class ListWithTotal(Of T)
+        Inherits List(Of T)
+        Public curTotal As Decimal
+    End Class
+
+    Private Class ImportSubset
+        Inherits ListWithTotal(Of ImportItem)
+    End Class
+
+    Private Class MatchSubset
+        Inherits ListWithTotal(Of NormalTrx)
+    End Class
+
+    Private Class MultiPartMatch
+        Public colImports As ImportSubset
+        Public colMatches As MatchSubset
+        Public intPriority As Integer       'The lower the number, the higher the priority
+
+        Public Function strSummary() As String
+            Return " a multi-part match of " + colImports.Count.ToString() +
+                " import items to " + colMatches.Count.ToString() +
+                " matches for $" + gstrFormatCurrency(colImports.curTotal)
+        End Function
+    End Class
 
     'Column number in item list with index into maudtItem().
     Private Const mintITMCOL_INDEX As Integer = 7
@@ -53,6 +96,9 @@ Friend Class BankImportForm
                 If Not item.objMatchedTrx Is Nothing Then
                     Yield item.objMatchedTrx
                 End If
+                For Each objExtraMatch As NormalTrx In item.colExtraMatchedTrx
+                    Yield objExtraMatch
+                Next
             Next
         End Get
     End Property
@@ -140,17 +186,52 @@ Friend Class BankImportForm
             ClearUpdateMatches()
             intFoundCount = 0
             For Each objItem In lvwTrx.Items
-                objItem.Checked = False
+                ChangeItemCheckedSilently(objItem, False)
 
-                intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
+                intItemIndex = CInt(objItem.SubItems(mintITMCOL_INDEX).Text)
                 If blnValidForAutoUpdate(intItemIndex, False, strFailReason) Then
-                    objItem.Checked = True
+                    ChangeItemCheckedSilently(objItem, True)
                     intFoundCount = intFoundCount + 1
-                    With maudtItem(intItemIndex).objMatchedTrx
-                        objItem.ToolTipText = gstrFormatDate(.datDate) + " " + .strDescription + " " + gstrFormatCurrency(.curAmount)
+                    With maudtItem(intItemIndex)
+                        If .objMatchedTrx Is Nothing Then
+                            objItem.ToolTipText = "Add as part of " + .objMultiPart.strSummary()
+                        Else
+                            Dim strTip As String
+                            Dim strMultiPartNote As String = ""
+                            If Not .objMultiPart Is Nothing Then
+                                strMultiPartNote = ", in a " + .objMultiPart.strSummary()
+                            End If
+                            With .objMatchedTrx
+                                strTip = "Matched to " + gstrFormatDate(.datDate) + " " + .strDescription + " " + gstrFormatCurrency(.curAmount) +
+                                    strMultiPartNote + "."
+                            End With
+                            objItem.ToolTipText = strTip
+                        End If
+                        If .blnMultiPartPrimary And Not .objMultiPart Is Nothing Then
+                            Dim objExplain As System.Text.StringBuilder = New System.Text.StringBuilder()
+                            Dim curImportTotal As Decimal = 0D
+                            objExplain.AppendLine("Import Items:")
+                            For Each objImport As ImportItem In .objMultiPart.colImports
+                                objExplain.AppendLine(" " + gstrFormatDate(objImport.objImportedTrx.datDate) + " " +
+                                                          objImport.objImportedTrx.strDescription + " " +
+                                                          gstrFormatCurrency(objImport.objImportedTrx.curAmount))
+                                curImportTotal = curImportTotal + objImport.objImportedTrx.curAmount
+                            Next
+                            objExplain.AppendLine("Import Total Amount: " + gstrFormatCurrency(curImportTotal))
+                            objExplain.AppendLine()
+                            objExplain.AppendLine("Matched Transactions:")
+                            Dim curMatchTotal As Decimal = 0D
+                            For Each objNormalTrx As NormalTrx In .objMultiPart.colMatches
+                                objExplain.AppendLine(" " + gstrFormatDate(objNormalTrx.datDate) + " " +
+                                                          objNormalTrx.strDescription + " " +
+                                                          gstrFormatCurrency(objNormalTrx.curAmount))
+                                curMatchTotal = curMatchTotal + objNormalTrx.curAmount
+                            Next
+                            objExplain.AppendLine("Match Total Amount: " + gstrFormatCurrency(curImportTotal))
+                            MsgBox(objExplain.ToString(), MsgBoxStyle.Information, "Multi-Part Match")
+                        End If
                     End With
                 Else
-                    'UPGRADE_ISSUE: MSComctlLib.ListItem property objItem.ToolTipText was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
                     objItem.ToolTipText = strFailReason
                 End If
             Next objItem
@@ -170,15 +251,18 @@ Friend Class BankImportForm
             Dim intItemIndex As Integer
             Dim strFailReason As String = ""
             Dim intUpdateCount As Integer
+            Dim intMultiPartSeqNumber As Integer
 
             ClearUpdateMatches()
             For Each objItem In lvwTrx.Items
                 If objItem.Checked Then
-
                     intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
-                    If Not blnValidForAutoUpdate(intItemIndex, True, strFailReason) Then
-                        objItem.Checked = False
-                        MsgBox("Skipping and unchecking " & strDescribeItem(intItemIndex) & " because: " & strFailReason & ".")
+                    'Could be set if a previous looked ahead for a multi-trx match
+                    If maudtItem(intItemIndex).objMatchedTrx Is Nothing Then
+                        If Not blnValidForAutoUpdate(intItemIndex, True, strFailReason) Then
+                            ChangeItemCheckedSilently(objItem, False)
+                            MsgBox("Skipping and unchecking " & strDescribeItem(intItemIndex) & " because: " & strFailReason & ".")
+                        End If
                     End If
                 End If
             Next objItem
@@ -190,9 +274,28 @@ Friend Class BankImportForm
 
                     intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
                     With maudtItem(intItemIndex)
-                        mobjImportHandler.BatchUpdate(.objImportedTrx, .objMatchedTrx)
-                        .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
-                        .objReg = .objMatchedReg
+                        If .objMatchedTrx Is Nothing Then
+                            If Not .objMatchedReg Is Nothing Then
+                                'Insert .objImportedTrx in .objMatchedReg with .objImportedTrx.strImportKey
+                                Using frm As TrxForm = New TrxForm
+                                    Dim datDummy As DateTime
+                                    If frm.blnAddNormalSilent(.objMatchedReg, .objImportedTrx, datDummy, True, "ImportAutoBatch") Then
+                                        MsgBox("Failed to insert transaction " + strDescribeItem(intItemIndex) + " required as part of a multi-part match.")
+                                    End If
+                                End Using
+                                .lngStatus = ImportStatus.mlngIMPSTS_NEW
+                                .objReg = .objMatchedReg
+                            End If
+                        Else
+                            mobjImportHandler.BatchUpdate(.objImportedTrx, .objMatchedTrx, 0)
+                            .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
+                            .objReg = .objMatchedReg
+                        End If
+                        intMultiPartSeqNumber = 0
+                        For Each objExtraMatch As NormalTrx In .colExtraMatchedTrx
+                            intMultiPartSeqNumber = intMultiPartSeqNumber + 1
+                            mobjImportHandler.BatchUpdate(.objImportedTrx, objExtraMatch, intMultiPartSeqNumber)
+                        Next
                         DisplayOneImportItem(objItem, intItemIndex)
                         intUpdateCount = intUpdateCount + 1
                         UpdateProgress(.objReg)
@@ -212,12 +315,17 @@ Friend Class BankImportForm
     Private Sub ClearUpdateMatches()
         Dim intIndex As Integer
         For intIndex = 1 To mintItems
-            maudtItem(intIndex).objMatchedReg = Nothing
-            maudtItem(intIndex).objMatchedTrx = Nothing
+            With maudtItem(intIndex)
+                .objMatchedReg = Nothing
+                .objMatchedTrx = Nothing
+                .colExtraMatchedTrx = New List(Of NormalTrx)()
+                .objMultiPart = Nothing
+                .blnMultiPartPrimary = False
+            End With
         Next
     End Sub
 
-    Private Function blnValidForAutoUpdate(ByRef intItemIndex As Integer, ByVal blnAllowNonExact As Boolean, ByRef strFailReason As String) As Boolean
+    Private Function blnValidForAutoUpdate(ByVal intItemIndex As Integer, ByVal blnAllowNonExact As Boolean, ByRef strFailReason As String) As Boolean
 
         Dim objImportedTrx As ImportedTrx
         Dim objReg As Register
@@ -228,19 +336,25 @@ Friend Class BankImportForm
         Dim blnNonExactConfirmed As Boolean
         Dim blnCheckWithoutAmount As Boolean
 
-        blnValidForAutoUpdate = False
         strFailReason = "Unspecified"
 
         With maudtItem(intItemIndex)
             If .lngStatus <> ImportStatus.mlngIMPSTS_UNRESOLVED Then
                 strFailReason = "Transaction already imported"
-                Exit Function
+                Return False
+            End If
+
+            If Not .objMatchedReg Is Nothing Then
+                'ImportItem was chosen for insert or update as part of an earlier multi-part match.
+                'This will cause the item to be checked if this method was called from cmdFindUpdates_Click(),
+                'which is redundant because all items in a multi-part matched are checked by UseMultiPartMatch(),
+                'but there is no harm from this.
+                Return True
             End If
 
             objImportedTrx = .objImportedTrx
-            'Verify that all the checked imported trx really do have a
-            'single exact match, because the user may have checked additional
-            'imported trx.
+            'Verify that all the checked ImportItems really do have a
+            'single exact match, because the user may have checked additional items.
             intExactCount = 0
             For Each objReg In mobjAccount.colRegisters
 
@@ -269,20 +383,301 @@ Friend Class BankImportForm
                     End If
                 End If
             Next objReg
-
-            If intExactCount = 0 Then
-                strFailReason = "Could not find an identical or very similar transaction to update"
-                Exit Function
-            End If
-            If intExactCount > 1 Then
-                strFailReason = "Cannot decide between multiple identical or very similar transactions to update"
-                Exit Function
+            If intExactCount = 1 Then
+                Return True
             End If
 
+            If mobjImportHandler.blnAllowMultiPartMatches Then
+                If blnFindMultiPartMatch(intItemIndex) Then
+                    Return True
+                End If
+            End If
         End With
-        blnValidForAutoUpdate = True
+
+        If intExactCount = 0 Then
+            strFailReason = "Could not find an identical or very similar transaction to update"
+        Else
+            strFailReason = "Cannot decide between multiple identical or very similar transactions to update"
+        End If
+        Return False
 
     End Function
+
+    'Look for import and match trx with the same payee name root within a few days of objImportedTrx.
+    'Construct all subsets we want to try of each set in multi-part matches.
+    'Find all pairs of these subsets with the same total amounts.
+    'Choose the highest priority multi-part match and use it.
+    'There can be many multi-part matches among these pairs, because two pairs that don't
+    'overlap can be used to create a new pair by adding their contents together.
+
+    Private Function blnFindMultiPartMatch(ByVal intRootItemIndex As Integer) As Boolean
+
+        Dim colImportSubset As ImportSubset
+        Dim colImportSubsets As List(Of ImportSubset)
+        Dim colMatchSubset As MatchSubset
+        Dim colMatchSubsets As List(Of MatchSubset)
+        Dim colMultiPartMatches As List(Of MultiPartMatch)
+        Dim strDescrStartsWith As String
+        Dim colAllCandidateImports As List(Of ImportItem)
+        Dim colAllCandidateMatches As List(Of NormalTrx)
+        Dim objRootImportItem As ImportItem
+        Dim objRootImportedTrx As ImportedTrx
+
+        objRootImportItem = maudtItem(intRootItemIndex)
+        objRootImportedTrx = objRootImportItem.objImportedTrx
+        strDescrStartsWith = VB.Left(objRootImportedTrx.strDescription, 8)
+        colAllCandidateImports = colFindAllCandidateImports(strDescrStartsWith, intRootItemIndex)
+        colAllCandidateMatches = colFindAllCandidateMatches(strDescrStartsWith, objRootImportedTrx.datDate)
+
+        'No multi-part matches are possible unless at least one of the input collections
+        'has more than one member, and both input collections have at least one possible match.
+        'colAllOtherPossibleImports can be empty because we add the root item to it to get
+        'the import item input collection.
+        If (colAllCandidateImports.Count + 1) < 2 And colAllCandidateMatches.Count < 2 Then
+            Return False
+        End If
+        If colAllCandidateMatches.Count = 0 Then
+            Return False
+        End If
+
+        'Prevent combinatorial explosion from too many combinations.
+        If colAllCandidateImports.Count + colAllCandidateMatches.Count > 24 Then
+            Return False
+        End If
+
+        'Limit size of subsets to keep the number of subsets down,
+        'and thereby the number of subset combinations.
+        colImportSubsets = New List(Of ImportSubset)()
+        For Each colImportSubset In colGetSubsets(Of ImportItem, ImportSubset)(colAllCandidateImports, 9,
+                Function(ByVal objItem As ImportItem) As Decimal
+                    Return objItem.objImportedTrx.curAmount
+                End Function)
+            colImportSubset.Add(objRootImportItem)
+            colImportSubset.curTotal = colImportSubset.curTotal + objRootImportItem.objImportedTrx.curAmount
+            colImportSubsets.Add(colImportSubset)
+        Next
+
+        'Limit size of subsets to keep the number of subsets down,
+        'and thereby the number of subset combinations.
+        colMatchSubsets = New List(Of MatchSubset)()
+        For Each colMatchSubset In colGetSubsets(Of NormalTrx, MatchSubset)(colAllCandidateMatches, 9,
+            Function(ByVal objItem As NormalTrx) As Decimal
+                Return objItem.curAmount
+            End Function)
+            colMatchSubsets.Add(colMatchSubset)
+        Next
+
+        'Find all subset pairs with the same totals.
+        colMultiPartMatches = New List(Of MultiPartMatch)()
+        For Each colImportSubset In colImportSubsets
+            For Each colMatchSubset In colMatchSubsets
+                If colImportSubset.curTotal = colMatchSubset.curTotal Then
+                    Dim objMultiPart As MultiPartMatch = New MultiPartMatch()
+                    objMultiPart.colImports = colImportSubset
+                    objMultiPart.colMatches = colMatchSubset
+                    colMultiPartMatches.Add(objMultiPart)
+                End If
+            Next
+        Next
+
+        If colMultiPartMatches.Count = 0 Then
+            Return False
+        End If
+
+        'The order in which we try MultiPartMatch objects is an art, not a science,
+        'and reflects the general notion we want to try "simpler" matches first.
+        'So I use the total number of match parts as a "score", with a credit 
+        'for a better priority if there are the same number of ImportItems and matched NormalTrx.
+        'Then sort in order of priority (lower numbers first, i.e. higher priority) and
+        'use the first multi-part match in this order (the highest priority).
+
+        For Each objMultiPart As MultiPartMatch In colMultiPartMatches
+            objMultiPart.intPriority = objMultiPart.colImports.Count + objMultiPart.colMatches.Count
+            If objMultiPart.colImports.Count = objMultiPart.colMatches.Count Then
+                objMultiPart.intPriority = objMultiPart.intPriority - 1
+            End If
+        Next
+        colMultiPartMatches.Sort(Function(ByVal objMP1 As MultiPartMatch, ByVal objMP2 As MultiPartMatch) As Integer
+                                     Return objMP1.intPriority.CompareTo(objMP2.intPriority)
+                                 End Function)
+
+        Dim objHighestPriorityMultiPartMatch As MultiPartMatch = colMultiPartMatches(0)
+        UseMultiPartMatch(intRootItemIndex, objHighestPriorityMultiPartMatch)
+
+        Return True
+
+    End Function
+
+    ''' <summary>
+    ''' Find all ImportItems that may be used in multi-part matches involving the ImportItem
+    ''' at the index passed (the root ImportItem), except for the root ImportItem itself.
+    ''' This includes all ImportItems with matching description and amount that have not
+    ''' already been matched to a NormalTrx.
+    ''' </summary>
+    ''' <param name="strDescrStartsWith"></param>
+    ''' <param name="intRootItemIndex"></param>
+    ''' <returns></returns>
+    Private Function colFindAllCandidateImports(ByVal strDescrStartsWith As String, ByVal intRootItemIndex As Integer) As List(Of ImportItem)
+        Dim datRootDate As DateTime
+        Dim datStartDate As DateTime
+        Dim datEndDate As DateTime
+        Dim objImportItem As ImportItem
+        Dim objImportedTrx As ImportedTrx
+
+        datRootDate = maudtItem(intRootItemIndex).objImportedTrx.datDate
+        datStartDate = datRootDate.AddDays(-1.0#)
+        datEndDate = datRootDate.AddDays(1.0#)
+        Dim colResult As List(Of ImportItem) = New List(Of ImportItem)()
+        For intItemIndex As Integer = 1 To mintItems
+            objImportItem = maudtItem(intItemIndex)
+            If (objImportItem.objMatchedReg Is Nothing) And (objImportItem.lngStatus = ImportStatus.mlngIMPSTS_UNRESOLVED) Then
+                objImportedTrx = objImportItem.objImportedTrx
+                If objImportedTrx.datDate >= datStartDate And objImportedTrx.datDate <= datEndDate Then
+                    If intItemIndex <> intRootItemIndex Then
+                        If objImportedTrx.strDescription.StartsWith(strDescrStartsWith, StringComparison.InvariantCultureIgnoreCase) Then
+                            colResult.Add(objImportItem)
+                        End If
+                    End If
+                End If
+            End If
+        Next
+        Return colResult
+    End Function
+
+    ''' <summary>
+    ''' Find all NormalTrx that may be used in multi-part matches for the given
+    ''' transaction description and date. This includes all NormalTrx that have
+    ''' not already been assigned to an ImportItem, that match the description and date.
+    ''' </summary>
+    ''' <param name="strDescrStartsWith"></param>
+    ''' <param name="datDate"></param>
+    ''' <returns></returns>
+    Private Function colFindAllCandidateMatches(ByVal strDescrStartsWith As String, ByVal datDate As DateTime) As List(Of NormalTrx)
+        Dim objReg As Register
+        Dim intRegIndex As Integer
+        Dim objNormalTrx As NormalTrx
+        Dim colResult As List(Of NormalTrx) = New List(Of NormalTrx)()
+        Dim datStartDate As DateTime
+        Dim datEndDate As DateTime
+        datStartDate = datDate.AddDays(-1.0#)
+        datEndDate = datDate.AddDays(1.0#)
+        For Each objReg In mobjAccount.colRegisters
+            For intRegIndex = objReg.lngFindBeforeDate(datStartDate) + 1 To objReg.lngTrxCount
+                objNormalTrx = TryCast(objReg.objTrx(intRegIndex), NormalTrx)
+                If Not objNormalTrx Is Nothing Then
+                    If objNormalTrx.datDate >= datStartDate And objNormalTrx.datDate <= datEndDate Then
+                        If objNormalTrx.strDescription.StartsWith(strDescrStartsWith) Then
+                            If Not colAllMatchedTrx.Contains(objNormalTrx) Then
+                                colResult.Add(objNormalTrx)
+                            End If
+                        End If
+                    End If
+                End If
+            Next
+        Next
+        Return colResult
+    End Function
+
+    Private Delegate Function curGetAmount(Of T)(ByVal objItem As T) As Decimal
+
+    ''' <summary>
+    ''' Iterate through all possible subsets of colCandidates, except the null set and
+    ''' sets with more than intMaxSize members. Call a delegate for each element added
+    ''' to a subset, each time that element is added.
+    ''' Each element returned by the iteration is a List(Of T). So if there are multiple
+    ''' subsets of colCandidates, the iterator will get a List(Of T) for each one.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="colCandidates"></param>
+    ''' <returns></returns>
+    Private Iterator Function colGetSubsets(Of T, TList As {ListWithTotal(Of T), New})(
+                ByVal colCandidates As List(Of T), ByVal intMaxSize As Integer,
+                ByVal dlgGetAmount As curGetAmount(Of T)) As IEnumerable(Of TList)
+        'Members of a set can be mapped to a bit positions in the binary representation 
+        'of a number with the same number of bits as members of the set.
+        'Generate all possible numbers that can be represented in that number of bits with at least one bit set,
+        'and for each number return the candidates that map to bits that are set in that number.
+        'For example, decimal 5 (binary 101) represents the first and third candidates.
+        'Skip zero because it has no bits set, i.e. it represents the null set.
+        For intCounter As Integer = 1 To CInt(2 ^ colCandidates.Count) - 1
+            Dim intBitMask As Integer = 1
+            Dim colResults As TList = New TList()
+            colResults.curTotal = 0D
+            For intBitPosition As Integer = 0 To colCandidates.Count - 1
+                If (intCounter And intBitMask) <> 0 Then
+                    Dim objItem As T = colCandidates.Item(intBitPosition)
+                    colResults.curTotal = colResults.curTotal + dlgGetAmount(objItem)
+                    colResults.Add(objItem)
+                End If
+                intBitMask = intBitMask * 2
+            Next
+            If colResults.Count <= intMaxSize Then
+                Yield colResults
+            End If
+        Next
+    End Function
+
+    ''' <summary>
+    ''' Decide what to do with each ImportItem and NormalTrx in a multi-part match.
+    ''' Make each element of colImportSubset point to one element of colMatchSubset,
+    ''' for the first "n" elements in each list where "n" is the lesser of colImportSubset.Count 
+    ''' and colMatchSubset.Count. Those NormalTrx will have their amounts set to the amounts
+    ''' of their paired ImportItems. Extra elements of colImportSubset will be inserted in the last
+    ''' register updated by the preceding step. Extra elements of colMatchSubset have their
+    ''' amounts set to zero. The net result is to make the matched NormalTrx look like the
+    ''' ImportItems, inserting, adjusting or zeroing out NormalTrx as needed. The actual inserts and
+    ''' updates are done later, not here, but WHAT WILL happen is decided here and reflected in how
+    ''' .objMatchedReg, .objMatchedTrx and .colExtraMatchedTrx are set.
+    ''' </summary>
+    Private Sub UseMultiPartMatch(ByVal intRootItemIndex As Integer, ByVal objMultiPart As MultiPartMatch)
+
+        Dim objImportEnum As IEnumerator(Of ImportItem) = objMultiPart.colImports.GetEnumerator()
+        Dim objMatchEnum As IEnumerator(Of NormalTrx) = objMultiPart.colMatches.GetEnumerator()
+        Dim objLastImportItem As ImportItem = Nothing
+        Dim objLastMatchedTrx As NormalTrx = Nothing
+
+        maudtItem(intRootItemIndex).blnMultiPartPrimary = True
+        'Walk through both enumerators in parallel, until one reaches the end.
+        'Then do the appropriate thing to the remaining elements in the other enumerator.
+        Do
+            If Not objImportEnum.MoveNext() Then
+                'We ran out of ImportItem objects, so have to put the remaining matched NormalTrx
+                'in the list to be zeroed out later.
+                Do
+                    '.MoveNext() BEFORE using .Current, because we haven't
+                    'advanced objMatchEnum yet in the outer loop.
+                    If Not objMatchEnum.MoveNext() Then
+                        Exit Do
+                    End If
+                    'Add to the list of matched NormalTrx to zero out.
+                    objLastImportItem.colExtraMatchedTrx.Add(objMatchEnum.Current)
+                Loop
+                Exit Do
+            End If
+            objLastImportItem = objImportEnum.Current
+            objLastImportItem.objMultiPart = objMultiPart
+            If Not objMatchEnum.MoveNext() Then
+                'We ran out of matched NormalTrx, so create new NormalTrx for each remaining ImportItem.
+                Do
+                    objImportEnum.Current.objMatchedReg = objLastMatchedTrx.objReg
+                    objImportEnum.Current.objMatchedTrx = Nothing
+                    '.MoveNext() AFTER using .Current, because we already advanced
+                    'objImportEnum in the outer loop.
+                    If Not objImportEnum.MoveNext() Then
+                        Exit Do
+                    End If
+                Loop
+                Exit Do
+            End If
+            objLastMatchedTrx = objMatchEnum.Current
+            objImportEnum.Current.objMatchedReg = objMatchEnum.Current.objReg
+            objImportEnum.Current.objMatchedTrx = objMatchEnum.Current
+        Loop
+        'Any of these items that come after the root item in the multi-part set would also be
+        'found by blnValidForAutoUpdate() when it checks .objMatchedReg, which would cause them
+        'to be checked redundantly after UseMultiPartMatch() returns, but there is no harm in this.
+        SetCheckStateOnAllMultiParts(objMultiPart, True)
+    End Sub
 
     Private Sub cmdFindNew_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdFindNew.Click
         Try
@@ -294,11 +689,11 @@ Friend Class BankImportForm
 
             intFoundCount = 0
             For Each objItem In lvwTrx.Items
-                objItem.Checked = False
+                ChangeItemCheckedSilently(objItem, False)
 
                 intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
                 If blnValidForAutoNew(intItemIndex, False, False, strFailReason) Then
-                    objItem.Checked = True
+                    ChangeItemCheckedSilently(objItem, True)
                     intFoundCount = intFoundCount + 1
                     'UPGRADE_ISSUE: MSComctlLib.ListItem property objItem.ToolTipText was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
                     objItem.ToolTipText = "Selected"
@@ -322,7 +717,6 @@ Friend Class BankImportForm
             Dim objItem As System.Windows.Forms.ListViewItem
             Dim intItemIndex As Integer
             Dim intCreateCount As Integer
-            Dim frm As TrxForm
             Dim datDummy As Date
             Dim objImportedTrx As ImportedTrx
             Dim blnItemImported As Boolean
@@ -347,7 +741,7 @@ Friend Class BankImportForm
                     intItemIndex = CShort(objItem.SubItems(mintITMCOL_INDEX).Text)
                     If Not blnValidForAutoNew(intItemIndex, blnManualSelectionAllowed, True, strFailReason) Then
                         MsgBox("Skipping and unchecking " & strDescribeItem(intItemIndex) & " because: " & strFailReason & ".")
-                        objItem.Checked = False
+                        ChangeItemCheckedSilently(objItem, False)
                     End If
                 End If
             Next objItem
@@ -362,13 +756,14 @@ Friend Class BankImportForm
                     blnItemImported = mobjImportHandler.blnAlternateAutoNewHandling(objImportedTrx, mobjSelectedRegister)
                     'If we did not use alternate handling.
                     If Not blnItemImported Then
-                        frm = New TrxForm
-                        If Not frm.blnAddNormalSilent(mobjSelectedRegister, objImportedTrx, datDummy, True, "ImportNewBatch") Then
-                            'Either the Trx was silently added, or TrxForm was displayed because
-                            'of a validation error and the user successfully fixed the problem
-                            'and saved the Trx.
-                            blnItemImported = True
-                        End If
+                        Using frm As TrxForm = New TrxForm
+                            If Not frm.blnAddNormalSilent(mobjSelectedRegister, objImportedTrx, datDummy, True, "ImportNewBatch") Then
+                                'Either the Trx was silently added, or TrxForm was displayed because
+                                'of a validation error and the user successfully fixed the problem
+                                'and saved the Trx.
+                                blnItemImported = True
+                            End If
+                        End Using
                     End If
                     'Now update the UI on the import form and any open register forms.
                     If blnItemImported Then
@@ -495,7 +890,8 @@ Friend Class BankImportForm
 
             blnLoadImports = True
             mintItems = 0
-            Erase maudtItem
+            ReDim maudtItem(1)
+            maudtItem(0) = New ImportItem()
 
             Do
                 objImportedTrx = mobjTrxReader.objNextTrx()
@@ -504,8 +900,8 @@ Friend Class BankImportForm
                 End If
                 mintItems = mintItems + 1
                 ReDim Preserve maudtItem(mintItems)
+                maudtItem(mintItems) = New ImportItem()
                 With maudtItem(mintItems)
-                    'UPGRADE_NOTE: Object maudtItem().objReg may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
                     .objReg = Nothing
                     .objImportedTrx = objImportedTrx
                     .lngStatus = ImportStatus.mlngIMPSTS_UNRESOLVED
@@ -561,6 +957,7 @@ Friend Class BankImportForm
             If Not lvwTrx.FocusedItem Is Nothing Then
                 intOldSelectedIndex = intSelectedItemIndex()
             End If
+            mblnIgnoreItemCheckedEvents = True
             lvwTrx.Items.Clear()
             For intIndex = 1 To mintItems
                 If maudtItem(intIndex).lngStatus = ImportStatus.mlngIMPSTS_UNRESOLVED Or blnShowCompleted Then
@@ -576,9 +973,11 @@ Friend Class BankImportForm
                 lvwTrx.FocusedItem = objNewSelectedItem
                 objNewSelectedItem.EnsureVisible()
             End If
+            mblnIgnoreItemCheckedEvents = False
 
             Exit Sub
         Catch ex As Exception
+            mblnIgnoreItemCheckedEvents = False
             gNestedException(ex)
         End Try
     End Sub
@@ -1019,9 +1418,11 @@ Friend Class BankImportForm
                 Exit Sub
             End If
             With maudtItem(intSelectedItemIndex())
-                If mobjImportHandler.blnIndividualUpdate(.objImportedTrx, objMatchedTrx) Then
-                    .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
-                    .objReg = objMatchedTrx.objReg
+                If Not objMatchedTrx Is Nothing Then
+                    If mobjImportHandler.blnIndividualUpdate(.objImportedTrx, objMatchedTrx) Then
+                        .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
+                        .objReg = objMatchedTrx.objReg
+                    End If
                 End If
             End With
             RedisplaySelectedItem()
@@ -1058,7 +1459,7 @@ Friend Class BankImportForm
     End Sub
 
     Private Function intSelectedItemIndex() As Integer
-        intSelectedItemIndex = CShort(lvwTrx.FocusedItem.SubItems(mintITMCOL_INDEX).Text)
+        intSelectedItemIndex = CInt(lvwTrx.FocusedItem.SubItems(mintITMCOL_INDEX).Text)
     End Function
 
     Private Function intSelectedMatchIndex() As Integer
@@ -1101,4 +1502,32 @@ Friend Class BankImportForm
     Private Function strDescribeTrx(ByRef objTrx As ImportedTrx) As String
         strDescribeTrx = "[ " & gstrFormatDate(objTrx.datDate) & " " & objTrx.strDescription & " $" & gstrFormatCurrency(objTrx.curAmount) & " ]"
     End Function
+
+    Private Sub lvwTrx_ItemChecked(sender As Object, e As ItemCheckedEventArgs) Handles lvwTrx.ItemChecked
+        If Not mblnIgnoreItemCheckedEvents Then
+            If e.Item.SubItems.Count >= mintITMCOL_INDEX Then
+                Dim intItemIndex As Integer = CInt(e.Item.SubItems(mintITMCOL_INDEX).Text)
+                Dim objMultiPart As MultiPartMatch = maudtItem(intItemIndex).objMultiPart
+                If Not objMultiPart Is Nothing Then
+                    SetCheckStateOnAllMultiParts(objMultiPart, e.Item.Checked)
+                End If
+            End If
+        End If
+    End Sub
+
+    Private Sub SetCheckStateOnAllMultiParts(ByVal objMultiPart As MultiPartMatch, ByVal blnChecked As Boolean)
+        For Each objItem As ListViewItem In lvwTrx.Items
+            Dim objImportItem As ImportItem = maudtItem(CInt(objItem.SubItems(mintITMCOL_INDEX).Text))
+            If objImportItem.objMultiPart Is objMultiPart Then
+                ChangeItemCheckedSilently(objItem, blnChecked)
+            End If
+        Next
+    End Sub
+
+    Private Sub ChangeItemCheckedSilently(ByVal objItem As ListViewItem, ByVal blnChecked As Boolean)
+        Dim blnSaveFlag As Boolean = mblnIgnoreItemCheckedEvents
+        mblnIgnoreItemCheckedEvents = True
+        objItem.Checked = blnChecked
+        mblnIgnoreItemCheckedEvents = blnSaveFlag
+    End Sub
 End Class
