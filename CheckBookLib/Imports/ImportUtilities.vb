@@ -479,7 +479,9 @@ Public Class ImportUtilities
         Next
         blnExactMatch = True
         colResult = New List(Of NormalTrx)
-        colResult.Add(objBestMatch)
+        If Not objBestMatch Is Nothing Then
+            colResult.Add(objBestMatch)
+        End If
         Return colResult
 
     End Function
