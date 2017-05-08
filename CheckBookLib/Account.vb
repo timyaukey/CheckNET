@@ -499,7 +499,7 @@ Public Class Account
         'RR line is for repeating register, no longer used.
 
         objReg.LogSave()
-        objReg.WriteEventLog(mstrTitle, mobjRepeats)
+        objReg.WriteEventLog(System.IO.Path.GetFileNameWithoutExtension(mstrFileLoaded), mobjRepeats)
     End Sub
 
     '$Description Write one line to the Save() output file.
