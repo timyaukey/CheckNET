@@ -73,15 +73,16 @@ Public Class Company
         For intIndex = 1 To objIncExpAccounts.intElements
             objCategories.Add(objIncExpAccounts.objElement(intIndex))
         Next
-        AddAccountTypeToCategories(Account.AccountType.Asset, "A")
-        AddAccountTypeToCategories(Account.AccountType.Liability, "L")
-        AddAccountTypeToCategories(Account.AccountType.Equity, "Q")
+        AddAccountTypeToCategories(Account.AccountType.Asset)
+        AddAccountTypeToCategories(Account.AccountType.Liability)
+        AddAccountTypeToCategories(Account.AccountType.Equity)
         BuildShortTermsCatKeys()
     End Sub
 
-    Private Sub AddAccountTypeToCategories(ByVal lngType As Account.AccountType, ByVal strPrefix As String)
+    Private Sub AddAccountTypeToCategories(ByVal lngType As Account.AccountType)
         Dim objCats As List(Of StringTransElement) = New List(Of StringTransElement)
         Dim elm As StringTransElement
+        Dim strPrefix As String = Account.strTypeToLetter(lngType)
         For Each objAccount As Account In colAccounts
             If objAccount.lngType = lngType Then
                 For Each objReg As Register In objAccount.colRegisters

@@ -272,7 +272,7 @@ Friend Class ShowRegisterForm
                 End If
                 gShowRegister(.objAccount, .objSelectedReg, Nothing)
             End With
-            Me.Close()
+            'Me.Close()
 
             Exit Sub
         Catch ex As Exception
@@ -362,7 +362,7 @@ Friend Class ShowRegisterForm
                     .objAccount = objAccount
                     .objReg = Nothing
                     .objReg = Nothing
-                    lstRegisters.Items.Add(objAccount.strTitle)
+                    lstRegisters.Items.Add(objAccount.strType + ":" + objAccount.strTitle)
                 End With
                 If objAccount.colRegisters.Count > 1 Then
                     For Each objReg In objAccount.colRegisters

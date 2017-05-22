@@ -92,6 +92,22 @@ Public Class Account
         End Set
     End Property
 
+    Public ReadOnly Property strType() As String
+        Get
+            Return strTypeToLetter(lngType)
+        End Get
+    End Property
+
+    Public Shared Function strTypeToLetter(ByVal lngType_ As AccountType) As String
+        Select Case lngType_
+            Case AccountType.Asset : Return "A"
+            Case AccountType.Liability : Return "L"
+            Case AccountType.Equity : Return "Q"
+            Case Else
+                Throw New Exception("Invalid account type")
+        End Select
+    End Function
+
     Public ReadOnly Property colRegisters() As List(Of Register)
         Get
             Return mcolRegisters

@@ -103,6 +103,8 @@ Friend Class CBMainForm
                 frmStartup.Configure(Nothing)
             Next strFile
 
+            mobjCompany.colAccounts.Sort(AddressOf AccountComparer)
+
             'With all Account objects loaded we can add them to the category list.
             mobjCompany.LoadCategories()
 
@@ -149,6 +151,13 @@ Friend Class CBMainForm
             gTopException(ex)
         End Try
     End Sub
+
+    Private Function AccountComparer(ByVal objAcct1 As Account, ByVal objAcct2 As Account) As Integer
+        If objAcct1.lngType <> objAcct2.lngType Then
+            Return objAcct1.lngType.CompareTo(objAcct2.lngType)
+        End If
+        Return objAcct1.strTitle.CompareTo(objAcct2.strTitle)
+    End Function
 
     Private colBankImportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
     Private colCheckImportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
