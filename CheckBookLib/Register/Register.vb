@@ -1142,13 +1142,14 @@ Public Class Register
         lngCurrentTrxIndex = mlngTrxCurrent
     End Function
 
-    '$Description Return a new RegCursor initialized with this Register.
+    Public Function colDateRange(ByVal datStart As DateTime, ByVal datEnd As DateTime) As IEnumerable(Of Trx)
+        Dim objRange As RegDateRange = New RegDateRange(Me, datStart, datEnd)
+        Return objRange.colTrx()
+    End Function
 
-    Public Function objGetCursor() As RegCursor
-        Dim objCursor As RegCursor
-        objCursor = New RegCursor
-        objCursor.Init(Me)
-        objGetCursor = objCursor
+    Public Function colAllTrx() As IEnumerable(Of Trx)
+        Dim objRange As RegIterator = New RegIterator(Me)
+        Return objRange.colTrx()
     End Function
 
     '$Description Validate the register, and report all errors by firing

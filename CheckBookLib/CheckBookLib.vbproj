@@ -128,6 +128,8 @@
     <Compile Include="Imports\DepositImportStandard.vb" />
     <Compile Include="Plugins\ImportPlugins.vb" />
     <Compile Include="Imports\InvoiceImportStandard.vb" />
+    <Compile Include="Register\RegDateRange.vb" />
+    <Compile Include="Register\RegIterator.vb" />
     <Compile Include="RepeatSummarizer.vb" />
     <Compile Include="RepeatUnitTypeConverter.vb" />
     <Compile Include="SearchUtilities.vb" />
@@ -161,7 +163,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Register\RegCursor.vb" />
     <Compile Include="Register\Register.vb" />
     <Compile Include="Register\RegisterLoader.vb" />
     <Compile Include="Register\RegisterSaver.vb" />

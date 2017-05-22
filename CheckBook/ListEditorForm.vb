@@ -478,14 +478,12 @@ Friend Class ListEditorForm
 
     Private Function blnElementIsUsedInRegister(ByVal objReg As Register, ByVal strKey As String) As Boolean
 
-        Dim lngIndex As Integer
         Dim objTrx As Trx
         Dim objSplit As TrxSplit
 
         Try
 
-            For lngIndex = 1 To objReg.lngTrxCount
-                objTrx = objReg.objTrx(lngIndex)
+            For Each objTrx In objReg.colAllTrx()
                 If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
                     For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
                         If mlngListType = ListType.glngLIST_TYPE_CATEGORY Then
