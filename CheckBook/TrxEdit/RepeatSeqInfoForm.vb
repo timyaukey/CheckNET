@@ -22,13 +22,11 @@ Friend Class RepeatSeqInfoForm
     End Sub
 
     Private Sub RepeatSeqInfoForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        Dim lngIndex As Integer
         Dim objTrx As Trx
         Dim colRows As List(Of RptGridRow) = New List(Of RptGridRow)()
         Dim objRow As RptGridRow
 
-        For lngIndex = 1 To mobjReg.lngTrxCount
-            objTrx = mobjReg.objTrx(lngIndex)
+        For Each objTrx In mobjReg.colAllTrx()
             If objTrx.strRepeatKey = mstrRepeatKey Then
                 objRow = New RptGridRow
                 objRow.TrxDate = objTrx.datDate.ToString(gstrFORMAT_DATE2)

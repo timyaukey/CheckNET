@@ -135,6 +135,26 @@ Public MustInherit Class Trx
         End Get
     End Property
 
+    Public ReadOnly Property objNext() As Trx
+        Get
+            If mlngIndex >= mobjReg.lngTrxCount Then
+                Return Nothing
+            Else
+                Return mobjReg.objTrx(mlngIndex + 1)
+            End If
+        End Get
+    End Property
+
+    Public ReadOnly Property objPrevious() As Trx
+        Get
+            If mlngIndex <= 1 Then
+                Return Nothing
+            Else
+                Return mobjReg.objTrx(mlngIndex + 1)
+            End If
+        End Get
+    End Property
+
     Public ReadOnly Property strRepeatKey() As String
         Get
             strRepeatKey = mstrRepeatKey

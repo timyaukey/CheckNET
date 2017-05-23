@@ -900,6 +900,14 @@ Public Class Register
         lngFindBeforeDate = lngIndex
     End Function
 
+    Public Function objFirstOnOrAfter(ByVal datDate As Date) As Trx
+        Dim lngIndex As Integer = lngFindBeforeDate(datDate) + 1
+        If lngIndex > mlngTrxUsed Then
+            Return Nothing
+        End If
+        Return Me.objTrx(lngIndex)
+    End Function
+
     '$Description Find the transfer Trx which is an exact match to the specified info.
     '$Param datDate The transfer Trx date.
     '$Param strTransferKey The strTransferKey of the Trx in THIS register to look for.

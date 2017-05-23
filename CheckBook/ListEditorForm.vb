@@ -234,16 +234,46 @@ Friend Class ListEditorForm
     Private Sub LoadList()
         Dim intIndex As Short
         Dim strError As String = ""
+        Dim strName As String
+        Dim blnFoundPersonal As Boolean = False
+
+        'Only for debugging, but harmless to leave in because it is so fast.
+        CompareTest("A", "A", 0)
+        CompareTest("One", "Two", -1)
+        CompareTest("Two", "One", 1)
+        CompareTest("One:A", "One:A", 0)
+        CompareTest("One:A", "One:B", -1)
+        CompareTest("Two:A", "One:B", 1)
+        CompareTest("One:B", "One:A", 1)
+        CompareTest("One:A", "One:AA", -1)
+        CompareTest("A", "A:B", -1)
+        CompareTest("C:Test", "C:Test2", -1)
+        CompareTest("C:Test2", "C:Test", 1)
+        CompareTest("C:Test:New", "C:Test2", -1)
+        CompareTest("C:Test:New", "C:Test2:New", -1)
+        CompareTest("C:Test2:New", "C:Test:New", 1)
 
         Try
 
             With lstElements
                 .Items.Clear()
                 For intIndex = 1 To mobjList.intElements
-                    If blnInsertElement(mobjList.strValue1(intIndex), CShort(mobjList.strKey(intIndex)), True, strError) Then
+                    strName = mobjList.strValue1(intIndex)
+                    If blnInsertElement(strName, CShort(mobjList.strKey(intIndex)), True, strError) Then
                         MsgBox(strError)
                     End If
+                    If mlngListType = ListType.glngLIST_TYPE_CATEGORY Then
+                        If strName.Substring(0, 1) = "C" Then
+                            blnFoundPersonal = True
+                        End If
+                    End If
                 Next
+                If mlngListType = ListType.glngLIST_TYPE_CATEGORY And Not blnFoundPersonal Then
+                    Dim intKey As Integer = intGetUnusedKey()
+                    If blnInsertElement("C", intKey, True, strError) Then
+                        MsgBox(strError)
+                    End If
+                End If
             End With
 
             Exit Sub
@@ -314,7 +344,7 @@ Friend Class ListEditorForm
                     Else
                         strExistingElementUCS = ""
                     End If
-                    If (strExistingElementUCS > strNewElementUCS) Or (intIndex >= .Items.Count) Then
+                    If (intCompareCatNames(strExistingElementUCS, strNewElementUCS) = 1) Or (intIndex >= .Items.Count) Then
                         If intIndex = 0 Then
                             strPrecedingUCS = ""
                         Else
@@ -340,15 +370,48 @@ Friend Class ListEditorForm
         End Try
     End Function
 
+    Private Function intCompareCatNames(ByVal strName1 As String, ByVal strName2 As String) As Integer
+        Dim strParts1() As String = strName1.Split(":")
+        Dim strParts2() As String = strName2.Split(":")
+        Dim intIndex As Integer
+        intIndex = LBound(strParts1)
+        Do
+            If intIndex > UBound(strParts1) Then
+                If intIndex > UBound(strParts2) Then
+                    Return 0
+                Else
+                    Return -1
+                End If
+            ElseIf intIndex > UBound(strParts2) Then
+                Return 1
+            Else
+                If strParts1(intIndex) > strParts2(intIndex) Then
+                    Return 1
+                ElseIf strParts2(intIndex) > strParts1(intIndex) Then
+                    Return -1
+                End If
+            End If
+            intIndex = intIndex + 1
+        Loop
+    End Function
+
+    Private Sub CompareTest(ByVal strName1 As String, ByVal strName2 As String, ByVal intExpectedResult As Integer)
+        If intCompareCatNames(strName1, strName2) <> intExpectedResult Then
+            Throw New Exception("Unexpected category name compare result: " + strName1 + " " + strName2)
+        End If
+    End Sub
+
     Private Function strNormalizeElement(ByVal strElement As String) As String
         Dim strResult As String
         strResult = UCase(Trim(strElement))
-        'Make leading "I" sort before "E" for categories.
+        'Make leading "I" sort before "E" for categories, and "C" at the end.
         If mlngListType = ListType.glngLIST_TYPE_CATEGORY Then
             If VB.Left(strResult, 1) = "I" Then
                 Mid(strResult, 1, 1) = Chr(1)
             ElseIf VB.Left(strResult, 1) = "E" Then
                 Mid(strResult, 1, 1) = Chr(2)
+            ElseIf VB.Left(strResult, 1) = "C" Then
+                Mid(strResult, 1, 1) = Chr(3)
             End If
         End If
         strNormalizeElement = strResult

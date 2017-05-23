@@ -13,11 +13,11 @@ Public Class RegDateRange
         mdatEnd = datEnd
     End Sub
 
-    Protected Overrides Function lngGetBeforeFirst() As Integer
-        Return mobjReg.lngFindBeforeDate(mdatStart)
+    Protected Overrides Function objGetFirst() As Trx
+        Return mobjReg.objFirstOnOrAfter(mdatStart)
     End Function
 
-    Protected Overrides Function blnAfterLast(lngIndex As Integer) As Boolean
-        Return mobjReg.objTrx(lngIndex).datDate > mdatEnd
+    Protected Overrides Function blnAfterLast(objTrx As Trx) As Boolean
+        Return objTrx.datDate > mdatEnd
     End Function
 End Class

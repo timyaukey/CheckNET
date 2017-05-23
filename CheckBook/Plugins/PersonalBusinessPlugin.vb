@@ -3,12 +3,12 @@ Option Explicit On
 
 Imports CheckBookLib
 
-Public Class AdjustBudgetsToCashflowPlugin
+Public Class PersonalBusinessPlugin
     Inherits ToolPlugin
 
     Public Sub New(hostUI_ As IHostUI)
         MyBase.New(hostUI_)
-        SortCode = 100
+        SortCode = 110
     End Sub
 
     Public Overrides Sub ClickHandler(sender As Object, e As EventArgs)
@@ -18,8 +18,8 @@ Public Class AdjustBudgetsToCashflowPlugin
                 MsgBox("Please click on the register window you wish to adjust.", MsgBoxStyle.Critical)
                 Exit Sub
             End If
-            Dim frmAdjust As AdjustBudgetsToCashForm = New AdjustBudgetsToCashForm
-            frmAdjust.ShowModal(objReg, HostUI.objCompany.objBudgets)
+            Dim frmAdjust As AdjustPersonalBusinessForm = New AdjustPersonalBusinessForm
+            frmAdjust.ShowModal(objReg.objAccount)
             Exit Sub
         Catch ex As Exception
             gTopException(ex)
@@ -27,6 +27,6 @@ Public Class AdjustBudgetsToCashflowPlugin
     End Sub
 
     Public Overrides Function GetMenuTitle() As String
-        Return "Adjust Budgets To Cashflow"
+        Return "Adjust Account For Personal Use"
     End Function
 End Class

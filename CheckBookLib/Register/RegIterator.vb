@@ -9,27 +9,32 @@ Public Class RegIterator
     End Sub
 
     Public Iterator Function colTrx() As IEnumerable(Of Trx)
-        Dim lngIndex As Integer
-
-        lngIndex = lngGetBeforeFirst()
+        'Using a Trx as the cursor instead of a Register index means
+        'we always return the Trx after the last one returned,
+        'even if Trx are inserted or deleted earlier in the Register order.
+        Dim objCurrentTrx As Trx = objGetFirst()
         Do
-            lngIndex = lngIndex + 1
-            If lngIndex > mobjReg.lngTrxCount Then
+            If objCurrentTrx Is Nothing Then
                 Return
             End If
-            If blnAfterLast(lngIndex) Then
+            If blnAfterLast(objCurrentTrx) Then
                 Return
             End If
-            Yield mobjReg.objTrx(lngIndex)
+            Yield objCurrentTrx
+            objCurrentTrx = objCurrentTrx.objNext
         Loop
 
     End Function
 
-    Protected Overridable Function lngGetBeforeFirst() As Integer
-        Return 0
+    Protected Overridable Function objGetFirst() As Trx
+        If mobjReg.lngTrxCount = 0 Then
+            Return Nothing
+        Else
+            Return mobjReg.objTrx(1)
+        End If
     End Function
 
-    Protected Overridable Function blnAfterLast(ByVal lngIndex As Integer) As Boolean
+    Protected Overridable Function blnAfterLast(ByVal objTrx As Trx) As Boolean
         Return False
     End Function
 End Class

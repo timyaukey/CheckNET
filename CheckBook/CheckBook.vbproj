@@ -111,6 +111,12 @@
     <Compile Include="AdjustBudgetsToCashForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="AdjustPersonalBusinessForm.Designer.vb">
+      <DependentUpon>AdjustPersonalBusinessForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AdjustPersonalBusinessForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="AssemblyInfo.vb" />
     <Compile Include="FileListEditorForm.Designer.vb">
       <DependentUpon>FileListEditorForm.vb</DependentUpon>
@@ -142,6 +148,7 @@
     <Compile Include="Plugins\CategoryReportPlugin.vb" />
     <Compile Include="Plugins\FindLiveBudgetsPlugin.vb" />
     <Compile Include="Plugins\PayablesReportPlugin.vb" />
+    <Compile Include="Plugins\PersonalBusinessPlugin.vb" />
     <Compile Include="Plugins\ReconcilePlugin.vb" />
     <Compile Include="Plugins\ToolPlugins.vb" />
     <Compile Include="Reports\CategorySummary\CatSumRptForm.Designer.vb">
@@ -314,6 +321,9 @@
     <EmbeddedResource Include="AdjustBudgetsToCashForm.resX">
       <DependentUpon>AdjustBudgetsToCashForm.vb</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AdjustPersonalBusinessForm.resx">
+      <DependentUpon>AdjustPersonalBusinessForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FileListEditorForm.resx">
       <DependentUpon>FileListEditorForm.vb</DependentUpon>
