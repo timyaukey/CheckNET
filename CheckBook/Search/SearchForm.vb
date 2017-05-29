@@ -586,7 +586,6 @@ Friend Class SearchForm
             Dim objOldTrx As NormalTrx
             Dim colOldTrx As ICollection(Of Trx)
             Dim objOldSplit As TrxSplit
-            Dim lngTrxIndex As Integer
             Dim objStartLogger As ILogGroupStart
             Dim datToday As Date
             Dim datResult As Date
@@ -635,9 +634,8 @@ Friend Class SearchForm
             'to worry if saving the new trx or a prior delete changed the index of a Trx.
             objStartLogger = mobjReg.objLogGroupStart("SearchForm.CombineDelete")
             For Each objOldTrx In colOldTrx
-                lngTrxIndex = objOldTrx.lngIndex
-                mobjReg.Delete(lngTrxIndex, New LogDelete, "SearchForm.CombineDeleteTrx")
-            Next objOldTrx
+                objOldTrx.Delete(New LogDelete, "SearchForm.CombineDeleteTrx")
+            Next
             mobjReg.LogGroupEnd(objStartLogger)
 
             mobjReg.SetCurrent(objNewTrx.lngIndex)
@@ -721,7 +719,7 @@ Friend Class SearchForm
                         If objTrxFirst Is Nothing Then
                             objTrxFirst = objTrxNew
                         End If
-                        mobjReg.Delete(objTrxSrc.lngIndex, New LogDelete, "SearchForm.MoveDelete")
+                        objTrxSrc.Delete(New LogDelete, "SearchForm.MoveDelete")
                     End If
                 End With
             Next objTrxSrc

@@ -105,7 +105,7 @@ Public Module TrxGeneratorLoader
     '   register in specified account.
 
     Public Function gstrGeneratorPath(ByVal objAccount As Account, ByVal objReg As Register) As String
-        gstrGeneratorPath = gstrAccountPath() & "\" & objAccount.strFileLoaded & ".gen\" & objReg.strRegisterKey
+        gstrGeneratorPath = gstrAccountPath() & "\" & objAccount.strFileNameRoot & ".gen\" & objReg.strRegisterKey
     End Function
 
     '$Description Report an error detected while loading a transaction generator file.

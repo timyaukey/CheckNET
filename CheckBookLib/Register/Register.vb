@@ -1064,6 +1064,12 @@ Public Class Register
         End Get
     End Property
 
+    Public ReadOnly Property strCatKey() As String
+        Get
+            Return objAccount.intKey.ToString() + "." + strRegisterKey
+        End Get
+    End Property
+
     Public Property strTitle() As String
         Get
             strTitle = mstrTitle

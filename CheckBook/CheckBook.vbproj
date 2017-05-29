@@ -118,6 +118,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.vb" />
+    <Compile Include="CategoryEditorForm.Designer.vb">
+      <DependentUpon>CategoryEditorForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CategoryEditorForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FileListEditorForm.Designer.vb">
       <DependentUpon>FileListEditorForm.vb</DependentUpon>
     </Compile>
@@ -324,6 +330,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AdjustPersonalBusinessForm.resx">
       <DependentUpon>AdjustPersonalBusinessForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CategoryEditorForm.resx">
+      <DependentUpon>CategoryEditorForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FileListEditorForm.resx">
       <DependentUpon>FileListEditorForm.vb</DependentUpon>

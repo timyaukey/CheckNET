@@ -140,13 +140,13 @@ Public Module CBMain
         Dim strBackupFile As String
         For Each objAccount In objCompany.colAccounts
             If objAccount.blnUnsavedChanges Then
-                strBackupFile = gstrBackupPath() & "\" & objAccount.strFileLoaded & "." & Now.ToString("MM$dd$yy$hh$mm")
+                strBackupFile = gstrBackupPath() & "\" & objAccount.strFileNameRoot & "." & Now.ToString("MM$dd$yy$hh$mm")
                 If Len(Dir(strBackupFile)) > 0 Then
                     Kill(strBackupFile)
                 End If
-                Rename(gstrAccountPath() & "\" & objAccount.strFileLoaded, strBackupFile)
+                Rename(gstrAccountPath() & "\" & objAccount.strFileNameRoot, strBackupFile)
                 PurgeAccountBackups(objAccount)
-                objAccount.Save(objAccount.strFileLoaded)
+                objAccount.Save(objAccount.strFileNameRoot)
                 MsgBox("Saved " & objAccount.strTitle)
             End If
         Next objAccount
@@ -172,7 +172,7 @@ Public Module CBMain
                 adatDays(intIndex).colInstances = New List(Of BackupInstance)
             Next
 
-            strBackup = Dir(gstrBackupPath() & "\" & objAccount.strFileLoaded & ".*", FileAttribute.Normal)
+            strBackup = Dir(gstrBackupPath() & "\" & objAccount.strFileNameRoot & ".*", FileAttribute.Normal)
             Do While strBackup <> ""
                 strEncodedDate = Mid(strBackup, InStr(UCase(strBackup), ".ACT.") + 5)
                 strParsableDate = "20" & Mid(strEncodedDate, 7, 2) & "/" & Mid(strEncodedDate, 1, 2) & "/" & Mid(strEncodedDate, 4, 2) & " " & Mid(strEncodedDate, 10, 2) & ":" & Mid(strEncodedDate, 13, 2)
@@ -224,54 +224,53 @@ Public Module CBMain
     End Function
 
     Public Function gblnAskAndCreateAccount(ByVal objCompany As Company) As Boolean
-        Dim strTitle As String = ""
-        Dim strFileRoot As String = ""
+        Dim objAccount As Account
         Dim strFile As String
-        Dim lngType As Account.AccountType = Account.AccountType.Asset
+
+        objAccount = New Account()
+        objAccount.Init(objCompany)
+        objAccount.intKey = objCompany.intGetUnusedAccountKey()
+        objAccount.lngSubType = Account.SubType.Liability_LoanPayable
 
         Using frm As AccountForm = New AccountForm()
-            If frm.ShowDialog(strTitle, strFileRoot, lngType, False, False) = DialogResult.OK Then
-                strFile = gstrAccountPath() & "\" & strFileRoot & ".act"
+            If frm.ShowDialog(objAccount, False, False) = DialogResult.OK Then
+                strFile = gstrAccountPath() & "\" & objAccount.strFileNameRoot & ".act"
                 If Dir(strFile) <> "" Then
                     MsgBox("Account file already exists with that name.", MsgBoxStyle.Critical)
                     Exit Function
                 End If
-                gCreateAccount(strFileRoot, strTitle, strTitle,
-                               objCompany.intGetUnusedAccountKey(), lngType)
+                gCreateAccount(objAccount)
                 Return True
             End If
         End Using
         Return False
     End Function
 
-    Public Sub gCreateAccount(ByVal strFileRoot As String, ByVal strAcctTitle As String, ByVal strRegTitle As String,
-                              ByVal intKey As Integer, ByVal lngType As Account.AccountType)
+    Public Sub gCreateAccount(ByVal objAccount As Account)
 
         Dim intFile As Integer
         Dim strFile As String
-        Dim strAccountType As String
+        Dim objSubTypeMatched As Account.SubTypeDef = Nothing
 
-        Select Case lngType
-            Case Account.AccountType.Asset
-                strAccountType = "A"
-            Case Account.AccountType.Liability
-                strAccountType = "L"
-            Case Account.AccountType.Equity
-                strAccountType = "E"
-            Case Else
-                Throw New Exception("Unrecognized account type")
-        End Select
+        For Each objSubType As Account.SubTypeDef In Account.arrSubTypeDefs
+            If objSubType.lngSubType = objAccount.lngSubType Then
+                objSubTypeMatched = objSubType
+            End If
+        Next
+        If objSubTypeMatched Is Nothing Then
+            Throw New Exception("Unrecognized account subtype")
+        End If
 
-        strFile = gstrAccountPath() & "\" & strFileRoot & ".act"
+        strFile = gstrAccountPath() & "\" & objAccount.strFileNameRoot & ".act"
         intFile = FreeFile()
         FileOpen(intFile, strFile, OpenMode.Output)
 
         PrintLine(intFile, "FHCKBK2")
-        PrintLine(intFile, "AT" & strAcctTitle)
-        PrintLine(intFile, "AK" & CStr(intKey))
-        PrintLine(intFile, "AY" & strAccountType)
+        PrintLine(intFile, "AT" & objAccount.strTitle)
+        PrintLine(intFile, "AK" & CStr(objAccount.intKey))
+        PrintLine(intFile, "AY" & objSubTypeMatched.strSaveCode)
         PrintLine(intFile, "RK1")
-        PrintLine(intFile, "RT" & strRegTitle)
+        PrintLine(intFile, "RT" & objAccount.strTitle)
         PrintLine(intFile, "RS")
         PrintLine(intFile, "RI")
         PrintLine(intFile, "RL1")
@@ -284,7 +283,7 @@ Public Module CBMain
 
         FileClose(intFile)
 
-        strFile = gstrAccountPath() & "\" & strFileRoot & ".rep"
+        strFile = gstrAccountPath() & "\" & objAccount.strFileNameRoot & ".rep"
         intFile = FreeFile()
         FileOpen(intFile, strFile, OpenMode.Output)
 

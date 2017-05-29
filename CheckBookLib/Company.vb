@@ -86,7 +86,7 @@ Public Class Company
         For Each objAccount As Account In colAccounts
             If objAccount.lngType = lngType Then
                 For Each objReg As Register In objAccount.colRegisters
-                    Dim strKey As String = objAccount.intKey.ToString() + "." + objReg.strRegisterKey
+                    Dim strKey As String = objReg.strCatKey
                     elm = New StringTransElement(strKey, strPrefix + ":" + objReg.strTitle, " " + objReg.strTitle)
                     objCats.Add(elm)
                 Next

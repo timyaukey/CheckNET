@@ -14,6 +14,7 @@ Friend Class RegisterForm
     Private mdatDefaultNewDate As Date
     Private WithEvents mfrmSearch As SearchForm
     Private mblnOldVisible As Boolean
+    Private mblnShowValidationErrors As Boolean
 
     'Column numbers.
     Private mintColDate As Integer
@@ -122,7 +123,7 @@ Friend Class RegisterForm
                 objOtherReg = mobjAccount.objFindReg(DirectCast(objTrx, TransferTrx).strTransferKey)
                 objXfer.DeleteTransfer(mobjReg, intIndex, objOtherReg)
             Else
-                mobjReg.Delete(intIndex, New LogDelete, "RegisterForm.Delete")
+                objTrx.Delete(New LogDelete, "RegisterForm.Delete")
             End If
             DiagnosticValidate()
 
@@ -363,7 +364,7 @@ Friend Class RegisterForm
             mobjReg.RaiseShowCurrent()
         End If
         RefreshPage()
-        mobjReg.ValidateRegister()
+        DiagnosticValidate()
     End Sub
 
     Private Sub grdReg_CellValueNeeded(ByVal sender As System.Object, _
@@ -589,11 +590,17 @@ Friend Class RegisterForm
 
         Try
 
-            If lngIndex > 0 Then
-                objTrx = mobjReg.objTrx(lngIndex)
-                strTrxSummary = ", " & strTrxSummaryForMsg(objTrx)
+            If mblnShowValidationErrors Then
+                If lngIndex > 0 Then
+                    objTrx = mobjReg.objTrx(lngIndex)
+                    strTrxSummary = ", " & strTrxSummaryForMsg(objTrx)
+                End If
+                Dim result As MsgBoxResult = MsgBox("Validation error on register index " & lngIndex & strTrxSummary & ":" & vbCrLf & strMsg & vbCrLf &
+                       "Show more errors?", MsgBoxStyle.YesNo Or MsgBoxStyle.DefaultButton1)
+                If result = MsgBoxResult.No Then
+                    mblnShowValidationErrors = False
+                End If
             End If
-            MsgBox("Validation error on register index " & lngIndex & strTrxSummary & ":" & vbCrLf & strMsg)
 
             Exit Sub
         Catch ex As Exception
@@ -606,6 +613,7 @@ Friend Class RegisterForm
     End Function
 
     Private Sub DiagnosticValidate()
+        mblnShowValidationErrors = True
         mobjReg.ValidateRegister()
     End Sub
 End Class

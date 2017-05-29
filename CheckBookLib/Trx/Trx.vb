@@ -326,6 +326,11 @@ Public MustInherit Class Trx
         mcurBalance = curNewBal
     End Sub
 
+    Public Sub Delete(ByVal objDeleteLogger As ILogDelete, ByVal strLogTitle As String,
+                      Optional ByVal blnSetChanged As Boolean = True)
+        mobjReg.Delete(mlngIndex, objDeleteLogger, strLogTitle, blnSetChanged)
+    End Sub
+
     Public MustOverride Sub UnApply()
     Public MustOverride Sub Apply(ByVal blnLoading As Boolean)
 

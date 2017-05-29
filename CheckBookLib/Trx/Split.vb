@@ -201,8 +201,14 @@ Public Class TrxSplit
 
     Friend Sub DeleteReplicaTrx()
         If Not mobjReplicaManager Is Nothing Then
-            mobjReplicaManager.objTrx.objReg.Delete(mobjReplicaManager.objTrx.lngIndex, New LogDeleteNull(), "", blnSetChanged:=False)
+            mobjReplicaManager.objTrx.Delete(New LogDeleteNull(), "", blnSetChanged:=False)
             mobjReplicaManager = Nothing
         End If
     End Sub
+
+    Public ReadOnly Property blnHasReplicaTrx() As Boolean
+        Get
+            Return (Not mobjReplicaManager Is Nothing)
+        End Get
+    End Property
 End Class

@@ -5,12 +5,21 @@ Public Class Account
     'The master Company object.
     Private mobjCompany As Company
     'Path passed to Load().
-    Private mstrFileLoaded As String
+    Private mstrFileNameRoot As String
     'Account title.
     Private mstrTitle As String
     'Unique number identifying this Account from others loaded at the same time.
     Private mintKey As Integer
     Private mlngType As AccountType
+    Private mlngSubType As SubType
+    Private mintRelatedKey1 As Integer
+    Private mintRelatedKey2 As Integer
+    Private mintRelatedKey3 As Integer
+    Private mintRelatedKey4 As Integer
+    Private mobjRelatedAcct1 As Account
+    Private mobjRelatedAcct2 As Account
+    Private mobjRelatedAcct3 As Account
+    Private mobjRelatedAcct4 As Account
     'Repeat key list for account.
     Private mobjRepeats As SimpleStringTranslator
     Private mobjRepeatSummarizer As RepeatSummarizer
@@ -32,7 +41,71 @@ Public Class Account
         Asset = 1
         Liability = 2
         Equity = 3
+        Personal = 4
     End Enum
+
+    Public Enum SubType
+        Unspecified = 0
+        Asset_CheckingAccount = 100
+        Asset_SavingsAccount = 101
+        Asset_AccountsReceivable = 102
+        Asset_Inventory = 103
+        Asset_LoanReceivable = 104
+        Asset_RealProperty = 105
+        Asset_OtherProperty = 106
+        Asset_Investment = 107
+        Asset_Other = 199
+        Liability_LoanPayable = 200
+        Liability_AccountsPayable = 201
+        Liability_Taxes = 202
+        Liability_Other = 299
+        Equity_CashInvested = 300
+        Equity_PropertyInvested = 301
+        Equity_RetainedEarnings = 302
+        Equity_Stock = 303
+        Equity_Other = 399
+        Personal_LiabilityLoan = 400
+        Personal_AssetLoan = 401
+        Personal_BankAccount = 402
+        Personal_Other = 499
+    End Enum
+
+    Public Class SubTypeDef
+        Public lngType As AccountType
+        Public lngSubType As SubType
+        Public strName As String
+        Public strSaveCode As String
+
+        Public Overrides Function ToString() As String
+            Return strName
+        End Function
+    End Class
+
+    Public Shared arrSubTypeDefs() As SubTypeDef =
+    {
+        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_CheckingAccount, .strName = "Asset - Checking Account", .strSaveCode = "A"},
+        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_SavingsAccount, .strName = "Asset - Savings Account", .strSaveCode = "ASA"},
+        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_AccountsReceivable, .strName = "Asset - Accounts Receivable", .strSaveCode = "AAR"},
+        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_Inventory, .strName = "Asset - Inventory", .strSaveCode = "AIV"},
+        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_LoanReceivable, .strName = "Asset - Loan Receivable", .strSaveCode = "ALR"},
+        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_RealProperty, .strName = "Asset - Real Property", .strSaveCode = "ARP"},
+        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_OtherProperty, .strName = "Asset - Other Property", .strSaveCode = "AOP"},
+        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_Investment, .strName = "Asset - Investment", .strSaveCode = "AIN"},
+        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_Other, .strName = "Asset - Other", .strSaveCode = "AOT"},
+        New SubTypeDef() With {.lngType = AccountType.Liability, .lngSubType = SubType.Liability_LoanPayable, .strName = "Liability - Loan Payable", .strSaveCode = "L"},
+        New SubTypeDef() With {.lngType = AccountType.Liability, .lngSubType = SubType.Liability_AccountsPayable, .strName = "Liability - Accounts Payable", .strSaveCode = "LAP"},
+        New SubTypeDef() With {.lngType = AccountType.Liability, .lngSubType = SubType.Liability_Taxes, .strName = "Liability - Taxes", .strSaveCode = "LTX"},
+        New SubTypeDef() With {.lngType = AccountType.Liability, .lngSubType = SubType.Liability_Other, .strName = "Liability - Other", .strSaveCode = "LOT"},
+        New SubTypeDef() With {.lngType = AccountType.Equity, .lngSubType = SubType.Equity_CashInvested, .strName = "Equity - Cash Invested", .strSaveCode = "ECA"},
+        New SubTypeDef() With {.lngType = AccountType.Equity, .lngSubType = SubType.Equity_PropertyInvested, .strName = "Equity - Property Invested", .strSaveCode = "EPI"},
+        New SubTypeDef() With {.lngType = AccountType.Equity, .lngSubType = SubType.Equity_RetainedEarnings, .strName = "Equity - Retained Earnings", .strSaveCode = "ERE"},
+        New SubTypeDef() With {.lngType = AccountType.Equity, .lngSubType = SubType.Equity_Stock, .strName = "Equity - Stock", .strSaveCode = "EST"},
+        New SubTypeDef() With {.lngType = AccountType.Equity, .lngSubType = SubType.Equity_Other, .strName = "Equity - Other", .strSaveCode = "E"},
+        New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_LiabilityLoan, .strName = "Personal - Liability Loan", .strSaveCode = "PLL"},
+        New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_AssetLoan, .strName = "Personal - Asset Loan", .strSaveCode = "PAL"},
+        New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_BankAccount, .strName = "Personal - Bank Account", .strSaveCode = "PBA"},
+        New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_Other, .strName = "Pesonal - Other", .strSaveCode = "POT"}
+    }
 
     'Fired when ChangeMade() is called. Used by clients
     'sensitive to changes in the Account as a whole,
@@ -56,10 +129,13 @@ Public Class Account
         End Get
     End Property
 
-    Public ReadOnly Property strFileLoaded() As String
+    Public Property strFileNameRoot() As String
         Get
-            strFileLoaded = mstrFileLoaded
+            strFileNameRoot = mstrFileNameRoot
         End Get
+        Set(value As String)
+            mstrFileNameRoot = value
+        End Set
     End Property
 
     Public Property strTitle() As String
@@ -67,7 +143,7 @@ Public Class Account
             If Len(mstrTitle) > 0 Then
                 strTitle = mstrTitle
             Else
-                strTitle = mstrFileLoaded
+                strTitle = mstrFileNameRoot
             End If
         End Get
         Set(ByVal Value As String)
@@ -76,10 +152,14 @@ Public Class Account
         End Set
     End Property
 
-    Public ReadOnly Property intKey() As Integer
+    Public Property intKey() As Integer
         Get
             Return mintKey
         End Get
+        Set(value As Integer)
+            mintKey = value
+            SetChanged()
+        End Set
     End Property
 
     Public Property lngType() As AccountType
@@ -88,6 +168,56 @@ Public Class Account
         End Get
         Set(value As AccountType)
             mlngType = value
+            SetChanged()
+        End Set
+    End Property
+
+    Public Property lngSubType() As SubType
+        Get
+            Return mlngSubType
+        End Get
+        Set(value As SubType)
+            mlngSubType = value
+            SetChanged()
+        End Set
+    End Property
+
+    Public Property objRelatedAcct1() As Account
+        Get
+            Return mobjRelatedAcct1
+        End Get
+        Set(value As Account)
+            mobjRelatedAcct1 = value
+            SetChanged()
+        End Set
+    End Property
+
+    Public Property objRelatedAcct2() As Account
+        Get
+            Return mobjRelatedAcct2
+        End Get
+        Set(value As Account)
+            mobjRelatedAcct2 = value
+            SetChanged()
+        End Set
+    End Property
+
+    Public Property objRelatedAcct3() As Account
+        Get
+            Return mobjRelatedAcct3
+        End Get
+        Set(value As Account)
+            mobjRelatedAcct3 = value
+            SetChanged()
+        End Set
+    End Property
+
+    Public Property objRelatedAcct4() As Account
+        Get
+            Return mobjRelatedAcct4
+        End Get
+        Set(value As Account)
+            mobjRelatedAcct4 = value
             SetChanged()
         End Set
     End Property
@@ -103,6 +233,7 @@ Public Class Account
             Case AccountType.Asset : Return "A"
             Case AccountType.Liability : Return "L"
             Case AccountType.Equity : Return "Q"
+            Case AccountType.Personal : Return "P"
             Case Else
                 Throw New Exception("Invalid account type")
         End Select
@@ -154,7 +285,7 @@ Public Class Account
     Public Sub LoadStart(ByVal strAcctFile As String)
 
         RaiseEvent LoadStatus("Loading " & strAcctFile)
-        mstrFileLoaded = strAcctFile
+        mstrFileNameRoot = strAcctFile
         mblnUnsavedChanges = False
         mcolRegisters = New List(Of Register)
         LoadIndividual()
@@ -173,7 +304,7 @@ Public Class Account
         Try
 
             intFile = FreeFile()
-            FileOpen(intFile, gstrAccountPath() & "\" & mstrFileLoaded, OpenMode.Input)
+            FileOpen(intFile, gstrAccountPath() & "\" & mstrFileNameRoot, OpenMode.Input)
 
             strLine = LineInput(intFile)
             lngLinesRead = lngLinesRead + 1
@@ -205,15 +336,29 @@ Public Class Account
                         mintKey = intNewKey
                         mobjCompany.UseAccountKey(mintKey)
                     Case "AY"
+                        Dim objSubTypeMatched As SubTypeDef = Nothing
+                        For Each objSubType In arrSubTypeDefs
+                            If objSubType.strSaveCode = Mid(strLine, 3) Then
+                                objSubTypeMatched = objSubType
+                            End If
+                        Next
+                        If objSubTypeMatched Is Nothing Then
+                            Throw New Exception("Unrecognized account subtype")
+                        End If
+                        mlngType = objSubTypeMatched.lngType
+                        mlngSubType = objSubTypeMatched.lngSubType
+                    Case "AR"
                         Select Case Mid(strLine, 3, 1)
-                            Case "A"
-                                mlngType = AccountType.Asset
-                            Case "L"
-                                mlngType = AccountType.Liability
-                            Case "E"
-                                mlngType = AccountType.Equity
+                            Case "1"
+                                mintRelatedKey1 = intLoadParseRelatedAccountKey(strLine)
+                            Case "2"
+                                mintRelatedKey2 = intLoadParseRelatedAccountKey(strLine)
+                            Case "3"
+                                mintRelatedKey3 = intLoadParseRelatedAccountKey(strLine)
+                            Case "4"
+                                mintRelatedKey4 = intLoadParseRelatedAccountKey(strLine)
                             Case Else
-                                Throw New Exception("Unrecognized account type")
+                                Throw New Exception("Invalid related account selector")
                         End Select
                     Case "RK"
                         If Not blnAccountPropertiesValidated Then
@@ -258,9 +403,17 @@ Public Class Account
             FileClose(intFile)
         Catch ex As Exception
             FileClose(intFile)
-            Throw New Exception("Error in Account.LoadIndividual(" & mstrFileLoaded & ";" & lngLinesRead & ")", ex)
+            Throw New Exception("Error in Account.LoadIndividual(" & mstrFileNameRoot & ";" & lngLinesRead & ")", ex)
         End Try
     End Sub
+
+    Private Function intLoadParseRelatedAccountKey(ByVal strLine As String) As Integer
+        Dim intRelatedKey As Integer
+        If Int32.TryParse(strLine.Substring(4), intRelatedKey) Then
+            Return intRelatedKey
+        End If
+        Throw New Exception("Invalid related account key")
+    End Function
 
     Public Sub LoadGenerated()
         Dim objReg As Register
@@ -276,7 +429,7 @@ Public Class Account
                 gCreateGeneratedTrx(Me, objReg, datRegisterEndDate)
             Next objReg
         Catch ex As Exception
-            Throw New Exception("Error in Account.LoadGenerated(" & mstrFileLoaded & ")", ex)
+            Throw New Exception("Error in Account.LoadGenerated(" & mstrFileNameRoot & ")", ex)
         End Try
     End Sub
 
@@ -289,12 +442,17 @@ Public Class Account
 
             Exit Sub
         Catch ex As Exception
-            Throw New Exception("Error in Account.LoadApply(" & mstrFileLoaded & ")", ex)
+            Throw New Exception("Error in Account.LoadApply(" & mstrFileNameRoot & ")", ex)
         End Try
     End Sub
 
     Public Sub LoadFinish()
         Try
+            'This has to happen after all Account objects are loaded, not when the "AR" lines are read.
+            mobjRelatedAcct1 = objLoadResolveRelatedAccount(mintRelatedKey1)
+            mobjRelatedAcct2 = objLoadResolveRelatedAccount(mintRelatedKey2)
+            mobjRelatedAcct3 = objLoadResolveRelatedAccount(mintRelatedKey3)
+            mobjRelatedAcct4 = objLoadResolveRelatedAccount(mintRelatedKey4)
 
             'Construct repeat key StringTranslator from actual transaction
             'data and info in .GEN files.
@@ -308,9 +466,21 @@ Public Class Account
 
             Exit Sub
         Catch ex As Exception
-            Throw New Exception("Error in Account.LoadFinish(" & mstrFileLoaded & ")", ex)
+            Throw New Exception("Error in Account.LoadFinish(" & mstrFileNameRoot & ")", ex)
         End Try
     End Sub
+
+    Private Function objLoadResolveRelatedAccount(ByVal intRelatedKey As Integer) As Account
+        If intRelatedKey = 0 Then
+            Return Nothing
+        End If
+        For Each objAccount As Account In mobjCompany.colAccounts
+            If objAccount.intKey = intRelatedKey Then
+                Return objAccount
+            End If
+        Next
+        Throw New Exception("Related account key " + intRelatedKey.ToString() + " not found")
+    End Function
 
     '$Description Remove all generated Trx from Registers for this account,
     '   then recreate generated Trx through the specified end date.
@@ -427,7 +597,7 @@ Public Class Account
     Public Sub Save(ByVal strPath_ As String)
         Dim blnFileOpen As Boolean
         Dim objReg As Register
-        Dim strAcctType As String
+        Dim objSubTypeMatched As SubTypeDef = Nothing
 
         Try
 
@@ -440,23 +610,25 @@ Public Class Account
                 SaveLine("AT" & mstrTitle)
             End If
             SaveLine("AK" & CStr(mintKey))
-            Select Case mlngType
-                Case AccountType.Asset
-                    strAcctType = "A"
-                Case AccountType.Liability
-                    strAcctType = "L"
-                Case AccountType.Equity
-                    strAcctType = "E"
-                Case Else
-                    Throw New Exception("Unrecognized account type")
-            End Select
-            SaveLine("AY" & strAcctType)
+            For Each objSubType As SubTypeDef In Account.arrSubTypeDefs
+                If objSubType.lngSubType = mlngSubType Then
+                    objSubTypeMatched = objSubType
+                End If
+            Next
+            If objSubTypeMatched Is Nothing Then
+                Throw New Exception("Could not match account subtype in save for " + mstrTitle)
+            End If
+            SaveLine("AY" & objSubTypeMatched.strSaveCode)
             'Define each register at the top of the file.
             For Each objReg In mcolRegisters
                 If Not objReg.blnDeleted Then
                     SaveDefineRegister(objReg)
                 End If
             Next objReg
+            SaveRelatedAcct(objRelatedAcct1, "1")
+            SaveRelatedAcct(objRelatedAcct2, "2")
+            SaveRelatedAcct(objRelatedAcct3, "3")
+            SaveRelatedAcct(objRelatedAcct4, "4")
             'Save the transactions for each register.
             For Each objReg In mcolRegisters
                 If Not objReg.blnDeleted Then
@@ -476,6 +648,12 @@ Public Class Account
             End If
             gNestedException(ex)
         End Try
+    End Sub
+
+    Private Sub SaveRelatedAcct(ByVal objRelatedAccount As Account, ByVal strSelector As String)
+        If Not objRelatedAccount Is Nothing Then
+            SaveLine("AR" + strSelector + " " + objRelatedAccount.intKey.ToString())
+        End If
     End Sub
 
     Private Sub SaveDefineRegister(ByVal objReg As Register)
@@ -515,7 +693,7 @@ Public Class Account
         'RR line is for repeating register, no longer used.
 
         objReg.LogSave()
-        objReg.WriteEventLog(System.IO.Path.GetFileNameWithoutExtension(mstrFileLoaded), mobjRepeats)
+        objReg.WriteEventLog(System.IO.Path.GetFileNameWithoutExtension(mstrFileNameRoot), mobjRepeats)
     End Sub
 
     '$Description Write one line to the Save() output file.

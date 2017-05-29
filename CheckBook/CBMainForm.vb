@@ -83,7 +83,13 @@ Friend Class CBMainForm
             strFile = Dir(gstrAccountPath() & "\*.act")
             If strFile = "" Then
                 MsgBox("Creating first checking account...", MsgBoxStyle.Information)
-                gCreateAccount("Main", "Checking Account", "Main Register", mobjCompany.intGetUnusedAccountKey(), Account.AccountType.Asset)
+                objAccount = New Account()
+                objAccount.Init(mobjCompany)
+                objAccount.intKey = mobjCompany.intGetUnusedAccountKey()
+                objAccount.lngSubType = Account.SubType.Asset_CheckingAccount
+                objAccount.strFileNameRoot = "Main"
+                objAccount.strTitle = "Checking Account"
+                gCreateAccount(objAccount)
                 strFile = Dir(gstrAccountPath() & "\*.act")
             End If
             While strFile <> ""
@@ -301,7 +307,8 @@ Friend Class CBMainForm
         Try
 
             frm = New ListEditorForm
-            frm.blnShowMe(mobjCompany, ListEditorForm.ListType.glngLIST_TYPE_BUDGET, gstrAddPath("Shared.bud"), mobjCompany.objBudgets, "Budget List")
+            frm.blnShowMe(mobjCompany, ListEditorForm.ListType.glngLIST_TYPE_BUDGET, gstrAddPath("Shared.bud"),
+                          mobjCompany.objBudgets, "Budget List", AddressOf blnEditStringTransElem)
 
             Exit Sub
         Catch ex As Exception
@@ -310,20 +317,32 @@ Friend Class CBMainForm
     End Sub
 
     Public Sub mnuListCategories_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuListCategories.Click
-        Dim frm As ListEditorForm
-
         Try
-            frm = New ListEditorForm
-            If frm.blnShowMe(mobjCompany, ListEditorForm.ListType.glngLIST_TYPE_CATEGORY, gstrAddPath("Shared.cat"),
-                             mobjCompany.objIncExpAccounts, "Category List") Then
-                mobjCompany.LoadCategories()
-            End If
+            Using frmListEditor As ListEditorForm = New ListEditorForm()
+                Using frmCatEditor As CategoryEditorForm = New CategoryEditorForm()
+                    If frmListEditor.blnShowMe(mobjCompany, ListEditorForm.ListType.glngLIST_TYPE_CATEGORY, gstrAddPath("Shared.cat"),
+                             mobjCompany.objIncExpAccounts, "Category List", AddressOf frmCatEditor.blnShowDialog) Then
+                        mobjCompany.LoadCategories()
+                    End If
+                End Using
+            End Using
 
             Exit Sub
         Catch ex As Exception
             gTopException(ex)
         End Try
     End Sub
+
+    Private Function blnEditStringTransElem(ByVal objTransElem As StringTransElement, ByVal blnNew As Boolean) As Boolean
+        Dim strNewValue1 As String
+        strNewValue1 = InputBox("Name: ", "", objTransElem.strValue1)
+        If strNewValue1 = "" Or strNewValue1 = objTransElem.strValue1 Then
+            Return False
+        End If
+        objTransElem.strValue1 = strNewValue1
+        Return True
+    End Function
+
 
     Public Sub mnuListPayees_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuListPayees.Click
         Dim frm As PayeeListForm

@@ -5,33 +5,66 @@ Imports CheckBookLib
 
 Public Class AccountForm
     Private mblnUpdateMode As Boolean
+    Private mobjCompany As Company
 
-    Public Overloads Function ShowDialog(ByRef strTitle As String, ByRef strFileName As String, ByRef lngAccountType As Account.AccountType,
-                                         ByVal blnUpdateMode As Boolean, ByVal blnReadOnly As Boolean) As DialogResult
+    Public Overloads Function ShowDialog(ByRef objAccount As Account, ByVal blnUpdateMode As Boolean, ByVal blnReadOnly As Boolean) As DialogResult
         mblnUpdateMode = blnUpdateMode
-        txtAccountName.Text = strTitle
-        txtFileName.Text = strFileName
-        cboAccountType.Items.Add(New AccountTypeItem(Account.AccountType.Asset, "Asset"))
-        cboAccountType.Items.Add(New AccountTypeItem(Account.AccountType.Liability, "Liability"))
-        cboAccountType.Items.Add(New AccountTypeItem(Account.AccountType.Equity, "Equity"))
-        For Each objItem As AccountTypeItem In cboAccountType.Items
-            If objItem.lngType = lngAccountType Then
+        mobjCompany = objAccount.objCompany
+        txtAccountName.Text = objAccount.strTitle
+        txtFileName.Text = objAccount.strFileNameRoot
+        For Each objSubType As Account.SubTypeDef In Account.arrSubTypeDefs
+            cboAccountType.Items.Add(objSubType)
+        Next
+        For Each objItem As Account.SubTypeDef In cboAccountType.Items
+            If objItem.lngSubType = objAccount.lngSubType Then
                 cboAccountType.SelectedItem = objItem
                 Exit For
             End If
         Next
         txtAccountName.Enabled = (Not blnReadOnly)
         txtFileName.Enabled = (Not mblnUpdateMode) And (Not blnReadOnly)
-        cboAccountType.Enabled = (Not mblnUpdateMode) And (Not blnReadOnly)
+        cboAccountType.Enabled = (Not blnReadOnly)
+        LoadAccountList(cboRelated1, objAccount.objRelatedAcct1, blnReadOnly)
+        LoadAccountList(cboRelated2, objAccount.objRelatedAcct2, blnReadOnly)
+        LoadAccountList(cboRelated3, objAccount.objRelatedAcct3, blnReadOnly)
+        LoadAccountList(cboRelated4, objAccount.objRelatedAcct4, blnReadOnly)
         btnOkay.Enabled = (Not blnReadOnly)
         Dim result As DialogResult = Me.ShowDialog()
         If result = DialogResult.OK Then
-            strTitle = txtAccountName.Text
-            strFileName = txtFileName.Text
-            lngAccountType = DirectCast(cboAccountType.SelectedItem, AccountTypeItem).lngType
+            objAccount.strTitle = txtAccountName.Text
+            objAccount.lngSubType = DirectCast(cboAccountType.SelectedItem, Account.SubTypeDef).lngSubType
+            objAccount.objRelatedAcct1 = DirectCast(cboRelated1.SelectedItem, AccountItem).objAccount
+            objAccount.objRelatedAcct2 = DirectCast(cboRelated2.SelectedItem, AccountItem).objAccount
+            objAccount.objRelatedAcct3 = DirectCast(cboRelated3.SelectedItem, AccountItem).objAccount
+            objAccount.objRelatedAcct4 = DirectCast(cboRelated4.SelectedItem, AccountItem).objAccount
+            If Not blnUpdateMode Then
+                objAccount.strFileNameRoot = txtFileName.Text
+            End If
+            Return result
         End If
-        Return result
     End Function
+
+    Private Sub LoadAccountList(ByVal ctl As ComboBox, ByVal objSelectedAccount As Account, ByVal blnReadOnly As Boolean)
+        Dim objItem As AccountItem
+        Dim objSelectedItem As AccountItem
+        ctl.Items.Clear()
+        objItem = New AccountItem()
+        objItem.objAccount = Nothing
+        objItem.strTitle = "(none)"
+        objSelectedItem = objItem
+        ctl.Items.Add(objItem)
+        For Each objAccount As Account In mobjCompany.colAccounts
+            objItem = New AccountItem()
+            objItem.objAccount = objAccount
+            objItem.strTitle = objAccount.strType + ":" + objAccount.strTitle
+            ctl.Items.Add(objItem)
+            If objAccount Is objSelectedAccount Then
+                objSelectedItem = objItem
+            End If
+        Next
+        ctl.SelectedItem = objSelectedItem
+        ctl.Enabled = (Not blnReadOnly)
+    End Sub
 
     Private Sub btnOkay_Click(sender As Object, e As EventArgs) Handles btnOkay.Click
         If txtAccountName.Text.Length = 0 Then
@@ -59,23 +92,13 @@ Public Class AccountForm
         Me.Close()
     End Sub
 
-    Private Class AccountTypeItem
-        Private mlngType As Account.AccountType
-        Private mstrName As String
-
-        Public Sub New(ByVal lngType_ As Account.AccountType, ByVal strName_ As String)
-            mlngType = lngType_
-            mstrName = strName_
-        End Sub
-
-        Public ReadOnly Property lngType() As Account.AccountType
-            Get
-                Return mlngType
-            End Get
-        End Property
+    Private Class AccountItem
+        Public objAccount As Account
+        Public strTitle As String
 
         Public Overrides Function ToString() As String
-            Return mstrName
+            Return strTitle
         End Function
     End Class
+
 End Class

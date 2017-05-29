@@ -146,7 +146,7 @@ Friend Class ShowRegisterForm
             End If
 
             With maudtElement(lstRegisters.SelectedIndex)
-                strNameRoot = Replace(LCase(.objAccount.strFileLoaded), ".act", "")
+                strNameRoot = Replace(LCase(.objAccount.strFileNameRoot), ".act", "")
                 If MsgBox("Are you sure you want to delete account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
@@ -233,19 +233,10 @@ Friend Class ShowRegisterForm
     End Sub
 
     Private Sub cmdSetAccountProperties_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSetAccountProperties.Click
-        Dim strTitle As String
-        Dim strFileName As String
-        Dim lngType As Account.AccountType
-
         Try
-
             With maudtElement(lstRegisters.SelectedIndex)
-                strTitle = .objAccount.strTitle
-                strFileName = .objAccount.strFileLoaded
-                lngType = .objAccount.lngType
                 Using frm As AccountForm = New AccountForm
-                    If frm.ShowDialog(strTitle, strFileName, lngType, True, Not gobjSecurity.blnIsAdministrator) = DialogResult.OK Then
-                        .objAccount.strTitle = strTitle
+                    If frm.ShowDialog(.objAccount, True, Not gobjSecurity.blnIsAdministrator) = DialogResult.OK Then
                         MsgBox("Account property changes will take effect the next time you start the software.", MsgBoxStyle.Information)
                     End If
                 End Using

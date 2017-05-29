@@ -13,14 +13,18 @@ Friend Class ListEditorForm
     Private mobjCompany As Company
     Private mblnModified As Boolean
     Private mblnSaved As Boolean
+    Private mblnEditElem As EditStringTransElement
 
     Public Enum ListType
         glngLIST_TYPE_CATEGORY = 1
         glngLIST_TYPE_BUDGET = 2
     End Enum
 
+    Public Delegate Function EditStringTransElement(ByVal objTransElem As StringTransElement, ByVal blnNew As Boolean) As Boolean
+
     Public Function blnShowMe(ByVal objCompany As Company, ByVal lngListType As ListType, ByVal strFile As String,
-                              ByVal objList As SimpleStringTranslator, ByVal strCaption As String) As Boolean
+                              ByVal objList As SimpleStringTranslator, ByVal strCaption As String,
+                              ByVal blnEditElem As EditStringTransElement) As Boolean
 
         Dim frm As System.Windows.Forms.Form
 
@@ -42,6 +46,7 @@ Friend Class ListEditorForm
             mstrFile = strFile
             mblnModified = False
             mblnSaved = False
+            mblnEditElem = blnEditElem
             LoadList()
             Me.ShowDialog()
             Return mblnSaved
@@ -93,24 +98,29 @@ Friend Class ListEditorForm
     End Sub
 
     Private Sub cmdNew_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNew.Click
-        Dim strElement As String
-        Dim intKey As Short
+        'Dim strValue1 As String
         Dim strKey As String
         Dim strError As String = ""
+        Dim objTransElem As StringTransElement
 
         Try
 
-            strElement = Trim(InputBox("Name to add:"))
-            If strElement = "" Then
-                Exit Sub
-            End If
-            intKey = intGetUnusedKey()
-            strKey = strMakeKey(intKey)
+            'strValue1 = Trim(InputBox("Name to add:"))
+            'If strValue1 = "" Then
+            'Exit Sub
+            'End If
+            strKey = strMakeKey(intGetUnusedKey())
             If strKey = "" Then
                 MsgBox("Too many entries in list.", MsgBoxStyle.Critical)
                 Exit Sub
             End If
-            If blnInsertElement(strElement, intKey, False, strError) Then
+            'objTransElem = New StringTransElement(strKey, strValue1, strMakeValue2(strValue1))
+            objTransElem = New StringTransElement(strKey, "", "")
+            If Not mblnEditElem(objTransElem, True) Then
+                Exit Sub
+            End If
+            objTransElem.strValue2 = strMakeValue2(objTransElem.strValue1)
+            If blnInsertElement(objTransElem, False, strError) Then
                 MsgBox(strError, MsgBoxStyle.Critical)
                 Exit Sub
             End If
@@ -123,15 +133,16 @@ Friend Class ListEditorForm
     End Sub
 
     Private Sub cmdChange_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdChange.Click
-        Dim strOldElement As String
-        Dim strNewElement As String
+        Dim objOrigTransElem As StringTransElement
+        Dim strOrigValue1 As String
+        Dim objNewTransElem As StringTransElement
+        Dim strNewValue1 As String
         Dim intIndex As Short
-        Dim intKey As Short
         Dim strError As String = ""
         Dim blnFoundChild As Boolean
         Dim strChildMatchPrefix As String
         Dim intMatchLen As Short
-        Dim strNewChildElement As String
+        Dim objScanTransElem As StringTransElement
 
         Try
 
@@ -141,35 +152,40 @@ Friend Class ListEditorForm
                 MsgBox("Please select the list entry to change.", MsgBoxStyle.Critical)
                 Exit Sub
             End If
-            strOldElement = gstrVB6GetItemString(lstElements, intIndex)
-            strNewElement = InputBox("Edit list entry name:", , strOldElement)
-            If strNewElement = "" Or strNewElement = strOldElement Then
+            objOrigTransElem = DirectCast(lstElements.SelectedItem, StringTransElement)
+            strOrigValue1 = objOrigTransElem.strValue1
+            'strNewValue1 = InputBox("Edit list entry name:", , strOrigValue1)
+            'If strNewValue1 = "" Or strNewValue1 = strOrigValue1 Then
+            'Exit Sub
+            'End If
+            objNewTransElem = objOrigTransElem.objClone()
+            If Not mblnEditElem(objNewTransElem, False) Then
                 Exit Sub
             End If
+            strNewValue1 = objNewTransElem.strValue1
+            'objNewTransElem.strValue1 = strNewValue1
+            objNewTransElem.strValue2 = strMakeValue2(strNewValue1)
 
-            'Delete the old element, and insert the new one with the same key.
-            intKey = gintVB6GetItemData(lstElements, intIndex)
             'Always delete first, so insert isn't confused by finding the old entry.
             DeleteElement(intIndex)
-            If blnInsertElement(strNewElement, intKey, False, strError) Then
+            If blnInsertElement(objNewTransElem, False, strError) Then
                 'Insert failed, so put back the entry we just deleted.
-                lstElements.Items.Insert(intIndex, strOldElement)
-                gVB6SetItemData(lstElements, intIndex, intKey)
+                lstElements.Items.Insert(intIndex, objOrigTransElem)
                 MsgBox(strError, MsgBoxStyle.Critical)
                 Exit Sub
             End If
 
             'Change all children of the changed entry.
-            strChildMatchPrefix = UCase(strOldElement & ":")
+            strChildMatchPrefix = UCase(strOrigValue1 & ":")
             intMatchLen = Len(strChildMatchPrefix)
             Do
                 blnFoundChild = False
                 For intIndex = 0 To lstElements.Items.Count - 1
-                    If UCase(VB.Left(gstrVB6GetItemString(lstElements, intIndex), intMatchLen)) = strChildMatchPrefix Then
-                        intKey = gintVB6GetItemData(lstElements, intIndex)
-                        strNewChildElement = strNewElement & ":" & Mid(gstrVB6GetItemString(lstElements, intIndex), intMatchLen + 1)
+                    objScanTransElem = DirectCast(lstElements.Items(intIndex), StringTransElement)
+                    If UCase(VB.Left(objScanTransElem.strValue1, intMatchLen)) = strChildMatchPrefix Then
+                        objScanTransElem.strValue1 = strNewValue1 & ":" & Mid(objScanTransElem.strValue1, intMatchLen + 1)
                         DeleteElement(intIndex)
-                        If blnInsertElement(strNewChildElement, intKey, False, strError) Then
+                        If blnInsertElement(objScanTransElem, False, strError) Then
                             gRaiseError("Unexpected error renaming children: " & strError)
                         End If
                         blnFoundChild = True
@@ -189,7 +205,7 @@ Friend Class ListEditorForm
     End Sub
 
     Private Sub cmdDelete_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdDelete.Click
-        Dim strElement As String
+        Dim strValue1 As String
         Dim intIndex As Short
 
         Try
@@ -199,8 +215,8 @@ Friend Class ListEditorForm
                 MsgBox("Please select the list entry to delete.", MsgBoxStyle.Critical)
                 Exit Sub
             End If
-            strElement = gstrVB6GetItemString(lstElements, intIndex)
-            If InStr(strElement, ":") = 0 Then
+            strValue1 = DirectCast(lstElements.Items(intIndex), StringTransElement).strValue1
+            If InStr(strValue1, ":") = 0 Then
                 If Not blnFirstLevelChangesAllowed Then
                     MsgBox("You may not delete top level entries in this list.", MsgBoxStyle.Critical)
                     Exit Sub
@@ -208,7 +224,7 @@ Friend Class ListEditorForm
             End If
             If blnMultipleLevelsAllowed Then
                 If intIndex < (lstElements.Items.Count - 1) Then
-                    If UCase(strElement & ":") = UCase(VB.Left(gstrVB6GetItemString(lstElements, intIndex + 1), Len(strElement) + 1)) Then
+                    If UCase(strValue1 & ":") = UCase(VB.Left(DirectCast(lstElements.Items(intIndex + 1), StringTransElement).strValue1, Len(strValue1) + 1)) Then
                         MsgBox("You may not delete a list entry with child entries.", MsgBoxStyle.Critical)
                         Exit Sub
                     End If
@@ -234,8 +250,8 @@ Friend Class ListEditorForm
     Private Sub LoadList()
         Dim intIndex As Short
         Dim strError As String = ""
-        Dim strName As String
         Dim blnFoundPersonal As Boolean = False
+        Dim objTransElem As StringTransElement
 
         'Only for debugging, but harmless to leave in because it is so fast.
         CompareTest("A", "A", 0)
@@ -258,19 +274,20 @@ Friend Class ListEditorForm
             With lstElements
                 .Items.Clear()
                 For intIndex = 1 To mobjList.intElements
-                    strName = mobjList.strValue1(intIndex)
-                    If blnInsertElement(strName, CShort(mobjList.strKey(intIndex)), True, strError) Then
+                    objTransElem = mobjList.objElement(intIndex)
+                    If blnInsertElement(objTransElem.objClone(), True, strError) Then
                         MsgBox(strError)
                     End If
                     If mlngListType = ListType.glngLIST_TYPE_CATEGORY Then
-                        If strName.Substring(0, 1) = "C" Then
+                        If CategoryTranslator.blnIsPersonal(objTransElem.strValue1) Then
                             blnFoundPersonal = True
                         End If
                     End If
                 Next
                 If mlngListType = ListType.glngLIST_TYPE_CATEGORY And Not blnFoundPersonal Then
                     Dim intKey As Integer = intGetUnusedKey()
-                    If blnInsertElement("C", intKey, True, strError) Then
+                    objTransElem = New StringTransElement(strMakeKey(intKey), "C", "C")
+                    If blnInsertElement(objTransElem, True, strError) Then
                         MsgBox(strError)
                     End If
                 End If
@@ -292,10 +309,11 @@ Friend Class ListEditorForm
     '$Param intKey The key value for the element. Stored in the list ItemData.
     '$Returns True iff element could not be inserted.
 
-    Private Function blnInsertElement(ByVal strNewElement As String, ByVal intKey As Short, ByVal blnInLoad As Boolean, ByRef strError As String) As Boolean
+    Private Function blnInsertElement(ByVal objTransElem As StringTransElement, ByVal blnInLoad As Boolean, ByRef strError As String) As Boolean
 
         Dim intIndex As Short
         Dim strExistingElementUCS As String
+        Dim strNewElement As String
         Dim strNewElementUCS As String
         Dim strNewParentUCS As String
         Dim intLastColon As Short
@@ -305,6 +323,7 @@ Friend Class ListEditorForm
 
             strError = ""
             blnInsertElement = True
+            strNewElement = objTransElem.strValue1
             strNewElementUCS = strNormalizeElement(strNewElement)
             If strNewElementUCS = "" Then
                 strError = "List entry name is required."
@@ -318,6 +337,13 @@ Friend Class ListEditorForm
                 strError = "List entry names may not end in "":""."
                 Exit Function
             End If
+            For Each objExtraPair As KeyValuePair(Of String, String) In objTransElem.colValues
+                If objExtraPair.Key.Contains("/") Or objExtraPair.Key.Contains(":") Or
+                        objExtraPair.Value.Contains("/") Or objExtraPair.Value.Contains(":") Then
+                    strError = "List entry values may not contain ""//"" or "":""."
+                    Exit Function
+                End If
+            Next
             intLastColon = InStrRev(strNewElement, ":")
             If intLastColon > 0 Then
                 If Not blnMultipleLevelsAllowed Then
@@ -336,7 +362,7 @@ Friend Class ListEditorForm
                 'Iterate one more than the number of elements.
                 For intIndex = 0 To .Items.Count
                     If intIndex < .Items.Count Then
-                        strExistingElementUCS = strNormalizeElement(gstrVB6GetItemString(lstElements, intIndex))
+                        strExistingElementUCS = strNormalizeElement(DirectCast(lstElements.Items(intIndex), StringTransElement).strValue1)
                         If strExistingElementUCS = strNewElementUCS Then
                             strError = """" & strNewElement & """ is already in this list."
                             Exit Function
@@ -348,7 +374,7 @@ Friend Class ListEditorForm
                         If intIndex = 0 Then
                             strPrecedingUCS = ""
                         Else
-                            strPrecedingUCS = strNormalizeElement(gstrVB6GetItemString(lstElements, intIndex - 1))
+                            strPrecedingUCS = strNormalizeElement(DirectCast(lstElements.Items(intIndex - 1), StringTransElement).strValue1)
                         End If
                         If strNewParentUCS <> "" Then
                             If Not ((strNewParentUCS = strPrecedingUCS) Or ((strNewParentUCS & ":") = VB.Left(strPrecedingUCS, Len(strNewParentUCS) + 1))) Then
@@ -356,8 +382,7 @@ Friend Class ListEditorForm
                                 Exit Function
                             End If
                         End If
-                        .Items.Insert(intIndex, gobjCreateListBoxItem(strNewElement, intKey))
-                        'gVB6SetItemData(lstElements, intIndex, intKey)
+                        .Items.Insert(intIndex, objTransElem)
                         Exit For
                     End If
                 Next
@@ -429,35 +454,14 @@ Friend Class ListEditorForm
 
     Private Sub RebuildTranslator()
         Dim intIndex As Short
-        Dim strName1 As String
-        Dim strName2 As String
-        Dim strKey As String
-        Dim intColonPos As Short
-        Dim intColonPos2 As Short
-        Dim intIndent As Short
+        Dim objTransElem As StringTransElement
 
         Try
 
             mobjList.Init()
             For intIndex = 0 To lstElements.Items.Count - 1
-                strName1 = gstrVB6GetItemString(lstElements, intIndex)
-                strKey = strMakeKey(gintVB6GetItemData(lstElements, intIndex))
-                If blnMultipleLevelsAllowed Then
-                    intColonPos = 0
-                    intIndent = 0
-                    Do
-                        intColonPos2 = InStr(intColonPos + 1, strName1, ":")
-                        If intColonPos2 = 0 Then
-                            strName2 = Space(intIndent) & Mid(strName1, intColonPos + 1)
-                            Exit Do
-                        End If
-                        intColonPos = intColonPos2
-                        intIndent = intIndent + 1
-                    Loop
-                Else
-                    strName2 = strName1
-                End If
-                mobjList.Add(New StringTransElement(strKey, strName1, strName2))
+                objTransElem = DirectCast(lstElements.Items(intIndex), StringTransElement)
+                mobjList.Add(objTransElem.objClone())
             Next
 
             Exit Sub
@@ -465,6 +469,27 @@ Friend Class ListEditorForm
             gNestedException(ex)
         End Try
     End Sub
+
+    Private Function strMakeValue2(ByVal strValue1 As String) As String
+        Dim intColonPos As Short
+        Dim intColonPos2 As Short
+        Dim intIndent As Short
+        If blnMultipleLevelsAllowed Then
+            intColonPos = 0
+            intIndent = 0
+            Do
+                intColonPos2 = InStr(intColonPos + 1, strValue1, ":")
+                If intColonPos2 = 0 Then
+                    Return Space(intIndent) & Mid(strValue1, intColonPos + 1)
+                    Exit Do
+                End If
+                intColonPos = intColonPos2
+                intIndent = intIndent + 1
+            Loop
+        Else
+            Return strValue1
+        End If
+    End Function
 
     '$Description Write new file from mobjList. mobjList is assumed to be in sorted order.
 
@@ -481,7 +506,11 @@ Friend Class ListEditorForm
             PrintLine(intFile, "Generated " & Now)
             With mobjList
                 For intIndex = 1 To .intElements
-                    PrintLine(intFile, "/" & .strKey(intIndex) & "/" & .strValue1(intIndex) & "/" & .strValue2(intIndex))
+                    Dim strExtraPairs As String = ""
+                    For Each objPair As KeyValuePair(Of String, String) In .objElement(intIndex).colValues
+                        strExtraPairs += ("/" + objPair.Key + ":" + objPair.Value)
+                    Next
+                    PrintLine(intFile, "/" & .strKey(intIndex) & "/" & .strValue1(intIndex) & "/" & .strValue2(intIndex) & strExtraPairs)
                 Next
             End With
             FileClose(intFile)
@@ -505,7 +534,7 @@ Friend Class ListEditorForm
 
         Try
 
-            strKey = strMakeKey(gintVB6GetItemData(lstElements, intListIndex))
+            strKey = DirectCast(lstElements.Items(intListIndex), StringTransElement).strKey
             For Each objAccount In mobjCompany.colAccounts
                 If blnElementIsUsedInAccount(objAccount, strKey) Then
                     blnElementIsUsed = True
@@ -588,15 +617,13 @@ Friend Class ListEditorForm
     Private Function intGetUnusedKey() As Short
         Dim intKey As Short
         Dim intIndex As Short
-        Dim intMax As Short
         Dim blnFound As Boolean
 
-        intMax = lstElements.Items.Count - 1
         intKey = 1
         Do
             blnFound = False
-            For intIndex = 0 To intMax
-                If gintVB6GetItemData(lstElements, intIndex) = intKey Then
+            For intIndex = 0 To lstElements.Items.Count - 1
+                If DirectCast(lstElements.Items(intIndex), StringTransElement).strKey = strMakeKey(intKey) Then
                     blnFound = True
                     Exit For
                 End If

@@ -420,6 +420,8 @@ Public Class NormalTrx
     Public Overrides Sub Validate()
         Dim objSplit As TrxSplit
         Dim curTotal As Decimal
+        Dim objCategories As CategoryTranslator = mobjReg.objAccount.objCompany.objCategories
+        Dim blnAccountIsPersonal As Boolean = (mobjReg.objAccount.lngType = Account.AccountType.Personal)
         MyBase.Validate()
         If mcolSplits Is Nothing Then
             objReg.RaiseValidationError(lngIndex, "Missing split collection")
@@ -437,6 +439,9 @@ Public Class NormalTrx
                     If objSplit.strBudgetKey <> objSplit.objBudget.strBudgetKey Then
                         objReg.RaiseValidationError(lngIndex, "Split applied to budget trx has wrong budget key")
                     End If
+                End If
+                If blnAccountIsPersonal <> CategoryTranslator.blnIsPersonal(objCategories.strKeyToValue1(objSplit.strCategoryKey)) Then
+                    objReg.RaiseValidationError(lngIndex, "Split category mixes personal and business")
                 End If
             Next objSplit
             If curTotal <> mcurAmount Then
