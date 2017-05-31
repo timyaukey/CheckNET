@@ -330,7 +330,9 @@
     <Compile Include="TrxTypeListForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Content Include="Reports\AllReports.css" />
     <Content Include="Reports\BalanceSheet.css" />
+    <Content Include="Reports\ProfitAndLoss.css" />
     <EmbeddedResource Include="AccountForm.resx">
       <DependentUpon>AccountForm.vb</DependentUpon>
     </EmbeddedResource>

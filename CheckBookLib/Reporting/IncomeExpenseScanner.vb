@@ -25,7 +25,7 @@ Public NotInheritable Class IncomeExpenseScanner
                                             End If
                                             Dim objGroup As LineItemGroup = objManager.objGetGroup(strGroupKey)
                                             Dim objLine As ReportLineItem = objGroup.objGetItem(objManager, objSplit.strCategoryKey)
-                                            objLine.Add(-objSplit.curAmount)
+                                            objLine.Add(objSplit.curAmount)
                                         End If
                                     Next
                                 End If

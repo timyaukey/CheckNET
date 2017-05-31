@@ -89,74 +89,136 @@ Public Class TrialBalanceForm
     End Sub
 
     Private Sub btnBalanceSheet_Click(sender As Object, e As EventArgs) Handles btnBalanceSheet.Click
-        Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "BalanceSheet", mobjBalSheet)
-        Dim objAccumAssets As ReportAccumulator = New ReportAccumulator()
-        Dim objAccumLiabilities As ReportAccumulator = New ReportAccumulator()
-        Dim objAccumEquity As ReportAccumulator = New ReportAccumulator()
-        Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
-        Dim strLineHeaderClass As String = "ReportHeader2"
-        Dim strLineTitleClass As String = "ReportLineTitle2"
-        Dim strLineAmountClass As String = "ReportLineAmount2"
-        Dim strLineFooterTitleClass As String = "ReportFooterTitle2"
-        Dim strLineFooterAmountClass As String = "ReportFooterAmount2"
-        Dim strMinusClass As String = "Minus"
+        Try
+            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "BalanceSheet", mobjBalSheet)
+            Dim objAccumAssets As ReportAccumulator = New ReportAccumulator()
+            Dim objAccumLiabilities As ReportAccumulator = New ReportAccumulator()
+            Dim objAccumEquity As ReportAccumulator = New ReportAccumulator()
+            Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
+            Dim strLineHeaderClass As String = "ReportHeader2"
+            Dim strLineTitleClass As String = "ReportLineTitle2"
+            Dim strLineAmountClass As String = "ReportLineAmount2"
+            Dim strLineFooterTitleClass As String = "ReportFooterTitle2"
+            Dim strLineFooterAmountClass As String = "ReportFooterAmount2"
+            Dim strMinusClass As String = "Minus"
 
-        objWriter.BeginReport()
-        objWriter.OutputHeader("Balance Sheet", "Ending Date " + ctlEndDate.Value.ToLongDateString())
+            objWriter.BeginReport()
+            objWriter.OutputHeader("Balance Sheet", "Ending Date " + ctlEndDate.Value.ToShortDateString())
 
-        objWriter.OutputText(strLineHeaderClass, "Assets")
-        objWriter.OutputGroupSummary(strLineTitleClass, "Checking Accounts", strLineAmountClass, strMinusClass,
-            Account.SubType.Asset_CheckingAccount.ToString(), objAccumAssets)
-        objWriter.OutputGroupSummary(strLineTitleClass, "Savings Accounts", strLineAmountClass, strMinusClass,
-            Account.SubType.Asset_SavingsAccount.ToString(), objAccumAssets)
-        objWriter.OutputGroupSummary(strLineTitleClass, "Inventory", strLineAmountClass, strMinusClass,
-            Account.SubType.Asset_Inventory.ToString(), objAccumAssets)
-        objWriter.OutputGroupSummary(strLineTitleClass, "Accounts Receivable", strLineAmountClass, strMinusClass,
-            Account.SubType.Asset_AccountsReceivable.ToString(), objAccumAssets)
-        objWriter.OutputGroupSummary(strLineTitleClass, "Loans Receivable", strLineAmountClass, strMinusClass,
-            Account.SubType.Asset_LoanReceivable.ToString(), objAccumAssets)
-        objWriter.OutputGroupSummary(strLineTitleClass, "Real Property", strLineAmountClass, strMinusClass,
-            Account.SubType.Asset_RealProperty.ToString(), objAccumAssets)
-        objWriter.OutputGroupSummary(strLineTitleClass, "Other Property", strLineAmountClass, strMinusClass,
-            Account.SubType.Asset_OtherProperty.ToString(), objAccumAssets)
-        objWriter.OutputGroupSummary(strLineTitleClass, "Investments", strLineAmountClass, strMinusClass,
-            Account.SubType.Asset_Investment.ToString(), objAccumAssets)
-        objWriter.OutputGroupSummary(strLineTitleClass, "Other Assets", strLineAmountClass, strMinusClass,
-            Account.SubType.Asset_Other.ToString(), objAccumAssets)
-        objWriter.OutputAmount(strLineFooterTitleClass, "Total Assets", strLineFooterAmountClass, strMinusClass, objAccumAssets.curTotal, objAccumTotal)
+            objWriter.OutputText(strLineHeaderClass, "Assets")
+            objWriter.OutputGroupSummary(strLineTitleClass, "Checking Accounts", strLineAmountClass, strMinusClass,
+                Account.SubType.Asset_CheckingAccount.ToString(), False, objAccumAssets)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Savings Accounts", strLineAmountClass, strMinusClass,
+                Account.SubType.Asset_SavingsAccount.ToString(), True, objAccumAssets)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Inventory", strLineAmountClass, strMinusClass,
+                Account.SubType.Asset_Inventory.ToString(), False, objAccumAssets)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Accounts Receivable", strLineAmountClass, strMinusClass,
+                Account.SubType.Asset_AccountsReceivable.ToString(), False, objAccumAssets)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Loans Receivable", strLineAmountClass, strMinusClass,
+                Account.SubType.Asset_LoanReceivable.ToString(), False, objAccumAssets)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Real Property", strLineAmountClass, strMinusClass,
+                Account.SubType.Asset_RealProperty.ToString(), True, objAccumAssets)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Other Property", strLineAmountClass, strMinusClass,
+                Account.SubType.Asset_OtherProperty.ToString(), True, objAccumAssets)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Investments", strLineAmountClass, strMinusClass,
+                Account.SubType.Asset_Investment.ToString(), True, objAccumAssets)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Other Assets", strLineAmountClass, strMinusClass,
+                Account.SubType.Asset_Other.ToString(), True, objAccumAssets)
+            objWriter.OutputAmount(strLineFooterTitleClass, "Total Assets", strLineFooterAmountClass, strMinusClass, objAccumAssets.curTotal, objAccumTotal)
 
-        objWriter.OutputText(strLineHeaderClass, "Liabilities")
-        objWriter.OutputGroupSummary(strLineTitleClass, "Loans Payable", strLineAmountClass, strMinusClass,
-            Account.SubType.Liability_LoanPayable.ToString(), objAccumLiabilities)
-        objWriter.OutputGroupSummary(strLineTitleClass, "Accounts Payable", strLineAmountClass, strMinusClass,
-            Account.SubType.Liability_AccountsPayable.ToString(), objAccumLiabilities)
-        objWriter.OutputGroupSummary(strLineTitleClass, "Other", strLineAmountClass, strMinusClass,
-            Account.SubType.Liability_Other.ToString(), objAccumLiabilities)
-        objWriter.OutputGroupSummary(strLineTitleClass, "Taxes", strLineAmountClass, strMinusClass,
-            Account.SubType.Liability_Taxes.ToString(), objAccumLiabilities)
-        objWriter.OutputAmount(strLineFooterTitleClass, "Total Liabilities", strLineFooterAmountClass, strMinusClass, objAccumLiabilities.curTotal, objAccumTotal)
+            objWriter.OutputText(strLineHeaderClass, "Liabilities")
+            objWriter.OutputGroupSummary(strLineTitleClass, "Loans Payable", strLineAmountClass, strMinusClass,
+                Account.SubType.Liability_LoanPayable.ToString(), False, objAccumLiabilities)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Accounts Payable", strLineAmountClass, strMinusClass,
+                Account.SubType.Liability_AccountsPayable.ToString(), False, objAccumLiabilities)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Other", strLineAmountClass, strMinusClass,
+                Account.SubType.Liability_Other.ToString(), True, objAccumLiabilities)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Taxes", strLineAmountClass, strMinusClass,
+                Account.SubType.Liability_Taxes.ToString(), True, objAccumLiabilities)
+            objWriter.OutputAmount(strLineFooterTitleClass, "Total Liabilities", strLineFooterAmountClass, strMinusClass, objAccumLiabilities.curTotal, objAccumTotal)
 
-        objWriter.OutputText(strLineHeaderClass, "Equity")
-        objWriter.OutputGroupSummary(strLineTitleClass, "Cash Invested", strLineAmountClass, strMinusClass,
-            Account.SubType.Equity_CashInvested.ToString(), objAccumEquity)
-        objWriter.OutputGroupSummary(strLineTitleClass, "Property Invested", strLineAmountClass, strMinusClass,
-            Account.SubType.Equity_PropertyInvested.ToString(), objAccumEquity)
-        objWriter.OutputGroupSummary(strLineTitleClass, "Retained Earnings", strLineAmountClass, strMinusClass,
-            Account.SubType.Equity_RetainedEarnings.ToString(), objAccumEquity)
-        objWriter.OutputGroupSummary(strLineTitleClass, "Stock", strLineAmountClass, strMinusClass,
-            Account.SubType.Equity_Stock.ToString(), objAccumEquity)
-        objWriter.OutputGroupSummary(strLineTitleClass, "Other", strLineAmountClass, strMinusClass,
-            Account.SubType.Equity_Other.ToString(), objAccumEquity)
-        objWriter.OutputAmount(strLineFooterTitleClass, "Total Equity", strLineFooterAmountClass, strMinusClass, objAccumEquity.curTotal, objAccumTotal)
+            objWriter.OutputText(strLineHeaderClass, "Equity")
+            objWriter.OutputGroupSummary(strLineTitleClass, "Cash Invested", strLineAmountClass, strMinusClass,
+                Account.SubType.Equity_CashInvested.ToString(), False, objAccumEquity)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Property Invested", strLineAmountClass, strMinusClass,
+                Account.SubType.Equity_PropertyInvested.ToString(), False, objAccumEquity)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Retained Earnings", strLineAmountClass, strMinusClass,
+                Account.SubType.Equity_RetainedEarnings.ToString(), False, objAccumEquity)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Stock", strLineAmountClass, strMinusClass,
+                Account.SubType.Equity_Stock.ToString(), True, objAccumEquity)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Other", strLineAmountClass, strMinusClass,
+                Account.SubType.Equity_Other.ToString(), True, objAccumEquity)
+            objWriter.OutputAmount(strLineFooterTitleClass, "Total Equity", strLineFooterAmountClass, strMinusClass, objAccumEquity.curTotal, objAccumTotal)
 
-        objWriter.EndReport()
-        objWriter.CheckPrinted()
-        MsgBox("Balance sheet bottom line is: " + gstrFormatCurrency(objAccumTotal.curTotal))
-        objWriter.ShowReport()
+            objWriter.EndReport()
+            objWriter.CheckPrinted()
+            MsgBox("Balance sheet bottom line is: " + gstrFormatCurrency(objAccumTotal.curTotal))
+            objWriter.ShowReport()
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub btnIncomeExpenseStatement_Click(sender As Object, e As EventArgs) Handles btnIncomeExpenseStatement.Click
+        Try
+            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "ProfitAndLoss", mobjIncExp)
+            Dim objAccumIncome As ReportAccumulator = New ReportAccumulator()
+            Dim objAccumOperExp As ReportAccumulator = New ReportAccumulator()
+            Dim objAccumOtherExp As ReportAccumulator = New ReportAccumulator()
+            Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
+            Dim objAccumDummy As ReportAccumulator = New ReportAccumulator()
+            Dim strLineHeaderClass As String = "ReportHeader2"
+            Dim strLineTitleClass As String = "ReportLineTitle2"
+            Dim strLineAmountClass As String = "ReportLineAmount2"
+            Dim strLineFooterTitleClass As String = "ReportFooterTitle2"
+            Dim strLineFooterAmountClass As String = "ReportFooterAmount2"
+            Dim strMinusClass As String = "Minus"
 
+            objWriter.BeginReport()
+            objWriter.OutputHeader("Profit and Loss Statement",
+                                   "From " + ctlStartDate.Value.ToShortDateString() + " To " + ctlEndDate.Value.ToShortDateString())
+
+            objWriter.OutputText(strLineHeaderClass, "Income")
+            objWriter.OutputGroupSummary(strLineTitleClass, "Sales", strLineAmountClass, strMinusClass,
+                CategoryTranslator.strTypeSales, False, objAccumIncome)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Returns", strLineAmountClass, strMinusClass,
+                CategoryTranslator.strTypeReturns, False, objAccumIncome)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Cost of Goods Sold", strLineAmountClass, strMinusClass,
+                CategoryTranslator.strTypeCOGS, False, objAccumIncome)
+            objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
+                CategoryTranslator.strTypeOtherIncome, objAccumIncome)
+            objWriter.OutputAmount(strLineFooterTitleClass, "Net Income", strLineFooterAmountClass, strMinusClass, objAccumIncome.curTotal, objAccumTotal)
+
+            objWriter.OutputText(strLineHeaderClass, "Operating Expenses")
+            objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
+                CategoryTranslator.strTypeOperatingExpenses, objAccumOperExp)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Office Expense", strLineAmountClass, strMinusClass,
+                CategoryTranslator.strTypeOfficeExpense, False, objAccumOperExp)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Payroll", strLineAmountClass, strMinusClass,
+                CategoryTranslator.strTypePayroll, False, objAccumOperExp)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Rental Income", strLineAmountClass, strMinusClass,
+                CategoryTranslator.strTypeRentInc, True, objAccumOperExp)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Rental Expense", strLineAmountClass, strMinusClass,
+                CategoryTranslator.strTypeRentExp, True, objAccumOperExp)
+            objWriter.OutputAmount(strLineFooterTitleClass, "Total Operating Expenses", strLineFooterAmountClass, strMinusClass, objAccumOperExp.curTotal, objAccumTotal)
+
+            objWriter.OutputText(strLineHeaderClass, "Other Expenses")
+            objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
+                CategoryTranslator.strTypeOtherExpense, objAccumOtherExp)
+            objWriter.OutputGroupSummary(strLineTitleClass, "Taxes", strLineAmountClass, strMinusClass,
+                CategoryTranslator.strTypeTaxes, True, objAccumOtherExp)
+            objWriter.OutputAmount(strLineFooterTitleClass, "Total Other Expenses", strLineFooterAmountClass, strMinusClass, objAccumOtherExp.curTotal, objAccumTotal)
+
+            objWriter.OutputText(strLineHeaderClass, "Grand Total Income/Expense")
+            objWriter.OutputAmount(strLineFooterTitleClass, "", strLineFooterAmountClass, strMinusClass, objAccumTotal.curTotal, objAccumDummy)
+
+            objWriter.EndReport()
+            objWriter.CheckPrinted()
+            MsgBox("Net profit bottom line is: " + gstrFormatCurrency(objAccumTotal.curTotal))
+            objWriter.ShowReport()
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
     End Sub
 
     Private Sub btnPostRetainedEarnings_Click(sender As Object, e As EventArgs) Handles btnPostRetainedEarnings.Click
@@ -183,7 +245,7 @@ Public Class TrialBalanceForm
                                   False, 0D, False, False, 0, "", "")
             For Each objGroup As LineItemGroup In objIncExpTotal.colGroups
                 For Each objItem As ReportLineItem In objGroup.colItems
-                    objTrx.AddSplit("", objItem.strItemKey, "", "", System.DateTime.FromOADate(0), System.DateTime.FromOADate(0), "", "", objItem.curTotal)
+                    objTrx.AddSplit("", objItem.strItemKey, "", "", System.DateTime.FromOADate(0), System.DateTime.FromOADate(0), "", "", -objItem.curTotal)
                 Next
             Next
             objRegister.NewAddEnd(objTrx, New LogAdd(), "PostRetainedEarnings.AddTrx")

@@ -18,6 +18,7 @@ Public Class HTMLWriter
     Public Sub BeginReport()
         OutputLine("<html>")
         OutputLine("<head>")
+        OutputLine(" <link rel='stylesheet' type='text/css' href='AllReports.css'>")
         OutputLine(" <link rel='stylesheet' type='text/css' href='" + mstrFileNameRoot + ".css'>")
         OutputLine("</head>")
         OutputLine("<body>")
@@ -34,7 +35,7 @@ Public Class HTMLWriter
         OutputDiv("ReportCompanyName", mobjCompany.strCompanyName)
         OutputDiv("ReportTitle", strTitle)
         OutputDiv("ReportSubTitle", strSubTitle)
-        OutputDiv("ReportPrepared", "Prepared On " + DateTime.Today.ToLongDateString())
+        OutputDiv("ReportPrepared", "Prepared " + DateTime.Today.ToLongDateString())
     End Sub
 
     Public Sub OutputGroupItems(ByVal strTitleClass As String, ByVal strAmountClass As String,
@@ -47,9 +48,12 @@ Public Class HTMLWriter
     End Sub
 
     Public Sub OutputGroupSummary(ByVal strTitleClass As String, ByVal strTitle As String, ByVal strAmountClass As String,
-                           ByVal strNegativeClass As String, ByVal strGroupKey As String, ByVal objAccum As ReportAccumulator)
+                           ByVal strNegativeClass As String, ByVal strGroupKey As String, ByVal blnOmitIfZero As Boolean,
+                           ByVal objAccum As ReportAccumulator)
         Dim objGroup As LineItemGroup = mobjReportManager.objGetGroup(strGroupKey)
-        OutputAmount(strTitleClass, strTitle, strAmountClass, strNegativeClass, objGroup.curGroupTotal, objAccum)
+        If objGroup.curGroupTotal <> 0D Or Not blnOmitIfZero Then
+            OutputAmount(strTitleClass, strTitle, strAmountClass, strNegativeClass, objGroup.curGroupTotal, objAccum)
+        End If
         objGroup.blnPrinted = True
     End Sub
 
