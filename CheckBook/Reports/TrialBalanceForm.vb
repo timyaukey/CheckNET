@@ -258,7 +258,7 @@ Public Class TrialBalanceForm
 
     Private Sub btnLoanBalances_Click(sender As Object, e As EventArgs) Handles btnLoanBalances.Click
         Try
-            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "ProfitAndLoss", mobjIncExp)
+            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "LoanBalances", mobjIncExp)
             Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
             Dim objAccumDummy As ReportAccumulator = New ReportAccumulator()
             Dim strLineHeaderClass As String = "ReportHeader2"
@@ -290,7 +290,32 @@ Public Class TrialBalanceForm
 
     Private Sub btnVendorBalances_Click(sender As Object, e As EventArgs) Handles btnVendorBalances.Click
         Try
+            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "VendorBalances", mobjIncExp)
+            Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
+            Dim objAccumDummy As ReportAccumulator = New ReportAccumulator()
+            Dim strLineHeaderClass As String = "ReportHeader2"
+            Dim strLineTitleClass As String = "ReportLineTitle2"
+            Dim strLineAmountClass As String = "ReportLineAmount2"
+            Dim strLineFooterTitleClass As String = "ReportFooterTitle2"
+            Dim strLineFooterAmountClass As String = "ReportFooterAmount2"
+            Dim strMinusClass As String = "Minus"
 
+            Dim colVendors As List(Of VendorSummary) = VendorSummary.colScanVendors(mobjCompany, ctlEndDate.Value)
+
+            objWriter.BeginReport()
+            objWriter.OutputHeader("Vendor Balances", "As Of " + ctlEndDate.Value.ToShortDateString())
+
+            For Each objVendor As VendorSummary In colVendors
+                If objVendor.curBalance <> 0D Then
+                    objWriter.OutputAmount(strLineTitleClass, objVendor.strVendorName, strLineAmountClass, strMinusClass, objVendor.curBalance, objAccumTotal)
+                End If
+            Next
+
+            objWriter.OutputText(strLineHeaderClass, "Total Vendor Debt")
+            objWriter.OutputAmount(strLineFooterTitleClass, "", strLineFooterAmountClass, strMinusClass, objAccumTotal.curTotal, objAccumDummy)
+
+            objWriter.EndReport()
+            objWriter.ShowReport()
         Catch ex As Exception
             gTopException(ex)
         End Try

@@ -139,6 +139,7 @@
     <Compile Include="Reporting\LineItemGroup.vb" />
     <Compile Include="Reporting\ReportGroupManager.vb" />
     <Compile Include="Reporting\ReportLineItem.vb" />
+    <Compile Include="Reporting\VendorSummary.vb" />
     <Compile Include="SearchUtilities.vb" />
     <Compile Include="StringTransElement.vb" />
     <Compile Include="SimpleStringTranslator.vb" />
