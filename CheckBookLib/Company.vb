@@ -5,6 +5,7 @@ Public Class Company
 
     Public Event SomethingModified()
 
+    Public ReadOnly strCompanyName As String
     Public ReadOnly colAccounts As List(Of Account)
     Public ReadOnly objCategories As CategoryTranslator
     Public ReadOnly objIncExpAccounts As CategoryTranslator
@@ -17,6 +18,7 @@ Public Class Company
         objCategories = New CategoryTranslator()
         objIncExpAccounts = New CategoryTranslator()
         objBudgets = New BudgetTranslator()
+        strCompanyName = "Schmidt's Garden Center, Inc."
     End Sub
 
     Public Function blnAccountKeyUsed(ByVal intKey As Integer) As Boolean

@@ -9,6 +9,13 @@ div, body
     padding-left: 20px;
 }
 
+.ReportCompanyName
+{
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+}
+
 .ReportTitle
 {
 	font-size: 48px;
@@ -37,6 +44,7 @@ div, body
 {
     font-size:18px;
     font-weight:bold;
+    margin-top:20px;
 }
 
 .ReportLineTitle2
@@ -50,4 +58,20 @@ div, body
 	display: inline-block;
 	text-align: right;
 	width: 20%;
+}
+
+.ReportFooterTitle2
+{
+	display: inline-block;
+	width: 75%;
+}
+
+.ReportFooterAmount2
+{
+	display: inline-block;
+	text-align: right;
+	width: 20%;
+    border-top-style:solid;
+    border-top-color:black;
+    border-top-width:1px;
 }

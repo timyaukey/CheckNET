@@ -6,11 +6,13 @@ Public Class ReportLineItem
     Private mstrItemKey As String
     Private mstrItemTitle As String
     Private mcurTotal As Decimal
+    Public blnPrinted As Boolean
 
     Public Sub New(ByVal objParent_ As LineItemGroup, ByVal strItemKey_ As String, ByVal strItemTitle_ As String)
         mobjParent = objParent_
         mstrItemKey = strItemKey_
         mstrItemTitle = strItemTitle_
+        blnPrinted = False
     End Sub
 
     Public Sub Add(ByVal curAmount As Decimal)

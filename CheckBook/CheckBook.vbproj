@@ -176,6 +176,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Reports\HTMLWriter.vb" />
+    <Compile Include="Reports\ReportAccumulator.vb" />
     <Compile Include="Reports\TrialBalanceForm.Designer.vb">
       <DependentUpon>TrialBalanceForm.vb</DependentUpon>
     </Compile>
