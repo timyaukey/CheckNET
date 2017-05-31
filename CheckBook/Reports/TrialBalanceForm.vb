@@ -26,7 +26,7 @@ Public Class TrialBalanceForm
             mobjIncExp = IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value, True)
             ShowInListView(lvwIncExpAccounts, mobjIncExp, "Income/Expenses Through End Date")
             ConfigureStatementButtons(False)
-            Dim curBalanceError As Decimal = mobjBalSheet.curGrandTotal + mobjIncExp.curGrandTotal
+            Dim curBalanceError As Decimal = mobjBalSheet.curGrandTotal - mobjIncExp.curGrandTotal
             If curBalanceError <> 0D Then
                 lblResultSummary.Text = "Accounts out of balance by " + gstrFormatCurrency(curBalanceError)
             ElseIf mobjIncExp.curGrandTotal <> 0D Then
@@ -47,7 +47,7 @@ Public Class TrialBalanceForm
             ShowInListView(lvwIncExpAccounts, mobjIncExp, "Income/Expenses For Date Range")
             Dim objIncExpTotal As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value, True)
             ConfigureStatementButtons(True)
-            Dim curBalanceError As Decimal = mobjBalSheet.curGrandTotal + objIncExpTotal.curGrandTotal
+            Dim curBalanceError As Decimal = mobjBalSheet.curGrandTotal - objIncExpTotal.curGrandTotal
             If curBalanceError <> 0D Then
                 lblResultSummary.Text = "Accounts out of balance by " + gstrFormatCurrency(curBalanceError)
             ElseIf objIncExpTotal.curGrandTotal <> 0D Then
@@ -240,7 +240,7 @@ Public Class TrialBalanceForm
                 MsgBox("Unable to find Retained Earnings register")
                 Exit Sub
             End If
-            Dim objIncExpTotal As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value, False)
+            Dim objIncExpTotal As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value, True)
             Dim objTrx As NormalTrx = New NormalTrx(objRegister)
             objTrx.NewStartNormal(True, "Pmt", ctlEndDate.Value, "Post to retained earnings", "", Trx.TrxStatus.glngTRXSTS_UNREC,
                                   False, 0D, False, False, 0, "", "")
