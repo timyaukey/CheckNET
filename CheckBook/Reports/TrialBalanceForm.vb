@@ -11,6 +11,7 @@ Public Class TrialBalanceForm
     Public Sub ShowWindow(ByVal objCompany As Company, ByVal objHostUI As IHostUI)
         mobjCompany = objCompany
         Me.MdiParent = objHostUI.objGetMainForm()
+        ConfigureStatementButtons(False)
         Me.Show()
     End Sub
 
@@ -45,8 +46,7 @@ Public Class TrialBalanceForm
             mobjIncExp = IncomeExpenseScanner.objRun(mobjCompany, ctlStartDate.Value, ctlEndDate.Value, False)
             ShowInListView(lvwIncExpAccounts, mobjIncExp, "Income/Expenses For Date Range")
             Dim objIncExpTotal As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value, True)
-            ConfigureStatementButtons(False)
-            'ConfigureStatementButtons(True) 'Comment this line out after testing the statements
+            ConfigureStatementButtons(True)
             Dim curBalanceError As Decimal = mobjBalSheet.curGrandTotal + objIncExpTotal.curGrandTotal
             If curBalanceError <> 0D Then
                 lblResultSummary.Text = "Accounts out of balance by " + gstrFormatCurrency(curBalanceError)
@@ -54,7 +54,6 @@ Public Class TrialBalanceForm
                 lblResultSummary.Text = "Accounts balance, but update retained earnings"
             Else
                 lblResultSummary.Text = "Accounts are in balance, and inc/exp are cleared"
-                ConfigureStatementButtons(True)
             End If
         Catch ex As Exception
             gTopException(ex)
@@ -86,6 +85,8 @@ Public Class TrialBalanceForm
     Private Sub ConfigureStatementButtons(ByVal blnEnabled As Boolean)
         btnBalanceSheet.Enabled = blnEnabled
         btnIncomeExpenseStatement.Enabled = blnEnabled
+        btnLoanBalances.Enabled = blnEnabled
+        btnVendorBalances.Enabled = blnEnabled
     End Sub
 
     Private Sub btnBalanceSheet_Click(sender As Object, e As EventArgs) Handles btnBalanceSheet.Click
@@ -103,7 +104,7 @@ Public Class TrialBalanceForm
             Dim strMinusClass As String = "Minus"
 
             objWriter.BeginReport()
-            objWriter.OutputHeader("Balance Sheet", "Ending Date " + ctlEndDate.Value.ToShortDateString())
+            objWriter.OutputHeader("Balance Sheet", "As Of " + ctlEndDate.Value.ToShortDateString())
 
             objWriter.OutputText(strLineHeaderClass, "Assets")
             objWriter.OutputGroupSummary(strLineTitleClass, "Checking Accounts", strLineAmountClass, strMinusClass,
@@ -250,6 +251,46 @@ Public Class TrialBalanceForm
             Next
             objRegister.NewAddEnd(objTrx, New LogAdd(), "PostRetainedEarnings.AddTrx")
             MsgBox("Income and expenses posted to retained earnings.")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
+    End Sub
+
+    Private Sub btnLoanBalances_Click(sender As Object, e As EventArgs) Handles btnLoanBalances.Click
+        Try
+            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "ProfitAndLoss", mobjIncExp)
+            Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
+            Dim objAccumDummy As ReportAccumulator = New ReportAccumulator()
+            Dim strLineHeaderClass As String = "ReportHeader2"
+            Dim strLineTitleClass As String = "ReportLineTitle2"
+            Dim strLineAmountClass As String = "ReportLineAmount2"
+            Dim strLineFooterTitleClass As String = "ReportFooterTitle2"
+            Dim strLineFooterAmountClass As String = "ReportFooterAmount2"
+            Dim strMinusClass As String = "Minus"
+
+            objWriter.BeginReport()
+            objWriter.OutputHeader("Long Term Debt Balances", "As Of " + ctlEndDate.Value.ToShortDateString())
+
+            Dim objLoanGroup As LineItemGroup = mobjBalSheet.objGetGroup(Account.SubType.Liability_LoanPayable.ToString())
+            For Each objItem As ReportLineItem In objLoanGroup.colItems
+                If objItem.curTotal <> 0D Then
+                    objWriter.OutputAmount(strLineTitleClass, objItem.strItemTitle, strLineAmountClass, strMinusClass, objItem.curTotal, objAccumTotal)
+                End If
+            Next
+
+            objWriter.OutputText(strLineHeaderClass, "Total Long Term Debt")
+            objWriter.OutputAmount(strLineFooterTitleClass, "", strLineFooterAmountClass, strMinusClass, objAccumTotal.curTotal, objAccumDummy)
+
+            objWriter.EndReport()
+            objWriter.ShowReport()
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
+    End Sub
+
+    Private Sub btnVendorBalances_Click(sender As Object, e As EventArgs) Handles btnVendorBalances.Click
+        Try
+
         Catch ex As Exception
             gTopException(ex)
         End Try
