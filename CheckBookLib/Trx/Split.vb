@@ -184,7 +184,13 @@ Public Class TrxSplit
                         If objReg.strRegisterKey = strRegKey Then
                             Dim objReplicaTrx As ReplicaTrx = New ReplicaTrx(objReg)
                             Dim strCatKey As String = objNormalTrx.objReg.objAccount.intKey.ToString() + "." + objNormalTrx.objReg.strRegisterKey
-                            objReplicaTrx.NewStartReplica(True, objNormalTrx.datDate, objNormalTrx.strDescription,
+                            Dim strReplDescr As String
+                            If Not String.IsNullOrEmpty(mstrMemo) Then
+                                strReplDescr = mstrMemo
+                            Else
+                                strReplDescr = objNormalTrx.strDescription
+                            End If
+                            objReplicaTrx.NewStartReplica(True, objNormalTrx.datDate, strReplDescr,
                                                           strCatKey, -mcurAmount, objNormalTrx.blnFake)
                             If blnLoading Then
                                 objReg.NewLoadEnd(objReplicaTrx)

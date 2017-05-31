@@ -132,6 +132,13 @@
     <Compile Include="Register\RegIterator.vb" />
     <Compile Include="RepeatSummarizer.vb" />
     <Compile Include="RepeatUnitTypeConverter.vb" />
+    <Compile Include="Reporting\AccountGroupManager.vb" />
+    <Compile Include="Reporting\BalanceSheetScanner.vb" />
+    <Compile Include="Reporting\CategoryGroupManager.vb" />
+    <Compile Include="Reporting\IncomeExpenseScanner.vb" />
+    <Compile Include="Reporting\LineItemGroup.vb" />
+    <Compile Include="Reporting\ReportGroupManager.vb" />
+    <Compile Include="Reporting\ReportLineItem.vb" />
     <Compile Include="SearchUtilities.vb" />
     <Compile Include="StringTransElement.vb" />
     <Compile Include="SimpleStringTranslator.vb" />

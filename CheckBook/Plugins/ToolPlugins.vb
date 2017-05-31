@@ -17,5 +17,6 @@ Public Class ToolPlugins
         Yield New CategoryReportPlugin(hostUI_)
         Yield New PayablesReportPlugin(hostUI_)
         Yield New PersonalBusinessPlugin(hostUI_)
+        Yield New TrialBalancePlugIn(hostUI_)
     End Function
 End Class
