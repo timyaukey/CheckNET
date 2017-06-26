@@ -43,7 +43,9 @@ Public Class HTMLWriter
                            ByVal strGroupKey As String, ByVal objAccum As ReportAccumulator)
         Dim objGroup As LineItemGroup = objReportManager.objGetGroup(strGroupKey)
         For Each objLine As ReportLineItem In objGroup.colItems
-            OutputAmount(strTitleClass, objLine.strItemTitle, strAmountClass, strNegativeClass, objLine.curTotal, objAccum)
+            If objLine.curTotal <> 0D Then
+                OutputAmount(strTitleClass, objLine.strItemTitle, strAmountClass, strNegativeClass, objLine.curTotal, objAccum)
+            End If
             objLine.blnPrinted = True
         Next
     End Sub
