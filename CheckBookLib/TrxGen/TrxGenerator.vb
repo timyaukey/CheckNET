@@ -21,6 +21,7 @@ Module TrxGenerator
         Dim strError As String
         Dim objReg2 As Register
         Dim colReg As ICollection(Of Register)
+        Dim datOldestTrxDate As DateTime
 
         colReg = New List(Of Register)
         For Each objReg2 In objAccount.colRegisters
@@ -32,18 +33,26 @@ Module TrxGenerator
             If objGenerator.blnEnabled Then
                 objAccount.RaiseLoadStatus("Generate " + objGenerator.strDescription)
                 objAccount.objRepeatSummarizer.Define(objGenerator.strRepeatKey, objGenerator.strDescription, True)
+                If objGenerator.intMaxDaysOld.HasValue Then
+                    datOldestTrxDate = DateTime.Today.AddDays(-CDbl(objGenerator.intMaxDaysOld.Value))
+                Else
+                    datOldestTrxDate = New DateTime(1900, 1, 1)
+                End If
                 Try
                     colTrx = objGenerator.colCreateTrx(objReg, datRptEndMax)
                     For Each datTrxToCreate In colTrx
 
-                        'Only create Trx for seq numbers we don't already have in reg.
-                        If objReg.objRepeatTrx(datTrxToCreate.strRepeatKey, datTrxToCreate.intRepeatSeq) Is Nothing Then
-                            'Create the Trx.
-                            strError = gstrCreateOneTrx(datTrxToCreate, objReg, colReg)
-                            If strError <> "" Then
-                                MsgBox("Error using transaction generator [" & objGenerator.strDescription & "]:" & vbCrLf & strError, MsgBoxStyle.OkOnly Or MsgBoxStyle.Critical, "Checkbook")
-                                Exit For
+                        If datTrxToCreate.datDate >= datOldestTrxDate Then
+                            'Only create Trx for seq numbers we don't already have in reg.
+                            If objReg.objRepeatTrx(datTrxToCreate.strRepeatKey, datTrxToCreate.intRepeatSeq) Is Nothing Then
+                                'Create the Trx.
+                                strError = gstrCreateOneTrx(datTrxToCreate, objReg, colReg)
+                                If strError <> "" Then
+                                    MsgBox("Error using transaction generator [" & objGenerator.strDescription & "]:" & vbCrLf & strError, MsgBoxStyle.OkOnly Or MsgBoxStyle.Critical, "Checkbook")
+                                    Exit For
+                                End If
                             End If
+
                         End If
                     Next
                 Catch ex As Exception

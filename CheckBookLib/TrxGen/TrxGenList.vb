@@ -25,6 +25,11 @@ Public Class TrxGenList
         Dim blnAddTrx As Boolean
         Dim intNextRepeatSeq As Integer
 
+        strError = strLoadCore(domDoc)
+        If strError <> "" Then
+            Return strError
+        End If
+
         strError = gstrLoadTrxGeneratorCore(domDoc, mblnEnabled, mstrRepeatKey, mintStartRepeatSeq, mstrDescription, objAccount)
         If strError <> "" Then
             Return strError

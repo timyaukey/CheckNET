@@ -422,7 +422,9 @@ Friend Class RegisterForm
         Dim lngGridRow As Integer
 
         lngGridRow = lngIndexToGridRow(lngIndex)
-        grdReg.CurrentCell = grdReg.Rows(lngGridRow - 1).Cells(0)
+        If lngGridRow < grdReg.Rows.Count Then
+            grdReg.CurrentCell = grdReg.Rows(lngGridRow - 1).Cells(0)
+        End If
         HighlightCurrentRow()
     End Sub
 

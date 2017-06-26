@@ -31,6 +31,12 @@ Public MustInherit Class TGEGeneratorBase
     <ReadOnlyAttribute(False)>
     Public Property RepeatKey As String
 
+    <XmlAttribute("maxdaysold")>
+    <DisplayName("Max Days Old")>
+    <CategoryAttribute("Core")>
+    <Description("If not empty, do not generate any transactions older than this many days. ""0"" means today, ""1"" means yesterday, etc.")>
+    Public Property MaxDaysOld As String
+
     Public Shared Sub SetGroupReadOnly(ByVal blnReadOnly As Boolean)
         Dim pd As PropertyDescriptor = TypeDescriptor.GetProperties(GetType(TGEGeneratorBase)).Item("RepeatKey")
         Dim attr As ReadOnlyAttribute = DirectCast(pd.Attributes.Item(GetType(ReadOnlyAttribute)), ReadOnlyAttribute)

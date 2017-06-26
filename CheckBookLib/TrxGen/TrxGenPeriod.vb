@@ -26,6 +26,11 @@ Public Class TrxGenPeriod
         Dim intIndex As Integer
         Dim vntAttrib As Object
 
+        strError = strLoadCore(domDoc)
+        If strError <> "" Then
+            Return strError
+        End If
+
         strError = gstrLoadTrxGeneratorCore(domDoc, mblnEnabled, mstrRepeatKey, mintStartRepeatSeq, mstrDescription, objAccount)
         If strError <> "" Then
             Return strError

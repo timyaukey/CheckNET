@@ -20,6 +20,11 @@ Public Class TrxGenRepeat
         Dim elmRepeat As VB6XmlElement = Nothing
         Dim vntAttrib As Object
 
+        strError = strLoadCore(domDoc)
+        If strError <> "" Then
+            Return strError
+        End If
+
         strError = gstrLoadTrxGeneratorCore(domDoc, mblnEnabled, mstrRepeatKey, mintStartRepeatSeq, mstrDescription, objAccount)
         If strError <> "" Then
             Return strError

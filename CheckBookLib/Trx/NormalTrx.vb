@@ -443,6 +443,13 @@ Public Class NormalTrx
                 If blnAccountIsPersonal <> CategoryTranslator.blnIsPersonal(objCategories.strKeyToValue1(objSplit.strCategoryKey)) Then
                     objReg.RaiseValidationError(lngIndex, "Split category mixes personal and business")
                 End If
+                Dim intDotOffset As Integer = objSplit.strCategoryKey.IndexOf("."c)
+                If intDotOffset > 0 Then
+                    Dim intAccountKey As Integer = Integer.Parse(objSplit.strCategoryKey.Substring(0, intDotOffset))
+                    If intAccountKey = objReg.objAccount.intKey Then
+                        objReg.RaiseValidationError(lngIndex, "Split category uses the same account")
+                    End If
+                End If
             Next objSplit
             If curTotal <> mcurAmount Then
                 objReg.RaiseValidationError(lngIndex, "Normal trx splits add up wrong")

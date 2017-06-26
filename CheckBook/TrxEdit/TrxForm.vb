@@ -1080,6 +1080,15 @@ Friend Class TrxForm
                     If .strCategoryKey = "" Then
                         ValidationError("Split #" & intSplit & " has no category.")
                         Exit Function
+                    Else
+                        Dim intDotOffset As Integer = .strCategoryKey.IndexOf("."c)
+                        If intDotOffset > 0 Then
+                            Dim intAccountKey As Integer = Integer.Parse(.strCategoryKey.Substring(0, intDotOffset))
+                            If intAccountKey = mobjReg.objAccount.intKey Then
+                                ValidationError("Split category uses the same account")
+                                Exit Function
+                            End If
+                        End If
                     End If
                     If .strInvoiceDate <> "" Then
                         If Not gblnValidDate(.strInvoiceDate) Then

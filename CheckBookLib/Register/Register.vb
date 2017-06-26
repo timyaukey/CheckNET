@@ -398,6 +398,9 @@ Public Class Register
         If lngIndex <= mlngTrxUsed Then
             UpdateFirstAffected(lngIndex)
         End If
+        If mlngTrxCurrent > mlngTrxUsed Then
+            mlngTrxCurrent = mlngTrxUsed
+        End If
         'Still have to "fix balances" even if deleting the last Trx,
         'because that Trx might be applied to budgets.
         FixBalancesAndRefreshUI()
