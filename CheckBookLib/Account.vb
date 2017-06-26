@@ -59,11 +59,9 @@ Public Class Account
         Liability_AccountsPayable = 201
         Liability_Taxes = 202
         Liability_Other = 299
-        Equity_CashInvested = 300
-        Equity_PropertyInvested = 301
         Equity_RetainedEarnings = 302
         Equity_Stock = 303
-        Equity_Other = 399
+        Equity_Capital = 399
         Personal_LiabilityLoan = 400
         Personal_AssetLoan = 401
         Personal_BankAccount = 402
@@ -96,11 +94,9 @@ Public Class Account
         New SubTypeDef() With {.lngType = AccountType.Liability, .lngSubType = SubType.Liability_AccountsPayable, .strName = "Liability - Accounts Payable", .strSaveCode = "LAP"},
         New SubTypeDef() With {.lngType = AccountType.Liability, .lngSubType = SubType.Liability_Taxes, .strName = "Liability - Taxes", .strSaveCode = "LTX"},
         New SubTypeDef() With {.lngType = AccountType.Liability, .lngSubType = SubType.Liability_Other, .strName = "Liability - Other", .strSaveCode = "LOT"},
-        New SubTypeDef() With {.lngType = AccountType.Equity, .lngSubType = SubType.Equity_CashInvested, .strName = "Equity - Cash Invested", .strSaveCode = "ECA"},
-        New SubTypeDef() With {.lngType = AccountType.Equity, .lngSubType = SubType.Equity_PropertyInvested, .strName = "Equity - Property Invested", .strSaveCode = "EPI"},
         New SubTypeDef() With {.lngType = AccountType.Equity, .lngSubType = SubType.Equity_RetainedEarnings, .strName = "Equity - Retained Earnings", .strSaveCode = "ERE"},
         New SubTypeDef() With {.lngType = AccountType.Equity, .lngSubType = SubType.Equity_Stock, .strName = "Equity - Stock", .strSaveCode = "EST"},
-        New SubTypeDef() With {.lngType = AccountType.Equity, .lngSubType = SubType.Equity_Other, .strName = "Equity - Other", .strSaveCode = "E"},
+        New SubTypeDef() With {.lngType = AccountType.Equity, .lngSubType = SubType.Equity_Capital, .strName = "Equity - Capital", .strSaveCode = "E"},
         New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_LiabilityLoan, .strName = "Personal - Liability Loan", .strSaveCode = "PLL"},
         New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_AssetLoan, .strName = "Personal - Asset Loan", .strSaveCode = "PAL"},
         New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_BankAccount, .strName = "Personal - Bank Account", .strSaveCode = "PBA"},

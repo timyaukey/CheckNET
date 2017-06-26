@@ -1,10 +1,10 @@
 Option Strict On
 Option Explicit On
+Imports CheckBookLib
 
 Public Class TrxGenPeriod
+    Inherits TrxGenBase
     Implements ITrxGenerator
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
-
 
     Private mstrDescription As String
     Private mblnEnabled As Boolean
@@ -16,7 +16,7 @@ Public Class TrxGenPeriod
     Private mintStartRepeatSeq As Integer
     Private mdblDOWUsage(7) As Double 'vbSunday to vbSaturday
 
-    Public Function ITrxGenerator_strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String Implements ITrxGenerator.strLoad
+    Public Overrides Function strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String
 
         Dim strError As String
         Dim elmFirst As VB6XmlElement
@@ -28,55 +28,45 @@ Public Class TrxGenPeriod
 
         strError = gstrLoadTrxGeneratorCore(domDoc, mblnEnabled, mstrRepeatKey, mintStartRepeatSeq, mstrDescription, objAccount)
         If strError <> "" Then
-            ITrxGenerator_strLoad = strError
-            Exit Function
+            Return strError
         End If
 
         'Load <dowusage> element.
         elmDOWUsage = DirectCast(domDoc.DocumentElement.SelectSingleNode("dowusage"), VB6XmlElement)
         If elmDOWUsage Is Nothing Then
-            ITrxGenerator_strLoad = "Missing <dowusage> element"
-            Exit Function
+            Return "Missing <dowusage> element"
         End If
         dblTotalDOWWeights = 0
         mdblDOWUsage(FirstDayOfWeek.Sunday) = dblGetWeight(elmDOWUsage, "sunday", strError, dblTotalDOWWeights)
         If strError <> "" Then
-            ITrxGenerator_strLoad = strError
-            Exit Function
+            Return strError
         End If
         mdblDOWUsage(FirstDayOfWeek.Monday) = dblGetWeight(elmDOWUsage, "monday", strError, dblTotalDOWWeights)
         If strError <> "" Then
-            ITrxGenerator_strLoad = strError
-            Exit Function
+            Return strError
         End If
         mdblDOWUsage(FirstDayOfWeek.Tuesday) = dblGetWeight(elmDOWUsage, "tuesday", strError, dblTotalDOWWeights)
         If strError <> "" Then
-            ITrxGenerator_strLoad = strError
-            Exit Function
+            Return strError
         End If
         mdblDOWUsage(FirstDayOfWeek.Wednesday) = dblGetWeight(elmDOWUsage, "wednesday", strError, dblTotalDOWWeights)
         If strError <> "" Then
-            ITrxGenerator_strLoad = strError
-            Exit Function
+            Return strError
         End If
         mdblDOWUsage(FirstDayOfWeek.Thursday) = dblGetWeight(elmDOWUsage, "thursday", strError, dblTotalDOWWeights)
         If strError <> "" Then
-            ITrxGenerator_strLoad = strError
-            Exit Function
+            Return strError
         End If
         mdblDOWUsage(FirstDayOfWeek.Friday) = dblGetWeight(elmDOWUsage, "friday", strError, dblTotalDOWWeights)
         If strError <> "" Then
-            ITrxGenerator_strLoad = strError
-            Exit Function
+            Return strError
         End If
         mdblDOWUsage(FirstDayOfWeek.Saturday) = dblGetWeight(elmDOWUsage, "saturday", strError, dblTotalDOWWeights)
         If strError <> "" Then
-            ITrxGenerator_strLoad = strError
-            Exit Function
+            Return strError
         End If
         If dblTotalDOWWeights <= 0 Then
-            ITrxGenerator_strLoad = "DOW weights must add up to a positive number"
-            Exit Function
+            Return "DOW weights must add up to a positive number"
         End If
         For intIndex = gintLBOUND1 To UBound(mdblDOWUsage)
             mdblDOWUsage(intIndex) = mdblDOWUsage(intIndex) / dblTotalDOWWeights
@@ -85,17 +75,14 @@ Public Class TrxGenPeriod
         'Load first period start date.
         elmFirst = DirectCast(domDoc.DocumentElement.SelectSingleNode("firstperiodstarts"), VB6XmlElement)
         If elmFirst Is Nothing Then
-            ITrxGenerator_strLoad = "Missing <firstperiodstarts> element"
-            Exit Function
+            Return "Missing <firstperiodstarts> element"
         End If
         vntAttrib = elmFirst.GetAttribute("date")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            ITrxGenerator_strLoad = "Missing [date] attribute of <firstperiodstarts> element"
-            Exit Function
+            Return "Missing [date] attribute of <firstperiodstarts> element"
         End If
         If Not gblnValidDate(CStr(vntAttrib)) Then
-            ITrxGenerator_strLoad = "Invalid [date] attribute of <firstperiodstarts> element"
-            Exit Function
+            Return "Invalid [date] attribute of <firstperiodstarts> element"
         End If
         mdatFirstPeriodStarts = CDate(vntAttrib)
 
@@ -106,25 +93,22 @@ Public Class TrxGenPeriod
         Else
             vntAttrib = elmScaling.GetAttribute("increasepercent")
             If gblnXmlAttributeMissing(vntAttrib) Then
-                ITrxGenerator_strLoad = "Missing [increasepercent] attribute of <scaling> element"
-                Exit Function
+                Return "Missing [increasepercent] attribute of <scaling> element"
             End If
             If gblnValidAmount(CStr(vntAttrib)) Then
                 mdblDefaultPercentIncrease = CDbl(vntAttrib) / 100.0#
             Else
-                ITrxGenerator_strLoad = "Invalid [increasepercent] attribute of <scaling> element"
-                Exit Function
+                Return "Invalid [increasepercent] attribute of <scaling> element"
             End If
         End If
 
         'Load period ending dates and amounts.
         mdatPeriodEndings = gdatLoadSequencedTrx(domDoc.DocumentElement, "periodends", mdblDefaultPercentIncrease, 0, strError)
         If strError <> "" Then
-            ITrxGenerator_strLoad = strError
-            Exit Function
+            Return strError
         End If
 
-        ITrxGenerator_strLoad = gstrGetTrxGenTemplate(objAccount.objCompany, domDoc, mstrRepeatKey, 0, mdatTrxTemplate)
+        Return gstrGetTrxGenTemplate(objAccount.objCompany, domDoc, mstrRepeatKey, 0, mdatTrxTemplate)
     End Function
 
     Private Function dblGetWeight(ByVal elmDOWUsage As VB6XmlElement, ByVal strName As String, ByRef strError As String, ByRef dblTotalDOWUsage As Double) As Double
@@ -150,25 +134,25 @@ Public Class TrxGenPeriod
         dblGetWeight = dblResult
     End Function
 
-    Public ReadOnly Property ITrxGenerator_strDescription() As String Implements ITrxGenerator.strDescription
+    Public Overrides ReadOnly Property strDescription() As String
         Get
-            ITrxGenerator_strDescription = mstrDescription
+            Return mstrDescription
         End Get
     End Property
 
-    Public ReadOnly Property ITrxGenerator_blnEnabled() As Boolean Implements ITrxGenerator.blnEnabled
+    Public Overrides ReadOnly Property blnEnabled() As Boolean
         Get
-            ITrxGenerator_blnEnabled = mblnEnabled
+            Return mblnEnabled
         End Get
     End Property
 
-    Public ReadOnly Property ITrxGenerator_strRepeatKey() As String Implements ITrxGenerator.strRepeatKey
+    Public Overrides ReadOnly Property strRepeatKey() As String
         Get
-            ITrxGenerator_strRepeatKey = mdatTrxTemplate.strRepeatKey
+            Return mdatTrxTemplate.strRepeatKey
         End Get
     End Property
 
-    Public Function ITrxGenerator_colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As ICollection(Of TrxToCreate) Implements ITrxGenerator.colCreateTrx
+    Public Overrides Function colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As ICollection(Of TrxToCreate)
 
         Dim datNewTrx() As SequencedTrx
         Dim intLongestOutputPeriod As Integer
@@ -252,7 +236,7 @@ Public Class TrxGenPeriod
 
         'Combine datNewTrx with mdatTrxTemplate to create TrxToCreate
         'array to return.
-        ITrxGenerator_colCreateTrx = gcolTrxToCreateFromSeqTrx(datNewTrx, mdatTrxTemplate)
+        Return gcolTrxToCreateFromSeqTrx(datNewTrx, mdatTrxTemplate)
 
     End Function
 End Class

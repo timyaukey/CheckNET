@@ -182,6 +182,7 @@
     <Compile Include="SharedDefs.vb" />
     <Compile Include="TrxGen\TGEGeneratorBase.vb" />
     <Compile Include="TrxGen\TGEBase.vb" />
+    <Compile Include="TrxGen\TrxGenBase.vb" />
     <Compile Include="TrxGen\TrxGenFilePersister.vb" />
     <Compile Include="TrxGen\TGENormalTrx.vb" />
     <Compile Include="TrxGen\TGEGeneratorRepeat.vb" />

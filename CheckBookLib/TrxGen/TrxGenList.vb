@@ -1,10 +1,10 @@
 Option Strict On
 Option Explicit On
+Imports CheckBookLib
 
 Public Class TrxGenList
+    Inherits TrxGenBase
     Implements ITrxGenerator
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
-
 
     Private mstrDescription As String
     Private mblnEnabled As Boolean
@@ -12,7 +12,7 @@ Public Class TrxGenList
     Private mintStartRepeatSeq As Integer
     Private maudtTrx() As TrxToCreate
 
-    Public Function ITrxGenerator_strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String Implements ITrxGenerator.strLoad
+    Public Overrides Function strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String
 
         Dim strError As String
         Dim nodeTrx As VB6XmlNode
@@ -27,8 +27,7 @@ Public Class TrxGenList
 
         strError = gstrLoadTrxGeneratorCore(domDoc, mblnEnabled, mstrRepeatKey, mintStartRepeatSeq, mstrDescription, objAccount)
         If strError <> "" Then
-            ITrxGenerator_strLoad = strError
-            Exit Function
+            Return strError
         End If
 
         intCount = 0
@@ -44,13 +43,11 @@ Public Class TrxGenList
                 If elmTrx.Name = "normaltrx" Then
                     strMsg = strGetCommonFields(elmTrx, datDate, curAmount)
                     If strMsg <> "" Then
-                        ITrxGenerator_strLoad = strMsg
-                        Exit Function
+                        Return strMsg
                     End If
                     strMsg = gstrGetTrxGenTemplateNormal(objAccount.objCompany, elmTrx, mstrRepeatKey, curAmount, udtTrx)
                     If strMsg <> "" Then
-                        ITrxGenerator_strLoad = strMsg
-                        Exit Function
+                        Return strMsg
                     End If
                     blnAddTrx = True
                 End If
@@ -66,7 +63,7 @@ Public Class TrxGenList
             End If
         Next nodeTrx
 
-        ITrxGenerator_strLoad = ""
+        Return ""
     End Function
 
     Private Function strGetCommonFields(ByVal elmTrx As VB6XmlElement, ByRef datDate As Date, ByRef curAmount As Decimal) As String
@@ -97,25 +94,25 @@ Public Class TrxGenList
         curAmount = CDec(vntAttrib)
     End Function
 
-    Public ReadOnly Property ITrxGenerator_strDescription() As String Implements ITrxGenerator.strDescription
+    Public Overrides ReadOnly Property strDescription() As String
         Get
-            ITrxGenerator_strDescription = mstrDescription
+            Return mstrDescription
         End Get
     End Property
 
-    Public ReadOnly Property ITrxGenerator_blnEnabled() As Boolean Implements ITrxGenerator.blnEnabled
+    Public Overrides ReadOnly Property blnEnabled() As Boolean
         Get
-            ITrxGenerator_blnEnabled = mblnEnabled
+            Return mblnEnabled
         End Get
     End Property
 
-    Public ReadOnly Property ITrxGenerator_strRepeatKey() As String Implements ITrxGenerator.strRepeatKey
+    Public Overrides ReadOnly Property strRepeatKey() As String
         Get
-            ITrxGenerator_strRepeatKey = mstrRepeatKey
+            Return mstrRepeatKey
         End Get
     End Property
 
-    Public Function ITrxGenerator_colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As ICollection(Of TrxToCreate) Implements ITrxGenerator.colCreateTrx
+    Public Overrides Function colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As ICollection(Of TrxToCreate)
 
         Dim colResults As ICollection(Of TrxToCreate)
         Dim lngIndex As Integer
@@ -128,7 +125,7 @@ Public Class TrxGenList
                 colResults.Add(maudtTrx(lngIndex))
             End If
         Next
-        ITrxGenerator_colCreateTrx = colResults
+        Return colResults
 
     End Function
 End Class

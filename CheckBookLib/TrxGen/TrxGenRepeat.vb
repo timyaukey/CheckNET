@@ -1,10 +1,10 @@
 Option Strict On
 Option Explicit On
+Imports CheckBookLib
 
 Public Class TrxGenRepeat
+    Inherits TrxGenBase
     Implements ITrxGenerator
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
-
 
     Private mstrDescription As String
     Private mblnEnabled As Boolean
@@ -14,7 +14,7 @@ Public Class TrxGenRepeat
     Private mstrRepeatKey As String
     Private mintStartRepeatSeq As Integer
 
-    Public Function ITrxGenerator_strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String Implements ITrxGenerator.strLoad
+    Public Overrides Function strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String
 
         Dim strError As String
         Dim elmRepeat As VB6XmlElement = Nothing
@@ -22,49 +22,45 @@ Public Class TrxGenRepeat
 
         strError = gstrLoadTrxGeneratorCore(domDoc, mblnEnabled, mstrRepeatKey, mintStartRepeatSeq, mstrDescription, objAccount)
         If strError <> "" Then
-            ITrxGenerator_strLoad = strError
-            Exit Function
+            Return strError
         End If
 
         strError = gstrGetDateSequenceParams(domDoc.DocumentElement, "repeat", elmRepeat, mdatSequence)
         If strError <> "" Then
-            ITrxGenerator_strLoad = strError
-            Exit Function
+            Return strError
         End If
 
         vntAttrib = elmRepeat.GetAttribute("amount")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            ITrxGenerator_strLoad = "Missing [amount] attribute"
-            Exit Function
+            Return "Missing [amount] attribute"
         End If
         If Not gblnValidAmount(CStr(vntAttrib)) Then
-            ITrxGenerator_strLoad = "Invalid [amount] attribute"
-            Exit Function
+            Return "Invalid [amount] attribute"
         End If
         mcurAmount = CDec(vntAttrib)
 
-        ITrxGenerator_strLoad = gstrGetTrxGenTemplate(objAccount.objCompany, domDoc, mstrRepeatKey, mcurAmount, mdatTrxTemplate)
+        Return gstrGetTrxGenTemplate(objAccount.objCompany, domDoc, mstrRepeatKey, mcurAmount, mdatTrxTemplate)
     End Function
 
-    Public ReadOnly Property ITrxGenerator_strDescription() As String Implements ITrxGenerator.strDescription
+    Public Overrides ReadOnly Property strDescription() As String
         Get
-            ITrxGenerator_strDescription = mstrDescription
+            Return mstrDescription
         End Get
     End Property
 
-    Public ReadOnly Property ITrxGenerator_blnEnabled() As Boolean Implements ITrxGenerator.blnEnabled
+    Public Overrides ReadOnly Property blnEnabled() As Boolean
         Get
-            ITrxGenerator_blnEnabled = mblnEnabled
+            Return mblnEnabled
         End Get
     End Property
 
-    Public ReadOnly Property ITrxGenerator_strRepeatKey() As String Implements ITrxGenerator.strRepeatKey
+    Public Overrides ReadOnly Property strRepeatKey() As String
         Get
-            ITrxGenerator_strRepeatKey = mdatTrxTemplate.strRepeatKey
+            Return mdatTrxTemplate.strRepeatKey
         End Get
     End Property
 
-    Public Function ITrxGenerator_colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As ICollection(Of TrxToCreate) Implements ITrxGenerator.colCreateTrx
+    Public Overrides Function colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As ICollection(Of TrxToCreate)
 
         Dim datSeqTrx() As SequencedTrx
 
@@ -73,7 +69,7 @@ Public Class TrxGenRepeat
 
         'Combine datNewTrx with mdatTrxTemplate to create TrxToCreate
         'array to return.
-        ITrxGenerator_colCreateTrx = gcolTrxToCreateFromSeqTrx(datSeqTrx, mdatTrxTemplate)
+        Return gcolTrxToCreateFromSeqTrx(datSeqTrx, mdatTrxTemplate)
 
     End Function
 End Class

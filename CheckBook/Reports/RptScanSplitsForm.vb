@@ -11,7 +11,6 @@ Friend Class RptScanSplitsForm
 
     Public Enum SplitReportType
         glngSPLTRPT_TOTALS = 1
-        glngSPLTRPT_PAYABLES = 2
     End Enum
 
     Private mobjCompany As Company
@@ -72,13 +71,6 @@ Friend Class RptScanSplitsForm
             Select Case mlngRptType
                 Case SplitReportType.glngSPLTRPT_TOTALS
                     Me.Text = "Report of Totals By Category"
-                Case SplitReportType.glngSPLTRPT_PAYABLES
-                    Me.Text = "Accounts Payable Report"
-                    lblCategory.Visible = True
-                    cboCategory.Visible = True
-                    gLoadComboFromStringTranslator(cboCategory, mobjCompany.objCategories, True)
-                    lblReportDate.Visible = True
-                    txtReportDate.Visible = True
                 Case Else
                     gRaiseError("Unrecognized category report type")
             End Select
@@ -99,16 +91,8 @@ Friend Class RptScanSplitsForm
             If blnBadSpecs() Then
                 Exit Sub
             End If
-            Dim intIndex As Short
             If mlngRptType = SplitReportType.glngSPLTRPT_TOTALS Then
                 InitCatTotals()
-            ElseIf mlngRptType = SplitReportType.glngSPLTRPT_PAYABLES Then
-                For intIndex = LBound(macurPayables) To UBound(macurPayables)
-                    macurPayables(intIndex) = 0
-                Next
-                mcurPayablesTotal = 0
-                mcurPayablesCurrent = 0
-                mcurPayablesFuture = 0
             End If
             IterateSplits()
             ShowResults()
@@ -280,10 +264,6 @@ Friend Class RptScanSplitsForm
 
         Try
 
-            Dim datInvoiceDate As Date
-            Dim datDueDate As Date
-            Dim intAgeInDays As Short
-            Dim intAgeBracket As Short
             Select Case mlngRptType
                 Case SplitReportType.glngSPLTRPT_TOTALS
                     intCatIndex = mobjCompany.objCategories.intLookupKey(objSplit.strCategoryKey)
@@ -294,52 +274,6 @@ Friend Class RptScanSplitsForm
                             .lngCount = .lngCount + 1
                             .curAmount = .curAmount + objSplit.curAmount
                         End With
-                    End If
-                Case SplitReportType.glngSPLTRPT_PAYABLES
-                    If objSplit.strCategoryKey = mstrCatKey Or mstrCatKey = "" Then
-                        'Find the due date (used to calculate age),
-                        'and if necessary estimate invoice date.
-                        gGetSplitDates(objTrx, objSplit, datInvoiceDate, datDueDate)
-                        'If item is invoiced as of the report date.
-                        If datInvoiceDate <= mdatReportDate Then
-                            'If item was not paid as of the report date.
-                            If objTrx.blnFake Or (mdatReportDate < objTrx.datDate) Then
-                                'Count it!
-                                'We use the difference between datDueDate and mdatReportDate as
-                                'the age because we only include in the report trx that were unpaid
-                                'as of mdatReportDate, i.e. on mdatReportDate they were late by the
-                                'number of days between datDueDate and mdatReportDate. If you think
-                                'casually about the problem you might use the difference between
-                                'datDueDate and transaction/payment date as the age, but this is actually
-                                'a related but different number: The number of days late the payment
-                                'ACTUALLY was, as opposed to the number of days late the payment was
-                                'AS OF THE REPORT DATE. Unlike for the "actual days late" number, a
-                                'transaction isn't reported AT ALL if it was paid on or before the
-                                'report date. Another way of looking at it is one number describes
-                                'PAID debts where you KNOW how late they were (or weren't), and the
-                                'other describes UNPAID debts when you DON'T know how late they WILL
-                                'BE when paid but you know how late they are NOW (or when the report
-                                'was run).
-                                If mdatReportDate <= datDueDate Then
-                                    'Current or future payable.
-                                    'Anything due more than 30 days in the future is a "future".
-                                    'This definition is rather arbitrary.
-                                    If DateDiff(Microsoft.VisualBasic.DateInterval.Day, mdatReportDate, datDueDate) <= 30 Then
-                                        mcurPayablesCurrent = mcurPayablesCurrent + objSplit.curAmount
-                                    Else
-                                        mcurPayablesFuture = mcurPayablesFuture + objSplit.curAmount
-                                    End If
-                                Else
-                                    'Payable is at or past due date, and so belongs in one of the age brackets.
-                                    intAgeInDays = DateDiff(Microsoft.VisualBasic.DateInterval.Day, datDueDate, mdatReportDate)
-                                    intAgeBracket = (intAgeInDays - 1) / 30
-                                    If intAgeBracket <= UBound(macurPayables) Then
-                                        macurPayables(intAgeBracket) = macurPayables(intAgeBracket) + objSplit.curAmount
-                                    End If
-                                End If
-                                mcurPayablesTotal = mcurPayablesTotal + objSplit.curAmount
-                            End If
-                        End If
                     End If
                 Case Else
                     gRaiseError("Unrecognized report type")
@@ -356,27 +290,11 @@ Friend Class RptScanSplitsForm
 
         Try
 
-            Dim strPayables As String
-            Dim intIndex As Short
-            Dim curReconTotal As Decimal
             Select Case mlngRptType
                 Case SplitReportType.glngSPLTRPT_TOTALS
                     frmSumRpt = New CatSumRptForm
                     frmSumRpt.ShowMe(maudtCatTotals, mcolSelectAccounts, mobjCompany.objCategories, mdatStart, mdatEnd,
                                      mblnIncludeFake, mblnIncludeGenerated, mobjHostUI)
-                Case SplitReportType.glngSPLTRPT_PAYABLES
-                    strPayables = "Total payables as of " & gstrFormatDate(mdatReportDate) & " are $" & gstrFormatCurrency(mcurPayablesTotal) & vbCrLf & "Payables due in 30 days or less are $" & gstrFormatCurrency(mcurPayablesCurrent) & vbCrLf & "Payables more than 30 days out are $" & gstrFormatCurrency(mcurPayablesFuture)
-                    curReconTotal = mcurPayablesCurrent + mcurPayablesFuture
-                    For intIndex = LBound(macurPayables) To UBound(macurPayables)
-                        If macurPayables(intIndex) <> 0 Then
-                            strPayables = strPayables & vbCrLf & "Aged " & CStr(((intIndex + 0) * 30) + 1) & "-" & CStr((intIndex + 1) * 30) & " days: $" & gstrFormatCurrency(macurPayables(intIndex))
-                        End If
-                        curReconTotal = curReconTotal + macurPayables(intIndex)
-                    Next
-                    MsgBox(strPayables, MsgBoxStyle.Information)
-                    If curReconTotal <> mcurPayablesTotal Then
-                        MsgBox("Accounts payable current, future and age brackets do not add up to total!", MsgBoxStyle.Critical)
-                    End If
                 Case Else
                     gRaiseError("Unrecognized category report type")
             End Select

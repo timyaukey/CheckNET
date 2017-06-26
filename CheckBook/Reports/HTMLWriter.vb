@@ -5,14 +5,14 @@ Imports CheckBookLib
 Public Class HTMLWriter
     Private mobjCompany As Company
     Private mstrFileNameRoot As String
-    Private mobjReportManager As ReportGroupManager
     Private mobjBuilder As System.Text.StringBuilder
+    Public blnUseMinusNumbers As Boolean
 
-    Public Sub New(ByVal objCompany As Company, ByVal strFileNameRoot As String, ByVal objReportManager As ReportGroupManager)
+    Public Sub New(ByVal objCompany As Company, ByVal strFileNameRoot As String)
         mobjCompany = objCompany
         mstrFileNameRoot = strFileNameRoot
-        mobjReportManager = objReportManager
         mobjBuilder = New System.Text.StringBuilder()
+        blnUseMinusNumbers = False
     End Sub
 
     Public Sub BeginReport()
@@ -39,8 +39,9 @@ Public Class HTMLWriter
     End Sub
 
     Public Sub OutputGroupItems(ByVal strTitleClass As String, ByVal strAmountClass As String,
-                           ByVal strNegativeClass As String, ByVal strGroupKey As String, ByVal objAccum As ReportAccumulator)
-        Dim objGroup As LineItemGroup = mobjReportManager.objGetGroup(strGroupKey)
+                           ByVal strNegativeClass As String, ByVal objReportManager As ReportGroupManager,
+                           ByVal strGroupKey As String, ByVal objAccum As ReportAccumulator)
+        Dim objGroup As LineItemGroup = objReportManager.objGetGroup(strGroupKey)
         For Each objLine As ReportLineItem In objGroup.colItems
             OutputAmount(strTitleClass, objLine.strItemTitle, strAmountClass, strNegativeClass, objLine.curTotal, objAccum)
             objLine.blnPrinted = True
@@ -48,9 +49,9 @@ Public Class HTMLWriter
     End Sub
 
     Public Sub OutputGroupSummary(ByVal strTitleClass As String, ByVal strTitle As String, ByVal strAmountClass As String,
-                           ByVal strNegativeClass As String, ByVal strGroupKey As String, ByVal blnOmitIfZero As Boolean,
-                           ByVal objAccum As ReportAccumulator)
-        Dim objGroup As LineItemGroup = mobjReportManager.objGetGroup(strGroupKey)
+                           ByVal strNegativeClass As String, ByVal objReportManager As ReportGroupManager,
+                           ByVal strGroupKey As String, ByVal blnOmitIfZero As Boolean, ByVal objAccum As ReportAccumulator)
+        Dim objGroup As LineItemGroup = objReportManager.objGetGroup(strGroupKey)
         If objGroup.curGroupTotal <> 0D Or Not blnOmitIfZero Then
             OutputAmount(strTitleClass, strTitle, strAmountClass, strNegativeClass, objGroup.curGroupTotal, objAccum)
         End If
@@ -68,12 +69,16 @@ Public Class HTMLWriter
     Public Sub OutputAmount(ByVal strTitleClass As String, ByVal strTitle As String, ByVal strAmountClass As String,
                           ByVal strNegativeClass As String, ByVal curAmount As Decimal, objAccum As ReportAccumulator)
         Dim strExtraClass As String = ""
-        If curAmount < 0 Then
+        Dim curOutputAmount As Decimal = curAmount
+        If blnUseMinusNumbers Then
+            curOutputAmount = -curOutputAmount
+        End If
+        If curOutputAmount < 0 Then
             strExtraClass = " " + strNegativeClass
         End If
         OutputLine("<div>")
         OutputLine("<span class='" + strTitleClass + "'>" + strTitle + "</span>")
-        OutputLine("<span class='" + strAmountClass + strExtraClass + "'>" + gstrFormatCurrency(curAmount) + "</span>")
+        OutputLine("<span class='" + strAmountClass + strExtraClass + "'>" + curOutputAmount.ToString("###,###,###,##0.00") + "</span>")
         OutputLine("</div>")
         objAccum.Add(curAmount)
     End Sub
@@ -92,8 +97,8 @@ Public Class HTMLWriter
         System.Diagnostics.Process.Start(info)
     End Sub
 
-    Public Sub CheckPrinted()
-        For Each objGroup As LineItemGroup In mobjReportManager.colGroups
+    Public Sub CheckPrinted(ByVal objReportManager As ReportGroupManager)
+        For Each objGroup As LineItemGroup In objReportManager.colGroups
             If Not objGroup.blnPrinted Then
                 For Each objItem As ReportLineItem In objGroup.colItems
                     If Not objItem.blnPrinted Then

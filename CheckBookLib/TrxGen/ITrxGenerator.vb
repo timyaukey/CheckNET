@@ -23,6 +23,8 @@ Public Interface ITrxGenerator
 
     ReadOnly Property strRepeatKey() As String
 
+    ReadOnly Property intMaxDaysOld() As Integer?
+
     '$Description Return a Collection of TrxToCreate from which to create
     '   Trx to add to a register.
     '$Param datEndDate Create no transaction dated later than this. Other

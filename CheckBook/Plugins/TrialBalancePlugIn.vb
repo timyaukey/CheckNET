@@ -16,6 +16,6 @@ Public Class TrialBalancePlugIn
     End Sub
 
     Public Overrides Function GetMenuTitle() As String
-        Return "Trial Balance and Statements"
+        Return "Financial Statements"
     End Function
 End Class

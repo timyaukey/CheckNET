@@ -35,7 +35,6 @@ Partial Class TrialBalanceForm
         Me.ctlStartDate = New System.Windows.Forms.DateTimePicker()
         Me.lblBalanceSheetAccounts = New System.Windows.Forms.Label()
         Me.lblIncomeExpenseAccounts = New System.Windows.Forms.Label()
-        Me.btnStatementTotals = New System.Windows.Forms.Button()
         Me.btnBalanceSheet = New System.Windows.Forms.Button()
         Me.btnIncomeExpenseStatement = New System.Windows.Forms.Button()
         Me.lblResultSummary = New System.Windows.Forms.Label()
@@ -111,7 +110,7 @@ Partial Class TrialBalanceForm
         'btnTrialBalance
         '
         Me.btnTrialBalance.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnTrialBalance.Location = New System.Drawing.Point(389, 454)
+        Me.btnTrialBalance.Location = New System.Drawing.Point(389, 483)
         Me.btnTrialBalance.Name = "btnTrialBalance"
         Me.btnTrialBalance.Size = New System.Drawing.Size(150, 23)
         Me.btnTrialBalance.TabIndex = 13
@@ -151,16 +150,6 @@ Partial Class TrialBalanceForm
         Me.lblIncomeExpenseAccounts.Size = New System.Drawing.Size(136, 13)
         Me.lblIncomeExpenseAccounts.TabIndex = 6
         Me.lblIncomeExpenseAccounts.Text = "Income/Expense Accounts"
-        '
-        'btnStatementTotals
-        '
-        Me.btnStatementTotals.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnStatementTotals.Location = New System.Drawing.Point(389, 483)
-        Me.btnStatementTotals.Name = "btnStatementTotals"
-        Me.btnStatementTotals.Size = New System.Drawing.Size(150, 23)
-        Me.btnStatementTotals.TabIndex = 14
-        Me.btnStatementTotals.Text = "Statement Totals"
-        Me.btnStatementTotals.UseVisualStyleBackColor = True
         '
         'btnBalanceSheet
         '
@@ -232,7 +221,6 @@ Partial Class TrialBalanceForm
         Me.Controls.Add(Me.lblResultSummary)
         Me.Controls.Add(Me.btnIncomeExpenseStatement)
         Me.Controls.Add(Me.btnBalanceSheet)
-        Me.Controls.Add(Me.btnStatementTotals)
         Me.Controls.Add(Me.lblIncomeExpenseAccounts)
         Me.Controls.Add(Me.lblBalanceSheetAccounts)
         Me.Controls.Add(Me.lblStartDate)
@@ -266,7 +254,6 @@ Partial Class TrialBalanceForm
     Friend WithEvents ctlStartDate As DateTimePicker
     Friend WithEvents lblBalanceSheetAccounts As Label
     Friend WithEvents lblIncomeExpenseAccounts As Label
-    Friend WithEvents btnStatementTotals As Button
     Friend WithEvents btnBalanceSheet As Button
     Friend WithEvents btnIncomeExpenseStatement As Button
     Friend WithEvents lblResultSummary As Label
