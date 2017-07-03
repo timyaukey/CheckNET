@@ -21,6 +21,7 @@ Friend Class CBMainForm
         Dim intFiles As Integer
         Dim strFile As String
         Dim strSecurityOption As String = ""
+        Dim datCutoff As Date
 
         Try
             mblnCancelStart = True
@@ -112,12 +113,13 @@ Friend Class CBMainForm
             mobjCompany.colAccounts.Sort(AddressOf AccountComparer)
 
             'With all Account objects loaded we can add them to the category list.
+            datCutoff = objCompany.datLastReconciled().AddDays(1D)
             mobjCompany.LoadCategories()
 
             'Load generated transactions for all of them.
             For Each objAccount In mobjCompany.colAccounts
                 frmStartup.Configure(objAccount)
-                objAccount.LoadGenerated()
+                objAccount.LoadGenerated(datCutoff)
                 frmStartup.Configure(Nothing)
             Next
 

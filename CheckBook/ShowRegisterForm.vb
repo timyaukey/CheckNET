@@ -304,25 +304,32 @@ Friend Class ShowRegisterForm
                 "Ending Date", gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, 90, Now)))
             If strRegisterEndDate <> "" Then
                 If gblnValidDate(strRegisterEndDate) Then
-                    Dim objAccount As Account
-                    System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor
-                    'Need to do all accounts, not just the selected account, because there may be many, many
-                    'accounts and even there are only a few each one can create trx in others through
-                    'balance sheet categories in trx.
-                    For Each objAccount In mobjCompany.colAccounts
-                        objAccount.RecreateGeneratedTrx(CDate(strRegisterEndDate))
-                    Next
-                    For Each objAccount In mobjCompany.colAccounts
-                        'Tell all register windows to refresh themselves.
-                        For Each objReg As Register In objAccount.colRegisters
-                            'Recompute the running balances, because replica trx can be added anywhere.
-                            objReg.LoadFinish()
-                            objReg.FireRedisplayTrx()
-                        Next objReg
-                    Next
-                    System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
+                    Dim strCutoffDate As String = gstrFormatDate(mobjCompany.datLastReconciled().AddDays(1D))
+                    strCutoffDate = InputBox("Enter cutoff date for transaction generators that do not " +
+                        "generate transactions older than some number of days relative to a cutoff date:", "Cutoff Date", strCutoffDate)
+                    If gblnValidDate(strCutoffDate) Then
+                        Dim objAccount As Account
+                        System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor
+                        'Need to do all accounts, not just the selected account, because there may be many, many
+                        'accounts and even there are only a few each one can create trx in others through
+                        'balance sheet categories in trx.
+                        For Each objAccount In mobjCompany.colAccounts
+                            objAccount.RecreateGeneratedTrx(CDate(strRegisterEndDate), CDate(strCutoffDate))
+                        Next
+                        For Each objAccount In mobjCompany.colAccounts
+                            'Tell all register windows to refresh themselves.
+                            For Each objReg As Register In objAccount.colRegisters
+                                'Recompute the running balances, because replica trx can be added anywhere.
+                                objReg.LoadFinish()
+                                objReg.FireRedisplayTrx()
+                            Next objReg
+                        Next
+                        System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
+                    Else
+                        MsgBox("Invalid cutoff date.")
+                    End If
                 Else
-                    MsgBox("Invalid date.")
+                    MsgBox("Invalid ending date.")
                 End If
             End If
 

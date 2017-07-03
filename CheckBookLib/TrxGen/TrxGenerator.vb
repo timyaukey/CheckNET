@@ -12,7 +12,7 @@ Module TrxGenerator
     '$Param objReg The Register to generate Trx in.
     '$Param datRptEndMax Latest date to create Trx for.
 
-    Public Sub gCreateGeneratedTrx(ByVal objAccount As Account, ByVal objReg As Register, ByVal datRptEndMax As Date)
+    Public Sub gCreateGeneratedTrx(ByVal objAccount As Account, ByVal objReg As Register, ByVal datRptEndMax As Date, ByVal datCutoff As Date)
 
         Dim colGenerators As ICollection(Of ITrxGenerator)
         Dim objGenerator As ITrxGenerator
@@ -34,7 +34,7 @@ Module TrxGenerator
                 objAccount.RaiseLoadStatus("Generate " + objGenerator.strDescription)
                 objAccount.objRepeatSummarizer.Define(objGenerator.strRepeatKey, objGenerator.strDescription, True)
                 If objGenerator.intMaxDaysOld.HasValue Then
-                    datOldestTrxDate = DateTime.Today.AddDays(-CDbl(objGenerator.intMaxDaysOld.Value))
+                    datOldestTrxDate = datCutoff.AddDays(-CDbl(objGenerator.intMaxDaysOld.Value))
                 Else
                     datOldestTrxDate = New DateTime(1900, 1, 1)
                 End If

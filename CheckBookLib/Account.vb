@@ -411,7 +411,7 @@ Public Class Account
         Throw New Exception("Invalid related account key")
     End Function
 
-    Public Sub LoadGenerated()
+    Public Sub LoadGenerated(ByVal datCutoff As Date)
         Dim objReg As Register
 
         Try
@@ -422,7 +422,7 @@ Public Class Account
             'because generating a transfer adds Trx to two registers.
             RaiseEvent LoadStatus("Generate for " + mstrTitle)
             For Each objReg In mcolRegisters
-                gCreateGeneratedTrx(Me, objReg, datRegisterEndDate)
+                gCreateGeneratedTrx(Me, objReg, datRegisterEndDate, datCutoff)
             Next objReg
         Catch ex As Exception
             Throw New Exception("Error in Account.LoadGenerated(" & mstrFileNameRoot & ")", ex)
@@ -481,7 +481,7 @@ Public Class Account
     '$Description Remove all generated Trx from Registers for this account,
     '   then recreate generated Trx through the specified end date.
 
-    Public Sub RecreateGeneratedTrx(ByVal datRegisterEndDate As Date)
+    Public Sub RecreateGeneratedTrx(ByVal datRegisterEndDate As Date, ByVal datCutoff As Date)
         Dim objReg As Register
 
         'Purge generated Trx and clear all budget allocations for each register.
@@ -498,7 +498,7 @@ Public Class Account
         'in this routine. The rest is divided fairly evenly between
         'LoadPostProcessing() and FireRedisplayTrx().
         For Each objReg In mcolRegisters
-            gCreateGeneratedTrx(Me, objReg, datRegisterEndDate)
+            gCreateGeneratedTrx(Me, objReg, datRegisterEndDate, datCutoff)
         Next objReg
 
         'In case trx generators have been edited.

@@ -30,6 +30,22 @@ Public Class Company
         Return False
     End Function
 
+    Public Function datLastReconciled() As Date
+        Dim datResult As Date = New Date(1900, 1, 1)
+        For Each act As Account In colAccounts
+            For Each reg In act.colRegisters
+                For Each objTrx In reg.colAllTrx()
+                    If objTrx.lngStatus = Trx.TrxStatus.glngTRXSTS_RECON Then
+                        If objTrx.datDate > datResult Then
+                            datResult = objTrx.datDate
+                        End If
+                    End If
+                Next
+            Next
+        Next
+        Return datResult
+    End Function
+
     Public Sub UseAccountKey(ByVal intKey As Integer)
         If intKey > mintMaxAccountKey Then
             mintMaxAccountKey = intKey
