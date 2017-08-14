@@ -97,8 +97,8 @@ Public Class TrialBalanceForm
                 objBalSheet, Account.SubType.Asset_Inventory.ToString(), False, objAccumAssets)
             objWriter.OutputGroupSummary(strLineTitleClass, "Accounts Receivable", strLineAmountClass, strMinusClass,
                 objBalSheet, Account.SubType.Asset_AccountsReceivable.ToString(), False, objAccumAssets)
-            objWriter.OutputGroupSummary(strLineTitleClass, "Loans Receivable", strLineAmountClass, strMinusClass,
-                objBalSheet, Account.SubType.Asset_LoanReceivable.ToString(), False, objAccumAssets)
+            objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
+                objBalSheet, Account.SubType.Asset_LoanReceivable.ToString(), objAccumAssets)
             objWriter.OutputGroupSummary(strLineTitleClass, "Real Property", strLineAmountClass, strMinusClass,
                 objBalSheet, Account.SubType.Asset_RealProperty.ToString(), False, objAccumAssets)
             objWriter.OutputGroupSummary(strLineTitleClass, "Other Property", strLineAmountClass, strMinusClass,
@@ -112,8 +112,8 @@ Public Class TrialBalanceForm
             objWriter.blnUseMinusNumbers = True
 
             objWriter.OutputText(strLineHeaderClass, "Liabilities")
-            objWriter.OutputGroupSummary(strLineTitleClass, "Loans Payable", strLineAmountClass, strMinusClass,
-                objBalSheet, Account.SubType.Liability_LoanPayable.ToString(), False, objAccumLiabilities)
+            objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
+                objBalSheet, Account.SubType.Liability_LoanPayable.ToString(), objAccumLiabilities)
             objWriter.OutputGroupSummary(strLineTitleClass, "Accounts Payable", strLineAmountClass, strMinusClass,
                 objBalSheet, Account.SubType.Liability_AccountsPayable.ToString(), False, objAccumLiabilities)
             objWriter.OutputGroupSummary(strLineTitleClass, "Other", strLineAmountClass, strMinusClass,
