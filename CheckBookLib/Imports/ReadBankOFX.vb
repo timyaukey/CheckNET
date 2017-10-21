@@ -82,6 +82,8 @@ Public Class ReadBankOFX
     Private Function objNextTrx() As ImportedTrx Implements ITrxReader.objNextTrx
         Dim strToken As String
         Dim strCheckNum As String
+        Dim strName As String
+        Dim strMemo As String
 
         objNextTrx = Nothing
         Try
@@ -89,6 +91,8 @@ Public Class ReadBankOFX
             objNextTrx = Nothing
             mobjUtil.ClearSavedTrxData()
             strCheckNum = ""
+            strName = ""
+            strMemo = ""
             Do
                 strToken = strGetToken()
                 If mblnInputEOF Then
@@ -101,6 +105,7 @@ Public Class ReadBankOFX
                         If strCheckNum <> "" Then
                             mobjUtil.strTrxNumber = strCheckNum
                         End If
+                        mobjUtil.strTrxPayee = Trim(strName + " " + strMemo)
                         objNextTrx = mobjUtil.objMakeTrx()
                         strCheckNum = ""
                         Exit Do
@@ -108,7 +113,9 @@ Public Class ReadBankOFX
                         strToken = strGetToken()
                         mobjUtil.strTrxDate = Mid(strToken, 5, 2) & "/" & Mid(strToken, 7, 2) & "/" & Mid(strToken, 1, 4)
                     Case "<NAME>"
-                        mobjUtil.strTrxPayee = strGetToken()
+                        strName = strGetToken()
+                    Case "<MEMO>"
+                        strMemo = strGetToken()
                     Case "<FITID>"
                         mobjUtil.strTrxUniqueKey = strGetToken()
                     Case "<TRNAMT>"
@@ -117,7 +124,7 @@ Public Class ReadBankOFX
                         strToken = strGetToken()
                         If strToken = "POS" Then
                             mobjUtil.strTrxNumber = "Card"
-                        ElseIf (strToken = "DEP") Or (strToken = "DIRECTDEP") Then
+                        ElseIf (strToken = "DEP") Or (strToken = "DIRECTDEP") Or (strToken = "CREDIT") Then
                             mobjUtil.strTrxNumber = "DEP"
                         ElseIf strToken = "CHECK" Then
                             'Will be overridden later

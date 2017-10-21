@@ -525,8 +525,8 @@ Friend Class BankImportForm
         Dim objImportedTrx As ImportedTrx
 
         datRootDate = maudtItem(intRootItemIndex).objImportedTrx.datDate
-        datStartDate = datRootDate.AddDays(-1.0#)
-        datEndDate = datRootDate.AddDays(1.0#)
+        datStartDate = datRootDate.AddDays(-2.0#)
+        datEndDate = datRootDate.AddDays(2.0#)
         Dim colResult As List(Of ImportItem) = New List(Of ImportItem)()
         For intItemIndex As Integer = 1 To mintItems
             objImportItem = maudtItem(intItemIndex)
@@ -559,8 +559,8 @@ Friend Class BankImportForm
         Dim colResult As List(Of NormalTrx) = New List(Of NormalTrx)()
         Dim datStartDate As DateTime
         Dim datEndDate As DateTime
-        datStartDate = datDate.AddDays(-1.0#)
-        datEndDate = datDate.AddDays(1.0#)
+        datStartDate = datDate.AddDays(-6.0#)
+        datEndDate = datDate.AddDays(2.0#)
         For Each objReg In mobjAccount.colRegisters
             For intRegIndex = objReg.lngFindBeforeDate(datStartDate) + 1 To objReg.lngTrxCount
                 objNormalTrx = TryCast(objReg.objTrx(intRegIndex), NormalTrx)
@@ -655,10 +655,10 @@ Friend Class BankImportForm
                 Exit Do
             End If
             objLastImportItem = objImportEnum.Current
-            objLastImportItem.objMultiPart = objMultiPart
             If Not objMatchEnum.MoveNext() Then
                 'We ran out of matched NormalTrx, so create new NormalTrx for each remaining ImportItem.
                 Do
+                    objImportEnum.Current.objMultiPart = objMultiPart
                     objImportEnum.Current.objMatchedReg = objLastMatchedTrx.objReg
                     objImportEnum.Current.objMatchedTrx = Nothing
                     '.MoveNext() AFTER using .Current, because we already advanced
@@ -670,6 +670,7 @@ Friend Class BankImportForm
                 Exit Do
             End If
             objLastMatchedTrx = objMatchEnum.Current
+            objImportEnum.Current.objMultiPart = objMultiPart
             objImportEnum.Current.objMatchedReg = objMatchEnum.Current.objReg
             objImportEnum.Current.objMatchedTrx = objMatchEnum.Current
         Loop
