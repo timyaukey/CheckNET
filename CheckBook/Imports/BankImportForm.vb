@@ -12,6 +12,7 @@ Friend Class BankImportForm
     Private mobjImportHandler As IImportHandler
     Private mobjTrxReader As ITrxReader
     Private mblnIgnoreItemCheckedEvents As Boolean
+    Private mobjHashedMatches As HashSet(Of NormalTrx)
 
     Private Enum ImportStatus
         'Have not decided what to do with item yet.
@@ -136,6 +137,7 @@ Friend Class BankImportForm
 
             mstrImportSearchText = ""
             mintNextImportToSearch = 0
+            mobjHashedMatches = Nothing
             ShowSearchFor()
             If Not blnLoadImports() Then
                 Exit Sub
@@ -319,6 +321,7 @@ Friend Class BankImportForm
                 .objMatchedReg = Nothing
                 .objMatchedTrx = Nothing
                 .colExtraMatchedTrx = New List(Of NormalTrx)()
+                mobjHashedMatches = Nothing
                 .objMultiPart = Nothing
                 .blnMultiPartPrimary = False
             End With
@@ -378,6 +381,7 @@ Friend Class BankImportForm
                         If objPossibleMatchTrx.strImportKey = "" Then
                             .objMatchedTrx = objPossibleMatchTrx
                             .objMatchedReg = objReg
+                            mobjHashedMatches = Nothing
                             intExactCount = intExactCount + 1
                         End If
                     End If
@@ -571,14 +575,26 @@ Friend Class BankImportForm
                 objNormalTrx = TryCast(objTrx, NormalTrx)
                 If Not objNormalTrx Is Nothing Then
                     If objNormalTrx.strDescription.StartsWith(strDescrStartsWith) Then
-                        If Not colAllMatchedTrx.Contains(objNormalTrx) Then
+                        If Not blnTrxIsMatched(objNormalTrx) Then
                             colResult.Add(objNormalTrx)
+                            'Else  'uncomment to allow a breakpoint when debugging
+                            '    objNormalTrx = objNormalTrx
                         End If
                     End If
                 End If
             Next
         Next
         Return colResult
+    End Function
+
+    Private Function blnTrxIsMatched(ByVal objNormalTrx As NormalTrx) As Boolean
+        If mobjHashedMatches Is Nothing Then
+            mobjHashedMatches = New HashSet(Of NormalTrx)()
+            For Each objAdd As NormalTrx In colAllMatchedTrx
+                mobjHashedMatches.Add(objAdd)
+            Next
+        End If
+        Return mobjHashedMatches.Contains(objNormalTrx)
     End Function
 
     Private Delegate Function curGetAmount(Of T)(ByVal objItem As T) As Decimal
@@ -654,6 +670,7 @@ Friend Class BankImportForm
                     End If
                     'Add to the list of matched NormalTrx to zero out.
                     objLastImportItem.colExtraMatchedTrx.Add(objMatchEnum.Current)
+                    mobjHashedMatches = Nothing
                 Loop
                 Exit Do
             End If
@@ -664,6 +681,7 @@ Friend Class BankImportForm
                     objImportEnum.Current.objMultiPart = objMultiPart
                     objImportEnum.Current.objMatchedReg = objLastMatchedTrx.objReg
                     objImportEnum.Current.objMatchedTrx = Nothing
+                    mobjHashedMatches = Nothing
                     '.MoveNext() AFTER using .Current, because we already advanced
                     'objImportEnum in the outer loop.
                     If Not objImportEnum.MoveNext() Then
@@ -676,6 +694,7 @@ Friend Class BankImportForm
             objImportEnum.Current.objMultiPart = objMultiPart
             objImportEnum.Current.objMatchedReg = objMatchEnum.Current.objReg
             objImportEnum.Current.objMatchedTrx = objMatchEnum.Current
+            mobjHashedMatches = Nothing
         Loop
         'Any of these items that come after the root item in the multi-part set would also be
         'found by blnValidForAutoUpdate() when it checks .objMatchedReg, which would cause them

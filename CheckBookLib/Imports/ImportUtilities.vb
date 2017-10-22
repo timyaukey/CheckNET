@@ -281,6 +281,10 @@ Public Class ImportUtilities
                     End If
                     'Remove blanks here so we don't have to include them in the trx type specs.
                     strPayeeTrimmed = Trim(strPayeeTrimmed)
+                    'In case we trimmed away too much.
+                    If Len(strPayeeTrimmed) < 3 Then
+                        strPayeeTrimmed = mstrTrxPayeeTrimmed
+                    End If
                     'If Number=(number), then the trimmed input is really a check
                     'number and we perform a sanity check to insure it really is a number.
                     vstrNumber = CType(elmTrxType.GetAttribute("Number"), String)
