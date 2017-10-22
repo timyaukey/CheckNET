@@ -555,6 +555,7 @@ Friend Class BankImportForm
     Private Function colFindAllCandidateMatches(ByVal strDescrStartsWith As String, ByVal datDate As DateTime) As List(Of NormalTrx)
         Dim objReg As Register
         Dim intRegIndex As Integer
+        Dim objTrx As Trx
         Dim objNormalTrx As NormalTrx
         Dim colResult As List(Of NormalTrx) = New List(Of NormalTrx)()
         Dim datStartDate As DateTime
@@ -563,13 +564,15 @@ Friend Class BankImportForm
         datEndDate = datDate.AddDays(2.0#)
         For Each objReg In mobjAccount.colRegisters
             For intRegIndex = objReg.lngFindBeforeDate(datStartDate) + 1 To objReg.lngTrxCount
-                objNormalTrx = TryCast(objReg.objTrx(intRegIndex), NormalTrx)
+                objTrx = objReg.objTrx(intRegIndex)
+                If objTrx.datDate > datEndDate Then
+                    Exit For
+                End If
+                objNormalTrx = TryCast(objTrx, NormalTrx)
                 If Not objNormalTrx Is Nothing Then
-                    If objNormalTrx.datDate >= datStartDate And objNormalTrx.datDate <= datEndDate Then
-                        If objNormalTrx.strDescription.StartsWith(strDescrStartsWith) Then
-                            If Not colAllMatchedTrx.Contains(objNormalTrx) Then
-                                colResult.Add(objNormalTrx)
-                            End If
+                    If objNormalTrx.strDescription.StartsWith(strDescrStartsWith) Then
+                        If Not colAllMatchedTrx.Contains(objNormalTrx) Then
+                            colResult.Add(objNormalTrx)
                         End If
                     End If
                 End If

@@ -695,7 +695,7 @@ Public Class Register
         intDescrMatchLen = 10
         lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDaysBefore, datDate)) + 1
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDaysAfter, datDate)
-        strNumber = CStr(lngNumber)
+        strNumber = strComparableCheckNumber(CStr(lngNumber))
         strDescrLC = Left(LCase(strDescription), intDescrMatchLen)
         Do
             If lngIndex > mlngTrxUsed Then
@@ -711,7 +711,7 @@ Public Class Register
                     With objNormalTrx
                         blnMatched = False
                         If lngNumber <> 0 Then
-                            If .strNumber = strNumber Then
+                            If strComparableCheckNumber(.strNumber) = strNumber Then
                                 blnMatched = True
                             End If
                         End If
@@ -740,7 +740,7 @@ Public Class Register
                             End If
                         End If
                         If .curAmount = curAmount Then
-                            If (blnDescrMatches And blnDateMatches) Or (.strNumber = CStr(lngNumber)) Then
+                            If (blnDescrMatches And blnDateMatches) Or (strComparableCheckNumber(.strNumber) = strNumber) Then
                                 colExactMatches.Add(objNormalTrx)
                             End If
                         End If
@@ -751,6 +751,26 @@ Public Class Register
         Loop
 
     End Sub
+
+    ''' <summary>
+    ''' Return the last 4 digits of a check number.
+    ''' Used to create a check number to compare to for import matching,
+    ''' because some bank systems only give the last 4 digits of the check number.
+    ''' </summary>
+    ''' <param name="strInput"></param>
+    ''' <returns></returns>
+    Private Function strComparableCheckNumber(ByVal strInput As String) As String
+        If Val(strInput) = 0 Then
+            Return strInput
+        End If
+        If Len(strInput) < 4 Then
+            Return strInput.PadLeft(4, "0"c)
+        End If
+        If Len(strInput) > 4 Then
+            Return Right(strInput, 4)
+        End If
+        Return strInput
+    End Function
 
     '$Description Find all normal Trx objects which are an exact match to the description
     '   and close to the specified date.
