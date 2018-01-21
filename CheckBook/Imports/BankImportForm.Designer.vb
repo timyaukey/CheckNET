@@ -101,6 +101,8 @@
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.lblReadFrom = New System.Windows.Forms.Label()
+        Me.lblDescriptionFilter = New System.Windows.Forms.Label()
+        Me.txtDescriptionFilter = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'chkAllowManualBatchNew
@@ -528,12 +530,30 @@
         Me.lblReadFrom.TabIndex = 0
         Me.lblReadFrom.Text = "(read from source file)"
         '
+        'lblDescriptionFilter
+        '
+        Me.lblDescriptionFilter.AutoSize = True
+        Me.lblDescriptionFilter.Location = New System.Drawing.Point(327, 25)
+        Me.lblDescriptionFilter.Name = "lblDescriptionFilter"
+        Me.lblDescriptionFilter.Size = New System.Drawing.Size(90, 14)
+        Me.lblDescriptionFilter.TabIndex = 22
+        Me.lblDescriptionFilter.Text = "Description Filter:"
+        '
+        'txtDescriptionFilter
+        '
+        Me.txtDescriptionFilter.Location = New System.Drawing.Point(423, 20)
+        Me.txtDescriptionFilter.Name = "txtDescriptionFilter"
+        Me.txtDescriptionFilter.Size = New System.Drawing.Size(206, 20)
+        Me.txtDescriptionFilter.TabIndex = 23
+        '
         'BankImportForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(1099, 548)
+        Me.Controls.Add(Me.txtDescriptionFilter)
+        Me.Controls.Add(Me.lblDescriptionFilter)
         Me.Controls.Add(Me.chkAllowManualBatchNew)
         Me.Controls.Add(Me.cboDefaultCategory)
         Me.Controls.Add(Me.cmdBatchNew)
@@ -568,6 +588,7 @@
         Me.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds
         Me.Text = "Import Transactions From Bank"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -575,5 +596,7 @@
     Friend WithEvents _lvwMatches_CH_Gen As ColumnHeader
     Friend WithEvents _lvwMatches_CH_Imported As ColumnHeader
     Friend WithEvents _lvwMatches_CH_DueDate As ColumnHeader
+    Friend WithEvents lblDescriptionFilter As Label
+    Friend WithEvents txtDescriptionFilter As TextBox
 #End Region
 End Class

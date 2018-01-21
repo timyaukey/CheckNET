@@ -13,6 +13,7 @@ Friend Class BankImportForm
     Private mobjTrxReader As ITrxReader
     Private mblnIgnoreItemCheckedEvents As Boolean
     Private mobjHashedMatches As HashSet(Of NormalTrx)
+    Private mblnTrapKeyPress As Boolean
 
     Private Enum ImportStatus
         'Have not decided what to do with item yet.
@@ -981,9 +982,16 @@ Friend Class BankImportForm
                 intOldSelectedIndex = intSelectedItemIndex()
             End If
             mblnIgnoreItemCheckedEvents = True
+            Dim strDescriptionFilter As String = txtDescriptionFilter.Text.TrimEnd()
             lvwTrx.Items.Clear()
             For intIndex = 1 To mintItems
-                If maudtItem(intIndex).lngStatus = ImportStatus.mlngIMPSTS_UNRESOLVED Or blnShowCompleted Then
+                Dim blnMatchesFilter As Boolean
+                If strDescriptionFilter = "" Then
+                    blnMatchesFilter = True
+                Else
+                    blnMatchesFilter = maudtItem(intIndex).objImportedTrx.strDescription.Contains(strDescriptionFilter)
+                End If
+                If (maudtItem(intIndex).lngStatus = ImportStatus.mlngIMPSTS_UNRESOLVED Or blnShowCompleted) And blnMatchesFilter Then
                     blnMatchImport(intIndex)
                     objNewItem = objAddToImportList(intIndex)
                     If intIndex = intOldSelectedIndex Then
@@ -1073,34 +1081,36 @@ Friend Class BankImportForm
     End Sub
 
     Private Sub BankImportForm_KeyPress(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.KeyPressEventArgs) Handles MyBase.KeyPress
-        Dim KeyAscii As Integer = Asc(eventArgs.KeyChar)
-        Try
-            If KeyAscii >= 32 And KeyAscii <= 126 Then
-                mstrImportSearchText = mstrImportSearchText & Chr(KeyAscii)
-                ShowSearchFor()
-                CancelKeyPress(eventArgs)
-                Return
-            ElseIf KeyAscii = 3 Then  '^C (clear search string)
-                mstrImportSearchText = ""
-                ShowSearchFor()
-                CancelKeyPress(eventArgs)
-                Return
-            ElseIf KeyAscii = 8 Then  'Backspace (delete last char from search string)
-                If Len(mstrImportSearchText) > 0 Then
-                    mstrImportSearchText = VB.Left(mstrImportSearchText, Len(mstrImportSearchText) - 1)
+        If mblnTrapKeyPress Then
+            Dim KeyAscii As Integer = Asc(eventArgs.KeyChar)
+            Try
+                If KeyAscii >= 32 And KeyAscii <= 126 Then
+                    mstrImportSearchText = mstrImportSearchText & Chr(KeyAscii)
+                    ShowSearchFor()
+                    CancelKeyPress(eventArgs)
+                    Return
+                ElseIf KeyAscii = 3 Then  '^C (clear search string)
+                    mstrImportSearchText = ""
+                    ShowSearchFor()
+                    CancelKeyPress(eventArgs)
+                    Return
+                ElseIf KeyAscii = 8 Then  'Backspace (delete last char from search string)
+                    If Len(mstrImportSearchText) > 0 Then
+                        mstrImportSearchText = VB.Left(mstrImportSearchText, Len(mstrImportSearchText) - 1)
+                    End If
+                    ShowSearchFor()
+                    CancelKeyPress(eventArgs)
+                    Return
+                ElseIf KeyAscii = 19 Then  '^S (search for search string)
+                    FindMatchingImport()
+                    CancelKeyPress(eventArgs)
+                    Return
                 End If
-                ShowSearchFor()
-                CancelKeyPress(eventArgs)
-                Return
-            ElseIf KeyAscii = 19 Then  '^S (search for search string)
-                FindMatchingImport()
-                CancelKeyPress(eventArgs)
-                Return
-            End If
 
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
+            Catch ex As Exception
+                gTopException(ex)
+            End Try
+        End If
     End Sub
 
     Private Sub CancelKeyPress(eventArgs As KeyPressEventArgs)
@@ -1149,6 +1159,7 @@ Friend Class BankImportForm
     Private Sub BankImportForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Me.Width = 1115
         Me.Height = 587
+        mblnTrapKeyPress = True
     End Sub
 
     Private Sub lvwTrx_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles lvwTrx.Click
@@ -1552,5 +1563,13 @@ Friend Class BankImportForm
         mblnIgnoreItemCheckedEvents = True
         objItem.Checked = blnChecked
         mblnIgnoreItemCheckedEvents = blnSaveFlag
+    End Sub
+
+    Private Sub txtDescriptionFilter_GotFocus(sender As Object, e As EventArgs) Handles txtDescriptionFilter.GotFocus
+        mblnTrapKeyPress = False
+    End Sub
+
+    Private Sub txtDescriptionFilter_LostFocus(sender As Object, e As EventArgs) Handles txtDescriptionFilter.LostFocus
+        mblnTrapKeyPress = True
     End Sub
 End Class
