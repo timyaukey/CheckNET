@@ -982,14 +982,14 @@ Friend Class BankImportForm
                 intOldSelectedIndex = intSelectedItemIndex()
             End If
             mblnIgnoreItemCheckedEvents = True
-            Dim strDescriptionFilter As String = txtDescriptionFilter.Text.TrimEnd()
+            Dim strDescriptionFilter As String = txtDescriptionFilter.Text.TrimEnd().ToLower()
             lvwTrx.Items.Clear()
             For intIndex = 1 To mintItems
                 Dim blnMatchesFilter As Boolean
                 If strDescriptionFilter = "" Then
                     blnMatchesFilter = True
                 Else
-                    blnMatchesFilter = maudtItem(intIndex).objImportedTrx.strDescription.Contains(strDescriptionFilter)
+                    blnMatchesFilter = maudtItem(intIndex).objImportedTrx.strDescription.ToLower().Contains(strDescriptionFilter)
                 End If
                 If (maudtItem(intIndex).lngStatus = ImportStatus.mlngIMPSTS_UNRESOLVED Or blnShowCompleted) And blnMatchesFilter Then
                     blnMatchImport(intIndex)
@@ -1085,7 +1085,7 @@ Friend Class BankImportForm
             Dim KeyAscii As Integer = Asc(eventArgs.KeyChar)
             Try
                 If KeyAscii >= 32 And KeyAscii <= 126 Then
-                    mstrImportSearchText = mstrImportSearchText & Chr(KeyAscii)
+                    mstrImportSearchText = mstrImportSearchText & Char.ToLower(Chr(KeyAscii))
                     ShowSearchFor()
                     CancelKeyPress(eventArgs)
                     Return
@@ -1134,7 +1134,7 @@ Friend Class BankImportForm
             End If
             intItemArrayIndex = CShort(lvwTrx.Items.Item(intListItemIndex).SubItems(mintITMCOL_INDEX).Text)
             With maudtItem(intItemArrayIndex).objImportedTrx
-                If StrComp(.strNumber, mstrImportSearchText, CompareMethod.Text) = 0 Or gstrFormatCurrency(.curAmount) = mstrImportSearchText Or InStr(1, .strDescription, mstrImportSearchText, CompareMethod.Text) > 0 Then
+                If StrComp(.strNumber.ToLower(), mstrImportSearchText, CompareMethod.Text) = 0 Or gstrFormatCurrency(.curAmount) = mstrImportSearchText Or InStr(1, .strDescription.ToLower(), mstrImportSearchText, CompareMethod.Text) > 0 Then
                     lvwTrx.SelectedItems.Clear()
                     lvwTrx.FocusedItem = lvwTrx.Items.Item(intListItemIndex)
                     lvwTrx.FocusedItem.Selected = True
@@ -1571,5 +1571,12 @@ Friend Class BankImportForm
 
     Private Sub txtDescriptionFilter_LostFocus(sender As Object, e As EventArgs) Handles txtDescriptionFilter.LostFocus
         mblnTrapKeyPress = True
+    End Sub
+
+    Private Sub cmdSelectAll_Click(sender As Object, e As EventArgs) Handles cmdSelectAll.Click
+        Dim itm As ListViewItem
+        For Each itm In lvwTrx.Items
+            itm.Checked = Not itm.Checked
+        Next
     End Sub
 End Class

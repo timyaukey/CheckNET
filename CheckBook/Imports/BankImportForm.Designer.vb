@@ -103,6 +103,7 @@
         Me.lblReadFrom = New System.Windows.Forms.Label()
         Me.lblDescriptionFilter = New System.Windows.Forms.Label()
         Me.txtDescriptionFilter = New System.Windows.Forms.TextBox()
+        Me.cmdSelectAll = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'chkAllowManualBatchNew
@@ -116,7 +117,7 @@
         Me.chkAllowManualBatchNew.Name = "chkAllowManualBatchNew"
         Me.chkAllowManualBatchNew.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkAllowManualBatchNew.Size = New System.Drawing.Size(281, 16)
-        Me.chkAllowManualBatchNew.TabIndex = 21
+        Me.chkAllowManualBatchNew.TabIndex = 19
         Me.chkAllowManualBatchNew.Text = "Allow manual additions to batch new selections"
         Me.chkAllowManualBatchNew.UseVisualStyleBackColor = False
         '
@@ -132,7 +133,7 @@
         Me.cboDefaultCategory.Name = "cboDefaultCategory"
         Me.cboDefaultCategory.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboDefaultCategory.Size = New System.Drawing.Size(176, 22)
-        Me.cboDefaultCategory.TabIndex = 19
+        Me.cboDefaultCategory.TabIndex = 21
         '
         'cmdBatchNew
         '
@@ -145,7 +146,7 @@
         Me.cmdBatchNew.Name = "cmdBatchNew"
         Me.cmdBatchNew.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdBatchNew.Size = New System.Drawing.Size(120, 23)
-        Me.cmdBatchNew.TabIndex = 12
+        Me.cmdBatchNew.TabIndex = 15
         Me.cmdBatchNew.Text = "Do Batch New"
         Me.cmdBatchNew.UseVisualStyleBackColor = False
         '
@@ -160,7 +161,7 @@
         Me.cmdFindUpdates.Name = "cmdFindUpdates"
         Me.cmdFindUpdates.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdFindUpdates.Size = New System.Drawing.Size(120, 23)
-        Me.cmdFindUpdates.TabIndex = 14
+        Me.cmdFindUpdates.TabIndex = 17
         Me.cmdFindUpdates.Text = "Find Batch Updates"
         Me.cmdFindUpdates.UseVisualStyleBackColor = False
         '
@@ -175,7 +176,7 @@
         Me.cmdBatchUpdates.Name = "cmdBatchUpdates"
         Me.cmdBatchUpdates.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdBatchUpdates.Size = New System.Drawing.Size(120, 23)
-        Me.cmdBatchUpdates.TabIndex = 15
+        Me.cmdBatchUpdates.TabIndex = 18
         Me.cmdBatchUpdates.Text = "Do Batch Updates"
         Me.cmdBatchUpdates.UseVisualStyleBackColor = False
         '
@@ -190,7 +191,7 @@
         Me.cmdFindNew.Name = "cmdFindNew"
         Me.cmdFindNew.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdFindNew.Size = New System.Drawing.Size(120, 23)
-        Me.cmdFindNew.TabIndex = 11
+        Me.cmdFindNew.TabIndex = 14
         Me.cmdFindNew.Text = "Find Batch New"
         Me.cmdFindNew.UseVisualStyleBackColor = False
         '
@@ -200,7 +201,7 @@
         Me.chkLooseMatch.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLooseMatch.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLooseMatch.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLooseMatch.Location = New System.Drawing.Point(82, 25)
+        Me.chkLooseMatch.Location = New System.Drawing.Point(96, 25)
         Me.chkLooseMatch.Name = "chkLooseMatch"
         Me.chkLooseMatch.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLooseMatch.Size = New System.Drawing.Size(93, 16)
@@ -214,11 +215,11 @@
         Me.cmdRefreshItems.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdRefreshItems.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdRefreshItems.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdRefreshItems.Location = New System.Drawing.Point(8, 22)
+        Me.cmdRefreshItems.Location = New System.Drawing.Point(620, 23)
         Me.cmdRefreshItems.Name = "cmdRefreshItems"
         Me.cmdRefreshItems.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdRefreshItems.Size = New System.Drawing.Size(64, 18)
-        Me.cmdRefreshItems.TabIndex = 1
+        Me.cmdRefreshItems.TabIndex = 6
         Me.cmdRefreshItems.Text = "Refresh"
         Me.cmdRefreshItems.UseVisualStyleBackColor = False
         '
@@ -228,7 +229,7 @@
         Me.chkHideCompleted.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkHideCompleted.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkHideCompleted.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkHideCompleted.Location = New System.Drawing.Point(184, 25)
+        Me.chkHideCompleted.Location = New System.Drawing.Point(195, 25)
         Me.chkHideCompleted.Name = "chkHideCompleted"
         Me.chkHideCompleted.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkHideCompleted.Size = New System.Drawing.Size(137, 16)
@@ -247,7 +248,7 @@
         Me.cmdClose.Name = "cmdClose"
         Me.cmdClose.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdClose.Size = New System.Drawing.Size(79, 23)
-        Me.cmdClose.TabIndex = 18
+        Me.cmdClose.TabIndex = 24
         Me.cmdClose.Text = "Close"
         Me.cmdClose.UseVisualStyleBackColor = False
         '
@@ -262,7 +263,7 @@
         Me.cmdUpdateExisting.Name = "cmdUpdateExisting"
         Me.cmdUpdateExisting.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdUpdateExisting.Size = New System.Drawing.Size(104, 23)
-        Me.cmdUpdateExisting.TabIndex = 13
+        Me.cmdUpdateExisting.TabIndex = 16
         Me.cmdUpdateExisting.Text = "Single Update"
         Me.cmdUpdateExisting.UseVisualStyleBackColor = False
         '
@@ -281,7 +282,7 @@
         Me.lvwMatches.Location = New System.Drawing.Point(5, 318)
         Me.lvwMatches.Name = "lvwMatches"
         Me.lvwMatches.Size = New System.Drawing.Size(1088, 154)
-        Me.lvwMatches.TabIndex = 9
+        Me.lvwMatches.TabIndex = 12
         Me.lvwMatches.UseCompatibleStateImageBehavior = False
         Me.lvwMatches.View = System.Windows.Forms.View.Details
         '
@@ -351,7 +352,7 @@
         Me.cmdRepeatSearch.Name = "cmdRepeatSearch"
         Me.cmdRepeatSearch.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdRepeatSearch.Size = New System.Drawing.Size(104, 23)
-        Me.cmdRepeatSearch.TabIndex = 8
+        Me.cmdRepeatSearch.TabIndex = 11
         Me.cmdRepeatSearch.Text = "Repeat Search"
         Me.cmdRepeatSearch.UseVisualStyleBackColor = False
         '
@@ -366,7 +367,7 @@
         Me.cmdCreateNew.Name = "cmdCreateNew"
         Me.cmdCreateNew.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdCreateNew.Size = New System.Drawing.Size(104, 23)
-        Me.cmdCreateNew.TabIndex = 10
+        Me.cmdCreateNew.TabIndex = 13
         Me.cmdCreateNew.Text = "Single New"
         Me.cmdCreateNew.UseVisualStyleBackColor = False
         '
@@ -382,7 +383,7 @@
         Me.cboRegister.Name = "cboRegister"
         Me.cboRegister.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboRegister.Size = New System.Drawing.Size(176, 22)
-        Me.cboRegister.TabIndex = 17
+        Me.cboRegister.TabIndex = 23
         '
         'lvwTrx
         '
@@ -400,7 +401,7 @@
         Me.lvwTrx.Name = "lvwTrx"
         Me.lvwTrx.ShowItemToolTips = True
         Me.lvwTrx.Size = New System.Drawing.Size(1088, 250)
-        Me.lvwTrx.TabIndex = 5
+        Me.lvwTrx.TabIndex = 8
         Me.lvwTrx.UseCompatibleStateImageBehavior = False
         Me.lvwTrx.View = System.Windows.Forms.View.Details
         '
@@ -470,7 +471,7 @@
         Me.lblSearchFor.Name = "lblSearchFor"
         Me.lblSearchFor.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblSearchFor.Size = New System.Drawing.Size(425, 15)
-        Me.lblSearchFor.TabIndex = 7
+        Me.lblSearchFor.TabIndex = 10
         Me.lblSearchFor.Text = "(search for)"
         Me.lblSearchFor.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
@@ -486,7 +487,7 @@
         Me.lblDoubleClickHint.Name = "lblDoubleClickHint"
         Me.lblDoubleClickHint.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblDoubleClickHint.Size = New System.Drawing.Size(312, 52)
-        Me.lblDoubleClickHint.TabIndex = 4
+        Me.lblDoubleClickHint.TabIndex = 7
         Me.lblDoubleClickHint.Text = "Double-click a row to create a quick transaction from it"
         Me.lblDoubleClickHint.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
@@ -500,7 +501,7 @@
         Me.Label2.Name = "Label2"
         Me.Label2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label2.Size = New System.Drawing.Size(143, 15)
-        Me.Label2.TabIndex = 6
+        Me.Label2.TabIndex = 9
         Me.Label2.Text = "Matches To Current Item:"
         '
         'Label1
@@ -514,7 +515,7 @@
         Me.Label1.Name = "Label1"
         Me.Label1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label1.Size = New System.Drawing.Size(101, 15)
-        Me.Label1.TabIndex = 16
+        Me.Label1.TabIndex = 22
         Me.Label1.Text = "Import Into Register:"
         '
         'lblReadFrom
@@ -533,18 +534,32 @@
         'lblDescriptionFilter
         '
         Me.lblDescriptionFilter.AutoSize = True
-        Me.lblDescriptionFilter.Location = New System.Drawing.Point(327, 25)
+        Me.lblDescriptionFilter.Location = New System.Drawing.Point(352, 25)
         Me.lblDescriptionFilter.Name = "lblDescriptionFilter"
         Me.lblDescriptionFilter.Size = New System.Drawing.Size(90, 14)
-        Me.lblDescriptionFilter.TabIndex = 22
+        Me.lblDescriptionFilter.TabIndex = 4
         Me.lblDescriptionFilter.Text = "Description Filter:"
         '
         'txtDescriptionFilter
         '
-        Me.txtDescriptionFilter.Location = New System.Drawing.Point(423, 20)
+        Me.txtDescriptionFilter.Location = New System.Drawing.Point(448, 22)
         Me.txtDescriptionFilter.Name = "txtDescriptionFilter"
-        Me.txtDescriptionFilter.Size = New System.Drawing.Size(206, 20)
-        Me.txtDescriptionFilter.TabIndex = 23
+        Me.txtDescriptionFilter.Size = New System.Drawing.Size(155, 20)
+        Me.txtDescriptionFilter.TabIndex = 5
+        '
+        'cmdSelectAll
+        '
+        Me.cmdSelectAll.BackColor = System.Drawing.SystemColors.Control
+        Me.cmdSelectAll.Cursor = System.Windows.Forms.Cursors.Default
+        Me.cmdSelectAll.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdSelectAll.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.cmdSelectAll.Location = New System.Drawing.Point(5, 23)
+        Me.cmdSelectAll.Name = "cmdSelectAll"
+        Me.cmdSelectAll.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cmdSelectAll.Size = New System.Drawing.Size(64, 18)
+        Me.cmdSelectAll.TabIndex = 1
+        Me.cmdSelectAll.Text = "Select All"
+        Me.cmdSelectAll.UseVisualStyleBackColor = False
         '
         'BankImportForm
         '
@@ -552,6 +567,7 @@
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(1099, 548)
+        Me.Controls.Add(Me.cmdSelectAll)
         Me.Controls.Add(Me.txtDescriptionFilter)
         Me.Controls.Add(Me.lblDescriptionFilter)
         Me.Controls.Add(Me.chkAllowManualBatchNew)
@@ -598,5 +614,6 @@
     Friend WithEvents _lvwMatches_CH_DueDate As ColumnHeader
     Friend WithEvents lblDescriptionFilter As Label
     Friend WithEvents txtDescriptionFilter As TextBox
+    Public WithEvents cmdSelectAll As Button
 #End Region
 End Class
