@@ -41,28 +41,30 @@
 	'It can be modified using the Windows Form Designer.
 	'Do not modify it using the code editor.
 	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
+        Me.components = New System.ComponentModel.Container()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.cmdCancel = New System.Windows.Forms.Button
-        Me.cmdLater = New System.Windows.Forms.Button
-        Me.cmdFinish = New System.Windows.Forms.Button
-        Me.txtEndingBalance = New System.Windows.Forms.TextBox
-        Me.txtClearedBalance = New System.Windows.Forms.TextBox
-        Me.txtStartingBalance = New System.Windows.Forms.TextBox
-        Me.lvwTrx = New System.Windows.Forms.ListView
-        Me._lvwTrx_ColumnHeader_1 = New System.Windows.Forms.ColumnHeader
-        Me._lvwTrx_ColumnHeader_2 = New System.Windows.Forms.ColumnHeader
-        Me._lvwTrx_ColumnHeader_3 = New System.Windows.Forms.ColumnHeader
-        Me._lvwTrx_ColumnHeader_4 = New System.Windows.Forms.ColumnHeader
-        Me._lvwTrx_ColumnHeader_5 = New System.Windows.Forms.ColumnHeader
-        Me._lvwTrx_ColumnHeader_6 = New System.Windows.Forms.ColumnHeader
-        Me._lvwTrx_ColumnHeader_7 = New System.Windows.Forms.ColumnHeader
-        Me._lvwTrx_ColumnHeader_8 = New System.Windows.Forms.ColumnHeader
-        Me._lvwTrx_ColumnHeader_9 = New System.Windows.Forms.ColumnHeader
-        Me._lvwTrx_ColumnHeader_10 = New System.Windows.Forms.ColumnHeader
-        Me.Label3 = New System.Windows.Forms.Label
-        Me.Label2 = New System.Windows.Forms.Label
-        Me.Label1 = New System.Windows.Forms.Label
+        Me.cmdCancel = New System.Windows.Forms.Button()
+        Me.cmdLater = New System.Windows.Forms.Button()
+        Me.cmdFinish = New System.Windows.Forms.Button()
+        Me.txtEndingBalance = New System.Windows.Forms.TextBox()
+        Me.txtClearedBalance = New System.Windows.Forms.TextBox()
+        Me.txtStartingBalance = New System.Windows.Forms.TextBox()
+        Me.lvwTrx = New System.Windows.Forms.ListView()
+        Me._lvwTrx_ColumnHeader_1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwTrx_ColumnHeader_2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwTrx_ColumnHeader_3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwTrx_ColumnHeader_4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwTrx_ColumnHeader_5 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwTrx_ColumnHeader_6 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwTrx_ColumnHeader_7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwTrx_ColumnHeader_8 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwTrx_ColumnHeader_9 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me._lvwTrx_ColumnHeader_10 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.btnSelectThroughDate = New System.Windows.Forms.Button()
+        Me.txtSelectThroughDate = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'cmdCancel
@@ -75,7 +77,7 @@
         Me.cmdCancel.Name = "cmdCancel"
         Me.cmdCancel.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdCancel.Size = New System.Drawing.Size(114, 23)
-        Me.cmdCancel.TabIndex = 9
+        Me.cmdCancel.TabIndex = 11
         Me.cmdCancel.Text = "Cancel"
         Me.cmdCancel.UseVisualStyleBackColor = False
         '
@@ -89,7 +91,7 @@
         Me.cmdLater.Name = "cmdLater"
         Me.cmdLater.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdLater.Size = New System.Drawing.Size(114, 23)
-        Me.cmdLater.TabIndex = 8
+        Me.cmdLater.TabIndex = 10
         Me.cmdLater.Text = "Finish Later"
         Me.cmdLater.UseVisualStyleBackColor = False
         '
@@ -103,7 +105,7 @@
         Me.cmdFinish.Name = "cmdFinish"
         Me.cmdFinish.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdFinish.Size = New System.Drawing.Size(114, 23)
-        Me.cmdFinish.TabIndex = 7
+        Me.cmdFinish.TabIndex = 9
         Me.cmdFinish.Text = "Finish"
         Me.cmdFinish.UseVisualStyleBackColor = False
         '
@@ -118,7 +120,7 @@
         Me.txtEndingBalance.MaxLength = 0
         Me.txtEndingBalance.Name = "txtEndingBalance"
         Me.txtEndingBalance.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtEndingBalance.Size = New System.Drawing.Size(90, 20)
+        Me.txtEndingBalance.Size = New System.Drawing.Size(80, 20)
         Me.txtEndingBalance.TabIndex = 6
         Me.txtEndingBalance.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -134,7 +136,7 @@
         Me.txtClearedBalance.Name = "txtClearedBalance"
         Me.txtClearedBalance.ReadOnly = True
         Me.txtClearedBalance.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtClearedBalance.Size = New System.Drawing.Size(90, 20)
+        Me.txtClearedBalance.Size = New System.Drawing.Size(80, 20)
         Me.txtClearedBalance.TabIndex = 4
         Me.txtClearedBalance.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -150,7 +152,7 @@
         Me.txtStartingBalance.Name = "txtStartingBalance"
         Me.txtStartingBalance.ReadOnly = True
         Me.txtStartingBalance.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtStartingBalance.Size = New System.Drawing.Size(90, 20)
+        Me.txtStartingBalance.Size = New System.Drawing.Size(80, 20)
         Me.txtStartingBalance.TabIndex = 2
         Me.txtStartingBalance.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -260,12 +262,43 @@
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Starting Balance:"
         '
+        'btnSelectThroughDate
+        '
+        Me.btnSelectThroughDate.BackColor = System.Drawing.SystemColors.Control
+        Me.btnSelectThroughDate.Cursor = System.Windows.Forms.Cursors.Default
+        Me.btnSelectThroughDate.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSelectThroughDate.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnSelectThroughDate.Location = New System.Drawing.Point(234, 442)
+        Me.btnSelectThroughDate.Name = "btnSelectThroughDate"
+        Me.btnSelectThroughDate.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.btnSelectThroughDate.Size = New System.Drawing.Size(129, 23)
+        Me.btnSelectThroughDate.TabIndex = 7
+        Me.btnSelectThroughDate.Text = "Select Through Date"
+        Me.btnSelectThroughDate.UseVisualStyleBackColor = False
+        '
+        'txtSelectThroughDate
+        '
+        Me.txtSelectThroughDate.AcceptsReturn = True
+        Me.txtSelectThroughDate.BackColor = System.Drawing.SystemColors.Window
+        Me.txtSelectThroughDate.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtSelectThroughDate.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSelectThroughDate.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtSelectThroughDate.Location = New System.Drawing.Point(369, 443)
+        Me.txtSelectThroughDate.MaxLength = 0
+        Me.txtSelectThroughDate.Name = "txtSelectThroughDate"
+        Me.txtSelectThroughDate.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtSelectThroughDate.Size = New System.Drawing.Size(70, 20)
+        Me.txtSelectThroughDate.TabIndex = 8
+        Me.txtSelectThroughDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
         'ReconcileForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(614, 532)
+        Me.Controls.Add(Me.txtSelectThroughDate)
+        Me.Controls.Add(Me.btnSelectThroughDate)
         Me.Controls.Add(Me.cmdCancel)
         Me.Controls.Add(Me.cmdLater)
         Me.Controls.Add(Me.cmdFinish)
@@ -291,5 +324,8 @@
         Me.PerformLayout()
 
     End Sub
-#End Region 
+
+    Public WithEvents btnSelectThroughDate As Button
+    Public WithEvents txtSelectThroughDate As TextBox
+#End Region
 End Class

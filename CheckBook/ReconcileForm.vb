@@ -20,6 +20,8 @@ Friend Class ReconcileForm
         Dim lngIndex As Integer
         'True iff Trx is selected in this reconciliation.
         Dim blnSelected As Boolean
+        Dim objLvwItem As ListViewItem
+        Dim datBankDate As DateTime?
     End Structure
 
     Private maudtTrx() As ReconTrx
@@ -94,7 +96,7 @@ Friend Class ReconcileForm
                                     curSelectedTotal = curSelectedTotal + objTrx.curAmount
                                 End If
                             End With
-                            DisplayTrx(DirectCast(objTrx, NormalTrx))
+                            DisplayTrx(DirectCast(objTrx, NormalTrx), mlngTrxUsed)
                         End If
                     End If
                 End With
@@ -108,7 +110,7 @@ Friend Class ReconcileForm
 
     End Sub
 
-    Private Sub DisplayTrx(ByVal objTrx As NormalTrx)
+    Private Sub DisplayTrx(ByVal objTrx As NormalTrx, ByVal lngTrxIndex As Integer)
         Dim objItem As System.Windows.Forms.ListViewItem
         Dim intPipe2 As Integer
         Dim datBankDate As DateTime
@@ -117,6 +119,7 @@ Friend Class ReconcileForm
         Dim strSortableNumber As String
 
         objItem = gobjListViewAdd(lvwTrx)
+        maudtTrx(lngTrxIndex).objLvwItem = objItem
         With objItem
             AddSubItem(objItem, mintCOL_DATE, gstrFormatDate(objTrx.datDate))
             AddSubItem(objItem, mintCOL_NUMBER, objTrx.strNumber)
@@ -125,10 +128,12 @@ Friend Class ReconcileForm
             AddSubItem(objItem, mintCOL_IMPORTED, CStr(IIf(objTrx.strImportKey = "", "", "Y")))
             intPipe2 = InStr(2, objTrx.strImportKey, "|")
             strSortableBankDate = ""
+            maudtTrx(lngTrxIndex).datBankDate = Nothing
             If intPipe2 > 0 Then
                 strBankDate = Mid(objTrx.strImportKey, 2, intPipe2 - 2)
                 If DateTime.TryParse(strBankDate, datBankDate) Then
                     strSortableBankDate = gstrFormatDate(datBankDate)
+                    maudtTrx(lngTrxIndex).datBankDate = datBankDate
                 End If
             Else
                 strBankDate = ""
@@ -281,5 +286,38 @@ Friend Class ReconcileForm
 
     Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCancel.Click
         Me.Close()
+    End Sub
+
+    Private Sub btnSelectThroughDate_Click(sender As Object, e As EventArgs) Handles btnSelectThroughDate.Click
+        Dim lngIndex As Integer
+        Dim datCutoff As DateTime
+        Dim blnSelect As Boolean
+        Dim intSelectCount As Integer
+
+        If Not IsDate(txtSelectThroughDate.Text) Then
+            MsgBox("Invalid select-through date", MsgBoxStyle.Exclamation)
+            Return
+        End If
+        datCutoff = CDate(txtSelectThroughDate.Text)
+
+        intSelectCount = 0
+        For lngIndex = 1 To mlngTrxUsed
+            With maudtTrx(lngIndex)
+                With maudtTrx(lngIndex)
+                    If .datBankDate.HasValue Then
+                        blnSelect = (.datBankDate.Value <= datCutoff)
+                    Else
+                        blnSelect = False
+                    End If
+                    If blnSelect Then
+                        intSelectCount = intSelectCount + 1
+                    End If
+                    If .objLvwItem.Checked <> blnSelect Then
+                        .objLvwItem.Checked = blnSelect
+                    End If
+                End With
+            End With
+        Next
+        MsgBox("Selected " & intSelectCount & " transactions to clear.", MsgBoxStyle.Information)
     End Sub
 End Class
