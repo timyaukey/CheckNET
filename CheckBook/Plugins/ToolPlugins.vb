@@ -16,6 +16,7 @@ Public Class ToolPlugins
         Yield New AdjustBudgetsToCashflowPlugin(hostUI_)
         Yield New CategoryReportPlugin(hostUI_)
         Yield New PersonalBusinessPlugin(hostUI_)
+        Yield New CombinedBalancePlugin(hostUI_)
         Yield New TrialBalancePlugIn(hostUI_)
     End Function
 End Class

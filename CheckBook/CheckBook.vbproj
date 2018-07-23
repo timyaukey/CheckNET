@@ -152,6 +152,7 @@
     </Compile>
     <Compile Include="Plugins\AdjustBudgetsToCashflowPlugin.vb" />
     <Compile Include="Plugins\CategoryReportPlugin.vb" />
+    <Compile Include="Plugins\CombinedBalancePlugin.vb" />
     <Compile Include="Plugins\FindLiveBudgetsPlugin.vb" />
     <Compile Include="Plugins\PersonalBusinessPlugin.vb" />
     <Compile Include="Plugins\ReconcilePlugin.vb" />
