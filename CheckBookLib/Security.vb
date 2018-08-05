@@ -7,18 +7,22 @@ Public Class Security
     Private mdomSecurity As VB6XmlDocument
     Private melmUser As VB6XmlElement
     Private mstrLogin As String
+    Private mblnNoFile As Boolean
 
     Private Sub Init()
         'UPGRADE_NOTE: Object melmUser may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         melmUser = Nothing
         mstrLogin = ""
+        mblnNoFile = False
     End Sub
 
     Public Sub Load(ByVal strFileName As String)
         Init()
         MakePath(strFileName)
         If Dir(mstrFilePath) = "" Then
-            gRaiseError("Could not find security file " & mstrFilePath)
+            mblnNoFile = True
+            mstrLogin = "anonymous"
+            Return
         End If
         mdomSecurity = gdomLoadFile(mstrFilePath)
         If mdomSecurity.DocumentElement.Name <> "security" Then
@@ -48,6 +52,12 @@ Public Class Security
         End Get
     End Property
 
+    Public ReadOnly Property blnNoFile() As Boolean
+        Get
+            Return mblnNoFile
+        End Get
+    End Property
+
     Public ReadOnly Property blnHaveUser() As Boolean
         Get
             If melmUser Is Nothing Then
@@ -66,7 +76,7 @@ Public Class Security
 
     Public ReadOnly Property blnIsAdministrator() As Boolean
         Get
-            blnIsAdministrator = (mstrLogin = "admin") Or blnUserBoolean("isadmin")
+            blnIsAdministrator = (mstrLogin = "admin") Or blnUserBoolean("isadmin") Or mblnNoFile
         End Get
     End Property
 

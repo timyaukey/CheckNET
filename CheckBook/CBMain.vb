@@ -85,31 +85,33 @@ Public Module CBMain
             Dim strPassword As String
             Dim frmLogin As LoginForm
 
+            gobjSecurity = New Security
+            gobjSecurity.Load(gobjSecurity.strDefaultFileName)
+            If gobjSecurity.blnNoFile Then
+                Return True
+            End If
+
             strLogin = ""
             strPassword = ""
             frmLogin = New LoginForm
             If Not frmLogin.blnGetCredentials(strLogin, strPassword) Then
-                Exit Function
+                Return False
             End If
 
-            gblnUserAuthenticated = False
-            gobjSecurity = New Security
-            gobjSecurity.Load(gobjSecurity.strDefaultFileName)
             If Not gobjSecurity.blnFindUser(strLogin) Then
                 MsgBox("Invalid login or password")
-                Exit Function
+                Return False
             End If
             If Not gobjSecurity.blnPasswordMatches(strPassword) Then
                 MsgBox("Invalid login or password")
-                Exit Function
+                Return False
             End If
             If Not gobjSecurity.blnUserSignatureIsValid Then
                 MsgBox("User data is invalid")
-                Exit Function
+                Return False
             End If
-            gblnUserAuthenticated = True
 
-            Exit Function
+            Return True
         Catch ex As Exception
             gNestedException(ex)
         End Try

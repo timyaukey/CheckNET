@@ -53,15 +53,20 @@ Friend Class CBMainForm
                 My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build &
                 " [" & LCase(gstrDataPathValue) & "]"
 
-            If gblnDataIsLocked() Then
-                MsgBox("Data files are in use by someone else running this software.")
+            If gblnUnrecognizedArgs() Then
                 frmStartup.Close()
                 Exit Sub
             End If
 
-            If gblnUnrecognizedArgs() Then
-                frmStartup.Close()
-                Exit Sub
+            If Dir(gstrDataPath(), FileAttribute.Directory) = "" Then
+                gCreateStandardFolders()
+                gCreateStandardFiles()
+            Else
+                If gblnDataIsLocked() Then
+                    MsgBox("Data files are in use by someone else running this software.")
+                    frmStartup.Close()
+                    Exit Sub
+                End If
             End If
 
             If strSecurityOption <> "" Then
@@ -70,8 +75,6 @@ Friend Class CBMainForm
                 Exit Sub
             End If
 
-            gCreateStandardFolders()
-            gCreateStandardFiles()
             mobjCompany.LoadGlobalLists()
             gLoadTransTable()
 

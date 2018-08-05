@@ -18,6 +18,9 @@ Public Class CategoryTranslator
     Public Shared ReadOnly strTypeTaxes As String = "TAXES"
 
     Public Shared Function blnIsPersonal(ByVal strValue1 As String) As Boolean
+        If strValue1 = "" Then
+            Return False
+        End If
         Return Char.ToUpper(strValue1(0)) = "C"c
     End Function
 End Class
