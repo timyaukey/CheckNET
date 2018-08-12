@@ -453,6 +453,21 @@ Public Module CBMain
         End Try
     End Sub
 
+    Public Sub gCreateStandardCheckingAccount(ByVal objCompany As Company)
+        Try
+            MsgBox("Creating first checking account...", MsgBoxStyle.Information)
+            Dim objAccount As Account = New Account()
+            objAccount.Init(objCompany)
+            objAccount.intKey = objCompany.intGetUnusedAccountKey()
+            objAccount.lngSubType = Account.SubType.Asset_CheckingAccount
+            objAccount.strFileNameRoot = "Main"
+            objAccount.strTitle = "Checking Account"
+            gCreateAccount(objAccount)
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
+    End Sub
+
     Public Sub gInitPayeeList(ByVal lvwPayees As System.Windows.Forms.ListView)
         With lvwPayees
             .Columns.Clear()

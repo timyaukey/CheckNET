@@ -26,48 +26,33 @@ Friend Class CBMainForm
             mblnCancelStart = True
 
             mobjCompany = gobjInitialize()
+
             frmStartup = New StartupForm
             frmStartup.Show()
             frmStartup.ShowStatus("Initializing")
 
-            LoadPlugins()
-
-            Me.Text = "Willow Creek Checkbook " & My.Application.Info.Version.Major & "." &
-                        My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build &
-                        " [" & LCase(gstrDataPathValue) & "]"
-
             If Dir(gstrDataPath(), FileAttribute.Directory) = "" Then
                 gCreateStandardFolders()
                 gCreateStandardFiles()
-            Else
-                If gblnDataIsLocked() Then
-                    MsgBox("Data files are in use by someone else running this software.")
-                    frmStartup.Close()
-                    Exit Sub
-                End If
+                gCreateStandardCheckingAccount(mobjCompany)
             End If
 
-            mobjCompany.LoadGlobalLists()
-            gLoadTransTable()
+            If gblnDataIsLocked() Then
+                MsgBox("Data files are in use by someone else running this software.")
+                frmStartup.Close()
+                Exit Sub
+            End If
 
             If Not gblnUserAuthenticated() Then
                 frmStartup.Close()
                 Exit Sub
             End If
 
+            mobjCompany.LoadGlobalLists()
+            gLoadTransTable()
+
             'Find all ".act" files.
             strFile = Dir(gstrAccountPath() & "\*.act")
-            If strFile = "" Then
-                MsgBox("Creating first checking account...", MsgBoxStyle.Information)
-                objAccount = New Account()
-                objAccount.Init(mobjCompany)
-                objAccount.intKey = mobjCompany.intGetUnusedAccountKey()
-                objAccount.lngSubType = Account.SubType.Asset_CheckingAccount
-                objAccount.strFileNameRoot = "Main"
-                objAccount.strTitle = "Checking Account"
-                gCreateAccount(objAccount)
-                strFile = Dir(gstrAccountPath() & "\*.act")
-            End If
             While strFile <> ""
                 intFiles = intFiles + 1
                 ReDim Preserve astrFiles(intFiles - 1)
@@ -88,7 +73,7 @@ Friend Class CBMainForm
             mobjCompany.colAccounts.Sort(AddressOf AccountComparer)
 
             'With all Account objects loaded we can add them to the category list.
-            datCutoff = objCompany.datLastReconciled().AddDays(1D)
+            datCutoff = mobjCompany.datLastReconciled().AddDays(1D)
             mobjCompany.LoadCategories()
 
             'Load generated transactions for all of them.
@@ -114,6 +99,12 @@ Friend Class CBMainForm
             Next
 
             frmStartup.ShowStatus("Loading main window")
+
+            LoadPlugins()
+
+            Me.Text = "Willow Creek Checkbook " & My.Application.Info.Version.Major & "." &
+                        My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build &
+                        " [" & LCase(gstrDataPathValue) & "]"
 
             If gobjSecurity.blnNoFile Then
                 mnuEnableUserAccounts.Enabled = True
