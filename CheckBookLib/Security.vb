@@ -6,6 +6,7 @@ Public Class Security
     Private mstrFilePath As String
     Private mdomSecurity As VB6XmlDocument
     Private melmUser As VB6XmlElement
+    Private mstrLoginSaved As String
     Private mstrLogin As String
     Private mblnNoFile As Boolean
 
@@ -15,6 +16,12 @@ Public Class Security
         mstrLogin = ""
         mblnNoFile = False
     End Sub
+
+    Public ReadOnly Property strAdminLogin() As String
+        Get
+            Return "admin"
+        End Get
+    End Property
 
     Public Sub Load(ByVal strFileName As String)
         Init()
@@ -136,6 +143,12 @@ Public Class Security
 
     Public Sub SetPassword(ByVal strPassword As String)
         melmUser.SetAttribute("passwordhash", strMakeHash(strPassword))
+        Dim strSignature As String = strCreateUserSignature(melmUser)
+        melmUser.SetAttribute("signhash", strSignature)
+    End Sub
+
+    Public Sub DeleteUser()
+        mdomSecurity.DocumentElement.RemoveChild(melmUser)
     End Sub
 
     Private Function blnUserBoolean(ByVal strAttrib As String) As Boolean
@@ -173,4 +186,12 @@ Public Class Security
         Loop
         strMakeHash = Hex(lngHash)
     End Function
+
+    Public Sub SaveUserContext()
+        mstrLoginSaved = mstrLogin
+    End Sub
+
+    Public Sub RestoreUserContext()
+        blnFindUser(mstrLoginSaved)
+    End Sub
 End Class

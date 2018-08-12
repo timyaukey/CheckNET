@@ -55,6 +55,13 @@
         Me.mnuListCategories = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuListBudgets = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuListTrxTypes = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuUserAccounts = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuEnableUserAccounts = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuAddUserAccount = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuChangeCurrentPassword = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuChangeOtherPassword = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuDeleteUserAccount = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuRepairUserAccounts = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuWindows = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuMain.SuspendLayout()
         Me.SuspendLayout()
@@ -143,7 +150,7 @@
         '
         'mnuSetup
         '
-        Me.mnuSetup.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuListPayees, Me.mnuListCategories, Me.mnuListBudgets, Me.mnuListTrxTypes})
+        Me.mnuSetup.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuListPayees, Me.mnuListCategories, Me.mnuListBudgets, Me.mnuListTrxTypes, Me.mnuUserAccounts})
         Me.mnuSetup.MergeAction = System.Windows.Forms.MergeAction.Remove
         Me.mnuSetup.Name = "mnuSetup"
         Me.mnuSetup.Size = New System.Drawing.Size(49, 20)
@@ -172,6 +179,49 @@
         Me.mnuListTrxTypes.Name = "mnuListTrxTypes"
         Me.mnuListTrxTypes.Size = New System.Drawing.Size(207, 22)
         Me.mnuListTrxTypes.Text = "Transaction Import Types"
+        '
+        'mnuUserAccounts
+        '
+        Me.mnuUserAccounts.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuEnableUserAccounts, Me.mnuAddUserAccount, Me.mnuChangeCurrentPassword, Me.mnuChangeOtherPassword, Me.mnuDeleteUserAccount, Me.mnuRepairUserAccounts})
+        Me.mnuUserAccounts.Name = "mnuUserAccounts"
+        Me.mnuUserAccounts.Size = New System.Drawing.Size(207, 22)
+        Me.mnuUserAccounts.Text = "User Logins"
+        '
+        'mnuEnableUserAccounts
+        '
+        Me.mnuEnableUserAccounts.Name = "mnuEnableUserAccounts"
+        Me.mnuEnableUserAccounts.Size = New System.Drawing.Size(237, 22)
+        Me.mnuEnableUserAccounts.Text = "Enable User Logins"
+        '
+        'mnuAddUserAccount
+        '
+        Me.mnuAddUserAccount.Name = "mnuAddUserAccount"
+        Me.mnuAddUserAccount.Size = New System.Drawing.Size(237, 22)
+        Me.mnuAddUserAccount.Text = "Add User Login"
+        '
+        'mnuChangeCurrentPassword
+        '
+        Me.mnuChangeCurrentPassword.Name = "mnuChangeCurrentPassword"
+        Me.mnuChangeCurrentPassword.Size = New System.Drawing.Size(237, 22)
+        Me.mnuChangeCurrentPassword.Text = "Change Current User Password"
+        '
+        'mnuChangeOtherPassword
+        '
+        Me.mnuChangeOtherPassword.Name = "mnuChangeOtherPassword"
+        Me.mnuChangeOtherPassword.Size = New System.Drawing.Size(237, 22)
+        Me.mnuChangeOtherPassword.Text = "Change Other User Password"
+        '
+        'mnuDeleteUserAccount
+        '
+        Me.mnuDeleteUserAccount.Name = "mnuDeleteUserAccount"
+        Me.mnuDeleteUserAccount.Size = New System.Drawing.Size(237, 22)
+        Me.mnuDeleteUserAccount.Text = "Delete User Login"
+        '
+        'mnuRepairUserAccounts
+        '
+        Me.mnuRepairUserAccounts.Name = "mnuRepairUserAccounts"
+        Me.mnuRepairUserAccounts.Size = New System.Drawing.Size(237, 22)
+        Me.mnuRepairUserAccounts.Text = "Repair User Database"
         '
         'mnuWindows
         '
@@ -204,5 +254,12 @@
     Friend WithEvents mnuImportBank As ToolStripMenuItem
     Friend WithEvents mnuImportDeposits As ToolStripMenuItem
     Friend WithEvents mnuImportInvoices As ToolStripMenuItem
+    Friend WithEvents mnuUserAccounts As ToolStripMenuItem
+    Friend WithEvents mnuEnableUserAccounts As ToolStripMenuItem
+    Friend WithEvents mnuAddUserAccount As ToolStripMenuItem
+    Friend WithEvents mnuChangeCurrentPassword As ToolStripMenuItem
+    Friend WithEvents mnuChangeOtherPassword As ToolStripMenuItem
+    Friend WithEvents mnuDeleteUserAccount As ToolStripMenuItem
+    Friend WithEvents mnuRepairUserAccounts As ToolStripMenuItem
 #End Region
 End Class
