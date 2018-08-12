@@ -32,26 +32,9 @@ Friend Class CBMainForm
 
             LoadPlugins()
 
-            'Look for locally recognized command line options
-            Dim intIndex As Integer
-            Dim strArg As String
-            For intIndex = LBound(gstrCmdLinArgs) To UBound(gstrCmdLinArgs)
-                strArg = gstrCmdLinArgs(intIndex)
-                If strArg = "/help" Or strArg = "/?" Then
-                    MsgBox("Args: //r:(data root folder)" & vbCrLf & "/security:createfile" & vbCrLf & "/security:createuser" & vbCrLf & "/security:setpassword" & vbCrLf & "/security:signfile")
-                    frmStartup.Close()
-                    Exit Sub
-                End If
-            Next
-
             Me.Text = "Willow Creek Checkbook " & My.Application.Info.Version.Major & "." &
-                My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build &
-                " [" & LCase(gstrDataPathValue) & "]"
-
-            If gblnUnrecognizedArgs() Then
-                frmStartup.Close()
-                Exit Sub
-            End If
+                        My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build &
+                        " [" & LCase(gstrDataPathValue) & "]"
 
             If Dir(gstrDataPath(), FileAttribute.Directory) = "" Then
                 gCreateStandardFolders()

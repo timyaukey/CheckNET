@@ -31,7 +31,6 @@ Public Module SharedDefs
     'Lower bound of many arrays
     Public Const gintLBOUND1 As Short = 1
 
-    Public gstrCmdLinArgs() As String
     Public gstrDataPathValue As String
 
     'Global security context.
@@ -43,46 +42,14 @@ Public Module SharedDefs
     Public gdomTransTableUCS As VB6XmlDocument
 
     Public Function gobjInitialize() As Company
-        Dim intIndex As Integer
-        Dim strArg As String
-        Dim strPath As String
         Dim objCompany As Company
 
         objCompany = New Company()
-        gstrCmdLinArgs = gaSplit(VB.Command(), " ")
-        gstrDataPathValue = My.Application.Info.DirectoryPath & "\Data"
-        For intIndex = LBound(gstrCmdLinArgs) To UBound(gstrCmdLinArgs)
-            strArg = gstrCmdLinArgs(intIndex)
-            'All args recognized should have an "//" prefix, to keep them in a separate
-            'namespace from args recognized by individual programs.
-            '//r:(path) gives the path to the root data folder. It is relative to
-            'App.Path unless starts with a device letter or UNC path prefix.
-            If Left(strArg, 4) = "//r:" Then
-                strPath = Mid(strArg, 5)
-                If (Left(strPath, 2) = "\\") Or (Mid(strPath, 2, 1) = ":") Then
-                    gstrDataPathValue = strPath
-                Else
-                    gstrDataPathValue = My.Application.Info.DirectoryPath & "\" & strPath
-                End If
-                gstrCmdLinArgs(intIndex) = ""
-            End If
-        Next
+        gstrDataPathValue = System.Configuration.ConfigurationManager.AppSettings("DataPath")
+        If String.IsNullOrEmpty(gstrDataPath) Then
+            gstrDataPathValue = My.Application.Info.DirectoryPath & "\Data"
+        End If
         gobjInitialize = objCompany
-    End Function
-
-    Public Function gblnUnrecognizedArgs() As Boolean
-        Dim intIndex As Integer
-        Dim strArg As String
-
-        gblnUnrecognizedArgs = True
-        For intIndex = LBound(gstrCmdLinArgs) To UBound(gstrCmdLinArgs)
-            strArg = gstrCmdLinArgs(intIndex)
-            If Trim(strArg) <> "" Then
-                MsgBox("Unrecognized command line argument: " & strArg)
-                Exit Function
-            End If
-        Next
-        gblnUnrecognizedArgs = False
     End Function
 
     Public Function gaSplit(ByVal strInput As String, ByVal strSeparator As String) As String()

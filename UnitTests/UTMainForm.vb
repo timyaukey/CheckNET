@@ -1447,9 +1447,6 @@ Friend Class UTMainForm
 
     Private Sub UTMainForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         mobjCompany = gobjInitialize()
-        If gblnUnrecognizedArgs() Then
-            Exit Sub
-        End If
         mobjCompany.LoadGlobalLists()
         gobjSecurity = New Security
         gobjSecurity.CreateEmpty("")
