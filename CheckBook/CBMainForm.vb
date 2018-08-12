@@ -17,10 +17,6 @@ Friend Class CBMainForm
     Private Sub CBMainForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Dim objAccount As Account
         Dim objReg As Register
-        Dim astrFiles() As String = Nothing
-        Dim intFiles As Integer
-        Dim strFile As String
-        Dim datCutoff As Date
 
         Try
             mblnCancelStart = True
@@ -50,53 +46,7 @@ Friend Class CBMainForm
 
             mobjCompany.LoadGlobalLists()
             gLoadTransTable()
-
-            'Find all ".act" files.
-            strFile = Dir(gstrAccountPath() & "\*.act")
-            While strFile <> ""
-                intFiles = intFiles + 1
-                ReDim Preserve astrFiles(intFiles - 1)
-                astrFiles(intFiles - 1) = strFile
-                strFile = Dir()
-            End While
-
-            'Load real trx, and non-generated fake trx, for all of them.
-            For Each strFile In astrFiles
-                objAccount = New Account
-                objAccount.Init(mobjCompany)
-                frmStartup.Configure(objAccount)
-                objAccount.LoadStart(strFile)
-                mobjCompany.colAccounts.Add(objAccount)
-                frmStartup.Configure(Nothing)
-            Next strFile
-
-            mobjCompany.colAccounts.Sort(AddressOf AccountComparer)
-
-            'With all Account objects loaded we can add them to the category list.
-            datCutoff = mobjCompany.datLastReconciled().AddDays(1D)
-            mobjCompany.LoadCategories()
-
-            'Load generated transactions for all of them.
-            For Each objAccount In mobjCompany.colAccounts
-                frmStartup.Configure(objAccount)
-                objAccount.LoadGenerated(datCutoff)
-                frmStartup.Configure(Nothing)
-            Next
-
-            'Call Trx.Apply() for all Trx loaded above.
-            'This will create ReplicaTrx.
-            For Each objAccount In mobjCompany.colAccounts
-                frmStartup.Configure(objAccount)
-                objAccount.LoadApply()
-                frmStartup.Configure(Nothing)
-            Next
-
-            'Perform final steps after all Trx exist, including computing running balances.
-            For Each objAccount In mobjCompany.colAccounts
-                frmStartup.Configure(objAccount)
-                objAccount.LoadFinish()
-                frmStartup.Configure(Nothing)
-            Next
+            mobjCompany.LoadAccountFiles(AddressOf frmStartup.Configure)
 
             frmStartup.ShowStatus("Loading main window")
 
@@ -141,13 +91,6 @@ Friend Class CBMainForm
             gTopException(ex)
         End Try
     End Sub
-
-    Private Function AccountComparer(ByVal objAcct1 As Account, ByVal objAcct2 As Account) As Integer
-        If objAcct1.lngType <> objAcct2.lngType Then
-            Return objAcct1.lngType.CompareTo(objAcct2.lngType)
-        End If
-        Return objAcct1.strTitle.CompareTo(objAcct2.strTitle)
-    End Function
 
     Private colBankImportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
     Private colCheckImportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)

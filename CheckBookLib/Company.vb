@@ -13,6 +13,8 @@ Public Class Company
 
     Dim mintMaxAccountKey As Integer
 
+    Public Delegate Sub ShowStartupAccount(ByVal objAccount As Account)
+
     Public Sub New()
         colAccounts = New List(Of Account)
         objCategories = New CategoryTranslator()
@@ -164,6 +166,72 @@ Public Class Company
         Next
 
     End Sub
+
+    Public Sub LoadAccountFiles(ByVal dlgShowAccount As ShowStartupAccount)
+        Try
+            'Find all ".act" files.
+            Dim strFile As String = Dir(gstrAccountPath() & "\*.act")
+            Dim intFiles As Integer = 0
+            Dim datCutoff As Date
+            Dim astrFiles() As String = Nothing
+            Dim objAccount As Account
+            Dim objReg As Register
+
+            While strFile <> ""
+                intFiles = intFiles + 1
+                ReDim Preserve astrFiles(intFiles - 1)
+                astrFiles(intFiles - 1) = strFile
+                strFile = Dir()
+            End While
+
+            'Load real trx, and non-generated fake trx, for all of them.
+            For Each strFile In astrFiles
+                objAccount = New Account
+                objAccount.Init(Me)
+                dlgShowAccount(objAccount)
+                objAccount.LoadStart(strFile)
+                Me.colAccounts.Add(objAccount)
+                dlgShowAccount(Nothing)
+            Next strFile
+
+            Me.colAccounts.Sort(AddressOf AccountComparer)
+
+            'With all Account objects loaded we can add them to the category list.
+            datCutoff = datLastReconciled().AddDays(1D)
+            LoadCategories()
+
+            'Load generated transactions for all of them.
+            For Each objAccount In colAccounts
+                dlgShowAccount(objAccount)
+                objAccount.LoadGenerated(datCutoff)
+                dlgShowAccount(Nothing)
+            Next
+
+            'Call Trx.Apply() for all Trx loaded above.
+            'This will create ReplicaTrx.
+            For Each objAccount In colAccounts
+                dlgShowAccount(objAccount)
+                objAccount.LoadApply()
+                dlgShowAccount(Nothing)
+            Next
+
+            'Perform final steps after all Trx exist, including computing running balances.
+            For Each objAccount In colAccounts
+                dlgShowAccount(objAccount)
+                objAccount.LoadFinish()
+                dlgShowAccount(Nothing)
+            Next
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
+    End Sub
+
+    Private Function AccountComparer(ByVal objAcct1 As Account, ByVal objAcct2 As Account) As Integer
+        If objAcct1.lngType <> objAcct2.lngType Then
+            Return objAcct1.lngType.CompareTo(objAcct2.lngType)
+        End If
+        Return objAcct1.strTitle.CompareTo(objAcct2.strTitle)
+    End Function
 
     Private Function blnHasWord(ByVal strCatName As String, ByVal strPrefix As String) As Boolean
         blnHasWord = (InStr(strCatName, ":" & strPrefix) > 0) Or (InStr(strCatName, " " & strPrefix) > 0)
