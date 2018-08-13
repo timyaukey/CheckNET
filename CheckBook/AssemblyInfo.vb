@@ -14,7 +14,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("Willow Creek Software")>
 <Assembly: AssemblyProduct("")>
-<Assembly: AssemblyCopyright("Copyright 2005-2018 by Willow Creek Software")>
+<Assembly: AssemblyCopyright("Software Copyright 2005-2018 by Willow Creek Software")>
 <Assembly: AssemblyTrademark("")>
 <Assembly: AssemblyCulture("")>
 

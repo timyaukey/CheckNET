@@ -21,4 +21,8 @@ Friend Class StartupForm
         lblMessage.Text = strMessage
         System.Windows.Forms.Application.DoEvents()
     End Sub
+
+    Private Sub StartupForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        lblCopyright.Text = My.Application.Info.Copyright
+    End Sub
 End Class
