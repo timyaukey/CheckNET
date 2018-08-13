@@ -64,21 +64,6 @@ Public Module CBMain
         End If
     End Sub
 
-    Private objLockFile As System.IO.Stream
-
-    Public Function gblnDataIsLocked() As Boolean
-        Try
-            objLockFile = New IO.FileStream(gstrAddPath("LockFile.dat"), IO.FileMode.Append, IO.FileAccess.Write, IO.FileShare.None)
-            gblnDataIsLocked = False
-            Exit Function
-        Catch ex As System.IO.IOException
-            gblnDataIsLocked = True
-            Exit Function
-        Catch ex As Exception
-            gNestedException(ex)
-        End Try
-    End Function
-
     Public Function gblnUserAuthenticated() As Boolean
         Try
             Dim strLogin As String

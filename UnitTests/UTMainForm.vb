@@ -851,7 +851,7 @@ Friend Class UTMainForm
         gUTSetTestTitle("TestFileLoad1")
 
         gUTSetSubTest("Load")
-        objCompany = New Company()
+        objCompany = New Company(My.Application.Info.DirectoryPath & "\Data")
         objAccount = New Account()
         objAccount.Init(objCompany)
         objReg = objLoadFile(objAccount, "UTRegLoad1.txt")
@@ -1446,7 +1446,8 @@ Friend Class UTMainForm
     End Sub
 
     Private Sub UTMainForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        mobjCompany = gobjInitialize()
+        Dim strDataPathValue As String = My.Application.Info.DirectoryPath & "\Data"
+        mobjCompany = New Company(strDataPathValue)
         mobjCompany.LoadGlobalLists()
         gobjSecurity = New Security
         gobjSecurity.CreateEmpty("")

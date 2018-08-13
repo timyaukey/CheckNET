@@ -10,18 +10,32 @@ Public Class Company
     Public ReadOnly objCategories As CategoryTranslator
     Public ReadOnly objIncExpAccounts As CategoryTranslator
     Public ReadOnly objBudgets As BudgetTranslator
-
-    Dim mintMaxAccountKey As Integer
+    Private ReadOnly mstrDataPathValue As String
+    Private mobjLockFile As System.IO.Stream
+    Private mintMaxAccountKey As Integer
 
     Public Delegate Sub ShowStartupAccount(ByVal objAccount As Account)
 
-    Public Sub New()
+    Public Sub New(ByVal strDataPathValue As String)
         colAccounts = New List(Of Account)
         objCategories = New CategoryTranslator()
         objIncExpAccounts = New CategoryTranslator()
         objBudgets = New BudgetTranslator()
+        mstrDataPathValue = strDataPathValue
+        gstrDataPathValue = mstrDataPathValue   'Legacy
         strCompanyName = "Schmidt's Garden Center, Inc."
     End Sub
+
+    Public Function blnDataIsLocked() As Boolean
+        Try
+            mobjLockFile = New IO.FileStream(gstrAddPath("LockFile.dat"), IO.FileMode.Append, IO.FileAccess.Write, IO.FileShare.None)
+            Return False
+        Catch ex As System.IO.IOException
+            Return True
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
+    End Function
 
     Public Function blnAccountKeyUsed(ByVal intKey As Integer) As Boolean
         For Each act As Account In colAccounts

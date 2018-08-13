@@ -41,17 +41,6 @@ Public Module SharedDefs
     'Above with Output attributes of Payee elements converted to upper case.
     Public gdomTransTableUCS As VB6XmlDocument
 
-    Public Function gobjInitialize() As Company
-        Dim objCompany As Company
-
-        objCompany = New Company()
-        gstrDataPathValue = System.Configuration.ConfigurationManager.AppSettings("DataPath")
-        If String.IsNullOrEmpty(gstrDataPath) Then
-            gstrDataPathValue = My.Application.Info.DirectoryPath & "\Data"
-        End If
-        gobjInitialize = objCompany
-    End Function
-
     Public Function gaSplit(ByVal strInput As String, ByVal strSeparator As String) As String()
         Dim sep(1) As String
         sep(0) = strSeparator

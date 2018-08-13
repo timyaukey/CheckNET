@@ -17,11 +17,17 @@ Friend Class CBMainForm
     Private Sub CBMainForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Dim objAccount As Account
         Dim objReg As Register
+        Dim strDataPathValue As String
 
         Try
             mblnCancelStart = True
 
-            mobjCompany = gobjInitialize()
+            strDataPathValue = System.Configuration.ConfigurationManager.AppSettings("DataPath")
+            If String.IsNullOrEmpty(strDataPathValue) Then
+                strDataPathValue = My.Application.Info.DirectoryPath & "\Data"
+            End If
+
+            mobjCompany = New Company(strDataPathValue)
 
             frmStartup = New StartupForm
             frmStartup.Show()
@@ -33,7 +39,7 @@ Friend Class CBMainForm
                 gCreateStandardCheckingAccount(mobjCompany)
             End If
 
-            If gblnDataIsLocked() Then
+            If mobjCompany.blnDataIsLocked() Then
                 MsgBox("Data files are in use by someone else running this software.")
                 frmStartup.Close()
                 Exit Sub

@@ -49,7 +49,7 @@ Public Class UTRegister
     'Initialize a new UTRegister with an empty Register.
 
     Public Sub Init(ByVal strRegisterKey As String)
-        mobjCompany = New Company()
+        mobjCompany = New Company(My.Application.Info.DirectoryPath & "\Data")
         mobjAccount = New Account()
         mobjAccount.Init(mobjCompany)
         mobjReg = New Register
