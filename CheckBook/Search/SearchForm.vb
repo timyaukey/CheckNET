@@ -261,7 +261,7 @@ Friend Class SearchForm
 
         objItem = objAddNewMatch(objTrx, objTrx.curAmount)
         If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
-            gSummarizeSplits(mobjCompany, DirectCast(objTrx, NormalTrx), strCategory, strPONumber, strInvoiceNum, strInvoiceDate, strDueDate, strTerms, strBudget, curAvailable)
+            DirectCast(objTrx, NormalTrx).SummarizeSplits(mobjCompany, strCategory, strPONumber, strInvoiceNum, strInvoiceDate, strDueDate, strTerms, strBudget, curAvailable)
             gAddListSubItem(objItem, 4, gstrFormatCurrency(curAvailable))
             gAddListSubItem(objItem, 5, strCategory)
             gAddListSubItem(objItem, 6, strPONumber)

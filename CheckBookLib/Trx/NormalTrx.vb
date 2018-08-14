@@ -195,9 +195,180 @@ Public Class NormalTrx
 
     Public Overrides ReadOnly Property strCategory As String
         Get
-            Return gstrSummarizeTrxCat(mobjReg.objAccount.objCompany.objCategories, DirectCast(Me, NormalTrx))
+            Dim objSplit As TrxSplit
+            Dim strCategoryKey As String = ""
+
+            For Each objSplit In Me.colSplits
+                If strCategoryKey = "" Then
+                    strCategoryKey = objSplit.strCategoryKey
+                ElseIf strCategoryKey <> objSplit.strCategoryKey Then
+                    Return "(mixed)"
+                End If
+            Next objSplit
+            Return gstrTranslateCatKey(mobjReg.objAccount.objCompany.objCategories, strCategoryKey)
         End Get
     End Property
+
+    Public Function strSummarizeDueDate() As String
+
+        Dim objSplit As TrxSplit
+        Dim datDueDate As Date = System.DateTime.FromOADate(0)
+
+        For Each objSplit In Me.colSplits
+            If datDueDate = System.DateTime.FromOADate(0) Then
+                datDueDate = objSplit.datDueDate
+            ElseIf datDueDate <> objSplit.datDueDate And objSplit.datDueDate <> System.DateTime.FromOADate(0) Then
+                Return "(mixed)"
+            End If
+        Next objSplit
+        If datDueDate = System.DateTime.FromOADate(0) Then
+            Return ""
+        Else
+            Return datDueDate.ToString(gstrFORMAT_DATE2)
+        End If
+
+    End Function
+
+    Public Function strSummarizeInvoiceDate() As String
+
+        Dim objSplit As TrxSplit
+        Dim datInvoiceDate As Date = System.DateTime.FromOADate(0)
+
+        For Each objSplit In Me.colSplits
+            If datInvoiceDate = System.DateTime.FromOADate(0) Then
+                datInvoiceDate = objSplit.datInvoiceDate
+            ElseIf datInvoiceDate <> objSplit.datInvoiceDate And objSplit.datInvoiceDate <> System.DateTime.FromOADate(0) Then
+                Return "(mixed)"
+            End If
+        Next objSplit
+        If datInvoiceDate = System.DateTime.FromOADate(0) Then
+            Return ""
+        Else
+            Return datInvoiceDate.ToString(gstrFORMAT_DATE2)
+        End If
+
+    End Function
+
+    Public Function strSummarizePONumber() As String
+
+        Dim objSplit As TrxSplit
+        Dim strPONumber As String = ""
+
+        For Each objSplit In Me.colSplits
+            If strPONumber = "" Then
+                strPONumber = objSplit.strPONumber
+            ElseIf strPONumber <> objSplit.strPONumber And objSplit.strPONumber <> "" Then
+                Return "(mixed)"
+            End If
+        Next objSplit
+        Return strPONumber
+
+    End Function
+
+    Public Function strSummarizeTerms() As String
+
+        Dim objSplit As TrxSplit
+        Dim strTerms As String = ""
+
+        For Each objSplit In Me.colSplits
+            If strTerms = "" Then
+                strTerms = objSplit.strTerms
+            ElseIf strTerms <> objSplit.strTerms And objSplit.strTerms <> "" Then
+                Return "(mixed)"
+            End If
+        Next objSplit
+        Return strTerms
+
+    End Function
+
+    Public Function strSummarizeInvoiceNum() As String
+
+        Dim objSplit As TrxSplit
+        Dim strInvNumber As String = ""
+
+        For Each objSplit In Me.colSplits
+            If strInvNumber = "" Then
+                strInvNumber = objSplit.strInvoiceNum
+            ElseIf strInvNumber <> objSplit.strInvoiceNum And objSplit.strInvoiceNum <> "" Then
+                Return "(mixed)"
+            End If
+        Next objSplit
+        Return strInvNumber
+
+    End Function
+
+    Public Sub SummarizeSplits(ByVal objCompany As Company, ByRef strCategory As String, ByRef strPONumber As String,
+                                ByRef strInvoiceNum As String, ByRef strInvoiceDate As String, ByRef strDueDate As String,
+                               ByRef strTerms As String, ByRef strBudget As String, ByRef curAvailable As Decimal)
+
+        Dim objSplit As TrxSplit
+        Dim strCatKey As String = ""
+        Dim strPONumber2 As String = ""
+        Dim strInvoiceNum2 As String = ""
+        Dim datInvoiceDate As Date
+        Dim datDueDate As Date
+        Dim strTerms2 As String = ""
+        Dim strBudgetKey As String = ""
+        Dim blnFirstSplit As Boolean
+
+        blnFirstSplit = True
+        curAvailable = 0
+        For Each objSplit In Me.colSplits
+            If objSplit.strBudgetKey = objCompany.strPlaceholderBudgetKey Then
+                curAvailable = curAvailable + objSplit.curAmount
+            End If
+            If blnFirstSplit Then
+                'Remember fields from the first split.
+                strCatKey = objSplit.strCategoryKey
+                strPONumber2 = objSplit.strPONumber
+                strInvoiceNum2 = objSplit.strInvoiceNum
+                datInvoiceDate = objSplit.datInvoiceDate
+                datDueDate = objSplit.datDueDate
+                strTerms2 = objSplit.strTerms
+                strBudgetKey = objSplit.strBudgetKey
+                'Format fields from the first split.
+                strCategory = gstrTranslateCatKey(objCompany.objCategories, strCatKey)
+                strInvoiceNum = strInvoiceNum2
+                strPONumber = strPONumber2
+                If datInvoiceDate = System.DateTime.FromOADate(0) Then
+                    strInvoiceDate = ""
+                Else
+                    strInvoiceDate = gstrFormatDate(datInvoiceDate)
+                End If
+                If datDueDate = System.DateTime.FromOADate(0) Then
+                    strDueDate = ""
+                Else
+                    strDueDate = gstrFormatDate(datDueDate)
+                End If
+                strTerms = strTerms2
+                strBudget = gstrTranslateBudgetKey(objCompany, strBudgetKey)
+                blnFirstSplit = False
+            Else
+                If strCatKey <> objSplit.strCategoryKey Then
+                    strCategory = "(mixed)"
+                End If
+                If strPONumber2 <> objSplit.strPONumber Then
+                    strPONumber = "(mixed)"
+                End If
+                If strInvoiceNum2 <> objSplit.strInvoiceNum Then
+                    strInvoiceNum = "(mixed)"
+                End If
+                If datInvoiceDate <> objSplit.datInvoiceDate Then
+                    strInvoiceDate = "(mixed)"
+                End If
+                If datDueDate <> objSplit.datDueDate Then
+                    strDueDate = "(mixed)"
+                End If
+                If strTerms2 <> objSplit.strTerms Then
+                    strTerms = "(mixed)"
+                End If
+                If strBudgetKey <> objSplit.strBudgetKey Then
+                    strBudget = "(mixed)"
+                End If
+            End If
+        Next objSplit
+
+    End Sub
 
     Public Overrides Sub UnApply()
         'Regenerating generated Trx must cause this and Apply() to be called.

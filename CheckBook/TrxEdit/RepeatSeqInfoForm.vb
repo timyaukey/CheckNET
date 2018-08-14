@@ -33,7 +33,11 @@ Friend Class RepeatSeqInfoForm
                 objRow.Descr = objTrx.strDescription
                 objRow.Amount = objTrx.curAmount.ToString(gstrFORMAT_CURRENCY)
                 objRow.SeqNum = objTrx.intRepeatSeq.ToString()
-                objRow.DueDate = gstrSummarizeTrxDueDate(objTrx)
+                If TypeOf objTrx Is NormalTrx Then
+                    objRow.DueDate = DirectCast(objTrx, NormalTrx).strSummarizeDueDate()
+                Else
+                    objRow.DueDate = ""
+                End If
                 objRow.Type = objTrx.strFakeStatus
                 colRows.Add(objRow)
             End If

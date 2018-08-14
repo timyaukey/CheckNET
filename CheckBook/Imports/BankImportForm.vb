@@ -1345,7 +1345,7 @@ Friend Class BankImportForm
             .SubItems.Insert(2, New ListViewItem.ListViewSubItem(Nothing, objTrx.strDescription))
             .SubItems.Insert(3, New ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objTrx.curAmount)))
             .SubItems.Insert(4, New ListViewItem.ListViewSubItem(Nothing, strSummarizeTrxCat(objTrx)))
-            .SubItems.Insert(5, New ListViewItem.ListViewSubItem(Nothing, gstrSummarizeTrxDueDate(objTrx)))
+            .SubItems.Insert(5, New ListViewItem.ListViewSubItem(Nothing, objTrx.strSummarizeDueDate()))
             .SubItems.Insert(6, New ListViewItem.ListViewSubItem(Nothing, strFake))
             .SubItems.Insert(7, New ListViewItem.ListViewSubItem(Nothing, strGen))
             .SubItems.Insert(8, New ListViewItem.ListViewSubItem(Nothing, strImport))
