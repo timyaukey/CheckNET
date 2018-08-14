@@ -70,12 +70,6 @@ Public Module CBMain
             Dim strPassword As String
             Dim frmLogin As LoginForm
 
-            gobjSecurity = New Security
-            gobjSecurity.Load()
-            If gobjSecurity.blnNoFile Then
-                Return True
-            End If
-
             strLogin = ""
             strPassword = ""
             frmLogin = New LoginForm

@@ -11,6 +11,7 @@ Friend Class CBMainForm
     Implements IHostUI
 
     Private frmStartup As StartupForm
+    Private mobjSecurity As Security
     Private mblnCancelStart As Boolean
     Private WithEvents mobjCompany As Company
 
@@ -45,9 +46,14 @@ Friend Class CBMainForm
                 Exit Sub
             End If
 
-            If Not gblnUserAuthenticated() Then
-                frmStartup.Close()
-                Exit Sub
+            mobjSecurity = New Security
+            gobjSecurity = mobjSecurity
+            mobjSecurity.Load()
+            If Not mobjSecurity.blnNoFile Then
+                If Not gblnUserAuthenticated() Then
+                    frmStartup.Close()
+                    Exit Sub
+                End If
             End If
 
             mobjCompany.LoadGlobalLists()
@@ -62,7 +68,7 @@ Friend Class CBMainForm
                         My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build &
                         " [" & LCase(gstrDataPathValue) & "]"
 
-            If gobjSecurity.blnNoFile Then
+            If mobjSecurity.blnNoFile Then
                 mnuEnableUserAccounts.Enabled = True
                 mnuAddUserAccount.Enabled = False
                 mnuDeleteUserAccount.Enabled = False
@@ -71,11 +77,11 @@ Friend Class CBMainForm
                 mnuRepairUserAccounts.Enabled = False
             Else
                 mnuEnableUserAccounts.Enabled = False
-                mnuAddUserAccount.Enabled = gobjSecurity.blnIsAdministrator
-                mnuDeleteUserAccount.Enabled = gobjSecurity.blnIsAdministrator
+                mnuAddUserAccount.Enabled = mobjSecurity.blnIsAdministrator
+                mnuDeleteUserAccount.Enabled = mobjSecurity.blnIsAdministrator
                 mnuChangeCurrentPassword.Enabled = True
-                mnuChangeOtherPassword.Enabled = gobjSecurity.blnIsAdministrator
-                mnuRepairUserAccounts.Enabled = gobjSecurity.blnIsAdministrator
+                mnuChangeOtherPassword.Enabled = mobjSecurity.blnIsAdministrator
+                mnuRepairUserAccounts.Enabled = mobjSecurity.blnIsAdministrator
             End If
 
             mblnCancelStart = False
@@ -350,13 +356,13 @@ Friend Class CBMainForm
     Private Sub mnuEnableUserAccounts_Click(sender As Object, e As EventArgs) Handles mnuEnableUserAccounts.Click
         Try
             Dim strPassword As String = ""
-            gobjSecurity.CreateEmpty()
-            gobjSecurity.CreateUser(gobjSecurity.strAdminLogin, "Administrator")
-            gobjSecurity.SetPassword(strPassword)
-            gobjSecurity.Save()
-            gobjSecurity.blnFindUser(gobjSecurity.strAdminLogin)
-            gobjSecurity.blnPasswordMatches(strPassword)
-            MsgBox("User logins enabled. Added administrator login """ & gobjSecurity.strLogin & """, with empty password.")
+            mobjSecurity.CreateEmpty()
+            mobjSecurity.CreateUser(mobjSecurity.strAdminLogin, "Administrator")
+            mobjSecurity.SetPassword(strPassword)
+            mobjSecurity.Save()
+            mobjSecurity.blnFindUser(mobjSecurity.strAdminLogin)
+            mobjSecurity.blnPasswordMatches(strPassword)
+            MsgBox("User logins enabled. Added administrator login """ & mobjSecurity.strLogin & """, with empty password.")
             Exit Sub
         Catch ex As Exception
             gTopException(ex)
@@ -365,11 +371,11 @@ Friend Class CBMainForm
 
     Private Sub mnuAddUserAccount_Click(sender As Object, e As EventArgs) Handles mnuAddUserAccount.Click
         Try
-            gobjSecurity.SaveUserContext()
+            mobjSecurity.SaveUserContext()
             AddUserAccount()
-            gobjSecurity.RestoreUserContext()
+            mobjSecurity.RestoreUserContext()
         Catch ex As Exception
-            gobjSecurity.RestoreUserContext()
+            mobjSecurity.RestoreUserContext()
             gTopException(ex)
         End Try
     End Sub
@@ -379,7 +385,7 @@ Friend Class CBMainForm
         If strLogin = "" Then
             Exit Sub
         End If
-        If gobjSecurity.blnFindUser(strLogin) Then
+        If mobjSecurity.blnFindUser(strLogin) Then
             MsgBox("Login name already exists.")
             Exit Sub
         End If
@@ -391,40 +397,40 @@ Friend Class CBMainForm
         If strPassword = Nothing Then
             Exit Sub
         End If
-        gobjSecurity.CreateUser(strLogin, strName)
-        gobjSecurity.SetPassword(strPassword)
-        gobjSecurity.Save()
+        mobjSecurity.CreateUser(strLogin, strName)
+        mobjSecurity.SetPassword(strPassword)
+        mobjSecurity.Save()
         MsgBox("New login """ & strLogin & """ created.")
     End Sub
 
     Private Sub mnuChangeCurrentPassword_Click(sender As Object, e As EventArgs) Handles mnuChangeCurrentPassword.Click
         Try
-            gobjSecurity.SaveUserContext()
+            mobjSecurity.SaveUserContext()
             ChangeCurrentPassword()
-            gobjSecurity.RestoreUserContext()
+            mobjSecurity.RestoreUserContext()
         Catch ex As Exception
-            gobjSecurity.RestoreUserContext()
+            mobjSecurity.RestoreUserContext()
             gTopException(ex)
         End Try
     End Sub
 
     Private Sub ChangeCurrentPassword()
-        Dim strPassword As String = strAskNewPassword(gobjSecurity.strLogin)
+        Dim strPassword As String = strAskNewPassword(mobjSecurity.strLogin)
         If strPassword = Nothing Then
             Exit Sub
         End If
-        gobjSecurity.SetPassword(strPassword)
-        gobjSecurity.Save()
+        mobjSecurity.SetPassword(strPassword)
+        mobjSecurity.Save()
         MsgBox("Password changed for current user login.")
     End Sub
 
     Private Sub mnuChangeOtherPassword_Click(sender As Object, e As EventArgs) Handles mnuChangeOtherPassword.Click
         Try
-            gobjSecurity.SaveUserContext()
+            mobjSecurity.SaveUserContext()
             ChangeOtherPassword()
-            gobjSecurity.RestoreUserContext()
+            mobjSecurity.RestoreUserContext()
         Catch ex As Exception
-            gobjSecurity.RestoreUserContext()
+            mobjSecurity.RestoreUserContext()
             gTopException(ex)
         End Try
     End Sub
@@ -435,7 +441,7 @@ Friend Class CBMainForm
         If strLogin = "" Then
             Exit Sub
         End If
-        If Not gobjSecurity.blnFindUser(strLogin) Then
+        If Not mobjSecurity.blnFindUser(strLogin) Then
             MsgBox("Login name does not exist.")
             Exit Sub
         End If
@@ -443,8 +449,8 @@ Friend Class CBMainForm
         If strPassword = Nothing Then
             Exit Sub
         End If
-        gobjSecurity.SetPassword(strPassword)
-        gobjSecurity.Save()
+        mobjSecurity.SetPassword(strPassword)
+        mobjSecurity.Save()
         MsgBox("Password changed for login """ & strLogin & """.")
     End Sub
 
@@ -463,11 +469,11 @@ Friend Class CBMainForm
 
     Private Sub mnuDeleteUserAccount_Click(sender As Object, e As EventArgs) Handles mnuDeleteUserAccount.Click
         Try
-            gobjSecurity.SaveUserContext()
+            mobjSecurity.SaveUserContext()
             DeleteUserAccount()
-            gobjSecurity.RestoreUserContext()
+            mobjSecurity.RestoreUserContext()
         Catch ex As Exception
-            gobjSecurity.RestoreUserContext()
+            mobjSecurity.RestoreUserContext()
             gTopException(ex)
         End Try
     End Sub
@@ -475,36 +481,36 @@ Friend Class CBMainForm
     Private Sub DeleteUserAccount()
         Dim strDeleteLogin As String = InputBox("Login name to delete:", "Login")
         If strDeleteLogin = "" Then
-            gobjSecurity.RestoreUserContext()
+            mobjSecurity.RestoreUserContext()
             Exit Sub
         End If
-        If LCase(strDeleteLogin) = gobjSecurity.strAdminLogin Then
-            MsgBox("Cannot delete the """ + gobjSecurity.strAdminLogin + """ login.")
-            gobjSecurity.RestoreUserContext()
+        If LCase(strDeleteLogin) = mobjSecurity.strAdminLogin Then
+            MsgBox("Cannot delete the """ + mobjSecurity.strAdminLogin + """ login.")
+            mobjSecurity.RestoreUserContext()
             Exit Sub
         End If
-        If LCase(strDeleteLogin) = LCase(gobjSecurity.strLogin) Then
+        If LCase(strDeleteLogin) = LCase(mobjSecurity.strLogin) Then
             MsgBox("Cannot delete the login you are currently using.")
-            gobjSecurity.RestoreUserContext()
+            mobjSecurity.RestoreUserContext()
             Exit Sub
         End If
-        If Not gobjSecurity.blnFindUser(strDeleteLogin) Then
+        If Not mobjSecurity.blnFindUser(strDeleteLogin) Then
             MsgBox("No such login.")
-            gobjSecurity.RestoreUserContext()
+            mobjSecurity.RestoreUserContext()
             Exit Sub
         End If
         If MsgBox("Are you sure you want to delete login """ + strDeleteLogin + """?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
             Exit Sub
         End If
-        gobjSecurity.DeleteUser()
-        gobjSecurity.Save()
+        mobjSecurity.DeleteUser()
+        mobjSecurity.Save()
         MsgBox("Login deleted.")
     End Sub
 
     Private Sub mnuRepairUserAccounts_Click(sender As Object, e As EventArgs) Handles mnuRepairUserAccounts.Click
         Try
-            gobjSecurity.CreateSignatures()
-            gobjSecurity.Save()
+            mobjSecurity.CreateSignatures()
+            mobjSecurity.Save()
             MsgBox("User login database repaired.")
         Catch ex As Exception
             gTopException(ex)
