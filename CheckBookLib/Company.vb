@@ -10,6 +10,7 @@ Public Class Company
     Public ReadOnly objCategories As CategoryTranslator
     Public ReadOnly objIncExpAccounts As CategoryTranslator
     Public ReadOnly objBudgets As BudgetTranslator
+    Public ReadOnly objSecurity As Security
     Private ReadOnly mstrDataPathValue As String
     Private mobjLockFile As System.IO.Stream
     Private mintMaxAccountKey As Integer
@@ -21,6 +22,7 @@ Public Class Company
         objCategories = New CategoryTranslator()
         objIncExpAccounts = New CategoryTranslator()
         objBudgets = New BudgetTranslator()
+        objSecurity = New Security()
         mstrDataPathValue = strDataPathValue
         gstrDataPathValue = mstrDataPathValue   'Legacy
         strCompanyName = "Schmidt's Garden Center, Inc."

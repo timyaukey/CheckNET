@@ -45,7 +45,7 @@ Friend Class ShowRegisterForm
 
         Try
 
-            If Not gobjSecurity.blnIsAdministrator Then
+            If Not mobjCompany.objSecurity.blnIsAdministrator Then
                 MsgBox("Your login is not authorized to delete registers.")
                 Exit Sub
             End If
@@ -115,7 +115,7 @@ Friend Class ShowRegisterForm
     Private Sub cmdNewAccount_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewAccount.Click
         Try
 
-            If Not gobjSecurity.blnIsAdministrator Then
+            If Not mobjCompany.objSecurity.blnIsAdministrator Then
                 MsgBox("Your login is not authorized to create accounts.")
                 Exit Sub
             End If
@@ -135,7 +135,7 @@ Friend Class ShowRegisterForm
 
         Try
 
-            If Not gobjSecurity.blnIsAdministrator Then
+            If Not mobjCompany.objSecurity.blnIsAdministrator Then
                 MsgBox("Your login is not authorized to delete accounts.")
                 Exit Sub
             End If
@@ -202,7 +202,7 @@ Friend Class ShowRegisterForm
 
         Try
 
-            If Not gobjSecurity.blnIsAdministrator Then
+            If Not mobjCompany.objSecurity.blnIsAdministrator Then
                 MsgBox("Your login is not authorized to create a new register.")
                 Exit Sub
             End If
@@ -236,7 +236,7 @@ Friend Class ShowRegisterForm
         Try
             With maudtElement(lstRegisters.SelectedIndex)
                 Using frm As AccountForm = New AccountForm
-                    If frm.ShowDialog(.objAccount, True, Not gobjSecurity.blnIsAdministrator) = DialogResult.OK Then
+                    If frm.ShowDialog(.objAccount, True, Not mobjCompany.objSecurity.blnIsAdministrator) = DialogResult.OK Then
                         MsgBox("Account property changes will take effect the next time you start the software.", MsgBoxStyle.Information)
                     End If
                 End Using
@@ -287,7 +287,7 @@ Friend Class ShowRegisterForm
                     Exit Sub
                 End If
                 objProps = New RegPropertiesForm
-                objProps.ShowModal(.objSelectedReg, Not gobjSecurity.blnIsAdministrator)
+                objProps.ShowModal(.objSelectedReg, Not mobjCompany.objSecurity.blnIsAdministrator)
             End With
 
             Exit Sub

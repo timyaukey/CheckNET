@@ -33,9 +33,6 @@ Public Module SharedDefs
 
     Public gstrDataPathValue As String
 
-    'Global security context.
-    Public gobjSecurity As Security
-
     'Table with memorized payees.
     Public gdomTransTable As VB6XmlDocument
     'Above with Output attributes of Payee elements converted to upper case.

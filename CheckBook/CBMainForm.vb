@@ -46,11 +46,10 @@ Friend Class CBMainForm
                 Exit Sub
             End If
 
-            mobjSecurity = New Security
-            gobjSecurity = mobjSecurity
+            mobjSecurity = mobjCompany.objSecurity
             mobjSecurity.Load()
             If Not mobjSecurity.blnNoFile Then
-                If Not gblnUserAuthenticated() Then
+                If Not gblnUserAuthenticated(mobjSecurity) Then
                     frmStartup.Close()
                     Exit Sub
                 End If

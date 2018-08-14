@@ -104,7 +104,7 @@ Public Class Register
         mlngTrxCurrent = 0
         ClearFirstAffected()
         mobjLog = New EventLog
-        mobjLog.Init(Me, gobjSecurity.strLogin)
+        mobjLog.Init(Me, mobjAccount.objCompany.objSecurity.strLogin)
 
     End Sub
 

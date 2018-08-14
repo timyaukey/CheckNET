@@ -64,7 +64,7 @@ Public Module CBMain
         End If
     End Sub
 
-    Public Function gblnUserAuthenticated() As Boolean
+    Public Function gblnUserAuthenticated(ByVal objSecurity As Security) As Boolean
         Try
             Dim strLogin As String
             Dim strPassword As String
@@ -77,15 +77,15 @@ Public Module CBMain
                 Return False
             End If
 
-            If Not gobjSecurity.blnFindUser(strLogin) Then
+            If Not objSecurity.blnFindUser(strLogin) Then
                 MsgBox("Invalid login or password")
                 Return False
             End If
-            If Not gobjSecurity.blnPasswordMatches(strPassword) Then
+            If Not objSecurity.blnPasswordMatches(strPassword) Then
                 MsgBox("Invalid login or password")
                 Return False
             End If
-            If Not gobjSecurity.blnUserSignatureIsValid Then
+            If Not objSecurity.blnUserSignatureIsValid Then
                 MsgBox("User data is invalid")
                 Return False
             End If

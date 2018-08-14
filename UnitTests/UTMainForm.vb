@@ -1449,8 +1449,7 @@ Friend Class UTMainForm
         Dim strDataPathValue As String = My.Application.Info.DirectoryPath & "\Data"
         mobjCompany = New Company(strDataPathValue)
         mobjCompany.LoadGlobalLists()
-        gobjSecurity = New Security
-        gobjSecurity.CreateEmpty()
+        mobjCompany.objSecurity.CreateEmpty()
     End Sub
 
     Private Sub UTMainForm_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
