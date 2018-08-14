@@ -500,7 +500,7 @@ Friend Class ListEditorForm
 
         Try
 
-            strTmpFile = gstrAddPath("NewList.tmp")
+            strTmpFile = mobjCompany.strAddPath("NewList.tmp")
             intFile = FreeFile()
             FileOpen(intFile, strTmpFile, OpenMode.Output)
             PrintLine(intFile, "Generated " & Now)

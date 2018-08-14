@@ -293,7 +293,7 @@ Friend Class RptScanSplitsForm
             Select Case mlngRptType
                 Case SplitReportType.glngSPLTRPT_TOTALS
                     frmSumRpt = New CatSumRptForm
-                    frmSumRpt.ShowMe(maudtCatTotals, mcolSelectAccounts, mobjCompany.objCategories, mdatStart, mdatEnd,
+                    frmSumRpt.ShowMe(mobjCompany, maudtCatTotals, mcolSelectAccounts, mobjCompany.objCategories, mdatStart, mdatEnd,
                                      mblnIncludeFake, mblnIncludeGenerated, mobjHostUI)
                 Case Else
                     gRaiseError("Unrecognized category report type")

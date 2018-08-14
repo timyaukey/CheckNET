@@ -90,7 +90,7 @@ Public Class HTMLWriter
     End Sub
 
     Public Sub ShowReport()
-        Dim strReportFile As String = gstrReportPath() + "\" + mstrFileNameRoot + ".html"
+        Dim strReportFile As String = mobjCompany.strReportPath() + "\" + mstrFileNameRoot + ".html"
         Using objFile As System.IO.TextWriter = New System.IO.StreamWriter(strReportFile)
             objFile.Write(mobjBuilder.ToString())
         End Using

@@ -51,7 +51,7 @@ Public Class Security
     End Sub
 
     Private Sub MakePath()
-        mstrFilePath = gstrDataPath() & "\Security.xml"
+        mstrFilePath = mobjCompany.strAddPath("Security.xml")
     End Sub
 
     Public ReadOnly Property blnNoFile() As Boolean

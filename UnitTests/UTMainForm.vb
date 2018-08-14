@@ -928,7 +928,7 @@ Friend Class UTMainForm
         objReg.Init(objAccount, "Regular", "reg", False, 3, System.DateTime.FromOADate(0))
         objRepeatSummarizer = New RepeatSummarizer()
         lngLinesRead = 0
-        objLoader.LoadFileUT(objReg, objRepeatSummarizer, gstrAddPath("UTData\" & strFileName), False, #1/1/1980#, lngLinesRead)
+        objLoader.LoadFileUT(objReg, objRepeatSummarizer, mobjCompany.strAddPath("UTData\" & strFileName), False, #1/1/1980#, lngLinesRead)
         objReg.LoadApply()
         objReg.LoadFinish()
         objLoadFile = objReg
@@ -942,7 +942,7 @@ Friend Class UTMainForm
         gUTSetSubTest("Load")
 
         objString = New SimpleStringTranslator()
-        objString.LoadFile(gstrAddPath("UTData\UTStringTran1.txt"))
+        objString.LoadFile(mobjCompany.strAddPath("UTData\UTStringTran1.txt"))
 
         gUTSetSubTest("Verify")
 

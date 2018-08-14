@@ -18,14 +18,14 @@ Module CheckPrinting
     Private mobjTrx As Trx
     Private mobjFont As Font
 
-    Public Function gdomGetCheckFormat() As VB6XmlDocument
+    Public Function gdomGetCheckFormat(ByVal objCompany_ As Company) As VB6XmlDocument
         Dim domCheckFormat As VB6XmlDocument
         Dim strCheckFormatFile As String
         Dim objParseError As VB6XmlParseError
 
         gdomGetCheckFormat = Nothing
         domCheckFormat = New VB6XmlDocument
-        strCheckFormatFile = gstrAddPath("CheckFormat.xml")
+        strCheckFormatFile = objCompany_.strAddPath("CheckFormat.xml")
         domCheckFormat.Load(strCheckFormatFile)
         objParseError = domCheckFormat.ParseError
         If Not objParseError Is Nothing Then

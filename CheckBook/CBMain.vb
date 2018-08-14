@@ -121,11 +121,11 @@ Public Module CBMain
         Dim strBackupFile As String
         For Each objAccount In objCompany.colAccounts
             If objAccount.blnUnsavedChanges Then
-                strBackupFile = gstrBackupPath() & "\" & objAccount.strFileNameRoot & "." & Now.ToString("MM$dd$yy$hh$mm")
+                strBackupFile = objCompany.strBackupPath() & "\" & objAccount.strFileNameRoot & "." & Now.ToString("MM$dd$yy$hh$mm")
                 If Len(Dir(strBackupFile)) > 0 Then
                     Kill(strBackupFile)
                 End If
-                Rename(gstrAccountPath() & "\" & objAccount.strFileNameRoot, strBackupFile)
+                Rename(objCompany.strAccountPath() & "\" & objAccount.strFileNameRoot, strBackupFile)
                 PurgeAccountBackups(objAccount)
                 objAccount.Save(objAccount.strFileNameRoot)
                 MsgBox("Saved " & objAccount.strTitle)
@@ -153,7 +153,7 @@ Public Module CBMain
                 adatDays(intIndex).colInstances = New List(Of BackupInstance)
             Next
 
-            strBackup = Dir(gstrBackupPath() & "\" & objAccount.strFileNameRoot & ".*", FileAttribute.Normal)
+            strBackup = Dir(objAccount.objCompany.strBackupPath() & "\" & objAccount.strFileNameRoot & ".*", FileAttribute.Normal)
             Do While strBackup <> ""
                 strEncodedDate = Mid(strBackup, InStr(UCase(strBackup), ".ACT.") + 5)
                 strParsableDate = "20" & Mid(strEncodedDate, 7, 2) & "/" & Mid(strEncodedDate, 1, 2) & "/" & Mid(strEncodedDate, 4, 2) & " " & Mid(strEncodedDate, 10, 2) & ":" & Mid(strEncodedDate, 13, 2)
@@ -172,7 +172,7 @@ Public Module CBMain
 
             'Delete the very old backups
             For Each strBackup In colOlderFiles
-                Kill(gstrBackupPath() & "\" & strBackup)
+                Kill(objAccount.objCompany.strBackupPath() & "\" & strBackup)
             Next
 
             'Delete everything but the "intBackupsToKeep" most recent backups created on each date.
@@ -190,7 +190,7 @@ Public Module CBMain
                 colInstances.Sort(AddressOf BackupInstanceComparer)
                 For intIndex = 1 To colInstances.Count() - intBackupsToKeep
                     strBackup = colInstances(intIndex - 1).strName
-                    Kill(gstrBackupPath() & "\" & strBackup)
+                    Kill(objAccount.objCompany.strBackupPath() & "\" & strBackup)
                 Next
             Next
 
@@ -215,7 +215,7 @@ Public Module CBMain
 
         Using frm As AccountForm = New AccountForm()
             If frm.ShowDialog(objAccount, False, False) = DialogResult.OK Then
-                strFile = gstrAccountPath() & "\" & objAccount.strFileNameRoot & ".act"
+                strFile = objCompany.strAccountPath() & "\" & objAccount.strFileNameRoot & ".act"
                 If Dir(strFile) <> "" Then
                     MsgBox("Account file already exists with that name.", MsgBoxStyle.Critical)
                     Exit Function
@@ -242,7 +242,7 @@ Public Module CBMain
             Throw New Exception("Unrecognized account subtype")
         End If
 
-        strFile = gstrAccountPath() & "\" & objAccount.strFileNameRoot & ".act"
+        strFile = objAccount.objCompany.strAccountPath() & "\" & objAccount.strFileNameRoot & ".act"
         intFile = FreeFile()
         FileOpen(intFile, strFile, OpenMode.Output)
 
@@ -264,7 +264,7 @@ Public Module CBMain
 
         FileClose(intFile)
 
-        strFile = gstrAccountPath() & "\" & objAccount.strFileNameRoot & ".rep"
+        strFile = objAccount.objCompany.strAccountPath() & "\" & objAccount.strFileNameRoot & ".rep"
         intFile = FreeFile()
         FileOpen(intFile, strFile, OpenMode.Output)
 
@@ -311,20 +311,20 @@ Public Module CBMain
         System.Windows.Forms.Application.DoEvents()
     End Function
 
-    Public Sub gCreateStandardFolders()
+    Public Sub gCreateStandardFolders(ByVal objCompany As Company)
         Try
 
-            If Dir(gstrDataPath(), FileAttribute.Directory) = "" Then
-                MkDir(gstrDataPath())
+            If Dir(objCompany.strDataPath(), FileAttribute.Directory) = "" Then
+                MkDir(objCompany.strDataPath())
             End If
-            If Dir(gstrAccountPath(), FileAttribute.Directory) = "" Then
-                MkDir(gstrAccountPath())
+            If Dir(objCompany.strAccountPath(), FileAttribute.Directory) = "" Then
+                MkDir(objCompany.strAccountPath())
             End If
-            If Dir(gstrBackupPath(), FileAttribute.Directory) = "" Then
-                MkDir(gstrBackupPath())
+            If Dir(objCompany.strBackupPath(), FileAttribute.Directory) = "" Then
+                MkDir(objCompany.strBackupPath())
             End If
-            If Dir(gstrReportPath(), FileAttribute.Directory) = "" Then
-                MkDir(gstrReportPath())
+            If Dir(objCompany.strReportPath(), FileAttribute.Directory) = "" Then
+                MkDir(objCompany.strReportPath())
             End If
 
             Exit Sub
@@ -333,14 +333,14 @@ Public Module CBMain
         End Try
     End Sub
 
-    Public Sub gCreateStandardFiles()
+    Public Sub gCreateStandardFiles(ByVal objCompany As Company)
         Dim strFile As String
         Dim intFile As Integer
 
         Try
 
             'Standard category file
-            strFile = gstrAddPath("Shared.cat")
+            strFile = objCompany.strCategoryPath()
             If Dir(strFile, FileAttribute.Normal) = "" Then
                 MsgBox("Creating standard category list, which you can edit later...", MsgBoxStyle.Information)
                 intFile = FreeFile()
@@ -391,7 +391,7 @@ Public Module CBMain
             End If
 
             'Standard budget file
-            strFile = gstrAddPath("Shared.bud")
+            strFile = objCompany.strBudgetPath()
             If Dir(strFile, FileAttribute.Normal) = "" Then
                 MsgBox("Creating standard budget list, which you can edit later...", MsgBoxStyle.Information)
                 intFile = FreeFile()
@@ -405,7 +405,7 @@ Public Module CBMain
             End If
 
             'Standard payee file
-            strFile = gstrPayeeFilePath()
+            strFile = objCompany.strPayeeFilePath()
             If Dir(strFile, FileAttribute.Normal) = "" Then
                 intFile = FreeFile()
                 FileOpen(intFile, strFile, OpenMode.Output)
@@ -416,7 +416,7 @@ Public Module CBMain
             End If
 
             'Standard QIF import transaction types file
-            strFile = gstrTrxTypeFilePath()
+            strFile = objCompany.strTrxTypeFilePath()
             If Dir(strFile, FileAttribute.Normal) = "" Then
                 intFile = FreeFile()
                 FileOpen(intFile, strFile, OpenMode.Output)

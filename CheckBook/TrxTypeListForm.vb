@@ -34,7 +34,7 @@ Friend Class TrxTypeListForm
                     Exit Sub
                 End If
             Next frm
-            strTableFile = gstrTrxTypeFilePath()
+            strTableFile = mobjCompany.strTrxTypeFilePath()
             mdomTypeTable = mobjCompany.domLoadFile(strTableFile)
             melmTypeTable = mdomTypeTable.DocumentElement
             Me.ShowDialog()
@@ -67,7 +67,7 @@ Friend Class TrxTypeListForm
             If blnValidateAndCopyTrxTypeToXML() Then
                 Exit Sub
             End If
-            mdomTypeTable.Save(gstrTrxTypeFilePath())
+            mdomTypeTable.Save(mobjCompany.strTrxTypeFilePath())
             MsgBox("Changes saved.", MsgBoxStyle.Information)
             Me.Close()
 

@@ -34,9 +34,9 @@ Friend Class CBMainForm
             frmStartup.Show()
             frmStartup.ShowStatus("Initializing")
 
-            If Dir(gstrDataPath(), FileAttribute.Directory) = "" Then
-                gCreateStandardFolders()
-                gCreateStandardFiles()
+            If Dir(mobjCompany.strDataPath(), FileAttribute.Directory) = "" Then
+                gCreateStandardFolders(mobjCompany)
+                gCreateStandardFiles(mobjCompany)
                 gCreateStandardCheckingAccount(mobjCompany)
             End If
 
@@ -65,7 +65,7 @@ Friend Class CBMainForm
 
             Me.Text = "Willow Creek Checkbook " & My.Application.Info.Version.Major & "." &
                         My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build &
-                        " [" & LCase(gstrDataPathValue) & "]"
+                        " [" & LCase(mobjCompany.strDataPath()) & "]"
 
             If mobjSecurity.blnNoFile Then
                 mnuEnableUserAccounts.Enabled = True
@@ -245,7 +245,7 @@ Friend Class CBMainForm
         Try
 
             frm = New ListEditorForm
-            frm.blnShowMe(mobjCompany, ListEditorForm.ListType.glngLIST_TYPE_BUDGET, gstrAddPath("Shared.bud"),
+            frm.blnShowMe(mobjCompany, ListEditorForm.ListType.glngLIST_TYPE_BUDGET, mobjCompany.strBudgetPath(),
                           mobjCompany.objBudgets, "Budget List", AddressOf blnEditStringTransElem)
 
             Exit Sub
@@ -258,7 +258,7 @@ Friend Class CBMainForm
         Try
             Using frmListEditor As ListEditorForm = New ListEditorForm()
                 Using frmCatEditor As CategoryEditorForm = New CategoryEditorForm()
-                    If frmListEditor.blnShowMe(mobjCompany, ListEditorForm.ListType.glngLIST_TYPE_CATEGORY, gstrAddPath("Shared.cat"),
+                    If frmListEditor.blnShowMe(mobjCompany, ListEditorForm.ListType.glngLIST_TYPE_CATEGORY, mobjCompany.strCategoryPath(),
                              mobjCompany.objIncExpAccounts, "Category List", AddressOf frmCatEditor.blnShowDialog) Then
                         mobjCompany.LoadCategories()
                     End If

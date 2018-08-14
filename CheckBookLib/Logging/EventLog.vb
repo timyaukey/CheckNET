@@ -75,7 +75,7 @@ Public Class EventLog
         For Each objLogger In mcolLoggers
             objLogger.WriteLog(Me)
         Next objLogger
-        strLogFolder = gstrAddPath("EventLogs")
+        strLogFolder = mobjCompany.strAddPath("EventLogs")
         If Dir(strLogFolder, FileAttribute.Directory) = "" Then
             MkDir(strLogFolder)
         End If

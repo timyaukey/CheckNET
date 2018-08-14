@@ -30,13 +30,12 @@ Public Class Company
         objBudgets = New BudgetTranslator()
         objSecurity = New Security(Me)
         mstrDataPathValue = strDataPathValue
-        gstrDataPathValue = mstrDataPathValue   'Legacy
         strCompanyName = "Schmidt's Garden Center, Inc."
     End Sub
 
     Public Function blnDataIsLocked() As Boolean
         Try
-            mobjLockFile = New IO.FileStream(gstrAddPath("LockFile.dat"), IO.FileMode.Append, IO.FileAccess.Write, IO.FileShare.None)
+            mobjLockFile = New IO.FileStream(strAddPath("LockFile.dat"), IO.FileMode.Append, IO.FileAccess.Write, IO.FileShare.None)
             Return False
         Catch ex As System.IO.IOException
             Return True
@@ -98,8 +97,8 @@ Public Class Company
     Public Sub LoadGlobalLists()
         Try
 
-            objBudgets.LoadFile(gstrAddPath("Shared.bud"))
-            objIncExpAccounts.LoadFile(gstrAddPath("Shared.cat"))
+            objBudgets.LoadFile(strBudgetPath())
+            objIncExpAccounts.LoadFile(strCategoryPath())
             LoadCategories()  'Will not include asset, liability and equity accounts, but that's okay at this point.
             FindPlaceholderBudget()
 
@@ -196,7 +195,7 @@ Public Class Company
 
             Dim strTableFile As String
 
-            strTableFile = gstrPayeeFilePath()
+            strTableFile = strPayeeFilePath()
             domTransTable = domLoadFile(strTableFile)
             CreateTransTableUCS()
 
@@ -280,7 +279,7 @@ Public Class Company
     Public Sub LoadAccountFiles(ByVal dlgShowAccount As ShowStartupAccount)
         Try
             'Find all ".act" files.
-            Dim strFile As String = Dir(gstrAccountPath() & "\*.act")
+            Dim strFile As String = Dir(strAccountPath() & "\*.act")
             Dim intFiles As Integer = 0
             Dim datCutoff As Date
             Dim astrFiles() As String = Nothing
@@ -348,5 +347,41 @@ Public Class Company
 
     Public Shared Function strEncodeCatKey(ByVal strCatKey As String) As String
         Return "(" & strCatKey & ")"
+    End Function
+
+    Public Function strDataPath() As String
+        Return mstrDataPathValue
+    End Function
+
+    Public Function strAddPath(ByVal strBareName As String) As String
+        Return strDataPath() & "\" & strBareName
+    End Function
+
+    Public Function strTrxTypeFilePath() As String
+        Return strAddPath("QIFImportTrxTypes.xml")
+    End Function
+
+    Public Function strPayeeFilePath() As String
+        Return strAddPath("PayeeList.xml")
+    End Function
+
+    Public Function strCategoryPath() As String
+        Return strAddPath("Shared.cat")
+    End Function
+
+    Public Function strBudgetPath() As String
+        Return strAddPath("Shared.bud")
+    End Function
+
+    Public Function strAccountPath() As String
+        Return strAddPath("Accounts")
+    End Function
+
+    Public Function strReportPath() As String
+        Return strAddPath("Reports")
+    End Function
+
+    Public Function strBackupPath() As String
+        Return strAddPath("Backup")
     End Function
 End Class

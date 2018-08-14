@@ -45,7 +45,7 @@ Public Class ImportUtilities
 
             Dim strTableFile As String
 
-            strTableFile = gstrTrxTypeFilePath()
+            strTableFile = mobjCompany.strTrxTypeFilePath()
             mdomTrxTypes = mobjCompany.domLoadFile(strTableFile)
 
             Exit Sub

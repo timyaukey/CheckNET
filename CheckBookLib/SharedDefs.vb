@@ -31,33 +31,11 @@ Public Module SharedDefs
     'Lower bound of many arrays
     Public Const gintLBOUND1 As Short = 1
 
-    Public gstrDataPathValue As String
-
     Public Function gaSplit(ByVal strInput As String, ByVal strSeparator As String) As String()
         Dim sep(1) As String
         sep(0) = strSeparator
         Dim tmp() As String = strInput.Split(sep, StringSplitOptions.None)
         Return tmp
-    End Function
-
-    Public Function gstrDataPath() As String
-        gstrDataPath = gstrDataPathValue
-    End Function
-
-    Public Function gstrAddPath(ByVal strBareName As String) As String
-        gstrAddPath = gstrDataPath() & "\" & strBareName
-    End Function
-
-    '$Description Path and name of trx type translation file.
-
-    Public Function gstrTrxTypeFilePath() As String
-        gstrTrxTypeFilePath = gstrAddPath("QIFImportTrxTypes.xml")
-    End Function
-
-    '$Description Path and name of payee file.
-
-    Public Function gstrPayeeFilePath() As String
-        gstrPayeeFilePath = gstrAddPath("PayeeList.xml")
     End Function
 
     'Category keys of categories which typically have due dates
@@ -67,22 +45,6 @@ Public Module SharedDefs
 
     'Key of budget used as placeholder in fake trx.
     Public gstrPlaceholderBudgetKey As String
-
-    Public Function gstrAccountPath() As String
-        gstrAccountPath = gstrDataPath() & "\Accounts"
-    End Function
-
-    Public Function gstrReportPath() As String
-        gstrReportPath = gstrDataPath() & "\Reports"
-    End Function
-
-    Public Function gstrBackupPath() As String
-        gstrBackupPath = gstrDataPath() & "\Backup"
-    End Function
-
-    Public Function gstrImageFilePath() As String
-        gstrImageFilePath = gstrDataPath() & "\ImageFiles"
-    End Function
 
     Public Function gstrMakeRepeatId(ByVal strRepeatKey As String, ByVal intRepeatSeq As Integer) As String
         gstrMakeRepeatId = "#" & strRepeatKey & "." & intRepeatSeq

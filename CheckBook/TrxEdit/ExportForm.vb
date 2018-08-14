@@ -32,7 +32,7 @@ Friend Class ExportForm
     Public Function blnGetSettings(ByVal objCompany As Company) As Boolean
         mobjCompany = objCompany
         mblnCancel = True
-        mstrOutputFile = gstrReportPath() & "\ExportSplits.csv"
+        mstrOutputFile = mobjCompany.strReportPath() & "\ExportSplits.csv"
         lblOutputFile.Text = "Will output to " & mstrOutputFile
         Me.ShowDialog()
         blnGetSettings = Not mblnCancel

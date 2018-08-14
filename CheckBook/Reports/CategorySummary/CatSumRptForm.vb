@@ -7,8 +7,9 @@ Imports CheckBookLib
 
 Friend Class CatSumRptForm
 	Inherits System.Windows.Forms.Form
-	
-	Private maudtCatTotals() As PublicTypes.CategoryInfo 'Indexed by index in gobjCategories.
+
+    Private mobjCompany As Company
+    Private maudtCatTotals() As PublicTypes.CategoryInfo 'Indexed by index in gobjCategories.
     Private mcolSelectedAccounts As IEnumerable(Of Account)
     Private mobjCats As IStringTranslator
     Private mdatStart As Date
@@ -22,11 +23,11 @@ Friend Class CatSumRptForm
 	
 	Private Const mintAMOUNT_WIDTH As Short = 24
 
-    Public Sub ShowMe(ByRef audtCatTotals() As PublicTypes.CategoryInfo, ByVal colSelectedAccounts As IEnumerable(Of Account),
+    Public Sub ShowMe(ByVal objCompany As Company, ByRef audtCatTotals() As PublicTypes.CategoryInfo, ByVal colSelectedAccounts As IEnumerable(Of Account),
                       ByVal objCats As IStringTranslator, ByVal datStart As Date, ByVal datEnd As Date,
                       ByVal blnIncludeFake As Boolean, ByVal blnIncludeGenerated As Boolean, ByVal objHostUI As IHostUI)
 
-        'maudtCatTotals = VB6.CopyArray(audtCatTotals)
+        mobjCompany = objCompany
         maudtCatTotals = audtCatTotals.Clone()
         mcolSelectedAccounts = colSelectedAccounts
         mobjCats = objCats
@@ -70,7 +71,7 @@ Friend Class CatSumRptForm
 		
         Try
 
-            strOutFile = gstrReportPath() & "\CatSum.rpt"
+            strOutFile = mobjCompany.strReportPath() & "\CatSum.rpt"
             mintOutFile = FreeFile()
             FileOpen(mintOutFile, strOutFile, OpenMode.Output)
             ShowSpecs(mcolSelectedAccounts, mdatStart, mdatEnd, mblnIncludeFake, mblnIncludeGenerated)

@@ -1455,7 +1455,7 @@ Friend Class TrxForm
 
             gstrNextCheckNumToPrint = CStr(Val(strNumber) + 1)
 
-            domCheckFormat = gdomGetCheckFormat()
+            domCheckFormat = gdomGetCheckFormat(mobjCompany)
             If domCheckFormat Is Nothing Then
                 Exit Sub
             End If

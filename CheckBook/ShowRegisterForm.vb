@@ -170,21 +170,21 @@ Friend Class ShowRegisterForm
         Try
 
             Do
-                strFile = Dir(gstrBackupPath() & "\" & strNameRoot & ".act.*")
+                strFile = Dir(mobjCompany.strBackupPath() & "\" & strNameRoot & ".act.*")
                 If strFile = "" Then
                     Exit Do
                 End If
-                Kill(gstrBackupPath() & "\" & strFile)
+                Kill(mobjCompany.strBackupPath() & "\" & strFile)
             Loop
 
-            strFile = gstrAccountPath() & "\" & strNameRoot & ".rep"
+            strFile = mobjCompany.strAccountPath() & "\" & strNameRoot & ".rep"
             If Dir(strFile) <> "" Then
                 Kill(strFile)
             End If
 
             'It looks for ACT files to find accounts, so delete this one last
             'in case it crashes deleting other files. So you can try again.
-            strFile = gstrAccountPath() & "\" & strNameRoot & ".act"
+            strFile = mobjCompany.strAccountPath() & "\" & strNameRoot & ".act"
             If Dir(strFile) <> "" Then
                 Kill(strFile)
             End If

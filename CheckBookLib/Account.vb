@@ -300,12 +300,12 @@ Public Class Account
         Try
 
             intFile = FreeFile()
-            FileOpen(intFile, gstrAccountPath() & "\" & mstrFileNameRoot, OpenMode.Input)
+            FileOpen(intFile, mobjCompany.strAccountPath() & "\" & mstrFileNameRoot, OpenMode.Input)
 
             strLine = LineInput(intFile)
             lngLinesRead = lngLinesRead + 1
             'The difference between FHCKBK1 and FHCKBK2 is that FHCKBK2 is hardcoded
-            'to use budget file Shared.bud, category file Shared.cat, and repeat group
+            'to use a specific budget file name and category file name, and repeat group
             'file (acctfilename).rep instead of getting the file names from FC, FB and FR
             'lines in the .act file.
             If strLine <> "FHCKBK2" Then
@@ -598,7 +598,7 @@ Public Class Account
         Try
 
             mintSaveFile = FreeFile()
-            FileOpen(mintSaveFile, gstrAccountPath() & "\" & strPath_, OpenMode.Output)
+            FileOpen(mintSaveFile, mobjCompany.strAccountPath() & "\" & strPath_, OpenMode.Output)
             blnFileOpen = True
 
             SaveLine("FHCKBK2")
