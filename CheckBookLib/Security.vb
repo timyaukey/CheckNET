@@ -3,12 +3,17 @@ Option Explicit On
 
 Public Class Security
 
+    Private mobjCompany As Company
     Private mstrFilePath As String
     Private mdomSecurity As VB6XmlDocument
     Private melmUser As VB6XmlElement
     Private mstrLoginSaved As String
     Private mstrLogin As String
     Private mblnNoFile As Boolean
+
+    Public Sub New(ByVal objCompany As Company)
+        mobjCompany = objCompany
+    End Sub
 
     Private Sub Init()
         'UPGRADE_NOTE: Object melmUser may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
@@ -31,7 +36,7 @@ Public Class Security
             mstrLogin = "anonymous"
             Return
         End If
-        mdomSecurity = gdomLoadFile(mstrFilePath)
+        mdomSecurity = mobjCompany.domLoadFile(mstrFilePath)
         If mdomSecurity.DocumentElement.Name <> "security" Then
             gRaiseError("Invalid security file document element")
         End If

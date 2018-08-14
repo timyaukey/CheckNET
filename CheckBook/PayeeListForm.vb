@@ -7,6 +7,7 @@ Friend Class PayeeListForm
     Inherits System.Windows.Forms.Form
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
+    Private mobjCompany As Company
     'A deep clone of gdomTransTable.
     Private mdomNewTransTable As VB6XmlDocument
     'This is the <Table> element that will be modified, mdomNewTransTable.documentElement.
@@ -24,6 +25,7 @@ Friend Class PayeeListForm
     Public Sub ShowMe(ByVal objCompany As Company)
         Try
 
+            mobjCompany = objCompany
             LoadSharedDocument()
             gLoadComboFromStringTranslator(cboCategory, objCompany.objCategories, True)
             gLoadComboFromStringTranslator(cboBudget, objCompany.objBudgets, True)
@@ -38,12 +40,11 @@ Friend Class PayeeListForm
     End Sub
 
     Private Sub LoadSharedDocument()
-        mdomNewTransTable = gdomTransTable.CloneNode(True)
+        mdomNewTransTable = mobjCompany.domTransTable.CloneNode(True)
         melmTransTable = mdomNewTransTable.DocumentElement
     End Sub
 
     Private Sub PayeeListForm_Activated(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Activated
-
         Try
 
             If Not mblnActivated Then
@@ -63,10 +64,10 @@ Friend Class PayeeListForm
             If blnValidateAndCopyPayeeToXML() Then
                 Exit Sub
             End If
-            gdomTransTable = mdomNewTransTable
+            mobjCompany.domTransTable = mdomNewTransTable
             LoadSharedDocument()
-            gdomTransTable.Save(gstrPayeeFilePath())
-            gCreateTransTableUCS()
+            mobjCompany.domTransTable.Save(gstrPayeeFilePath())
+            mobjCompany.CreateTransTableUCS()
             Me.Close()
 
             Exit Sub

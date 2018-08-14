@@ -9,6 +9,7 @@ Module CheckPrinting
 
     Public gstrNextCheckNumToPrint As String
 
+    Private mobjCompany As Company
     Private mdblMarginLeft As Double
     Private mdblMarginTop As Double
     Private mdblCurrentX As Double
@@ -37,10 +38,11 @@ Module CheckPrinting
 
     End Function
 
-    Public Function gblnPrintCheck(ByVal domCheckFormat_ As VB6XmlDocument, ByVal objTrx_ As Trx) As Boolean
+    Public Function gblnPrintCheck(ByVal objCompany_ As Company, ByVal domCheckFormat_ As VB6XmlDocument, ByVal objTrx_ As Trx) As Boolean
         Dim objPrintDoc As PrintDocument
         Dim blnPreview As Boolean = False
 
+        mobjCompany = objCompany_
         mdomCheckFormat = domCheckFormat_
         mobjTrx = objTrx_
         objPrintDoc = New PrintDocument
@@ -93,7 +95,7 @@ Module CheckPrinting
 
         'Find the first memorized trx with the same payee name
         'and a mailing address.
-        colPayees = gcolFindPayeeMatches((mobjTrx.strDescription))
+        colPayees = mobjCompany.colFindPayeeMatches((mobjTrx.strDescription))
         intPayeeIndex = 0
         Do
             If intPayeeIndex >= colPayees.Length Then

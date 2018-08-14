@@ -46,7 +46,7 @@ Public Class ImportUtilities
             Dim strTableFile As String
 
             strTableFile = gstrTrxTypeFilePath()
-            mdomTrxTypes = gdomLoadFile(strTableFile)
+            mdomTrxTypes = mobjCompany.domLoadFile(strTableFile)
 
             Exit Sub
         Catch ex As Exception
@@ -357,7 +357,7 @@ Public Class ImportUtilities
             Dim curMatchTmp As Decimal
 
             strOutputPayee = strTrimmedPayee
-            objPayees = gdomTransTable.DocumentElement.SelectNodes("Payee")
+            objPayees = mobjCompany.domTransTable.DocumentElement.SelectNodes("Payee")
             For Each elmPayee In objPayees
                 strInput = UCase(Trim(CType(elmPayee.GetAttribute("Input"), String)))
                 If (strInput <> "") And (InStr(UCase(strTrimmedPayee), strInput) > 0) Then

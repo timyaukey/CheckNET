@@ -1404,7 +1404,7 @@ Friend Class UTMainForm
         gUTSetSubTest("Main")
 
         Dim objSec As Security
-        objSec = New Security
+        objSec = New Security(mobjCompany)
         objSec.CreateEmpty()
         gUTAssert(objSec.strLogin = "", "Login name was not empty")
         objSec.CreateUser("admin", "Administrator")
@@ -1413,7 +1413,7 @@ Friend Class UTMainForm
         objSec.CreateSignatures()
         objSec.Save()
 
-        objSec = New Security
+        objSec = New Security(mobjCompany)
         objSec.Load()
         gUTAssert(objSec.strLogin = "", "Login name was not empty 2")
         gUTAssert(Not objSec.blnFindUser("nouser"), "Should not have found user")
@@ -1429,7 +1429,7 @@ Friend Class UTMainForm
         objSec.CreateSignatures()
         objSec.Save()
 
-        objSec = New Security
+        objSec = New Security(mobjCompany)
         objSec.Load()
         gUTAssert(objSec.blnFindUser("admin"), "Did not find admin 2")
         gUTAssert(objSec.strLogin = "admin", "Login was not admin 2")

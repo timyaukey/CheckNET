@@ -56,7 +56,7 @@ Friend Class CBMainForm
             End If
 
             mobjCompany.LoadGlobalLists()
-            gLoadTransTable()
+            mobjCompany.LoadTransTable()
             mobjCompany.LoadAccountFiles(AddressOf frmStartup.Configure)
 
             frmStartup.ShowStatus("Loading main window")
@@ -302,7 +302,7 @@ Friend Class CBMainForm
         Try
 
             frm = New TrxTypeListForm
-            frm.ShowMe()
+            frm.ShowMe(mobjCompany)
 
             Exit Sub
         Catch ex As Exception

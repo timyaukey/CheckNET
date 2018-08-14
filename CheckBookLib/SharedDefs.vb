@@ -33,11 +33,6 @@ Public Module SharedDefs
 
     Public gstrDataPathValue As String
 
-    'Table with memorized payees.
-    Public gdomTransTable As VB6XmlDocument
-    'Above with Output attributes of Payee elements converted to upper case.
-    Public gdomTransTableUCS As VB6XmlDocument
-
     Public Function gaSplit(ByVal strInput As String, ByVal strSeparator As String) As String()
         Dim sep(1) As String
         sep(0) = strSeparator
@@ -451,94 +446,6 @@ Public Module SharedDefs
             Case 9 : strWordMultipliedByTen = "ninety"
             Case Else : strWordMultipliedByTen = ""
         End Select
-    End Function
-
-    '$Description Load list of memorized payees and import translation instructions.
-
-    Public Sub gLoadTransTable()
-        Try
-
-            Dim strTableFile As String
-
-            strTableFile = gstrPayeeFilePath()
-            gdomTransTable = gdomLoadFile(strTableFile)
-            gCreateTransTableUCS()
-
-            Exit Sub
-        Catch ex As Exception
-            gNestedException(ex)
-        End Try
-    End Sub
-
-    '$Description Deep clone gdomTransTable into gdomTransTableUCS, adding
-    '   an OutputUCS attribute for each Payee element with an Output attribute.
-    '   This routine must be called whenever payee information changes. The
-    '   resulting DOM is temporary, and never saved to an XML file.
-
-    Public Sub gCreateTransTableUCS()
-        Dim colPayees As VB6XmlNodeList
-        Dim elmPayee As VB6XmlElement
-        Dim vntOutput As Object
-
-        Try
-
-            gdomTransTableUCS = DirectCast(gdomTransTable.CloneNode(True), VB6XmlDocument)
-            colPayees = gdomTransTableUCS.DocumentElement.SelectNodes("Payee")
-            For Each elmPayee In colPayees
-                vntOutput = elmPayee.GetAttribute("Output")
-                If Not gblnXmlAttributeMissing(vntOutput) Then
-                    elmPayee.SetAttribute("OutputUCS", UCase(CStr(vntOutput)))
-                End If
-            Next elmPayee
-
-            Exit Sub
-        Catch ex As Exception
-            gNestedException(ex)
-        End Try
-    End Sub
-
-    Public Function gcolFindPayeeMatches(ByRef strRawInput As String) As VB6XmlNodeList
-        Dim strInput As String
-        Dim strXPath As String
-
-        gcolFindPayeeMatches = Nothing
-        Try
-
-            strInput = UCase(Trim(strRawInput))
-            strInput = Replace(strInput, "'", "")
-            strXPath = "Payee[substring(@OutputUCS,1," & Len(strInput) & ")='" & strInput & "']"
-            gcolFindPayeeMatches = gdomTransTableUCS.DocumentElement.SelectNodes(strXPath)
-
-            Exit Function
-        Catch ex As Exception
-            gNestedException(ex)
-        End Try
-    End Function
-
-    '$Description Load an XML file into a new DOM and return it.
-
-    Public Function gdomLoadFile(ByVal strFile As String) As VB6XmlDocument
-        Dim dom As VB6XmlDocument
-        Dim objParseError As VB6XmlParseError
-
-        gdomLoadFile = Nothing
-        Try
-
-            dom = New VB6XmlDocument
-            With dom
-                .Load(strFile)
-                objParseError = .ParseError
-                If Not objParseError Is Nothing Then
-                    gRaiseError("XML parse error loading file: " & gstrXMLParseErrorText(objParseError))
-                End If
-                .SetProperty("SelectionLanguage", "XPath")
-            End With
-            gdomLoadFile = dom
-
-            Exit Function
-        Catch ex As Exception
-            gNestedException(ex)
-        End Try
     End Function
 
     Public Function gblnValidDate(ByVal strDate As String) As Boolean

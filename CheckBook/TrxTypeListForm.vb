@@ -7,6 +7,7 @@ Friend Class TrxTypeListForm
     Inherits System.Windows.Forms.Form
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
+    Private mobjCompany As Company
     Private mdomTypeTable As VB6XmlDocument
     'This is the <Table> element that will be modified.
     Private melmTypeTable As VB6XmlElement
@@ -20,12 +21,13 @@ Friend Class TrxTypeListForm
     'True iff Form_Activate event has fired.
     Private mblnActivated As Boolean
 
-    Public Sub ShowMe()
+    Public Sub ShowMe(ByVal objCompany_ As Company)
         Dim strTableFile As String
         Dim frm As System.Windows.Forms.Form
 
         Try
 
+            mobjCompany = objCompany_
             For Each frm In gcolForms()
                 If TypeOf frm Is BankImportForm Then
                     MsgBox("You may not edit transaction types while importing from " & "the bank.", MsgBoxStyle.Critical)
@@ -33,7 +35,7 @@ Friend Class TrxTypeListForm
                 End If
             Next frm
             strTableFile = gstrTrxTypeFilePath()
-            mdomTypeTable = gdomLoadFile(strTableFile)
+            mdomTypeTable = mobjCompany.domLoadFile(strTableFile)
             melmTypeTable = mdomTypeTable.DocumentElement
             Me.ShowDialog()
 
