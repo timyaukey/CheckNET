@@ -23,9 +23,9 @@ Public Class Security
         End Get
     End Property
 
-    Public Sub Load(ByVal strFileName As String)
+    Public Sub Load()
         Init()
-        MakePath(strFileName)
+        MakePath()
         If Dir(mstrFilePath) = "" Then
             mblnNoFile = True
             mstrLogin = "anonymous"
@@ -37,27 +37,17 @@ Public Class Security
         End If
     End Sub
 
-    Public Sub CreateEmpty(ByVal strFileName As String)
+    Public Sub CreateEmpty()
         Init()
-        MakePath(strFileName)
+        MakePath()
         mdomSecurity = New VB6XmlDocument
         mdomSecurity.LoadXml("<security>" & vbCrLf & "</security>")
         mstrLogin = ""
     End Sub
 
-    Private Sub MakePath(ByVal strFileName As String)
-        mstrFilePath = strMakePath(strFileName)
+    Private Sub MakePath()
+        mstrFilePath = gstrDataPath() & "\Security.xml"
     End Sub
-
-    Public Function strMakePath(ByVal strFileName As String) As String
-        strMakePath = gstrDataPath() & "\" & strFileName
-    End Function
-
-    Public ReadOnly Property strDefaultFileName() As String
-        Get
-            strDefaultFileName = "Security.xml"
-        End Get
-    End Property
 
     Public ReadOnly Property blnNoFile() As Boolean
         Get

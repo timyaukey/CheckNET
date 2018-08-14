@@ -189,7 +189,6 @@ Public Class Company
             Dim datCutoff As Date
             Dim astrFiles() As String = Nothing
             Dim objAccount As Account
-            Dim objReg As Register
 
             While strFile <> ""
                 intFiles = intFiles + 1

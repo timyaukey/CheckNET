@@ -71,7 +71,7 @@ Public Module CBMain
             Dim frmLogin As LoginForm
 
             gobjSecurity = New Security
-            gobjSecurity.Load(gobjSecurity.strDefaultFileName)
+            gobjSecurity.Load()
             If gobjSecurity.blnNoFile Then
                 Return True
             End If

@@ -350,7 +350,7 @@ Friend Class CBMainForm
     Private Sub mnuEnableUserAccounts_Click(sender As Object, e As EventArgs) Handles mnuEnableUserAccounts.Click
         Try
             Dim strPassword As String = ""
-            gobjSecurity.CreateEmpty(gobjSecurity.strDefaultFileName)
+            gobjSecurity.CreateEmpty()
             gobjSecurity.CreateUser(gobjSecurity.strAdminLogin, "Administrator")
             gobjSecurity.SetPassword(strPassword)
             gobjSecurity.Save()

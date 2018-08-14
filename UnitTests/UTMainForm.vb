@@ -1405,7 +1405,7 @@ Friend Class UTMainForm
 
         Dim objSec As Security
         objSec = New Security
-        objSec.CreateEmpty("UTSecurity.xml")
+        objSec.CreateEmpty()
         gUTAssert(objSec.strLogin = "", "Login name was not empty")
         objSec.CreateUser("admin", "Administrator")
         gUTAssert(objSec.blnHaveUser, "Create did not remember user")
@@ -1414,7 +1414,7 @@ Friend Class UTMainForm
         objSec.Save()
 
         objSec = New Security
-        objSec.Load("UTSecurity.xml")
+        objSec.Load()
         gUTAssert(objSec.strLogin = "", "Login name was not empty 2")
         gUTAssert(Not objSec.blnFindUser("nouser"), "Should not have found user")
         gUTAssert(objSec.blnFindUser("admin"), "Did not find admin user")
@@ -1430,7 +1430,7 @@ Friend Class UTMainForm
         objSec.Save()
 
         objSec = New Security
-        objSec.Load("UTSecurity.xml")
+        objSec.Load()
         gUTAssert(objSec.blnFindUser("admin"), "Did not find admin 2")
         gUTAssert(objSec.strLogin = "admin", "Login was not admin 2")
         gUTAssert(Not objSec.blnPasswordMatches("wrongpass"), "Admin pass fail 2")
@@ -1450,7 +1450,7 @@ Friend Class UTMainForm
         mobjCompany = New Company(strDataPathValue)
         mobjCompany.LoadGlobalLists()
         gobjSecurity = New Security
-        gobjSecurity.CreateEmpty("")
+        gobjSecurity.CreateEmpty()
     End Sub
 
     Private Sub UTMainForm_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
