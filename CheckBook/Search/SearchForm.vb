@@ -301,7 +301,7 @@ Friend Class SearchForm
         Dim curAvailable As Decimal
 
         objItem = objAddNewMatch(objTrx, objSplit.curAmount)
-        If objSplit.strBudgetKey = gstrPlaceholderBudgetKey Then
+        If objSplit.strBudgetKey = mobjCompany.strPlaceholderBudgetKey Then
             curAvailable = objSplit.curAmount
         Else
             curAvailable = 0

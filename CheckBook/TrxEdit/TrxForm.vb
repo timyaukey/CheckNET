@@ -293,7 +293,7 @@ Friend Class TrxForm
         Dim intIndex As Integer
         mblnHasPlaceholderBudget = False
         For intIndex = 1 To mintSplits
-            If maudtSplits(intIndex).strBudgetKey = gstrPlaceholderBudgetKey Then
+            If maudtSplits(intIndex).strBudgetKey = mobjCompany.strPlaceholderBudgetKey Then
                 mblnHasPlaceholderBudget = True
                 Exit Sub
 
@@ -671,7 +671,7 @@ Friend Class TrxForm
     '   if the amount of the specified split is changed.
 
     Private Function blnPlaceholderAdjustmentRequired(ByRef intSplitIndex As Integer) As Boolean
-        If mblnHasPlaceholderBudget And maudtSplits(intSplitIndex).strBudgetKey <> gstrPlaceholderBudgetKey Then
+        If mblnHasPlaceholderBudget And maudtSplits(intSplitIndex).strBudgetKey <> mobjCompany.strPlaceholderBudgetKey Then
             blnPlaceholderAdjustmentRequired = True
         Else
             blnPlaceholderAdjustmentRequired = False
@@ -700,7 +700,7 @@ Friend Class TrxForm
         ReDim intPlaceholderIndexes(1)
         'Scan splits to find placeholders, and add up non-placeholders.
         For intSplitIndex = 1 To mintSplits
-            If maudtSplits(intSplitIndex).strBudgetKey = gstrPlaceholderBudgetKey Then
+            If maudtSplits(intSplitIndex).strBudgetKey = mobjCompany.strPlaceholderBudgetKey Then
                 intPlaceholders = intPlaceholders + 1
                 ReDim Preserve intPlaceholderIndexes(intPlaceholders)
                 intPlaceholderIndexes(intPlaceholders) = intSplitIndex

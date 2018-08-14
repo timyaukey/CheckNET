@@ -569,7 +569,7 @@ Public Module CBMain
                 intDaysBack = 25
             Else
                 'Is the category one we guessed to have short terms?
-                If InStr(gstrShortTermsCatKeys, Company.strEncodeCatKey(objSplit.strCategoryKey)) > 0 Then
+                If InStr(objTrx.objReg.objAccount.objCompany.strShortTermsCatKeys, Company.strEncodeCatKey(objSplit.strCategoryKey)) > 0 Then
                     intDaysBack = 14
                 Else
                     intDaysBack = 30

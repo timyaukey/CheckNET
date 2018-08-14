@@ -38,14 +38,6 @@ Public Module SharedDefs
         Return tmp
     End Function
 
-    'Category keys of categories which typically have due dates
-    '14 days or less after invoice or billing dates. Category
-    'keys have "(" and ")" around them.
-    Public gstrShortTermsCatKeys As String
-
-    'Key of budget used as placeholder in fake trx.
-    Public gstrPlaceholderBudgetKey As String
-
     Public Function gstrMakeRepeatId(ByVal strRepeatKey As String, ByVal intRepeatSeq As Integer) As String
         gstrMakeRepeatId = "#" & strRepeatKey & "." & intRepeatSeq
     End Function
@@ -222,7 +214,7 @@ Public Module SharedDefs
         blnFirstSplit = True
         curAvailable = 0
         For Each objSplit In objTrx.colSplits
-            If objSplit.strBudgetKey = gstrPlaceholderBudgetKey Then
+            If objSplit.strBudgetKey = objCompany.strPlaceholderBudgetKey Then
                 curAvailable = curAvailable + objSplit.curAmount
             End If
             If blnFirstSplit Then

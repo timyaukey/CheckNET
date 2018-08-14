@@ -21,6 +21,14 @@ Public Class Company
     Private mobjLockFile As System.IO.Stream
     Private mintMaxAccountKey As Integer
 
+    'Category keys of categories which typically have due dates
+    '14 days or less after invoice or billing dates. Category
+    'keys have "(" and ")" around them.
+    Public strShortTermsCatKeys As String
+
+    'Key of budget used as placeholder in fake trx.
+    Public strPlaceholderBudgetKey As String
+
     Public Delegate Sub ShowStartupAccount(ByVal objAccount As Account)
 
     Public Sub New(ByVal strDataPathValue As String)
@@ -149,11 +157,11 @@ Public Class Company
         Dim intPlaceholderIndex As Integer
         intPlaceholderIndex = objBudgets.intLookupValue1("(placeholder)")
         If intPlaceholderIndex > 0 Then
-            gstrPlaceholderBudgetKey = objBudgets.strKey(intPlaceholderIndex)
+            strPlaceholderBudgetKey = objBudgets.strKey(intPlaceholderIndex)
         Else
             'Don't use empty string, because that's the key used
             'if a split doesn't use a budget.
-            gstrPlaceholderBudgetKey = "---"
+            strPlaceholderBudgetKey = "---"
         End If
     End Sub
 
@@ -165,7 +173,7 @@ Public Class Company
         Dim blnPossibleCredit As Boolean
         Dim blnPossibleUtility As Boolean
 
-        gstrShortTermsCatKeys = ""
+        strShortTermsCatKeys = ""
         For intCatIndex = 1 To objCategories.intElements
             strCatName = LCase(objCategories.strValue1(intCatIndex))
 
@@ -182,7 +190,7 @@ Public Class Company
                 blnHasWord(strCatName, "mortgage") Or blnHasWord(strCatName, "house")
 
             If blnPossibleCredit Or blnPossibleUtility Then
-                gstrShortTermsCatKeys = gstrShortTermsCatKeys & strEncodeCatKey(objCategories.strKey(intCatIndex))
+                strShortTermsCatKeys = strShortTermsCatKeys & strEncodeCatKey(objCategories.strKey(intCatIndex))
             End If
         Next
 
