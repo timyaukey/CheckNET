@@ -32,7 +32,7 @@ Public Class HTMLWriter
     End Sub
 
     Public Sub OutputHeader(ByVal strTitle As String, ByVal strSubTitle As String)
-        OutputDiv("ReportCompanyName", mobjCompany.strCompanyName)
+        OutputDiv("ReportCompanyName", mobjCompany.objInfo.strCompanyName)
         OutputDiv("ReportTitle", strTitle)
         OutputDiv("ReportSubTitle", strSubTitle)
         OutputDiv("ReportPrepared", "Prepared " + DateTime.Today.ToLongDateString())

@@ -51,10 +51,12 @@
         Me.mnuTools = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuRpt = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuSetup = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuCompanyInformation = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuListPayees = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuListCategories = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuListBudgets = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuListTrxTypes = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuCheckFormat = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuUserAccounts = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuEnableUserAccounts = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuAddUserAccount = New System.Windows.Forms.ToolStripMenuItem()
@@ -63,7 +65,6 @@
         Me.mnuDeleteUserAccount = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuRepairUserAccounts = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuWindows = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuCheckFormat = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuMain.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -151,11 +152,17 @@
         '
         'mnuSetup
         '
-        Me.mnuSetup.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuListPayees, Me.mnuListCategories, Me.mnuListBudgets, Me.mnuListTrxTypes, Me.mnuCheckFormat, Me.mnuUserAccounts})
+        Me.mnuSetup.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuListPayees, Me.mnuListCategories, Me.mnuListBudgets, Me.mnuListTrxTypes, Me.mnuCheckFormat, Me.mnuCompanyInformation, Me.mnuUserAccounts})
         Me.mnuSetup.MergeAction = System.Windows.Forms.MergeAction.Remove
         Me.mnuSetup.Name = "mnuSetup"
         Me.mnuSetup.Size = New System.Drawing.Size(49, 20)
         Me.mnuSetup.Text = "Setup"
+        '
+        'mnuCompanyInformation
+        '
+        Me.mnuCompanyInformation.Name = "mnuCompanyInformation"
+        Me.mnuCompanyInformation.Size = New System.Drawing.Size(207, 22)
+        Me.mnuCompanyInformation.Text = "Company Information"
         '
         'mnuListPayees
         '
@@ -180,6 +187,12 @@
         Me.mnuListTrxTypes.Name = "mnuListTrxTypes"
         Me.mnuListTrxTypes.Size = New System.Drawing.Size(207, 22)
         Me.mnuListTrxTypes.Text = "Transaction Import Types"
+        '
+        'mnuCheckFormat
+        '
+        Me.mnuCheckFormat.Name = "mnuCheckFormat"
+        Me.mnuCheckFormat.Size = New System.Drawing.Size(207, 22)
+        Me.mnuCheckFormat.Text = "Check Format"
         '
         'mnuUserAccounts
         '
@@ -231,12 +244,6 @@
         Me.mnuWindows.Size = New System.Drawing.Size(68, 20)
         Me.mnuWindows.Text = "Windows"
         '
-        'mnuCheckFormat
-        '
-        Me.mnuCheckFormat.Name = "mnuCheckFormat"
-        Me.mnuCheckFormat.Size = New System.Drawing.Size(207, 22)
-        Me.mnuCheckFormat.Text = "Check Format"
-        '
         'CBMainForm
         '
         Me.BackColor = System.Drawing.SystemColors.AppWorkspace
@@ -269,5 +276,6 @@
     Friend WithEvents mnuDeleteUserAccount As ToolStripMenuItem
     Friend WithEvents mnuRepairUserAccounts As ToolStripMenuItem
     Friend WithEvents mnuCheckFormat As ToolStripMenuItem
+    Friend WithEvents mnuCompanyInformation As ToolStripMenuItem
 #End Region
 End Class

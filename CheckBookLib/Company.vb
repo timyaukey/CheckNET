@@ -1,16 +1,18 @@
 Option Strict On
 Option Explicit On
 
+Imports System.Xml.Serialization
+
 Public Class Company
 
     Public Event SomethingModified()
 
-    Public ReadOnly strCompanyName As String
     Public ReadOnly colAccounts As List(Of Account)
     Public ReadOnly objCategories As CategoryTranslator
     Public ReadOnly objIncExpAccounts As CategoryTranslator
     Public ReadOnly objBudgets As BudgetTranslator
     Public ReadOnly objSecurity As Security
+    Public objInfo As CompanyInfo
 
     'Table with memorized payees.
     Public domTransTable As VB6XmlDocument
@@ -38,7 +40,15 @@ Public Class Company
         objBudgets = New BudgetTranslator()
         objSecurity = New Security(Me)
         mstrDataPathValue = strDataPathValue
-        strCompanyName = "Schmidt's Garden Center, Inc."
+
+        Try
+            Dim ser As XmlSerializer = New XmlSerializer(GetType(CompanyInfo))
+            Using inputStream As System.IO.FileStream = New IO.FileStream(strCompanyInfoPath(), IO.FileMode.Open)
+                objInfo = DirectCast(ser.Deserialize(inputStream), CompanyInfo)
+            End Using
+        Catch ex As Exception
+            objInfo = New CompanyInfo()
+        End Try
     End Sub
 
     Public Function blnDataIsLocked() As Boolean
@@ -383,6 +393,10 @@ Public Class Company
 
     Public Function strCheckFormatPath() As String
         Return strAddPath("CheckFormat.xml")
+    End Function
+
+    Public Function strCompanyInfoPath() As String
+        Return strAddPath("CompanyInfo.xml")
     End Function
 
     Public Function strAccountPath() As String

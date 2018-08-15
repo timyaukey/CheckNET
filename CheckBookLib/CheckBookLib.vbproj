@@ -80,6 +80,7 @@
     <Compile Include="CategoryTranslator.vb" />
     <Compile Include="CBListBoxItem.vb" />
     <Compile Include="AgingUtils.vb" />
+    <Compile Include="CompanyInfo.vb" />
     <Compile Include="ErrorHandling.vb" />
     <Compile Include="FilePersisterExceptions.vb" />
     <Compile Include="IFilePersister.vb" />

@@ -525,4 +525,14 @@ Friend Class CBMainForm
             gTopException(ex)
         End Try
     End Sub
+
+    Private Sub mnuCompanyInformation_Click(sender As Object, e As EventArgs) Handles mnuCompanyInformation.Click
+        Try
+            Using frm As CompanyInfoEditor = New CompanyInfoEditor()
+                frm.ShowMe(mobjCompany)
+            End Using
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
+    End Sub
 End Class
