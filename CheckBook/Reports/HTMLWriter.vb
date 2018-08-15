@@ -5,12 +5,14 @@ Imports CheckBookLib
 Public Class HTMLWriter
     Private mobjCompany As Company
     Private mstrFileNameRoot As String
+    Private mblnLocalStylesheet As Boolean
     Private mobjBuilder As System.Text.StringBuilder
     Public blnUseMinusNumbers As Boolean
 
-    Public Sub New(ByVal objCompany As Company, ByVal strFileNameRoot As String)
+    Public Sub New(ByVal objCompany As Company, ByVal strFileNameRoot As String, ByVal blnLocalStylesheet As Boolean)
         mobjCompany = objCompany
         mstrFileNameRoot = strFileNameRoot
+        mblnLocalStylesheet = blnLocalStylesheet
         mobjBuilder = New System.Text.StringBuilder()
         blnUseMinusNumbers = False
     End Sub
@@ -19,10 +21,20 @@ Public Class HTMLWriter
         OutputLine("<html>")
         OutputLine("<head>")
         OutputLine(" <link rel='stylesheet' type='text/css' href='AllReports.css'>")
-        OutputLine(" <link rel='stylesheet' type='text/css' href='" + mstrFileNameRoot + ".css'>")
+        CopyStylesheet("AllReports.css")
+        If mblnLocalStylesheet Then
+            OutputLine(" <link rel='stylesheet' type='text/css' href='" + mstrFileNameRoot + ".css'>")
+            CopyStylesheet(mstrFileNameRoot + ".css")
+        End If
         OutputLine("</head>")
         OutputLine("<body>")
         OutputLine("<div class='ReportBody'>")
+    End Sub
+
+    Private Sub CopyStylesheet(ByVal strFileName As String)
+        Dim strInputPath As String = Company.strExecutableFolder() + "\\Reports\\" + strFileName
+        Dim strOutputPath As String = mobjCompany.strReportPath() + "\\" + strFileName
+        System.IO.File.Copy(strInputPath, strOutputPath, True)
     End Sub
 
     Public Sub EndReport()

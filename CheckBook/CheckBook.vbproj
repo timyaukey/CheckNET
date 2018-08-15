@@ -349,9 +349,15 @@
     <Compile Include="TrxTypeListForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Content Include="Reports\AllReports.css" />
-    <Content Include="Reports\BalanceSheet.css" />
-    <Content Include="Reports\ProfitAndLoss.css" />
+    <Content Include="Reports\AllReports.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\BalanceSheet.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\ProfitAndLoss.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="AccountForm.resx">
       <DependentUpon>AccountForm.vb</DependentUpon>
     </EmbeddedResource>

@@ -46,10 +46,16 @@ Public Class Company
             Using inputStream As System.IO.FileStream = New IO.FileStream(strCompanyInfoPath(), IO.FileMode.Open)
                 objInfo = DirectCast(ser.Deserialize(inputStream), CompanyInfo)
             End Using
-        Catch ex As Exception
+        Catch ex As System.IO.FileNotFoundException
             objInfo = New CompanyInfo()
+        Catch ex As Exception
+            Throw ex
         End Try
     End Sub
+
+    Public Shared Function strExecutableFolder() As String
+        Return My.Application.Info.DirectoryPath
+    End Function
 
     Public Function blnDataIsLocked() As Boolean
         Try

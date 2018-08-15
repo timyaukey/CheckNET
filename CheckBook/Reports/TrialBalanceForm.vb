@@ -73,7 +73,7 @@ Public Class TrialBalanceForm
     Private Sub btnBalanceSheet_Click(sender As Object, e As EventArgs) Handles btnBalanceSheet.Click
         Try
             Dim objBalSheet As AccountGroupManager = objGetBalanceSheetData()
-            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "BalanceSheet")
+            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "BalanceSheet", True)
             Dim objAccumAssets As ReportAccumulator = New ReportAccumulator()
             Dim objAccumLiabilities As ReportAccumulator = New ReportAccumulator()
             Dim objAccumEquity As ReportAccumulator = New ReportAccumulator()
@@ -167,7 +167,7 @@ Public Class TrialBalanceForm
     Private Sub btnIncomeExpenseStatement_Click(sender As Object, e As EventArgs) Handles btnIncomeExpenseStatement.Click
         Try
             Dim objIncExp As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, ctlStartDate.Value, ctlEndDate.Value, False)
-            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "ProfitAndLoss")
+            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "ProfitAndLoss", True)
             Dim objAccumIncome As ReportAccumulator = New ReportAccumulator()
             Dim objAccumOperExp As ReportAccumulator = New ReportAccumulator()
             Dim objAccumOtherExp As ReportAccumulator = New ReportAccumulator()
@@ -263,7 +263,7 @@ Public Class TrialBalanceForm
 
     Private Sub btnLoanBalances_Click(sender As Object, e As EventArgs) Handles btnLoanBalances.Click
         Try
-            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "LoanBalances")
+            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "LoanBalances", False)
             Dim objBalSheet As AccountGroupManager = objGetBalanceSheetData()
             Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
             Dim objAccumDummy As ReportAccumulator = New ReportAccumulator()
@@ -296,7 +296,7 @@ Public Class TrialBalanceForm
 
     Private Sub btnVendorBalances_Click(sender As Object, e As EventArgs) Handles btnVendorBalances.Click
         Try
-            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "VendorBalances")
+            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "VendorBalances", False)
             Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
             Dim objAccumDummy As ReportAccumulator = New ReportAccumulator()
             Dim strLineHeaderClass As String = "ReportHeader2"

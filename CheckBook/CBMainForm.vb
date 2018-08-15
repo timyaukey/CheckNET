@@ -25,7 +25,7 @@ Friend Class CBMainForm
 
             strDataPathValue = System.Configuration.ConfigurationManager.AppSettings("DataPath")
             If String.IsNullOrEmpty(strDataPathValue) Then
-                strDataPathValue = My.Application.Info.DirectoryPath & "\Data"
+                strDataPathValue = Company.strExecutableFolder() & "\Data"
             End If
 
             mobjCompany = New Company(strDataPathValue)
