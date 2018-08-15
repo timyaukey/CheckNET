@@ -35,7 +35,7 @@ Partial Class CompanyInfoEditor
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.prpDetails.Location = New System.Drawing.Point(12, 37)
         Me.prpDetails.Name = "prpDetails"
-        Me.prpDetails.PropertySort = System.Windows.Forms.PropertySort.NoSort
+        Me.prpDetails.PropertySort = System.Windows.Forms.PropertySort.Categorized
         Me.prpDetails.Size = New System.Drawing.Size(539, 442)
         Me.prpDetails.TabIndex = 0
         Me.prpDetails.ToolbarVisible = False

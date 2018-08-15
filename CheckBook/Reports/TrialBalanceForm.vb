@@ -84,6 +84,7 @@ Public Class TrialBalanceForm
             Dim strLineFooterTitleClass As String = "ReportFooterTitle2"
             Dim strLineFooterAmountClass As String = "ReportFooterAmount2"
             Dim strMinusClass As String = "Minus"
+            Dim objConfig As CompanyInfo = mobjCompany.objInfo
 
             objWriter.BeginReport()
             objWriter.OutputHeader("Balance Sheet", "As Of " + ctlEndDate.Value.ToShortDateString())
@@ -97,10 +98,23 @@ Public Class TrialBalanceForm
                 objBalSheet, Account.SubType.Asset_Inventory.ToString(), False, objAccumAssets)
             objWriter.OutputGroupSummary(strLineTitleClass, "Accounts Receivable", strLineAmountClass, strMinusClass,
                 objBalSheet, Account.SubType.Asset_AccountsReceivable.ToString(), False, objAccumAssets)
-            objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
-                objBalSheet, Account.SubType.Asset_LoanReceivable.ToString(), objAccumAssets)
-            objWriter.OutputGroupSummary(strLineTitleClass, "Real Property", strLineAmountClass, strMinusClass,
-                objBalSheet, Account.SubType.Asset_RealProperty.ToString(), False, objAccumAssets)
+
+            If objConfig.blnLoansReceivableSummaryOnly Then
+                objWriter.OutputGroupSummary(strLineTitleClass, "Loans Receivable", strLineAmountClass, strMinusClass,
+                    objBalSheet, Account.SubType.Asset_LoanReceivable.ToString(), objConfig.blnLoansReceivableSuppressZero, objAccumAssets)
+            Else
+                objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
+                    objBalSheet, Account.SubType.Asset_LoanReceivable.ToString(), objAccumAssets)
+            End If
+
+            If objConfig.blnRealPropertySummaryOnly Then
+                objWriter.OutputGroupSummary(strLineTitleClass, "Real Property", strLineAmountClass, strMinusClass,
+                    objBalSheet, Account.SubType.Asset_RealProperty.ToString(), objConfig.blnRealPropertySuppressZero, objAccumAssets)
+            Else
+                objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
+                    objBalSheet, Account.SubType.Asset_RealProperty.ToString(), objAccumAssets)
+            End If
+
             objWriter.OutputGroupSummary(strLineTitleClass, "Other Property", strLineAmountClass, strMinusClass,
                 objBalSheet, Account.SubType.Asset_OtherProperty.ToString(), False, objAccumAssets)
             objWriter.OutputGroupSummary(strLineTitleClass, "Investments", strLineAmountClass, strMinusClass,
@@ -112,8 +126,15 @@ Public Class TrialBalanceForm
             objWriter.blnUseMinusNumbers = True
 
             objWriter.OutputText(strLineHeaderClass, "Liabilities")
-            objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
-                objBalSheet, Account.SubType.Liability_LoanPayable.ToString(), objAccumLiabilities)
+
+            If objConfig.blnLoansPayableSummaryOnly Then
+                objWriter.OutputGroupSummary(strLineTitleClass, "Loans Payable", strLineAmountClass, strMinusClass,
+                    objBalSheet, Account.SubType.Liability_LoanPayable.ToString(), objConfig.blnLoansPayableSuppressZero, objAccumLiabilities)
+            Else
+                objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
+                    objBalSheet, Account.SubType.Liability_LoanPayable.ToString(), objAccumLiabilities)
+            End If
+
             objWriter.OutputGroupSummary(strLineTitleClass, "Accounts Payable", strLineAmountClass, strMinusClass,
                 objBalSheet, Account.SubType.Liability_AccountsPayable.ToString(), False, objAccumLiabilities)
             objWriter.OutputGroupSummary(strLineTitleClass, "Other", strLineAmountClass, strMinusClass,
