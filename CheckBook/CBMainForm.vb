@@ -515,4 +515,14 @@ Friend Class CBMainForm
             gTopException(ex)
         End Try
     End Sub
+
+    Private Sub mnuCheckFormat_Click(sender As Object, e As EventArgs) Handles mnuCheckFormat.Click
+        Try
+            Using frm As CheckFormatEditor = New CheckFormatEditor()
+                frm.ShowMe(mobjCompany)
+            End Using
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
+    End Sub
 End Class

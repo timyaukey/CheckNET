@@ -381,6 +381,10 @@ Public Class Company
         Return strAddPath("Shared.bud")
     End Function
 
+    Public Function strCheckFormatPath() As String
+        Return strAddPath("CheckFormat.xml")
+    End Function
+
     Public Function strAccountPath() As String
         Return strAddPath("Accounts")
     End Function

@@ -25,7 +25,7 @@ Module CheckPrinting
 
         gdomGetCheckFormat = Nothing
         domCheckFormat = New VB6XmlDocument
-        strCheckFormatFile = objCompany_.strAddPath("CheckFormat.xml")
+        strCheckFormatFile = objCompany_.strCheckFormatPath()
         domCheckFormat.Load(strCheckFormatFile)
         objParseError = domCheckFormat.ParseError
         If Not objParseError Is Nothing Then
@@ -182,6 +182,9 @@ Module CheckPrinting
         If elmInvoiceList Is Nothing Then
             Exit Sub
         End If
+        If dblX = 0.0D And dblY = 0.0D Then
+            Exit Sub
+        End If
 
         vntAttrib = elmInvoiceList.GetAttribute("rows")
         If gblnXmlAttributeMissing(vntAttrib) Then
@@ -263,6 +266,9 @@ Module CheckPrinting
         If elmItem Is Nothing Then
             Exit Sub
         End If
+        If dblX = 0.0D And dblY = 0.0D Then
+            Exit Sub
+        End If
 
         SetLocation(dblX, dblY, ev)
 
@@ -305,7 +311,6 @@ Module CheckPrinting
         Dim elmItem As VB6XmlElement
         Dim vntAttrib As Object
 
-        'UPGRADE_NOTE: Object objGetCheckPrintPos may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         objGetCheckPrintPos = Nothing
 
         elmItem = domCheckFormat.DocumentElement.SelectSingleNode(strItemName)

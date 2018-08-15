@@ -63,6 +63,7 @@
         Me.mnuDeleteUserAccount = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuRepairUserAccounts = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuWindows = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuCheckFormat = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuMain.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -150,7 +151,7 @@
         '
         'mnuSetup
         '
-        Me.mnuSetup.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuListPayees, Me.mnuListCategories, Me.mnuListBudgets, Me.mnuListTrxTypes, Me.mnuUserAccounts})
+        Me.mnuSetup.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuListPayees, Me.mnuListCategories, Me.mnuListBudgets, Me.mnuListTrxTypes, Me.mnuCheckFormat, Me.mnuUserAccounts})
         Me.mnuSetup.MergeAction = System.Windows.Forms.MergeAction.Remove
         Me.mnuSetup.Name = "mnuSetup"
         Me.mnuSetup.Size = New System.Drawing.Size(49, 20)
@@ -230,6 +231,12 @@
         Me.mnuWindows.Size = New System.Drawing.Size(68, 20)
         Me.mnuWindows.Text = "Windows"
         '
+        'mnuCheckFormat
+        '
+        Me.mnuCheckFormat.Name = "mnuCheckFormat"
+        Me.mnuCheckFormat.Size = New System.Drawing.Size(207, 22)
+        Me.mnuCheckFormat.Text = "Check Format"
+        '
         'CBMainForm
         '
         Me.BackColor = System.Drawing.SystemColors.AppWorkspace
@@ -261,5 +268,6 @@
     Friend WithEvents mnuChangeOtherPassword As ToolStripMenuItem
     Friend WithEvents mnuDeleteUserAccount As ToolStripMenuItem
     Friend WithEvents mnuRepairUserAccounts As ToolStripMenuItem
+    Friend WithEvents mnuCheckFormat As ToolStripMenuItem
 #End Region
 End Class
