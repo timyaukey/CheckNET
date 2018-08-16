@@ -25,6 +25,8 @@
         Me.lblMessage = New System.Windows.Forms.Label()
         Me.lblCopyright = New System.Windows.Forms.Label()
         Me.lblTitle = New System.Windows.Forms.Label()
+        Me.picSplash = New System.Windows.Forms.PictureBox()
+        CType(Me.picSplash, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lblMessage
@@ -59,22 +61,32 @@
         Me.lblTitle.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblTitle.Font = New System.Drawing.Font("Arial", 20.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTitle.Location = New System.Drawing.Point(12, 9)
+        Me.lblTitle.Location = New System.Drawing.Point(12, 19)
         Me.lblTitle.Name = "lblTitle"
-        Me.lblTitle.Size = New System.Drawing.Size(435, 43)
+        Me.lblTitle.Size = New System.Drawing.Size(435, 37)
         Me.lblTitle.TabIndex = 2
         Me.lblTitle.Text = "Willow Creek Checkbook"
         Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
+        'picSplash
+        '
+        Me.picSplash.BackgroundImage = CType(resources.GetObject("picSplash.BackgroundImage"), System.Drawing.Image)
+        Me.picSplash.Location = New System.Drawing.Point(12, 59)
+        Me.picSplash.Name = "picSplash"
+        Me.picSplash.Size = New System.Drawing.Size(435, 343)
+        Me.picSplash.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.picSplash.TabIndex = 3
+        Me.picSplash.TabStop = False
         '
         'StartupForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
         Me.ClientSize = New System.Drawing.Size(459, 475)
         Me.ControlBox = False
+        Me.Controls.Add(Me.picSplash)
         Me.Controls.Add(Me.lblTitle)
         Me.Controls.Add(Me.lblCopyright)
         Me.Controls.Add(Me.lblMessage)
@@ -87,11 +99,13 @@
         Me.Name = "StartupForm"
         Me.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        CType(Me.picSplash, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents lblCopyright As Label
     Friend WithEvents lblTitle As Label
+    Friend WithEvents picSplash As PictureBox
 #End Region
 End Class
