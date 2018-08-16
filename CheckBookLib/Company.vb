@@ -41,16 +41,14 @@ Public Class Company
         objSecurity = New Security(Me)
         mstrDataPathValue = strDataPathValue
 
-        Try
+        If System.IO.File.Exists(strCompanyInfoPath()) Then
             Dim ser As XmlSerializer = New XmlSerializer(GetType(CompanyInfo))
             Using inputStream As System.IO.FileStream = New IO.FileStream(strCompanyInfoPath(), IO.FileMode.Open)
                 objInfo = DirectCast(ser.Deserialize(inputStream), CompanyInfo)
             End Using
-        Catch ex As System.IO.FileNotFoundException
+        Else
             objInfo = New CompanyInfo()
-        Catch ex As Exception
-            Throw ex
-        End Try
+        End If
     End Sub
 
     Public Shared Function strExecutableFolder() As String
