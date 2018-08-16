@@ -1073,6 +1073,7 @@ Friend Class TrxForm
                 Exit Function
             End If
         End If
+        Dim blnAccountIsPersonal As Boolean = (mobjReg.objAccount.lngType = Account.AccountType.Personal)
         For intSplit = 1 To mintSplits
             If blnSplitUsed(intSplit) Then
                 intSplitsUsed = intSplitsUsed + 1
@@ -1086,6 +1087,11 @@ Friend Class TrxForm
                             Dim intAccountKey As Integer = Integer.Parse(.strCategoryKey.Substring(0, intDotOffset))
                             If intAccountKey = mobjReg.objAccount.intKey Then
                                 ValidationError("Split category uses the same account")
+                                Exit Function
+                            End If
+                        Else
+                            If blnAccountIsPersonal <> CategoryTranslator.blnIsPersonal(mobjCompany.objCategories.strKeyToValue1(.strCategoryKey)) Then
+                                ValidationError("Personal category may not be used in a non-personal account, or visa versa")
                                 Exit Function
                             End If
                         End If
