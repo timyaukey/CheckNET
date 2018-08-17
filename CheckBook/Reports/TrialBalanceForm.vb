@@ -20,7 +20,7 @@ Public Class TrialBalanceForm
     Private Sub btnTrialBalance_Click(sender As Object, e As EventArgs) Handles btnTrialBalance.Click
         Try
             Dim objBalSheet As AccountGroupManager = objGetBalanceSheetData()
-            Dim objIncExp As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value, True)
+            Dim objIncExp As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value.Date, True)
             ShowInListView(lvwBalanceSheetAccounts, objBalSheet, "Balance Sheet Through End Date")
             ShowInListView(lvwIncExpAccounts, objIncExp, "Income/Expenses Through End Date")
             ConfigureStatementButtons(true)
@@ -38,7 +38,7 @@ Public Class TrialBalanceForm
     End Sub
 
     Private Function objGetBalanceSheetData() As AccountGroupManager
-        Return BalanceSheetScanner.objRun(mobjCompany, ctlEndDate.Value)
+        Return BalanceSheetScanner.objRun(mobjCompany, ctlEndDate.Value.Date)
     End Function
 
     Private Sub ShowInListView(ByVal lvw As ListView, ByVal objData As ReportGroupManager, ByVal strGrandTotalPrefix As String)
@@ -87,7 +87,7 @@ Public Class TrialBalanceForm
             Dim objConfig As CompanyInfo = mobjCompany.objInfo
 
             objWriter.BeginReport()
-            objWriter.OutputHeader("Balance Sheet", "As Of " + ctlEndDate.Value.ToShortDateString())
+            objWriter.OutputHeader("Balance Sheet", "As Of " + ctlEndDate.Value.Date.ToShortDateString())
 
             objWriter.OutputText(strLineHeaderClass, "Assets")
             objWriter.OutputGroupSummary(strLineTitleClass, "Checking Accounts", strLineAmountClass, strMinusClass,
@@ -166,7 +166,7 @@ Public Class TrialBalanceForm
 
     Private Sub btnIncomeExpenseStatement_Click(sender As Object, e As EventArgs) Handles btnIncomeExpenseStatement.Click
         Try
-            Dim objIncExp As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, ctlStartDate.Value, ctlEndDate.Value, False)
+            Dim objIncExp As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, ctlStartDate.Value.Date, ctlEndDate.Value.Date, False)
             Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "ProfitAndLoss", True)
             Dim objAccumIncome As ReportAccumulator = New ReportAccumulator()
             Dim objAccumOperExp As ReportAccumulator = New ReportAccumulator()
@@ -182,7 +182,7 @@ Public Class TrialBalanceForm
 
             objWriter.BeginReport()
             objWriter.OutputHeader("Profit and Loss Statement",
-                                   "From " + ctlStartDate.Value.ToShortDateString() + " To " + ctlEndDate.Value.ToShortDateString())
+                                   "From " + ctlStartDate.Value.Date.ToShortDateString() + " To " + ctlEndDate.Value.Date.ToShortDateString())
 
             objWriter.OutputText(strLineHeaderClass, "Income")
             objWriter.OutputGroupSummary(strLineTitleClass, "Sales", strLineAmountClass, strMinusClass,
@@ -230,7 +230,7 @@ Public Class TrialBalanceForm
     Private Sub btnPostRetainedEarnings_Click(sender As Object, e As EventArgs) Handles btnPostRetainedEarnings.Click
         Try
             Dim objRegister As Register = Nothing
-            If MsgBox("This will transfer all income and expense balances to retained earnings as of " + ctlEndDate.Value.ToShortDateString() +
+            If MsgBox("This will transfer all income and expense balances to retained earnings as of " + ctlEndDate.Value.Date.ToShortDateString() +
                       ". Are you sure you want to do this?", MsgBoxStyle.DefaultButton2 Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
                 Exit Sub
             End If
@@ -245,9 +245,9 @@ Public Class TrialBalanceForm
                 MsgBox("Unable to find Retained Earnings register")
                 Exit Sub
             End If
-            Dim objIncExpTotal As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value, True)
+            Dim objIncExpTotal As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value.Date, True)
             Dim objTrx As NormalTrx = New NormalTrx(objRegister)
-            objTrx.NewStartNormal(True, "Pmt", ctlEndDate.Value, "Post to retained earnings", "", Trx.TrxStatus.glngTRXSTS_UNREC,
+            objTrx.NewStartNormal(True, "Pmt", ctlEndDate.Value.Date, "Post to retained earnings", "", Trx.TrxStatus.glngTRXSTS_UNREC,
                                   False, 0D, False, False, 0, "", "")
             For Each objGroup As LineItemGroup In objIncExpTotal.colGroups
                 For Each objItem As ReportLineItem In objGroup.colItems
@@ -275,7 +275,7 @@ Public Class TrialBalanceForm
             Dim strMinusClass As String = "Minus"
 
             objWriter.BeginReport()
-            objWriter.OutputHeader("Long Term Debt Balances", "As Of " + ctlEndDate.Value.ToShortDateString())
+            objWriter.OutputHeader("Long Term Debt Balances", "As Of " + ctlEndDate.Value.Date.ToShortDateString())
 
             Dim objLoanGroup As LineItemGroup = objBalSheet.objGetGroup(Account.SubType.Liability_LoanPayable.ToString())
             For Each objItem As ReportLineItem In objLoanGroup.colItems
@@ -306,10 +306,10 @@ Public Class TrialBalanceForm
             Dim strLineFooterAmountClass As String = "ReportFooterAmount2"
             Dim strMinusClass As String = "Minus"
 
-            Dim colVendors As List(Of VendorSummary) = VendorSummary.colScanVendors(mobjCompany, ctlEndDate.Value)
+            Dim colVendors As List(Of VendorSummary) = VendorSummary.colScanVendors(mobjCompany, ctlEndDate.Value.Date)
 
             objWriter.BeginReport()
-            objWriter.OutputHeader("Vendor Balances", "As Of " + ctlEndDate.Value.ToShortDateString())
+            objWriter.OutputHeader("Vendor Balances", "As Of " + ctlEndDate.Value.Date.ToShortDateString())
 
             For Each objVendor As VendorSummary In colVendors
                 If objVendor.curBalance <> 0D Then
