@@ -64,7 +64,7 @@ Public Class RepeatSummarizer
             If Not keySum.FromGenerator Then
                 repeatName += " (old)"
             End If
-            trans.Add(New StringTransElement(keySum.Key, repeatName, repeatName))
+            trans.Add(New StringTransElement(trans, keySum.Key, repeatName, repeatName))
         Next
         BuildStringTranslator = trans
     End Function

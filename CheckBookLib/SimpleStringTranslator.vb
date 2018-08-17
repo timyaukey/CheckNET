@@ -47,7 +47,7 @@ Public Class SimpleStringTranslator
         strValue2 = Mid(strLine, intPos2 + 1, intPos3 - intPos2 - 1)
         strValue3 = Mid(strLine, intPos3 + 1)
 
-        objNew = New StringTransElement(strKey, strValue1, strValue2)
+        objNew = New StringTransElement(Me, strKey, strValue1, strValue2)
 
         If strValue3 <> "" Then
             Dim strExtraPairs() As String = strValue3.Split(strSeparator(0))

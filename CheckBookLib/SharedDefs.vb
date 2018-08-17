@@ -49,7 +49,7 @@ Public Module SharedDefs
         If strName = "" Then
             strRoot = "TmpCat#" & strKey
             strName = "E:" & strRoot
-            objCategories.Add(New StringTransElement(strKey, strName, " " & strRoot))
+            objCategories.Add(New StringTransElement(objCategories, strKey, strName, " " & strRoot))
             MsgBox("Error: Could not find code " & strKey & " in category " & "list. Have assigned it temporary category name " & strName & ", which " & "you will probably want to edit to make this category " & "permanent.", MsgBoxStyle.Information)
         End If
         gstrTranslateCatKey = strName
@@ -62,7 +62,7 @@ Public Module SharedDefs
             strName = objCompany.objBudgets.strKeyToValue1(strKey)
             If strName = "" Then
                 strName = "TmpBud#" & strKey
-                objCompany.objBudgets.Add(New StringTransElement(strKey, strName, strName))
+                objCompany.objBudgets.Add(New StringTransElement(objCompany.objBudgets, strKey, strName, strName))
                 MsgBox("Error: Could not find code " & strKey & " in budget " & "list. Have assigned it temporary budget name " & strName & ", which " & "you will probably want to edit to make this budget " & "permanent.", MsgBoxStyle.Information)
             End If
             gstrTranslateBudgetKey = strName

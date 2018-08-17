@@ -115,7 +115,7 @@ Friend Class ListEditorForm
                 Exit Sub
             End If
             'objTransElem = New StringTransElement(strKey, strValue1, strMakeValue2(strValue1))
-            objTransElem = New StringTransElement(strKey, "", "")
+            objTransElem = New StringTransElement(mobjList, strKey, "", "")
             If Not mblnEditElem(objTransElem, True) Then
                 Exit Sub
             End If
@@ -286,7 +286,7 @@ Friend Class ListEditorForm
                 Next
                 If mlngListType = ListType.glngLIST_TYPE_CATEGORY And Not blnFoundPersonal Then
                     Dim intKey As Integer = intGetUnusedKey()
-                    objTransElem = New StringTransElement(strMakeKey(intKey), "C", "C")
+                    objTransElem = New StringTransElement(mobjList, strMakeKey(intKey), "C", "C")
                     If blnInsertElement(objTransElem, True, strError) Then
                         MsgBox(strError)
                     End If

@@ -117,4 +117,8 @@ Public MustInherit Class StringTranslator(Of TElement As StringTransElement)
             Return 0
         End If
     End Function
+
+    Public Overridable Function strFormatElement(ByVal objElement As StringTransElement) As String Implements IStringTranslator.strFormatElement
+        Return objElement.strValue1
+    End Function
 End Class

@@ -28,12 +28,13 @@ Partial Class CategoryEditorForm
         Me.lblName = New System.Windows.Forms.Label()
         Me.cboType = New System.Windows.Forms.ComboBox()
         Me.lblType = New System.Windows.Forms.Label()
+        Me.lblExplanation = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'btnOkay
         '
         Me.btnOkay.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnOkay.Location = New System.Drawing.Point(220, 106)
+        Me.btnOkay.Location = New System.Drawing.Point(220, 122)
         Me.btnOkay.Name = "btnOkay"
         Me.btnOkay.Size = New System.Drawing.Size(75, 23)
         Me.btnOkay.TabIndex = 0
@@ -43,7 +44,7 @@ Partial Class CategoryEditorForm
         'btnCancel
         '
         Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnCancel.Location = New System.Drawing.Point(301, 106)
+        Me.btnCancel.Location = New System.Drawing.Point(301, 122)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(75, 23)
         Me.btnCancel.TabIndex = 1
@@ -88,11 +89,23 @@ Partial Class CategoryEditorForm
         Me.lblType.TabIndex = 5
         Me.lblType.Text = "Type:"
         '
+        'lblExplanation
+        '
+        Me.lblExplanation.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblExplanation.Location = New System.Drawing.Point(56, 66)
+        Me.lblExplanation.Name = "lblExplanation"
+        Me.lblExplanation.Size = New System.Drawing.Size(320, 53)
+        Me.lblExplanation.TabIndex = 6
+        Me.lblExplanation.Text = "Category type is used to classify income and expenses on financial statements. If" &
+    " no type is chosen it will be treated as ""Operating Expenses""."
+        '
         'CategoryEditorForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(388, 141)
+        Me.ClientSize = New System.Drawing.Size(388, 157)
+        Me.Controls.Add(Me.lblExplanation)
         Me.Controls.Add(Me.lblType)
         Me.Controls.Add(Me.cboType)
         Me.Controls.Add(Me.lblName)
@@ -115,4 +128,5 @@ Partial Class CategoryEditorForm
     Friend WithEvents lblName As Label
     Friend WithEvents cboType As ComboBox
     Friend WithEvents lblType As Label
+    Friend WithEvents lblExplanation As Label
 End Class

@@ -581,7 +581,7 @@ Public Class Account
 
         objResult = New SimpleStringTranslator
         For Each objReg In mcolRegisters
-            objResult.Add(New StringTransElement(objReg.strRegisterKey, objReg.strTitle, objReg.strTitle))
+            objResult.Add(New StringTransElement(objResult, objReg.strRegisterKey, objReg.strTitle, objReg.strTitle))
         Next objReg
         objRegisterList = objResult
     End Function

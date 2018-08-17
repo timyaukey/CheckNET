@@ -11,17 +11,17 @@ Public Class CategoryEditorForm
             strCatTypeCode = objTransElem.colValues(CategoryTranslator.strTypeKey)
         End If
         cboType.Items.Clear()
-        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeSales, "Sales")
-        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeReturns, "Returns")
-        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeCOGS, "Cost of Goods Sold")
-        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeOperatingExpenses, "Operating Expenses")
-        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeOfficeExpense, "Office Expense")
-        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypePayroll, "Payroll")
-        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeRentInc, "Rental Income")
-        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeRentExp, "Rental Expense")
-        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeOtherIncome, "Other Income")
-        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeOtherExpense, "Other Expenses")
-        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeTaxes, "Taxes")
+        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeSales)
+        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeReturns)
+        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeCOGS)
+        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeOperatingExpenses)
+        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeOfficeExpense)
+        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypePayroll)
+        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeRentInc)
+        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeRentExp)
+        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeOtherIncome)
+        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeOtherExpense)
+        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeTaxes)
         Me.ShowDialog()
         If mblnSaved Then
             objTransElem.strValue1 = txtName.Text
@@ -33,8 +33,8 @@ Public Class CategoryEditorForm
         Return mblnSaved
     End Function
 
-    Private Sub AddComboItem(ByVal cbo As ComboBox, ByVal strCurrentValueKey As String, ByVal strCBKey As String, ByVal strCBValue As String)
-        Dim objItem As ComboItem = New ComboItem(strCBKey, strCBValue)
+    Private Sub AddComboItem(ByVal cbo As ComboBox, ByVal strCurrentValueKey As String, ByVal strCBKey As String)
+        Dim objItem As ComboItem = New ComboItem(strCBKey, CategoryTranslator.strTranslateType(strCBKey))
         cbo.Items.Add(objItem)
         If objItem.strKey = strCurrentValueKey Then
             cbo.SelectedItem = objItem
