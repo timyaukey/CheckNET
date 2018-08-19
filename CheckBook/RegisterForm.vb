@@ -6,7 +6,6 @@ Imports CheckBookLib
 Friend Class RegisterForm
 	Inherits System.Windows.Forms.Form
 
-    Private mfrmStartup As StartupForm
     Private mobjCompany As Company
     Private mobjAccount As Account
     Private WithEvents mobjReg As Register
@@ -41,16 +40,13 @@ Friend Class RegisterForm
     Private mlngCOLOR_REAL As System.Drawing.Color = System.Drawing.Color.FromArgb(255, 255, 250) '&H80000005
     Private mlngCOLOR_REPLICA As System.Drawing.Color = System.Drawing.Color.FromArgb(&H80, &H40, &H0)
 
-    Public Sub ShowMe(ByVal objReg_ As Register, ByVal frmStartup As StartupForm)
+    Public Sub ShowMe(ByVal objReg_ As Register)
 
         mobjAccount = objReg_.objAccount
         mobjReg = objReg_
         mobjCompany = mobjAccount.objCompany
         mdatDefaultNewDate = Today
-
-        mfrmStartup = frmStartup
         Me.Show()
-        mfrmStartup = Nothing
 
     End Sub
 
@@ -335,8 +331,6 @@ Friend Class RegisterForm
         Dim datSelectDate As Date
         'The date of the current Trx.
         Dim datCurrentDate As Date
-        Dim strMonthYear As String = ""
-        Dim strNewMonthYear As String = ""
 
         grdReg.RowCount = mobjReg.lngTrxCount
         lngSelectIndex = 0
@@ -344,14 +338,6 @@ Friend Class RegisterForm
         datTargetDate = Today
         For lngIndex = 1 To mobjReg.lngTrxCount
             datCurrentDate = mobjReg.objTrx(lngIndex).datDate
-            strNewMonthYear = CStr(Year(datCurrentDate))
-            If strNewMonthYear <> strMonthYear Then
-                strMonthYear = strNewMonthYear
-                If Not mfrmStartup Is Nothing Then
-                    mfrmStartup.ShowStatus("Formatting " & mobjReg.strTitle & " " & strMonthYear)
-                End If
-            End If
-            'AllocateGridRow lngIndex
             If datCurrentDate <= datTargetDate Then
                 If datCurrentDate > datSelectDate Then
                     lngSelectIndex = lngIndex

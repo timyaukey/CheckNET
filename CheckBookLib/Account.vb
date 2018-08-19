@@ -1,6 +1,9 @@
 Option Strict On
 Option Explicit On
 
+Imports System.IO
+Imports System.Text
+
 Public Class Account
     'The master Company object.
     Private mobjCompany As Company
@@ -702,4 +705,61 @@ Public Class Account
     Public Overrides Function ToString() As String
         Return Me.strTitle
     End Function
+
+    Public Shared Sub CreateStandardChecking(ByVal objCompany As Company, ByVal objShowMessage As Company.ShowCreateNewMessage)
+        Try
+            objShowMessage("Creating first checking account...")
+            Dim objAccount As Account = New Account()
+            objAccount.Init(objCompany)
+            objAccount.intKey = objCompany.intGetUnusedAccountKey()
+            objAccount.lngSubType = Account.SubType.Asset_CheckingAccount
+            objAccount.strFileNameRoot = "Main"
+            objAccount.strTitle = "Checking Account"
+            objAccount.Create()
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
+    End Sub
+
+    Public Sub Create()
+        Try
+            Dim objSubTypeMatched As Account.SubTypeDef = Nothing
+
+            For Each objSubType As Account.SubTypeDef In Account.arrSubTypeDefs
+                If objSubType.lngSubType = lngSubType Then
+                    objSubTypeMatched = objSubType
+                End If
+            Next
+            If objSubTypeMatched Is Nothing Then
+                Throw New Exception("Unrecognized account subtype")
+            End If
+
+            Dim strAcctFile As String = mobjCompany.strAccountPath() & "\" & strFileNameRoot & ".act"
+            Using objAcctWriter As TextWriter = New StreamWriter(strAcctFile)
+                objAcctWriter.WriteLine("FHCKBK2")
+                objAcctWriter.WriteLine("AT" & strTitle)
+                objAcctWriter.WriteLine("AK" & CStr(intKey))
+                objAcctWriter.WriteLine("AY" & objSubTypeMatched.strSaveCode)
+                objAcctWriter.WriteLine("RK1")
+                objAcctWriter.WriteLine("RT" & strTitle)
+                objAcctWriter.WriteLine("RS")
+                objAcctWriter.WriteLine("RI")
+                objAcctWriter.WriteLine("RL1")
+                objAcctWriter.WriteLine(".R")
+                objAcctWriter.WriteLine("RF1")
+                objAcctWriter.WriteLine(".R")
+                objAcctWriter.WriteLine("RR1")
+                objAcctWriter.WriteLine(".R")
+                objAcctWriter.WriteLine(".A")
+            End Using
+
+            Dim strRepeatFile As String = mobjCompany.strAccountPath() & "\" & strFileNameRoot & ".rep"
+            Using objRepeatWriter As TextWriter = New StreamWriter(strRepeatFile)
+                objRepeatWriter.WriteLine("dummy line")
+            End Using
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
+    End Sub
+
 End Class

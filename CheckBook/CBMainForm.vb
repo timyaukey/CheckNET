@@ -23,6 +23,10 @@ Friend Class CBMainForm
         Try
             mblnCancelStart = True
 
+            frmStartup = New StartupForm
+            frmStartup.Show()
+            frmStartup.ShowStatus("Initializing")
+
             strDataPathValue = System.Configuration.ConfigurationManager.AppSettings("DataPath")
             If String.IsNullOrEmpty(strDataPathValue) Then
                 strDataPathValue = Company.strExecutableFolder() & "\Data"
@@ -30,14 +34,8 @@ Friend Class CBMainForm
 
             mobjCompany = New Company(strDataPathValue)
 
-            frmStartup = New StartupForm
-            frmStartup.Show()
-            frmStartup.ShowStatus("Initializing")
-
-            If Dir(mobjCompany.strDataPath(), FileAttribute.Directory) = "" Then
-                gCreateStandardFolders(mobjCompany)
-                gCreateStandardFiles(mobjCompany)
-                gCreateStandardCheckingAccount(mobjCompany)
+            If Not mobjCompany.blnDataPathExists() Then
+                mobjCompany.CreateInitialData(AddressOf ShowCreateMessage)
             End If
 
             If mobjCompany.blnDataIsLocked() Then
@@ -55,9 +53,7 @@ Friend Class CBMainForm
                 End If
             End If
 
-            mobjCompany.LoadGlobalLists()
-            mobjCompany.LoadTransTable()
-            mobjCompany.LoadAccountFiles(AddressOf frmStartup.Configure)
+            mobjCompany.Load(AddressOf frmStartup.Configure)
 
             frmStartup.ShowStatus("Loading main window")
 
@@ -86,21 +82,22 @@ Friend Class CBMainForm
             mblnCancelStart = False
 
             For Each objAccount In mobjCompany.colAccounts
-                frmStartup.Configure(objAccount)
                 For Each objReg In objAccount.colRegisters
                     If objReg.blnShowInitially Then
-                        gShowRegister(objAccount, objReg, frmStartup)
+                        gShowRegister(objAccount, objReg)
                     End If
                 Next
-                frmStartup.Configure(Nothing)
             Next
 
             frmStartup.Close()
-            frmStartup = frmStartup
 
         Catch ex As Exception
             gTopException(ex)
         End Try
+    End Sub
+
+    Private Sub ShowCreateMessage(ByVal strMessage As String)
+        MsgBox(strMessage, MsgBoxStyle.Information)
     End Sub
 
     Private colBankImportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)

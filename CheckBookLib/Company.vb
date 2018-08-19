@@ -1,6 +1,7 @@
 Option Strict On
 Option Explicit On
 
+Imports System.IO
 Imports System.Xml.Serialization
 
 Public Class Company
@@ -32,6 +33,7 @@ Public Class Company
     Public strPlaceholderBudgetKey As String
 
     Public Delegate Sub ShowStartupAccount(ByVal objAccount As Account)
+    Public Delegate Sub ShowCreateNewMessage(ByVal strMessage As String)
 
     Public Sub New(ByVal strDataPathValue As String)
         colAccounts = New List(Of Account)
@@ -114,6 +116,12 @@ Public Class Company
         For Each objAccount In colAccounts
             objAccount.Teardown()
         Next objAccount
+    End Sub
+
+    Public Sub Load(ByVal showAccount As ShowStartupAccount)
+        LoadGlobalLists()
+        LoadTransTable()
+        LoadAccountFiles(showAccount)
     End Sub
 
     Public Sub LoadGlobalLists()
@@ -298,7 +306,7 @@ Public Class Company
         End Try
     End Function
 
-    Public Sub LoadAccountFiles(ByVal dlgShowAccount As ShowStartupAccount)
+    Public Sub LoadAccountFiles(ByVal showAccount As ShowStartupAccount)
         Try
             'Find all ".act" files.
             Dim strFile As String = Dir(strAccountPath() & "\*.act")
@@ -318,10 +326,10 @@ Public Class Company
             For Each strFile In astrFiles
                 objAccount = New Account
                 objAccount.Init(Me)
-                dlgShowAccount(objAccount)
+                showAccount(objAccount)
                 objAccount.LoadStart(strFile)
                 Me.colAccounts.Add(objAccount)
-                dlgShowAccount(Nothing)
+                showAccount(Nothing)
             Next strFile
 
             Me.colAccounts.Sort(AddressOf AccountComparer)
@@ -332,24 +340,24 @@ Public Class Company
 
             'Load generated transactions for all of them.
             For Each objAccount In colAccounts
-                dlgShowAccount(objAccount)
+                showAccount(objAccount)
                 objAccount.LoadGenerated(datCutoff)
-                dlgShowAccount(Nothing)
+                showAccount(Nothing)
             Next
 
             'Call Trx.Apply() for all Trx loaded above.
             'This will create ReplicaTrx.
             For Each objAccount In colAccounts
-                dlgShowAccount(objAccount)
+                showAccount(objAccount)
                 objAccount.LoadApply()
-                dlgShowAccount(Nothing)
+                showAccount(Nothing)
             Next
 
             'Perform final steps after all Trx exist, including computing running balances.
             For Each objAccount In colAccounts
-                dlgShowAccount(objAccount)
+                showAccount(objAccount)
                 objAccount.LoadFinish()
-                dlgShowAccount(Nothing)
+                showAccount(Nothing)
             Next
         Catch ex As Exception
             gNestedException(ex)
@@ -373,6 +381,10 @@ Public Class Company
 
     Public Function strDataPath() As String
         Return mstrDataPathValue
+    End Function
+
+    Public Function blnDataPathExists() As Boolean
+        Return System.IO.Directory.Exists(strDataPath())
     End Function
 
     Public Function strAddPath(ByVal strBareName As String) As String
@@ -414,4 +426,115 @@ Public Class Company
     Public Function strBackupPath() As String
         Return strAddPath("Backup")
     End Function
+
+    Public Sub CreateInitialData(ByVal objShowMessage As ShowCreateNewMessage)
+        CreateStandardFolders(objShowMessage)
+        CreateStandardFiles(objShowMessage)
+        Account.CreateStandardChecking(Me, objShowMessage)
+    End Sub
+
+    Private Sub CreateStandardFolders(ByVal objShowMessage As ShowCreateNewMessage)
+        Try
+            If Not Directory.Exists(strDataPath()) Then
+                Directory.CreateDirectory(strDataPath())
+            End If
+            If Not Directory.Exists(strAccountPath()) Then
+                Directory.CreateDirectory(strAccountPath())
+            End If
+            If Not Directory.Exists(strBackupPath()) Then
+                Directory.CreateDirectory(strBackupPath())
+            End If
+            If Not Directory.Exists(strReportPath()) Then
+                Directory.CreateDirectory(strReportPath())
+            End If
+
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
+    End Sub
+
+    Private Sub CreateStandardFiles(ByVal objShowMessage As ShowCreateNewMessage)
+        Try
+            'Standard category file
+            If Not File.Exists(strCategoryPath()) Then
+                objShowMessage("Creating standard category list, which you can edit later...")
+                Using objCatWriter As TextWriter = New StreamWriter(strCategoryPath())
+                    objCatWriter.WriteLine("Dummy line")
+                    objCatWriter.WriteLine("/001/I/Income")
+                    objCatWriter.WriteLine("/002/I:Interest/ Interest/Type:OTINC")
+                    objCatWriter.WriteLine("/003/I:Wages/ Wages/Type:OTINC")
+                    objCatWriter.WriteLine("/004/I:Bonus/ Bonus/Type:OTINC")
+                    objCatWriter.WriteLine("/005/I:Other/ Other/Type:OTINC")
+                    objCatWriter.WriteLine("/006/I:Sales/ Sales/Type:SALES")
+                    objCatWriter.WriteLine("/007/I:Draw/ Draw/Type:OTINC")
+                    objCatWriter.WriteLine("/008/I:Gift/ Gift/Type:OTINC")
+                    objCatWriter.WriteLine("/009/E/Expense")
+                    objCatWriter.WriteLine("/010/E:Cable TV/ Cable TV")
+                    objCatWriter.WriteLine("/011/E:Car/ Car")
+                    objCatWriter.WriteLine("/012/E:Car:Gasoline/  Gasoline")
+                    objCatWriter.WriteLine("/013/E:Car:Payment/  Car Payment")
+                    objCatWriter.WriteLine("/014/E:Car:Repair/  Car Repair")
+                    objCatWriter.WriteLine("/015/E:Charity/ Charity")
+                    objCatWriter.WriteLine("/016/E:Cleaning/ Cleaning")
+                    objCatWriter.WriteLine("/017/E:Clothing/ Clothing")
+                    objCatWriter.WriteLine("/018/E:Credit Cards/ Credit Cards")
+                    objCatWriter.WriteLine("/019/E:Entertainment/ Entertainment")
+                    objCatWriter.WriteLine("/020/E:Groceries/ Groceries")
+                    objCatWriter.WriteLine("/021/E:Home/ Home")
+                    objCatWriter.WriteLine("/022/E:Home:Mortgage/  Mortgage")
+                    objCatWriter.WriteLine("/023/E:Home:Repair/  Home Repair")
+                    objCatWriter.WriteLine("/024/E:Internet/ Internet")
+                    objCatWriter.WriteLine("/025/E:Medical/ Medical")
+                    objCatWriter.WriteLine("/026/E:Medical:Insurance/  Insurance")
+                    objCatWriter.WriteLine("/027/E:Medical:Office Visits/  Office Visits")
+                    objCatWriter.WriteLine("/028/E:Medical:Prescriptions/  Prescriptions")
+                    objCatWriter.WriteLine("/029/E:Miscellaneous/ Miscellaneous")
+                    objCatWriter.WriteLine("/030/E:Taxes/ Taxes/Type:TAXES")
+                    objCatWriter.WriteLine("/031/E:Taxes:Federal Income/  Federal Income/Type:TAXES")
+                    objCatWriter.WriteLine("/032/E:Taxes:Local Income/  Local Income/Type:TAXES")
+                    objCatWriter.WriteLine("/033/E:Taxes:Property/  Property/Type:TAXES")
+                    objCatWriter.WriteLine("/034/E:Taxes:State Income/  State Income/Type:TAXES")
+                    objCatWriter.WriteLine("/035/E:Util/ Utilities")
+                    objCatWriter.WriteLine("/036/E:Util:Electric/  Electricity")
+                    objCatWriter.WriteLine("/037/E:Util:Oil/  Fuel Oil")
+                    objCatWriter.WriteLine("/040/E:Util:Natural Gas/  Natural Gas")
+                    objCatWriter.WriteLine("/039/E:Util:Phone/  Phone")
+                    objCatWriter.WriteLine("/038/E:Util:Water/  Water")
+                End Using
+            End If
+
+            'Standard budget file
+            If Not File.Exists(strBudgetPath()) Then
+                objShowMessage("Creating standard budget list, which you can edit later...")
+                Using objBudgetWriter As TextWriter = New StreamWriter(strBudgetPath())
+                    objBudgetWriter.WriteLine("dummy line")
+                    objBudgetWriter.WriteLine("/01/Groceries/Groceries")
+                    objBudgetWriter.WriteLine("/02/Clothing/Clothing")
+                    objBudgetWriter.WriteLine("/03/Entertainment/Entertainment")
+                End Using
+            End If
+
+            'Standard payee file
+            If Not File.Exists(strPayeeFilePath()) Then
+                Using objPayeeWriter As TextWriter = New StreamWriter(strPayeeFilePath())
+                    objPayeeWriter.WriteLine("<Table>")
+                    objPayeeWriter.WriteLine("</Table>")
+                End Using
+            End If
+
+            'Standard import transaction types file
+            If Not File.Exists(strTrxTypeFilePath()) Then
+                Using objTrxTypeWriter As TextWriter = New StreamWriter(strTrxTypeFilePath())
+                    objTrxTypeWriter.WriteLine("<Table>")
+                    objTrxTypeWriter.WriteLine("</Table>")
+                End Using
+            End If
+
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
+    End Sub
+
 End Class

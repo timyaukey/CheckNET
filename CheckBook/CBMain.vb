@@ -96,7 +96,7 @@ Public Module CBMain
         End Try
     End Function
 
-    Friend Sub gShowRegister(ByVal objAccount As Account, ByVal objReg As Register, ByVal frmStartup As StartupForm)
+    Friend Sub gShowRegister(ByVal objAccount As Account, ByVal objReg As Register)
 
         Dim frm As System.Windows.Forms.Form
         Dim frmReg As RegisterForm
@@ -113,7 +113,7 @@ Public Module CBMain
         Next frm
 
         frmReg = New RegisterForm
-        frmReg.ShowMe(objReg, frmStartup)
+        frmReg.ShowMe(objReg)
     End Sub
 
     Public Sub gSaveChangedAccounts(ByVal objCompany As Company)
@@ -220,74 +220,12 @@ Public Module CBMain
                     MsgBox("Account file already exists with that name.", MsgBoxStyle.Critical)
                     Exit Function
                 End If
-                gCreateAccount(objAccount)
+                objAccount.Create()
                 Return True
             End If
         End Using
         Return False
     End Function
-
-    Public Sub gCreateAccount(ByVal objAccount As Account)
-
-        Dim intFile As Integer
-        Dim strFile As String
-        Dim objSubTypeMatched As Account.SubTypeDef = Nothing
-
-        For Each objSubType As Account.SubTypeDef In Account.arrSubTypeDefs
-            If objSubType.lngSubType = objAccount.lngSubType Then
-                objSubTypeMatched = objSubType
-            End If
-        Next
-        If objSubTypeMatched Is Nothing Then
-            Throw New Exception("Unrecognized account subtype")
-        End If
-
-        strFile = objAccount.objCompany.strAccountPath() & "\" & objAccount.strFileNameRoot & ".act"
-        intFile = FreeFile()
-        FileOpen(intFile, strFile, OpenMode.Output)
-
-        PrintLine(intFile, "FHCKBK2")
-        PrintLine(intFile, "AT" & objAccount.strTitle)
-        PrintLine(intFile, "AK" & CStr(objAccount.intKey))
-        PrintLine(intFile, "AY" & objSubTypeMatched.strSaveCode)
-        PrintLine(intFile, "RK1")
-        PrintLine(intFile, "RT" & objAccount.strTitle)
-        PrintLine(intFile, "RS")
-        PrintLine(intFile, "RI")
-        PrintLine(intFile, "RL1")
-        PrintLine(intFile, ".R")
-        PrintLine(intFile, "RF1")
-        PrintLine(intFile, ".R")
-        PrintLine(intFile, "RR1")
-        PrintLine(intFile, ".R")
-        PrintLine(intFile, ".A")
-
-        FileClose(intFile)
-
-        strFile = objAccount.objCompany.strAccountPath() & "\" & objAccount.strFileNameRoot & ".rep"
-        intFile = FreeFile()
-        FileOpen(intFile, strFile, OpenMode.Output)
-
-        'Note: Keep the first line up to date!
-        PrintLine(intFile, "Last used: 14")
-        PrintLine(intFile, "/01/Paycheck 1/Paycheck 1")
-        PrintLine(intFile, "/02/Paycheck 2/Paycheck 2")
-        PrintLine(intFile, "/03/Mortgage/Mortgage")
-        PrintLine(intFile, "/04/Grocery Budget/Grocery Budget")
-        PrintLine(intFile, "/05/Car Payment 1/Car Payment 1")
-        PrintLine(intFile, "/06/Car Payment 2/Car Payment 2")
-        PrintLine(intFile, "/07/Credit Card Payment 1/Credit Card Payment 1")
-        PrintLine(intFile, "/08/Credit Card Payment 2/Credit Card Payment 2")
-        PrintLine(intFile, "/09/Telephone/Telephone")
-        PrintLine(intFile, "/10/Electricity/Electricity")
-        PrintLine(intFile, "/11/Oil-Natural Gas/Oil-Natural Gas")
-        PrintLine(intFile, "/12/Vacation Savings/Vacation Savings")
-        PrintLine(intFile, "/13/Fed Income Tax Savings/Fed Income Tax Savings")
-        PrintLine(intFile, "/14/State Income Tax Savings/State Income Tax Savings")
-
-        FileClose(intFile)
-
-    End Sub
 
     Public Sub gLoadAccountListBox(ByVal lst As System.Windows.Forms.ListBox, ByVal objCompany As Company)
         Dim objAccount As Account
@@ -310,142 +248,6 @@ Public Module CBMain
         frm.Close()
         System.Windows.Forms.Application.DoEvents()
     End Function
-
-    Public Sub gCreateStandardFolders(ByVal objCompany As Company)
-        Try
-
-            If Dir(objCompany.strDataPath(), FileAttribute.Directory) = "" Then
-                MkDir(objCompany.strDataPath())
-            End If
-            If Dir(objCompany.strAccountPath(), FileAttribute.Directory) = "" Then
-                MkDir(objCompany.strAccountPath())
-            End If
-            If Dir(objCompany.strBackupPath(), FileAttribute.Directory) = "" Then
-                MkDir(objCompany.strBackupPath())
-            End If
-            If Dir(objCompany.strReportPath(), FileAttribute.Directory) = "" Then
-                MkDir(objCompany.strReportPath())
-            End If
-
-            Exit Sub
-        Catch ex As Exception
-            gNestedException(ex)
-        End Try
-    End Sub
-
-    Public Sub gCreateStandardFiles(ByVal objCompany As Company)
-        Dim strFile As String
-        Dim intFile As Integer
-
-        Try
-
-            'Standard category file
-            strFile = objCompany.strCategoryPath()
-            If Dir(strFile, FileAttribute.Normal) = "" Then
-                MsgBox("Creating standard category list, which you can edit later...", MsgBoxStyle.Information)
-                intFile = FreeFile()
-                FileOpen(intFile, strFile, OpenMode.Output)
-                'Note: Keep the first line up to date!
-                PrintLine(intFile, "Last used: 40")
-                PrintLine(intFile, "/001/I/Income")
-                PrintLine(intFile, "/002/I:Interest/ Interest")
-                PrintLine(intFile, "/003/I:Wages/ Wages")
-                PrintLine(intFile, "/004/I:Bonus/ Bonus")
-                PrintLine(intFile, "/005/I:Other/ Other")
-                PrintLine(intFile, "/006/I:Sales/ Sales")
-                PrintLine(intFile, "/007/I:Draw/ Draw")
-                PrintLine(intFile, "/008/I:Gift/ Gift")
-                PrintLine(intFile, "/009/E/Expense")
-                PrintLine(intFile, "/010/E:Cable TV/ Cable TV")
-                PrintLine(intFile, "/011/E:Car/ Car")
-                PrintLine(intFile, "/012/E:Car:Gasoline/  Gasoline")
-                PrintLine(intFile, "/013/E:Car:Payment/  Car Payment")
-                PrintLine(intFile, "/014/E:Car:Repair/  Car Repair")
-                PrintLine(intFile, "/015/E:Charity/ Charity")
-                PrintLine(intFile, "/016/E:Cleaning/ Cleaning")
-                PrintLine(intFile, "/017/E:Clothing/ Clothing")
-                PrintLine(intFile, "/018/E:Credit Cards/ Credit Cards")
-                PrintLine(intFile, "/019/E:Entertainment/ Entertainment")
-                PrintLine(intFile, "/020/E:Groceries/ Groceries")
-                PrintLine(intFile, "/021/E:Home/ Home")
-                PrintLine(intFile, "/022/E:Home:Mortgage/  Mortgage")
-                PrintLine(intFile, "/023/E:Home:Repair/  Home Repair")
-                PrintLine(intFile, "/024/E:Internet/ Internet")
-                PrintLine(intFile, "/025/E:Medical/ Medical")
-                PrintLine(intFile, "/026/E:Medical:Insurance/  Insurance")
-                PrintLine(intFile, "/027/E:Medical:Office Visits/  Office Visits")
-                PrintLine(intFile, "/028/E:Medical:Prescriptions/  Prescriptions")
-                PrintLine(intFile, "/029/E:Miscellaneous/ Miscellaneous")
-                PrintLine(intFile, "/030/E:Taxes/ Taxes")
-                PrintLine(intFile, "/031/E:Taxes:Federal Income/  Federal Income")
-                PrintLine(intFile, "/032/E:Taxes:Local Income/  Local Income")
-                PrintLine(intFile, "/033/E:Taxes:Property/  Property")
-                PrintLine(intFile, "/034/E:Taxes:State Income/  State Income")
-                PrintLine(intFile, "/035/E:Util/ Utilities")
-                PrintLine(intFile, "/036/E:Util:Electric/  Electricity")
-                PrintLine(intFile, "/037/E:Util:Oil/  Fuel Oil")
-                PrintLine(intFile, "/040/E:Util:Natural Gas/  Natural Gas")
-                PrintLine(intFile, "/039/E:Util:Phone/  Phone")
-                PrintLine(intFile, "/038/E:Util:Water/  Water")
-                FileClose(intFile)
-            End If
-
-            'Standard budget file
-            strFile = objCompany.strBudgetPath()
-            If Dir(strFile, FileAttribute.Normal) = "" Then
-                MsgBox("Creating standard budget list, which you can edit later...", MsgBoxStyle.Information)
-                intFile = FreeFile()
-                FileOpen(intFile, strFile, OpenMode.Output)
-                'Note: Keep the first line up to date!
-                PrintLine(intFile, "Last used: 03")
-                PrintLine(intFile, "/01/Groceries/Groceries")
-                PrintLine(intFile, "/02/Clothing/Clothing")
-                PrintLine(intFile, "/03/Entertainment/Entertainment")
-                FileClose(intFile)
-            End If
-
-            'Standard payee file
-            strFile = objCompany.strPayeeFilePath()
-            If Dir(strFile, FileAttribute.Normal) = "" Then
-                intFile = FreeFile()
-                FileOpen(intFile, strFile, OpenMode.Output)
-                'Note: Keep the first line up to date!
-                PrintLine(intFile, "<Table>")
-                PrintLine(intFile, "</Table>")
-                FileClose(intFile)
-            End If
-
-            'Standard QIF import transaction types file
-            strFile = objCompany.strTrxTypeFilePath()
-            If Dir(strFile, FileAttribute.Normal) = "" Then
-                intFile = FreeFile()
-                FileOpen(intFile, strFile, OpenMode.Output)
-                'Note: Keep the first line up to date!
-                PrintLine(intFile, "<Table>")
-                PrintLine(intFile, "</Table>")
-                FileClose(intFile)
-            End If
-
-            Exit Sub
-        Catch ex As Exception
-            gNestedException(ex)
-        End Try
-    End Sub
-
-    Public Sub gCreateStandardCheckingAccount(ByVal objCompany As Company)
-        Try
-            MsgBox("Creating first checking account...", MsgBoxStyle.Information)
-            Dim objAccount As Account = New Account()
-            objAccount.Init(objCompany)
-            objAccount.intKey = objCompany.intGetUnusedAccountKey()
-            objAccount.lngSubType = Account.SubType.Asset_CheckingAccount
-            objAccount.strFileNameRoot = "Main"
-            objAccount.strTitle = "Checking Account"
-            gCreateAccount(objAccount)
-        Catch ex As Exception
-            gNestedException(ex)
-        End Try
-    End Sub
 
     Public Sub gInitPayeeList(ByVal lvwPayees As System.Windows.Forms.ListView)
         With lvwPayees
