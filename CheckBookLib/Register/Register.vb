@@ -1,14 +1,15 @@
 Option Strict On
 Option Explicit On
 
+''' <summary>
+''' A transaction register, which is a list of Trx objects from one Account and
+''' a running balance of those transactions. Use .objTrx() to access those transactions.
+''' The running balance is computed from scratch each time it is loaded.
+''' Any transactions which are transfers to or from other registers must have those
+''' registers loaded as well, which generally means all registers must be loaded.
+''' </summary>
+
 Public Class Register
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
-
-    'Represent a transaction register. The running balance is computed from scratch
-    'each time it is loaded. Any transactions which are transfers to or from other
-    'registers must have those registers loaded as well, which generally means all
-    'registers must be loaded.
-
     'Parent Account.
     Private mobjAccount As Account
     'Number of elements allocated in maobjTrx().

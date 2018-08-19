@@ -1,27 +1,28 @@
 Option Strict On
 Option Explicit On
 
+''' <summary>
+''' Represents one transaction. Subclassed for different kinds of transactions.
+'''
+''' To create a transaction and add it to a Register, create a Trx subclass instance
+''' and call NewStartNormal(), NewStartBudget() or NewStartTransfer() depending on the
+''' type of transaction you want to create. If you called NewStartNormal(), add at
+''' least one split with AddSplit(). Then call Register.NewLoadEnd() if you are in
+''' the process of loading a Register from some external source and will note the
+''' end of the load by calling Register.LoadPostProcessing(). Otherwise call
+''' Register.NewAddEnd(), which is what will typically happen if you are adding to
+''' a Register which is already visible in the UI.
+''' To update an existing transaction, call UpdateStartNormal(),
+''' UpdateStartBudget() or UpdateStartTransfer() as appropriate for the transaction
+''' type. Then call AddSplit() at least once if you called UpdateStartNormal().
+''' Then call Register.UpdateEnd().
+'''
+''' The UI is not updated directly by the caller to these methods, rather it is
+''' updated indirectly by responding to events fired by the Register object as
+''' its methods are called and complete their tasks.
+''' </summary>
+
 Public MustInherit Class Trx
-
-    'Represents one transaction.
-
-    'To create a transaction and add it to a Register, create a Trx instance and
-    'call NewStartNormal(), NewStartBudget() or NewStartTransfer() depending on the
-    'type of transaction you want to create. If you called NewStartNormal(), add at
-    'least one split with AddSplit(). Then call Register.NewLoadEnd() if you are in
-    'the process of loading a Register from some external source and will note the
-    'end of the load by calling Register.LoadPostProcessing(). Otherwise call
-    'Register.NewAddEnd(), which is what will typically happen if you are adding to
-    'a Register which is already visible in the UI.
-
-    'To update an existing transaction, call UpdateStartNormal(),
-    'UpdateStartBudget() or UpdateStartTransfer() as appropriate for the transaction
-    'type. Then call AddSplit() at least once if you called UpdateStartNormal().
-    'Then call Register.UpdateEnd().
-
-    'The UI is not updated directly by the caller to these methods, rather it is
-    'updated indirectly by responding to events fired by the Register object as
-    'its methods are called and complete their tasks.
 
     Public Enum TrxStatus
         'Missing value (should never be this).

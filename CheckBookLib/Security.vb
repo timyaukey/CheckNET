@@ -1,6 +1,12 @@
 Option Strict On
 Option Explicit On
 
+''' <summary>
+''' Authentication and authorization tools.
+''' Use of these tools is voluntary. This system may be used without actually 
+''' authenticating the user or checking their authorization.
+''' </summary>
+
 Public Class Security
 
     Private mobjCompany As Company

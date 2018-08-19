@@ -2,7 +2,6 @@ Option Strict On
 Option Explicit On
 
 Imports System.IO
-Imports VB = Microsoft.VisualBasic
 
 'Ways to narrow down Trx search results during import.
 Public Enum ImportMatchNarrowMethod
@@ -10,6 +9,10 @@ Public Enum ImportMatchNarrowMethod
     ClosestDate = 2
     EarliestDate = 3
 End Enum
+
+''' <summary>
+''' Static methods not associated with WinForm user interface management.
+''' </summary>
 
 Public Module SharedDefs
 

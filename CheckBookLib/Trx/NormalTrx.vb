@@ -1,6 +1,13 @@
 ﻿Option Strict On
 Option Explicit On
 
+''' <summary>
+''' A Trx subclass representing a transaction that exists somewhere in the real
+''' world, like a credit card company or a bank. The actual amount of the transaction
+''' is represented by a collection of Split objects. Each NormalTrx has at least
+''' one Split object.
+''' </summary>
+
 Public Class NormalTrx
     Inherits Trx
 

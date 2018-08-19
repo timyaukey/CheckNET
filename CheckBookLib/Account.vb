@@ -2,7 +2,14 @@ Option Strict On
 Option Explicit On
 
 Imports System.IO
-Imports System.Text
+
+''' <summary>
+''' Represents one general ledger account and all the transactions in it,
+''' like a checking account or a loan account. The most important member
+''' is colRegisters, which is a collection of the Register objects containing
+''' the transactions in this account. Most commonly there is one register
+''' per account.
+''' </summary>
 
 Public Class Account
     'The master Company object.

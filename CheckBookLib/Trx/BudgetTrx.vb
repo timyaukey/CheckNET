@@ -1,6 +1,13 @@
 ﻿Option Strict On
 Option Explicit On
 
+''' <summary>
+''' A Trx subclass representing an amount of money set aside for some use.
+''' Split objects can reference a BudgetTrx, which causes the effective
+''' amount of the budget item used in running balance computations to be
+''' different than the nominal budget amount.
+''' </summary>
+
 Public Class BudgetTrx
     Inherits Trx
 

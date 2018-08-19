@@ -3,10 +3,11 @@ Option Explicit On
 
 Imports CheckBookLib
 
-Public Module CBMain
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
+''' <summary>
+''' Static methods related to WinForm user interface management.
+''' </summary>
 
-    'UI related stuff.
+Public Module CBMain
 
     Public Const gstrREG_APP As String = "Willow Creek Checkbook"
     Public Const gstrREG_KEY_GENERAL As String = "General"

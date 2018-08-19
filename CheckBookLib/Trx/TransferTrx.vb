@@ -1,6 +1,11 @@
 ﻿Option Strict On
 Option Explicit On
 
+''' <summary>
+''' A Trx subclass representing a transfer between two Register objects
+''' in the same account.
+''' </summary>
+
 Public Class TransferTrx
     Inherits Trx
 

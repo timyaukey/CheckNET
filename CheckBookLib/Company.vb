@@ -4,6 +4,16 @@ Option Explicit On
 Imports System.IO
 Imports System.Xml.Serialization
 
+''' <summary>
+''' The core class of the object model. One instance contains all the data objects
+''' used by a company, including the list of general ledger accounts, and a bunch
+''' of other non-transactional definition data such as the category list.
+''' The simplest usage is to create an instance passing the path to the data file
+''' folder, and then call Load() to load all the accounts and everything else.
+''' You do not HAVE to call methods that check for files being in use, or authenticate
+''' the user.
+''' </summary>
+
 Public Class Company
 
     Public Event SomethingModified()

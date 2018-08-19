@@ -1,8 +1,12 @@
 Option Strict On
 Option Explicit On
 
+''' <summary>
+''' Represents an amount of money associated with a NormalTrx, plus
+''' attributes such as due date, category, invoice number, memo, etc.
+''' </summary>
+
 Public Class TrxSplit
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     'Memo for this Split.
     Private mstrMemo As String
