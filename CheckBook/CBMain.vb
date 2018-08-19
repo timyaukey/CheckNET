@@ -180,7 +180,7 @@ Public Module CBMain
             For intAgeInDays = 0 To UBound(adatDays)
                 If intAgeInDays = 0 Then
                     'Keep all backups from the current date.
-                    intBackupsToKeep = 2 ' 100
+                    intBackupsToKeep = 100
                 ElseIf intAgeInDays < 5 Then
                     intBackupsToKeep = 10
                 Else
