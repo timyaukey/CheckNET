@@ -245,30 +245,9 @@ Public Module SharedDefs
         Return New CBListBoxItem(strName, intValue)
     End Function
 
-    Public Function gstrVB6GetItemString(ctl As System.Windows.Forms.ListBox, intIndex As Integer) As String
-        'Return VB6.GetItemString(ctl, intIndex)
-        Return DirectCast(ctl.Items(intIndex), CBListBoxItem).strName
-    End Function
-
     Public Function gstrVB6GetItemString(ctl As System.Windows.Forms.ComboBox, intIndex As Integer) As String
         'Return VB6.GetItemString(ctl, intIndex)
         Return DirectCast(ctl.Items(intIndex), CBListBoxItem).strName
-    End Function
-
-    Public Sub gVB6SetItemData(ctl As System.Windows.Forms.ListBox, intIndex As Integer, intItemData As Integer)
-        'VB6.SetItemData(ctl, intIndex, intItemData)
-        Dim item As Object = ctl.Items(intIndex)
-        DirectCast(item, CBListBoxItem).intValue = intItemData
-    End Sub
-
-    Public Sub gVB6SetItemData(ctl As System.Windows.Forms.ComboBox, intIndex As Integer, intItemData As Integer)
-        'VB6.SetItemData(ctl, intIndex, intItemData)
-        DirectCast(ctl.Items(intIndex), CBListBoxItem).intValue = intItemData
-    End Sub
-
-    Public Function gintVB6GetItemData(ctl As System.Windows.Forms.ListBox, intIndex As Integer) As Integer
-        'Return VB6.GetItemData(ctl, intIndex)
-        Return DirectCast(ctl.Items(intIndex), CBListBoxItem).intValue
     End Function
 
     Public Function gintVB6GetItemData(ctl As System.Windows.Forms.ComboBox, intIndex As Integer) As Integer
