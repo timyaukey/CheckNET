@@ -3,7 +3,7 @@ Option Explicit On
 
 ''' <summary>
 ''' A Trx subclass representing an amount of money set aside for some use.
-''' Split objects can reference a BudgetTrx, which causes the effective
+''' TrxSplit objects can reference a BudgetTrx, which causes the effective
 ''' amount of the budget item used in running balance computations to be
 ''' different than the nominal budget amount.
 ''' </summary>
@@ -11,9 +11,9 @@ Option Explicit On
 Public Class BudgetTrx
     Inherits Trx
 
-    'Original budget amount, or zero if mblnBudget=False.
-    'Is NOT changed as other Trx are applied and unapplied to this one.
-    'Sign has the same meaning as Split.curAmount, so is normally negative.
+    'Original budget amount.
+    'Is NOT changed as other TrxSplit are applied and unapplied to this one.
+    'Sign has the same meaning as TrxSplit.curAmount, so is negative for expenses.
     Protected mcurBudgetLimit As Decimal
     'Last date in the budget period. Budget period starts at mdatDate.
     Protected mdatBudgetEnds As Date
@@ -29,8 +29,7 @@ Public Class BudgetTrx
     'Amount applied toward budget. Magnitude may be greater than mcurBudgetLimit,
     'in which case mcurAmount will equal zero instead of a credit.
     Protected mcurBudgetApplied As Decimal
-    'Collection of Split objects belonging to other Trx and applied to this
-    'budget Trx. Nothing if this is not a budget Trx.
+    'Collection of TrxSplit objects belonging to other NormalTrx and applied to this BudgetTrx.
     Protected mcolAppliedSplits As List(Of TrxSplit)
 
     Public Sub New(ByVal objReg_ As Register)

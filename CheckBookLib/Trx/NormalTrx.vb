@@ -5,22 +5,22 @@ Option Explicit On
 ''' A Trx subclass representing a transaction that exists somewhere in the real
 ''' world, like a credit card company or a bank. The actual amount of the transaction
 ''' is represented by a collection of Split objects. Each NormalTrx has at least
-''' one Split object.
+''' one TrxSplit object.
 ''' </summary>
 
 Public Class NormalTrx
     Inherits Trx
 
-    'Unique key identifying an external transaction imported to create this Trx.
-    'Used for matching new imported Trx against prior imports, to avoid duplicates.
+    'Unique key identifying an external transaction imported to create this NormalTrx.
+    'Used for matching new imported NormalTrx against prior imports, to avoid duplicates.
     Protected mstrImportKey As String
-    'True iff any split with a budget key was not matched to a budget Trx,
-    'and the Trx date was not before the earliest budget in the register.
+    'True iff any split with a budget key was not matched to a BudgetTrx,
+    'and the NormalTrx date was not before the earliest budget in the register.
     Protected mblnAnyUnmatchedBudget As Boolean
-    'Trx amount may be different from a matching normal Trx
+    'Trx amount may be different from a matching NormalTrx
     'by this amount, either positive or negative.
     Protected mcurNormalMatchRange As Decimal
-    'Collection of Split objects belonging to this Trx.
+    'Collection of TrxSplit objects belonging to this Trx.
     Protected mcolSplits As List(Of TrxSplit)
 
     Public Sub New(ByVal objReg_ As Register)

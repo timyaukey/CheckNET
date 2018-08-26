@@ -490,6 +490,10 @@
     <Content Include="CheckBook.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BudgetDashboard\BudgetDashboard.csproj">
+      <Project>{050728f0-3aad-42fb-a8a8-9e23a5dc4d0e}</Project>
+      <Name>BudgetDashboard</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
       <Project>{73A968C7-281A-45DC-8360-2E44B3C9510B}</Project>
       <Name>CheckBookLib</Name>
