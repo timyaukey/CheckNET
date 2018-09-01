@@ -78,7 +78,6 @@
     <Compile Include="BooleanStringTypeConverter.vb" />
     <Compile Include="BudgetTranslator.vb" />
     <Compile Include="CategoryTranslator.vb" />
-    <Compile Include="CBListBoxItem.vb" />
     <Compile Include="AgingUtils.vb" />
     <Compile Include="CompanyInfo.vb" />
     <Compile Include="ErrorHandling.vb" />
