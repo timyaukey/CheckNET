@@ -129,7 +129,7 @@ Module CheckPrinting
         Dim intPennies As Short
         intPennies = Fix(curAmount * 100.0#) - Fix(curAmount) * 100.0#
         Dim strDollars As String
-        strDollars = gstrAmountToWords(curAmount)
+        strDollars = MoneyFormat.strAmountToWords(curAmount)
         strDollars = UCase(Left(strDollars, 1)) & Mid(strDollars, 2)
         PrintCheckText(mdomCheckFormat, "LongAmount", strDollars & " and " & gstrFormatInteger(intPennies, "00") & "/100", ev)
         If strAccountNumber <> "" Then

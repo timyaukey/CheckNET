@@ -1393,7 +1393,7 @@ Friend Class UTMainForm
     Private Sub TestOneAmountToWords(ByVal curInput As Decimal, ByVal strExpectedOutput As String)
 
         Dim strActualOutput As String
-        strActualOutput = gstrAmountToWords(curInput)
+        strActualOutput = MoneyFormat.strAmountToWords(curInput)
         gUTAssert(strExpectedOutput = strActualOutput, curInput & " yields <" & strActualOutput & "> instead of <" & strExpectedOutput & ">")
     End Sub
 
