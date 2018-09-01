@@ -16,20 +16,6 @@ End Enum
 
 Public Module SharedDefs
 
-    Public Const gstrFORMAT_CURRENCY As String = "#######0.00"
-    Public Const gstrFORMAT_DATE As String = "mm/dd/yy"
-    Public Const gstrFORMAT_DATE2 As String = "MM/dd/yy"
-    Public Const gstrUNABLE_TO_TRANSLATE As String = "???"
-
-    'Lower bound of many arrays
-    Public Const gintLBOUND1 As Short = 1
-
-    '$Description Registry key name specific to a register.
-
-    Public Function gstrRegkeyRegister(ByVal objReg As Register) As String
-        gstrRegkeyRegister = "Registers\" & objReg.strTitle
-    End Function
-
     Public Function gblnValidDate(ByVal strDate As String) As Boolean
         If strDate Like "*#/*#/*##" Then
             If IsDate(strDate) Then

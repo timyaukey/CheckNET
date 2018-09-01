@@ -1240,6 +1240,12 @@ Public Class Register
         RaiseEvent ValidationError(lngIndex, strMsg)
     End Sub
 
+    '$Description Registry key name specific to a register.
+
+    Public Function strRegistryKey() As String
+        Return "Registers\" & strTitle
+    End Function
+
     Public Sub LogAction(ByVal strTitle As String)
         mobjLog.AddILogAction(New LogAction, strTitle)
     End Sub

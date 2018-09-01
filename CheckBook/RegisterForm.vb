@@ -269,16 +269,16 @@ Friend Class RegisterForm
     Private Sub ConfigGrid()
         Dim intCol As Integer
 
-        ConfigGridCol(intCol, mintColDate, "Date", 700, _
-            Function(objTrx As Trx) objTrx.datDate.ToString(gstrFORMAT_DATE2))
+        ConfigGridCol(intCol, mintColDate, "Date", 700,
+            Function(objTrx As Trx) objTrx.datDate.ToString(Utilities.strDateWithTwoDigitYear))
         ConfigGridCol(intCol, mintColNumber, "Number", 700, _
             Function(objTrx As Trx) objTrx.strNumber)
         ConfigGridCol(intCol, mintColDescr, "Description", 3000, _
             Function(objTrx As Trx) objTrx.strDescription)
         ConfigGridCol(intCol, mintColAmount, "Amount", 900,
-            Function(objTrx As Trx) objTrx.curAmount.ToString(gstrFORMAT_CURRENCY), True)
+            Function(objTrx As Trx) gstrFormatCurrency(objTrx.curAmount), True)
         ConfigGridCol(intCol, mintColBalance, "Balance", 900,
-            Function(objTrx As Trx) objTrx.curBalance.ToString(gstrFORMAT_CURRENCY), True)
+            Function(objTrx As Trx) gstrFormatCurrency(objTrx.curBalance), True)
         ConfigGridCol(intCol, mintColCategory, "Category", 1800,
             Function(objTrx As Trx) objTrx.strCategory)
         ConfigGridCol(intCol, mintColPONumber, "PO#", 900,

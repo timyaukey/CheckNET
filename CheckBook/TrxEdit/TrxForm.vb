@@ -44,7 +44,7 @@ Friend Class TrxForm
     Private txtSplitPONum() As TextBox
     Private txtSplitTerms() As TextBox
 
-    'Dim (gintLBOUND1 to mintSplits).
+    'Dim (Utilities.intLBOUND1 to mintSplits).
     Private maudtSplits() As SplitData
     Private mintSplits As Integer
     'Number of elements in maudtSplits() hidden above the top of the control array.
@@ -637,7 +637,7 @@ Friend Class TrxForm
         ComputeSplitTotal(curTotal, blnBadAmount)
         If blnBadAmount Then
             'Do NOT set mcurTotalAmount if cannot compute trx total.
-            txtSplitTotal.Text = gstrUNABLE_TO_TRANSLATE
+            txtSplitTotal.Text = "???"
         Else
             txtSplitTotal.Text = gstrFormatCurrency(curTotal)
             mcurTotalAmount = curTotal
@@ -719,9 +719,9 @@ Friend Class TrxForm
         If intPlaceholders > 0 Then
             'Set all placeholders
             mblnSuppressPlaceholderAdjustment = True
-            For intPlaceholderSelector = gintLBOUND1 To UBound(intPlaceholderIndexes)
+            For intPlaceholderSelector = Utilities.intLBOUND1 To UBound(intPlaceholderIndexes)
                 intSplitIndex = intPlaceholderIndexes(intPlaceholderSelector)
-                If intPlaceholderSelector = gintLBOUND1 Then
+                If intPlaceholderSelector = Utilities.intLBOUND1 Then
                     strSplitAmount = gstrFormatCurrency(mcurTotalAmount - curNonPlaceholderTotal)
                 Else
                     strSplitAmount = "0.00"
@@ -1791,7 +1791,7 @@ Friend Class TrxForm
             End If
 
             If IsNumeric(txtNumber.Text) Then
-                SaveSetting(gstrREG_APP, gstrRegkeyRegister(mobjReg), "TrxNum", txtNumber.Text)
+                SaveSetting(gstrREG_APP, mobjReg.strRegistryKey(), "TrxNum", txtNumber.Text)
             ElseIf LCase(txtNumber.Text) = "inv" Or LCase(txtNumber.Text) = "crm" Then
                 chkFake.CheckState = System.Windows.Forms.CheckState.Checked
             End If
@@ -1819,7 +1819,7 @@ Friend Class TrxForm
             If IsNumeric(txtNumber.Text) Then
                 lngOldNum = CInt(txtNumber.Text)
             Else
-                lngOldNum = CInt(GetSetting(gstrREG_APP, gstrRegkeyRegister(mobjReg), "TrxNum", "1000"))
+                lngOldNum = CInt(GetSetting(gstrREG_APP, mobjReg.strRegistryKey(), "TrxNum", "1000"))
             End If
 
             If strKey = "-" Then

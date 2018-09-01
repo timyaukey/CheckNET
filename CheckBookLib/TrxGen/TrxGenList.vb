@@ -125,7 +125,7 @@ Public Class TrxGenList
 
         colResults = New List(Of TrxToCreate)
         lngCount = UBound(maudtTrx)
-        For lngIndex = gintLBOUND1 To lngCount
+        For lngIndex = Utilities.intLBOUND1 To lngCount
             If maudtTrx(lngIndex).datDate <= datRegisterEndDate Then
                 colResults.Add(maudtTrx(lngIndex))
             End If

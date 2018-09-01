@@ -257,7 +257,7 @@ Friend Class CatSumRptForm
             Dim strCatName As String
             Dim strLine As String
 
-            For intIndex = gintLBOUND1 To UBound(maudtCatTotals)
+            For intIndex = Utilities.intLBOUND1 To UBound(maudtCatTotals)
                 strCatCode = mobjCats.strKey(intIndex)
                 strCatName = mobjCats.strValue1(intIndex)
                 strLine = strCatName & vbTab & maudtCatTotals(intIndex).curAmount & vbTab & strCatCode

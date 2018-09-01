@@ -73,7 +73,7 @@ Friend Class AdjustBudgetsToCashForm
     End Sub
 
     Private Function strRegSection() As String
-        strRegSection = gstrRegkeyRegister(mobjReg) & "\CashFlowBudgetAdj"
+        strRegSection = mobjReg.strRegistryKey() & "\CashFlowBudgetAdj"
     End Function
 
     Private Sub LoadSavedBudget(ByVal intIndex As Short)

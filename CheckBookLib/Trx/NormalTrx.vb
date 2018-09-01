@@ -231,7 +231,7 @@ Public Class NormalTrx
         If datDueDate = System.DateTime.FromOADate(0) Then
             Return ""
         Else
-            Return datDueDate.ToString(gstrFORMAT_DATE2)
+            Return datDueDate.ToString(Utilities.strDateWithTwoDigitYear)
         End If
 
     End Function
@@ -251,7 +251,7 @@ Public Class NormalTrx
         If datInvoiceDate = System.DateTime.FromOADate(0) Then
             Return ""
         Else
-            Return datInvoiceDate.ToString(gstrFORMAT_DATE2)
+            Return datInvoiceDate.ToString(Utilities.strDateWithTwoDigitYear)
         End If
 
     End Function

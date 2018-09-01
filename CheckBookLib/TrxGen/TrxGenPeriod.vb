@@ -73,7 +73,7 @@ Public Class TrxGenPeriod
         If dblTotalDOWWeights <= 0 Then
             Return "DOW weights must add up to a positive number"
         End If
-        For intIndex = gintLBOUND1 To UBound(mdblDOWUsage)
+        For intIndex = Utilities.intLBOUND1 To UBound(mdblDOWUsage)
             mdblDOWUsage(intIndex) = mdblDOWUsage(intIndex) / dblTotalDOWWeights
         Next
 
