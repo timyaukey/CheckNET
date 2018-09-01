@@ -56,7 +56,7 @@ Public Class ReadChecks
             If strLine Is Nothing Then
                 Exit Function
             End If
-            astrParts = gaSplit(Trim(strLine), vbTab)
+            astrParts = Utilities.Split(Trim(strLine), vbTab)
             mobjUtil.strTrxNumber = mobjSpecs.strConvertTrxNum(astrParts(mobjSpecs.NumberColumn))
             mobjUtil.strTrxDate = astrParts(mobjSpecs.DateColumn)
             mobjUtil.strTrxPayee = astrParts(mobjSpecs.DescrColumn)

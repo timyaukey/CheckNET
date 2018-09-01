@@ -16,16 +16,6 @@ End Enum
 
 Public Module SharedDefs
 
-    'Document types
-    Public Const gintDOCTYP_INVOICE As Short = 1
-    Public Const gintDOCTYP_PACKLIST As Short = 2
-    Public Const gintDOCTYP_BILL As Short = 3
-    Public Const gintDOCTYP_STATEMENT As Short = 4
-    Public Const gintDOCTYP_CREDIT As Short = 5
-    Public Const gintDOCTYP_CRMCONF As Short = 6
-    Public Const gintDOCTYP_ORDCONF As Short = 7
-    Public Const gintDOCTYP_LATENOTICE As Short = 8
-
     Public Const gstrFORMAT_CURRENCY As String = "#######0.00"
     Public Const gstrFORMAT_DATE As String = "mm/dd/yy"
     Public Const gstrFORMAT_DATE2 As String = "MM/dd/yy"
@@ -33,44 +23,6 @@ Public Module SharedDefs
 
     'Lower bound of many arrays
     Public Const gintLBOUND1 As Short = 1
-
-    Public Function gaSplit(ByVal strInput As String, ByVal strSeparator As String) As String()
-        Dim sep(1) As String
-        sep(0) = strSeparator
-        Dim tmp() As String = strInput.Split(sep, StringSplitOptions.None)
-        Return tmp
-    End Function
-
-    Public Function gstrMakeRepeatId(ByVal strRepeatKey As String, ByVal intRepeatSeq As Integer) As String
-        gstrMakeRepeatId = "#" & strRepeatKey & "." & intRepeatSeq
-    End Function
-
-    Public Function gstrTranslateCatKey(ByVal objCategories As CategoryTranslator, ByVal strKey As String) As String
-        Dim strName As String
-        Dim strRoot As String
-        strName = objCategories.strKeyToValue1(strKey)
-        If strName = "" Then
-            strRoot = "TmpCat#" & strKey
-            strName = "E:" & strRoot
-            objCategories.Add(New StringTransElement(objCategories, strKey, strName, " " & strRoot))
-            MsgBox("Error: Could not find code " & strKey & " in category " & "list. Have assigned it temporary category name " & strName & ", which " & "you will probably want to edit to make this category " & "permanent.", MsgBoxStyle.Information)
-        End If
-        gstrTranslateCatKey = strName
-    End Function
-
-    Public Function gstrTranslateBudgetKey(ByVal objCompany As Company, ByVal strKey As String) As String
-        Dim strName As String
-        gstrTranslateBudgetKey = ""
-        If strKey <> "" Then
-            strName = objCompany.objBudgets.strKeyToValue1(strKey)
-            If strName = "" Then
-                strName = "TmpBud#" & strKey
-                objCompany.objBudgets.Add(New StringTransElement(objCompany.objBudgets, strKey, strName, strName))
-                MsgBox("Error: Could not find code " & strKey & " in budget " & "list. Have assigned it temporary budget name " & strName & ", which " & "you will probably want to edit to make this budget " & "permanent.", MsgBoxStyle.Information)
-            End If
-            gstrTranslateBudgetKey = strName
-        End If
-    End Function
 
     '$Description Registry key name specific to a register.
 

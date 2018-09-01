@@ -317,7 +317,7 @@ Friend Class SearchForm
             strDueDate = gstrFormatDate(objSplit.datDueDate)
         End If
         gAddListSubItem(objItem, 4, gstrFormatCurrency(curAvailable))
-        gAddListSubItem(objItem, 5, gstrTranslateCatKey(mobjCompany.objCategories, objSplit.strCategoryKey))
+        gAddListSubItem(objItem, 5, mobjCompany.objCategories.strTranslateKey(objSplit.strCategoryKey))
         gAddListSubItem(objItem, 6, objSplit.strPONumber)
         gAddListSubItem(objItem, 7, objSplit.strInvoiceNum)
         gAddListSubItem(objItem, 8, strInvoiceDate)

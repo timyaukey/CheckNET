@@ -170,9 +170,13 @@ Public MustInherit Class Trx
 
     Public ReadOnly Property strRepeatId() As String
         Get
-            strRepeatId = gstrMakeRepeatId(mstrRepeatKey, mintRepeatSeq)
+            strRepeatId = strMakeRepeatId(mstrRepeatKey, mintRepeatSeq)
         End Get
     End Property
+
+    Public Shared Function strMakeRepeatId(ByVal strRepeatKey As String, ByVal intRepeatSeq As Integer) As String
+        Return "#" & strRepeatKey & "." & intRepeatSeq
+    End Function
 
     Public Sub ClearRepeat()
         mintRepeatSeq = 0

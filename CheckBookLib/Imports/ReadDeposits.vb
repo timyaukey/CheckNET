@@ -24,7 +24,7 @@ Public Class ReadDeposits
         Dim strData As String
 
         strData = mobjInput.ReadToEnd()
-        mastrLines = gaSplit(strData, vbNewLine)
+        mastrLines = Utilities.Split(strData, vbNewLine)
         mintNextIndex = LBound(mastrLines)
         blnOpenSource = True
     End Function
@@ -51,7 +51,7 @@ Public Class ReadDeposits
         strLine = mastrLines(mintNextIndex)
         mintNextIndex = mintNextIndex + 1
 
-        astrParts = gaSplit(strLine, " ")
+        astrParts = Utilities.Split(strLine, " ")
         If UBound(astrParts) <> 2 Then
             'UPGRADE_NOTE: Object ITrxImport_objNextTrx may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
             objNextTrx = Nothing

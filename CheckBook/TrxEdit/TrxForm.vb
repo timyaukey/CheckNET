@@ -409,10 +409,10 @@ Friend Class TrxForm
                             End If
                             curTotalApplied = curTotalApplied + objSplit.curAmount
                             If objItem.SubItems.Count > 6 Then
-                                objItem.SubItems(6).Text = gstrTranslateCatKey(mobjCompany.objCategories, objSplit.strCategoryKey)
+                                objItem.SubItems(6).Text = mobjCompany.objCategories.strTranslateKey(objSplit.strCategoryKey)
                             Else
                                 objItem.SubItems.Insert(6, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing,
-                                    gstrTranslateCatKey(mobjCompany.objCategories, objSplit.strCategoryKey)))
+                                    mobjCompany.objCategories.strTranslateKey(objSplit.strCategoryKey)))
                             End If
                         End With
                     End If

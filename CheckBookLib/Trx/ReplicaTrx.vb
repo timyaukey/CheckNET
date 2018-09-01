@@ -18,7 +18,7 @@ Public Class ReplicaTrx
 
     Public Overrides ReadOnly Property strCategory As String
         Get
-            Return gstrTranslateCatKey(mobjReg.objAccount.objCompany.objCategories, mstrCatKey)
+            Return mobjReg.objAccount.objCompany.objCategories.strTranslateKey(mstrCatKey)
         End Get
     End Property
 

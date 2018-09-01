@@ -22,7 +22,7 @@ Public Class ReadInvoices
         Dim strData As String
 
         strData = mobjInput.ReadToEnd()
-        mastrLines = gaSplit(strData, vbNewLine)
+        mastrLines = Utilities.Split(strData, vbNewLine)
         mintNextIndex = LBound(mastrLines)
         blnOpenSource = True
     End Function
@@ -63,7 +63,7 @@ Public Class ReadInvoices
         If Left(strLine, 1) = vbTab Then
             strLine = Mid(strLine, 2, Len(strLine) - 1)
         End If
-        astrParts = gaSplit(Trim(strLine), vbTab)
+        astrParts = Utilities.Split(Trim(strLine), vbTab)
 
         strDescription = astrParts(0)
         strPONumber = astrParts(1)

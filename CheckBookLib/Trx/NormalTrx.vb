@@ -212,7 +212,7 @@ Public Class NormalTrx
                     Return "(mixed)"
                 End If
             Next objSplit
-            Return gstrTranslateCatKey(mobjReg.objAccount.objCompany.objCategories, strCategoryKey)
+            Return mobjReg.objAccount.objCompany.objCategories.strTranslateKey(strCategoryKey)
         End Get
     End Property
 
@@ -334,7 +334,7 @@ Public Class NormalTrx
                 strTerms2 = objSplit.strTerms
                 strBudgetKey = objSplit.strBudgetKey
                 'Format fields from the first split.
-                strCategory = gstrTranslateCatKey(objCompany.objCategories, strCatKey)
+                strCategory = objCompany.objCategories.strTranslateKey(strCatKey)
                 strInvoiceNum = strInvoiceNum2
                 strPONumber = strPONumber2
                 If datInvoiceDate = System.DateTime.FromOADate(0) Then
@@ -348,7 +348,7 @@ Public Class NormalTrx
                     strDueDate = gstrFormatDate(datDueDate)
                 End If
                 strTerms = strTerms2
-                strBudget = gstrTranslateBudgetKey(objCompany, strBudgetKey)
+                strBudget = objCompany.objBudgets.strTranslateKey(strBudgetKey)
                 blnFirstSplit = False
             Else
                 If strCatKey <> objSplit.strCategoryKey Then

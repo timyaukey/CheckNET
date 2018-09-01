@@ -208,6 +208,7 @@
     <Compile Include="Trx\TrxManager.vb" />
     <Compile Include="UITypeEditors\DateConverter.vb" />
     <Compile Include="UITypeEditors\StringTranslatorUIEditor.vb" />
+    <Compile Include="Utilities.vb" />
     <Compile Include="VB6Xml\VB6XmlDocument.vb" />
     <Compile Include="VB6Xml\VB6XmlElement.vb" />
     <Compile Include="VB6Xml\VB6XmlNode.vb" />
