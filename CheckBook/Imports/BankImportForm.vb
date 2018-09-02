@@ -372,7 +372,7 @@ Friend Class BankImportForm
                             blnNonExactConfirmed = True
                         End If
                     End If
-                    objPossibleMatchTrx = gdatFirstElement(colUnusedMatches)
+                    objPossibleMatchTrx = Utilities.objFirstElement(colUnusedMatches)
                     blnCheckWithoutAmount = False
                     'A check in the register with a zero amount means we didn't know the amount when we entered it, or imported it.
                     If Val(objPossibleMatchTrx.strNumber) > 0 And objPossibleMatchTrx.curAmount = 0.0# Then

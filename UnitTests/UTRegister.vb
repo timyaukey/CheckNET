@@ -340,7 +340,7 @@ Public Class UTRegister
         mcolErrors = New List(Of String)
         mobjReg.ValidateRegister()
         If mcolErrors.Count() > 0 Then
-            gUTFailure("Unexpected validation errors: " & gdatFirstElement(mcolErrors))
+            gUTFailure("Unexpected validation errors: " & Utilities.objFirstElement(mcolErrors))
         End If
 
     End Sub

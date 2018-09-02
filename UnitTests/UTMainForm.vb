@@ -742,17 +742,17 @@ Friend Class UTMainForm
 
             .objReg.MatchPayee(#4/3/2000#, 1, "company2", True, colMatches, blnExactMatch)
             gUTAssert(colMatches.Count() = 1, "company2 fail")
-            objTrx = gdatFirstElement(colMatches)
-            gUTAssert(gdatFirstElement(colMatches).lngIndex = 2, "company2 index fail")
+            objTrx = Utilities.objFirstElement(colMatches)
+            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 2, "company2 index fail")
             gUTAssert(objTrx.strDescription = "company2", "company2 name fail")
             gUTAssert(objTrx.datDate = #4/3/2000#, "company2 date fail")
             gUTAssert(blnExactMatch = True, "company2 exact fail")
 
             .objReg.MatchPayee(#4/6/2000#, 1, "payee1", True, colMatches, blnExactMatch)
             gUTAssert(colMatches.Count() = 2, "payee1 fail")
-            objTrx = gdatFirstElement(colMatches)
-            gUTAssert(gdatFirstElement(colMatches).lngIndex = 3, "payee1#1 index fail")
-            gUTAssert(gdatSecondElement(colMatches).lngIndex = 4, "payee1#2 index fail")
+            objTrx = Utilities.objFirstElement(colMatches)
+            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 3, "payee1#1 index fail")
+            gUTAssert(Utilities.objSecondElement(colMatches).lngIndex = 4, "payee1#2 index fail")
             gUTAssert(blnExactMatch = False, "payee#1 exact fail")
         End With
 
@@ -775,11 +775,11 @@ Friend Class UTMainForm
 
             .objReg.MatchInvoice(#4/3/2000#, 10, "company2", "I1000", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 I1000 fail")
-            gUTAssert(gdatFirstElement(colMatches).lngIndex = 2, "company2 I1000 index fail")
+            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 2, "company2 I1000 index fail")
 
             .objReg.MatchInvoice(#4/3/2000#, 10, "company2", "I1001", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 I1001 fail")
-            gUTAssert(gdatFirstElement(colMatches).lngIndex = 2, "company2 I1001 index fail")
+            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 2, "company2 I1001 index fail")
 
             .objReg.MatchInvoice(#4/5/2000#, 1, "company2", "I1000", colMatches)
             gUTAssert(colMatches.Count() = 0, "company2 I1000 -2 fail")
@@ -810,11 +810,11 @@ Friend Class UTMainForm
 
             .objReg.MatchPONumber(#4/3/2000#, 10, "company2", "P1", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 P1 fail")
-            gUTAssert(gdatFirstElement(colMatches).lngIndex = 2, "company2 P1 index fail")
+            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 2, "company2 P1 index fail")
 
             .objReg.MatchPONumber(#4/3/2000#, 10, "company2", "P2", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 P2 fail")
-            gUTAssert(gdatFirstElement(colMatches).lngIndex = 2, "company2 I1001 index fail")
+            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 2, "company2 I1001 index fail")
 
             .objReg.MatchPONumber(#4/5/2000#, 1, "company2", "P1", colMatches)
             gUTAssert(colMatches.Count() = 0, "company2 P1 -2 fail")

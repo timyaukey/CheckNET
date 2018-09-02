@@ -181,7 +181,6 @@
     <Compile Include="TrxGen\TGESample.vb" />
     <Compile Include="TrxGen\TGESchedule.vb" />
     <Compile Include="TrxGen\SequencedTrx.vb" />
-    <Compile Include="SharedDefs.vb" />
     <Compile Include="TrxGen\TGEGeneratorBase.vb" />
     <Compile Include="TrxGen\TGEBase.vb" />
     <Compile Include="TrxGen\TrxGenBase.vb" />

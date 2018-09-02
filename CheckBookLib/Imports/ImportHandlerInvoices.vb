@@ -65,7 +65,7 @@ Public Class ImportHandlerInvoices
         Dim colMatches As ICollection(Of NormalTrx) = Nothing
         objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.objFirstSplit.strInvoiceNum, colMatches)
         If colMatches.Count() > 0 Then
-            Return gdatFirstElement(colMatches)
+            Return Utilities.objFirstElement(colMatches)
         End If
         Return Nothing
     End Function

@@ -65,4 +65,19 @@ Public Class Utilities
         objClipboardReader = New System.IO.StringReader(strData)
     End Function
 
+    Public Shared Function objFirstElement(Of T)(enumerable As IEnumerable(Of T)) As T
+        Using enumerator As IEnumerator(Of T) = enumerable.GetEnumerator()
+            enumerator.MoveNext()
+            Return enumerator.Current
+        End Using
+    End Function
+
+    Public Shared Function objSecondElement(Of T)(enumerable As IEnumerable(Of T)) As T
+        Using enumerator As IEnumerator(Of T) = enumerable.GetEnumerator()
+            enumerator.MoveNext()
+            enumerator.MoveNext()
+            Return enumerator.Current
+        End Using
+    End Function
+
 End Class
