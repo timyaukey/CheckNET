@@ -22,4 +22,8 @@ Public Class CheckImportStandard
     Protected Overrides Function GetCheckSpecs() As ReadChecksSpec
         Return New ReadChecksSpec(1, 0, 2, 3, -1)
     End Function
+
+    Public Overrides Function GetTrxReader() As ITrxReader
+        Return New ReadChecks(Utilities.objClipboardReader(), "(clipboard)", GetCheckSpecs())
+    End Function
 End Class

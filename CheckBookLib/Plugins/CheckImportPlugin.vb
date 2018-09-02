@@ -18,7 +18,4 @@ Public MustInherit Class CheckImportPlugin
         Return New ImportHandlerChecks()
     End Function
 
-    Public Overrides Function GetTrxReader() As ITrxReader
-        Return New ReadChecks(Utilities.objClipboardReader(), "(clipboard)", GetCheckSpecs())
-    End Function
 End Class
