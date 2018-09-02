@@ -242,7 +242,7 @@ Friend Class CBMainForm
         Try
 
             frm = New ListEditorForm
-            frm.blnShowMe(mobjCompany, ListEditorForm.ListType.glngLIST_TYPE_BUDGET, mobjCompany.strBudgetPath(),
+            frm.blnShowMe(mobjCompany, ListEditorForm.ListType.Budget, mobjCompany.strBudgetPath(),
                           mobjCompany.objBudgets, "Budget List", AddressOf blnEditStringTransElem)
 
             Exit Sub
@@ -255,7 +255,7 @@ Friend Class CBMainForm
         Try
             Using frmListEditor As ListEditorForm = New ListEditorForm()
                 Using frmCatEditor As CategoryEditorForm = New CategoryEditorForm()
-                    If frmListEditor.blnShowMe(mobjCompany, ListEditorForm.ListType.glngLIST_TYPE_CATEGORY, mobjCompany.strCategoryPath(),
+                    If frmListEditor.blnShowMe(mobjCompany, ListEditorForm.ListType.Category, mobjCompany.strCategoryPath(),
                              mobjCompany.objIncExpAccounts, "Category List", AddressOf frmCatEditor.blnShowDialog) Then
                         mobjCompany.LoadCategories()
                     End If

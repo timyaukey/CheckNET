@@ -16,8 +16,8 @@ Friend Class ListEditorForm
     Private mblnEditElem As EditStringTransElement
 
     Public Enum ListType
-        glngLIST_TYPE_CATEGORY = 1
-        glngLIST_TYPE_BUDGET = 2
+        Category = 1
+        Budget = 2
     End Enum
 
     Public Delegate Function EditStringTransElement(ByVal objTransElem As StringTransElement, ByVal blnNew As Boolean) As Boolean
@@ -278,13 +278,13 @@ Friend Class ListEditorForm
                     If blnInsertElement(objTransElem.objClone(), True, strError) Then
                         MsgBox(strError)
                     End If
-                    If mlngListType = ListType.glngLIST_TYPE_CATEGORY Then
+                    If mlngListType = ListType.Category Then
                         If CategoryTranslator.blnIsPersonal(objTransElem.strValue1) Then
                             blnFoundPersonal = True
                         End If
                     End If
                 Next
-                If mlngListType = ListType.glngLIST_TYPE_CATEGORY And Not blnFoundPersonal Then
+                If mlngListType = ListType.Category And Not blnFoundPersonal Then
                     Dim intKey As Integer = intGetUnusedKey()
                     objTransElem = New StringTransElement(mobjList, strMakeKey(intKey), "C", "C")
                     If blnInsertElement(objTransElem, True, strError) Then
@@ -430,7 +430,7 @@ Friend Class ListEditorForm
         Dim strResult As String
         strResult = UCase(Trim(strElement))
         'Make leading "I" sort before "E" for categories, and "C" at the end.
-        If mlngListType = ListType.glngLIST_TYPE_CATEGORY Then
+        If mlngListType = ListType.Category Then
             If VB.Left(strResult, 1) = "I" Then
                 Mid(strResult, 1, 1) = Chr(1)
             ElseIf VB.Left(strResult, 1) = "E" Then
@@ -578,12 +578,12 @@ Friend Class ListEditorForm
             For Each objTrx In objReg.colAllTrx()
                 If objTrx.lngType = Trx.TrxType.Normal Then
                     For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
-                        If mlngListType = ListType.glngLIST_TYPE_CATEGORY Then
+                        If mlngListType = ListType.Category Then
                             If objSplit.strCategoryKey = strKey Then
                                 blnElementIsUsedInRegister = True
                                 Exit Function
                             End If
-                        ElseIf mlngListType = ListType.glngLIST_TYPE_BUDGET Then
+                        ElseIf mlngListType = ListType.Budget Then
                             If objSplit.strBudgetKey = strKey Then
                                 blnElementIsUsedInRegister = True
                                 Exit Function
@@ -592,7 +592,7 @@ Friend Class ListEditorForm
                             gRaiseError("Unsupported list type")
                         End If
                     Next
-                ElseIf mlngListType = ListType.glngLIST_TYPE_BUDGET Then
+                ElseIf mlngListType = ListType.Budget Then
                     If objTrx.lngType = Trx.TrxType.Budget Then
                         If DirectCast(objTrx, BudgetTrx).strBudgetKey = strKey Then
                             blnElementIsUsedInRegister = True
@@ -646,7 +646,7 @@ Friend Class ListEditorForm
         If intKey < 1 Or intKey > 999 Then
             strMakeKey = ""
         Else
-            If mlngListType = ListType.glngLIST_TYPE_CATEGORY Or intKey > 99 Then
+            If mlngListType = ListType.Category Or intKey > 99 Then
                 strMakeKey = Utilities.strFormatInteger(intKey, "000")
             Else
                 strMakeKey = Utilities.strFormatInteger(intKey, "00")
@@ -658,7 +658,7 @@ Friend Class ListEditorForm
 
     Private ReadOnly Property blnFirstLevelChangesAllowed() As Boolean
         Get
-            blnFirstLevelChangesAllowed = (mlngListType <> ListType.glngLIST_TYPE_CATEGORY)
+            blnFirstLevelChangesAllowed = (mlngListType <> ListType.Category)
         End Get
     End Property
 
@@ -666,7 +666,7 @@ Friend Class ListEditorForm
 
     Private ReadOnly Property blnMultipleLevelsAllowed() As Boolean
         Get
-            blnMultipleLevelsAllowed = (mlngListType = ListType.glngLIST_TYPE_CATEGORY)
+            blnMultipleLevelsAllowed = (mlngListType = ListType.Category)
         End Get
     End Property
 End Class

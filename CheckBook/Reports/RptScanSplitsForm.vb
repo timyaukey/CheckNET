@@ -10,7 +10,7 @@ Friend Class RptScanSplitsForm
     'range, and process them in some way typically a report or other summary.
 
     Public Enum SplitReportType
-        glngSPLTRPT_TOTALS = 1
+        Totals = 1
     End Enum
 
     Private mobjCompany As Company
@@ -69,7 +69,7 @@ Friend Class RptScanSplitsForm
         Try
 
             Select Case mlngRptType
-                Case SplitReportType.glngSPLTRPT_TOTALS
+                Case SplitReportType.Totals
                     Me.Text = "Report of Totals By Category"
                 Case Else
                     gRaiseError("Unrecognized category report type")
@@ -91,7 +91,7 @@ Friend Class RptScanSplitsForm
             If blnBadSpecs() Then
                 Exit Sub
             End If
-            If mlngRptType = SplitReportType.glngSPLTRPT_TOTALS Then
+            If mlngRptType = SplitReportType.Totals Then
                 InitCatTotals()
             End If
             IterateSplits()
@@ -265,7 +265,7 @@ Friend Class RptScanSplitsForm
         Try
 
             Select Case mlngRptType
-                Case SplitReportType.glngSPLTRPT_TOTALS
+                Case SplitReportType.Totals
                     intCatIndex = mobjCompany.objCategories.intLookupKey(objSplit.strCategoryKey)
                     If intCatIndex = 0 Then
                         MsgBox("Could not find category key " & objSplit.strCategoryKey & " for " & "trx dated " & Utilities.strFormatDate(objTrx.datDate) & " " & "in register " & objReg.strTitle)
@@ -291,7 +291,7 @@ Friend Class RptScanSplitsForm
         Try
 
             Select Case mlngRptType
-                Case SplitReportType.glngSPLTRPT_TOTALS
+                Case SplitReportType.Totals
                     frmSumRpt = New CatSumRptForm
                     frmSumRpt.ShowMe(mobjCompany, maudtCatTotals, mcolSelectAccounts, mobjCompany.objCategories, mdatStart, mdatEnd,
                                      mblnIncludeFake, mblnIncludeGenerated, mobjHostUI)
