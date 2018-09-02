@@ -1,6 +1,7 @@
 Option Strict On
 Option Explicit On
 
+Imports CheckBookLib
 Imports System.IO
 
 Public Class ReadBankQIF
