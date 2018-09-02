@@ -76,7 +76,7 @@ Public Class SearchUtilities
         PruneSearchMatches(colExactMatches, colMatches, blnExactMatch,
                            Function(objTrx As Trx) As Boolean
                                If objTrx.datDate = datDate Then
-                                   If objTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON Then
+                                   If objTrx.lngStatus <> Trx.TrxStatus.Reconciled Then
                                        If TypeOf objTrx Is NormalTrx Then
                                            If String.IsNullOrEmpty(DirectCast(objTrx, NormalTrx).strImportKey) Then
                                                Return True

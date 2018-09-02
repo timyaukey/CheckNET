@@ -247,7 +247,7 @@ Public Class TrialBalanceForm
             End If
             Dim objIncExpTotal As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value.Date, True)
             Dim objTrx As NormalTrx = New NormalTrx(objRegister)
-            objTrx.NewStartNormal(True, "Pmt", ctlEndDate.Value.Date, "Post to retained earnings", "", Trx.TrxStatus.glngTRXSTS_UNREC,
+            objTrx.NewStartNormal(True, "Pmt", ctlEndDate.Value.Date, "Post to retained earnings", "", Trx.TrxStatus.Unreconciled,
                                   False, 0D, False, False, 0, "", "")
             For Each objGroup As LineItemGroup In objIncExpTotal.colGroups
                 For Each objItem As ReportLineItem In objGroup.colItems

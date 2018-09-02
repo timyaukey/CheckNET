@@ -260,7 +260,7 @@ Public Class AdjustPersonalBusinessForm
     Private Sub CreateAdjustmentTrx(ByVal objRegister As Register, ByVal datDate As DateTime, ByVal strDescription As String,
                                     ByVal strCatKey As String, ByVal curAmount As Decimal)
         Dim objTrx As NormalTrx = New NormalTrx(objRegister)
-        objTrx.NewStartNormal(True, "Pmt", datDate, strDescription, "", Trx.TrxStatus.glngTRXSTS_UNREC, False, 0D, False, False, 0, "", "")
+        objTrx.NewStartNormal(True, "Pmt", datDate, strDescription, "", Trx.TrxStatus.Unreconciled, False, 0D, False, False, 0, "", "")
         objTrx.AddSplit("", strCatKey, "", "", System.DateTime.FromOADate(0), System.DateTime.FromOADate(0), "", "", curAmount)
         objRegister.NewAddEnd(objTrx, New LogAdd(), "AdjustPersonalBusiness.AddTrx")
     End Sub

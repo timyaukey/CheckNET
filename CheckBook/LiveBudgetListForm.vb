@@ -36,7 +36,7 @@ Friend Class LiveBudgetListForm
             lvwMatches.Items.Clear()
             For lngIndex = 1 To mobjReg.lngTrxCount
                 objTrx = mobjReg.objTrx(lngIndex)
-                If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
+                If objTrx.lngType = Trx.TrxType.Budget Then
                     With DirectCast(objTrx, BudgetTrx)
                         If .datDate <= datTarget And .datBudgetEnds >= datTarget Then
                             objItem = gobjListViewAdd(lvwMatches)

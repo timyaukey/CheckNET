@@ -115,26 +115,26 @@ Public Class RegisterLoader
                 blnLoadLine = True
                 Exit Function
             Case "TN" 'Normal transaction header.
-                mlngType = Trx.TrxType.glngTRXTYP_NORMAL
+                mlngType = Trx.TrxType.Normal
                 Select Case Mid(mstrLine, 3, 1)
                     Case "U"
-                        mlngStatus = Trx.TrxStatus.glngTRXSTS_UNREC
+                        mlngStatus = Trx.TrxStatus.Unreconciled
                     Case "R"
-                        mlngStatus = Trx.TrxStatus.glngTRXSTS_RECON
+                        mlngStatus = Trx.TrxStatus.Reconciled
                     Case "S"
-                        mlngStatus = Trx.TrxStatus.glngTRXSTS_SELECTED
+                        mlngStatus = Trx.TrxStatus.Selected
                     Case Else
                         RaiseErrorInLoad("Normal Trx status may only be U or R")
                 End Select
                 mstrDescription = Mid(mstrLine, 4)
             Case "TB" 'Budget transaction header.
-                mlngType = Trx.TrxType.glngTRXTYP_BUDGET
+                mlngType = Trx.TrxType.Budget
                 If Mid(mstrLine, 3, 1) <> "N" Then
                     RaiseErrorInLoad("Budget Trx status may only be N")
                 End If
                 mstrDescription = Mid(mstrLine, 4)
             Case "TT" 'Transfer transaction header.
-                mlngType = Trx.TrxType.glngTRXTYP_TRANSFER
+                mlngType = Trx.TrxType.Transfer
                 If Mid(mstrLine, 3, 1) <> "N" Then
                     RaiseErrorInLoad("Transfer Trx status may only be N")
                 End If
@@ -146,7 +146,7 @@ Public Class RegisterLoader
             Case "ME"
                 mstrMemo = Mid(mstrLine, 3)
             Case "A$"
-                If mlngType <> Trx.TrxType.glngTRXTYP_BUDGET And mlngType <> Trx.TrxType.glngTRXTYP_TRANSFER Then
+                If mlngType <> Trx.TrxType.Budget And mlngType <> Trx.TrxType.Transfer Then
                     RaiseErrorInLoad("A$ line only allowed for budget and transfer Trx")
                 End If
                 If Not IsNumeric(Mid(mstrLine, 3)) Then
@@ -154,7 +154,7 @@ Public Class RegisterLoader
                 End If
                 mcurAmount = CDec(Mid(mstrLine, 3))
             Case "MR"
-                If mlngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
+                If mlngType <> Trx.TrxType.Normal Then
                     RaiseErrorInLoad("MR line only allowed for normal Trx")
                 End If
                 If Not IsNumeric(Mid(mstrLine, 3)) Then
@@ -164,7 +164,7 @@ Public Class RegisterLoader
             Case "AR"
                 mblnAwaitingReview = True
             Case "BE"
-                If mlngType <> Trx.TrxType.glngTRXTYP_BUDGET Then
+                If mlngType <> Trx.TrxType.Budget Then
                     RaiseErrorInLoad("BE line only allowed for budget Trx")
                 End If
                 mdatBudgetEnds = datConvertInput(Mid(mstrLine, 3), "budget ending")
@@ -173,7 +173,7 @@ Public Class RegisterLoader
             Case "BN"
                 mintBudgetNumber = intConvertRepeatCount(Mid(mstrLine, 3), "BN line")
             Case "KI"
-                If mlngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
+                If mlngType <> Trx.TrxType.Normal Then
                     RaiseErrorInLoad("KI line only allowed for normal Trx")
                 End If
                 mstrImportKey = Mid(mstrLine, 3)
@@ -182,12 +182,12 @@ Public Class RegisterLoader
             Case "KR"
                 mstrRepeatKey = Mid(mstrLine, 3)
             Case "KT"
-                If mlngType <> Trx.TrxType.glngTRXTYP_TRANSFER Then
+                If mlngType <> Trx.TrxType.Transfer Then
                     RaiseErrorInLoad("KT line only allowed for transfer Trx")
                 End If
                 mstrTransferKey = Mid(mstrLine, 3)
             Case "KB"
-                If mlngType <> Trx.TrxType.glngTRXTYP_BUDGET Then
+                If mlngType <> Trx.TrxType.Budget Then
                     RaiseErrorInLoad("KB line only allowed for budget Trx")
                 End If
                 mstrBudgetKey = Mid(mstrLine, 3)
@@ -204,47 +204,47 @@ Public Class RegisterLoader
             '    'This line will be ignored in contexts where it is not used.
             '    mdatRptEnd = datConvertInput(Mid(mstrLine, 3), "repeat sequence end")
             Case "SM"
-                If mlngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
+                If mlngType <> Trx.TrxType.Normal Then
                     RaiseErrorInLoad("SM only allowed for normal Trx")
                 End If
                 mstrSMemo = Mid(mstrLine, 3)
             Case "SC"
-                If mlngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
+                If mlngType <> Trx.TrxType.Normal Then
                     RaiseErrorInLoad("SC only allowed for normal Trx")
                 End If
                 mstrSCategoryKey = Mid(mstrLine, 3)
             Case "SP"
-                If mlngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
+                If mlngType <> Trx.TrxType.Normal Then
                     RaiseErrorInLoad("SP only allowed for normal Trx")
                 End If
                 mstrSPONumber = Mid(mstrLine, 3)
             Case "SN"
-                If mlngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
+                If mlngType <> Trx.TrxType.Normal Then
                     RaiseErrorInLoad("SN only allowed for normal Trx")
                 End If
                 mstrSInvoiceNum = Mid(mstrLine, 3)
             Case "SI"
-                If mlngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
+                If mlngType <> Trx.TrxType.Normal Then
                     RaiseErrorInLoad("SI only allowed for normal Trx")
                 End If
                 mdatSInvoiceDate = datConvertInput(Mid(mstrLine, 3), "invoice")
             Case "SD"
-                If mlngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
+                If mlngType <> Trx.TrxType.Normal Then
                     RaiseErrorInLoad("SD only allowed for normal Trx")
                 End If
                 mdatSDueDate = datConvertInput(Mid(mstrLine, 3), "due")
             Case "ST"
-                If mlngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
+                If mlngType <> Trx.TrxType.Normal Then
                     RaiseErrorInLoad("ST only allowed for normal Trx")
                 End If
                 mstrSTerms = Mid(mstrLine, 3)
             Case "SB"
-                If mlngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
+                If mlngType <> Trx.TrxType.Normal Then
                     RaiseErrorInLoad("SB only allowed for normal Trx")
                 End If
                 mstrSBudgetKey = Mid(mstrLine, 3)
             Case "SA"
-                If mlngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
+                If mlngType <> Trx.TrxType.Normal Then
                     RaiseErrorInLoad("SA only allowed for normal Trx")
                 End If
                 If Not IsNumeric(Mid(mstrLine, 3)) Then
@@ -254,7 +254,7 @@ Public Class RegisterLoader
             Case "SF"
                 'Ignore this. Used to be file list, and a few old trx still have this data field.
             Case "SZ"
-                If mlngType <> Trx.TrxType.glngTRXTYP_NORMAL Then
+                If mlngType <> Trx.TrxType.Normal Then
                     RaiseErrorInLoad("SZ only allowed for normal Trx")
                 End If
                 objSplit = New TrxSplit
@@ -268,8 +268,8 @@ Public Class RegisterLoader
 
     Private Sub ClearTrxData()
         mstrDescription = ""
-        mlngStatus = Trx.TrxStatus.gintTRXSTS_MISSING
-        mlngType = Trx.TrxType.glngTRXTYP_MISSING
+        mlngStatus = Trx.TrxStatus.Missing
+        mlngType = Trx.TrxType.Missing
         mstrNumber = ""
         mdatDate = System.DateTime.FromOADate(0)
         mstrMemo = ""
@@ -277,7 +277,7 @@ Public Class RegisterLoader
         mcurNormalMatchRange = 0
         mblnAwaitingReview = False
         mdatBudgetEnds = System.DateTime.FromOADate(0)
-        mlngBudgetUnit = Trx.RepeatUnit.glngRPTUNT_MISSING
+        mlngBudgetUnit = Trx.RepeatUnit.Missing
         mintBudgetNumber = 0
         mstrImportKey = ""
         mstrTransferKey = ""
@@ -323,7 +323,7 @@ Public Class RegisterLoader
 
         Dim lngResult As Trx.RepeatUnit
         lngResult = glngConvertRepeatUnit(strInput)
-        If lngResult = Trx.RepeatUnit.glngRPTUNT_MISSING Then
+        If lngResult = Trx.RepeatUnit.Missing Then
             RaiseErrorInLoad("Unrecognized unit name in " & strContext)
         End If
         lngConvertRepeatUnit = lngResult
@@ -341,7 +341,7 @@ Public Class RegisterLoader
     End Function
 
     Private Sub CreateTrx()
-        If mlngType = Trx.TrxType.glngTRXTYP_MISSING Then
+        If mlngType = Trx.TrxType.Missing Then
             RaiseError("CreateTrx", "No TN, TB or TT line before TZ")
         End If
         If mdatDate = System.DateTime.FromOADate(0) Then
@@ -368,7 +368,7 @@ Public Class RegisterLoader
             End If
 
             Select Case mlngType
-                Case Trx.TrxType.glngTRXTYP_NORMAL
+                Case Trx.TrxType.Normal
                     Dim objNormalTrx As NormalTrx = New NormalTrx(objTargetReg)
                     If mcolSplits.Count() = 0 Then
                         RaiseError("CreateTrx", "No splits for normal Trx")
@@ -382,11 +382,11 @@ Public Class RegisterLoader
                         End With
                     Next objSplit
                     objTargetReg.NewLoadEnd(objNormalTrx)
-                Case Trx.TrxType.glngTRXTYP_BUDGET
+                Case Trx.TrxType.Budget
                     If mstrBudgetKey = "" Then
                         RaiseError("CreateTrx", "No KB line for budget Trx")
                     End If
-                    If mlngBudgetUnit <> Trx.RepeatUnit.glngRPTUNT_MISSING Then
+                    If mlngBudgetUnit <> Trx.RepeatUnit.Missing Then
                         If mintBudgetNumber = 0 Then
                             RaiseError("CreateTrx", "Missing BN line for budget Trx with BU line")
                         End If
@@ -398,7 +398,7 @@ Public Class RegisterLoader
                     Dim objBudgetTrx As BudgetTrx = New BudgetTrx(objTargetReg)
                     objBudgetTrx.NewStartBudget(True, mdatDate, mstrDescription, mstrMemo, mblnAwaitingReview, blnAutoGenerated, mintRepeatSeq, mstrRepeatKey, mcurAmount, mdatBudgetEnds, mstrBudgetKey)
                     objTargetReg.NewLoadEnd(objBudgetTrx)
-                Case Trx.TrxType.glngTRXTYP_TRANSFER
+                Case Trx.TrxType.Transfer
                     If mstrTransferKey = "" Then
                         RaiseError("CreateTrx", "No KT line for transfer Trx")
                     End If

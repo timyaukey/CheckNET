@@ -74,7 +74,7 @@ Public Class UTRegister
     'Used to add Trx which will be input to later tests. Does NOT fire any Register events.
 
     Public Sub LoadNormal(ByVal strNumber As String, ByVal datDate As Date, ByVal curAmount As Decimal,
-                          Optional ByVal lngStatus As Trx.TrxStatus = Trx.TrxStatus.glngTRXSTS_UNREC,
+                          Optional ByVal lngStatus As Trx.TrxStatus = Trx.TrxStatus.Unreconciled,
                           Optional ByVal blnFake As Boolean = False, Optional ByVal curNormalMatchRange As Decimal = 0,
                           Optional ByVal strImportKey As String = "", Optional ByVal strRepeatKey As String = "",
                           Optional ByVal strCategoryKey As String = "cat1", Optional ByVal strBudgetKey As String = "",
@@ -117,7 +117,7 @@ Public Class UTRegister
 
     Public Sub AddNormal(ByVal strNumber As String, ByVal datDate As Date, ByVal curAmount As Decimal, ByVal strFailMsg As String,
                          ByVal lngExpectedIndex As Integer, ByVal lngBalanceChangeFirst As Integer, ByVal lngBalanceChangeLast As Integer,
-                         Optional ByVal lngStatus As Trx.TrxStatus = Trx.TrxStatus.glngTRXSTS_UNREC,
+                         Optional ByVal lngStatus As Trx.TrxStatus = Trx.TrxStatus.Unreconciled,
                          Optional ByVal blnFake As Boolean = False, Optional ByVal curNormalMatchRange As Decimal = 0,
                          Optional ByVal strImportKey As String = "", Optional ByVal strRepeatKey As String = "",
                          Optional ByVal strCategoryKey As String = "cat1", Optional ByVal strBudgetKey As String = "",
@@ -154,7 +154,7 @@ Public Class UTRegister
 
     Public Sub UpdateNormal(ByVal strNumber As String, ByVal datDate As Date, ByVal curAmount As Decimal, ByVal strFailMsg As String,
                             ByVal lngExpectedOldIndex As Integer, ByVal lngExpectedNewIndex As Integer, ByVal lngBalanceChangeFirst As Integer,
-                            ByVal lngBalanceChangeLast As Integer, Optional ByVal lngStatus As Trx.TrxStatus = Trx.TrxStatus.glngTRXSTS_UNREC,
+                            ByVal lngBalanceChangeLast As Integer, Optional ByVal lngStatus As Trx.TrxStatus = Trx.TrxStatus.Unreconciled,
                             Optional ByVal blnFake As Boolean = False, Optional ByVal curNormalMatchRange As Decimal = 0,
                             Optional ByVal strCategoryKey As String = "cat1", Optional ByVal strBudgetKey As String = "",
                             Optional ByVal vcurAmount2 As Object = Nothing, Optional ByVal strBudgetKey2 As String = "",

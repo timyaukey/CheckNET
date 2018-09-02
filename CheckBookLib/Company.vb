@@ -92,7 +92,7 @@ Public Class Company
         For Each act As Account In colAccounts
             For Each reg In act.colRegisters
                 For Each objTrx In reg.colAllTrx()
-                    If objTrx.lngStatus = Trx.TrxStatus.glngTRXSTS_RECON Then
+                    If objTrx.lngStatus = Trx.TrxStatus.Reconciled Then
                         If objTrx.datDate > datResult Then
                             datResult = objTrx.datDate
                         End If

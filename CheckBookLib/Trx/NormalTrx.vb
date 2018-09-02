@@ -91,7 +91,7 @@ Public Class NormalTrx
         mdatDate = datDate_
         mstrDescription = ""
         mstrMemo = ""
-        mlngStatus = TrxStatus.glngTRXSTS_UNREC
+        mlngStatus = TrxStatus.Unreconciled
         mblnFake = False
         mcurNormalMatchRange = 0.0D
         mblnAwaitingReview = False
@@ -154,7 +154,7 @@ Public Class NormalTrx
 
     Public Overrides ReadOnly Property lngType As TrxType
         Get
-            Return TrxType.glngTRXTYP_NORMAL
+            Return TrxType.Normal
         End Get
     End Property
 
@@ -608,7 +608,7 @@ Public Class NormalTrx
             For Each objSplit In mcolSplits
                 curTotal = curTotal + objSplit.curAmount
                 If Not objSplit.objBudget Is Nothing Then
-                    If objSplit.objBudget.lngType <> TrxType.glngTRXTYP_BUDGET Then
+                    If objSplit.objBudget.lngType <> TrxType.Budget Then
                         objReg.RaiseValidationError(lngIndex, "Split applied to non-budget trx")
                     End If
                     If objSplit.strBudgetKey = "" Then
@@ -637,7 +637,7 @@ Public Class NormalTrx
             If mstrImportKey <> "" Then
                 objReg.RaiseValidationError(lngIndex, "Normal trx cannot have import key if it is fake")
             End If
-            If mlngStatus <> TrxStatus.glngTRXSTS_UNREC Then
+            If mlngStatus <> TrxStatus.Unreconciled Then
                 objReg.RaiseValidationError(lngIndex, "Normal trx must be unreconciled if it is fake")
             End If
         End If

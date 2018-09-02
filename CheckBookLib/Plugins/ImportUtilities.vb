@@ -185,7 +185,7 @@ Public Class ImportUtilities
             End If
 
             objTrx = New ImportedTrx(Nothing)
-            objTrx.NewStartNormal(False, strNumber, datDate, strDescription, strMemo, Trx.TrxStatus.glngTRXSTS_UNREC,
+            objTrx.NewStartNormal(False, strNumber, datDate, strDescription, strMemo, Trx.TrxStatus.Unreconciled,
                                   mblnMakeFakeTrx, 0.0D, False, False, 0, strImportKey, "")
             objTrx.lngNarrowMethod = mlngNarrowMethod
             objTrx.curMatchMin = mcurMatchMin
@@ -472,7 +472,7 @@ Public Class ImportUtilities
 
         blnHaveFirstMatch = False
         For Each objPossibleMatchTrx In colInputMatches
-            If String.IsNullOrEmpty(objPossibleMatchTrx.strImportKey) And (objPossibleMatchTrx.lngStatus <> Trx.TrxStatus.glngTRXSTS_RECON) Then
+            If String.IsNullOrEmpty(objPossibleMatchTrx.strImportKey) And (objPossibleMatchTrx.lngStatus <> Trx.TrxStatus.Reconciled) Then
                 dblCurrentDistance = Math.Abs(objPossibleMatchTrx.datDate.Subtract(datTargetDate).TotalDays)
                 If (Not blnHaveFirstMatch) Or (dblCurrentDistance < dblBestDistance) Then
                     dblBestDistance = dblCurrentDistance

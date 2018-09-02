@@ -863,7 +863,7 @@ Friend Class UTMainForm
 
         objTrx = objReg.objTrx(1)
         With DirectCast(objTrx, BudgetTrx)
-            gUTAssert(.lngType = Trx.TrxType.glngTRXTYP_BUDGET, "Wrong type")
+            gUTAssert(.lngType = Trx.TrxType.Budget, "Wrong type")
             gUTAssert(.datDate = #4/10/2000#, "Wrong date")
             gUTAssert(.strDescription = "General household", "Wrong description")
             gUTAssert(.curAmount = (-150D + 10.99), "Wrong amount")
@@ -876,7 +876,7 @@ Friend Class UTMainForm
 
         objTrx = objReg.objTrx(2)
         With DirectCast(objTrx, NormalTrx)
-            gUTAssert(.lngType = Trx.TrxType.glngTRXTYP_NORMAL, "Wrong type")
+            gUTAssert(.lngType = Trx.TrxType.Normal, "Wrong type")
             gUTAssert(.datDate = #4/13/2000#, "Wrong date")
             gUTAssert(.strDescription = "Hadley Garden Center", "Wrong description")
             gUTAssert(.strMemo = "Bird seed", "Wrong memo")
@@ -896,7 +896,7 @@ Friend Class UTMainForm
 
         objTrx = objReg.objTrx(3)
         With DirectCast(objTrx, NormalTrx)
-            gUTAssert(.lngType = Trx.TrxType.glngTRXTYP_NORMAL, "Wrong type")
+            gUTAssert(.lngType = Trx.TrxType.Normal, "Wrong type")
             gUTAssert(.datDate = #4/15/2000#, "Wrong date")
             gUTAssert(.strNumber = "1001", "Wrong number")
             gUTAssert(.strImportKey = "imp1", "Wrong import key")
@@ -908,7 +908,7 @@ Friend Class UTMainForm
 
         objTrx = objReg.objTrx(4)
         With DirectCast(objTrx, TransferTrx)
-            gUTAssert(.lngType = Trx.TrxType.glngTRXTYP_TRANSFER, "Wrong type")
+            gUTAssert(.lngType = Trx.TrxType.Transfer, "Wrong type")
             gUTAssert(.datDate = #4/20/2000#, "Wrong date")
             gUTAssert(.strTransferKey = "xfr55", "Wrong transfer key")
             gUTAssert(.curAmount = 140.01, "Wrong transfer amount")

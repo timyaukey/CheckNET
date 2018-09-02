@@ -164,7 +164,7 @@ Public Class EventLog
                 .SetAttribute("RptSeq", CStr(objTrx.intRepeatSeq))
             End If
             Select Case objTrx.lngType
-                Case Trx.TrxType.glngTRXTYP_NORMAL
+                Case Trx.TrxType.Normal
                     .SetAttribute("Type", "Normal")
                     elmSplitParent = elmTrx
                     objNormalTrx = DirectCast(objTrx, NormalTrx)
@@ -198,12 +198,12 @@ Public Class EventLog
                             End If
                         End With
                     Next objSplit
-                Case Trx.TrxType.glngTRXTYP_BUDGET
+                Case Trx.TrxType.Budget
                     Dim objBudgetTrx As BudgetTrx = DirectCast(objTrx, BudgetTrx)
                     .SetAttribute("Type", "Budget")
                     .SetAttribute("BudgetLimit", Utilities.strFormatCurrency(objBudgetTrx.curBudgetLimit))
                     .SetAttribute("BudgetName", mobjCompany.objBudgets.strKeyToValue1(objBudgetTrx.strBudgetKey))
-                Case Trx.TrxType.glngTRXTYP_TRANSFER
+                Case Trx.TrxType.Transfer
                     .SetAttribute("Type", "Transfer")
                 Case Else
                     gRaiseError("Unsupported trx type")

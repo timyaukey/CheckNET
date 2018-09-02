@@ -576,7 +576,7 @@ Friend Class ListEditorForm
         Try
 
             For Each objTrx In objReg.colAllTrx()
-                If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
+                If objTrx.lngType = Trx.TrxType.Normal Then
                     For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
                         If mlngListType = ListType.glngLIST_TYPE_CATEGORY Then
                             If objSplit.strCategoryKey = strKey Then
@@ -593,7 +593,7 @@ Friend Class ListEditorForm
                         End If
                     Next
                 ElseIf mlngListType = ListType.glngLIST_TYPE_BUDGET Then
-                    If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
+                    If objTrx.lngType = Trx.TrxType.Budget Then
                         If DirectCast(objTrx, BudgetTrx).strBudgetKey = strKey Then
                             blnElementIsUsedInRegister = True
                             Exit Function

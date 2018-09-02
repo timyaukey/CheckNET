@@ -79,8 +79,8 @@ Friend Class ReconcileForm
             For lngIndex = 1 To lngMaxRegIndex
                 objTrx = objReg.objTrx(lngIndex)
                 With objTrx
-                    If .lngType = Trx.TrxType.glngTRXTYP_NORMAL And Not .blnFake Then
-                        If .lngStatus = Trx.TrxStatus.glngTRXSTS_RECON Then
+                    If .lngType = Trx.TrxType.Normal And Not .blnFake Then
+                        If .lngStatus = Trx.TrxStatus.Reconciled Then
                             curStartingBalance = curStartingBalance + .curAmount
                         Else
                             mlngTrxUsed = mlngTrxUsed + 1
@@ -91,7 +91,7 @@ Friend Class ReconcileForm
                             With maudtTrx(mlngTrxUsed)
                                 .objReg = objReg
                                 .lngIndex = lngIndex
-                                .blnSelected = (objTrx.lngStatus = Trx.TrxStatus.glngTRXSTS_SELECTED)
+                                .blnSelected = (objTrx.lngStatus = Trx.TrxStatus.Selected)
                                 If .blnSelected Then
                                     curSelectedTotal = curSelectedTotal + objTrx.curAmount
                                 End If
@@ -148,7 +148,7 @@ Friend Class ReconcileForm
             AddSubItem(objItem, mintCOL_SORTABLE_NUMBER, strSortableNumber)
             AddSubItem(objItem, mintCOL_SORTABLE_BANK_DATE, strSortableBankDate)
             AddSubItem(objItem, mintCOL_ARRAY_INDEX, CStr(mlngTrxUsed))
-            .Checked = (objTrx.lngStatus = Trx.TrxStatus.glngTRXSTS_SELECTED)
+            .Checked = (objTrx.lngStatus = Trx.TrxStatus.Selected)
         End With
     End Sub
 
@@ -241,7 +241,7 @@ Friend Class ReconcileForm
                 Exit Sub
             End If
 
-            SaveChanges(Trx.TrxStatus.glngTRXSTS_RECON)
+            SaveChanges(Trx.TrxStatus.Reconciled)
             SaveSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.strTitle, "")
 
             MsgBox("Congratulations!" & vbCrLf & vbCrLf & "You have reconciled your account to the ending balance " & "on your bank statement. This means that the total of transactions marked as " & "reconciled in the software equals the bank statement ending balance.", MsgBoxStyle.Information)
@@ -256,7 +256,7 @@ Friend Class ReconcileForm
     Private Sub cmdLater_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdLater.Click
         Try
 
-            SaveChanges(Trx.TrxStatus.glngTRXSTS_SELECTED)
+            SaveChanges(Trx.TrxStatus.Selected)
             SaveSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.strTitle, txtEndingBalance.Text)
 
             MsgBox("Your work has been saved. To resume this reconciliation, just " & "reconcile normally. The software will remember what you have already done.", MsgBoxStyle.Information)
@@ -275,7 +275,7 @@ Friend Class ReconcileForm
 
         For lngIndex = 1 To mlngTrxUsed
             With maudtTrx(lngIndex)
-                lngNewStatus = CType(IIf(.blnSelected, lngSelectedStatus, Trx.TrxStatus.glngTRXSTS_UNREC), Trx.TrxStatus)
+                lngNewStatus = CType(IIf(.blnSelected, lngSelectedStatus, Trx.TrxStatus.Unreconciled), Trx.TrxStatus)
                 If .objReg.objTrx(.lngIndex).lngStatus <> lngNewStatus Then
                     .objReg.SetTrxStatus(.lngIndex, lngNewStatus, New LogStatus, "ReconcileForm.SaveChanges")
                 End If

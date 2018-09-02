@@ -65,7 +65,7 @@ Public Class ReadDeposits
 
         objTrx = New ImportedTrx(Nothing)
 
-        objTrx.NewStartNormal(False, "", datDate, strDescription, "", Trx.TrxStatus.glngTRXSTS_UNREC, New TrxGenImportData())
+        objTrx.NewStartNormal(False, "", datDate, strDescription, "", Trx.TrxStatus.Unreconciled, New TrxGenImportData())
         objTrx.AddSplit("", "", "", "", datNull, datNull, "", "", curAmount)
 
         objNextTrx = objTrx

@@ -231,7 +231,7 @@ Friend Class RptScanSplitsForm
                         System.Windows.Forms.Application.DoEvents()
                         datLastProgress = datDate
                     End If
-                    If .lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
+                    If .lngType = Trx.TrxType.Normal Then
                         blnInclude = True
                         If .blnFake Then
                             If Not mblnIncludeFake Then

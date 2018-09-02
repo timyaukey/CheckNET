@@ -26,51 +26,51 @@ Public MustInherit Class Trx
 
     Public Enum TrxStatus
         'Missing value (should never be this).
-        gintTRXSTS_MISSING = 0
+        Missing = 0
         'Unreconciled (new).
-        glngTRXSTS_UNREC = 1
+        Unreconciled = 1
         'Reconciled.
-        glngTRXSTS_RECON = 2
+        Reconciled = 2
         'Non-bank (budget, transfer, etc.)
-        glngTRXSTS_NONBANK = 3
+        NonBank = 3
         'Selected in current reconciliation.
-        glngTRXSTS_SELECTED = 4
+        Selected = 4
     End Enum
 
     Public Enum TrxType
         'Missing value (should never be this).
-        glngTRXTYP_MISSING = 0
+        Missing = 0
         'Ordinary transaction.
-        glngTRXTYP_NORMAL = 1
+        Normal = 1
         'Budget transaction (must be fake).
-        glngTRXTYP_BUDGET = 2
+        Budget = 2
         'Transfer transaction.
-        glngTRXTYP_TRANSFER = 3
+        Transfer = 3
         'Replica transaction.
-        glngTRXTYP_REPLICA = 4
+        Replica = 4
     End Enum
 
     Public Enum TrxSearchField
-        glngTRXSFL_NUMBER
-        glngTRXSFL_DESCR
-        glngTRXSFL_CATKEY
-        glngTRXSFL_AMOUNT
-        glngTRXSFL_MEMO
-        glngTRXSFL_INVNUM
-        glngTRXSFL_PONUMBER
+        Number
+        Description
+        Category
+        Amount
+        Memo
+        InvoiceNumber
+        PONumber
     End Enum
 
     Public Enum TrxSearchType
-        glngTRXSTP_EQUAL = 1
-        glngTRXSTP_CONTAINS = 2
-        glngTRXSTP_STARTS = 3
+        EqualTo = 1
+        Contains = 2
+        StartsWith = 3
     End Enum
 
     Public Enum RepeatUnit
-        glngRPTUNT_MISSING = 0
-        glngRPTUNT_DAY = 1
-        glngRPTUNT_WEEK = 2
-        glngRPTUNT_MONTH = 3
+        Missing = 0
+        Day = 1
+        Week = 2
+        Month = 3
     End Enum
 
     'Register this Trx belongs to.
@@ -229,13 +229,13 @@ Public MustInherit Class Trx
     Public ReadOnly Property strStatus() As String
         Get
             Select Case mlngStatus
-                Case TrxStatus.glngTRXSTS_NONBANK
+                Case TrxStatus.NonBank
                     strStatus = "NonBank"
-                Case TrxStatus.glngTRXSTS_UNREC
+                Case TrxStatus.Unreconciled
                     strStatus = "Unreconciled"
-                Case TrxStatus.glngTRXSTS_SELECTED
+                Case TrxStatus.Selected
                     strStatus = "Selected"
-                Case TrxStatus.glngTRXSTS_RECON
+                Case TrxStatus.Reconciled
                     strStatus = "Reconciled"
                 Case Else
                     strStatus = ""
@@ -295,14 +295,14 @@ Public MustInherit Class Trx
         If mstrDescription = "" Then
             gRaiseError("Missing description in " & strRoutine)
         End If
-        If mlngStatus = TrxStatus.gintTRXSTS_MISSING Then
+        If mlngStatus = TrxStatus.Missing Then
             gRaiseError("Missing status in " & strRoutine)
         End If
     End Sub
 
     Public Sub SetSortKey()
         Dim strInvNum As String = ""
-        If lngType = TrxType.glngTRXTYP_NORMAL Then
+        If lngType = TrxType.Normal Then
             strInvNum = DirectCast(Me, NormalTrx).objFirstSplit.strInvoiceNum
         End If
         Dim strDebitCredit As String
@@ -361,10 +361,10 @@ Public MustInherit Class Trx
         Dim strCatName As String
 
         Select Case lngSearchField
-            Case TrxSearchField.glngTRXSFL_CATKEY
-                If lngType = TrxType.glngTRXTYP_NORMAL Then
+            Case TrxSearchField.Category
+                If lngType = TrxType.Normal Then
                     For Each objSplit In DirectCast(Me, NormalTrx).colSplits
-                        If lngSearchType = TrxSearchType.glngTRXSTP_EQUAL Then
+                        If lngSearchType = TrxSearchType.EqualTo Then
                             If objSplit.strCategoryKey = strSearchFor Then
                                 dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
                             End If
@@ -377,8 +377,8 @@ Public MustInherit Class Trx
                     Next
                 End If
                 Exit Sub
-            Case TrxSearchField.glngTRXSFL_INVNUM
-                If lngType = TrxType.glngTRXTYP_NORMAL Then
+            Case TrxSearchField.InvoiceNumber
+                If lngType = TrxType.Normal Then
                     For Each objSplit In DirectCast(Me, NormalTrx).colSplits
                         If blnIsStringMatch(lngSearchType, (objSplit.strInvoiceNum), strSearchFor) Then
                             dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
@@ -386,8 +386,8 @@ Public MustInherit Class Trx
                     Next
                 End If
                 Exit Sub
-            Case TrxSearchField.glngTRXSFL_PONUMBER
-                If lngType = TrxType.glngTRXTYP_NORMAL Then
+            Case TrxSearchField.PONumber
+                If lngType = TrxType.Normal Then
                     For Each objSplit In DirectCast(Me, NormalTrx).colSplits
                         If blnIsStringMatch(lngSearchType, (objSplit.strPONumber), strSearchFor) Then
                             dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
@@ -395,13 +395,13 @@ Public MustInherit Class Trx
                     Next
                 End If
                 Exit Sub
-            Case TrxSearchField.glngTRXSFL_DESCR
+            Case TrxSearchField.Description
                 strTrxData = mstrDescription
-            Case TrxSearchField.glngTRXSFL_NUMBER
+            Case TrxSearchField.Number
                 strTrxData = mstrNumber
-            Case TrxSearchField.glngTRXSFL_AMOUNT
+            Case TrxSearchField.Amount
                 strTrxData = Utilities.strFormatCurrency(mcurAmount)
-            Case TrxSearchField.glngTRXSFL_MEMO
+            Case TrxSearchField.Memo
                 strTrxData = mstrMemo
             Case Else
                 gRaiseError("Unrecognized field in Trx.blnIsSearchMatch")
@@ -418,11 +418,11 @@ Public MustInherit Class Trx
     Private Function blnIsStringMatch(ByVal lngSearchType As TrxSearchType, ByRef strTrxData As String, ByRef strSearchFor As String) As Boolean
 
         Select Case lngSearchType
-            Case TrxSearchType.glngTRXSTP_EQUAL
+            Case TrxSearchType.EqualTo
                 blnIsStringMatch = (StrComp(strTrxData, strSearchFor, CompareMethod.Text) = 0)
-            Case TrxSearchType.glngTRXSTP_STARTS
+            Case TrxSearchType.StartsWith
                 blnIsStringMatch = (StrComp(Left(strTrxData, Len(strSearchFor)), strSearchFor, CompareMethod.Text) = 0)
-            Case TrxSearchType.glngTRXSTP_CONTAINS
+            Case TrxSearchType.Contains
                 blnIsStringMatch = (InStr(1, strTrxData, strSearchFor, CompareMethod.Text) > 0)
             Case Else
                 gRaiseError("Unrecognized search type in Trx.blnIsStringMatch")

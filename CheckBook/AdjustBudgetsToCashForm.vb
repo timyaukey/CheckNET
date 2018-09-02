@@ -251,7 +251,7 @@ Friend Class AdjustBudgetsToCashForm
                     datPrev = objTrx.datDate
                 End If
                 'If this is a budget trx, see if it matches anything we are looking for.
-                If objTrx.lngType = Trx.TrxType.glngTRXTYP_BUDGET Then
+                If objTrx.lngType = Trx.TrxType.Budget Then
                     objBudget = DirectCast(objTrx, BudgetTrx)
                     strTrxBudgetKey = objBudget.strBudgetKey
                     'Check against each budget key we are looking for.

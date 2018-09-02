@@ -31,13 +31,13 @@ Public Class RegisterSaver
         End If
         'Do not save ReplicaTrx, because they will be recreated on load.
         Select Case mobjTrx.lngType
-            Case Trx.TrxType.glngTRXTYP_NORMAL
+            Case Trx.TrxType.Normal
                 SaveTrxNormal()
                 SaveLine(".T")
-            Case Trx.TrxType.glngTRXTYP_BUDGET
+            Case Trx.TrxType.Budget
                 SaveTrxBudget()
                 SaveLine(".T")
-            Case Trx.TrxType.glngTRXTYP_TRANSFER
+            Case Trx.TrxType.Transfer
                 SaveTrxTransfer()
                 SaveLine(".T")
         End Select
@@ -127,11 +127,11 @@ Public Class RegisterSaver
     Private Function strConvertRepeatUnit(ByVal lngUnit As Trx.RepeatUnit) As String
         strConvertRepeatUnit = ""
         Select Case lngUnit
-            Case Trx.RepeatUnit.glngRPTUNT_DAY
+            Case Trx.RepeatUnit.Day
                 strConvertRepeatUnit = "DAY"
-            Case Trx.RepeatUnit.glngRPTUNT_WEEK
+            Case Trx.RepeatUnit.Week
                 strConvertRepeatUnit = "WEEK"
-            Case Trx.RepeatUnit.glngRPTUNT_MONTH
+            Case Trx.RepeatUnit.Month
                 strConvertRepeatUnit = "MONTH"
             Case Else
                 gRaiseError("Unrecognized repeat unit: " & lngUnit)

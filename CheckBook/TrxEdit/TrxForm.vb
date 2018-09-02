@@ -71,7 +71,7 @@ Friend Class TrxForm
 
         Try
 
-            Init(objReg_, False, 0, Trx.TrxType.glngTRXTYP_NORMAL, blnCheckInvoiceNum_, strLogTitle)
+            Init(objReg_, False, 0, Trx.TrxType.Normal, blnCheckInvoiceNum_, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             SetSharedControls(objTrx_)
@@ -97,7 +97,7 @@ Friend Class TrxForm
 
         Try
 
-            Init(objReg_, False, 0, Trx.TrxType.glngTRXTYP_NORMAL, blnCheckInvoiceNum_, strLogTitle)
+            Init(objReg_, False, 0, Trx.TrxType.Normal, blnCheckInvoiceNum_, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             SetSharedControls(objTrx_)
@@ -126,7 +126,7 @@ Friend Class TrxForm
 
         Try
 
-            Init(objReg_, False, 0, Trx.TrxType.glngTRXTYP_BUDGET, False, strLogTitle)
+            Init(objReg_, False, 0, Trx.TrxType.Budget, False, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             ClearSharedControls()
@@ -152,7 +152,7 @@ Friend Class TrxForm
 
         Try
 
-            Init(objReg_, False, 0, Trx.TrxType.glngTRXTYP_TRANSFER, False, strLogTitle)
+            Init(objReg_, False, 0, Trx.TrxType.Transfer, False, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             ClearSharedControls()
@@ -186,17 +186,17 @@ Friend Class TrxForm
             mstrOldRepeatKey = objTrx.strRepeatKey
             mintOldRepeatSeq = objTrx.intRepeatSeq
             Select Case objTrx.lngType
-                Case Trx.TrxType.glngTRXTYP_NORMAL
+                Case Trx.TrxType.Normal
                     ConfigNormalControls()
                     SetNormalControls(DirectCast(objTrx, NormalTrx))
                     CheckForPlaceholderBudget()
                     mcurOldAmount = objTrx.curAmount
                     mlngOldStatus = objTrx.lngStatus
-                Case Trx.TrxType.glngTRXTYP_BUDGET
+                Case Trx.TrxType.Budget
                     ConfigBudgetControls()
                     SetBudgetControls(DirectCast(objTrx, BudgetTrx))
                     ShowBudgetApplied(DirectCast(objTrx, BudgetTrx), lngIndex_)
-                Case Trx.TrxType.glngTRXTYP_TRANSFER
+                Case Trx.TrxType.Transfer
                     ConfigTransferControls()
                     SetTransferControls(DirectCast(objTrx, TransferTrx))
             End Select
@@ -271,7 +271,7 @@ Friend Class TrxForm
             mblnInSetNormalControls = True
             With objTrx
                 txtNumber.Text = .strNumber
-                cboStatus.SelectedIndex = CInt(IIf(.lngStatus = Trx.TrxStatus.glngTRXSTS_UNREC, 0, IIf(.lngStatus = Trx.TrxStatus.glngTRXSTS_SELECTED, 1, 2)))
+                cboStatus.SelectedIndex = CInt(IIf(.lngStatus = Trx.TrxStatus.Unreconciled, 0, IIf(.lngStatus = Trx.TrxStatus.Selected, 1, 2)))
                 chkFake.CheckState = CType(IIf(.blnFake, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked), CheckState)
                 txtMatchRange.Text = Utilities.strFormatCurrency(.curNormalMatchRange)
                 mstrImportKey = .strImportKey
@@ -375,7 +375,7 @@ Friend Class TrxForm
             If objCurrent.datDate > objBudget.datBudgetEnds Then
                 Exit Do
             End If
-            If objCurrent.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
+            If objCurrent.lngType = Trx.TrxType.Normal Then
                 For Each objSplit In DirectCast(objCurrent, NormalTrx).colSplits
                     If objSplit.objBudget Is objBudget Then
                         'Show it.
@@ -824,11 +824,11 @@ Friend Class TrxForm
 
     Private Sub cmdCopyAmount_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCopyAmount.Click
         Dim strAmount As String = ""
-        If mlngType = Trx.TrxType.glngTRXTYP_NORMAL Then
+        If mlngType = Trx.TrxType.Normal Then
             strAmount = txtSplitTotal.Text
-        ElseIf mlngType = Trx.TrxType.glngTRXTYP_BUDGET Then
+        ElseIf mlngType = Trx.TrxType.Budget Then
             strAmount = txtBudgetLimit.Text
-        ElseIf mlngType = Trx.TrxType.glngTRXTYP_TRANSFER Then
+        ElseIf mlngType = Trx.TrxType.Transfer Then
             strAmount = txtTransferAmount.Text
         End If
         My.Computer.Clipboard.Clear()
@@ -895,17 +895,17 @@ Friend Class TrxForm
             Exit Function
         End If
         Select Case mlngType
-            Case Trx.TrxType.glngTRXTYP_NORMAL
+            Case Trx.TrxType.Normal
                 If blnValidateNormal() Then
                     Exit Function
                 End If
                 SaveNormal()
-            Case Trx.TrxType.glngTRXTYP_BUDGET
+            Case Trx.TrxType.Budget
                 If blnValidateBudget() Then
                     Exit Function
                 End If
                 SaveBudget()
-            Case Trx.TrxType.glngTRXTYP_TRANSFER
+            Case Trx.TrxType.Transfer
                 If blnValidateTransfer(strOtherRegisterKey) Then
                     Exit Function
                 End If
@@ -1059,7 +1059,7 @@ Friend Class TrxForm
             End If
         End If
         If chkFake.CheckState = System.Windows.Forms.CheckState.Checked Then
-            If lngTrxStatus() <> Trx.TrxStatus.glngTRXSTS_UNREC Then
+            If lngTrxStatus() <> Trx.TrxStatus.Unreconciled Then
                 ValidationError("Fake transactions must be unreconciled.")
                 Exit Function
             End If
@@ -1151,7 +1151,7 @@ Friend Class TrxForm
             ValidationError("At least one split must be entered.")
             Exit Function
         End If
-        If mblnEditMode And (mlngOldStatus = Trx.TrxStatus.glngTRXSTS_RECON) Then
+        If mblnEditMode And (mlngOldStatus = Trx.TrxStatus.Reconciled) Then
             If curNewTotal <> mcurOldAmount Then
                 If MsgBox("Saving this will change the amount of a transaction " &
                           "which has already been reconciled to a bank statement. " &
@@ -1208,7 +1208,7 @@ Friend Class TrxForm
                 Exit Do
             End If
             objTrx = objReg.objTrx(lngIndex)
-            If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
+            If objTrx.lngType = Trx.TrxType.Normal Then
                 'If objTrx.datDate < datEarliestToCheck Then
                 '    Exit Do
                 'End If
@@ -1391,11 +1391,11 @@ Friend Class TrxForm
     Private Function lngTrxStatus() As Trx.TrxStatus
         Select Case VB.Left(cboStatus.Text, 1)
             Case "R"
-                lngTrxStatus = Trx.TrxStatus.glngTRXSTS_RECON
+                lngTrxStatus = Trx.TrxStatus.Reconciled
             Case "S"
-                lngTrxStatus = Trx.TrxStatus.glngTRXSTS_SELECTED
+                lngTrxStatus = Trx.TrxStatus.Selected
             Case Else
-                lngTrxStatus = Trx.TrxStatus.glngTRXSTS_UNREC
+                lngTrxStatus = Trx.TrxStatus.Unreconciled
         End Select
     End Function
 
@@ -1698,7 +1698,7 @@ Friend Class TrxForm
                     If strNumber <> "" Then
                         txtNumber.Text = strNumber
                     End If
-                    If mlngType = Trx.TrxType.glngTRXTYP_NORMAL Then
+                    If mlngType = Trx.TrxType.Normal Then
                         cboSplitCategory(0).Text = strCategory
                         If strBudget <> "" Then
                             cboSplitBudget(0).Text = strBudget
@@ -1708,11 +1708,11 @@ Friend Class TrxForm
                         End If
                         'txtSplitAmount(0).SetFocus
                         txtSplitInvoiceNum(0).Focus()
-                    ElseIf mlngType = Trx.TrxType.glngTRXTYP_TRANSFER Then
+                    ElseIf mlngType = Trx.TrxType.Transfer Then
                         If strAmount <> "" Then
                             txtTransferAmount.Text = strAmount
                         End If
-                    ElseIf mlngType = Trx.TrxType.glngTRXTYP_BUDGET Then
+                    ElseIf mlngType = Trx.TrxType.Budget Then
                         If strAmount <> "" Then
                             txtBudgetLimit.Text = strAmount
                         End If
