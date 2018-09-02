@@ -128,7 +128,6 @@
     <Compile Include="Logging\ILogGroupStart.vb" />
     <Compile Include="PluginFactoryAttribute.vb" />
     <Compile Include="Imports\DepositImportStandard.vb" />
-    <Compile Include="Plugins\ImportPlugins.vb" />
     <Compile Include="Imports\InvoiceImportStandard.vb" />
     <Compile Include="Register\RegDateRange.vb" />
     <Compile Include="Register\RegIterator.vb" />

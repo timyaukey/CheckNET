@@ -499,6 +499,10 @@
       <Project>{73A968C7-281A-45DC-8360-2E44B3C9510B}</Project>
       <Name>CheckBookLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ImportPlugins\ImportPlugins.vbproj">
+      <Project>{67bc9967-b09a-4a5a-9bf5-40c9c9af79ef}</Project>
+      <Name>ImportPlugins</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
