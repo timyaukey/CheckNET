@@ -647,9 +647,9 @@ Friend Class ListEditorForm
             strMakeKey = ""
         Else
             If mlngListType = ListType.glngLIST_TYPE_CATEGORY Or intKey > 99 Then
-                strMakeKey = gstrFormatInteger(intKey, "000")
+                strMakeKey = Utilities.strFormatInteger(intKey, "000")
             Else
-                strMakeKey = gstrFormatInteger(intKey, "00")
+                strMakeKey = Utilities.strFormatInteger(intKey, "00")
             End If
         End If
     End Function

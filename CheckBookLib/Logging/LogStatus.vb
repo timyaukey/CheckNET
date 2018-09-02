@@ -22,10 +22,10 @@ Public Class LogStatus
 
     Private Sub ILogger_WriteLog(ByVal objLog As EventLog) Implements ILogger.WriteLog
         objLog.EventStart(mstrTitle, mdatTimestamp)
-        objLog.WriteValue("Date", gstrFormatDate(mobjNewTrx.datDate))
+        objLog.WriteValue("Date", Utilities.strFormatDate(mobjNewTrx.datDate))
         objLog.WriteValue("Number", mobjNewTrx.strNumber)
         objLog.WriteValue("Payee", mobjNewTrx.strDescription)
-        objLog.WriteValue("Amount", gstrFormatCurrency(mobjNewTrx.curAmount))
+        objLog.WriteValue("Amount", Utilities.strFormatCurrency(mobjNewTrx.curAmount))
         objLog.WriteValue("Status", mobjNewTrx.strStatus)
         objLog.EventEnd()
     End Sub

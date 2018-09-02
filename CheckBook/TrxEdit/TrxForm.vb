@@ -217,7 +217,7 @@ Friend Class TrxForm
     End Sub
 
     Private Sub ClearSharedControls()
-        txtDate.Text = gstrFormatDate(mdatDefaultDate)
+        txtDate.Text = Utilities.strFormatDate(mdatDefaultDate)
         txtDescription.Text = ""
         txtMemo.Text = ""
         cboRepeatKey.SelectedIndex = -1
@@ -228,7 +228,7 @@ Friend Class TrxForm
 
     Private Sub SetSharedControls(ByVal objTrx As Trx)
         With objTrx
-            txtDate.Text = gstrFormatDate(.datDate)
+            txtDate.Text = Utilities.strFormatDate(.datDate)
             txtDescription.Text = .strDescription
             txtMemo.Text = .strMemo
             SetComboFromStringTranslator(cboRepeatKey, mobjAccount.objRepeats, .strRepeatKey)
@@ -273,7 +273,7 @@ Friend Class TrxForm
                 txtNumber.Text = .strNumber
                 cboStatus.SelectedIndex = CInt(IIf(.lngStatus = Trx.TrxStatus.glngTRXSTS_UNREC, 0, IIf(.lngStatus = Trx.TrxStatus.glngTRXSTS_SELECTED, 1, 2)))
                 chkFake.CheckState = CType(IIf(.blnFake, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked), CheckState)
-                txtMatchRange.Text = gstrFormatCurrency(.curNormalMatchRange)
+                txtMatchRange.Text = Utilities.strFormatCurrency(.curNormalMatchRange)
                 mstrImportKey = .strImportKey
                 SetImportKeyControls((mstrImportKey <> ""))
                 chkImported.Enabled = (mstrImportKey <> "")
@@ -335,10 +335,10 @@ Friend Class TrxForm
 
     Private Sub SetBudgetControls(ByVal objTrx As BudgetTrx)
         With objTrx
-            txtBudgetLimit.Text = gstrFormatCurrency(.curBudgetLimit)
+            txtBudgetLimit.Text = Utilities.strFormatCurrency(.curBudgetLimit)
             SetComboFromStringTranslator(cboBudgetName, mobjCompany.objBudgets, .strBudgetKey)
-            txtBudgetApplied.Text = gstrFormatCurrency(.curBudgetApplied)
-            txtBudgetEnds.Text = gstrFormatDate(.datBudgetEnds)
+            txtBudgetApplied.Text = Utilities.strFormatCurrency(.curBudgetApplied)
+            txtBudgetEnds.Text = Utilities.strFormatDate(.datBudgetEnds)
         End With
     End Sub
 
@@ -381,7 +381,7 @@ Friend Class TrxForm
                         'Show it.
                         With objCurrent
                             objItem = gobjListViewAdd(lvwAppliedTo)
-                            objItem.Text = gstrFormatDate(.datDate)
+                            objItem.Text = Utilities.strFormatDate(.datDate)
                             If objItem.SubItems.Count > 1 Then
                                 objItem.SubItems(1).Text = .strNumber
                             Else
@@ -403,9 +403,9 @@ Friend Class TrxForm
                                 objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objSplit.strPONumber))
                             End If
                             If objItem.SubItems.Count > 5 Then
-                                objItem.SubItems(5).Text = gstrFormatCurrency(objSplit.curAmount)
+                                objItem.SubItems(5).Text = Utilities.strFormatCurrency(objSplit.curAmount)
                             Else
-                                objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objSplit.curAmount)))
+                                objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(objSplit.curAmount)))
                             End If
                             curTotalApplied = curTotalApplied + objSplit.curAmount
                             If objItem.SubItems.Count > 6 Then
@@ -458,7 +458,7 @@ Friend Class TrxForm
         With objTrx
             chkFake.CheckState = CType(IIf(.blnFake, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked), CheckState)
             SetComboFromStringTranslator(cboTransferTo, mobjAccount.objRegisterList(), .strTransferKey)
-            txtTransferAmount.Text = gstrFormatCurrency(.curTransferAmount)
+            txtTransferAmount.Text = Utilities.strFormatCurrency(.curTransferAmount)
         End With
     End Sub
 
@@ -556,16 +556,16 @@ Friend Class TrxForm
                 If objSplit.datInvoiceDate = System.DateTime.FromOADate(0) Then
                     .strInvoiceDate = ""
                 Else
-                    .strInvoiceDate = gstrFormatDate(objSplit.datInvoiceDate)
+                    .strInvoiceDate = Utilities.strFormatDate(objSplit.datInvoiceDate)
                 End If
                 If objSplit.datDueDate = System.DateTime.FromOADate(0) Then
                     .strDueDate = ""
                 Else
-                    .strDueDate = gstrFormatDate(objSplit.datDueDate)
+                    .strDueDate = Utilities.strFormatDate(objSplit.datDueDate)
                 End If
                 .strTerms = objSplit.strTerms
                 .strBudgetKey = objSplit.strBudgetKey
-                .strAmount = gstrFormatCurrency(objSplit.curAmount)
+                .strAmount = Utilities.strFormatCurrency(objSplit.curAmount)
             End With
         Next objSplit
     End Sub
@@ -598,7 +598,7 @@ Friend Class TrxForm
             End If
             For intIndex = 0 To mintSPLIT_CTRL_ARRAY_SIZE - 1
                 With maudtSplits(intIndex + mintSplitOffset + 1)
-                    lblSplitNumber(intIndex).Text = gstrFormatInteger(intIndex + 1 + mintSplitOffset, "##0") & "."
+                    lblSplitNumber(intIndex).Text = Utilities.strFormatInteger(intIndex + 1 + mintSplitOffset, "##0") & "."
                     SetComboFromStringTranslator(cboSplitCategory(intIndex), mobjCompany.objCategories, .strCategoryKey)
                     txtSplitPONum(intIndex).Text = .strPONumber
                     txtSplitInvoiceNum(intIndex).Text = .strInvoiceNum
@@ -639,7 +639,7 @@ Friend Class TrxForm
             'Do NOT set mcurTotalAmount if cannot compute trx total.
             txtSplitTotal.Text = "???"
         Else
-            txtSplitTotal.Text = gstrFormatCurrency(curTotal)
+            txtSplitTotal.Text = Utilities.strFormatCurrency(curTotal)
             mcurTotalAmount = curTotal
         End If
     End Sub
@@ -722,7 +722,7 @@ Friend Class TrxForm
             For intPlaceholderSelector = Utilities.intLBOUND1 To UBound(intPlaceholderIndexes)
                 intSplitIndex = intPlaceholderIndexes(intPlaceholderSelector)
                 If intPlaceholderSelector = Utilities.intLBOUND1 Then
-                    strSplitAmount = gstrFormatCurrency(mcurTotalAmount - curNonPlaceholderTotal)
+                    strSplitAmount = Utilities.strFormatCurrency(mcurTotalAmount - curNonPlaceholderTotal)
                 Else
                     strSplitAmount = "0.00"
                 End If
@@ -832,7 +832,7 @@ Friend Class TrxForm
             strAmount = txtTransferAmount.Text
         End If
         My.Computer.Clipboard.Clear()
-        My.Computer.Clipboard.SetText(gstrFormatCurrency(System.Math.Abs(CDec(strAmount)), "##########.00"))
+        My.Computer.Clipboard.SetText(Utilities.strFormatCurrency(System.Math.Abs(CDec(strAmount))))
     End Sub
 
     Private Sub cmdCopyDate_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCopyDate.Click
@@ -924,7 +924,7 @@ Friend Class TrxForm
         Dim intRepeatSeq As Integer
 
         blnValidateShared = True
-        If Not gblnValidDate(txtDate.Text) Then
+        If Not Utilities.blnIsValidDate(txtDate.Text) Then
             ValidationError("Invalid transaction date.")
             Exit Function
         End If
@@ -1097,7 +1097,7 @@ Friend Class TrxForm
                         End If
                     End If
                     If .strInvoiceDate <> "" Then
-                        If Not gblnValidDate(.strInvoiceDate) Then
+                        If Not Utilities.blnIsValidDate(.strInvoiceDate) Then
                             ValidationError("Split #" & intSplit & " has an invalid invoice date.")
                             Exit Function
                         End If
@@ -1108,7 +1108,7 @@ Friend Class TrxForm
                         'End If
                     End If
                     If .strDueDate <> "" Then
-                        If Not gblnValidDate(.strDueDate) Then
+                        If Not Utilities.blnIsValidDate(.strDueDate) Then
                             ValidationError("Split #" & intSplit & " has an invalid due date.")
                             Exit Function
                         End If
@@ -1138,7 +1138,7 @@ Friend Class TrxForm
                             Exit Function
                         End If
                     End If
-                    If Not gblnValidAmount(.strAmount) Then
+                    If Not Utilities.blnIsValidAmount(.strAmount) Then
                         ValidationError("Split #" & intSplit & " has an invalid amount.")
                         Exit Function
                     End If
@@ -1240,7 +1240,7 @@ Friend Class TrxForm
                                     'have an invoice number.
                                     'This function can be called before split information
                                     'has been validated, so we have to validate ourselves.
-                                    'If gblnValidAmount(maudtSplits(intSplit).strAmount) Then
+                                    'If Utilities.blnIsValidAmount(maudtSplits(intSplit).strAmount) Then
                                     '    If CCur(maudtSplits(intSplit).strAmount) = objSplit.curAmount Then
                                     '        If MsgBox("Invoice number " & objSplit.strInvoiceNum & _
                                     ''            " for payee " & objTrx.strDescription & _
@@ -1303,7 +1303,7 @@ Friend Class TrxForm
             blnDeclineInvalidDate = False
             Exit Function
         End If
-        strMsg = strCheckLabel & " " & gstrFormatDate(datCheck) & " is more than " & intWeeks & " weeks " & strRelationship & " " & strAnchorLabel & "." & vbCrLf & vbCrLf & "Is this date correct?"
+        strMsg = strCheckLabel & " " & Utilities.strFormatDate(datCheck) & " is more than " & intWeeks & " weeks " & strRelationship & " " & strAnchorLabel & "." & vbCrLf & vbCrLf & "Is this date correct?"
         blnDeclineInvalidDate = MsgBox(strMsg, MsgBoxStyle.YesNo Or MsgBoxStyle.DefaultButton2, "Date Validation") <> MsgBoxResult.Yes
 
     End Function
@@ -1453,7 +1453,7 @@ Friend Class TrxForm
             End If
 
             txtNumber.Text = strNumber
-            txtDate.Text = gstrFormatDate(Today)
+            txtDate.Text = Utilities.strFormatDate(Today)
             chkFake.CheckState = System.Windows.Forms.CheckState.Unchecked
 
             If blnValidateShared() Then
@@ -1667,8 +1667,8 @@ Friend Class TrxForm
             Else
                 Exit Sub
             End If
-            If gblnValidDate(txtDate.Text) Then
-                txtDate.Text = gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, intIncrement, CDate(txtDate.Text)))
+            If Utilities.blnIsValidDate(txtDate.Text) Then
+                txtDate.Text = Utilities.strFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, intIncrement, CDate(txtDate.Text)))
             End If
             eventArgs.Handled = True
         Catch ex As Exception
@@ -2007,7 +2007,7 @@ Friend Class TrxForm
             'It must end in "(n)", where "n" the current date and time.
             strNewInvoice = objOldSplit.strInvoiceNum
             If strNewInvoice <> "" Then
-                strInvNumPostfix = "(" & gstrFormatDate(Now, "MM/dd/yy") & ")"
+                strInvNumPostfix = "(" & Utilities.strFormatDate(Now, "MM/dd/yy") & ")"
                 intParenPos = InStr(strNewInvoice, "(")
                 If intParenPos > 0 Then
                     strNewInvoice = VB.Left(strNewInvoice, intParenPos - 1) & strInvNumPostfix
@@ -2018,8 +2018,8 @@ Friend Class TrxForm
             End If
             objNewSplit.strMemo = objOldSplit.strMemo
             objNewSplit.strTerms = objOldSplit.strTerms
-            objOldSplit.strAmount = gstrFormatCurrency(curSplitAmount - curNewAmount)
-            objNewSplit.strAmount = gstrFormatCurrency(curNewAmount)
+            objOldSplit.strAmount = Utilities.strFormatCurrency(curSplitAmount - curNewAmount)
+            objNewSplit.strAmount = Utilities.strFormatCurrency(curNewAmount)
 
             'Redisplay all the splits.
             DisplaySplits(mintSplitOffset)
@@ -2077,7 +2077,7 @@ Friend Class TrxForm
 
     Private Function blnValidateBudget() As Boolean
         blnValidateBudget = True
-        If Not gblnValidDate(txtBudgetEnds.Text) Then
+        If Not Utilities.blnIsValidDate(txtBudgetEnds.Text) Then
             ValidationError("Invalid budget ending date.")
             Exit Function
         End If
@@ -2085,7 +2085,7 @@ Friend Class TrxForm
             ValidationError("Budget ending date may not be before transaction date.")
             Exit Function
         End If
-        If Not gblnValidAmount(txtBudgetLimit.Text) Then
+        If Not Utilities.blnIsValidAmount(txtBudgetLimit.Text) Then
             ValidationError("Invalid budget limit.")
             Exit Function
         End If
@@ -2123,7 +2123,7 @@ Friend Class TrxForm
         If blnInvalidTrxDateVersusToday() Then
             Exit Function
         End If
-        If Not gblnValidAmount(txtTransferAmount.Text) Then
+        If Not Utilities.blnIsValidAmount(txtTransferAmount.Text) Then
             ValidationError("Invalid transfer amount.")
             Exit Function
         End If

@@ -103,9 +103,9 @@ Friend Class ReconcileForm
             Next
         Next objReg
 
-        txtStartingBalance.Text = gstrFormatCurrency(curStartingBalance)
+        txtStartingBalance.Text = Utilities.strFormatCurrency(curStartingBalance)
         mcurClearedBalance = curStartingBalance + curSelectedTotal
-        txtClearedBalance.Text = gstrFormatCurrency(mcurClearedBalance)
+        txtClearedBalance.Text = Utilities.strFormatCurrency(mcurClearedBalance)
         gSetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_NUMBER)
 
     End Sub
@@ -121,10 +121,10 @@ Friend Class ReconcileForm
         objItem = gobjListViewAdd(lvwTrx)
         maudtTrx(lngTrxIndex).objLvwItem = objItem
         With objItem
-            AddSubItem(objItem, mintCOL_DATE, gstrFormatDate(objTrx.datDate))
+            AddSubItem(objItem, mintCOL_DATE, Utilities.strFormatDate(objTrx.datDate))
             AddSubItem(objItem, mintCOL_NUMBER, objTrx.strNumber)
             AddSubItem(objItem, mintCOL_DESCRIPTION, objTrx.strDescription)
-            AddSubItem(objItem, mintCOL_AMOUNT, gstrFormatCurrency(objTrx.curAmount))
+            AddSubItem(objItem, mintCOL_AMOUNT, Utilities.strFormatCurrency(objTrx.curAmount))
             AddSubItem(objItem, mintCOL_IMPORTED, CStr(IIf(objTrx.strImportKey = "", "", "Y")))
             intPipe2 = InStr(2, objTrx.strImportKey, "|")
             strSortableBankDate = ""
@@ -132,7 +132,7 @@ Friend Class ReconcileForm
             If intPipe2 > 0 Then
                 strBankDate = Mid(objTrx.strImportKey, 2, intPipe2 - 2)
                 If DateTime.TryParse(strBankDate, datBankDate) Then
-                    strSortableBankDate = gstrFormatDate(datBankDate)
+                    strSortableBankDate = Utilities.strFormatDate(datBankDate)
                     maudtTrx(lngTrxIndex).datBankDate = datBankDate
                 End If
             Else
@@ -205,7 +205,7 @@ Friend Class ReconcileForm
                     .blnSelected = False
                 End If
             End With
-            txtClearedBalance.Text = gstrFormatCurrency(mcurClearedBalance)
+            txtClearedBalance.Text = Utilities.strFormatCurrency(mcurClearedBalance)
 
             Exit Sub
         Catch ex As Exception

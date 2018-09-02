@@ -81,7 +81,7 @@ Public Class TrxGenList
             strGetCommonFields = "Missing [date] attribute"
             Exit Function
         End If
-        If Not gblnValidDate(CStr(vntAttrib)) Then
+        If Not Utilities.blnIsValidDate(CStr(vntAttrib)) Then
             strGetCommonFields = "Invalid [date] attribute"
             Exit Function
         End If
@@ -92,7 +92,7 @@ Public Class TrxGenList
             strGetCommonFields = "Missing [amount] attribute"
             Exit Function
         End If
-        If Not gblnValidAmount(CStr(vntAttrib)) Then
+        If Not Utilities.blnIsValidAmount(CStr(vntAttrib)) Then
             strGetCommonFields = "Invalid [amount] attribute"
             Exit Function
         End If

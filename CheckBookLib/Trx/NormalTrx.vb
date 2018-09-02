@@ -340,12 +340,12 @@ Public Class NormalTrx
                 If datInvoiceDate = System.DateTime.FromOADate(0) Then
                     strInvoiceDate = ""
                 Else
-                    strInvoiceDate = gstrFormatDate(datInvoiceDate)
+                    strInvoiceDate = Utilities.strFormatDate(datInvoiceDate)
                 End If
                 If datDueDate = System.DateTime.FromOADate(0) Then
                     strDueDate = ""
                 Else
-                    strDueDate = gstrFormatDate(datDueDate)
+                    strDueDate = Utilities.strFormatDate(datDueDate)
                 End If
                 strTerms = strTerms2
                 strBudget = objCompany.objBudgets.strTranslateKey(strBudgetKey)

@@ -63,7 +63,7 @@ Public Class EventLog
         End If
 
         mdomOutput = New VB6XmlDocument
-        mdomOutput.LoadXml("<Activity Login=""" & mstrLogin & """ SessionStart=""" & gstrFormatDate(mdatStart, "G") & """></Activity>")
+        mdomOutput.LoadXml("<Activity Login=""" & mstrLogin & """ SessionStart=""" & Utilities.strFormatDate(mdatStart, "G") & """></Activity>")
         objParseError = mdomOutput.ParseError
         If Not objParseError Is Nothing Then
             ShowTrxGenLoadError("", gstrXMLParseErrorText(objParseError))
@@ -79,11 +79,11 @@ Public Class EventLog
         If Dir(strLogFolder, FileAttribute.Directory) = "" Then
             MkDir(strLogFolder)
         End If
-        strLogFolder = strLogFolder & "\" & gstrFormatDate(Today, "yyyy-MMM")
+        strLogFolder = strLogFolder & "\" & Utilities.strFormatDate(Today, "yyyy-MMM")
         If Dir(strLogFolder, FileAttribute.Directory) = "" Then
             MkDir(strLogFolder)
         End If
-        strLogFile = strLogFolder & "\" & strAccountTitle & "_R" & mobjReg.strRegisterKey & "_" & gstrFormatDate(mdatStart, "yyyy-MMM-dd-HH-mm-ss") & ".xml"
+        strLogFile = strLogFolder & "\" & strAccountTitle & "_R" & mobjReg.strRegisterKey & "_" & Utilities.strFormatDate(mdatStart, "yyyy-MMM-dd-HH-mm-ss") & ".xml"
         mdomOutput.Save(strLogFile)
     End Sub
 
@@ -127,7 +127,7 @@ Public Class EventLog
     Public Sub EventStart(ByVal strTitle As String, ByVal datTimestamp As Date)
         melmEvent = mdomOutput.CreateElement("Event")
         melmEvent.SetAttribute("Title", strTitle)
-        melmEvent.SetAttribute("When", gstrFormatDate(datTimestamp, "G"))
+        melmEvent.SetAttribute("When", Utilities.strFormatDate(datTimestamp, "G"))
         melmEventContainer.AppendChild(melmEvent)
     End Sub
 
@@ -151,10 +151,10 @@ Public Class EventLog
         elmTrx = mdomOutput.CreateElement(strName)
         melmEvent.AppendChild(elmTrx)
         With elmTrx
-            .SetAttribute("Date", gstrFormatDate(objTrx.datDate))
+            .SetAttribute("Date", Utilities.strFormatDate(objTrx.datDate))
             .SetAttribute("Number", objTrx.strNumber)
             .SetAttribute("Payee", objTrx.strDescription)
-            .SetAttribute("Amount", gstrFormatCurrency(objTrx.curAmount))
+            .SetAttribute("Amount", Utilities.strFormatCurrency(objTrx.curAmount))
             .SetAttribute("FakeStatus", objTrx.strFakeStatus)
             If objTrx.strMemo <> "" Then
                 .SetAttribute("TrxMemo", objTrx.strMemo)
@@ -176,7 +176,7 @@ Public Class EventLog
                         With elmSplitParent
                             .SetAttribute("CatName", mobjCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey))
                             If objNormalTrx.lngSplits > 1 Then
-                                .SetAttribute("Amount", gstrFormatCurrency(objSplit.curAmount))
+                                .SetAttribute("Amount", Utilities.strFormatCurrency(objSplit.curAmount))
                             End If
                             If objSplit.strPONumber <> "" Then
                                 .SetAttribute("PONum", objSplit.strPONumber)
@@ -185,10 +185,10 @@ Public Class EventLog
                                 .SetAttribute("InvNum", objSplit.strInvoiceNum)
                             End If
                             If objSplit.datInvoiceDate <> System.DateTime.FromOADate(0) Then
-                                .SetAttribute("InvDate", gstrFormatDate(objSplit.datInvoiceDate))
+                                .SetAttribute("InvDate", Utilities.strFormatDate(objSplit.datInvoiceDate))
                             End If
                             If objSplit.datDueDate <> System.DateTime.FromOADate(0) Then
-                                .SetAttribute("DueDate", gstrFormatDate(objSplit.datDueDate))
+                                .SetAttribute("DueDate", Utilities.strFormatDate(objSplit.datDueDate))
                             End If
                             If objSplit.strTerms <> "" Then
                                 .SetAttribute("Terms", objSplit.strTerms)
@@ -201,7 +201,7 @@ Public Class EventLog
                 Case Trx.TrxType.glngTRXTYP_BUDGET
                     Dim objBudgetTrx As BudgetTrx = DirectCast(objTrx, BudgetTrx)
                     .SetAttribute("Type", "Budget")
-                    .SetAttribute("BudgetLimit", gstrFormatCurrency(objBudgetTrx.curBudgetLimit))
+                    .SetAttribute("BudgetLimit", Utilities.strFormatCurrency(objBudgetTrx.curBudgetLimit))
                     .SetAttribute("BudgetName", mobjCompany.objBudgets.strKeyToValue1(objBudgetTrx.strBudgetKey))
                 Case Trx.TrxType.glngTRXTYP_TRANSFER
                     .SetAttribute("Type", "Transfer")

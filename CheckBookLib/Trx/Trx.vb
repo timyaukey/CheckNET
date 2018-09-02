@@ -400,7 +400,7 @@ Public MustInherit Class Trx
             Case TrxSearchField.glngTRXSFL_NUMBER
                 strTrxData = mstrNumber
             Case TrxSearchField.glngTRXSFL_AMOUNT
-                strTrxData = gstrFormatCurrency(mcurAmount)
+                strTrxData = Utilities.strFormatCurrency(mcurAmount)
             Case TrxSearchField.glngTRXSFL_MEMO
                 strTrxData = mstrMemo
             Case Else

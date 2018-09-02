@@ -49,21 +49,21 @@ Public Module AgingUtils
         gstrMakeDateBracket = ""
         If intBracketSize < 0 Then
             If intBracketSize = -1 Then
-                gstrMakeDateBracket = gstrFormatDate(datInputDate, "yyyy/MM/01")
+                gstrMakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/01")
             ElseIf intBracketSize = -2 Then
                 intMonthPart = CInt(Int((VB.Day(datInputDate) - 1) / 15))
                 If intMonthPart > 1 Then
                     intMonthPart = 1
                 End If
-                gstrMakeDateBracket = gstrFormatDate(datInputDate, "yyyy/MM/") & gstrFormatInteger(1 + intMonthPart * 15, "0#")
+                gstrMakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/") & Utilities.strFormatInteger(1 + intMonthPart * 15, "0#")
             ElseIf intBracketSize = -4 Then
                 intMonthPart = CInt(Int((VB.Day(datInputDate) - 1) / 8))
-                gstrMakeDateBracket = gstrFormatDate(datInputDate, "yyyy/MM/") & gstrFormatInteger(1 + intMonthPart * 8, "0#")
+                gstrMakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/") & Utilities.strFormatInteger(1 + intMonthPart * 8, "0#")
             End If
         Else
             intOffsetDays = DateDiff(Microsoft.VisualBasic.DateInterval.Day, datBaseDate, datInputDate)
             datBracketDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, Int(intOffsetDays / intBracketSize) * intBracketSize, datBaseDate)
-            gstrMakeDateBracket = gstrFormatDate(datBracketDate, "yyyy/MM/dd")
+            gstrMakeDateBracket = Utilities.strFormatDate(datBracketDate, "yyyy/MM/dd")
         End If
 
     End Function
@@ -81,10 +81,10 @@ Public Module AgingUtils
     End Function
 
     Public Function gstrAgingBracketFuture(ByVal intStartingAge As Long, ByVal intEndingAge As Long) As String
-        gstrAgingBracketFuture = "Due In " & gstrFormatInteger(-intEndingAge, "000") & "-" & gstrFormatInteger(-intStartingAge, "000") & " Days"
+        gstrAgingBracketFuture = "Due In " & Utilities.strFormatInteger(-intEndingAge, "000") & "-" & Utilities.strFormatInteger(-intStartingAge, "000") & " Days"
     End Function
 
     Public Function gstrAgingBracketPastDue(ByVal intStartingAge As Long, ByVal intEndingAge As Long) As String
-        gstrAgingBracketPastDue = "Due " & gstrFormatInteger(intStartingAge, "000") & "-" & gstrFormatInteger(intEndingAge, "000") & " Days Ago"
+        gstrAgingBracketPastDue = "Due " & Utilities.strFormatInteger(intStartingAge, "000") & "-" & Utilities.strFormatInteger(intEndingAge, "000") & " Days Ago"
     End Function
 End Module

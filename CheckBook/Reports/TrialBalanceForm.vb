@@ -26,7 +26,7 @@ Public Class TrialBalanceForm
             ConfigureStatementButtons(true)
             Dim curBalanceError As Decimal = objBalSheet.curGrandTotal - objIncExp.curGrandTotal
             If curBalanceError <> 0D Then
-                lblResultSummary.Text = "Accounts out of balance by " + gstrFormatCurrency(curBalanceError)
+                lblResultSummary.Text = "Accounts out of balance by " + Utilities.strFormatCurrency(curBalanceError)
             ElseIf objIncExp.curGrandTotal <> 0D Then
                 lblResultSummary.Text = "Accounts balance, but update retained earnings"
             Else
@@ -46,19 +46,19 @@ Public Class TrialBalanceForm
         lvw.Items.Clear()
         For Each objGroup As LineItemGroup In objData.colGroups
             lvwItem = New ListViewItem(objGroup.strGroupTitle)
-            lvwItem.SubItems.Add(gstrFormatCurrency(objGroup.curGroupTotal))
+            lvwItem.SubItems.Add(Utilities.strFormatCurrency(objGroup.curGroupTotal))
             lvwItem.BackColor = Color.LightGray
             lvw.Items.Add(lvwItem)
             For Each objLine As ReportLineItem In objGroup.colItems
                 If objLine.curTotal <> 0D Then
                     lvwItem = New ListViewItem("  " + objLine.strItemTitle)
-                    lvwItem.SubItems.Add(gstrFormatCurrency(objLine.curTotal))
+                    lvwItem.SubItems.Add(Utilities.strFormatCurrency(objLine.curTotal))
                     lvw.Items.Add(lvwItem)
                 End If
             Next
         Next
         lvwItem = New ListViewItem(strGrandTotalPrefix)
-        lvwItem.SubItems.Add(gstrFormatCurrency(objData.curGrandTotal))
+        lvwItem.SubItems.Add(Utilities.strFormatCurrency(objData.curGrandTotal))
         lvwItem.BackColor = Color.LightGray
         lvw.Items.Add(lvwItem)
     End Sub
@@ -220,7 +220,7 @@ Public Class TrialBalanceForm
 
             objWriter.EndReport()
             objWriter.CheckPrinted(objIncExp)
-            MsgBox("Net profit bottom line is: " + gstrFormatCurrency(objAccumTotal.curTotal))
+            MsgBox("Net profit bottom line is: " + Utilities.strFormatCurrency(objAccumTotal.curTotal))
             objWriter.ShowReport()
         Catch ex As Exception
             gTopException(ex)

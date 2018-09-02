@@ -301,13 +301,13 @@ Friend Class ShowRegisterForm
         Try
 
             Dim strRegisterEndDate As String = InputBox("Enter ending date to generate transactions through:",
-                "Ending Date", gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, 90, Now)))
+                "Ending Date", Utilities.strFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, 90, Now)))
             If strRegisterEndDate <> "" Then
-                If gblnValidDate(strRegisterEndDate) Then
-                    Dim strCutoffDate As String = gstrFormatDate(mobjCompany.datLastReconciled().AddDays(1D))
+                If Utilities.blnIsValidDate(strRegisterEndDate) Then
+                    Dim strCutoffDate As String = Utilities.strFormatDate(mobjCompany.datLastReconciled().AddDays(1D))
                     strCutoffDate = InputBox("Enter cutoff date for transaction generators that do not " +
                         "generate transactions older than some number of days relative to a cutoff date:", "Cutoff Date", strCutoffDate)
-                    If gblnValidDate(strCutoffDate) Then
+                    If Utilities.blnIsValidDate(strCutoffDate) Then
                         Dim objAccount As Account
                         System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor
                         'Need to do all accounts, not just the selected account, because there may be many, many

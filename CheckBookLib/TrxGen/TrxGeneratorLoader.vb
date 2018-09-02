@@ -272,7 +272,7 @@ Public Module TrxGeneratorLoader
             gstrGetDateSequenceParams = "Missing [startdate] attribute"
             Exit Function
         End If
-        If gblnValidDate(CStr(vntAttrib)) Then
+        If Utilities.blnIsValidDate(CStr(vntAttrib)) Then
             datParams.datNominalStartDate = CDate(vntAttrib)
         Else
             gstrGetDateSequenceParams = "Invalid [startdate] attribute"
@@ -283,7 +283,7 @@ Public Module TrxGeneratorLoader
         If gblnXmlAttributeMissing(vntAttrib) Then
             datParams.vntNominalEndDate = vntAttrib
         Else
-            If gblnValidDate(CStr(vntAttrib)) Then
+            If Utilities.blnIsValidDate(CStr(vntAttrib)) Then
                 datParams.vntNominalEndDate = CDate(vntAttrib)
             Else
                 gstrGetDateSequenceParams = "Invalid [enddate] attribute"
@@ -360,7 +360,7 @@ Public Module TrxGeneratorLoader
             strError = "Missing [date] attribute" & strErrorEnding
             Exit Function
         End If
-        If gblnValidDate(CStr(vntAttrib)) Then
+        If Utilities.blnIsValidDate(CStr(vntAttrib)) Then
             datTrxDate = CDate(vntAttrib)
         Else
             strError = "Invalid [date] attribute" & strErrorEnding
@@ -370,7 +370,7 @@ Public Module TrxGeneratorLoader
         If gblnXmlAttributeMissing(vntAttrib) Then
             dblPercentIncrease = dblDefaultPercentIncrease
         Else
-            If Not gblnValidAmount(CStr(vntAttrib)) Then
+            If Not Utilities.blnIsValidAmount(CStr(vntAttrib)) Then
                 strError = "Invalid [increasepercent] attribute" & strErrorEnding
                 Exit Function
             End If
@@ -381,7 +381,7 @@ Public Module TrxGeneratorLoader
             strError = "Missing [amount] attribute" & strErrorEnding
             Exit Function
         End If
-        If gblnValidAmount(CStr(vntAttrib)) Then
+        If Utilities.blnIsValidAmount(CStr(vntAttrib)) Then
             curAmount = CDec(vntAttrib) * CDec((1.0# + dblPercentIncrease))
         Else
             strError = "Invalid [amount] attribute" & strErrorEnding

@@ -123,15 +123,15 @@ Module CheckPrinting
             intPayeeIndex = intPayeeIndex + 1
         Loop
 
-        PrintCheckText(mdomCheckFormat, "Date", gstrFormatDate(mobjTrx.datDate), ev)
-        PrintCheckText(mdomCheckFormat, "ShortAmount", gstrFormatCurrency(curAmount), ev)
+        PrintCheckText(mdomCheckFormat, "Date", Utilities.strFormatDate(mobjTrx.datDate), ev)
+        PrintCheckText(mdomCheckFormat, "ShortAmount", Utilities.strFormatCurrency(curAmount), ev)
         PrintCheckText(mdomCheckFormat, "Payee", mobjTrx.strDescription, ev)
         Dim intPennies As Short
         intPennies = Fix(curAmount * 100.0#) - Fix(curAmount) * 100.0#
         Dim strDollars As String
         strDollars = MoneyFormat.strAmountToWords(curAmount)
         strDollars = UCase(Left(strDollars, 1)) & Mid(strDollars, 2)
-        PrintCheckText(mdomCheckFormat, "LongAmount", strDollars & " and " & gstrFormatInteger(intPennies, "00") & "/100", ev)
+        PrintCheckText(mdomCheckFormat, "LongAmount", strDollars & " and " & Utilities.strFormatInteger(intPennies, "00") & "/100", ev)
         If strAccountNumber <> "" Then
             PrintCheckText(mdomCheckFormat, "AccountNumber", "Account #: " & strAccountNumber, ev)
         End If
@@ -149,8 +149,8 @@ Module CheckPrinting
         'is printed elsewhere.
 
         PrintOptionalCheckText(mdomCheckFormat, "Payee2", strMailName, ev)
-        PrintOptionalCheckText(mdomCheckFormat, "Amount2", "$" & gstrFormatCurrency(curAmount), ev)
-        PrintOptionalCheckText(mdomCheckFormat, "Date2", gstrFormatDate(mobjTrx.datDate), ev)
+        PrintOptionalCheckText(mdomCheckFormat, "Amount2", "$" & Utilities.strFormatCurrency(curAmount), ev)
+        PrintOptionalCheckText(mdomCheckFormat, "Date2", Utilities.strFormatDate(mobjTrx.datDate), ev)
         PrintOptionalCheckText(mdomCheckFormat, "Number2", "#" & mobjTrx.strNumber, ev)
 
         PrintInvoiceNumbers(mdomCheckFormat, "InvoiceList1", mobjTrx, dblLineHeight, ev)

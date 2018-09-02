@@ -177,11 +177,11 @@ Public Class ImportUtilities
                     'in the download file. I believe the actual safe characters to use is
                     '20, based on the max blanks it inserts, but 16 is nice and pessimistic
                     'and ought to be enough to recognize the payee.
-                    strUniqueKey = strNumber & "|" & Left(mstrTrxPayeeTrimmed, 16) & "|" & gstrFormatCurrency(curAmount)
+                    strUniqueKey = strNumber & "|" & Left(mstrTrxPayeeTrimmed, 16) & "|" & Utilities.strFormatCurrency(curAmount)
                 End If
                 'NOTE: Date must stay in the same place, because statement reconciliation
                 'parses it out to show.
-                strImportKey = strSqueezeInput("|" & gstrFormatDate(datDate) & "|" & strUniqueKey)
+                strImportKey = strSqueezeInput("|" & Utilities.strFormatDate(datDate) & "|" & strUniqueKey)
             End If
 
             objTrx = New ImportedTrx(Nothing)

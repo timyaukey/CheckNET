@@ -311,7 +311,7 @@ Public Class RegisterLoader
 
     Private Function datConvertInput(ByVal strInput As String, ByVal strContext As String) As Date
 
-        If gblnValidDate(strInput) Then
+        If Utilities.blnIsValidDate(strInput) Then
             datConvertInput = CDate(strInput)
             Exit Function
         End If

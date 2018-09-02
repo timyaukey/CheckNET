@@ -86,7 +86,7 @@ Public Class TrxGenPeriod
         If gblnXmlAttributeMissing(vntAttrib) Then
             Return "Missing [date] attribute of <firstperiodstarts> element"
         End If
-        If Not gblnValidDate(CStr(vntAttrib)) Then
+        If Not Utilities.blnIsValidDate(CStr(vntAttrib)) Then
             Return "Invalid [date] attribute of <firstperiodstarts> element"
         End If
         mdatFirstPeriodStarts = CDate(vntAttrib)
@@ -100,7 +100,7 @@ Public Class TrxGenPeriod
             If gblnXmlAttributeMissing(vntAttrib) Then
                 Return "Missing [increasepercent] attribute of <scaling> element"
             End If
-            If gblnValidAmount(CStr(vntAttrib)) Then
+            If Utilities.blnIsValidAmount(CStr(vntAttrib)) Then
                 mdblDefaultPercentIncrease = CDbl(vntAttrib) / 100.0#
             Else
                 Return "Invalid [increasepercent] attribute of <scaling> element"

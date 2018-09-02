@@ -74,7 +74,7 @@ Friend Class ExportForm
 
         blnValidControls = False
         If chkInclude.CheckState = System.Windows.Forms.CheckState.Checked Then
-            If Not gblnValidDate(txtDate.Text) Then
+            If Not Utilities.blnIsValidDate(txtDate.Text) Then
                 If blnAllowMonthPart Then
                     If LCase(txtDate.Text) = "whole month" Then
                         intDays = -1
@@ -149,16 +149,16 @@ Friend Class ExportForm
 
             gGetSplitDates(objTrx, objSplit, datInvToUse, datDueToUse)
             If objSplit.datInvoiceDate > System.DateTime.FromOADate(0) Then
-                strInvDate = gstrFormatDate(objSplit.datInvoiceDate)
+                strInvDate = Utilities.strFormatDate(objSplit.datInvoiceDate)
             End If
             If objSplit.datDueDate > System.DateTime.FromOADate(0) Then
-                strDueDate = gstrFormatDate(objSplit.datDueDate)
+                strDueDate = Utilities.strFormatDate(objSplit.datDueDate)
             End If
 
-            strLine = gstrFormatDate(objTrx.datDate) & "," & objTrx.strNumber & ",""" & objTrx.strDescription & """," _
-                & gstrFormatCurrency(objSplit.curAmount) & ",""" & mobjCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey) _
-                & """," & strDueDate & "," & gstrFormatDate(datDueToUse) & "," & strInvDate & "," _
-                & gstrFormatDate(datInvToUse) & ",""" & objSplit.strPONumber & """,""" & objSplit.strInvoiceNum & """,""" & objSplit.strTerms & """"
+            strLine = Utilities.strFormatDate(objTrx.datDate) & "," & objTrx.strNumber & ",""" & objTrx.strDescription & """," _
+                & Utilities.strFormatCurrency(objSplit.curAmount) & ",""" & mobjCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey) _
+                & """," & strDueDate & "," & Utilities.strFormatDate(datDueToUse) & "," & strInvDate & "," _
+                & Utilities.strFormatDate(datInvToUse) & ",""" & objSplit.strPONumber & """,""" & objSplit.strInvoiceNum & """,""" & objSplit.strTerms & """"
 
             'The order of these extra fields must match the order they
             'are added in OpenOutput().

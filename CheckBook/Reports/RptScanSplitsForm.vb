@@ -116,13 +116,13 @@ Friend Class RptScanSplitsForm
                 Exit Function
             End If
 
-            If Not gblnValidDate(txtStartDate.Text) Then
+            If Not Utilities.blnIsValidDate(txtStartDate.Text) Then
                 MsgBox("Invalid transaction starting date.", MsgBoxStyle.Critical)
                 Exit Function
             End If
             mdatStart = CDate(txtStartDate.Text)
 
-            If Not gblnValidDate(txtEndDate.Text) Then
+            If Not Utilities.blnIsValidDate(txtEndDate.Text) Then
                 MsgBox("Invalid transaction ending date.", MsgBoxStyle.Critical)
                 Exit Function
             End If
@@ -144,7 +144,7 @@ Friend Class RptScanSplitsForm
             End If
 
             If txtReportDate.Visible Then
-                If Not gblnValidDate(txtReportDate.Text) Then
+                If Not Utilities.blnIsValidDate(txtReportDate.Text) Then
                     MsgBox("Invalid report date.", MsgBoxStyle.Critical)
                     Exit Function
                 End If
@@ -227,7 +227,7 @@ Friend Class RptScanSplitsForm
                 With objTrx
                     datDate = .datDate
                     If datDate <> datLastProgress Then
-                        lblProgress.Text = strRegTitle & "  " & gstrFormatDate(datDate)
+                        lblProgress.Text = strRegTitle & "  " & Utilities.strFormatDate(datDate)
                         System.Windows.Forms.Application.DoEvents()
                         datLastProgress = datDate
                     End If
@@ -268,7 +268,7 @@ Friend Class RptScanSplitsForm
                 Case SplitReportType.glngSPLTRPT_TOTALS
                     intCatIndex = mobjCompany.objCategories.intLookupKey(objSplit.strCategoryKey)
                     If intCatIndex = 0 Then
-                        MsgBox("Could not find category key " & objSplit.strCategoryKey & " for " & "trx dated " & gstrFormatDate(objTrx.datDate) & " " & "in register " & objReg.strTitle)
+                        MsgBox("Could not find category key " & objSplit.strCategoryKey & " for " & "trx dated " & Utilities.strFormatDate(objTrx.datDate) & " " & "in register " & objReg.strTitle)
                     Else
                         With maudtCatTotals(intCatIndex)
                             .lngCount = .lngCount + 1

@@ -100,7 +100,7 @@ Friend Class CatSumRptForm
             WriteRptLine("Totals By Category Report")
             WriteRptLine("-------------------------")
             WriteRptLine("")
-            WriteRptLine("Printed On: " & gstrFormatDate(Now, "MM/dd/yyyy hh:mmtt"))
+            WriteRptLine("Printed On: " & Utilities.strFormatDate(Now, "MM/dd/yyyy hh:mmtt"))
             WriteRptLine("")
             WriteRptLine("Accounts Included:")
 
@@ -113,13 +113,13 @@ Friend Class CatSumRptForm
             End With
             WriteRptLine("")
 
-            txtStartDate.Text = gstrFormatDate(datStart)
-            txtEndDate.Text = gstrFormatDate(datEnd)
+            txtStartDate.Text = Utilities.strFormatDate(datStart)
+            txtEndDate.Text = Utilities.strFormatDate(datEnd)
             chkIncludeFake.CheckState = IIf(blnIncludeFake, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
             chkIncludeGenerated.CheckState = IIf(blnIncludeGenerated, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
 
-            WriteRptLine("Start Date:    " & gstrFormatDate(datStart))
-            WriteRptLine("End Date:      " & gstrFormatDate(datEnd))
+            WriteRptLine("Start Date:    " & Utilities.strFormatDate(datStart))
+            WriteRptLine("End Date:      " & Utilities.strFormatDate(datEnd))
             WriteRptLine("Fake Trx:      " & IIf(blnIncludeFake, "Yes", "No"))
             WriteRptLine("Generated Trx: " & IIf(blnIncludeGenerated, "Yes", "No"))
 
@@ -215,7 +215,7 @@ Friend Class CatSumRptForm
 		
         strRightPad = New String(" ", intNestingLevel + 1)
         objResultRow.Label = strRightPad & strRightPad & strRightPad & strLabel
-        strAmount = gstrFormatCurrency(curAmount)
+        strAmount = Utilities.strFormatCurrency(curAmount)
         objResultRow.Amount = strAmount & strRightPad & strRightPad & strRightPad
         mcolResultRows.Add(objResultRow)
 

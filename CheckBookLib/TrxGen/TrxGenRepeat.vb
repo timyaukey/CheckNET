@@ -39,7 +39,7 @@ Public Class TrxGenRepeat
         If gblnXmlAttributeMissing(vntAttrib) Then
             Return "Missing [amount] attribute"
         End If
-        If Not gblnValidAmount(CStr(vntAttrib)) Then
+        If Not Utilities.blnIsValidAmount(CStr(vntAttrib)) Then
             Return "Invalid [amount] attribute"
         End If
         mcurAmount = CDec(vntAttrib)

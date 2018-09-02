@@ -99,7 +99,7 @@ Friend Class RegisterForm
                     MsgBox("You can delete this transaction, but it has a repeat key " & "so the software will probably just recreate it." & vbCrLf &
                            "If you don't want to use this transaction it is much better " & "to change the amount to zero than to delete it.", MsgBoxStyle.Critical)
                 End If
-                If MsgBox("Do you really want to delete the transaction dated " & gstrFormatDate(.datDate) & " for $" & gstrFormatCurrency(.curAmount) & " made out to " & .strDescription & "?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                If MsgBox("Do you really want to delete the transaction dated " & Utilities.strFormatDate(.datDate) & " for $" & Utilities.strFormatCurrency(.curAmount) & " made out to " & .strDescription & "?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
                 If .lngStatus = Trx.TrxStatus.glngTRXSTS_RECON Then
@@ -276,9 +276,9 @@ Friend Class RegisterForm
         ConfigGridCol(intCol, mintColDescr, "Description", 3000, _
             Function(objTrx As Trx) objTrx.strDescription)
         ConfigGridCol(intCol, mintColAmount, "Amount", 900,
-            Function(objTrx As Trx) gstrFormatCurrency(objTrx.curAmount), True)
+            Function(objTrx As Trx) Utilities.strFormatCurrency(objTrx.curAmount), True)
         ConfigGridCol(intCol, mintColBalance, "Balance", 900,
-            Function(objTrx As Trx) gstrFormatCurrency(objTrx.curBalance), True)
+            Function(objTrx As Trx) Utilities.strFormatCurrency(objTrx.curBalance), True)
         ConfigGridCol(intCol, mintColCategory, "Category", 1800,
             Function(objTrx As Trx) objTrx.strCategory)
         ConfigGridCol(intCol, mintColPONumber, "PO#", 900,
@@ -597,7 +597,7 @@ Friend Class RegisterForm
     End Sub
 
     Private Function strTrxSummaryForMsg(ByVal objTrx As Trx) As String
-        strTrxSummaryForMsg = gstrFormatDate(objTrx.datDate) & " " & objTrx.strDescription & " $" & gstrFormatCurrency(objTrx.curAmount)
+        strTrxSummaryForMsg = Utilities.strFormatDate(objTrx.datDate) & " " & objTrx.strDescription & " $" & Utilities.strFormatCurrency(objTrx.curAmount)
     End Function
 
     Private Sub DiagnosticValidate()

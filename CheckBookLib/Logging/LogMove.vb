@@ -24,12 +24,12 @@ Public Class LogMove
 
     Private Sub ILogger_WriteLog(ByVal objLog As EventLog) Implements ILogger.WriteLog
         objLog.EventStart(mstrTitle, mdatTimestamp)
-        objLog.WriteValue("OldDate", gstrFormatDate(mobjOldTrx.datDate))
-        objLog.WriteValue("NewDate", gstrFormatDate(mobjNewTrx.datDate))
+        objLog.WriteValue("OldDate", Utilities.strFormatDate(mobjOldTrx.datDate))
+        objLog.WriteValue("NewDate", Utilities.strFormatDate(mobjNewTrx.datDate))
         objLog.WriteValue("Number", mobjOldTrx.strNumber)
         objLog.WriteValue("Payee", mobjOldTrx.strDescription)
         objLog.WriteValue("DueDate", mobjOldTrx.strSummarizeDueDate())
-        objLog.WriteValue("Amount", gstrFormatCurrency(mobjOldTrx.curAmount))
+        objLog.WriteValue("Amount", Utilities.strFormatCurrency(mobjOldTrx.curAmount))
         objLog.WriteValue("CatName", mobjOldTrx.strCategory)
         objLog.EventEnd()
     End Sub

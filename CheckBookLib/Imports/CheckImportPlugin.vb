@@ -19,6 +19,6 @@ Public MustInherit Class CheckImportPlugin
     End Function
 
     Public Overrides Function GetTrxReader() As ITrxReader
-        Return New ReadChecks(gobjClipboardReader(), "(clipboard)", GetCheckSpecs())
+        Return New ReadChecks(Utilities.objClipboardReader(), "(clipboard)", GetCheckSpecs())
     End Function
 End Class

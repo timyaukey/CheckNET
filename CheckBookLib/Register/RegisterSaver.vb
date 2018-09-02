@@ -55,7 +55,7 @@ Public Class RegisterSaver
                 SaveLine("KI" & .strImportKey)
             End If
             If .curNormalMatchRange <> 0 Then
-                SaveLine("MR" & gstrFormatCurrency(.curNormalMatchRange))
+                SaveLine("MR" & Utilities.strFormatCurrency(.curNormalMatchRange))
             End If
             For Each objSplit In .colSplits
                 With objSplit
@@ -70,10 +70,10 @@ Public Class RegisterSaver
                         SaveLine("SN" & .strInvoiceNum)
                     End If
                     If .datInvoiceDate <> System.DateTime.FromOADate(0) Then
-                        SaveLine("SI" & gstrFormatDate(.datInvoiceDate))
+                        SaveLine("SI" & Utilities.strFormatDate(.datInvoiceDate))
                     End If
                     If .datDueDate <> System.DateTime.FromOADate(0) Then
-                        SaveLine("SD" & gstrFormatDate(.datDueDate))
+                        SaveLine("SD" & Utilities.strFormatDate(.datDueDate))
                     End If
                     If Len(.strTerms) > 0 Then
                         SaveLine("ST" & .strTerms)
@@ -81,7 +81,7 @@ Public Class RegisterSaver
                     If Len(.strBudgetKey) > 0 Then
                         SaveLine("SB" & .strBudgetKey)
                     End If
-                    SaveLine("SA" & gstrFormatCurrency(.curAmount))
+                    SaveLine("SA" & Utilities.strFormatCurrency(.curAmount))
                     SaveLine("SZ")
                 End With
             Next objSplit
@@ -91,9 +91,9 @@ Public Class RegisterSaver
     Private Sub SaveTrxBudget()
         SaveTrxShared("TB")
         With DirectCast(mobjTrx, BudgetTrx)
-            SaveLine("BE" & gstrFormatDate(.datBudgetEnds))
+            SaveLine("BE" & Utilities.strFormatDate(.datBudgetEnds))
             SaveLine("KB" & .strBudgetKey)
-            SaveLine("A$" & gstrFormatCurrency(.curBudgetLimit))
+            SaveLine("A$" & Utilities.strFormatCurrency(.curBudgetLimit))
         End With
     End Sub
 
@@ -101,14 +101,14 @@ Public Class RegisterSaver
         SaveTrxShared("TT")
         With DirectCast(mobjTrx, TransferTrx)
             SaveLine("KT" & .strTransferKey)
-            SaveLine("A$" & gstrFormatCurrency(.curTransferAmount))
+            SaveLine("A$" & Utilities.strFormatCurrency(.curTransferAmount))
         End With
     End Sub
 
     Private Sub SaveTrxShared(ByVal strFirstCmd As String)
         With mobjTrx
             SaveLine(strFirstCmd & Mid("URNS", .lngStatus, 1) & .strDescription)
-            SaveLine("DT" & gstrFormatDate(.datDate))
+            SaveLine("DT" & Utilities.strFormatDate(.datDate))
             If Len(.strMemo) > 0 Then
                 SaveLine("ME" & .strMemo)
             End If

@@ -41,7 +41,7 @@ Public Class CombinedBalancePlugin
             For Each objPersonalReg As Register In objPersonalAcct.colRegisters
                 curCombinedBalance = curCombinedBalance + curRegisterBalance(objPersonalReg, datEndDate)
             Next
-            MsgBox("Combined personal and business balance as of " & datEndDate.ToShortDateString() & " is " & gstrFormatCurrency(curCombinedBalance) & ".")
+            MsgBox("Combined personal and business balance as of " & datEndDate.ToShortDateString() & " is " & Utilities.strFormatCurrency(curCombinedBalance) & ".")
             Exit Sub
         Catch ex As Exception
             gTopException(ex)

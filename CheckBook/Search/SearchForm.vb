@@ -44,8 +44,8 @@ Friend Class SearchForm
         mcurAmountTotal = 0
         mdatDefaultDate = Today
         Me.Text = "Search " & mobjReg.strTitle
-        txtStartDate.Text = gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Month, -2, Today))
-        txtEndDate.Text = gstrFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Month, 6, Today))
+        txtStartDate.Text = Utilities.strFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Month, -2, Today))
+        txtEndDate.Text = Utilities.strFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Month, 6, Today))
         LoadSearchIn()
         LoadSearchType()
         LoadComboFromStringTranslator(cboSearchCats, mobjCompany.objCategories)
@@ -151,11 +151,11 @@ Friend Class SearchForm
                     strSearchFor = txtSearchFor.Text
             End Select
 
-            If Not gblnValidDate(txtStartDate.Text) Then
+            If Not Utilities.blnIsValidDate(txtStartDate.Text) Then
                 MsgBox("Invalid starting date.", MsgBoxStyle.Critical)
                 Exit Sub
             End If
-            If Not gblnValidDate(txtEndDate.Text) Then
+            If Not Utilities.blnIsValidDate(txtEndDate.Text) Then
                 MsgBox("Invalid ending date.", MsgBoxStyle.Critical)
                 Exit Sub
             End If
@@ -240,11 +240,11 @@ Friend Class SearchForm
     End Sub
 
     Private Sub cmdTotalToClipboard_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdTotalToClipboard.Click
-        My.Computer.Clipboard.SetText(gstrFormatCurrency(mcurAmountTotal))
+        My.Computer.Clipboard.SetText(Utilities.strFormatCurrency(mcurAmountTotal))
     End Sub
 
     Private Sub ShowTotals()
-        lblTotalDollars.Text = "Matched $" & gstrFormatCurrency(mcurAmountMatched) & "    Total $" & gstrFormatCurrency(mcurAmountTotal)
+        lblTotalDollars.Text = "Matched $" & Utilities.strFormatCurrency(mcurAmountMatched) & "    Total $" & Utilities.strFormatCurrency(mcurAmountTotal)
     End Sub
 
     Private Sub AddSearchMatchTrx(ByVal objTrx As Trx)
@@ -262,7 +262,7 @@ Friend Class SearchForm
         objItem = objAddNewMatch(objTrx, objTrx.curAmount)
         If objTrx.lngType = Trx.TrxType.glngTRXTYP_NORMAL Then
             DirectCast(objTrx, NormalTrx).SummarizeSplits(mobjCompany, strCategory, strPONumber, strInvoiceNum, strInvoiceDate, strDueDate, strTerms, strBudget, curAvailable)
-            gAddListSubItem(objItem, 4, gstrFormatCurrency(curAvailable))
+            gAddListSubItem(objItem, 4, Utilities.strFormatCurrency(curAvailable))
             gAddListSubItem(objItem, 5, strCategory)
             gAddListSubItem(objItem, 6, strPONumber)
             gAddListSubItem(objItem, 7, strInvoiceNum)
@@ -309,14 +309,14 @@ Friend Class SearchForm
         If objSplit.datInvoiceDate = System.DateTime.FromOADate(0) Then
             strInvoiceDate = ""
         Else
-            strInvoiceDate = gstrFormatDate(objSplit.datInvoiceDate)
+            strInvoiceDate = Utilities.strFormatDate(objSplit.datInvoiceDate)
         End If
         If objSplit.datDueDate = System.DateTime.FromOADate(0) Then
             strDueDate = ""
         Else
-            strDueDate = gstrFormatDate(objSplit.datDueDate)
+            strDueDate = Utilities.strFormatDate(objSplit.datDueDate)
         End If
-        gAddListSubItem(objItem, 4, gstrFormatCurrency(curAvailable))
+        gAddListSubItem(objItem, 4, Utilities.strFormatCurrency(curAvailable))
         gAddListSubItem(objItem, 5, mobjCompany.objCategories.strTranslateKey(objSplit.strCategoryKey))
         gAddListSubItem(objItem, 6, objSplit.strPONumber)
         gAddListSubItem(objItem, 7, objSplit.strInvoiceNum)
@@ -330,10 +330,10 @@ Friend Class SearchForm
 
     Private Function objAddNewMatch(ByVal objTrx As Trx, ByVal curMatchAmount As Decimal) As ListViewItem
         Dim objItem As ListViewItem = gobjListViewAdd(lvwMatches)
-        objItem.Text = gstrFormatDate(objTrx.datDate)
+        objItem.Text = Utilities.strFormatDate(objTrx.datDate)
         gAddListSubItem(objItem, 1, objTrx.strNumber)
         gAddListSubItem(objItem, 2, objTrx.strDescription)
-        gAddListSubItem(objItem, 3, gstrFormatCurrency(curMatchAmount))
+        gAddListSubItem(objItem, 3, Utilities.strFormatCurrency(curMatchAmount))
         Dim objMatch As SearchMatch = New SearchMatch()
         objMatch.objTrx = objTrx
         objItem.Tag = objMatch
@@ -677,7 +677,7 @@ Friend Class SearchForm
             If Not frmMoveTo.blnShowModal(mobjAccount.colRegisters, mobjReg, strNewDate, objNewReg) Then
                 Exit Sub
             End If
-            If gblnValidDate(strNewDate) Then
+            If Utilities.blnIsValidDate(strNewDate) Then
                 datExplicitDate = CDate(strNewDate)
                 blnUseDayOffset = False
             ElseIf IsNumeric(strNewDate) Or strNewDate = "" Then

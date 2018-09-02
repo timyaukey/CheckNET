@@ -67,7 +67,7 @@ Friend Class AdjustBudgetsToCashForm
         For intIndex = 1 To mintNUM_BUDGETS
             LoadSavedBudget(intIndex)
         Next
-        txtStartingDate.Text = gstrFormatDate(Today)
+        txtStartingDate.Text = Utilities.strFormatDate(Today)
         txtMinBal.Text = GetSetting(gstrREG_APP, strRegSection(), mstrREG_MINBAL)
         txtPrefix.Text = GetSetting(gstrREG_APP, strRegSection(), mstrREG_NAMEPRE)
     End Sub
@@ -173,11 +173,11 @@ Friend Class AdjustBudgetsToCashForm
                 MsgBox("Percentages of selected budgets must add up to 100.", MsgBoxStyle.Critical)
                 Exit Function
             End If
-            If Not gblnValidDate(txtStartingDate.Text) Then
+            If Not Utilities.blnIsValidDate(txtStartingDate.Text) Then
                 MsgBox("Invalid starting date.", MsgBoxStyle.Critical)
                 Exit Function
             End If
-            If Not gblnValidAmount(txtMinBal.Text) Then
+            If Not Utilities.blnIsValidAmount(txtMinBal.Text) Then
                 MsgBox("Invalid minimum balance.", MsgBoxStyle.Critical)
                 Exit Function
             End If
@@ -450,21 +450,21 @@ Friend Class AdjustBudgetsToCashForm
 
         objItem = gobjListViewAdd(lvwResults)
         With objItem
-            .Text = gstrFormatDate(objBudgetTrx.datDate)
+            .Text = Utilities.strFormatDate(objBudgetTrx.datDate)
             If objItem.SubItems.Count > 1 Then
                 objItem.SubItems(1).Text = objBudgetTrx.strDescription
             Else
                 objItem.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objBudgetTrx.strDescription))
             End If
             If objItem.SubItems.Count > 2 Then
-                objItem.SubItems(2).Text = gstrFormatCurrency(objBudgetTrx.curBudgetLimit)
+                objItem.SubItems(2).Text = Utilities.strFormatCurrency(objBudgetTrx.curBudgetLimit)
             Else
-                objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objBudgetTrx.curBudgetLimit)))
+                objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(objBudgetTrx.curBudgetLimit)))
             End If
             If objItem.SubItems.Count > 3 Then
-                objItem.SubItems(3).Text = gstrFormatCurrency(objBudgetTrx.curBudgetApplied)
+                objItem.SubItems(3).Text = Utilities.strFormatCurrency(objBudgetTrx.curBudgetApplied)
             Else
-                objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, gstrFormatCurrency(objBudgetTrx.curBudgetApplied)))
+                objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(objBudgetTrx.curBudgetApplied)))
             End If
         End With
     End Sub

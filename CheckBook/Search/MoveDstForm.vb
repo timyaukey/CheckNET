@@ -48,7 +48,7 @@ Friend Class MoveDstForm
             Exit Sub
         End If
         If strDateOrDays <> "" Then
-            If Not (gblnValidDate(strDateOrDays) Or IsNumeric(strDateOrDays)) Then
+            If Not (Utilities.blnIsValidDate(strDateOrDays) Or IsNumeric(strDateOrDays)) Then
                 MsgBox("Invalid date or number of days.")
                 Exit Sub
             End If
