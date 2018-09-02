@@ -61,7 +61,14 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BankImportOFX.vb" />
+    <Compile Include="BankImportQIF.vb" />
+    <Compile Include="CheckImportCompuPay.vb" />
+    <Compile Include="CheckImportInsight.vb" />
+    <Compile Include="CheckImportStandard.vb" />
+    <Compile Include="DepositImportStandard.vb" />
     <Compile Include="ImportPlugins.vb" />
+    <Compile Include="InvoiceImportStandard.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

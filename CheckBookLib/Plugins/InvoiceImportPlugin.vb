@@ -1,6 +1,8 @@
 ﻿Option Strict On
 Option Explicit On
 
+Imports CheckBookLib
+
 Public MustInherit Class InvoiceImportPlugin
     Inherits TrxImportPlugin
 

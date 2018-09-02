@@ -1,7 +1,9 @@
 ﻿Option Strict On
 Option Explicit On
 
-Public Class CheckImportCompuPay
+Imports CheckBookLib
+
+Public Class CheckImportInsight
     Inherits CheckImportPlugin
 
     Public Sub New(ByVal hostUI_ As IHostUI)
@@ -9,14 +11,14 @@ Public Class CheckImportCompuPay
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String
-        Return "Import CompuPay Payroll Checks"
+        Return "Import Digital Insight Online Banking Checks"
     End Function
 
     Public Overrides Function GetMenuTitle() As String
-        Return "CompuPay Payroll Clipboard"
+        Return "Digital Insight Clipboard"
     End Function
 
     Protected Overrides Function GetCheckSpecs() As ReadChecksSpec
-        Return New ReadChecksSpec(0, 5, 9, 12, -1)
+        Return New ReadChecksSpec(6, 0, 1, 2, -1)
     End Function
 End Class
