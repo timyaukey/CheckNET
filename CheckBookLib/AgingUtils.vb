@@ -1,14 +1,12 @@
 Option Strict On
 Option Explicit On
 
-Imports VB = Microsoft.VisualBasic
+Public Class AgingUtils
 
-Public Module AgingUtils
-
-    Public Function gstrMakeAgingBracket(ByVal datAgingDate As Date, ByVal intBracketSize As Short, ByVal blnFake As Boolean, ByVal datTrxDate As Date, ByVal datInvDate As Date, ByVal datDueDate As Date) As String
+    Public Shared Function strMakeAgeBracket(ByVal datAgingDate As Date, ByVal intBracketSize As Short, ByVal blnFake As Boolean, ByVal datTrxDate As Date, ByVal datInvDate As Date, ByVal datDueDate As Date) As String
         Dim strBracket As String
 
-        strBracket = gstrAgingBracketNotInvoiced()
+        strBracket = strNotInvoicedLabel()
         'If item was invoiced as of report date.
         Dim intAgeInDays As Long
         Dim intAgeBracket As Long
@@ -26,65 +24,65 @@ Public Module AgingUtils
                 intStartingAge = 1 + (intAgeBracket * intBracketSize)
                 intEndingAge = intStartingAge + intBracketSize - 1
                 If intAgeBracket = -1 Then
-                    strBracket = gstrAgingBracketCurrent()
+                    strBracket = strCurrentLabel()
                 ElseIf intAgeBracket >= 0 Then
-                    strBracket = gstrAgingBracketPastDue(intStartingAge, intEndingAge)
+                    strBracket = strPastDueLabel(intStartingAge, intEndingAge)
                 Else
-                    strBracket = gstrAgingBracketFuture(intStartingAge, intEndingAge)
+                    strBracket = strFutureLabel(intStartingAge, intEndingAge)
                 End If
             Else
-                strBracket = gstrAgingBracketPaid()
+                strBracket = strPaidLabel()
             End If
         End If
-        gstrMakeAgingBracket = strBracket
+        strMakeAgeBracket = strBracket
 
     End Function
 
-    Public Function gstrMakeDateBracket(ByVal datInputDate As Date, ByVal intBracketSize As Short, ByVal datBaseDate As Date) As String
+    Public Shared Function strMakeDateBracket(ByVal datInputDate As Date, ByVal intBracketSize As Short, ByVal datBaseDate As Date) As String
 
         Dim intOffsetDays As Long
         Dim intMonthPart As Integer
         Dim datBracketDate As Date
 
-        gstrMakeDateBracket = ""
+        strMakeDateBracket = ""
         If intBracketSize < 0 Then
             If intBracketSize = -1 Then
-                gstrMakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/01")
+                strMakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/01")
             ElseIf intBracketSize = -2 Then
-                intMonthPart = CInt(Int((VB.Day(datInputDate) - 1) / 15))
+                intMonthPart = CInt(Int((Microsoft.VisualBasic.Day(datInputDate) - 1) / 15))
                 If intMonthPart > 1 Then
                     intMonthPart = 1
                 End If
-                gstrMakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/") & Utilities.strFormatInteger(1 + intMonthPart * 15, "0#")
+                strMakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/") & Utilities.strFormatInteger(1 + intMonthPart * 15, "0#")
             ElseIf intBracketSize = -4 Then
-                intMonthPart = CInt(Int((VB.Day(datInputDate) - 1) / 8))
-                gstrMakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/") & Utilities.strFormatInteger(1 + intMonthPart * 8, "0#")
+                intMonthPart = CInt(Int((Microsoft.VisualBasic.Day(datInputDate) - 1) / 8))
+                strMakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/") & Utilities.strFormatInteger(1 + intMonthPart * 8, "0#")
             End If
         Else
             intOffsetDays = DateDiff(Microsoft.VisualBasic.DateInterval.Day, datBaseDate, datInputDate)
             datBracketDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, Int(intOffsetDays / intBracketSize) * intBracketSize, datBaseDate)
-            gstrMakeDateBracket = Utilities.strFormatDate(datBracketDate, "yyyy/MM/dd")
+            strMakeDateBracket = Utilities.strFormatDate(datBracketDate, "yyyy/MM/dd")
         End If
 
     End Function
 
-    Public Function gstrAgingBracketNotInvoiced() As String
-        gstrAgingBracketNotInvoiced = "Not Invoiced"
+    Public Shared Function strNotInvoicedLabel() As String
+        Return "Not Invoiced"
     End Function
 
-    Public Function gstrAgingBracketCurrent() As String
-        gstrAgingBracketCurrent = "Current"
+    Public Shared Function strCurrentLabel() As String
+        Return "Current"
     End Function
 
-    Public Function gstrAgingBracketPaid() As String
-        gstrAgingBracketPaid = "Paid"
+    Public Shared Function strPaidLabel() As String
+        Return "Paid"
     End Function
 
-    Public Function gstrAgingBracketFuture(ByVal intStartingAge As Long, ByVal intEndingAge As Long) As String
-        gstrAgingBracketFuture = "Due In " & Utilities.strFormatInteger(-intEndingAge, "000") & "-" & Utilities.strFormatInteger(-intStartingAge, "000") & " Days"
+    Public Shared Function strFutureLabel(ByVal intStartingAge As Long, ByVal intEndingAge As Long) As String
+        Return "Due In " & Utilities.strFormatInteger(-intEndingAge, "000") & "-" & Utilities.strFormatInteger(-intStartingAge, "000") & " Days"
     End Function
 
-    Public Function gstrAgingBracketPastDue(ByVal intStartingAge As Long, ByVal intEndingAge As Long) As String
-        gstrAgingBracketPastDue = "Due " & Utilities.strFormatInteger(intStartingAge, "000") & "-" & Utilities.strFormatInteger(intEndingAge, "000") & " Days Ago"
+    Public Shared Function strPastDueLabel(ByVal intStartingAge As Long, ByVal intEndingAge As Long) As String
+        Return "Due " & Utilities.strFormatInteger(intStartingAge, "000") & "-" & Utilities.strFormatInteger(intEndingAge, "000") & " Days Ago"
     End Function
-End Module
+End Class
