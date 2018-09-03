@@ -1,6 +1,8 @@
 ﻿Option Strict On
 Option Explicit On
 
+Imports CheckBookLib
+
 ''' <summary>
 ''' All bank import plugins must inherit from this.
 ''' </summary>

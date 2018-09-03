@@ -1,6 +1,8 @@
 Option Strict On
 Option Explicit On
 
+Imports CheckBookLib
+
 Public Class ImportUtilities
 
     'Helper class for importing transaction information from a bank download file.
@@ -490,10 +492,3 @@ Public Class ImportUtilities
 
     End Function
 End Class
-
-'Ways to narrow down Trx search results during import.
-Public Enum ImportMatchNarrowMethod
-    None = 1
-    ClosestDate = 2
-    EarliestDate = 3
-End Enum

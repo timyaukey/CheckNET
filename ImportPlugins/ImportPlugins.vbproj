@@ -61,14 +61,23 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BankImportOFX.vb" />
-    <Compile Include="BankImportQIF.vb" />
-    <Compile Include="CheckImportCompuPay.vb" />
-    <Compile Include="CheckImportInsight.vb" />
-    <Compile Include="CheckImportStandard.vb" />
-    <Compile Include="DepositImportStandard.vb" />
+    <Compile Include="Bank\BankImportOFX.vb" />
+    <Compile Include="Bank\BankImportPlugin.vb" />
+    <Compile Include="Bank\BankImportQIF.vb" />
+    <Compile Include="Bank\ImportHandlerBank.vb" />
+    <Compile Include="Checks\CheckImportCompuPay.vb" />
+    <Compile Include="Checks\CheckImportInsight.vb" />
+    <Compile Include="Checks\CheckImportPlugin.vb" />
+    <Compile Include="Checks\CheckImportStandard.vb" />
+    <Compile Include="Checks\ImportHandlerChecks.vb" />
+    <Compile Include="Deposits\DepositImportPlugin.vb" />
+    <Compile Include="Deposits\DepositImportStandard.vb" />
+    <Compile Include="Deposits\ImportHandlerDeposits.vb" />
     <Compile Include="ImportPlugins.vb" />
-    <Compile Include="InvoiceImportStandard.vb" />
+    <Compile Include="ImportUtilities.vb" />
+    <Compile Include="Invoices\ImportHandlerInvoices.vb" />
+    <Compile Include="Invoices\InvoiceImportPlugin.vb" />
+    <Compile Include="Invoices\InvoiceImportStandard.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -84,12 +93,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="ReadBankOFX.vb" />
-    <Compile Include="ReadBankQIF.vb" />
-    <Compile Include="ReadChecks.vb" />
-    <Compile Include="ReadChecksSpec.vb" />
-    <Compile Include="ReadDeposits.vb" />
-    <Compile Include="ReadInvoices.vb" />
+    <Compile Include="Bank\ReadBankOFX.vb" />
+    <Compile Include="Bank\ReadBankQIF.vb" />
+    <Compile Include="Checks\ReadChecks.vb" />
+    <Compile Include="Checks\ReadChecksSpec.vb" />
+    <Compile Include="Deposits\ReadDeposits.vb" />
+    <Compile Include="Invoices\ReadInvoices.vb" />
+    <Compile Include="TrxImportPlugin.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
