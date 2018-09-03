@@ -19,20 +19,12 @@ Public Class BankImportQIF
         Return "QIF File"
     End Function
 
-    Protected Overrides Function GetFileSelectionWindowCaption() As String
-        Return "Select QIF File From Bank To Import"
-    End Function
-
-    Protected Overrides Function GetFileType() As String
-        Return "QIF"
-    End Function
-
-    Protected Overrides Function GetSettingsKey() As String
-        Return "BankQIFPath"
-    End Function
-
-    Protected Overrides Function GetBankReader(objFile As TextReader, strFile As String) As ITrxReader
-        Return New ReadBankQIF(objFile, strFile)
+    Public Overrides Function GetTrxReader() As ITrxReader
+        Dim objInput As TrxImportPlugin.InputFile = objAskForFile("Select QIF File From Bank To Import", "QIF", "BankQIFPath")
+        If Not objInput Is Nothing Then
+            Return New ReadBankQIF(objInput.objFile, objInput.strFile)
+        End If
+        Return Nothing
     End Function
 
 End Class

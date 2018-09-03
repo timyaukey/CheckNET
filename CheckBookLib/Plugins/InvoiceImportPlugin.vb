@@ -1,7 +1,9 @@
 ﻿Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
+''' <summary>
+''' All invoice import plugins must inherit from this.
+''' </summary>
 
 Public MustInherit Class InvoiceImportPlugin
     Inherits TrxImportPlugin
@@ -13,4 +15,5 @@ Public MustInherit Class InvoiceImportPlugin
     Public Overrides Function GetImportHandler() As IImportHandler
         Return New ImportHandlerInvoices()
     End Function
+
 End Class

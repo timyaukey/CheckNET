@@ -18,11 +18,7 @@ Public Class CheckImportCompuPay
         Return "CompuPay Payroll Clipboard"
     End Function
 
-    Protected Overrides Function GetCheckSpecs() As ReadChecksSpec
-        Return New ReadChecksSpec(0, 5, 9, 12, -1)
-    End Function
-
     Public Overrides Function GetTrxReader() As ITrxReader
-        Return New ReadChecks(Utilities.objClipboardReader(), "(clipboard)", GetCheckSpecs())
+        Return New ReadChecks(Utilities.objClipboardReader(), "(clipboard)", New ReadChecksSpec(0, 5, 9, 12, -1))
     End Function
 End Class

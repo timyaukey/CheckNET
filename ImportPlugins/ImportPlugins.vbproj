@@ -87,6 +87,7 @@
     <Compile Include="ReadBankOFX.vb" />
     <Compile Include="ReadBankQIF.vb" />
     <Compile Include="ReadChecks.vb" />
+    <Compile Include="ReadChecksSpec.vb" />
     <Compile Include="ReadDeposits.vb" />
     <Compile Include="ReadInvoices.vb" />
   </ItemGroup>

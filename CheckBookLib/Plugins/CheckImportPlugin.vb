@@ -8,8 +8,6 @@ Option Explicit On
 Public MustInherit Class CheckImportPlugin
     Inherits TrxImportPlugin
 
-    Protected MustOverride Function GetCheckSpecs() As ReadChecksSpec
-
     Public Sub New(ByVal hostUI_ As IHostUI)
         MyBase.New(hostUI_)
     End Sub

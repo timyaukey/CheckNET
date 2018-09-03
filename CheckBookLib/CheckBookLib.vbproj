@@ -100,7 +100,6 @@
     <Compile Include="Plugins\ImportHandlerBank.vb" />
     <Compile Include="Plugins\ImportHandlerChecks.vb" />
     <Compile Include="Plugins\ImportHandlerDeposits.vb" />
-    <Compile Include="Plugins\ReadChecksSpec.vb" />
     <Compile Include="Plugins\ImportedTrx.vb" />
     <Compile Include="Plugins\ImportUtilities.vb" />
     <Compile Include="Plugins\ITrxReader.vb" />

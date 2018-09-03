@@ -6,8 +6,8 @@ Imports System.IO
 ''' <summary>
 ''' All plugins that import Trx using ITrxReader and IImportHandler
 ''' inherit from this. This class is subclassed several different
-''' ways for different types of Trx importers. CBMainForm checks
-''' the subclass to determine which menu to add them to.
+''' ways for different types of Trx importers. The user interface checks
+''' the subclass to determine which menu to add the plugin to.
 ''' </summary>
 
 Public MustInherit Class TrxImportPlugin
@@ -28,7 +28,7 @@ Public MustInherit Class TrxImportPlugin
             End If
             Dim objReader As ITrxReader = GetTrxReader()
             If Not objReader Is Nothing Then
-                HostUI.OpenImportForm(GetImportWindowCaption, GetImportHandler(), objReader)
+                HostUI.OpenImportForm(GetImportWindowCaption(), GetImportHandler(), objReader)
             End If
             Exit Sub
         Catch ex As Exception

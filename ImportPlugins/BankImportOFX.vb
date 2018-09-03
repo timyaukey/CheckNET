@@ -19,20 +19,12 @@ Public Class BankImportOFX
         Return "OFX File"
     End Function
 
-    Protected Overrides Function GetFileSelectionWindowCaption() As String
-        Return "Select OFX File From Bank To Import"
-    End Function
-
-    Protected Overrides Function GetFileType() As String
-        Return "OFX"
-    End Function
-
-    Protected Overrides Function GetSettingsKey() As String
-        Return "BankOFXPath"
-    End Function
-
-    Protected Overrides Function GetBankReader(objFile As TextReader, strFile As String) As ITrxReader
-        Return New ReadBankOFX(objFile, strFile)
+    Public Overrides Function GetTrxReader() As ITrxReader
+        Dim objInput As TrxImportPlugin.InputFile = objAskForFile("Select OFX File From Bank To Import", "OFX", "BankOFXPath")
+        If Not objInput Is Nothing Then
+            Return New ReadBankOFX(objInput.objFile, objInput.strFile)
+        End If
+        Return Nothing
     End Function
 
 End Class
