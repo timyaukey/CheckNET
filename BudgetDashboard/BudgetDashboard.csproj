@@ -40,8 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BudgetDashboardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BudgetDashboardForm.Designer.cs">
+      <DependentUpon>BudgetDashboardForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="BudgetDetailRow.cs" />
     <Compile Include="BudgetDetailCell.cs" />
+    <Compile Include="BudgetSpecsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BudgetSpecsForm.Designer.cs">
+      <DependentUpon>BudgetSpecsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="DashboardData.cs" />
     <Compile Include="DashboardPlugin.cs" />
     <Compile Include="DataCell.cs" />
@@ -59,6 +71,14 @@
       <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
       <Name>CheckBookLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BudgetDashboardForm.resx">
+      <DependentUpon>BudgetDashboardForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BudgetSpecsForm.resx">
+      <DependentUpon>BudgetSpecsForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

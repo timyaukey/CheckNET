@@ -8,7 +8,7 @@ namespace BudgetDashboard
         where TCell : DetailCell<TData>, new()
         where TData : class
     {
-        private readonly TCell[] Cells;
+        public readonly TCell[] Cells;
         public DataCell RowTotal;
         public readonly string Key;
         public readonly string Label;

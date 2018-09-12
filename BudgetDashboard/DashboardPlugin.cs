@@ -17,13 +17,22 @@ namespace BudgetDashboard
 
         public override void ClickHandler(object sender, EventArgs e)
         {
-            System.Windows.Forms.MessageBox.Show("budget dashboard");
             Register reg = HostUI.objGetCurrentRegister();
-            if (reg != null)
+            if (reg == null)
             {
-                Account account = reg.objAccount;
-                DashboardData data = new DashboardData(account, 14, 26, new DateTime(2015, 1, 1));
-                data.Load();
+                System.Windows.Forms.MessageBox.Show("Select a register window first");
+                return;
+            }
+            using (var specsForm = new BudgetSpecsForm())
+            {
+                if (specsForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    Account account = reg.objAccount;
+                    DashboardData data = new DashboardData(account, specsForm.PeriodDays, specsForm.PeriodCount, specsForm.StartDate);
+                    data.Load();
+                    var budgetForm = new BudgetDashboardForm();
+                    budgetForm.Show(HostUI, data);
+                }
             }
         }
 
