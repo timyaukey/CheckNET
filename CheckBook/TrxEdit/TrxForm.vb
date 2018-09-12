@@ -380,7 +380,7 @@ Friend Class TrxForm
                     If objSplit.objBudget Is objBudget Then
                         'Show it.
                         With objCurrent
-                            objItem = gobjListViewAdd(lvwAppliedTo)
+                            objItem = UITools.ListViewAdd(lvwAppliedTo)
                             objItem.Text = Utilities.strFormatDate(.datDate)
                             If objItem.SubItems.Count > 1 Then
                                 objItem.SubItems(1).Text = .strNumber

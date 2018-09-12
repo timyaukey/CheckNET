@@ -262,23 +262,23 @@ Friend Class SearchForm
         objItem = objAddNewMatch(objTrx, objTrx.curAmount)
         If objTrx.lngType = Trx.TrxType.Normal Then
             DirectCast(objTrx, NormalTrx).SummarizeSplits(mobjCompany, strCategory, strPONumber, strInvoiceNum, strInvoiceDate, strDueDate, strTerms, strBudget, curAvailable)
-            gAddListSubItem(objItem, 4, Utilities.strFormatCurrency(curAvailable))
-            gAddListSubItem(objItem, 5, strCategory)
-            gAddListSubItem(objItem, 6, strPONumber)
-            gAddListSubItem(objItem, 7, strInvoiceNum)
-            gAddListSubItem(objItem, 8, strInvoiceDate)
-            gAddListSubItem(objItem, 9, strDueDate)
-            gAddListSubItem(objItem, 10, strTerms)
-            gAddListSubItem(objItem, 11, objTrx.strFakeStatus)
+            UITools.AddListSubItem(objItem, 4, Utilities.strFormatCurrency(curAvailable))
+            UITools.AddListSubItem(objItem, 5, strCategory)
+            UITools.AddListSubItem(objItem, 6, strPONumber)
+            UITools.AddListSubItem(objItem, 7, strInvoiceNum)
+            UITools.AddListSubItem(objItem, 8, strInvoiceDate)
+            UITools.AddListSubItem(objItem, 9, strDueDate)
+            UITools.AddListSubItem(objItem, 10, strTerms)
+            UITools.AddListSubItem(objItem, 11, objTrx.strFakeStatus)
         Else
-            gAddListSubItem(objItem, 4, "")
-            gAddListSubItem(objItem, 5, "")
-            gAddListSubItem(objItem, 6, "")
-            gAddListSubItem(objItem, 7, "")
-            gAddListSubItem(objItem, 8, "")
-            gAddListSubItem(objItem, 9, "")
-            gAddListSubItem(objItem, 10, "")
-            gAddListSubItem(objItem, 11, "")
+            UITools.AddListSubItem(objItem, 4, "")
+            UITools.AddListSubItem(objItem, 5, "")
+            UITools.AddListSubItem(objItem, 6, "")
+            UITools.AddListSubItem(objItem, 7, "")
+            UITools.AddListSubItem(objItem, 8, "")
+            UITools.AddListSubItem(objItem, 9, "")
+            UITools.AddListSubItem(objItem, 10, "")
+            UITools.AddListSubItem(objItem, 11, "")
         End If
         mcurAmountMatched = mcurAmountMatched + objTrx.curAmount
 
@@ -316,24 +316,24 @@ Friend Class SearchForm
         Else
             strDueDate = Utilities.strFormatDate(objSplit.datDueDate)
         End If
-        gAddListSubItem(objItem, 4, Utilities.strFormatCurrency(curAvailable))
-        gAddListSubItem(objItem, 5, mobjCompany.objCategories.strTranslateKey(objSplit.strCategoryKey))
-        gAddListSubItem(objItem, 6, objSplit.strPONumber)
-        gAddListSubItem(objItem, 7, objSplit.strInvoiceNum)
-        gAddListSubItem(objItem, 8, strInvoiceDate)
-        gAddListSubItem(objItem, 9, strDueDate)
-        gAddListSubItem(objItem, 10, objSplit.strTerms)
-        gAddListSubItem(objItem, 11, objTrx.strFakeStatus)
+        UITools.AddListSubItem(objItem, 4, Utilities.strFormatCurrency(curAvailable))
+        UITools.AddListSubItem(objItem, 5, mobjCompany.objCategories.strTranslateKey(objSplit.strCategoryKey))
+        UITools.AddListSubItem(objItem, 6, objSplit.strPONumber)
+        UITools.AddListSubItem(objItem, 7, objSplit.strInvoiceNum)
+        UITools.AddListSubItem(objItem, 8, strInvoiceDate)
+        UITools.AddListSubItem(objItem, 9, strDueDate)
+        UITools.AddListSubItem(objItem, 10, objSplit.strTerms)
+        UITools.AddListSubItem(objItem, 11, objTrx.strFakeStatus)
         mcurAmountMatched = mcurAmountMatched + objSplit.curAmount
 
     End Sub
 
     Private Function objAddNewMatch(ByVal objTrx As Trx, ByVal curMatchAmount As Decimal) As ListViewItem
-        Dim objItem As ListViewItem = gobjListViewAdd(lvwMatches)
+        Dim objItem As ListViewItem = UITools.ListViewAdd(lvwMatches)
         objItem.Text = Utilities.strFormatDate(objTrx.datDate)
-        gAddListSubItem(objItem, 1, objTrx.strNumber)
-        gAddListSubItem(objItem, 2, objTrx.strDescription)
-        gAddListSubItem(objItem, 3, Utilities.strFormatCurrency(curMatchAmount))
+        UITools.AddListSubItem(objItem, 1, objTrx.strNumber)
+        UITools.AddListSubItem(objItem, 2, objTrx.strDescription)
+        UITools.AddListSubItem(objItem, 3, Utilities.strFormatCurrency(curMatchAmount))
         Dim objMatch As SearchMatch = New SearchMatch()
         objMatch.objTrx = objTrx
         objItem.Tag = objMatch

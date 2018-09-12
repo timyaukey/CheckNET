@@ -40,31 +40,6 @@ Public Module CBMain
         gcolForms = colResult
     End Function
 
-    Public Function gobjListViewAdd(ByVal lvw As System.Windows.Forms.ListView) As System.Windows.Forms.ListViewItem
-        gobjListViewAdd = lvw.Items.Add("")
-    End Function
-
-    Public Sub gAddListSubItem(ByVal objItem As ListViewItem, ByVal intColIndex As Integer, ByVal strValue As String)
-        If objItem.SubItems.Count > intColIndex Then
-            objItem.SubItems(intColIndex).Text = strValue
-        Else
-            objItem.SubItems.Insert(intColIndex, New ListViewItem.ListViewSubItem(Nothing, strValue))
-        End If
-    End Sub
-
-    Public Sub gSetListViewSortColumn(ByVal lvw As System.Windows.Forms.ListView, ByVal intColumn As Short)
-        'In .NET the list view will have to have its .ListViewItemSorter set to
-        'some object, and the column passed to that object. Copy ListViewSorter.vb
-        'into project.
-        If intColumn = 0 Then
-            lvw.ListViewItemSorter = Nothing
-            'UPGRADE_ISSUE: MSComctlLib.ListView property lvw.SortKey was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-        Else
-            lvw.ListViewItemSorter = New ListViewSorter(intColumn)
-            'UPGRADE_ISSUE: MSComctlLib.ListView property lvw.SortKey was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-        End If
-    End Sub
-
     Public Function gblnUserAuthenticated(ByVal objSecurity As Security) As Boolean
         Try
             Dim strLogin As String
@@ -269,11 +244,11 @@ Public Module CBMain
     End Sub
 
     Public Sub gDisablePayeeListSorting(ByVal lvwPayees As System.Windows.Forms.ListView)
-        gSetListViewSortColumn(lvwPayees, 0)
+        UITools.SetListViewSortColumn(lvwPayees, 0)
     End Sub
 
     Public Sub gSortPayeeListByName(ByVal lvwPayees As System.Windows.Forms.ListView)
-        gSetListViewSortColumn(lvwPayees, 1)
+        UITools.SetListViewSortColumn(lvwPayees, 1)
     End Sub
 
     Public Function gobjCreatePayeeListItem(ByVal elmPayee As VB6XmlElement, ByVal lvwPayees As System.Windows.Forms.ListView, ByVal intIndex As Short) As System.Windows.Forms.ListViewItem

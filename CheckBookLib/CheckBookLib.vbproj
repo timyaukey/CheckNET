@@ -87,6 +87,7 @@
     <Compile Include="IFilePersistable.vb" />
     <Compile Include="IStringTranslator.vb" />
     <Compile Include="LineStringTranslator.vb" />
+    <Compile Include="ListViewSorter.vb" />
     <Compile Include="Logging\LogAddNull.vb" />
     <Compile Include="Logging\LogDeleteNull.vb" />
     <Compile Include="MoneyFormat.vb" />

@@ -1,4 +1,9 @@
-﻿Public Class ListViewSorter
+﻿Option Strict On
+Option Explicit On
+
+Imports System.Windows.Forms
+
+Public Class ListViewSorter
     Implements IComparer
 
     Private col As Integer

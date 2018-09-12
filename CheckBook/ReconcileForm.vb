@@ -106,7 +106,7 @@ Friend Class ReconcileForm
         txtStartingBalance.Text = Utilities.strFormatCurrency(curStartingBalance)
         mcurClearedBalance = curStartingBalance + curSelectedTotal
         txtClearedBalance.Text = Utilities.strFormatCurrency(mcurClearedBalance)
-        gSetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_NUMBER)
+        UITools.SetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_NUMBER)
 
     End Sub
 
@@ -118,7 +118,7 @@ Friend Class ReconcileForm
         Dim strSortableBankDate As String
         Dim strSortableNumber As String
 
-        objItem = gobjListViewAdd(lvwTrx)
+        objItem = UITools.ListViewAdd(lvwTrx)
         maudtTrx(lngTrxIndex).objLvwItem = objItem
         With objItem
             AddSubItem(objItem, mintCOL_DATE, Utilities.strFormatDate(objTrx.datDate))
@@ -167,16 +167,16 @@ Friend Class ReconcileForm
             With lvwTrx
                 Select Case ColumnHeader.Index
                     Case mintCOL_DATE
-                        gSetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_DATE)
+                        UITools.SetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_DATE)
                         .Refresh()
                     Case mintCOL_NUMBER
-                        gSetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_NUMBER)
+                        UITools.SetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_NUMBER)
                         .Refresh()
                     Case mintCOL_DESCRIPTION
-                        gSetListViewSortColumn(lvwTrx, mintCOL_DESCRIPTION)
+                        UITools.SetListViewSortColumn(lvwTrx, mintCOL_DESCRIPTION)
                         .Refresh()
                     Case mintCOL_BANK_DATE
-                        gSetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_BANK_DATE)
+                        UITools.SetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_BANK_DATE)
                         .Refresh()
                 End Select
             End With

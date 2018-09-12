@@ -448,7 +448,7 @@ Friend Class AdjustBudgetsToCashForm
     Private Sub ShowBudget(ByVal objBudgetTrx As BudgetTrx)
         Dim objItem As System.Windows.Forms.ListViewItem
 
-        objItem = gobjListViewAdd(lvwResults)
+        objItem = UITools.ListViewAdd(lvwResults)
         With objItem
             .Text = Utilities.strFormatDate(objBudgetTrx.datDate)
             If objItem.SubItems.Count > 1 Then

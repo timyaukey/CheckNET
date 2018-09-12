@@ -1019,7 +1019,7 @@ Friend Class BankImportForm
         objAddToImportList = Nothing
         Try
 
-            objItem = gobjListViewAdd(lvwTrx)
+            objItem = UITools.ListViewAdd(lvwTrx)
             DisplayOneImportItem(objItem, intIndex)
             objAddToImportList = objItem
 
@@ -1326,7 +1326,7 @@ Friend Class BankImportForm
 
     Private Sub DisplayMatch(ByVal objTrx As NormalTrx, ByVal intIndex As Integer)
 
-        Dim objItem As ListViewItem = gobjListViewAdd(lvwMatches)
+        Dim objItem As ListViewItem = UITools.ListViewAdd(lvwMatches)
         Dim strFake As String = ""
         Dim strGen As String = ""
         Dim strImport As String = ""

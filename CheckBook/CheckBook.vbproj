@@ -233,7 +233,6 @@
     <Compile Include="ListEditorForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ListViewSorter.vb" />
     <Compile Include="LiveBudgetListForm.Designer.vb">
       <SubType>Code</SubType>
       <DependentUpon>LiveBudgetListForm.vb</DependentUpon>
