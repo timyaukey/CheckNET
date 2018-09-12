@@ -517,7 +517,7 @@ Friend Class TrxForm
             cbo.SelectedIndex = -1
             'In case there is actually a blank element in the list.
             For intIndex = 0 To cbo.Items.Count - 1
-                If gstrVB6GetItemString(cbo, intIndex) = strValue1 Then
+                If UITools.GetItemString(cbo, intIndex) = strValue1 Then
                     cbo.SelectedIndex = intIndex
                     Exit For
                 End If
@@ -525,7 +525,7 @@ Friend Class TrxForm
         Else
             'cbo.Text = strValue1
             For intIndex = 0 To cbo.Items.Count - 1
-                If gstrVB6GetItemString(cbo, intIndex) = strValue1 Then
+                If UITools.GetItemString(cbo, intIndex) = strValue1 Then
                     cbo.SelectedIndex = intIndex
                     Exit For
                 End If
@@ -777,7 +777,7 @@ Friend Class TrxForm
         intListMax = cbo.Items.Count - 1
 
         For intListIndex = 0 To intListMax
-            If UCase(VB.Left(gstrVB6GetItemString(cbo, intListIndex), intTextLen)) = strText Then
+            If UCase(VB.Left(UITools.GetItemString(cbo, intListIndex), intTextLen)) = strText Then
                 'This fires the Click event, which fills in the full match.
                 'Strangely, the value assigned to cbo.ListIndex seems to change to
                 '-1 after the event handler exits, for reasons I don't understand.
@@ -2159,7 +2159,7 @@ Friend Class TrxForm
         If cbo.SelectedIndex = -1 Then
             strGetStringTranslatorKeyFromCombo = ""
         Else
-            lngItemData = gintVB6GetItemData(cbo, cbo.SelectedIndex)
+            lngItemData = UITools.GetItemData(cbo, cbo.SelectedIndex)
             If lngItemData = 0 Then
                 strGetStringTranslatorKeyFromCombo = ""
             Else

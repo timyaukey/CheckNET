@@ -79,7 +79,7 @@ Friend Class SearchForm
 
     Private Sub LoadSearchInOne(ByVal strTitle As String, ByVal lngFieldID As Trx.TrxSearchField)
         With cboSearchIn
-            .Items.Add(gobjCreateListBoxItem(strTitle, lngFieldID))
+            .Items.Add(UITools.CreateListBoxItem(strTitle, lngFieldID))
         End With
     End Sub
 
@@ -92,7 +92,7 @@ Friend Class SearchForm
 
     Private Sub LoadSearchTypeOne(ByVal strTitle As String, ByVal lngTypeID As Trx.TrxSearchType)
         With cboSearchType
-            .Items.Add(gobjCreateListBoxItem(strTitle, lngTypeID))
+            .Items.Add(UITools.CreateListBoxItem(strTitle, lngTypeID))
         End With
     End Sub
 
@@ -106,7 +106,7 @@ Friend Class SearchForm
     End Sub
 
     Private Sub cboSearchIn_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboSearchIn.SelectedIndexChanged
-        Select Case gintVB6GetItemData(cboSearchIn, cboSearchIn.SelectedIndex)
+        Select Case UITools.GetItemData(cboSearchIn, cboSearchIn.SelectedIndex)
             Case Trx.TrxSearchField.Category
                 txtSearchFor.Visible = False
                 cboSearchCats.Visible = True
@@ -124,8 +124,8 @@ Friend Class SearchForm
 
         Try
 
-            lngSearchType = CType(gintVB6GetItemData(cboSearchType, cboSearchType.SelectedIndex), Trx.TrxSearchType)
-            lngSearchField = CType(gintVB6GetItemData(cboSearchIn, cboSearchIn.SelectedIndex), Trx.TrxSearchField)
+            lngSearchType = CType(UITools.GetItemData(cboSearchType, cboSearchType.SelectedIndex), Trx.TrxSearchType)
+            lngSearchField = CType(UITools.GetItemData(cboSearchIn, cboSearchIn.SelectedIndex), Trx.TrxSearchField)
             Select Case lngSearchField
                 Case Trx.TrxSearchField.Category
                     If lngSearchType <> Trx.TrxSearchType.EqualTo And lngSearchType <> Trx.TrxSearchType.StartsWith Then
@@ -136,7 +136,7 @@ Friend Class SearchForm
                         MsgBox("Please select a category to search for.", MsgBoxStyle.Critical)
                         Exit Sub
                     Else
-                        lngItemData = gintVB6GetItemData(cboSearchCats, cboSearchCats.SelectedIndex)
+                        lngItemData = UITools.GetItemData(cboSearchCats, cboSearchCats.SelectedIndex)
                         strSearchFor = mobjCompany.objCategories.strKey(lngItemData)
                         If lngSearchType = Trx.TrxSearchType.StartsWith Then
                             strSearchFor = mobjCompany.objCategories.strKeyToValue1(strSearchFor)

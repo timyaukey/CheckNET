@@ -534,7 +534,7 @@ Friend Class AdjustBudgetsToCashForm
         If cbo.SelectedIndex = -1 Then
             strGetStringTranslatorKeyFromCombo = ""
         Else
-            lngItemData = gintVB6GetItemData(cbo, cbo.SelectedIndex)
+            lngItemData = UITools.GetItemData(cbo, cbo.SelectedIndex)
             If lngItemData = 0 Then
                 strGetStringTranslatorKeyFromCombo = ""
             Else

@@ -44,11 +44,11 @@ Friend Class ChangeCategoryForm
 		If MsgBox("Are you sure you want to change all splits in the selected transactions " & "with the old category to the new category?", MsgBoxStyle.Question + MsgBoxStyle.OKCancel) <> MsgBoxResult.OK Then
 			Exit Sub
 		End If
-		
-        lngItemData = gintVB6GetItemData(cboOldCategory, cboOldCategory.SelectedIndex)
+
+        lngItemData = UITools.GetItemData(cboOldCategory, cboOldCategory.SelectedIndex)
         mstrOldCatKey = mobjCompany.objCategories.strKey(lngItemData)
 
-        lngItemData = gintVB6GetItemData(cboNewCategory, cboNewCategory.SelectedIndex)
+        lngItemData = UITools.GetItemData(cboNewCategory, cboNewCategory.SelectedIndex)
         mstrNewCatKey = mobjCompany.objCategories.strKey(lngItemData)
 
         mblnSuccess = True

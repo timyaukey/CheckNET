@@ -125,7 +125,6 @@
     <Compile Include="CategoryEditorForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CBListBoxItem.vb" />
     <Compile Include="CompanyInfoEditor.Designer.vb">
       <DependentUpon>CompanyInfoEditor.vb</DependentUpon>
     </Compile>

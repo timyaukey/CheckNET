@@ -79,6 +79,7 @@
     <Compile Include="BudgetTranslator.vb" />
     <Compile Include="CategoryTranslator.vb" />
     <Compile Include="AgingUtils.vb" />
+    <Compile Include="CBListBoxItem.vb" />
     <Compile Include="CompanyInfo.vb" />
     <Compile Include="ErrorHandling.vb" />
     <Compile Include="FilePersisterExceptions.vb" />
@@ -181,6 +182,7 @@
     <Compile Include="TrxGen\TrxGenRepeat.vb" />
     <Compile Include="Trx\TrxGenImportData.vb" />
     <Compile Include="Trx\TrxManager.vb" />
+    <Compile Include="UITools.vb" />
     <Compile Include="UITypeEditors\DateConverter.vb" />
     <Compile Include="UITypeEditors\StringTranslatorUIEditor.vb" />
     <Compile Include="Utilities.vb" />

@@ -843,7 +843,7 @@ Friend Class BankImportForm
         objSplit = objImportedTrx.objFirstSplit
         If objSplit.strCategoryKey = "" And blnSetMissingCategory Then
             If cboDefaultCategory.SelectedIndex <> -1 Then
-                lngCatIdx = gintVB6GetItemData(cboDefaultCategory, cboDefaultCategory.SelectedIndex)
+                lngCatIdx = UITools.GetItemData(cboDefaultCategory, cboDefaultCategory.SelectedIndex)
                 If lngCatIdx > 0 Then
                     strDefaultCatKey = mobjCompany.objCategories.strKey(lngCatIdx)
                     objSplit.strCategoryKey = strDefaultCatKey
@@ -1074,7 +1074,7 @@ Friend Class BankImportForm
             .Items.Clear()
             intIndex = 0
             For Each objReg In mobjAccount.colRegisters
-                .Items.Add(gobjCreateListBoxItem(objReg.strTitle, intIndex))
+                .Items.Add(UITools.CreateListBoxItem(objReg.strTitle, intIndex))
                 intIndex = intIndex + 1
             Next objReg
         End With
@@ -1508,7 +1508,7 @@ Friend Class BankImportForm
                     'UPGRADE_NOTE: Object mobjSelectedRegister may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
                     mobjSelectedRegister = Nothing
                 Else
-                    mobjSelectedRegister = mobjAccount.colRegisters.Item(gintVB6GetItemData(cboRegister, .SelectedIndex))
+                    mobjSelectedRegister = mobjAccount.colRegisters.Item(UITools.GetItemData(cboRegister, .SelectedIndex))
                 End If
             End With
 

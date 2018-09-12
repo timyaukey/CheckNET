@@ -65,21 +65,6 @@ Public Module CBMain
         End If
     End Sub
 
-    Public Function gobjCreateListBoxItem(ByVal strName As String, ByVal intValue As Integer) As CBListBoxItem 'Object
-        'Return New VB6.ListBoxItem(strName, intValue)
-        Return New CBListBoxItem(strName, intValue)
-    End Function
-
-    Public Function gstrVB6GetItemString(ctl As System.Windows.Forms.ComboBox, intIndex As Integer) As String
-        'Return VB6.GetItemString(ctl, intIndex)
-        Return DirectCast(ctl.Items(intIndex), CBListBoxItem).strName
-    End Function
-
-    Public Function gintVB6GetItemData(ctl As System.Windows.Forms.ComboBox, intIndex As Integer) As Integer
-        'Return VB6.GetItemData(ctl, intIndex)
-        Return DirectCast(ctl.Items(intIndex), CBListBoxItem).intValue
-    End Function
-
     Public Function gblnUserAuthenticated(ByVal objSecurity As Security) As Boolean
         Try
             Dim strLogin As String
@@ -344,10 +329,10 @@ Public Module CBMain
             With cbo
                 .Items.Clear()
                 If blnAddEmpty Then
-                    .Items.Add(gobjCreateListBoxItem("", 0))
+                    .Items.Add(UITools.CreateListBoxItem("", 0))
                 End If
                 For intIndex = 1 To objList.intElements
-                    .Items.Add(gobjCreateListBoxItem(objList.strValue1(intIndex), intIndex))
+                    .Items.Add(UITools.CreateListBoxItem(objList.strValue1(intIndex), intIndex))
                 Next
             End With
 
@@ -359,9 +344,9 @@ Public Module CBMain
 
     Public Sub gLoadMatchNarrowingMethods(ByVal cbo As ComboBox)
         cbo.Items.Clear()
-        cbo.Items.Add(gobjCreateListBoxItem("None", ImportMatchNarrowMethod.None))
-        cbo.Items.Add(gobjCreateListBoxItem("Closest Date", ImportMatchNarrowMethod.ClosestDate))
-        cbo.Items.Add(gobjCreateListBoxItem("Earliest Date", ImportMatchNarrowMethod.EarliestDate))
+        cbo.Items.Add(UITools.CreateListBoxItem("None", ImportMatchNarrowMethod.None))
+        cbo.Items.Add(UITools.CreateListBoxItem("Closest Date", ImportMatchNarrowMethod.ClosestDate))
+        cbo.Items.Add(UITools.CreateListBoxItem("Earliest Date", ImportMatchNarrowMethod.EarliestDate))
     End Sub
 
     Public Sub gGetSplitDates(ByVal objTrx As Trx, ByVal objSplit As TrxSplit, ByRef datInvoiceDate As Date, ByRef datDueDate As Date)

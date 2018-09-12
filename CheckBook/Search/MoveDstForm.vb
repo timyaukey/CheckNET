@@ -20,10 +20,10 @@ Friend Class MoveDstForm
         mblnSuccess = False
         mcolRegisters = colRegisters
         mobjOldReg = objOldReg
-        cboRegister.Items.Add(gobjCreateListBoxItem("", -1))
+        cboRegister.Items.Add(UITools.CreateListBoxItem("", -1))
         For intRegIdx = 0 To mcolRegisters.Count() - 1
             objReg = mcolRegisters.Item(intRegIdx)
-            cboRegister.Items.Add(gobjCreateListBoxItem(objReg.strTitle, intRegIdx))
+            cboRegister.Items.Add(UITools.CreateListBoxItem(objReg.strTitle, intRegIdx))
         Next
         cboRegister.SelectedIndex = 0
         Me.ShowDialog()
@@ -54,7 +54,7 @@ Friend Class MoveDstForm
             End If
         End If
         If cboRegister.SelectedIndex > 0 Then
-            objNewReg = mcolRegisters.Item(gintVB6GetItemData(cboRegister, cboRegister.SelectedIndex))
+            objNewReg = mcolRegisters.Item(UITools.GetItemData(cboRegister, cboRegister.SelectedIndex))
             If objNewReg Is mobjOldReg Then
                 MsgBox("You may not choose the same register (select no register " & "to leave in the same register.")
                 Exit Sub

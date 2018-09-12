@@ -139,7 +139,7 @@ Friend Class RptScanSplitsForm
                     'MsgBox "You must select a category.", vbCritical
                     'Exit Function
                 Else
-                    mstrCatKey = mobjCompany.objCategories.strKey(gintVB6GetItemData(cboCategory, cboCategory.SelectedIndex))
+                    mstrCatKey = mobjCompany.objCategories.strKey(UITools.GetItemData(cboCategory, cboCategory.SelectedIndex))
                 End If
             End If
 
