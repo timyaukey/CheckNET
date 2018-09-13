@@ -237,6 +237,28 @@ Friend Class CBMainForm
         End Get
     End Property
 
+    Public Function blnAddNormalTrx(ByVal objReg As Register, ByVal objTrx As NormalTrx,
+                                    ByVal datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
+                                    ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrx
+        Using frm As TrxForm = New TrxForm()
+            If frm.blnAddNormal(objReg, objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
+                Return True
+            End If
+            Return False
+        End Using
+    End Function
+
+    Public Function blnAddNormalTrxSilent(ByVal objReg As Register, ByVal objTrx As NormalTrx,
+                                    ByVal datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
+                                    ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrxSilent
+        Using frm As TrxForm = New TrxForm()
+            If frm.blnAddNormalSilent(objReg, objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
+                Return True
+            End If
+            Return False
+        End Using
+    End Function
+
     Public Sub mnuListBudgets_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuListBudgets.Click
         Dim frm As ListEditorForm
 

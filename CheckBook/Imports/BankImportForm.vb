@@ -7,6 +7,7 @@ Imports CheckBookLib
 Friend Class BankImportForm
     Inherits System.Windows.Forms.Form
 
+    Private mobjHostUI As IHostUI
     Private WithEvents mobjAccount As Account
     Private mobjCompany As Company
     Private mobjImportHandler As IImportHandler
@@ -122,7 +123,7 @@ Friend Class BankImportForm
                       ByVal objHostUI As IHostUI)
 
         Try
-
+            mobjHostUI = objHostUI
             mobjAccount = objAccount
             mobjCompany = mobjAccount.objCompany
             mobjImportHandler = objImportHandler
@@ -280,12 +281,10 @@ Friend Class BankImportForm
                         If .objMatchedTrx Is Nothing Then
                             If Not .objMatchedReg Is Nothing Then
                                 'Insert .objImportedTrx in .objMatchedReg with .objImportedTrx.strImportKey
-                                Using frm As TrxForm = New TrxForm
-                                    Dim datDummy As DateTime
-                                    If frm.blnAddNormalSilent(.objMatchedReg, .objImportedTrx, datDummy, True, "ImportAutoBatch") Then
-                                        MsgBox("Failed to insert transaction " + strDescribeItem(intItemIndex) + " required as part of a multi-part match.")
-                                    End If
-                                End Using
+                                Dim datDummy As DateTime
+                                If mobjHostUI.blnAddNormalTrxSilent(.objMatchedReg, .objImportedTrx, datDummy, True, "ImportAutoBatch") Then
+                                    MsgBox("Failed to insert transaction " + strDescribeItem(intItemIndex) + " required as part of a multi-part match.")
+                                End If
                                 .lngStatus = ImportStatus.mlngIMPSTS_NEW
                                 .objReg = .objMatchedReg
                             End If
@@ -780,14 +779,9 @@ Friend Class BankImportForm
                     blnItemImported = mobjImportHandler.blnAlternateAutoNewHandling(objImportedTrx, mobjSelectedRegister)
                     'If we did not use alternate handling.
                     If Not blnItemImported Then
-                        Using frm As TrxForm = New TrxForm
-                            If Not frm.blnAddNormalSilent(mobjSelectedRegister, objImportedTrx, datDummy, True, "ImportNewBatch") Then
-                                'Either the Trx was silently added, or TrxForm was displayed because
-                                'of a validation error and the user successfully fixed the problem
-                                'and saved the Trx.
-                                blnItemImported = True
-                            End If
-                        End Using
+                        If Not mobjHostUI.blnAddNormalTrxSilent(mobjSelectedRegister, objImportedTrx, datDummy, True, "ImportNewBatch") Then
+                            blnItemImported = True
+                        End If
                     End If
                     'Now update the UI on the import form and any open register forms.
                     If blnItemImported Then
@@ -1366,7 +1360,6 @@ Friend Class BankImportForm
     End Function
 
     Private Sub cmdCreateNew_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCreateNew.Click
-        Dim frm As TrxForm
         Dim datDummy As Date
 
         Try
@@ -1379,12 +1372,8 @@ Friend Class BankImportForm
                 Exit Sub
             End If
 
-            frm = New TrxForm
-            'If chkBypassDateConfirm.value = vbChecked Then
-            '    frm.blnBypassConfirmation = True
-            'End If
             With maudtItem(intSelectedItemIndex())
-                If frm.blnAddNormal(mobjSelectedRegister, .objImportedTrx, datDummy, True, "Import.CreateNew") Then
+                If mobjHostUI.blnAddNormalTrx(mobjSelectedRegister, .objImportedTrx, datDummy, True, "Import.CreateNew") Then
                     Exit Sub
                 End If
                 .lngStatus = ImportStatus.mlngIMPSTS_NEW
@@ -1399,7 +1388,6 @@ Friend Class BankImportForm
     End Sub
 
     Private Sub lvwTrx_DoubleClick(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles lvwTrx.DoubleClick
-        Dim frm As TrxForm
         Dim datDummy As Date
 
         Try
@@ -1412,15 +1400,11 @@ Friend Class BankImportForm
                 Exit Sub
             End If
 
-            frm = New TrxForm
-            'If chkBypassDateConfirm.value = vbChecked Then
-            '    frm.blnBypassConfirmation = True
-            'End If
             With maudtItem(intSelectedItemIndex())
                 If MsgBox("Create transaction " & strDescribeTrx(.objImportedTrx) & "?", MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton1, "Create Transaction") <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
-                If frm.blnAddNormalSilent(mobjSelectedRegister, .objImportedTrx, datDummy, True, "ImportNewSilent") Then
+                If mobjHostUI.blnAddNormalTrxSilent(mobjSelectedRegister, .objImportedTrx, datDummy, True, "ImportNewSilent") Then
                     Exit Sub
                 End If
                 .lngStatus = ImportStatus.mlngIMPSTS_NEW
