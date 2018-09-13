@@ -1,6 +1,8 @@
 ﻿Option Strict On
 Option Explicit On
 
+Imports CheckBookLib
+
 ''' <summary>
 ''' The ITrxReader interface returns instances of this
 ''' read from some kind of external source, like a file
@@ -49,10 +51,3 @@ Public Class ImportedTrx
     End Property
 
 End Class
-
-'Ways to narrow down Trx search results during import.
-Public Enum ImportMatchNarrowMethod
-    None = 1
-    ClosestDate = 2
-    EarliestDate = 3
-End Enum

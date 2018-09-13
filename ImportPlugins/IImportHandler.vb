@@ -1,6 +1,8 @@
 ﻿Option Strict On
 Option Explicit On
 
+Imports CheckBookLib
+
 Public Interface IImportHandler
     Function objStatusSearch(ByVal objImportedTrx As ImportedTrx, ByVal objReg As Register) As NormalTrx
 

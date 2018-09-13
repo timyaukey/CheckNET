@@ -89,11 +89,14 @@
     <Compile Include="Deposits\DepositImportPlugin.vb" />
     <Compile Include="Deposits\DepositImportStandard.vb" />
     <Compile Include="Deposits\ImportHandlerDeposits.vb" />
+    <Compile Include="IImportHandler.vb" />
+    <Compile Include="ImportedTrx.vb" />
     <Compile Include="ImportPlugins.vb" />
     <Compile Include="ImportUtilities.vb" />
     <Compile Include="Invoices\ImportHandlerInvoices.vb" />
     <Compile Include="Invoices\InvoiceImportPlugin.vb" />
     <Compile Include="Invoices\InvoiceImportStandard.vb" />
+    <Compile Include="ITrxReader.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
