@@ -37,4 +37,47 @@ Public Class UITools
         End If
     End Sub
 
+    Public Shared Sub LoadAccountListBox(ByVal lst As ListBox, ByVal objCompany As Company)
+        Dim objAccount As Account
+
+        With lst
+            .Items.Clear()
+            For Each objAccount In objCompany.colAccounts
+                .Items.Add(objAccount.strTitle)
+            Next objAccount
+        End With
+    End Sub
+
+    Public Shared Function objGetSelectedAccountAndUnload(ByVal lst As ListBox, ByVal frm As Form, ByVal objCompany As Company) As Account
+
+        If lst.SelectedIndex = -1 Then
+            objGetSelectedAccountAndUnload = Nothing
+            Exit Function
+        End If
+        objGetSelectedAccountAndUnload = objCompany.colAccounts.Item(lst.SelectedIndex)
+        frm.Close()
+        Application.DoEvents()
+    End Function
+
+    Public Shared Sub LoadComboFromStringTranslator(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As IStringTranslator, ByVal blnAddEmpty As Boolean)
+
+        Try
+
+            Dim intIndex As Integer
+            With cbo
+                .Items.Clear()
+                If blnAddEmpty Then
+                    .Items.Add(UITools.CreateListBoxItem("", 0))
+                End If
+                For intIndex = 1 To objList.intElements
+                    .Items.Add(UITools.CreateListBoxItem(objList.strValue1(intIndex), intIndex))
+                Next
+            End With
+
+            Exit Sub
+        Catch ex As Exception
+            gNestedException(ex)
+        End Try
+    End Sub
+
 End Class

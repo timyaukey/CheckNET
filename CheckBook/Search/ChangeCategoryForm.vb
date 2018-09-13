@@ -14,8 +14,8 @@ Friend Class ChangeCategoryForm
     Public Function blnGetCategories(ByVal objCompany As Company, ByRef strOldCatKey As String, ByRef strNewCatKey As String) As Boolean
 
         mobjCompany = objCompany
-        gLoadComboFromStringTranslator(cboOldCategory, mobjCompany.objCategories, True)
-        gLoadComboFromStringTranslator(cboNewCategory, mobjCompany.objCategories, True)
+        UITools.LoadComboFromStringTranslator(cboOldCategory, mobjCompany.objCategories, True)
+        UITools.LoadComboFromStringTranslator(cboNewCategory, mobjCompany.objCategories, True)
         mblnSuccess = False
         ShowDialog()
         strOldCatKey = mstrOldCatKey

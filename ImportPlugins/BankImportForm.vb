@@ -4,7 +4,7 @@ Option Explicit On
 Imports VB = Microsoft.VisualBasic
 Imports CheckBookLib
 
-Friend Class BankImportForm
+Public Class BankImportForm
     Inherits System.Windows.Forms.Form
 
     Private mobjHostUI As IHostUI
@@ -146,7 +146,7 @@ Friend Class BankImportForm
             End If
             DisplayImportItems()
             LoadRegisterList()
-            gLoadComboFromStringTranslator(cboDefaultCategory, mobjCompany.objCategories, True)
+            UITools.LoadComboFromStringTranslator(cboDefaultCategory, mobjCompany.objCategories, True)
 
             Me.Text = strTitle
             ConfigureButtons()

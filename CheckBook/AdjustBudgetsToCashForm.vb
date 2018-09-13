@@ -81,7 +81,7 @@ Friend Class AdjustBudgetsToCashForm
 
         Try
 
-            gLoadComboFromStringTranslator(cboBudget(intIndex), mobjBudgets, True)
+            UITools.LoadComboFromStringTranslator(cboBudget(intIndex), mobjBudgets, True)
             With cboBudget(intIndex)
                 strValue1 = mobjBudgets.strKeyToValue1(GetSetting(gstrREG_APP, strRegSection(), mstrREG_BUDKEY_NAME & intIndex))
                 If strValue1 = "" Then

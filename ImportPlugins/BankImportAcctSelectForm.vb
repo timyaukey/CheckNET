@@ -3,7 +3,7 @@ Option Explicit On
 
 Imports CheckBookLib
 
-Friend Class BankImportAcctSelectForm
+Public Class BankImportAcctSelectForm
     Inherits System.Windows.Forms.Form
 
     Private mobjCompany As Company
@@ -16,9 +16,9 @@ Friend Class BankImportAcctSelectForm
         Try
             mobjCompany = objCompany
             mobjAccount = Nothing
-            gLoadAccountListBox(lstAccounts, objCompany)
+            UITools.LoadAccountListBox(lstAccounts, objCompany)
             Me.ShowDialog()
-            System.Windows.Forms.Application.DoEvents()
+            Application.DoEvents()
             If Not mobjAccount Is Nothing Then
                 frm = New BankImportForm
                 frm.ShowMe(strTitle, mobjAccount, objImportHandler, objTrxReader, objHostUI)
@@ -36,7 +36,7 @@ Friend Class BankImportAcctSelectForm
     Private Sub cmdOkay_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdOkay.Click
         Try
 
-            mobjAccount = gobjGetSelectedAccountAndUnload(lstAccounts, Me, mobjCompany)
+            mobjAccount = UITools.objGetSelectedAccountAndUnload(lstAccounts, Me, mobjCompany)
             If mobjAccount Is Nothing Then
                 MsgBox("Please select the account to import into.", MsgBoxStyle.Critical)
                 Exit Sub

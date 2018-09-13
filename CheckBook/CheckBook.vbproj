@@ -137,20 +137,6 @@
     <Compile Include="FileListEditorForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Imports\BankImportAcctSelectForm.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>BankImportAcctSelectForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Imports\BankImportAcctSelectForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Imports\BankImportForm.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>BankImportForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Imports\BankImportForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -375,14 +361,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FileListEditorForm.resx">
       <DependentUpon>FileListEditorForm.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Imports\BankImportAcctSelectForm.resX">
-      <DependentUpon>BankImportAcctSelectForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Imports\BankImportForm.resX">
-      <DependentUpon>BankImportForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <CustomToolNamespace>My.Resources</CustomToolNamespace>

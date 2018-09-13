@@ -22,7 +22,7 @@ Friend Class ReconAcctSelectForm
 
         Try
 
-            objAccount = gobjGetSelectedAccountAndUnload(lstAccounts, Me, mobjCompany)
+            objAccount = UITools.objGetSelectedAccountAndUnload(lstAccounts, Me, mobjCompany)
             If objAccount Is Nothing Then
                 MsgBox("Please select the account to reconcile.", MsgBoxStyle.Critical)
                 Exit Sub
@@ -40,7 +40,7 @@ Friend Class ReconAcctSelectForm
     Private Sub ReconAcctSelectForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Try
 
-            gLoadAccountListBox(lstAccounts, mobjCompany)
+            UITools.LoadAccountListBox(lstAccounts, mobjCompany)
 
             Exit Sub
         Catch ex As Exception

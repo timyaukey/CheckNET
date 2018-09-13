@@ -27,8 +27,8 @@ Friend Class PayeeListForm
 
             mobjCompany = objCompany
             LoadSharedDocument()
-            gLoadComboFromStringTranslator(cboCategory, objCompany.objCategories, True)
-            gLoadComboFromStringTranslator(cboBudget, objCompany.objBudgets, True)
+            UITools.LoadComboFromStringTranslator(cboCategory, objCompany.objCategories, True)
+            UITools.LoadComboFromStringTranslator(cboBudget, objCompany.objBudgets, True)
             gLoadMatchNarrowingMethods(cboNarrowMethod)
             Me.ShowDialog()
 

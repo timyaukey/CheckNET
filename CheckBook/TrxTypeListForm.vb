@@ -2,6 +2,7 @@ Option Strict On
 Option Explicit On
 
 Imports CheckBookLib
+Imports ImportPlugins
 
 Friend Class TrxTypeListForm
     Inherits System.Windows.Forms.Form
@@ -23,17 +24,10 @@ Friend Class TrxTypeListForm
 
     Public Sub ShowMe(ByVal objCompany_ As Company)
         Dim strTableFile As String
-        Dim frm As System.Windows.Forms.Form
 
         Try
 
             mobjCompany = objCompany_
-            For Each frm In gcolForms()
-                If TypeOf frm Is BankImportForm Then
-                    MsgBox("You may not edit transaction types while importing from " & "the bank.", MsgBoxStyle.Critical)
-                    Exit Sub
-                End If
-            Next frm
             strTableFile = mobjCompany.strTrxTypeFilePath()
             mdomTypeTable = mobjCompany.domLoadFile(strTableFile)
             melmTypeTable = mdomTypeTable.DocumentElement

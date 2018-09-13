@@ -98,7 +98,7 @@ Friend Class SearchForm
 
     Private Sub LoadComboFromStringTranslator(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As IStringTranslator)
 
-        gLoadComboFromStringTranslator(cbo, objList, False)
+        UITools.LoadComboFromStringTranslator(cbo, objList, False)
         With cbo
             .Left = txtSearchFor.Left
             .Top = txtSearchFor.Top

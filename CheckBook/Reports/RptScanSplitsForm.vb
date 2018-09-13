@@ -51,7 +51,7 @@ Friend Class RptScanSplitsForm
             Me.MdiParent = mobjHostUI.objGetMainForm()
             mobjHostUI.objGetMainForm().Show()
             CustomizeForm()
-            gLoadAccountListBox(lstAccounts, mobjCompany)
+            UITools.LoadAccountListBox(lstAccounts, mobjCompany)
             Me.Show()
 
             Exit Sub

@@ -213,7 +213,7 @@ Friend Class TrxForm
     End Function
 
     Private Sub ConfigSharedControls()
-        gLoadComboFromStringTranslator(cboRepeatKey, mobjAccount.objRepeats, True)
+        UITools.LoadComboFromStringTranslator(cboRepeatKey, mobjAccount.objRepeats, True)
     End Sub
 
     Private Sub ClearSharedControls()
@@ -249,8 +249,8 @@ Friend Class TrxForm
         EnableStatus()
         chkFake.Visible = True
         For intIndex = 0 To mintSPLIT_CTRL_ARRAY_SIZE - 1
-            gLoadComboFromStringTranslator(cboSplitCategory(intIndex), mobjCompany.objCategories, True)
-            gLoadComboFromStringTranslator(cboSplitBudget(intIndex), mobjCompany.objBudgets, True)
+            UITools.LoadComboFromStringTranslator(cboSplitCategory(intIndex), mobjCompany.objCategories, True)
+            UITools.LoadComboFromStringTranslator(cboSplitBudget(intIndex), mobjCompany.objBudgets, True)
         Next
         ShowFrame(frmNormal)
     End Sub
@@ -322,7 +322,7 @@ Friend Class TrxForm
         txtBudgetEnds.Visible = True
         chkFake.Visible = False
         cmdCopyInvoiceNumbers.Visible = False
-        gLoadComboFromStringTranslator(cboBudgetName, mobjCompany.objBudgets, True)
+        UITools.LoadComboFromStringTranslator(cboBudgetName, mobjCompany.objBudgets, True)
         ShowFrame(frmBudget)
     End Sub
 
@@ -443,7 +443,7 @@ Friend Class TrxForm
         lblStatus.Visible = False
         chkFake.Visible = True
         cmdCopyInvoiceNumbers.Visible = False
-        gLoadComboFromStringTranslator(cboTransferTo, mobjAccount.objRegisterList(), True)
+        UITools.LoadComboFromStringTranslator(cboTransferTo, mobjAccount.objRegisterList(), True)
         cboTransferTo.Enabled = Not mblnEditMode
         ShowFrame(frmTransfer)
     End Sub

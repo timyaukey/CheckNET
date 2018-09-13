@@ -203,28 +203,6 @@ Public Module CBMain
         Return False
     End Function
 
-    Public Sub gLoadAccountListBox(ByVal lst As System.Windows.Forms.ListBox, ByVal objCompany As Company)
-        Dim objAccount As Account
-
-        With lst
-            .Items.Clear()
-            For Each objAccount In objCompany.colAccounts
-                .Items.Add(objAccount.strTitle)
-            Next objAccount
-        End With
-    End Sub
-
-    Public Function gobjGetSelectedAccountAndUnload(ByVal lst As ListBox, ByVal frm As Form, ByVal objCompany As Company) As Account
-
-        If lst.SelectedIndex = -1 Then
-            gobjGetSelectedAccountAndUnload = Nothing
-            Exit Function
-        End If
-        gobjGetSelectedAccountAndUnload = objCompany.colAccounts.Item(lst.SelectedIndex)
-        frm.Close()
-        System.Windows.Forms.Application.DoEvents()
-    End Function
-
     Public Sub gInitPayeeList(ByVal lvwPayees As System.Windows.Forms.ListView)
         With lvwPayees
             .Columns.Clear()
@@ -294,27 +272,6 @@ Public Module CBMain
         Else
             objItem.SubItems.Insert(intSubItem, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strText))
         End If
-    End Sub
-
-    Public Sub gLoadComboFromStringTranslator(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As IStringTranslator, ByVal blnAddEmpty As Boolean)
-
-        Try
-
-            Dim intIndex As Integer
-            With cbo
-                .Items.Clear()
-                If blnAddEmpty Then
-                    .Items.Add(UITools.CreateListBoxItem("", 0))
-                End If
-                For intIndex = 1 To objList.intElements
-                    .Items.Add(UITools.CreateListBoxItem(objList.strValue1(intIndex), intIndex))
-                Next
-            End With
-
-            Exit Sub
-        Catch ex As Exception
-            gNestedException(ex)
-        End Try
     End Sub
 
     Public Sub gLoadMatchNarrowingMethods(ByVal cbo As ComboBox)
