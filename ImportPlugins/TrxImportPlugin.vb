@@ -24,12 +24,15 @@ Public MustInherit Class TrxImportPlugin
 
     Public Overrides Sub ClickHandler(sender As Object, e As EventArgs)
         Try
-            If HostUI.blnImportFormAlreadyOpen() Then
+            If BankImportForm.intOpenCount > 0 Then
+                MsgBox("An import form is already open, and only one can be open at a time.")
                 Exit Sub
             End If
             Dim objReader As ITrxReader = GetTrxReader()
             If Not objReader Is Nothing Then
-                HostUI.OpenImportForm(GetImportWindowCaption(), GetImportHandler(), objReader)
+                Using frm As BankImportAcctSelectForm = New BankImportAcctSelectForm()
+                    frm.ShowMe(Me.HostUI.objCompany, GetImportWindowCaption(), GetImportHandler(), objReader, Me.HostUI)
+                End Using
             End If
             Exit Sub
         Catch ex As Exception

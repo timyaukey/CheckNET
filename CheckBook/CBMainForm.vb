@@ -194,27 +194,6 @@ Friend Class CBMainForm
         End Try
     End Sub
 
-    Private Function blnImportFormAlreadyOpen() As Boolean Implements IHostUI.blnImportFormAlreadyOpen
-        Dim frm As System.Windows.Forms.Form
-
-        For Each frm In gcolForms()
-            If TypeOf frm Is BankImportForm Then
-                MsgBox("An import form is already open, and only one can be open at a time.")
-                blnImportFormAlreadyOpen = True
-                Exit Function
-            End If
-        Next frm
-        blnImportFormAlreadyOpen = False
-    End Function
-
-    Public Sub OpenImportForm(strWindowCaption As String, objHandler As IImportHandler,
-        objReader As ITrxReader) Implements IHostUI.OpenImportForm
-
-        Using frm As BankImportAcctSelectForm = New BankImportAcctSelectForm()
-            frm.ShowMe(mobjCompany, strWindowCaption, objHandler, objReader, Me)
-        End Using
-    End Sub
-
     Public Function strChooseFile(strWindowCaption As String, strFileType As String, strSettingsKey As String) _
         As String Implements IHostUI.strChooseFile
         Return CommonDialogControlForm.strChooseFile(strWindowCaption, strFileType, strSettingsKey)

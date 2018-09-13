@@ -15,6 +15,7 @@ Public Class BankImportForm
     Private mblnIgnoreItemCheckedEvents As Boolean
     Private mobjHashedMatches As HashSet(Of NormalTrx)
     Private mblnTrapKeyPress As Boolean
+    Public Shared intOpenCount As Integer
 
     Private Enum ImportStatus
         'Have not decided what to do with item yet.
@@ -1154,6 +1155,11 @@ Public Class BankImportForm
         Me.Width = 1115
         Me.Height = 587
         mblnTrapKeyPress = True
+        intOpenCount = intOpenCount + 1
+    End Sub
+
+    Private Sub BankImportForm_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        intOpenCount = intOpenCount - 1
     End Sub
 
     Private Sub lvwTrx_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles lvwTrx.Click
@@ -1563,4 +1569,5 @@ Public Class BankImportForm
             itm.Checked = Not itm.Checked
         Next
     End Sub
+
 End Class
