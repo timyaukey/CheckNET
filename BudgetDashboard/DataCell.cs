@@ -19,7 +19,7 @@ namespace BudgetDashboard
             BudgetApplied = budgetApplied;
         }
 
-        public void Add(DataCell cell)
+        public void AddData(DataCell cell)
         {
             this.BudgetLimit += cell.BudgetLimit;
             this.BudgetApplied += cell.BudgetApplied;

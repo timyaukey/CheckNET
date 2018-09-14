@@ -8,7 +8,7 @@ namespace BudgetDashboard
     {
         public readonly List<T> Details = new List<T>();
 
-        public void Add(T detail)
+        public void AddDetail(T detail)
         {
             Details.Add(detail);
         }
