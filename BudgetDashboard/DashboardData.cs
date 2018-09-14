@@ -19,6 +19,9 @@ namespace BudgetDashboard
         public readonly List<SplitDetailRow> UnbudgetedIncome;
         public readonly List<BudgetDetailRow> BudgetedExpenses;
         public readonly List<SplitDetailRow> UnbudgetedExpenses;
+        public readonly TotalRow TotalIncome;
+        public readonly TotalRow TotalExpense;
+        public readonly TotalRow NetProfit;
 
         public DashboardData(Account account, int periodDays, int periodCount, DateTime startDate)
         {
@@ -34,6 +37,9 @@ namespace BudgetDashboard
             UnbudgetedIncome = new List<SplitDetailRow>();
             BudgetedExpenses = new List<BudgetDetailRow>();
             UnbudgetedExpenses = new List<SplitDetailRow>();
+            TotalIncome = new TotalRow(periodCount, "", "Total Income");
+            TotalExpense = new TotalRow(periodCount, "", "Total Expense");
+            NetProfit = new TotalRow(periodCount, "", "Net Profit");
         }
 
         public void Load()
@@ -48,19 +54,33 @@ namespace BudgetDashboard
             foreach(var row in BudgetDetailRows.Values)
             {
                 if (row.RowTotal.BudgetApplied > 0)
+                {
                     BudgetedIncome.Add(row);
+                    TotalIncome.AddRow<BudgetDetailRow, BudgetDetailCell>(row);
+                }
                 else
+                {
                     BudgetedExpenses.Add(row);
+                    TotalExpense.AddRow<BudgetDetailRow, BudgetDetailCell>(row);
+                }
             }
             BudgetedIncome.Sort(DataRowComparer);
             BudgetedExpenses.Sort(DataRowComparer);
             foreach(var row in SplitDetailRows.Values)
             {
                 if (row.RowTotal.BudgetApplied > 0)
+                {
                     UnbudgetedIncome.Add(row);
+                    TotalIncome.AddRow<SplitDetailRow, SplitDetailCell>(row);
+                }
                 else
+                {
                     UnbudgetedExpenses.Add(row);
+                    TotalExpense.AddRow<SplitDetailRow, SplitDetailCell>(row);
+                }
             }
+            NetProfit.AddRow<TotalRow, DataCell>(TotalIncome);
+            NetProfit.AddRow<TotalRow, DataCell>(TotalExpense);
             UnbudgetedIncome.Sort(DataRowComparer);
             UnbudgetedExpenses.Sort(DataRowComparer);
         }

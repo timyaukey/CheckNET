@@ -44,20 +44,23 @@ namespace BudgetDashboard
             }
             foreach(var row in mData.UnbudgetedIncome)
             {
-                AddGridRow(row);
+                AddGridRow<SplitDetailRow, SplitDetailCell>(row);
             }
-            foreach(var row in mData.UnbudgetedExpenses)
+            foreach (var row in mData.BudgetedIncome)
             {
-                AddGridRow(row);
+                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row);
             }
-            foreach(var row in mData.BudgetedIncome)
+            AddGridRow<TotalRow, DataCell>(mData.TotalIncome);
+            foreach (var row in mData.UnbudgetedExpenses)
             {
-                AddGridRow(row);
+                AddGridRow<SplitDetailRow, SplitDetailCell>(row);
             }
             foreach(var row in mData.BudgetedExpenses)
             {
-                AddGridRow(row);
+                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row);
             }
+            AddGridRow<TotalRow, DataCell>(mData.TotalExpense);
+            AddGridRow<TotalRow, DataCell>(mData.NetProfit);
         }
 
         private void ConfigureColumn(int colIndex, string title, int width)
@@ -67,18 +70,9 @@ namespace BudgetDashboard
             col.Width = width;
         }
 
-        private void AddGridRow(SplitDetailRow row)
-        {
-            DataGridViewRow gridRow = new DataGridViewRow();
-            AddCell(gridRow, row.Label);
-            for (int periodIndex = 0; periodIndex < mData.PeriodCount; periodIndex++)
-            {
-                AddCell(gridRow, row.Cells[periodIndex].BudgetApplied.ToString("C2"));
-            }
-            grdMain.Rows.Add(gridRow);
-        }
-
-        private void AddGridRow(BudgetDetailRow row)
+        private void AddGridRow<TRow, TCell2>(TRow row)
+            where TRow : DataRow<TCell2>
+            where TCell2 : DataCell, new()
         {
             DataGridViewRow gridRow = new DataGridViewRow();
             AddCell(gridRow, row.Label);

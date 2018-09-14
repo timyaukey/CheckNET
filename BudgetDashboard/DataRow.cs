@@ -22,6 +22,17 @@ namespace BudgetDashboard
             RowTotal = new DataCell();
         }
 
+        public void AddRow<TRow, TCell2>(TRow row)
+            where TRow : DataRow<TCell2>
+            where TCell2 : DataCell, new()
+        {
+            for (int i = 0; i < Cells.Length; i++)
+            {
+                this.Cells[i].AddData(row.Cells[i]);
+            }
+            this.RowTotal.AddData(row.RowTotal);
+        }
+
         public override string ToString()
         {
             return Label + " " + RowTotal.ToString();
