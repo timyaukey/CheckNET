@@ -25,13 +25,13 @@ namespace BudgetDashboard
 
         public void AddToPeriod(int period, TData data)
         {
-            DataCell newCell = MakeDataCell(data);
+            TCell newCell = MakeDataCell(data);
             Cells[period].AddDetail(data);
             Cells[period].AddData(newCell);
             this.RowTotal.AddData(newCell);
         }
 
-        public abstract DataCell MakeDataCell(TData detail);
+        public abstract TCell MakeDataCell(TData detail);
 
         public override string ToString()
         {

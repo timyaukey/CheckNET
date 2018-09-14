@@ -8,6 +8,15 @@ namespace BudgetDashboard
     {
         public readonly List<T> Details = new List<T>();
 
+        public DetailCell()
+        {
+        }
+
+        public DetailCell(decimal budgetLimit, decimal budgetApplied)
+            : base(budgetLimit, budgetApplied)
+        {
+        }
+
         public void AddDetail(T detail)
         {
             Details.Add(detail);
