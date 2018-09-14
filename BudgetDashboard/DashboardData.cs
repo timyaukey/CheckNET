@@ -65,7 +65,7 @@ namespace BudgetDashboard
             UnbudgetedExpenses.Sort(DataRowComparer);
         }
 
-        private int DataRowComparer<TCell, TData>(DataRow<TCell, TData> row1, DataRow<TCell, TData> row2)
+        private int DataRowComparer<TCell, TData>(DetailRow<TCell, TData> row1, DetailRow<TCell, TData> row2)
             where TCell : DetailCell<TData>, new()
             where TData : class
         {

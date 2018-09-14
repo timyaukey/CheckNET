@@ -4,7 +4,7 @@ using CheckBookLib;
 
 namespace BudgetDashboard
 {
-    public class BudgetDetailRow : DataRow<BudgetDetailCell, BudgetTrx>
+    public class BudgetDetailRow : DetailRow<BudgetDetailCell, BudgetTrx>
     {
         public BudgetDetailRow(int periodCount, string key, string label)
             : base(periodCount, key, label)

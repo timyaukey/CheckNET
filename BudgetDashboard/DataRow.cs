@@ -4,9 +4,8 @@ using CheckBookLib;
 
 namespace BudgetDashboard
 {
-    public abstract class DataRow<TCell, TData>
-        where TCell : DetailCell<TData>, new()
-        where TData : class
+    public abstract class DataRow<TCell>
+        where TCell : DataCell, new()
     {
         public readonly TCell[] Cells;
         public DataCell RowTotal;
@@ -22,16 +21,6 @@ namespace BudgetDashboard
                 Cells[i] = new TCell();
             RowTotal = new DataCell();
         }
-
-        public void AddToPeriod(int period, TData data)
-        {
-            TCell newCell = MakeDataCell(data);
-            Cells[period].AddDetail(data);
-            Cells[period].AddData(newCell);
-            this.RowTotal.AddData(newCell);
-        }
-
-        public abstract TCell MakeDataCell(TData detail);
 
         public override string ToString()
         {
