@@ -34,15 +34,19 @@ namespace BudgetDashboard
 
         private void DisplayData()
         {
-            grdMain.ColumnCount = mData.PeriodCount + 1;
+            grdMain.ColumnCount = mData.PeriodCount + 3;
             ConfigureColumn(0, "Category", 200, DataGridViewContentAlignment.MiddleLeft, DataGridViewContentAlignment.MiddleLeft);
+            ConfigureColumn(1, "Sequence", 200, DataGridViewContentAlignment.MiddleLeft, DataGridViewContentAlignment.MiddleLeft);
+            ConfigureColumn(2, "Row Total", 100, DataGridViewContentAlignment.MiddleRight, DataGridViewContentAlignment.MiddleRight);
             DateTime periodStart = mData.StartDate;
             for (int colIndex = 1; colIndex <= mData.PeriodCount; colIndex++)
             {
-                ConfigureColumn(colIndex, periodStart.ToShortDateString(), 100, DataGridViewContentAlignment.MiddleRight, DataGridViewContentAlignment.MiddleRight);
+                ConfigureColumn(colIndex + 2, periodStart.ToShortDateString(), 100, DataGridViewContentAlignment.MiddleRight, DataGridViewContentAlignment.MiddleRight);
                 periodStart = periodStart.AddDays(mData.PeriodDays);
             }
             grdMain.Columns[0].Frozen = true;
+            grdMain.Columns[1].Frozen = true;
+            grdMain.Columns[2].Frozen = true;
             foreach(var row in mData.UnbudgetedIncome)
             {
                 AddGridRow<SplitDetailRow, SplitDetailCell>(row, Color.White);
@@ -80,6 +84,8 @@ namespace BudgetDashboard
         {
             DataGridViewRow gridRow = new DataGridViewRow();
             AddCell(gridRow, row.Label, rowColor);
+            AddCell(gridRow, row.Sequence, rowColor);
+            AddCell(gridRow, row.RowTotal.Amount.ToString("F2"), rowColor);
             for (int periodIndex = 0; periodIndex < mData.PeriodCount; periodIndex++)
             {
                 AddCell(gridRow, row.Cells[periodIndex].Amount.ToString("F2"), rowColor);

@@ -98,6 +98,7 @@
         Me.MinimizeBox = False
         Me.Name = "StartupForm"
         Me.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         CType(Me.picSplash, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)

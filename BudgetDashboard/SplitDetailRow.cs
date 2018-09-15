@@ -6,8 +6,8 @@ namespace BudgetDashboard
 {
     public class SplitDetailRow : DetailRow<SplitDetailCell, SplitCarrier>
     {
-        public SplitDetailRow(int periodCount, string key, string label)
-            : base(periodCount, key, label)
+        public SplitDetailRow(int periodCount, string key, string label, string sequence)
+            : base(periodCount, key, label, sequence)
         {
         }
 

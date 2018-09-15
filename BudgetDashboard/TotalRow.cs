@@ -7,8 +7,8 @@ namespace BudgetDashboard
 {
     public class TotalRow : DataRow<DataCell>
     {
-        public TotalRow(int periodCount, string key, string label)
-            : base(periodCount, key, label)
+        public TotalRow(int periodCount, string key, string label, string sequence)
+            : base(periodCount, key, label, sequence)
         {
         }
     }

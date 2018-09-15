@@ -31,7 +31,7 @@ namespace BudgetDashboard
 
         public override string ToString()
         {
-            return "(limit=" + BudgetLimit.ToString("F2") + " applied=" + BudgetApplied.ToString("F2") + ")";
+            return "(amount=" + Amount.ToString("F2") + " limit=" + BudgetLimit.ToString("F2") + " applied=" + BudgetApplied.ToString("F2") + ")";
         }
     }
 }

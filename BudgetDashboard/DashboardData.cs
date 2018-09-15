@@ -37,9 +37,9 @@ namespace BudgetDashboard
             UnbudgetedIncome = new List<SplitDetailRow>();
             BudgetedExpenses = new List<BudgetDetailRow>();
             UnbudgetedExpenses = new List<SplitDetailRow>();
-            TotalIncome = new TotalRow(periodCount, "", "Total Income");
-            TotalExpense = new TotalRow(periodCount, "", "Total Expense");
-            NetProfit = new TotalRow(periodCount, "", "Net Profit");
+            TotalIncome = new TotalRow(periodCount, "", "Total Income", "");
+            TotalExpense = new TotalRow(periodCount, "", "Total Expense", "");
+            NetProfit = new TotalRow(periodCount, "", "Net Profit", "");
         }
 
         public void Load()
@@ -103,11 +103,17 @@ namespace BudgetDashboard
                     if (split.objBudget == null)
                     {
                         SplitDetailRow row;
-                        if (!SplitDetailRows.TryGetValue(split.strCategoryKey, out row))
+                        string rowKey = split.strCategoryKey + ":" + normalTrx.strRepeatKey;
+                        if (!SplitDetailRows.TryGetValue(rowKey, out row))
                         {
+                            string sequence = "(none)";
+                            if (!string.IsNullOrEmpty(normalTrx.strRepeatKey))
+                            {
+                                sequence = normalTrx.objReg.objAccount.objRepeats.strKeyToValue1(normalTrx.strRepeatKey);
+                            }
                             row = new SplitDetailRow(PeriodCount, split.strCategoryKey,
-                                Company.objCategories.strKeyToValue1(split.strCategoryKey));
-                            SplitDetailRows[split.strCategoryKey] = row;
+                                Company.objCategories.strKeyToValue1(split.strCategoryKey), sequence);
+                            SplitDetailRows[rowKey] = row;
                         }
                         SplitCarrier carrier = new SplitCarrier(split, normalTrx);
                         row.AddToPeriod(period, carrier);
@@ -120,11 +126,17 @@ namespace BudgetDashboard
                 if (budgetTrx != null)
                 {
                     BudgetDetailRow row;
-                    if (!BudgetDetailRows.TryGetValue(budgetTrx.strBudgetKey, out row))
+                    string rowKey = budgetTrx.strBudgetKey + ":" + budgetTrx.strRepeatKey;
+                    if (!BudgetDetailRows.TryGetValue(rowKey, out row))
                     {
+                        string sequence = "(none)";
+                        if (!string.IsNullOrEmpty(budgetTrx.strRepeatKey))
+                        {
+                            sequence = budgetTrx.objReg.objAccount.objRepeats.strKeyToValue1(budgetTrx.strRepeatKey);
+                        }
                         row = new BudgetDetailRow(PeriodCount, budgetTrx.strBudgetKey,
-                            Company.objBudgets.strKeyToValue1(budgetTrx.strBudgetKey));
-                        BudgetDetailRows[budgetTrx.strBudgetKey] = row;
+                            Company.objBudgets.strKeyToValue1(budgetTrx.strBudgetKey), sequence);
+                        BudgetDetailRows[rowKey] = row;
                     }
                     row.AddToPeriod(period, budgetTrx);
                 }

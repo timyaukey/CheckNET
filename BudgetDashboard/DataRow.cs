@@ -11,11 +11,13 @@ namespace BudgetDashboard
         public DataCell RowTotal;
         public readonly string Key;
         public readonly string Label;
+        public readonly string Sequence;
 
-        public DataRow(int periodCount, string key, string label)
+        public DataRow(int periodCount, string key, string label, string sequence)
         {
             this.Key = key;
             this.Label = label;
+            this.Sequence = sequence;
             this.Cells = new TCell[periodCount];
             for (int i = 0; i < periodCount; i++)
                 Cells[i] = new TCell();
@@ -35,7 +37,7 @@ namespace BudgetDashboard
 
         public override string ToString()
         {
-            return Label + " " + RowTotal.ToString();
+            return Label + " " + Sequence + " " + RowTotal.ToString();
         }
     }
 }

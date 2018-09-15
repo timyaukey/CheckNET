@@ -8,8 +8,8 @@ namespace BudgetDashboard
         where TCell : DetailCell<TData>, new()
         where TData : class
     {
-        public DetailRow(int periodCount, string key, string label)
-            : base(periodCount, key, label)
+        public DetailRow(int periodCount, string key, string label, string sequence)
+            : base(periodCount, key, label, sequence)
         {
         }
 
