@@ -13,7 +13,7 @@ namespace BudgetDashboard
 
         public override SplitDetailCell MakeDataCell(SplitCarrier detail)
         {
-            return new SplitDetailCell(0M, detail.Split.curAmount);
+            return new SplitDetailCell(detail.Split);
         }
     }
 }

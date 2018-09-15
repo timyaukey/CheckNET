@@ -53,7 +53,7 @@ namespace BudgetDashboard
             }
             foreach(var row in BudgetDetailRows.Values)
             {
-                if (row.RowTotal.BudgetApplied > 0)
+                if (row.RowTotal.Amount > 0)
                 {
                     BudgetedIncome.Add(row);
                     TotalIncome.AddRow<BudgetDetailRow, BudgetDetailCell>(row);
@@ -68,7 +68,7 @@ namespace BudgetDashboard
             BudgetedExpenses.Sort(DataRowComparer);
             foreach(var row in SplitDetailRows.Values)
             {
-                if (row.RowTotal.BudgetApplied > 0)
+                if (row.RowTotal.Amount > 0)
                 {
                     UnbudgetedIncome.Add(row);
                     TotalIncome.AddRow<SplitDetailRow, SplitDetailCell>(row);

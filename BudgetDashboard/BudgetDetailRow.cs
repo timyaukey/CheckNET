@@ -13,7 +13,7 @@ namespace BudgetDashboard
 
         public override BudgetDetailCell MakeDataCell(BudgetTrx detail)
         {
-            return new BudgetDetailCell(detail.curBudgetLimit, detail.curBudgetApplied);
+            return new BudgetDetailCell(detail);
         }
     }
 }

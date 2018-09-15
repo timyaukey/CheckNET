@@ -10,8 +10,8 @@ namespace BudgetDashboard
         {
         }
 
-        public SplitDetailCell(decimal budgetLimit, decimal budgetApplied)
-            : base(budgetLimit, budgetApplied)
+        public SplitDetailCell(TrxSplit split)
+            : base(split.curAmount, 0M, 0M)
         {
         }
     }
