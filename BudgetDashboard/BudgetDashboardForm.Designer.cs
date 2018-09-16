@@ -40,16 +40,16 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grdMain.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.grdMain.Location = new System.Drawing.Point(12, 50);
+            this.grdMain.Location = new System.Drawing.Point(12, 12);
             this.grdMain.Name = "grdMain";
-            this.grdMain.Size = new System.Drawing.Size(641, 284);
+            this.grdMain.Size = new System.Drawing.Size(890, 472);
             this.grdMain.TabIndex = 0;
             // 
             // BudgetDashboardForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(665, 346);
+            this.ClientSize = new System.Drawing.Size(914, 496);
             this.Controls.Add(this.grdMain);
             this.Name = "BudgetDashboardForm";
             this.Text = "Budget Dashboard";

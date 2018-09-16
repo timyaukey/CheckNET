@@ -37,9 +37,9 @@ namespace BudgetDashboard
             UnbudgetedIncome = new List<SplitDetailRow>();
             BudgetedExpenses = new List<BudgetDetailRow>();
             UnbudgetedExpenses = new List<SplitDetailRow>();
-            TotalIncome = new TotalRow(periodCount, "", "Total Income", "");
-            TotalExpense = new TotalRow(periodCount, "", "Total Expense", "");
-            NetProfit = new TotalRow(periodCount, "", "Net Profit", "");
+            TotalIncome = new TotalRow(periodCount, "", "Total Credits", "");
+            TotalExpense = new TotalRow(periodCount, "", "Total Debits", "");
+            NetProfit = new TotalRow(periodCount, "", "Net Debits/Credits", "");
         }
 
         public void Load()
@@ -103,10 +103,13 @@ namespace BudgetDashboard
                     if (split.objBudget == null)
                     {
                         SplitDetailRow row;
-                        string rowKey = split.strCategoryKey + ":" + normalTrx.strRepeatKey;
+                        // Unlike for BudgetTrx we do not incorporate repeat key in the row key,
+                        // because there are so many different generated NormalTrx sequences it
+                        // would make the resulting grid unwieldy.
+                        string rowKey = split.strCategoryKey;
                         if (!SplitDetailRows.TryGetValue(rowKey, out row))
                         {
-                            string sequence = "(none)";
+                            string sequence = "";
                             if (!string.IsNullOrEmpty(normalTrx.strRepeatKey))
                             {
                                 sequence = normalTrx.objReg.objAccount.objRepeats.strKeyToValue1(normalTrx.strRepeatKey);
