@@ -13,9 +13,9 @@ Public Class TransferTrx
     'For transfer Trx, there must exist a transfer Trx in this account with the same
     'date, the RegisterKey of THIS subaccount, and the negative of the amount of
     'this Trx. For non-transfer Trx, must be an empty string.
-    Protected mstrTransferKey As String
+    Private mstrTransferKey As String
     'Amount of a subaccount transfer.
-    Protected mcurTransferAmount As Decimal
+    Private mcurTransferAmount As Decimal
 
     Public Sub New(ByVal objReg_ As Register)
         MyBase.New(objReg_)

@@ -13,15 +13,15 @@ Public Class NormalTrx
 
     'Unique key identifying an external transaction imported to create this NormalTrx.
     'Used for matching new imported NormalTrx against prior imports, to avoid duplicates.
-    Protected mstrImportKey As String
+    Private mstrImportKey As String
     'True iff any split with a budget key was not matched to a BudgetTrx,
     'and the NormalTrx date was not before the earliest budget in the register.
-    Protected mblnAnyUnmatchedBudget As Boolean
+    Private mblnAnyUnmatchedBudget As Boolean
     'Trx amount may be different from a matching NormalTrx
     'by this amount, either positive or negative.
-    Protected mcurNormalMatchRange As Decimal
+    Private mcurNormalMatchRange As Decimal
     'Collection of TrxSplit objects belonging to this Trx.
-    Protected mcolSplits As List(Of TrxSplit)
+    Private mcolSplits As List(Of TrxSplit)
 
     Public Sub New(ByVal objReg_ As Register)
         MyBase.New(objReg_)

@@ -14,23 +14,19 @@ Public Class BudgetTrx
     'Original budget amount.
     'Is NOT changed as other TrxSplit are applied and unapplied to this one.
     'Sign has the same meaning as TrxSplit.curAmount, so is negative for expenses.
-    Protected mcurBudgetLimit As Decimal
+    Private mcurBudgetLimit As Decimal
     'Last date in the budget period. Budget period starts at mdatDate.
-    Protected mdatBudgetEnds As Date
+    Private mdatBudgetEnds As Date
     'For budget Trx, a unique ID for that budget. All budget Trx in a repeating
     'budget will have the same mstrBudgetKey, and the appropriate one for applying
     'Trx will be chosen by the budget period. Is a foreign key into some external
     'database defining how to create budget Trx.
-    Protected mstrBudgetKey As String
-    'Unit of time to which mintBudgetPeriodNumber applies.
-    Protected mlngBudgetPeriodUnit As RepeatUnit
-    'Number of mlngBudgetPeriodUnit in budget period.
-    Protected mintBudgetPeriodNumber As Short
+    Private mstrBudgetKey As String
     'Amount applied toward budget. Magnitude may be greater than mcurBudgetLimit,
     'in which case mcurAmount will equal zero instead of a credit.
-    Protected mcurBudgetApplied As Decimal
+    Private mcurBudgetApplied As Decimal
     'Collection of TrxSplit objects belonging to other NormalTrx and applied to this BudgetTrx.
-    Protected mcolAppliedSplits As List(Of TrxSplit)
+    Private mcolAppliedSplits As List(Of TrxSplit)
 
     Public Sub New(ByVal objReg_ As Register)
         MyBase.New(objReg_)
@@ -136,18 +132,6 @@ Public Class BudgetTrx
         End Get
     End Property
 
-    Public ReadOnly Property lngBudgetPeriodUnit() As RepeatUnit
-        Get
-            lngBudgetPeriodUnit = mlngBudgetPeriodUnit
-        End Get
-    End Property
-
-    Public ReadOnly Property intBudgetPeriodNumber() As Short
-        Get
-            intBudgetPeriodNumber = mintBudgetPeriodNumber
-        End Get
-    End Property
-
     Public ReadOnly Property curBudgetApplied() As Decimal
         Get
             curBudgetApplied = mcurBudgetApplied
@@ -170,14 +154,6 @@ Public Class BudgetTrx
         If mdatBudgetEnds < mdatDate Then
             gRaiseError("Budget period ends before it begins")
         End If
-    End Sub
-
-    '$Description Set all repeating Trx properties exclusive to budget Trx.
-
-    Public Sub SetBudgetRptProps(ByVal lngBudgetPeriodUnit_ As RepeatUnit, ByVal intBudgetPeriodNumber_ As Short)
-
-        mlngBudgetPeriodUnit = lngBudgetPeriodUnit_
-        mintBudgetPeriodNumber = intBudgetPeriodNumber_
     End Sub
 
     '$Description Set mcurAmount for a budget Trx. Called whenever
