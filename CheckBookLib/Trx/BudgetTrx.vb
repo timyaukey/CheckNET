@@ -111,6 +111,14 @@ Public Class BudgetTrx
         RaiseErrorOnBadBudget("UpdateStartBudget")
     End Sub
 
+    ''' <summary>
+    ''' Only needed to load old data files that have trx date
+    ''' equal to the ending date, not the starting date.
+    ''' This method can be removed after all old data files
+    ''' have been loaded and saved. Which might be hard to 
+    ''' determine, because a .ACT file will not be saved
+    ''' until there is actually a change in it.
+    ''' </summary>
     Private Sub PutPeriodDatesInCorrectOrder()
         If mdatBudgetStarts > mdatBudgetEnds Then
             Dim datTemp As Date = mdatBudgetStarts

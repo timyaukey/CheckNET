@@ -13,7 +13,6 @@ Public Class ToolPlugins
 
         Yield New ReconcilePlugin(hostUI_)
         Yield New FindLiveBudgetsPlugin(hostUI_)
-        Yield New AdjustBudgetsToCashflowPlugin(hostUI_)
         Yield New CategoryReportPlugin(hostUI_)
         Yield New PersonalBusinessPlugin(hostUI_)
         Yield New CombinedBalancePlugin(hostUI_)
