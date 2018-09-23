@@ -39,9 +39,11 @@ Public Class TGEBudgetTrx
 
     <XmlAttribute("budgetunit")>
     <TypeConverter(GetType(RepeatUnitTypeConverter))>
+    <Description("Unit type used to express the length of the budget period")>
     Public Property Unit As String
 
     <XmlAttribute("budgetnumber")>
+    <Description("The number of units in the budget period")>
     Public Property Interval As Integer
 
     Public Overrides Function blnIsEmpty() As Boolean

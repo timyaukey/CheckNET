@@ -33,9 +33,11 @@ Public Class TGERepeat
 
     <XmlAttribute("unit")>
     <TypeConverter(GetType(RepeatUnitTypeConverter))>
+    <Description("Unit type used to express the interval between transaction dates")>
     Public Property Unit As String
 
     <XmlAttribute("interval")>
+    <Description("Number of units between transaction dates")>
     Public Property Interval As Integer
 
     <XmlAttribute("startdate")>
