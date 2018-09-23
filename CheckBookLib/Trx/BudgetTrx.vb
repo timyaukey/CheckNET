@@ -125,6 +125,7 @@ Public Class BudgetTrx
             mdatBudgetStarts = mdatBudgetEnds
             mdatBudgetEnds = datTemp
             mdatDate = datTemp
+            Me.objReg.objAccount.SetChanged()
         End If
     End Sub
 

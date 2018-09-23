@@ -253,7 +253,7 @@ Public Class Register
     '   Is optimized for the case where position in the sort order is not changed much.
     '$Param lngIndex The index of the Trx object in the register to move.
 
-    Public Sub UpdateEnd(ByVal objTrx As Trx, ByVal objChangeLogger As ILogChange, ByVal strTitle As String, ByVal objOldTrx As Trx)
+    Friend Sub UpdateEnd(ByVal objTrx As Trx, ByVal objChangeLogger As ILogChange, ByVal strTitle As String, ByVal objOldTrx As Trx)
 
         Dim lngOldIndex As Integer = objTrx.lngIndex
 
@@ -315,7 +315,7 @@ Public Class Register
 
     End Function
 
-    Public Sub ClearFirstAffected()
+    Friend Sub ClearFirstAffected()
         mlngFirstAffected = mlngNO_TRX_AFFECTED
     End Sub
 
@@ -470,7 +470,7 @@ Public Class Register
     '$Description Remove all generated Trx from the Register, and clear
     '   all budget allocations.
 
-    Public Sub PurgeGenerated()
+    Friend Sub PurgeGenerated()
         Dim lngInIndex As Integer
         Dim lngOutIndex As Integer
         Dim objTrx As Trx
@@ -924,7 +924,7 @@ Public Class Register
         lngFindBeforeDate = lngIndex
     End Function
 
-    Public Function objFirstOnOrAfter(ByVal datDate As Date) As Trx
+    Friend Function objFirstOnOrAfter(ByVal datDate As Date) As Trx
         Dim lngIndex As Integer = lngFindBeforeDate(datDate) + 1
         If lngIndex > mlngTrxUsed Then
             Return Nothing
@@ -940,7 +940,7 @@ Public Class Register
     '   there is no such match. If there are multiple matches it will pick one,
     '   but it is undefined which it will pick.
 
-    Public Function lngMatchTransfer(ByVal datDate As Date, ByVal strTransferKey_ As String, ByVal curAmount As Decimal) As Integer
+    Friend Function lngMatchTransfer(ByVal datDate As Date, ByVal strTransferKey_ As String, ByVal curAmount As Decimal) As Integer
 
         Dim lngIndex As Integer
         Dim objTrx As Trx
@@ -977,7 +977,7 @@ Public Class Register
     '   will be the latest dated budget Trx whose budget period includes datDate,
     '   and with the exact same strBudgetKey value.
 
-    Public Function objMatchBudget(ByVal datDate As Date, ByVal strBudgetKey As String, ByRef blnNoMatch As Boolean) As BudgetTrx
+    Friend Function objMatchBudget(ByVal datDate As Date, ByVal strBudgetKey As String, ByRef blnNoMatch As Boolean) As BudgetTrx
 
         Dim lngIndex As Integer
         Dim objBudgetTrx As BudgetTrx
@@ -1001,7 +1001,7 @@ Public Class Register
     '$Description Used to report to the UI that a budget Trx has changed, in
     '   case balances need to be updated.
 
-    Public Sub RaiseBudgetChanged(ByVal objBudgetTrx As Trx)
+    Friend Sub RaiseBudgetChanged(ByVal objBudgetTrx As Trx)
         UpdateFirstAffected(objBudgetTrx.lngIndex)
         RaiseEvent BudgetChanged(objBudgetTrx.lngIndex, objBudgetTrx)
     End Sub
@@ -1155,11 +1155,11 @@ Public Class Register
         mlngTrxCurrent = lngTrxCurrent_
     End Sub
 
-    Public Sub AddRepeatTrx(ByVal objTrx As Trx)
+    Private Sub AddRepeatTrx(ByVal objTrx As Trx)
         mcolRepeatTrx.Add(objTrx.strRepeatId, objTrx)
     End Sub
 
-    Public Sub SetRepeatTrx(ByVal objTrx As Trx)
+    Private Sub SetRepeatTrx(ByVal objTrx As Trx)
         mcolRepeatTrx.Item(objTrx.strRepeatId) = objTrx
     End Sub
 
@@ -1172,7 +1172,7 @@ Public Class Register
         End If
     End Function
 
-    Public Sub RemoveRepeatTrx(ByVal objTrx As Trx)
+    Friend Sub RemoveRepeatTrx(ByVal objTrx As Trx)
         mcolRepeatTrx.Remove(objTrx.strRepeatId)
     End Sub
 
@@ -1236,7 +1236,7 @@ Public Class Register
 
     End Sub
 
-    Public Sub RaiseValidationError(ByVal lngIndex As Integer, ByVal strMsg As String)
+    Friend Sub RaiseValidationError(ByVal lngIndex As Integer, ByVal strMsg As String)
         RaiseEvent ValidationError(lngIndex, strMsg)
     End Sub
 
@@ -1250,7 +1250,7 @@ Public Class Register
         mobjLog.AddILogAction(New LogAction, strTitle)
     End Sub
 
-    Public Sub LogSave()
+    Friend Sub LogSave()
         mobjLog.AddILogAction(New LogSave, "Register.Save")
     End Sub
 
@@ -1265,7 +1265,7 @@ Public Class Register
         mobjLog.AddILogGroupEnd(New LogGroupEnd, objStartLogger)
     End Sub
 
-    Public Sub WriteEventLog(ByVal strAccountTitle As String, ByVal objRepeats As IStringTranslator)
+    Friend Sub WriteEventLog(ByVal strAccountTitle As String, ByVal objRepeats As IStringTranslator)
         mobjLog.WriteAll(strAccountTitle, objRepeats)
     End Sub
 
