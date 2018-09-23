@@ -986,7 +986,7 @@ Public Class Register
         For lngIndex = mlngTrxUsed To 1 Step -1
             objBudgetTrx = TryCast(Me.objTrx(lngIndex), BudgetTrx)
             If Not objBudgetTrx Is Nothing Then
-                If datDate >= objBudgetTrx.datDate And datDate <= objBudgetTrx.datBudgetEnds Then
+                If objBudgetTrx.InBudgetPeriod(datDate) Then
                     If strBudgetKey = objBudgetTrx.strBudgetKey Then
                         Return objBudgetTrx
                     End If

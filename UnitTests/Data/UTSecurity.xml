@@ -1,0 +1,4 @@
+<security>
+  <user login="admin" name="Administrator" passwordhash="D95D7" signhash="1B7C74" />
+  <user login="john" name="John Public" passwordhash="B940D4" signhash="77FAF4" />
+</security>

@@ -1,0 +1,36 @@
+TNUHadley Garden Center
+N#Card
+DT04/13/00
+MEBird seed
+SCcat1
+SA-24.95
+SZ
+SCcat2
+SA-10.99
+SBbud1
+SMsunflower
+SZ
+.T
+TNRPete's
+N#1001
+DT04/15/00
+KIimp1
+KRrep1
+MR22.01
+SCcat3
+SMBirthday
+SA-18.50
+SZ
+.T
+TBNGeneral household
+DT04/16/00
+BE04/10/00
+KBbud1
+A$-150.00
+.T
+TTNSave for taxes
+DT04/20/00
+KTxfr55
+A$140.01
+.T
+.R

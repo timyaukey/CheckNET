@@ -195,7 +195,7 @@ Friend Class TrxForm
                 Case Trx.TrxType.Budget
                     ConfigBudgetControls()
                     SetBudgetControls(DirectCast(objTrx, BudgetTrx))
-                    ShowBudgetApplied(DirectCast(objTrx, BudgetTrx), lngIndex_)
+                    ShowBudgetApplied(DirectCast(objTrx, BudgetTrx))
                 Case Trx.TrxType.Transfer
                     ConfigTransferControls()
                     SetTransferControls(DirectCast(objTrx, TransferTrx))
@@ -318,8 +318,8 @@ Friend Class TrxForm
         lblNumber.Visible = False
         cboStatus.Visible = False
         lblStatus.Visible = False
-        lblBudgetEnds.Visible = True
-        txtBudgetEnds.Visible = True
+        lblBudgetStarts.Visible = True
+        txtBudgetStarts.Visible = True
         chkFake.Visible = False
         cmdCopyInvoiceNumbers.Visible = False
         UITools.LoadComboFromStringTranslator(cboBudgetName, mobjCompany.objBudgets, True)
@@ -330,7 +330,7 @@ Friend Class TrxForm
         txtBudgetLimit.Text = "0.00"
         cboBudgetName.SelectedIndex = -1
         txtBudgetApplied.Text = ""
-        txtBudgetEnds.Text = ""
+        txtBudgetStarts.Text = ""
     End Sub
 
     Private Sub SetBudgetControls(ByVal objTrx As BudgetTrx)
@@ -338,11 +338,11 @@ Friend Class TrxForm
             txtBudgetLimit.Text = Utilities.strFormatCurrency(.curBudgetLimit)
             SetComboFromStringTranslator(cboBudgetName, mobjCompany.objBudgets, .strBudgetKey)
             txtBudgetApplied.Text = Utilities.strFormatCurrency(.curBudgetApplied)
-            txtBudgetEnds.Text = Utilities.strFormatDate(.datBudgetEnds)
+            txtBudgetStarts.Text = Utilities.strFormatDate(.datBudgetStarts)
         End With
     End Sub
 
-    Private Sub ShowBudgetApplied(ByVal objBudget As BudgetTrx, ByVal lngIndex_ As Integer)
+    Private Sub ShowBudgetApplied(ByVal objBudget As BudgetTrx)
         Dim lngCurrent As Integer
         Dim objCurrent As Trx
         Dim objSplit As TrxSplit
@@ -353,18 +353,7 @@ Friend Class TrxForm
         mblnBudgetAppliedVisible = True
 
         'Set lngCurrent to the index of the earliest Trx to check.
-        lngCurrent = lngIndex_
-        Do
-            If lngCurrent = 1 Then
-                Exit Do
-            End If
-            objCurrent = mobjReg.objTrx(lngCurrent)
-            If objCurrent.datDate < objBudget.datDate Then
-                lngCurrent = lngCurrent + 1
-                Exit Do
-            End If
-            lngCurrent = lngCurrent - 1
-        Loop
+        lngCurrent = objBudget.lngEarliestPossibleAppliedIndex()
 
         'Check all Trx until we find one dated after the budget end date.
         Do
@@ -382,38 +371,14 @@ Friend Class TrxForm
                         With objCurrent
                             objItem = UITools.ListViewAdd(lvwAppliedTo)
                             objItem.Text = Utilities.strFormatDate(.datDate)
-                            If objItem.SubItems.Count > 1 Then
-                                objItem.SubItems(1).Text = .strNumber
-                            Else
-                                objItem.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, .strNumber))
-                            End If
-                            If objItem.SubItems.Count > 2 Then
-                                objItem.SubItems(2).Text = .strDescription
-                            Else
-                                objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, .strDescription))
-                            End If
-                            If objItem.SubItems.Count > 3 Then
-                                objItem.SubItems(3).Text = objSplit.strInvoiceNum
-                            Else
-                                objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objSplit.strInvoiceNum))
-                            End If
-                            If objItem.SubItems.Count > 4 Then
-                                objItem.SubItems(4).Text = objSplit.strPONumber
-                            Else
-                                objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objSplit.strPONumber))
-                            End If
-                            If objItem.SubItems.Count > 5 Then
-                                objItem.SubItems(5).Text = Utilities.strFormatCurrency(objSplit.curAmount)
-                            Else
-                                objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(objSplit.curAmount)))
-                            End If
+                            objItem.SubItems.Insert(1, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, .strNumber))
+                            objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, .strDescription))
+                            objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objSplit.strInvoiceNum))
+                            objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, objSplit.strPONumber))
+                            objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(objSplit.curAmount)))
                             curTotalApplied = curTotalApplied + objSplit.curAmount
-                            If objItem.SubItems.Count > 6 Then
-                                objItem.SubItems(6).Text = mobjCompany.objCategories.strTranslateKey(objSplit.strCategoryKey)
-                            Else
-                                objItem.SubItems.Insert(6, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing,
-                                    mobjCompany.objCategories.strTranslateKey(objSplit.strCategoryKey)))
-                            End If
+                            objItem.SubItems.Insert(6, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing,
+                                mobjCompany.objCategories.strTranslateKey(objSplit.strCategoryKey)))
                         End With
                     End If
                 Next objSplit
@@ -1726,7 +1691,7 @@ Friend Class TrxForm
         End Try
     End Sub
 
-    Private Function blnFindPayee(ByRef strPayee As String, ByRef strCategory As String, ByRef strNumber As String, _
+    Private Function blnFindPayee(ByRef strPayee As String, ByRef strCategory As String, ByRef strNumber As String,
                                   ByRef strBudget As String, ByRef strAmount As String, ByRef strMemo As String) As Boolean
 
         Dim colPayees As VB6XmlNodeList
@@ -1843,90 +1808,90 @@ Friend Class TrxForm
     End Sub
 
     Private Sub txtSplitPONum_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
-        _txtSplitPONum_0.TextChanged, _
-        _txtSplitPONum_1.TextChanged, _
-        _txtSplitPONum_2.TextChanged, _
-        _txtSplitPONum_3.TextChanged, _
-        _txtSplitPONum_4.TextChanged, _
-        _txtSplitPONum_5.TextChanged, _
-        _txtSplitPONum_6.TextChanged, _
-        _txtSplitPONum_7.TextChanged, _
-        _txtSplitPONum_8.TextChanged, _
+        _txtSplitPONum_0.TextChanged,
+        _txtSplitPONum_1.TextChanged,
+        _txtSplitPONum_2.TextChanged,
+        _txtSplitPONum_3.TextChanged,
+        _txtSplitPONum_4.TextChanged,
+        _txtSplitPONum_5.TextChanged,
+        _txtSplitPONum_6.TextChanged,
+        _txtSplitPONum_7.TextChanged,
+        _txtSplitPONum_8.TextChanged,
         _txtSplitPONum_9.TextChanged
         Dim index As Short = CShort(CType(eventSender, TextBox).Tag)
         maudtSplits(index + 1 + mintSplitOffset).strPONumber = txtSplitPONum(index).Text
     End Sub
 
     Private Sub txtSplitInvoiceNum_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
-        _txtSplitInvoiceNum_0.TextChanged, _
-        _txtSplitInvoiceNum_1.TextChanged, _
-        _txtSplitInvoiceNum_2.TextChanged, _
-        _txtSplitInvoiceNum_3.TextChanged, _
-        _txtSplitInvoiceNum_4.TextChanged, _
-        _txtSplitInvoiceNum_5.TextChanged, _
-        _txtSplitInvoiceNum_6.TextChanged, _
-        _txtSplitInvoiceNum_7.TextChanged, _
-        _txtSplitInvoiceNum_8.TextChanged, _
+        _txtSplitInvoiceNum_0.TextChanged,
+        _txtSplitInvoiceNum_1.TextChanged,
+        _txtSplitInvoiceNum_2.TextChanged,
+        _txtSplitInvoiceNum_3.TextChanged,
+        _txtSplitInvoiceNum_4.TextChanged,
+        _txtSplitInvoiceNum_5.TextChanged,
+        _txtSplitInvoiceNum_6.TextChanged,
+        _txtSplitInvoiceNum_7.TextChanged,
+        _txtSplitInvoiceNum_8.TextChanged,
         _txtSplitInvoiceNum_9.TextChanged
         Dim index As Short = CShort(CType(eventSender, TextBox).Tag)
         maudtSplits(index + 1 + mintSplitOffset).strInvoiceNum = txtSplitInvoiceNum(index).Text
     End Sub
 
     Private Sub txtSplitInvoiceDate_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
-        _txtSplitInvoiceDate_0.TextChanged, _
-        _txtSplitInvoiceDate_1.TextChanged, _
-        _txtSplitInvoiceDate_2.TextChanged, _
-        _txtSplitInvoiceDate_3.TextChanged, _
-        _txtSplitInvoiceDate_4.TextChanged, _
-        _txtSplitInvoiceDate_5.TextChanged, _
-        _txtSplitInvoiceDate_6.TextChanged, _
-        _txtSplitInvoiceDate_7.TextChanged, _
-        _txtSplitInvoiceDate_8.TextChanged, _
+        _txtSplitInvoiceDate_0.TextChanged,
+        _txtSplitInvoiceDate_1.TextChanged,
+        _txtSplitInvoiceDate_2.TextChanged,
+        _txtSplitInvoiceDate_3.TextChanged,
+        _txtSplitInvoiceDate_4.TextChanged,
+        _txtSplitInvoiceDate_5.TextChanged,
+        _txtSplitInvoiceDate_6.TextChanged,
+        _txtSplitInvoiceDate_7.TextChanged,
+        _txtSplitInvoiceDate_8.TextChanged,
         _txtSplitInvoiceDate_9.TextChanged
         Dim index As Short = CShort(CType(eventSender, TextBox).Tag)
         maudtSplits(index + 1 + mintSplitOffset).strInvoiceDate = txtSplitInvoiceDate(index).Text
     End Sub
 
     Private Sub txtSplitDueDate_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
-        _txtSplitDueDate_0.TextChanged, _
-        _txtSplitDueDate_1.TextChanged, _
-        _txtSplitDueDate_2.TextChanged, _
-        _txtSplitDueDate_3.TextChanged, _
-        _txtSplitDueDate_4.TextChanged, _
-        _txtSplitDueDate_5.TextChanged, _
-        _txtSplitDueDate_6.TextChanged, _
-        _txtSplitDueDate_7.TextChanged, _
-        _txtSplitDueDate_8.TextChanged, _
+        _txtSplitDueDate_0.TextChanged,
+        _txtSplitDueDate_1.TextChanged,
+        _txtSplitDueDate_2.TextChanged,
+        _txtSplitDueDate_3.TextChanged,
+        _txtSplitDueDate_4.TextChanged,
+        _txtSplitDueDate_5.TextChanged,
+        _txtSplitDueDate_6.TextChanged,
+        _txtSplitDueDate_7.TextChanged,
+        _txtSplitDueDate_8.TextChanged,
         _txtSplitDueDate_9.TextChanged
         Dim index As Short = CShort(CType(eventSender, TextBox).Tag)
         maudtSplits(index + 1 + mintSplitOffset).strDueDate = txtSplitDueDate(index).Text
     End Sub
 
     Private Sub txtSplitTerms_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
-        _txtSplitTerms_0.TextChanged, _
-        _txtSplitTerms_1.TextChanged, _
-        _txtSplitTerms_2.TextChanged, _
-        _txtSplitTerms_3.TextChanged, _
-        _txtSplitTerms_4.TextChanged, _
-        _txtSplitTerms_5.TextChanged, _
-        _txtSplitTerms_6.TextChanged, _
-        _txtSplitTerms_7.TextChanged, _
-        _txtSplitTerms_8.TextChanged, _
+        _txtSplitTerms_0.TextChanged,
+        _txtSplitTerms_1.TextChanged,
+        _txtSplitTerms_2.TextChanged,
+        _txtSplitTerms_3.TextChanged,
+        _txtSplitTerms_4.TextChanged,
+        _txtSplitTerms_5.TextChanged,
+        _txtSplitTerms_6.TextChanged,
+        _txtSplitTerms_7.TextChanged,
+        _txtSplitTerms_8.TextChanged,
         _txtSplitTerms_9.TextChanged
         Dim index As Short = CShort(CType(eventSender, TextBox).Tag)
         maudtSplits(index + 1 + mintSplitOffset).strTerms = txtSplitTerms(index).Text
     End Sub
 
     Private Sub txtSplitAmount_KeyPress(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.KeyPressEventArgs) Handles _
-        _txtSplitAmount_0.KeyPress, _
-        _txtSplitAmount_1.KeyPress, _
-        _txtSplitAmount_2.KeyPress, _
-        _txtSplitAmount_3.KeyPress, _
-        _txtSplitAmount_4.KeyPress, _
-        _txtSplitAmount_5.KeyPress, _
-        _txtSplitAmount_6.KeyPress, _
-        _txtSplitAmount_7.KeyPress, _
-        _txtSplitAmount_8.KeyPress, _
+        _txtSplitAmount_0.KeyPress,
+        _txtSplitAmount_1.KeyPress,
+        _txtSplitAmount_2.KeyPress,
+        _txtSplitAmount_3.KeyPress,
+        _txtSplitAmount_4.KeyPress,
+        _txtSplitAmount_5.KeyPress,
+        _txtSplitAmount_6.KeyPress,
+        _txtSplitAmount_7.KeyPress,
+        _txtSplitAmount_8.KeyPress,
         _txtSplitAmount_9.KeyPress
         Dim KeyAscii As Integer = Asc(eventArgs.KeyChar)
         Dim index As Integer = CShort(CType(eventSender, TextBox).Tag)
@@ -2031,15 +1996,15 @@ Friend Class TrxForm
     End Sub
 
     Private Sub txtSplitAmount_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
-        _txtSplitAmount_0.TextChanged, _
-        _txtSplitAmount_1.TextChanged, _
-        _txtSplitAmount_2.TextChanged, _
-        _txtSplitAmount_3.TextChanged, _
-        _txtSplitAmount_4.TextChanged, _
-        _txtSplitAmount_5.TextChanged, _
-        _txtSplitAmount_6.TextChanged, _
-        _txtSplitAmount_7.TextChanged, _
-        _txtSplitAmount_8.TextChanged, _
+        _txtSplitAmount_0.TextChanged,
+        _txtSplitAmount_1.TextChanged,
+        _txtSplitAmount_2.TextChanged,
+        _txtSplitAmount_3.TextChanged,
+        _txtSplitAmount_4.TextChanged,
+        _txtSplitAmount_5.TextChanged,
+        _txtSplitAmount_6.TextChanged,
+        _txtSplitAmount_7.TextChanged,
+        _txtSplitAmount_8.TextChanged,
         _txtSplitAmount_9.TextChanged
         Dim index As Integer = CInt(CType(eventSender, TextBox).Tag)
         Dim intSplitIndex As Integer
@@ -2059,15 +2024,15 @@ Friend Class TrxForm
     End Function
 
     Private Sub txtSplitMemo_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
-        _txtSplitMemo_0.TextChanged, _
-        _txtSplitMemo_1.TextChanged, _
-        _txtSplitMemo_2.TextChanged, _
-        _txtSplitMemo_3.TextChanged, _
-        _txtSplitMemo_4.TextChanged, _
-        _txtSplitMemo_5.TextChanged, _
-        _txtSplitMemo_6.TextChanged, _
-        _txtSplitMemo_7.TextChanged, _
-        _txtSplitMemo_8.TextChanged, _
+        _txtSplitMemo_0.TextChanged,
+        _txtSplitMemo_1.TextChanged,
+        _txtSplitMemo_2.TextChanged,
+        _txtSplitMemo_3.TextChanged,
+        _txtSplitMemo_4.TextChanged,
+        _txtSplitMemo_5.TextChanged,
+        _txtSplitMemo_6.TextChanged,
+        _txtSplitMemo_7.TextChanged,
+        _txtSplitMemo_8.TextChanged,
         _txtSplitMemo_9.TextChanged
         Dim index As Short = CShort(CType(eventSender, TextBox).Tag)
         maudtSplits(index + 1 + mintSplitOffset).strMemo = txtSplitMemo(index).Text
@@ -2077,12 +2042,12 @@ Friend Class TrxForm
 
     Private Function blnValidateBudget() As Boolean
         blnValidateBudget = True
-        If Not Utilities.blnIsValidDate(txtBudgetEnds.Text) Then
-            ValidationError("Invalid budget ending date.")
+        If Not Utilities.blnIsValidDate(txtBudgetStarts.Text) Then
+            ValidationError("Invalid budget starting date.")
             Exit Function
         End If
-        If CDate(txtBudgetEnds.Text) < CDate(txtDate.Text) Then
-            ValidationError("Budget ending date may not be before transaction date.")
+        If CDate(txtBudgetStarts.Text) > CDate(txtDate.Text) Then
+            ValidationError("Budget starting date may not be after transaction date.")
             Exit Function
         End If
         If Not Utilities.blnIsValidAmount(txtBudgetLimit.Text) Then
@@ -2099,19 +2064,19 @@ Friend Class TrxForm
     Private Sub SaveBudget()
         Dim objTrxManager As BudgetTrxManager
         Dim strBudgetKey As String
-        Dim datBudgetEnds As Date
+        Dim datBudgetStarts As Date
         strBudgetKey = strGetStringTranslatorKeyFromCombo(cboBudgetName, mobjCompany.objBudgets)
-        datBudgetEnds = CDate(txtBudgetEnds.Text)
+        datBudgetStarts = CDate(txtBudgetStarts.Text)
         If mblnEditMode Then
             objTrxManager = mobjReg.objGetBudgetTrxManager(mlngIndex)
             objTrxManager.UpdateStart()
             objTrxManager.objTrx.UpdateStartBudget(CDate(txtDate.Text), txtDescription.Text, txtMemo.Text, blnAwaitingReview(),
                                      blnAutoGenerated(), intRepeatSeq(), strRepeatKey(),
-                                     CDec(txtBudgetLimit.Text), datBudgetEnds, strBudgetKey, mobjReg.datOldestBudgetEndAllowed)
+                                     CDec(txtBudgetLimit.Text), datBudgetStarts, strBudgetKey, mobjReg.datOldestBudgetEndAllowed)
             objTrxManager.UpdateEnd(New LogChange, mstrLogTitle)
         Else
             Dim objTrx As BudgetTrx = New BudgetTrx(mobjReg)
-            objTrx.NewStartBudget(True, CDate(txtDate.Text), txtDescription.Text, txtMemo.Text, blnAwaitingReview(), blnAutoGenerated(), intRepeatSeq(), strRepeatKey(), CDec(txtBudgetLimit.Text), datBudgetEnds, strBudgetKey)
+            objTrx.NewStartBudget(True, CDate(txtDate.Text), txtDescription.Text, txtMemo.Text, blnAwaitingReview(), blnAutoGenerated(), intRepeatSeq(), strRepeatKey(), CDec(txtBudgetLimit.Text), datBudgetStarts, strBudgetKey)
             mobjReg.NewAddEnd(objTrx, New LogAdd, mstrLogTitle)
         End If
     End Sub
@@ -2169,15 +2134,15 @@ Friend Class TrxForm
     End Function
 
     Private Sub chkChoose_CheckStateChanged(sender As Object, e As EventArgs) Handles _
-        _chkChoose_0.CheckStateChanged, _
-        _chkChoose_1.CheckStateChanged, _
-        _chkChoose_2.CheckStateChanged, _
-        _chkChoose_3.CheckStateChanged, _
-        _chkChoose_4.CheckStateChanged, _
-        _chkChoose_5.CheckStateChanged, _
-        _chkChoose_6.CheckStateChanged, _
-        _chkChoose_7.CheckStateChanged, _
-        _chkChoose_8.CheckStateChanged, _
+        _chkChoose_0.CheckStateChanged,
+        _chkChoose_1.CheckStateChanged,
+        _chkChoose_2.CheckStateChanged,
+        _chkChoose_3.CheckStateChanged,
+        _chkChoose_4.CheckStateChanged,
+        _chkChoose_5.CheckStateChanged,
+        _chkChoose_6.CheckStateChanged,
+        _chkChoose_7.CheckStateChanged,
+        _chkChoose_8.CheckStateChanged,
         _chkChoose_9.CheckStateChanged
 
         Dim index As Short = CShort(CType(sender, CheckBox).Tag)
@@ -2185,15 +2150,15 @@ Friend Class TrxForm
     End Sub
 
     Private Sub cboSplitCategory_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles _
-        _cboSplitCategory_0.TextChanged, _
-        _cboSplitCategory_1.TextChanged, _
-        _cboSplitCategory_2.TextChanged, _
-        _cboSplitCategory_3.TextChanged, _
-        _cboSplitCategory_4.TextChanged, _
-        _cboSplitCategory_5.TextChanged, _
-        _cboSplitCategory_6.TextChanged, _
-        _cboSplitCategory_7.TextChanged, _
-        _cboSplitCategory_8.TextChanged, _
+        _cboSplitCategory_0.TextChanged,
+        _cboSplitCategory_1.TextChanged,
+        _cboSplitCategory_2.TextChanged,
+        _cboSplitCategory_3.TextChanged,
+        _cboSplitCategory_4.TextChanged,
+        _cboSplitCategory_5.TextChanged,
+        _cboSplitCategory_6.TextChanged,
+        _cboSplitCategory_7.TextChanged,
+        _cboSplitCategory_8.TextChanged,
         _cboSplitCategory_9.TextChanged
 
         Try
@@ -2210,15 +2175,15 @@ Friend Class TrxForm
     End Sub
 
     Private Sub cboSplitCategory_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles _
-        _cboSplitCategory_0.KeyDown, _
-        _cboSplitCategory_1.KeyDown, _
-        _cboSplitCategory_2.KeyDown, _
-        _cboSplitCategory_3.KeyDown, _
-        _cboSplitCategory_4.KeyDown, _
-        _cboSplitCategory_5.KeyDown, _
-        _cboSplitCategory_6.KeyDown, _
-        _cboSplitCategory_7.KeyDown, _
-        _cboSplitCategory_8.KeyDown, _
+        _cboSplitCategory_0.KeyDown,
+        _cboSplitCategory_1.KeyDown,
+        _cboSplitCategory_2.KeyDown,
+        _cboSplitCategory_3.KeyDown,
+        _cboSplitCategory_4.KeyDown,
+        _cboSplitCategory_5.KeyDown,
+        _cboSplitCategory_6.KeyDown,
+        _cboSplitCategory_7.KeyDown,
+        _cboSplitCategory_8.KeyDown,
         _cboSplitCategory_9.KeyDown
 
         Dim KeyCode As Integer = e.KeyCode
@@ -2228,15 +2193,15 @@ Friend Class TrxForm
     End Sub
 
     Private Sub cboSplitCategory_SelectedIndexChanged(ByVal sender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
-        _cboSplitCategory_0.SelectedIndexChanged, _
-        _cboSplitCategory_1.SelectedIndexChanged, _
-        _cboSplitCategory_2.SelectedIndexChanged, _
-        _cboSplitCategory_3.SelectedIndexChanged, _
-        _cboSplitCategory_4.SelectedIndexChanged, _
-        _cboSplitCategory_5.SelectedIndexChanged, _
-        _cboSplitCategory_6.SelectedIndexChanged, _
-        _cboSplitCategory_7.SelectedIndexChanged, _
-        _cboSplitCategory_8.SelectedIndexChanged, _
+        _cboSplitCategory_0.SelectedIndexChanged,
+        _cboSplitCategory_1.SelectedIndexChanged,
+        _cboSplitCategory_2.SelectedIndexChanged,
+        _cboSplitCategory_3.SelectedIndexChanged,
+        _cboSplitCategory_4.SelectedIndexChanged,
+        _cboSplitCategory_5.SelectedIndexChanged,
+        _cboSplitCategory_6.SelectedIndexChanged,
+        _cboSplitCategory_7.SelectedIndexChanged,
+        _cboSplitCategory_8.SelectedIndexChanged,
         _cboSplitCategory_9.SelectedIndexChanged
 
         Try
@@ -2254,15 +2219,15 @@ Friend Class TrxForm
     End Sub
 
     Private Sub cboSplitBudget_TextChanged(sender As Object, e As EventArgs) Handles _
-        _cboSplitBudget_0.TextChanged, _
-        _cboSplitBudget_1.TextChanged, _
-        _cboSplitBudget_2.TextChanged, _
-        _cboSplitBudget_3.TextChanged, _
-        _cboSplitBudget_4.TextChanged, _
-        _cboSplitBudget_5.TextChanged, _
-        _cboSplitBudget_6.TextChanged, _
-        _cboSplitBudget_7.TextChanged, _
-        _cboSplitBudget_8.TextChanged, _
+        _cboSplitBudget_0.TextChanged,
+        _cboSplitBudget_1.TextChanged,
+        _cboSplitBudget_2.TextChanged,
+        _cboSplitBudget_3.TextChanged,
+        _cboSplitBudget_4.TextChanged,
+        _cboSplitBudget_5.TextChanged,
+        _cboSplitBudget_6.TextChanged,
+        _cboSplitBudget_7.TextChanged,
+        _cboSplitBudget_8.TextChanged,
         _cboSplitBudget_9.TextChanged
 
         Try
@@ -2279,15 +2244,15 @@ Friend Class TrxForm
     End Sub
 
     Private Sub cboSplitBudget_KeyDown(sender As Object, e As KeyEventArgs) Handles _
-        _cboSplitBudget_0.KeyDown, _
-        _cboSplitBudget_1.KeyDown, _
-        _cboSplitBudget_2.KeyDown, _
-        _cboSplitBudget_3.KeyDown, _
-        _cboSplitBudget_4.KeyDown, _
-        _cboSplitBudget_5.KeyDown, _
-        _cboSplitBudget_6.KeyDown, _
-        _cboSplitBudget_7.KeyDown, _
-        _cboSplitBudget_8.KeyDown, _
+        _cboSplitBudget_0.KeyDown,
+        _cboSplitBudget_1.KeyDown,
+        _cboSplitBudget_2.KeyDown,
+        _cboSplitBudget_3.KeyDown,
+        _cboSplitBudget_4.KeyDown,
+        _cboSplitBudget_5.KeyDown,
+        _cboSplitBudget_6.KeyDown,
+        _cboSplitBudget_7.KeyDown,
+        _cboSplitBudget_8.KeyDown,
         _cboSplitBudget_9.KeyDown
 
         Dim KeyCode As Integer = e.KeyCode
@@ -2297,15 +2262,15 @@ Friend Class TrxForm
     End Sub
 
     Private Sub cboSplitBudget_SelectedIndexChanged(sender As Object, e As EventArgs) Handles _
-        _cboSplitBudget_0.SelectedIndexChanged, _
-        _cboSplitBudget_1.SelectedIndexChanged, _
-        _cboSplitBudget_2.SelectedIndexChanged, _
-        _cboSplitBudget_3.SelectedIndexChanged, _
-        _cboSplitBudget_4.SelectedIndexChanged, _
-        _cboSplitBudget_5.SelectedIndexChanged, _
-        _cboSplitBudget_6.SelectedIndexChanged, _
-        _cboSplitBudget_7.SelectedIndexChanged, _
-        _cboSplitBudget_8.SelectedIndexChanged, _
+        _cboSplitBudget_0.SelectedIndexChanged,
+        _cboSplitBudget_1.SelectedIndexChanged,
+        _cboSplitBudget_2.SelectedIndexChanged,
+        _cboSplitBudget_3.SelectedIndexChanged,
+        _cboSplitBudget_4.SelectedIndexChanged,
+        _cboSplitBudget_5.SelectedIndexChanged,
+        _cboSplitBudget_6.SelectedIndexChanged,
+        _cboSplitBudget_7.SelectedIndexChanged,
+        _cboSplitBudget_8.SelectedIndexChanged,
         _cboSplitBudget_9.SelectedIndexChanged
 
         Try

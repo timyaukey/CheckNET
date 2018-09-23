@@ -38,7 +38,7 @@ Friend Class LiveBudgetListForm
                 objTrx = mobjReg.objTrx(lngIndex)
                 If objTrx.lngType = Trx.TrxType.Budget Then
                     With DirectCast(objTrx, BudgetTrx)
-                        If .datDate <= datTarget And .datBudgetEnds >= datTarget Then
+                        If .InBudgetPeriod(datTarget) Then
                             objItem = UITools.ListViewAdd(lvwMatches)
                             objItem.Text = Utilities.strFormatDate(.datDate)
 

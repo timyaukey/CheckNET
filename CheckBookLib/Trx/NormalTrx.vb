@@ -391,7 +391,7 @@ Public Class NormalTrx
     '$Description Apply the Split objects in this Trx to any matching budgets.
     '   Does nothing except for normal Trx.
 
-    Public Sub ApplyToBudgets()
+    Private Sub ApplyToBudgets()
         Dim blnNoMatch As Boolean
         mblnAnyUnmatchedBudget = False
         For Each objSplit As TrxSplit In mcolSplits

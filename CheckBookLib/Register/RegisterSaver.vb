@@ -91,7 +91,7 @@ Public Class RegisterSaver
     Private Sub SaveTrxBudget()
         SaveTrxShared("TB")
         With DirectCast(mobjTrx, BudgetTrx)
-            SaveLine("BE" & Utilities.strFormatDate(.datBudgetEnds))
+            SaveLine("BE" & Utilities.strFormatDate(.datBudgetStarts))
             SaveLine("KB" & .strBudgetKey)
             SaveLine("A$" & Utilities.strFormatCurrency(.curBudgetLimit))
         End With

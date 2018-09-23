@@ -66,7 +66,7 @@ Public Structure TrxToCreate
     Dim adatSplits() As SplitToCreate
     Dim curAmount As Decimal
     Dim strBudgetKey As String
-    Dim datBudgetEnds As Date
+    Dim datBudgetStarts As Date
     Dim lngBudgetUnit As Trx.RepeatUnit
     Dim intBudgetNumber As Integer
     Dim strTransferKey As String

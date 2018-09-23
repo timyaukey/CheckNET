@@ -163,12 +163,12 @@
 	Public WithEvents lvwAppliedTo As System.Windows.Forms.ListView
 	Public WithEvents txtBudgetApplied As System.Windows.Forms.TextBox
 	Public WithEvents cboBudgetName As System.Windows.Forms.ComboBox
-	Public WithEvents txtBudgetEnds As System.Windows.Forms.TextBox
+	Public WithEvents txtBudgetStarts As System.Windows.Forms.TextBox
 	Public WithEvents txtBudgetLimit As System.Windows.Forms.TextBox
 	Public WithEvents lblOriginallyApplied As System.Windows.Forms.Label
 	Public WithEvents lblBudgetApplied As System.Windows.Forms.Label
 	Public WithEvents lblBudgetName As System.Windows.Forms.Label
-	Public WithEvents lblBudgetEnds As System.Windows.Forms.Label
+	Public WithEvents lblBudgetStarts As System.Windows.Forms.Label
 	Public WithEvents lblBudgetLimit As System.Windows.Forms.Label
 	Public WithEvents frmBudget As System.Windows.Forms.GroupBox
 	Public WithEvents cmdCopyInvoiceNumbers As System.Windows.Forms.Button
@@ -351,12 +351,12 @@
         Me._lvwAppliedTo_ColumnHeader_7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.txtBudgetApplied = New System.Windows.Forms.TextBox()
         Me.cboBudgetName = New System.Windows.Forms.ComboBox()
-        Me.txtBudgetEnds = New System.Windows.Forms.TextBox()
+        Me.txtBudgetStarts = New System.Windows.Forms.TextBox()
         Me.txtBudgetLimit = New System.Windows.Forms.TextBox()
         Me.lblOriginallyApplied = New System.Windows.Forms.Label()
         Me.lblBudgetApplied = New System.Windows.Forms.Label()
         Me.lblBudgetName = New System.Windows.Forms.Label()
-        Me.lblBudgetEnds = New System.Windows.Forms.Label()
+        Me.lblBudgetStarts = New System.Windows.Forms.Label()
         Me.lblBudgetLimit = New System.Windows.Forms.Label()
         Me.cmdCopyInvoiceNumbers = New System.Windows.Forms.Button()
         Me.cmdPrintCheck = New System.Windows.Forms.Button()
@@ -2510,12 +2510,12 @@
         Me.frmBudget.Controls.Add(Me.lvwAppliedTo)
         Me.frmBudget.Controls.Add(Me.txtBudgetApplied)
         Me.frmBudget.Controls.Add(Me.cboBudgetName)
-        Me.frmBudget.Controls.Add(Me.txtBudgetEnds)
+        Me.frmBudget.Controls.Add(Me.txtBudgetStarts)
         Me.frmBudget.Controls.Add(Me.txtBudgetLimit)
         Me.frmBudget.Controls.Add(Me.lblOriginallyApplied)
         Me.frmBudget.Controls.Add(Me.lblBudgetApplied)
         Me.frmBudget.Controls.Add(Me.lblBudgetName)
-        Me.frmBudget.Controls.Add(Me.lblBudgetEnds)
+        Me.frmBudget.Controls.Add(Me.lblBudgetStarts)
         Me.frmBudget.Controls.Add(Me.lblBudgetLimit)
         Me.frmBudget.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.frmBudget.ForeColor = System.Drawing.SystemColors.ControlText
@@ -2610,17 +2610,17 @@
         '
         'txtBudgetEnds
         '
-        Me.txtBudgetEnds.AcceptsReturn = True
-        Me.txtBudgetEnds.BackColor = System.Drawing.SystemColors.Window
-        Me.txtBudgetEnds.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtBudgetEnds.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtBudgetEnds.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtBudgetEnds.Location = New System.Drawing.Point(435, 14)
-        Me.txtBudgetEnds.MaxLength = 0
-        Me.txtBudgetEnds.Name = "txtBudgetEnds"
-        Me.txtBudgetEnds.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtBudgetEnds.Size = New System.Drawing.Size(78, 20)
-        Me.txtBudgetEnds.TabIndex = 156
+        Me.txtBudgetStarts.AcceptsReturn = True
+        Me.txtBudgetStarts.BackColor = System.Drawing.SystemColors.Window
+        Me.txtBudgetStarts.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtBudgetStarts.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtBudgetStarts.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtBudgetStarts.Location = New System.Drawing.Point(435, 14)
+        Me.txtBudgetStarts.MaxLength = 0
+        Me.txtBudgetStarts.Name = "txtBudgetEnds"
+        Me.txtBudgetStarts.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtBudgetStarts.Size = New System.Drawing.Size(78, 20)
+        Me.txtBudgetStarts.TabIndex = 156
         '
         'txtBudgetLimit
         '
@@ -2679,17 +2679,17 @@
         '
         'lblBudgetEnds
         '
-        Me.lblBudgetEnds.BackColor = System.Drawing.SystemColors.Control
-        Me.lblBudgetEnds.Cursor = System.Windows.Forms.Cursors.Default
-        Me.lblBudgetEnds.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblBudgetEnds.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblBudgetEnds.Location = New System.Drawing.Point(348, 16)
-        Me.lblBudgetEnds.Name = "lblBudgetEnds"
-        Me.lblBudgetEnds.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblBudgetEnds.Size = New System.Drawing.Size(80, 15)
-        Me.lblBudgetEnds.TabIndex = 155
-        Me.lblBudgetEnds.Text = "Budget Ends:"
-        Me.lblBudgetEnds.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.lblBudgetStarts.BackColor = System.Drawing.SystemColors.Control
+        Me.lblBudgetStarts.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblBudgetStarts.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblBudgetStarts.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.lblBudgetStarts.Location = New System.Drawing.Point(348, 16)
+        Me.lblBudgetStarts.Name = "lblBudgetStarts"
+        Me.lblBudgetStarts.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblBudgetStarts.Size = New System.Drawing.Size(80, 15)
+        Me.lblBudgetStarts.TabIndex = 155
+        Me.lblBudgetStarts.Text = "Budget Starts:"
+        Me.lblBudgetStarts.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'lblBudgetLimit
         '

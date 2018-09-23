@@ -106,6 +106,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Shared.bud" />
+    <None Include="Data\Shared.cat" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -122,6 +124,15 @@
       <Name>CheckBookLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\PayeeList.xml" />
+    <Content Include="Data\QIFImportTrxTypes.xml" />
+    <Content Include="Data\Security.xml" />
+    <Content Include="Data\UTData\UTRegLoad1.txt" />
+    <Content Include="Data\UTData\UTStringTran1.txt" />
+    <Content Include="Data\UTSecurity.xml" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

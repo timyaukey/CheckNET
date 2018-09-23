@@ -150,34 +150,34 @@ Friend Class UTMainForm
         objUTReg.Validate("Check 7 trx", 2, 1, 7, 5, 4, 6, 3)
 
         objUTReg = objLoadBuild(8)
-        objUTReg.Validate("Check 8 trx", 2, 1, 7, 5, 4, 8, 6, 3)
+        objUTReg.Validate("Check 8 trx", 2, 1, 7, 5, 8, 4, 6, 3)
 
         objUTReg = objLoadBuild(9)
-        objUTReg.Validate("Check 9 trx", 2, 1, 7, 5, 4, 9, 8, 6, 3)
+        objUTReg.Validate("Check 9 trx", 2, 1, 7, 5, 9, 8, 4, 6, 3)
 
         objUTReg = objLoadBuild(10)
-        objUTReg.Validate("Check 10 trx", 2, 1, 7, 5, 4, 10, 9, 8, 6, 3)
+        objUTReg.Validate("Check 10 trx", 2, 1, 7, 5, 9, 8, 4, 10, 6, 3)
 
         objUTReg = objLoadBuild(11)
-        objUTReg.Validate("Check 11 trx", 2, 1, 7, 5, 4, 10, 9, 8, 11, 6, 3)
+        objUTReg.Validate("Check 11 trx", 2, 1, 7, 5, 9, 8, 11, 4, 10, 6, 3)
 
         objUTReg = objLoadBuild(12)
-        objUTReg.Validate("Check 12 trx", 2, 1, 7, 5, 4, 10, 9, 8, 11, 12, 6, 3)
+        objUTReg.Validate("Check 12 trx", 2, 1, 7, 5, 9, 8, 11, 12, 4, 10, 6, 3)
 
         objUTReg = objLoadBuild(13)
-        objUTReg.Validate("Check 13 trx", 2, 1, 7, 5, 4, 10, 9, 8, 11, 12, 13, 6, 3)
+        objUTReg.Validate("Check 13 trx", 2, 1, 7, 5, 9, 8, 11, 12, 13, 4, 10, 6, 3)
 
         objUTReg = objLoadBuild(14)
-        objUTReg.Validate("Check 14 trx", 2, 1, 7, 5, 4, 10, 9, 8, 11, 12, 13, 14, 6, 3)
+        objUTReg.Validate("Check 14 trx", 2, 1, 7, 5, 9, 8, 11, 12, 14, 13, 4, 10, 6, 3)
 
         objUTReg = objLoadBuild(15)
-        objUTReg.Validate("Check 15 trx", 2, 1, 7, 5, 15, 4, 10, 9, 8, 11, 12, 13, 14, 6, 3)
+        objUTReg.Validate("Check 15 trx", 2, 1, 7, 5, 9, 8, 11, 12, 14, 13, 15, 4, 10, 6, 3)
 
         objUTReg = objLoadBuild(16)
-        objUTReg.Validate("Check 16 trx", 2, 1, 7, 5, 15, 4, 10, 9, 8, 11, 12, 13, 14, 16, 6, 3)
+        objUTReg.Validate("Check 16 trx", 2, 1, 7, 5, 9, 8, 11, 12, 14, 13, 16, 15, 4, 10, 6, 3)
 
         objUTReg = objLoadBuild(17)
-        objUTReg.Validate("Check 17 trx", 2, 1, 7, 5, 15, 4, 10, 9, 8, 11, 12, 13, 14, 16, 17, 6, 3)
+        objUTReg.Validate("Check 17 trx", 2, 1, 7, 5, 9, 8, 11, 12, 14, 13, 16, 17, 15, 4, 10, 6, 3)
     End Sub
 
     Private Function objLoadBuild(ByVal intTrxCount As Short) As UTRegister
@@ -203,7 +203,7 @@ Friend Class UTMainForm
             objUTReg.LoadNormal("1002", #5/1/2000#, -50.99D)
         End If
         If intTrxCount >= 4 Then
-            objUTReg.LoadBudget(#4/10/2000#, -200D, #4/20/2000#, "bud1")
+            objUTReg.LoadBudget(#4/20/2000#, -200D, #4/10/2000#, "bud1")
         End If
         If intTrxCount >= 5 Then
             'One day before start of budget range, so won't apply to #4.
@@ -230,7 +230,7 @@ Friend Class UTMainForm
         End If
         If intTrxCount >= 10 Then
             '#8 will be applied to this.
-            objUTReg.LoadBudget(#4/10/2000#, -100D, #4/20/2000#, "bud2")
+            objUTReg.LoadBudget(#4/20/2000#, -100D, #4/10/2000#, "bud2")
             objUTReg.SetTrxAmount(10, -80D)
         End If
         If intTrxCount >= 11 Then
@@ -244,7 +244,7 @@ Friend Class UTMainForm
             objUTReg.LoadNormal("1502", #4/13/2000#, -2D, strBudgetKey:="bud2")
         End If
         If intTrxCount >= 13 Then
-            objUTReg.LoadBudget(#4/14/2000#, -50D, #4/17/2000#, "bud3")
+            objUTReg.LoadBudget(#4/17/2000#, -50D, #4/14/2000#, "bud3")
         End If
         If intTrxCount >= 14 Then
             'Splits applied to different budgets.
@@ -254,7 +254,7 @@ Friend Class UTMainForm
         End If
         If intTrxCount >= 15 Then
             'Credit budget.
-            objUTReg.LoadBudget(#4/10/2000#, 100D, #4/20/2000#, "bud4")
+            objUTReg.LoadBudget(#4/20/2000#, 100D, #4/10/2000#, "bud4")
         End If
         If intTrxCount >= 16 Then
             'Apply to credit budget.
@@ -353,20 +353,20 @@ Friend Class UTMainForm
 
             gUTSetSubTest("Test add for budgets")
 
-            .AddBudget(#6/16/2000#, -50D, #6/20/2000#, "bud1", "First add", 4, 4, 6)
-            .Validate("", 1, 3, 5, 6, 2, 4)
+            .AddBudget(#6/16/2000#, -50D, #6/20/2000#, "bud1", "First add", 5, 5, 6)
+            .Validate("", 1, 3, 5, 2, 6, 4)
             gUTAssert(.strBudgetsChanged = "", "Did not expect budgets to change")
 
             .SetTrxAmount(6, -46D)
-            .AddNormal("Card", #6/17/2000#, -4D, "Second add", 6, 4, 6, strBudgetKey:="bud1")
-            .Validate("", 1, 3, 5, 6, 2, 7, 4)
-            gUTAssert(.strBudgetsChanged = ",4", "Expected budgets to change")
+            .AddNormal("Card", #6/17/2000#, -4D, "Second add", 5, 5, 5, strBudgetKey:="bud1")
+            .Validate("", 1, 3, 5, 2, 7, 6, 4)
+            gUTAssert(.strBudgetsChanged = ",6", "Expected budgets to change")
 
             gUTSetSubTest("Test update for budgets")
 
             'Add a second budget trx
-            .AddBudget(#6/17/2000#, -100D, #6/17/2000#, "bud2", "First add", 6, 6, 8)
-            .Validate("", 1, 3, 5, 6, 2, 8, 7, 4)
+            .AddBudget(#6/17/2000#, -100D, #6/17/2000#, "bud2", "First add", 5, 5, 8)
+            .Validate("", 1, 3, 5, 2, 8, 7, 6, 4)
 
             'Update the normal trx currently applied to the first budget,
             'and make it split between the first and second budgets instead.
@@ -374,50 +374,58 @@ Friend Class UTMainForm
             'even though we change the trx amount both the new and old amounts
             'come out of budgets (though different budgets) so it nets out the
             'same in the end.
-            .SetTrxAmount(6, -28D)
             .SetTrxAmount(8, -82.5D)
             .SetTrxAmount(7, -39.5D)
-            .UpdateNormal("Card", #6/17/2000#, -22D, "Second add", 7, 7, 4, 7, strBudgetKey:="bud1", vcurAmount2:=-17.5, strBudgetKey2:="bud2")
-            .Validate("", 1, 3, 5, 6, 2, 8, 7, 4)
-            gUTAssert(.strBudgetsChanged = ",4,4,6", "Expected 3 budget changes")
+            .SetTrxAmount(6, -28D)
+            .UpdateNormal("Card", #6/17/2000#, -22D, "Second add", 6, 6, 5, 6, strBudgetKey:="bud1", vcurAmount2:=-17.5, strBudgetKey2:="bud2")
+            .Validate("", 1, 3, 5, 2, 8, 7, 6, 4)
+            gUTAssert(.strBudgetsChanged = ",7,7,5", "Expected 3 budget changes")
 
             'Reduce the limit of the first budget to cause it to be exhausted.
             .SetTrxAmount(6, 0.0D)
-            .UpdateBudget(#6/16/2000#, -21.94, #6/20/2000#, "bud1", "Third update", 4, 4, 4, 8)
-            .Validate("", 1, 3, 5, 6, 2, 8, 7, 4)
+            .UpdateBudget(#6/20/2000#, -21.94, #6/16/2000#, "bud1", "Third update", 7, 7, 7, 8)
+            .Validate("", 1, 3, 5, 2, 8, 7, 6, 4)
 
             gUTSetSubTest("Test delete")
 
             'Delete from either end and the middle.
             .DeleteEntry(1, 1, 7, "First delete")
-            .Validate("", 3, 5, 6, 2, 8, 7, 4)
+            .Validate("", 3, 5, 2, 8, 7, 6, 4)
 
             .DeleteEntry(7, 0, 0, "Second delete")
-            .Validate("", 3, 5, 6, 2, 8, 7)
+            .Validate("", 3, 5, 2, 8, 7, 6)
 
             .DeleteEntry(4, 4, 5, "Third delete")
-            .Validate("", 3, 5, 6, 8, 7)
+            .Validate("", 3, 5, 2, 7, 6)
 
             'Delete one of the budgets, to show the applied splits are un-applied.
-            objTrx = objUTReg.objReg.objTrx(5)
-            gUTAssert(Not DirectCast(objTrx, NormalTrx).objSecondSplit.objBudget Is Nothing, "Expected split to be applied")
-            .DeleteEntry(4, 4, 4, "Fourth delete")
-            .Validate("", 3, 5, 6, 7)
-            gUTAssert(DirectCast(objTrx, NormalTrx).objSecondSplit.objBudget Is Nothing, "Expected split to be un-applied")
+            objTrx = objUTReg.objReg.objTrx(4)
+            gUTAssert(Not DirectCast(objTrx, NormalTrx).objFirstSplit.objBudget Is Nothing, "Expected first split to be applied")
+            gUTAssert(DirectCast(objTrx, NormalTrx).objSecondSplit.objBudget Is Nothing, "Expected second split to not be applied")
+            .DeleteEntry(5, 0, 0, "Fourth delete")
+            .Validate("", 3, 5, 2, 7)
+            gUTAssert(DirectCast(objTrx, NormalTrx).objFirstSplit.objBudget Is Nothing, "Expected split to be un-applied")
+
+            .AddBudget(#6/20/2000#, -32D, #6/17/2000#, "bud1", "re-add", 5, 5, 5)
+            .SetTrxAmount(9, -10D)
+            .Validate("", 3, 5, 2, 7, 9)
 
             'Delete a normal trx applied to a budget, to show it un-applies.
-            .SetTrxAmount(6, -21.94D)
-            .DeleteEntry(4, 3, 3, "Fifth delete")
-            .Validate("", 3, 5, 6)
+            .SetTrxAmount(9, -32D)
+            .DeleteEntry(4, 4, 4, "Fifth delete")
+            .Validate("", 3, 5, 2, 9)
 
             'Delete the remaining trx.
-            .DeleteEntry(3, 0, 0, "Sixth delete")
-            .Validate("", 3, 5)
+            .DeleteEntry(4, 0, 0, "Sixth delete")
+            .Validate("", 3, 5, 2)
 
-            .DeleteEntry(1, 1, 1, "Seventh delete")
-            .Validate("", 5)
+            .DeleteEntry(1, 1, 2, "Seventh delete")
+            .Validate("", 5, 2)
 
-            .DeleteEntry(1, 0, 0, "Eighth delete")
+            .DeleteEntry(1, 1, 1, "Eighth delete")
+            .Validate("", 2)
+
+            .DeleteEntry(1, 0, 0, "Ninth delete")
             .Validate("")
 
         End With
@@ -862,19 +870,6 @@ Friend Class UTMainForm
         gUTSetSubTest("Verify 1")
 
         objTrx = objReg.objTrx(1)
-        With DirectCast(objTrx, BudgetTrx)
-            gUTAssert(.lngType = Trx.TrxType.Budget, "Wrong type")
-            gUTAssert(.datDate = #4/10/2000#, "Wrong date")
-            gUTAssert(.strDescription = "General household", "Wrong description")
-            gUTAssert(.curAmount = (-150D + 10.99), "Wrong amount")
-            gUTAssert(.datBudgetEnds = #4/16/2000#, "Wrong budget end date")
-            gUTAssert(.strBudgetKey = "bud1", "Wrong budget key")
-            gUTAssert(.curBudgetLimit = -150D, "Wrong budget limit")
-        End With
-
-        gUTSetSubTest("Verify 2")
-
-        objTrx = objReg.objTrx(2)
         With DirectCast(objTrx, NormalTrx)
             gUTAssert(.lngType = Trx.TrxType.Normal, "Wrong type")
             gUTAssert(.datDate = #4/13/2000#, "Wrong date")
@@ -892,9 +887,9 @@ Friend Class UTMainForm
             gUTAssert(objSplit.strMemo = "sunflower", "Wrong split2 memo")
         End With
 
-        gUTSetSubTest("Verify 3")
+        gUTSetSubTest("Verify 2")
 
-        objTrx = objReg.objTrx(3)
+        objTrx = objReg.objTrx(2)
         With DirectCast(objTrx, NormalTrx)
             gUTAssert(.lngType = Trx.TrxType.Normal, "Wrong type")
             gUTAssert(.datDate = #4/15/2000#, "Wrong date")
@@ -902,6 +897,19 @@ Friend Class UTMainForm
             gUTAssert(.strImportKey = "imp1", "Wrong import key")
             gUTAssert(.strRepeatKey = "rep1", "Wrong repeat key")
             gUTAssert(.curNormalMatchRange = 22.01, "Wrong match range")
+        End With
+
+        gUTSetSubTest("Verify 3")
+
+        objTrx = objReg.objTrx(3)
+        With DirectCast(objTrx, BudgetTrx)
+            gUTAssert(.lngType = Trx.TrxType.Budget, "Wrong type")
+            gUTAssert(.datDate = #4/16/2000#, "Wrong date")
+            gUTAssert(.strDescription = "General household", "Wrong description")
+            gUTAssert(.curAmount = (-150D + 10.99), "Wrong amount")
+            gUTAssert(.datBudgetStarts = #4/10/2000#, "Wrong budget end date")
+            gUTAssert(.strBudgetKey = "bud1", "Wrong budget key")
+            gUTAssert(.curBudgetLimit = -150D, "Wrong budget limit")
         End With
 
         gUTSetSubTest("Verify 4")
@@ -1248,22 +1256,22 @@ Friend Class UTMainForm
         With objUTReg
             .LoadNormal("1500", #6/1/2000#, -10D)
             .LoadNormal("1501", #6/1/2000#, -20D, strRepeatKey:="r1", intRepeatSeq:=1)
-            .LoadBudget(#5/15/2000#, -1000D, #6/10/2000#, "01")
-            .LoadBudget(#5/20/2000#, -500D, #6/12/2000#, "02", strRepeatKey:="r2", intRepeatSeq:=1)
+            .LoadBudget(#6/10/2000#, -1000D, #5/15/2000#, "01")
+            .LoadBudget(#6/12/2000#, -500D, #5/20/2000#, "02", strRepeatKey:="r2", intRepeatSeq:=1)
             .objReg.LoadApply()
             .objReg.LoadFinish()
-            .Validate("", 3, 4, 1, 2)
+            .Validate("", 1, 2, 3, 4)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
-            .AddBudget(#6/3/2000#, -100D, #6/20/2000#, "03", "", 5, 5, 5, strRepeatKey:="r2", intRepeatSeq:=2)
-            .Validate("", 3, 4, 1, 2, 5)
+            .AddBudget(#6/20/2000#, -100D, #6/3/2000#, "03", "", 5, 5, 5, strRepeatKey:="r2", intRepeatSeq:=2)
+            .Validate("", 1, 2, 3, 4, 5)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 3, "count")
-            .UpdateBudget(#7/1/2000#, -100D, #7/10/2000#, "01", "", 1, 5, 1, 5)
+            .UpdateBudget(#7/10/2000#, -100D, #7/1/2000#, "01", "", 3, 5, 3, 5)
             .SetTrxAmount(3, -100D)
-            .SetTrxDate(3, #7/1/2000#)
-            .Validate("", 4, 1, 2, 5, 3)
+            .SetTrxDate(3, #7/10/2000#)
+            .Validate("", 1, 2, 4, 5, 3)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 3, "count")
             .DeleteEntry(1, 1, 4, "")
-            .Validate("", 1, 2, 5, 3)
+            .Validate("", 2, 4, 5, 3)
         End With
     End Sub
 
@@ -1446,7 +1454,7 @@ Friend Class UTMainForm
     End Sub
 
     Private Sub UTMainForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        Dim strDataPathValue As String = My.Application.Info.DirectoryPath & "\Data"
+        Dim strDataPathValue As String = My.Application.Info.DirectoryPath & "\..\..\Data"
         mobjCompany = New Company(strDataPathValue)
         mobjCompany.LoadGlobalLists()
         mobjCompany.objSecurity.CreateEmpty()

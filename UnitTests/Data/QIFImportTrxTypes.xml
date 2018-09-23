@@ -1,0 +1,22 @@
+<Table>
+  <TrxType Before="BTOT DE" Number="DEP">
+</TrxType>
+  <TrxType Before="DIRE" After="9268 D" MinAfter="4" Number="DEP">
+  </TrxType>
+  <TrxType Before="DEPO" After="65 OREGON" MinAfter="9" Number="DEP">
+  </TrxType>
+  <TrxType Before="CUS" Number="DEP" After="SIT" MinAfter="3">
+  </TrxType>
+  <TrxType Before="SETTLEMENT DI" Number="DEP">
+  </TrxType>
+  <TrxType Before="BILL PAY:" Number="Pmt">
+  </TrxType>
+  <TrxType Before="POS MAC" Number="Card">
+  </TrxType>
+  <TrxType Before="POS EXA" Number="Card">
+  </TrxType>
+  <TrxType Before="SILLYY" After="BOY">
+</TrxType>
+  <TrxType Before="DIRECT WITHDRAWAL," Number="Pmt">
+  </TrxType>
+</Table>
