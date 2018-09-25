@@ -10,7 +10,7 @@ namespace BudgetDashboard
 
     public class PluginFactory : IPluginFactory
     {
-        public IEnumerable<ToolPlugin> colGetPlugins(IHostUI hostUI_)
+        public IEnumerable<IPlugin> colGetPlugins(IHostUI hostUI_)
         {
             yield return new DashboardPlugin(hostUI_);
         }

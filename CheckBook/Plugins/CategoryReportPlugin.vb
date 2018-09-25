@@ -8,7 +8,6 @@ Public Class CategoryReportPlugin
 
     Public Sub New(hostUI_ As IHostUI)
         MyBase.New(hostUI_)
-        SortCode = 2
     End Sub
 
     Public Overrides Sub ClickHandler(sender As Object, e As EventArgs)
@@ -23,5 +22,9 @@ Public Class CategoryReportPlugin
 
     Public Overrides Function GetMenuTitle() As String
         Return "Totals By Category"
+    End Function
+
+    Public Overrides Function SortCode() As Integer
+        Return 2
     End Function
 End Class

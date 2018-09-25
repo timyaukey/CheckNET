@@ -8,7 +8,6 @@ Public Class PersonalBusinessPlugin
 
     Public Sub New(hostUI_ As IHostUI)
         MyBase.New(hostUI_)
-        SortCode = 110
     End Sub
 
     Public Overrides Sub ClickHandler(sender As Object, e As EventArgs)
@@ -28,5 +27,9 @@ Public Class PersonalBusinessPlugin
 
     Public Overrides Function GetMenuTitle() As String
         Return "Adjust Account For Personal Use"
+    End Function
+
+    Public Overrides Function SortCode() As Integer
+        Return 110
     End Function
 End Class

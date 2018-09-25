@@ -8,7 +8,7 @@ Imports CheckBookLib
 Public Class ImportPlugins
     Implements IPluginFactory
 
-    Public Iterator Function colGetPlugins(hostUI_ As IHostUI) As IEnumerable(Of ToolPlugin) _
+    Public Iterator Function colGetPlugins(hostUI_ As IHostUI) As IEnumerable(Of IPlugin) _
         Implements IPluginFactory.colGetPlugins
 
         Yield New BankImportOFX(hostUI_)

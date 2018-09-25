@@ -8,7 +8,6 @@ Public Class CheckImportStandard
 
     Public Sub New(ByVal hostUI_ As IHostUI)
         MyBase.New(hostUI_)
-        SortCode = 1
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String
@@ -21,5 +20,9 @@ Public Class CheckImportStandard
 
     Public Overrides Function GetTrxReader() As ITrxReader
         Return New ReadChecks(Utilities.objClipboardReader(), "(clipboard)", New ReadChecksSpec(1, 0, 2, 3, -1))
+    End Function
+
+    Public Overrides Function SortCode() As Integer
+        Return 1
     End Function
 End Class

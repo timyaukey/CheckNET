@@ -92,6 +92,7 @@
     <Compile Include="Logging\LogDeleteNull.vb" />
     <Compile Include="MoneyFormat.vb" />
     <Compile Include="Plugins\IHostUI.vb" />
+    <Compile Include="Plugins\PluginInterfaces.vb" />
     <Compile Include="Plugins\IPluginFactory.vb" />
     <Compile Include="Plugins\ReportPlugin.vb" />
     <Compile Include="Plugins\ToolPlugin.vb" />

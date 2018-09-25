@@ -12,5 +12,5 @@ Option Explicit On
 ''' </summary>
 
 Public Interface IPluginFactory
-    Function colGetPlugins(ByVal hostUI_ As IHostUI) As IEnumerable(Of ToolPlugin)
+    Function colGetPlugins(ByVal hostUI_ As IHostUI) As IEnumerable(Of IPlugin)
 End Interface

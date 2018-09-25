@@ -8,7 +8,6 @@ Public Class FindLiveBudgetsPlugin
 
     Public Sub New(hostUI_ As IHostUI)
         MyBase.New(hostUI_)
-        SortCode = 4
     End Sub
 
     Public Overrides Sub ClickHandler(sender As Object, e As EventArgs)
@@ -28,5 +27,9 @@ Public Class FindLiveBudgetsPlugin
 
     Public Overrides Function GetMenuTitle() As String
         Return "Find Live Budgets"
+    End Function
+
+    Public Overrides Function SortCode() As Integer
+        Return 4
     End Function
 End Class

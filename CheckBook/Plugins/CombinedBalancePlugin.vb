@@ -8,7 +8,6 @@ Public Class CombinedBalancePlugin
 
     Public Sub New(hostUI_ As IHostUI)
         MyBase.New(hostUI_)
-        SortCode = 120
     End Sub
 
     Public Overrides Sub ClickHandler(sender As Object, e As EventArgs)
@@ -63,5 +62,9 @@ Public Class CombinedBalancePlugin
 
     Public Overrides Function GetMenuTitle() As String
         Return "Combined Personal and Business Balance"
+    End Function
+
+    Public Overrides Function SortCode() As Integer
+        Return 120
     End Function
 End Class

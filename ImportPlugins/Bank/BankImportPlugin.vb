@@ -9,6 +9,7 @@ Imports CheckBookLib
 
 Public MustInherit Class BankImportPlugin
     Inherits TrxImportPlugin
+    Implements IBankImportPlugin
 
     Public Sub New(ByVal hostUI_ As IHostUI)
         MyBase.New(hostUI_)

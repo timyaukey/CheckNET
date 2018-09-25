@@ -8,7 +8,6 @@ Public Class ReconcilePlugin
 
     Public Sub New(hostUI_ As IHostUI)
         MyBase.New(hostUI_)
-        SortCode = 1
     End Sub
 
     Public Overrides Sub ClickHandler(sender As Object, e As EventArgs)
@@ -24,5 +23,9 @@ Public Class ReconcilePlugin
 
     Public Overrides Function GetMenuTitle() As String
         Return "Reconcile"
+    End Function
+
+    Public Overrides Function SortCode() As Integer
+        Return 1
     End Function
 End Class

@@ -12,7 +12,6 @@ namespace BudgetDashboard
         public DashboardPlugin(IHostUI hostUI)
             :base(hostUI)
         {
-            SortCode = 101;
         }
 
         public override void ClickHandler(object sender, EventArgs e)
@@ -39,6 +38,11 @@ namespace BudgetDashboard
         public override string GetMenuTitle()
         {
             return "Budget Dashboard";
+        }
+
+        public override int SortCode()
+        {
+            return 101;
         }
     }
 }

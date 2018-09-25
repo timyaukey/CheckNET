@@ -101,12 +101,12 @@ Friend Class CBMainForm
         MsgBox(strMessage, MsgBoxStyle.Information)
     End Sub
 
-    Private colBankImportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
-    Private colCheckImportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
-    Private colDepositImportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
-    Private colInvoiceImportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
-    Private colToolPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
-    Private colReportPlugins As List(Of ToolPlugin) = New List(Of ToolPlugin)
+    Private colBankImportPlugins As List(Of IBankImportPlugin) = New List(Of IBankImportPlugin)
+    Private colCheckImportPlugins As List(Of ICheckImportPlugin) = New List(Of ICheckImportPlugin)
+    Private colDepositImportPlugins As List(Of IDepositImportPlugin) = New List(Of IDepositImportPlugin)
+    Private colInvoiceImportPlugins As List(Of IInvoiceImportPlugin) = New List(Of IInvoiceImportPlugin)
+    Private colReportPlugins As List(Of IToolPlugin) = New List(Of IToolPlugin)
+    Private colToolPlugins As List(Of IToolPlugin) = New List(Of IToolPlugin)
 
     Private Sub LoadPlugins()
         LoadPluginsFromAssembly(Assembly.GetEntryAssembly())
@@ -120,8 +120,8 @@ Friend Class CBMainForm
         AddPluginsToMenu(mnuImportChecks, colCheckImportPlugins)
         AddPluginsToMenu(mnuImportDeposits, colDepositImportPlugins)
         AddPluginsToMenu(mnuImportInvoices, colInvoiceImportPlugins)
-        AddPluginsToMenu(mnuTools, colToolPlugins)
         AddPluginsToMenu(mnuRpt, colReportPlugins)
+        AddPluginsToMenu(mnuTools, colToolPlugins)
     End Sub
 
     Private Sub LoadPluginsFromAssembly(ByVal objAssembly As Assembly)
@@ -134,35 +134,37 @@ Friend Class CBMainForm
     End Sub
 
     Private Sub LoadPluginsFromFactory(ByVal objFactory As IPluginFactory)
-        For Each objPlugin As ToolPlugin In objFactory.colGetPlugins(Me)
-            If TypeOf objPlugin Is BankImportPlugin Then
-                colBankImportPlugins.Add(objPlugin)
-            ElseIf TypeOf objPlugin Is CheckImportPlugin Then
-                colCheckImportPlugins.Add(objPlugin)
-            ElseIf TypeOf objPlugin Is DepositImportPlugin Then
-                colDepositImportPlugins.Add(objPlugin)
-            ElseIf TypeOf objPlugin Is InvoiceImportPlugin Then
-                colInvoiceImportPlugins.Add(objPlugin)
-            ElseIf TypeOf objPlugin Is ReportPlugin Then
-                colReportPlugins.Add(objPlugin)
+        For Each objPlugin As IPlugin In objFactory.colGetPlugins(Me)
+            If TypeOf objPlugin Is IBankImportPlugin Then
+                colBankImportPlugins.Add(DirectCast(objPlugin, IBankImportPlugin))
+            ElseIf TypeOf objPlugin Is ICheckImportPlugin Then
+                colCheckImportPlugins.Add(DirectCast(objPlugin, ICheckImportPlugin))
+            ElseIf TypeOf objPlugin Is IDepositImportPlugin Then
+                colDepositImportPlugins.Add(DirectCast(objPlugin, IDepositImportPlugin))
+            ElseIf TypeOf objPlugin Is IInvoiceImportPlugin Then
+                colInvoiceImportPlugins.Add(DirectCast(objPlugin, IInvoiceImportPlugin))
+            ElseIf TypeOf objPlugin Is IReportPlugin Then
+                colReportPlugins.Add(DirectCast(objPlugin, IReportPlugin))
+            ElseIf TypeOf objPlugin Is IToolPlugin Then
+                colToolPlugins.Add(DirectCast(objPlugin, IToolPlugin))
             Else
-                colToolPlugins.Add(objPlugin)
+                'Plugin is of a type we don't know what to do with.
             End If
         Next
     End Sub
 
-    Private Sub AddPluginsToMenu(ByVal objMenu As ToolStripMenuItem, ByVal colPlugins As List(Of ToolPlugin))
+    Private Sub AddPluginsToMenu(Of TPlugin As IToolPlugin)(ByVal objMenu As ToolStripMenuItem, ByVal colPlugins As List(Of TPlugin))
         colPlugins.Sort(AddressOf PluginComparer)
-        For Each objPlugin As ToolPlugin In colPlugins
+        For Each objPlugin As IToolPlugin In colPlugins
             AddMenuOption(objMenu, objPlugin)
         Next
     End Sub
 
-    Private Function PluginComparer(ByVal objPlugin1 As ToolPlugin, ByVal objPlugin2 As ToolPlugin) As Integer
-        Return objPlugin1.SortCode.CompareTo(objPlugin2.SortCode)
+    Private Function PluginComparer(ByVal objPlugin1 As IToolPlugin, ByVal objPlugin2 As IToolPlugin) As Integer
+        Return objPlugin1.SortCode().CompareTo(objPlugin2.SortCode())
     End Function
 
-    Private Sub AddMenuOption(ByVal parent As ToolStripMenuItem, ByVal plugin As ToolPlugin)
+    Private Sub AddMenuOption(ByVal parent As ToolStripMenuItem, ByVal plugin As IToolPlugin)
         Dim mnuNewItem As ToolStripMenuItem = New ToolStripMenuItem()
         mnuNewItem.Text = plugin.GetMenuTitle()
         AddHandler mnuNewItem.Click, AddressOf plugin.ClickHandler
@@ -173,7 +175,6 @@ Friend Class CBMainForm
         If mblnCancelStart Then
             If Not frmStartup Is Nothing Then
                 frmStartup.Close()
-                'UPGRADE_NOTE: Object frmStartup may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
                 frmStartup = Nothing
             End If
             Me.Close()

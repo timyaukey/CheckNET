@@ -3,6 +3,7 @@ Option Explicit On
 
 Public MustInherit Class ReportPlugin
     Inherits ToolPlugin
+    Implements IReportPlugin
 
     Public Sub New(ByVal hostUI_ As IHostUI)
         MyBase.New(hostUI_)
