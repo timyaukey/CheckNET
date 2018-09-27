@@ -5,9 +5,8 @@ Imports CheckBookLib
 
 Friend Class SearchForm
     Inherits System.Windows.Forms.Form
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
-    Private mfrmReg As RegisterForm
+    Private mobjHostUI As IHostUI
     Private WithEvents mobjReg As Register
     Private mobjAccount As Account
     Private mobjCompany As Company
@@ -33,12 +32,12 @@ Friend Class SearchForm
     Private mdatLastEnd As Date
     Private mblnLastIncludeGenerated As Boolean
 
-    Public Sub ShowMe(ByVal objReg_ As Register, ByVal frmReg_ As RegisterForm)
+    Public Sub ShowMe(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register)
 
+        mobjHostUI = objHostUI_
         mobjReg = objReg_
         mobjAccount = mobjReg.objAccount
-        mobjCompany = mobjAccount.objCompany
-        mfrmReg = frmReg_
+        mobjCompany = mobjHostUI.objCompany
         colCheckedTrx = New List(Of Trx)
         mcurAmountMatched = 0
         mcurAmountTotal = 0

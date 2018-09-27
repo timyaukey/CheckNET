@@ -6,6 +6,7 @@ Imports CheckBookLib
 Friend Class RegisterForm
 	Inherits System.Windows.Forms.Form
 
+    Private mobjHostUI As IHostUI
     Private mobjCompany As Company
     Private mobjAccount As Account
     Private WithEvents mobjReg As Register
@@ -40,11 +41,12 @@ Friend Class RegisterForm
     Private mlngCOLOR_REAL As System.Drawing.Color = System.Drawing.Color.FromArgb(255, 255, 250) '&H80000005
     Private mlngCOLOR_REPLICA As System.Drawing.Color = System.Drawing.Color.FromArgb(&H80, &H40, &H0)
 
-    Public Sub ShowMe(ByVal objReg_ As Register)
+    Public Sub ShowMe(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register)
 
+        mobjHostUI = objHostUI_
         mobjAccount = objReg_.objAccount
         mobjReg = objReg_
-        mobjCompany = mobjAccount.objCompany
+        mobjCompany = mobjHostUI.objCompany
         mdatDefaultNewDate = Today
         Me.Show()
 
@@ -160,7 +162,7 @@ Friend Class RegisterForm
         Try
             If mfrmSearch Is Nothing Then
                 mfrmSearch = New SearchForm
-                mfrmSearch.ShowMe(mobjReg, Me)
+                mfrmSearch.ShowMe(mobjHostUI, mobjReg)
             Else
                 mfrmSearch.Show()
                 mfrmSearch.Activate()

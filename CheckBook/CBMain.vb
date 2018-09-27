@@ -72,7 +72,7 @@ Public Module CBMain
         End Try
     End Function
 
-    Friend Sub gShowRegister(ByVal objAccount As Account, ByVal objReg As Register)
+    Friend Sub gShowRegister(ByVal objHostUI As IHostUI, ByVal objReg As Register)
 
         Dim frm As System.Windows.Forms.Form
         Dim frmReg As RegisterForm
@@ -89,7 +89,7 @@ Public Module CBMain
         Next frm
 
         frmReg = New RegisterForm
-        frmReg.ShowMe(objReg)
+        frmReg.ShowMe(objHostUI, objReg)
     End Sub
 
     Public Sub gSaveChangedAccounts(ByVal objCompany As Company)

@@ -23,12 +23,14 @@ Friend Class ShowRegisterForm
         End Property
     End Structure
 
+    Private mobjHostUI As IHostUI
     Private mobjCompany As Company
     Private maudtElement() As ShowRegElement
     Private mintElements As Integer
 
-    Public Sub ShowWindow(ByVal objCompany As Company)
-        mobjCompany = objCompany
+    Public Sub ShowWindow(ByVal objHostUI As IHostUI)
+        mobjHostUI = objHostUI
+        mobjCompany = mobjHostUI.objCompany
         Me.Show()
     End Sub
 
@@ -261,7 +263,7 @@ Friend Class ShowRegisterForm
                     MsgBox("You must select a register, not an account.", MsgBoxStyle.Information)
                     Exit Sub
                 End If
-                gShowRegister(.objAccount, .objSelectedReg)
+                gShowRegister(mobjHostUI, .objSelectedReg)
             End With
             'Me.Close()
 

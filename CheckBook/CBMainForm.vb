@@ -85,7 +85,7 @@ Friend Class CBMainForm
             For Each objAccount In mobjCompany.colAccounts
                 For Each objReg In objAccount.colRegisters
                     If objReg.blnShowInitially Then
-                        gShowRegister(objAccount, objReg)
+                        gShowRegister(Me, objReg)
                     End If
                 Next
             Next
@@ -340,7 +340,7 @@ Friend Class CBMainForm
             Next frm2
 
             frm = New ShowRegisterForm
-            frm.ShowWindow(mobjCompany)
+            frm.ShowWindow(Me)
 
             Exit Sub
         Catch ex As Exception
