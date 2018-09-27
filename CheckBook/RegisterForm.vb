@@ -215,11 +215,9 @@ Friend Class RegisterForm
 
     Private Sub cmdNewBudget_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewBudget.Click
         Try
-            Using frm As TrxForm = frmCreateTrxForm()
-                If frm.blnAddBudget(mobjReg, mdatDefaultNewDate, "RegForm.NewBudget") Then
-                    MsgBox("Canceled.")
-                End If
-            End Using
+            If mobjHostUI.blnAddBudgetTrx(mobjReg, mdatDefaultNewDate, "RegForm.NewBudget") Then
+                MsgBox("Canceled.")
+            End If
             DiagnosticValidate()
             Exit Sub
         Catch ex As Exception
@@ -229,21 +227,15 @@ Friend Class RegisterForm
 
     Private Sub cmdNewXfer_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewXfer.Click
         Try
-            Using frm As TrxForm = frmCreateTrxForm()
-                If frm.blnAddTransfer(mobjReg, mdatDefaultNewDate, "RegForm.NewXfer") Then
-                    MsgBox("Canceled.")
-                End If
-            End Using
+            If mobjHostUI.blnAddTransferTrx(mobjReg, mdatDefaultNewDate, "RegForm.NewXfer") Then
+                MsgBox("Canceled.")
+            End If
             DiagnosticValidate()
             Exit Sub
         Catch ex As Exception
             gTopException(ex)
         End Try
     End Sub
-
-    Private Function frmCreateTrxForm() As TrxForm
-        Return New TrxForm
-    End Function
 
     Private Sub RegisterForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Try

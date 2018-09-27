@@ -2457,10 +2457,10 @@
         Me.cboTransferTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboTransferTo.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboTransferTo.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboTransferTo.Location = New System.Drawing.Point(226, 39)
+        Me.cboTransferTo.Location = New System.Drawing.Point(245, 38)
         Me.cboTransferTo.Name = "cboTransferTo"
         Me.cboTransferTo.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cboTransferTo.Size = New System.Drawing.Size(179, 22)
+        Me.cboTransferTo.Size = New System.Drawing.Size(232, 22)
         Me.cboTransferTo.TabIndex = 163
         '
         'txtTransferAmount
@@ -2470,7 +2470,7 @@
         Me.txtTransferAmount.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtTransferAmount.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtTransferAmount.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtTransferAmount.Location = New System.Drawing.Point(226, 15)
+        Me.txtTransferAmount.Location = New System.Drawing.Point(245, 14)
         Me.txtTransferAmount.MaxLength = 0
         Me.txtTransferAmount.Name = "txtTransferAmount"
         Me.txtTransferAmount.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -2484,10 +2484,10 @@
         Me.lblTransferTo.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblTransferTo.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblTransferTo.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblTransferTo.Location = New System.Drawing.Point(130, 41)
+        Me.lblTransferTo.Location = New System.Drawing.Point(130, 40)
         Me.lblTransferTo.Name = "lblTransferTo"
         Me.lblTransferTo.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblTransferTo.Size = New System.Drawing.Size(71, 16)
+        Me.lblTransferTo.Size = New System.Drawing.Size(90, 16)
         Me.lblTransferTo.TabIndex = 162
         Me.lblTransferTo.Text = "Transfer To:"
         '
@@ -2497,10 +2497,10 @@
         Me.lblTransferAmount.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblTransferAmount.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblTransferAmount.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblTransferAmount.Location = New System.Drawing.Point(130, 17)
+        Me.lblTransferAmount.Location = New System.Drawing.Point(130, 18)
         Me.lblTransferAmount.Name = "lblTransferAmount"
         Me.lblTransferAmount.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblTransferAmount.Size = New System.Drawing.Size(85, 16)
+        Me.lblTransferAmount.Size = New System.Drawing.Size(109, 16)
         Me.lblTransferAmount.TabIndex = 160
         Me.lblTransferAmount.Text = "Transfer Amount:"
         '
@@ -2608,7 +2608,7 @@
         Me.cboBudgetName.Size = New System.Drawing.Size(121, 22)
         Me.cboBudgetName.TabIndex = 158
         '
-        'txtBudgetEnds
+        'txtBudgetStarts
         '
         Me.txtBudgetStarts.AcceptsReturn = True
         Me.txtBudgetStarts.BackColor = System.Drawing.SystemColors.Window
@@ -2617,7 +2617,7 @@
         Me.txtBudgetStarts.ForeColor = System.Drawing.SystemColors.WindowText
         Me.txtBudgetStarts.Location = New System.Drawing.Point(435, 14)
         Me.txtBudgetStarts.MaxLength = 0
-        Me.txtBudgetStarts.Name = "txtBudgetEnds"
+        Me.txtBudgetStarts.Name = "txtBudgetStarts"
         Me.txtBudgetStarts.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtBudgetStarts.Size = New System.Drawing.Size(78, 20)
         Me.txtBudgetStarts.TabIndex = 156
@@ -2677,7 +2677,7 @@
         Me.lblBudgetName.Text = "Budget Name:"
         Me.lblBudgetName.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
-        'lblBudgetEnds
+        'lblBudgetStarts
         '
         Me.lblBudgetStarts.BackColor = System.Drawing.SystemColors.Control
         Me.lblBudgetStarts.Cursor = System.Windows.Forms.Cursors.Default

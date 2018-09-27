@@ -239,6 +239,26 @@ Friend Class CBMainForm
         End Using
     End Function
 
+    Private Function blnAddBudgetTrx(ByVal objReg As Register, ByVal datDefaultDate As DateTime,
+                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddBudgetTrx
+        Using frm As TrxForm = New TrxForm()
+            If frm.blnAddBudget(objReg, datDefaultDate, strLogTitle) Then
+                Return True
+            End If
+        End Using
+        Return False
+    End Function
+
+    Private Function blnAddTransferTrx(ByVal objReg As Register, ByVal datDefaultDate As DateTime,
+                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddTransferTrx
+        Using frm As TrxForm = New TrxForm()
+            If frm.blnAddTransfer(objReg, datDefaultDate, strLogTitle) Then
+                Return True
+            End If
+        End Using
+        Return False
+    End Function
+
     Private Function blnUpdateTrx(ByVal objTrx As Trx, ByRef datDefaultDate As Date,
                                   ByVal strLogTitle As String) As Boolean Implements IHostUI.blnUpdateTrx
         Using frmEdit As TrxForm = New TrxForm()

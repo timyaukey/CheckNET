@@ -21,6 +21,10 @@ Public Interface IHostUI
     Function blnAddNormalTrxSilent(ByVal objTrx As NormalTrx,
                              ByVal datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                              ByVal strLogTitle As String) As Boolean
+    Function blnAddBudgetTrx(ByVal objReg As Register, ByVal datDefaultDate As DateTime,
+                             ByVal strLogTitle As String) As Boolean
+    Function blnAddTransferTrx(ByVal objReg As Register, ByVal datDefaultDate As DateTime,
+                               ByVal strLogTitle As String) As Boolean
     Function blnUpdateTrx(ByVal objTrx As Trx, ByRef datDefaultDate As Date,
                           ByVal strLogTitle As String) As Boolean
 End Interface
