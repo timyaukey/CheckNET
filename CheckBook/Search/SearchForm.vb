@@ -422,11 +422,9 @@ Friend Class SearchForm
         Try
             Dim objTrx As NormalTrx = New NormalTrx(mobjReg)
             objTrx.NewEmptyNormal(mdatDefaultDate)
-            Using frm As TrxForm = frmCreateTrxForm()
-                If frm.blnAddNormal(objTrx, mdatDefaultDate, True, "SearchForm.NewNormal") Then
-                    MsgBox("Canceled.")
-                End If
-            End Using
+            If mobjHostUI.blnAddNormalTrx(objTrx, mdatDefaultDate, True, "SearchForm.NewNormal") Then
+                MsgBox("Canceled.")
+            End If
             mobjReg.ValidateRegister()
             Exit Sub
         Catch ex As Exception
@@ -620,12 +618,11 @@ Friend Class SearchForm
             End If
 
             'Now let them edit it and possibly save it.
-            Using frmTrx As TrxForm = frmCreateTrxForm()
-                If frmTrx.blnAddNormal(objNewTrx, datResult, False, "SearchForm.CombineNew") Then
-                    'They did not save it.
-                    Exit Sub
-                End If
-            End Using
+            If mobjHostUI.blnAddNormalTrx(objNewTrx, datResult, False, "SearchForm.CombineNew") Then
+                'They did not save it.
+                MsgBox("Canceled.")
+                Exit Sub
+            End If
             objNewTrx = mobjReg.objNormalTrx(mobjReg.lngCurrentTrxIndex())
 
             'Now delete old trx.
