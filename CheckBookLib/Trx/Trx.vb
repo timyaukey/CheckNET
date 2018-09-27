@@ -330,6 +330,10 @@ Public MustInherit Class Trx
         mcurAmount = curNewAmount
     End Sub
 
+    Public Sub SetReg(ByVal objNewReg As Register)
+        mobjReg = objNewReg
+    End Sub
+
     '$Description Called only by Register.lngFixBalances().
 
     Public Sub SetBalance(ByVal curNewBal As Decimal)

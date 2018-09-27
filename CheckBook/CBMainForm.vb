@@ -217,22 +217,22 @@ Friend Class CBMainForm
         End Get
     End Property
 
-    Private Function blnAddNormalTrx(ByVal objReg As Register, ByVal objTrx As NormalTrx,
+    Private Function blnAddNormalTrx(ByVal objTrx As NormalTrx,
                                     ByVal datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrx
         Using frm As TrxForm = New TrxForm()
-            If frm.blnAddNormal(objReg, objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
+            If frm.blnAddNormal(objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
                 Return True
             End If
             Return False
         End Using
     End Function
 
-    Private Function blnAddNormalTrxSilent(ByVal objReg As Register, ByVal objTrx As NormalTrx,
+    Private Function blnAddNormalTrxSilent(ByVal objTrx As NormalTrx,
                                     ByVal datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrxSilent
         Using frm As TrxForm = New TrxForm()
-            If frm.blnAddNormalSilent(objReg, objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
+            If frm.blnAddNormalSilent(objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
                 Return True
             End If
             Return False

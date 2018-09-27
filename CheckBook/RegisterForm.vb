@@ -206,7 +206,7 @@ Friend Class RegisterForm
             Dim objTrx As NormalTrx = New NormalTrx(mobjReg)
             objTrx.NewEmptyNormal(mdatDefaultNewDate)
             Using frm As TrxForm = frmCreateTrxForm()
-                If frm.blnAddNormal(mobjReg, objTrx, mdatDefaultNewDate, True, "RegForm.NewNormal") Then
+                If frm.blnAddNormal(objTrx, mdatDefaultNewDate, True, "RegForm.NewNormal") Then
                     MsgBox("Canceled.")
                 End If
             End Using

@@ -283,7 +283,8 @@ Public Class BankImportForm
                             If Not .objMatchedReg Is Nothing Then
                                 'Insert .objImportedTrx in .objMatchedReg with .objImportedTrx.strImportKey
                                 Dim datDummy As DateTime
-                                If mobjHostUI.blnAddNormalTrxSilent(.objMatchedReg, .objImportedTrx, datDummy, True, "ImportAutoBatch") Then
+                                .objImportedTrx.SetReg(.objMatchedReg)
+                                If mobjHostUI.blnAddNormalTrxSilent(.objImportedTrx, datDummy, True, "ImportAutoBatch") Then
                                     MsgBox("Failed to insert transaction " + strDescribeItem(intItemIndex) + " required as part of a multi-part match.")
                                 End If
                                 .lngStatus = ImportStatus.mlngIMPSTS_NEW
@@ -780,7 +781,8 @@ Public Class BankImportForm
                     blnItemImported = mobjImportHandler.blnAlternateAutoNewHandling(objImportedTrx, mobjSelectedRegister)
                     'If we did not use alternate handling.
                     If Not blnItemImported Then
-                        If Not mobjHostUI.blnAddNormalTrxSilent(mobjSelectedRegister, objImportedTrx, datDummy, True, "ImportNewBatch") Then
+                        objImportedTrx.SetReg(mobjSelectedRegister)
+                        If Not mobjHostUI.blnAddNormalTrxSilent(objImportedTrx, datDummy, True, "ImportNewBatch") Then
                             blnItemImported = True
                         End If
                     End If
@@ -1379,7 +1381,8 @@ Public Class BankImportForm
             End If
 
             With maudtItem(intSelectedItemIndex())
-                If mobjHostUI.blnAddNormalTrx(mobjSelectedRegister, .objImportedTrx, datDummy, True, "Import.CreateNew") Then
+                .objImportedTrx.SetReg(mobjSelectedRegister)
+                If mobjHostUI.blnAddNormalTrx(.objImportedTrx, datDummy, True, "Import.CreateNew") Then
                     Exit Sub
                 End If
                 .lngStatus = ImportStatus.mlngIMPSTS_NEW
@@ -1410,7 +1413,8 @@ Public Class BankImportForm
                 If MsgBox("Create transaction " & strDescribeTrx(.objImportedTrx) & "?", MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton1, "Create Transaction") <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
-                If mobjHostUI.blnAddNormalTrxSilent(mobjSelectedRegister, .objImportedTrx, datDummy, True, "ImportNewSilent") Then
+                .objImportedTrx.SetReg(mobjSelectedRegister)
+                If mobjHostUI.blnAddNormalTrxSilent(.objImportedTrx, datDummy, True, "ImportNewSilent") Then
                     Exit Sub
                 End If
                 .lngStatus = ImportStatus.mlngIMPSTS_NEW

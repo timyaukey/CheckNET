@@ -67,11 +67,11 @@ Friend Class TrxForm
     '$Description Enter a new normal Trx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddNormal(ByVal objReg_ As Register, ByVal objTrx_ As NormalTrx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
+    Public Function blnAddNormal(ByVal objTrx_ As NormalTrx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
 
         Try
 
-            Init(objReg_, False, 0, Trx.TrxType.Normal, blnCheckInvoiceNum_, strLogTitle)
+            Init(objTrx_.objReg, False, 0, Trx.TrxType.Normal, blnCheckInvoiceNum_, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             SetSharedControls(objTrx_)
@@ -93,11 +93,11 @@ Friend Class TrxForm
     '   has validation errors.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddNormalSilent(ByVal objReg_ As Register, ByVal objTrx_ As NormalTrx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
+    Public Function blnAddNormalSilent(ByVal objTrx_ As NormalTrx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
 
         Try
 
-            Init(objReg_, False, 0, Trx.TrxType.Normal, blnCheckInvoiceNum_, strLogTitle)
+            Init(objTrx_.objReg, False, 0, Trx.TrxType.Normal, blnCheckInvoiceNum_, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             SetSharedControls(objTrx_)

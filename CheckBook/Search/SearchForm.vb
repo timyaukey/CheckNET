@@ -423,7 +423,7 @@ Friend Class SearchForm
             Dim objTrx As NormalTrx = New NormalTrx(mobjReg)
             objTrx.NewEmptyNormal(mdatDefaultDate)
             Using frm As TrxForm = frmCreateTrxForm()
-                If frm.blnAddNormal(mobjReg, objTrx, mdatDefaultDate, True, "SearchForm.NewNormal") Then
+                If frm.blnAddNormal(objTrx, mdatDefaultDate, True, "SearchForm.NewNormal") Then
                     MsgBox("Canceled.")
                 End If
             End Using
@@ -621,7 +621,7 @@ Friend Class SearchForm
 
             'Now let them edit it and possibly save it.
             Using frmTrx As TrxForm = frmCreateTrxForm()
-                If frmTrx.blnAddNormal(mobjReg, objNewTrx, datResult, False, "SearchForm.CombineNew") Then
+                If frmTrx.blnAddNormal(objNewTrx, datResult, False, "SearchForm.CombineNew") Then
                     'They did not save it.
                     Exit Sub
                 End If

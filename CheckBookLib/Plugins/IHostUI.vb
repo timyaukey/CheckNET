@@ -15,10 +15,10 @@ Public Interface IHostUI
         ByVal strSettingsKey As String) As String
     Function objGetCurrentRegister() As Register
     Function objGetMainForm() As System.Windows.Forms.Form
-    Function blnAddNormalTrx(ByVal objReg As Register, ByVal objTrx As NormalTrx,
+    Function blnAddNormalTrx(ByVal objTrx As NormalTrx,
                              ByVal datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                              ByVal strLogTitle As String) As Boolean
-    Function blnAddNormalTrxSilent(ByVal objReg As Register, ByVal objTrx As NormalTrx,
+    Function blnAddNormalTrxSilent(ByVal objTrx As NormalTrx,
                              ByVal datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                              ByVal strLogTitle As String) As Boolean
 End Interface
