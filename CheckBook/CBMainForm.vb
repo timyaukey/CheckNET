@@ -85,7 +85,7 @@ Friend Class CBMainForm
             For Each objAccount In mobjCompany.colAccounts
                 For Each objReg In objAccount.colRegisters
                     If objReg.blnShowInitially Then
-                        gShowRegister(Me, objReg)
+                        ShowRegister(objReg)
                     End If
                 Next
             Next
@@ -195,29 +195,29 @@ Friend Class CBMainForm
         End Try
     End Sub
 
-    Public Function strChooseFile(strWindowCaption As String, strFileType As String, strSettingsKey As String) _
+    Private Function strChooseFile(strWindowCaption As String, strFileType As String, strSettingsKey As String) _
         As String Implements IHostUI.strChooseFile
         Return CommonDialogControlForm.strChooseFile(strWindowCaption, strFileType, strSettingsKey)
     End Function
 
-    Public Function objGetCurrentRegister() As Register Implements IHostUI.objGetCurrentRegister
+    Private Function objGetCurrentRegister() As Register Implements IHostUI.objGetCurrentRegister
         If Not TypeOf Me.ActiveMdiChild Is RegisterForm Then
             Return Nothing
         End If
         Return CType(Me.ActiveMdiChild, RegisterForm).objReg
     End Function
 
-    Public Function objGetMainForm() As Form Implements IHostUI.objGetMainForm
+    Private Function objGetMainForm() As Form Implements IHostUI.objGetMainForm
         Return Me
     End Function
 
-    Public ReadOnly Property objCompany() As Company Implements IHostUI.objCompany
+    Private ReadOnly Property objCompany() As Company Implements IHostUI.objCompany
         Get
             Return mobjCompany
         End Get
     End Property
 
-    Public Function blnAddNormalTrx(ByVal objReg As Register, ByVal objTrx As NormalTrx,
+    Private Function blnAddNormalTrx(ByVal objReg As Register, ByVal objTrx As NormalTrx,
                                     ByVal datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrx
         Using frm As TrxForm = New TrxForm()
@@ -228,7 +228,7 @@ Friend Class CBMainForm
         End Using
     End Function
 
-    Public Function blnAddNormalTrxSilent(ByVal objReg As Register, ByVal objTrx As NormalTrx,
+    Private Function blnAddNormalTrxSilent(ByVal objReg As Register, ByVal objTrx As NormalTrx,
                                     ByVal datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrxSilent
         Using frm As TrxForm = New TrxForm()
@@ -238,6 +238,27 @@ Friend Class CBMainForm
             Return False
         End Using
     End Function
+
+    Private Sub ShowRegister(ByVal objReg As Register) Implements IHostUI.ShowRegister
+
+        Dim frm As System.Windows.Forms.Form
+        Dim frmReg As RegisterForm
+
+        For Each frm In gcolForms()
+            If TypeOf frm Is RegisterForm Then
+                frmReg = DirectCast(frm, RegisterForm)
+                If frmReg.objReg Is objReg Then
+                    frmReg.Show()
+                    frmReg.Activate()
+                    Exit Sub
+                End If
+            End If
+        Next frm
+
+        frmReg = New RegisterForm
+        frmReg.ShowMe(Me, objReg)
+    End Sub
+
 
     Public Sub mnuListBudgets_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuListBudgets.Click
         Dim frm As ListEditorForm

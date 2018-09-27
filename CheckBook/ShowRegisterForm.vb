@@ -263,7 +263,7 @@ Friend Class ShowRegisterForm
                     MsgBox("You must select a register, not an account.", MsgBoxStyle.Information)
                     Exit Sub
                 End If
-                gShowRegister(mobjHostUI, .objSelectedReg)
+                mobjHostUI.ShowRegister(.objSelectedReg)
             End With
             'Me.Close()
 

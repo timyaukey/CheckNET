@@ -72,26 +72,6 @@ Public Module CBMain
         End Try
     End Function
 
-    Friend Sub gShowRegister(ByVal objHostUI As IHostUI, ByVal objReg As Register)
-
-        Dim frm As System.Windows.Forms.Form
-        Dim frmReg As RegisterForm
-
-        For Each frm In gcolForms()
-            If TypeOf frm Is RegisterForm Then
-                frmReg = DirectCast(frm, RegisterForm)
-                If frmReg.objReg Is objReg Then
-                    frmReg.Show()
-                    frmReg.Activate()
-                    Exit Sub
-                End If
-            End If
-        Next frm
-
-        frmReg = New RegisterForm
-        frmReg.ShowMe(objHostUI, objReg)
-    End Sub
-
     Public Sub gSaveChangedAccounts(ByVal objCompany As Company)
         Dim objAccount As Account
         Dim strBackupFile As String
