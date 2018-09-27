@@ -146,15 +146,14 @@ Friend Class RegisterForm
             MsgBox("You must first select a register row.", MsgBoxStyle.Critical)
             Exit Sub
         End If
-        If mobjReg.objTrx(lngIndex).lngType = Trx.TrxType.Replica Then
+        Dim objTrx As Trx = mobjReg.objTrx(lngIndex)
+        If TypeOf objTrx Is ReplicaTrx Then
             MsgBox("You may not edit a replica transaction directly. Instead edit the split it was created from in another transaction.", MsgBoxStyle.Critical)
             Exit Sub
         End If
-        Using frm As TrxForm = frmCreateTrxForm()
-            If frm.blnUpdate(lngIndex, mobjReg, mdatDefaultNewDate, "RegForm.Edit") Then
-                Exit Sub
-            End If
-        End Using
+        If mobjHostUI.blnUpdateTrx(objTrx, mdatDefaultNewDate, "RegForm.Edit") Then
+            Exit Sub
+        End If
         DiagnosticValidate()
     End Sub
 

@@ -173,14 +173,11 @@ Friend Class TrxForm
     '$Description Edit and existing Trx in the Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnUpdate(ByVal lngIndex_ As Integer, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
-
-        Dim objTrx As Trx
+    Public Function blnUpdate(ByVal objTrx As Trx, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
 
         Try
 
-            objTrx = objReg_.objTrx(lngIndex_)
-            Init(objReg_, True, lngIndex_, objTrx.lngType, True, strLogTitle)
+            Init(objTrx.objReg, True, objTrx.lngIndex, objTrx.lngType, True, strLogTitle)
             ConfigSharedControls()
             SetSharedControls(objTrx)
             mstrOldRepeatKey = objTrx.strRepeatKey

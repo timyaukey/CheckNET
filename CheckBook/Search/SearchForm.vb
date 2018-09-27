@@ -405,11 +405,9 @@ Friend Class SearchForm
                 MsgBox("You may not edit a replica transaction directly. Instead edit the split it was created from in another transaction.", MsgBoxStyle.Critical)
                 Exit Sub
             End If
-            Using frmEdit As TrxForm = frmCreateTrxForm()
-                If frmEdit.blnUpdate(objTrx.lngIndex, mobjReg, mdatDefaultDate, "SearchForm.Edit") Then
-                    Exit Sub
-                End If
-            End Using
+            If mobjHostUI.blnUpdateTrx(objTrx, mdatDefaultDate, "SearchForm.Edit") Then
+                Exit Sub
+            End If
             mobjReg.ValidateRegister()
 
             Exit Sub
@@ -431,10 +429,6 @@ Friend Class SearchForm
             gTopException(ex)
         End Try
     End Sub
-
-    Private Function frmCreateTrxForm() As TrxForm
-        Return New TrxForm()
-    End Function
 
     ''' <summary>
     ''' Enumerate all Trx objects for selected list items in the search results.

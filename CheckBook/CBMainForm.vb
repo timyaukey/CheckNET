@@ -239,6 +239,16 @@ Friend Class CBMainForm
         End Using
     End Function
 
+    Private Function blnUpdateTrx(ByVal objTrx As Trx, ByRef datDefaultDate As Date,
+                                  ByVal strLogTitle As String) As Boolean Implements IHostUI.blnUpdateTrx
+        Using frmEdit As TrxForm = New TrxForm()
+            If frmEdit.blnUpdate(objTrx, datDefaultDate, strLogTitle) Then
+                Return True
+            End If
+        End Using
+        Return False
+    End Function
+
     Private Sub ShowRegister(ByVal objReg As Register) Implements IHostUI.ShowRegister
 
         Dim frm As System.Windows.Forms.Form
