@@ -85,10 +85,10 @@ namespace BudgetDashboard
             DataGridViewRow gridRow = new DataGridViewRow();
             AddCell(gridRow, row.Label, rowColor);
             AddCell(gridRow, row.Sequence, rowColor);
-            AddCell(gridRow, row.RowTotal.Amount.ToString("F2"), rowColor);
+            AddCell(gridRow, row.RowTotal.CellAmount.ToString("F2"), rowColor);
             for (int periodIndex = 0; periodIndex < mData.PeriodCount; periodIndex++)
             {
-                AddCell(gridRow, row.Cells[periodIndex].Amount.ToString("F2"), rowColor);
+                AddCell(gridRow, row.Cells[periodIndex].CellAmount.ToString("F2"), rowColor);
             }
             grdMain.Rows.Add(gridRow);
         }

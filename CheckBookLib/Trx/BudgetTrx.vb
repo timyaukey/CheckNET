@@ -27,6 +27,8 @@ Public Class BudgetTrx
     'Amount applied toward budget. Magnitude may be greater than mcurBudgetLimit,
     'in which case mcurAmount will equal zero instead of a credit.
     Private mcurBudgetApplied As Decimal
+    'Budget is expired (amount will be zero).
+    Private mblnIsExpired As Boolean
     'Collection of TrxSplit objects belonging to other NormalTrx and applied to this BudgetTrx.
     Private mcolAppliedSplits As List(Of TrxSplit)
 
@@ -63,6 +65,7 @@ Public Class BudgetTrx
         PutPeriodDatesInCorrectOrder()
         mstrBudgetKey = strBudgetKey_
         mcurBudgetApplied = 0
+        mblnIsExpired = False
 
         If blnWillAddToRegister Then
             SetAmountForBudget(mobjReg.datOldestBudgetEndAllowed)
@@ -172,6 +175,12 @@ Public Class BudgetTrx
         End Get
     End Property
 
+    Public ReadOnly Property blnIsExpired() As Boolean
+        Get
+            Return mblnIsExpired
+        End Get
+    End Property
+
     Public Overrides ReadOnly Property strCategory As String
         Get
             Return ""
@@ -196,8 +205,10 @@ Public Class BudgetTrx
     Public Sub SetAmountForBudget(ByVal datOldestEnd As Date)
         If System.Math.Abs(mcurBudgetApplied) > System.Math.Abs(mcurBudgetLimit) Or mdatBudgetEnds < datOldestEnd Then
             mcurAmount = 0
+            mblnIsExpired = True
         Else
             mcurAmount = mcurBudgetLimit - mcurBudgetApplied
+            mblnIsExpired = False
         End If
     End Sub
 

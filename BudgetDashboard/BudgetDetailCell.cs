@@ -11,7 +11,8 @@ namespace BudgetDashboard
         }
 
         public BudgetDetailCell(BudgetTrx budgetTrx)
-            : base(budgetTrx.curAmount, budgetTrx.curBudgetLimit, budgetTrx.curBudgetApplied)
+            : base(budgetTrx.curAmount, budgetTrx.curBudgetLimit, budgetTrx.curBudgetApplied,
+                  budgetTrx.blnIsExpired ? budgetTrx.curBudgetApplied : budgetTrx.curBudgetLimit)
         {
         }
     }
