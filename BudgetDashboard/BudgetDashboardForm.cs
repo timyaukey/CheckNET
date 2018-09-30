@@ -49,23 +49,23 @@ namespace BudgetDashboard
             grdMain.Columns[2].Frozen = true;
             foreach(var row in mData.UnbudgetedIncome)
             {
-                AddGridRow<SplitDetailRow, SplitDetailCell>(row, Color.White);
+                AddGridRow<SplitDetailRow, SplitDetailCell>(row, Color.White, false);
             }
             foreach (var row in mData.BudgetedIncome)
             {
-                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row, Color.White);
+                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row, Color.White, true);
             }
-            AddGridRow<TotalRow, DataCell>(mData.TotalIncome, Color.LightGray);
+            AddGridRow<TotalRow, DataCell>(mData.TotalIncome, Color.LightGray, false);
             foreach (var row in mData.UnbudgetedExpenses)
             {
-                AddGridRow<SplitDetailRow, SplitDetailCell>(row, Color.White);
+                AddGridRow<SplitDetailRow, SplitDetailCell>(row, Color.White, false);
             }
             foreach(var row in mData.BudgetedExpenses)
             {
-                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row, Color.White);
+                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row, Color.White, true);
             }
-            AddGridRow<TotalRow, DataCell>(mData.TotalExpense, Color.LightGray);
-            AddGridRow<TotalRow, DataCell>(mData.NetProfit, Color.LightGreen);
+            AddGridRow<TotalRow, DataCell>(mData.TotalExpense, Color.LightGray, false);
+            AddGridRow<TotalRow, DataCell>(mData.NetProfit, Color.LightGreen, false);
         }
 
         private void ConfigureColumn(int colIndex, string title, int width, 
@@ -78,26 +78,49 @@ namespace BudgetDashboard
             col.DefaultCellStyle.Alignment = dataAlignment;
         }
 
-        private void AddGridRow<TRow, TCell2>(TRow row, Color rowColor)
+        private void AddGridRow<TRow, TCell2>(TRow row, Color rowBackgroundColor, bool useBudgetCell)
             where TRow : DataRow<TCell2>
             where TCell2 : DataCell, new()
         {
             DataGridViewRow gridRow = new DataGridViewRow();
-            AddCell(gridRow, row.Label, rowColor);
-            AddCell(gridRow, row.Sequence, rowColor);
-            AddCell(gridRow, row.RowTotal.CellAmount.ToString("F2"), rowColor);
+            AddTextCell(gridRow, row.Label, rowBackgroundColor);
+            AddTextCell(gridRow, row.Sequence, rowBackgroundColor);
+            if (useBudgetCell)
+                AddBudgetCell(gridRow, row.RowTotal, rowBackgroundColor);
+            else
+                AddDecimalCell(gridRow, row.RowTotal.CellAmount, rowBackgroundColor);
             for (int periodIndex = 0; periodIndex < mData.PeriodCount; periodIndex++)
             {
-                AddCell(gridRow, row.Cells[periodIndex].CellAmount.ToString("F2"), rowColor);
+                if (useBudgetCell)
+                    AddBudgetCell(gridRow, row.Cells[periodIndex], rowBackgroundColor);
+                else
+                    AddDecimalCell(gridRow, row.Cells[periodIndex].CellAmount, rowBackgroundColor);
             }
             grdMain.Rows.Add(gridRow);
         }
 
-        private void AddCell(DataGridViewRow gridRow, string text, Color cellColor)
+        private void AddTextCell(DataGridViewRow gridRow, string text, Color cellBackgroundColor)
         {
-            DataGridViewTextBoxCell cell = new DataGridViewTextBoxCell();
+            AddCell(gridRow, new DataGridViewTextBoxCell(),
+                text, cellBackgroundColor);
+        }
+
+        private void AddBudgetCell(DataGridViewRow gridRow, DataCell dataCell, Color cellBackgroundColor)
+        {
+            AddCell(gridRow, new BudgetGridCell(dataCell.BudgetLimit, dataCell.BudgetApplied), 
+                dataCell.CellAmount.ToString("F2"), cellBackgroundColor);
+        }
+
+        private void AddDecimalCell(DataGridViewRow gridRow, decimal amount, Color cellBackgroundColor)
+        {
+            AddCell(gridRow, new DataGridViewTextBoxCell(),
+                amount.ToString("F2"), cellBackgroundColor);
+        }
+
+        private void AddCell(DataGridViewRow gridRow, DataGridViewTextBoxCell cell, string text, Color cellBackgroundColor)
+        {
             cell.Value = text;
-            cell.Style.BackColor = cellColor;
+            cell.Style.BackColor = cellBackgroundColor;
             gridRow.Cells.Add(cell);
         }
     }

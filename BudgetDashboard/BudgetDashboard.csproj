@@ -48,6 +48,7 @@
     </Compile>
     <Compile Include="BudgetDetailRow.cs" />
     <Compile Include="BudgetDetailCell.cs" />
+    <Compile Include="BudgetGridCell.cs" />
     <Compile Include="BudgetSpecsForm.cs">
       <SubType>Form</SubType>
     </Compile>
