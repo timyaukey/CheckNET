@@ -46,26 +46,20 @@ Public Class RegisterLoader
     '   Does not clear the existing register contents before starting, so can be used
     '   to load a single Register with data from multiple files.
     '$Param objReg The Register object to load.
-    '$Param intFile The open file to load from. Loads transactions until a line starting
-    '   with ".R" (end of register) is found. Leaves file open, positioned so the line
-    '   "Line Input" will read the line following the ".R".
     '$Param blnFake The blnFake value to construct new transactions with.
     '$Param lngLinesRead The number of lines read from the file. On entry is the number
     '   of lines previously read, on exit is incremented to include lines read by
     '   this method.
 
     Public Sub LoadFile(ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer,
-            ByVal intFile As Integer, ByVal blnFake As Boolean, ByRef lngLinesRead As Integer)
+            ByVal blnFake As Boolean, ByRef lngLinesRead As Integer)
 
         Try
 
             LoadInit(objReg, objRepeatSummarizer, blnFake, lngLinesRead)
 
             Do
-                If EOF(intFile) Then
-                    RaiseErrorInLoad("End of file encountered")
-                End If
-                mstrLine = LineInput(intFile)
+                mstrLine = objReg.objAccount.strReadLine()
                 If blnLoadLine(lngLinesRead) Then
                     Exit Sub
                 End If
@@ -82,12 +76,9 @@ Public Class RegisterLoader
 
     Public Sub LoadFileUT(ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer, ByVal strFile As String, ByVal blnFake As Boolean, ByVal datRptEndMax_ As Date, ByRef lngLinesRead As Integer)
 
-        Dim intFile As Integer
-
-        intFile = FreeFile()
-        FileOpen(intFile, strFile, OpenMode.Input)
-        LoadFile(objReg, objRepeatSummarizer, intFile, False, lngLinesRead)
-        FileClose(intFile)
+        objReg.objAccount.OpenInputFile(strFile)
+        LoadFile(objReg, objRepeatSummarizer, False, lngLinesRead)
+        objReg.objAccount.CloseInputFile()
 
     End Sub
 

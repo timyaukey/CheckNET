@@ -4,19 +4,18 @@ Option Explicit On
 Public Class RegisterSaver
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
-    'Write lines for non-fake Trx to this file.
-    Private mintRealFile As Integer
+    Private mobjReg As Register
     'Append lines for fake non-generated Trx to this Collection.
     Private mcolFakeLines As ICollection(Of String)
     'The Trx currently being saved.
     Private mblnFake As Boolean
     Private mobjTrx As Trx
 
-    Public Sub Save(ByVal objReg_ As Register, ByVal intRealFile_ As Integer, ByVal colFakeLines_ As ICollection(Of String))
+    Public Sub Save(ByVal objReg_ As Register, ByVal colFakeLines_ As ICollection(Of String))
 
         Dim lngIndex As Integer
 
-        mintRealFile = intRealFile_
+        mobjReg = objReg_
         mcolFakeLines = colFakeLines_
         For lngIndex = 1 To objReg_.lngTrxCount
             SaveTrx(objReg_.objTrx(lngIndex))
@@ -142,7 +141,7 @@ Public Class RegisterSaver
         If mblnFake Then
             mcolFakeLines.Add(strLine)
         Else
-            PrintLine(mintRealFile, strLine)
+            mobjReg.objAccount.SaveLine(strLine)
         End If
     End Sub
 End Class

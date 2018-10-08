@@ -42,6 +42,8 @@ Public Class Account
     Private mblnUnsavedChanges As Boolean
     'File number for Save().
     Private mintSaveFile As Integer
+    'File number for Load().
+    Private mintLoadFile As Integer
     'RegisterLoader object used by LoadRegister().
     'Is Nothing unless LoadRegister() is on the call stack.
     Private WithEvents mobjLoader As RegisterLoader
@@ -299,7 +301,6 @@ Public Class Account
     End Sub
 
     Private Sub LoadIndividual()
-        Dim intFile As Integer
         Dim strLine As String
         Dim lngLinesRead As Integer
         Dim strRegKey As String = ""
@@ -309,10 +310,9 @@ Public Class Account
 
         Try
 
-            intFile = FreeFile()
-            FileOpen(intFile, mobjCompany.strAccountPath() & "\" & mstrFileNameRoot, OpenMode.Input)
+            OpenInputFile(mobjCompany.strAccountPath() & "\" & mstrFileNameRoot)
 
-            strLine = LineInput(intFile)
+            strLine = strReadLine()
             lngLinesRead = lngLinesRead + 1
             'The difference between FHCKBK1 and FHCKBK2 is that FHCKBK2 is hardcoded
             'to use a specific budget file name and category file name, and repeat group
@@ -329,7 +329,7 @@ Public Class Account
             mlngType = AccountType.Unspecified
 
             Do
-                strLine = LineInput(intFile)
+                strLine = strReadLine()
                 lngLinesRead = lngLinesRead + 1
                 Select Case Left(strLine, 2)
                     Case "AT"
@@ -392,13 +392,13 @@ Public Class Account
                         blnRegShow = False
                     Case "RL"
                         'Load individual non-fake Trx into Register.
-                        LoadRegister(strLine, False, intFile, lngLinesRead)
+                        LoadRegister(strLine, False, lngLinesRead)
                     Case "RF"
                         'Load individual fake Trx into Register.
-                        LoadRegister(strLine, True, intFile, lngLinesRead)
+                        LoadRegister(strLine, True, lngLinesRead)
                     Case "RR"
                         'Was the repeating register
-                        SkipLegacyRegister(intFile)
+                        SkipLegacyRegister()
                     Case ".A"
                         Exit Do
                     Case Else
@@ -406,12 +406,25 @@ Public Class Account
                 End Select
             Loop
 
-            FileClose(intFile)
+            CloseInputFile()
         Catch ex As Exception
-            FileClose(intFile)
+            CloseInputFile()
             Throw New Exception("Error in Account.LoadIndividual(" & mstrFileNameRoot & ";" & lngLinesRead & ")", ex)
         End Try
     End Sub
+
+    Friend Sub OpenInputFile(ByVal strFileName As String)
+        mintLoadFile = FreeFile()
+        FileOpen(mintLoadFile, strFileName, OpenMode.Input)
+    End Sub
+
+    Friend Sub CloseInputFile()
+        FileClose(mintLoadFile)
+    End Sub
+
+    Friend Function strReadLine() As String
+        Return LineInput(mintLoadFile)
+    End Function
 
     Private Function intLoadParseRelatedAccountKey(ByVal strLine As String) As Integer
         Dim intRelatedKey As Integer
@@ -545,7 +558,7 @@ Public Class Account
         objCompany.FireSomethingModified()
     End Sub
 
-    Private Sub LoadRegister(ByVal strLine As String, ByVal blnFake As Boolean, ByVal intFile As Integer, ByRef lngLinesRead As Integer)
+    Private Sub LoadRegister(ByVal strLine As String, ByVal blnFake As Boolean, ByRef lngLinesRead As Integer)
 
         Dim strSearchRegKey As String
         Dim objReg As Register
@@ -556,18 +569,15 @@ Public Class Account
             gRaiseError("Register key " & strSearchRegKey & " not found in " & Left(strLine, 2) & " line")
         Else
             mobjLoader = New RegisterLoader
-            mobjLoader.LoadFile(objReg, mobjRepeatSummarizer, intFile, blnFake, lngLinesRead)
+            mobjLoader.LoadFile(objReg, mobjRepeatSummarizer, blnFake, lngLinesRead)
             mobjLoader = Nothing
         End If
     End Sub
 
-    Private Sub SkipLegacyRegister(ByVal intFile As Integer)
+    Private Sub SkipLegacyRegister()
         Dim strLine As String
         Do
-            If EOF(intFile) Then
-                gRaiseError("End of file encountered skipping legacy RR register")
-            End If
-            strLine = LineInput(intFile)
+            strLine = strReadLine()
             If strLine = ".R" Then
                 Exit Sub
             End If
@@ -686,7 +696,7 @@ Public Class Account
         'Output the non-fake Trx, and remember the non-generated fake.
         colFakeLines = New List(Of String)
         SaveLine("RL" & objReg.strRegisterKey)
-        objSaver.Save(objReg, mintSaveFile, colFakeLines)
+        objSaver.Save(objReg, colFakeLines)
         SaveLine(".R")
 
         'Save non-generated fake Trx we saved above.
@@ -705,7 +715,7 @@ Public Class Account
     '$Description Write one line to the Save() output file.
     '$Param strLine The line to write.
 
-    Private Sub SaveLine(ByVal strLine As String)
+    Friend Sub SaveLine(ByVal strLine As String)
         PrintLine(mintSaveFile, strLine)
     End Sub
 
