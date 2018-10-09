@@ -87,7 +87,7 @@ Public Class Register
     'error is detected.
     Public Event ValidationError(ByVal lngIndex As Integer, ByVal strMsg As String)
 
-    Public Sub Init(ByVal objAccount_ As Account, ByVal strTitle_ As String, ByVal strRegisterKey_ As String, ByVal blnShowInitially_ As Boolean, ByVal lngAllocationUnit_ As Integer, ByVal datOldestBudgetEndAllowed_ As Date)
+    Friend Sub Init(ByVal objAccount_ As Account, ByVal strTitle_ As String, ByVal strRegisterKey_ As String, ByVal blnShowInitially_ As Boolean, ByVal lngAllocationUnit_ As Integer, ByVal datOldestBudgetEndAllowed_ As Date)
 
         mobjAccount = objAccount_
         mstrTitle = strTitle_
@@ -117,7 +117,7 @@ Public Class Register
     '$Param objNew Trx object to add. This actual object instance will
     '   become the register entry, rather than making a copy of it.
 
-    Public Sub NewLoadEnd(ByVal objNew As Trx)
+    Friend Sub NewLoadEnd(ByVal objNew As Trx)
         If objNew Is Nothing Then
             gRaiseError("objNew is Nothing in Register.NewLoadEnd")
         End If
@@ -451,7 +451,7 @@ Public Class Register
     '   Must be done for all Trx in all Registers in all Accounts before calling
     '   LoadFinish() for any Registers in any Accounts.
 
-    Public Sub LoadApply()
+    Friend Sub LoadApply()
 
         For lngIndex As Integer = 1 To mlngTrxUsed
             Me.objTrx(lngIndex).Apply(True)
@@ -513,7 +513,7 @@ Public Class Register
     '   to change, and clients may not want to update their UI until all
     '   the changes are done which is signaled by the RedisplayTrx event.
 
-    Public Sub FireHideTrx()
+    Friend Sub FireHideTrx()
         RaiseEvent HideTrx()
     End Sub
 

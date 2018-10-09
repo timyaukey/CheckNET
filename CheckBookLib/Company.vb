@@ -4,6 +4,8 @@ Option Explicit On
 Imports System.IO
 Imports System.Xml.Serialization
 
+<Assembly: System.Runtime.CompilerServices.InternalsVisibleTo("UnitTests")>
+
 ''' <summary>
 ''' The core class of the object model. One instance contains all the data objects
 ''' used by a company, including the list of general ledger accounts, and a bunch

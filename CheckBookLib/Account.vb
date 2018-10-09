@@ -259,17 +259,11 @@ Public Class Account
         End Get
     End Property
 
-    Public ReadOnly Property objRepeatSummarizer() As RepeatSummarizer
+    Friend ReadOnly Property objRepeatSummarizer() As RepeatSummarizer
         Get
             objRepeatSummarizer = mobjRepeatSummarizer
         End Get
     End Property
-
-    'Public ReadOnly Property strRepeatsFile() As String
-    '    Get
-    '        strRepeatsFile = mstrRepeatsFile
-    '    End Get
-    'End Property
 
     Public ReadOnly Property blnUnsavedChanges() As Boolean
         Get
@@ -277,12 +271,11 @@ Public Class Account
         End Get
     End Property
 
-    Public Sub RaiseLoadStatus(ByVal strMessage As String)
+    Friend Sub RaiseLoadStatus(ByVal strMessage As String)
         RaiseEvent LoadStatus(strMessage)
     End Sub
 
-    Public Sub Teardown()
-        'UPGRADE_NOTE: Object mobjCompany may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+    Friend Sub Teardown()
         mobjCompany = Nothing
     End Sub
 
@@ -290,7 +283,7 @@ Public Class Account
     '   Must always be called immediately after Init().
     '$Param strAcctFile Name of account file, without path.
 
-    Public Sub LoadStart(ByVal strAcctFile As String)
+    Friend Sub LoadStart(ByVal strAcctFile As String)
 
         RaiseEvent LoadStatus("Loading " & strAcctFile)
         mstrFileNameRoot = strAcctFile
@@ -412,11 +405,11 @@ Public Class Account
         End Try
     End Sub
 
-    Public Sub OpenInputFile(ByVal strFileName As String)
+    Friend Sub OpenInputFile(ByVal strFileName As String)
         mobjLoadFile = New StreamReader(strFileName)
     End Sub
 
-    Public Sub CloseInputFile()
+    Friend Sub CloseInputFile()
         mobjLoadFile.Close()
         mobjLoadFile = Nothing
     End Sub
@@ -433,7 +426,7 @@ Public Class Account
         Throw New Exception("Invalid related account key")
     End Function
 
-    Public Sub LoadGenerated(ByVal datCutoff As Date)
+    Friend Sub LoadGenerated(ByVal datCutoff As Date)
         Dim objReg As Register
 
         Try
@@ -451,7 +444,7 @@ Public Class Account
         End Try
     End Sub
 
-    Public Sub LoadApply()
+    Friend Sub LoadApply()
         Try
             RaiseEvent LoadStatus("Apply for " + mstrTitle)
             For Each objReg As Register In mcolRegisters
@@ -464,7 +457,7 @@ Public Class Account
         End Try
     End Sub
 
-    Public Sub LoadFinish()
+    Friend Sub LoadFinish()
         Try
             'This has to happen after all Account objects are loaded, not when the "AR" lines are read.
             mobjRelatedAcct1 = objLoadResolveRelatedAccount(mintRelatedKey1)
