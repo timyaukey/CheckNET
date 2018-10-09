@@ -40,38 +40,6 @@ Public Module CBMain
         gcolForms = colResult
     End Function
 
-    Public Function gblnUserAuthenticated(ByVal objSecurity As Security) As Boolean
-        Try
-            Dim strLogin As String
-            Dim strPassword As String
-            Dim frmLogin As LoginForm
-
-            strLogin = ""
-            strPassword = ""
-            frmLogin = New LoginForm
-            If Not frmLogin.blnGetCredentials(strLogin, strPassword) Then
-                Return False
-            End If
-
-            If Not objSecurity.blnFindUser(strLogin) Then
-                MsgBox("Invalid login or password")
-                Return False
-            End If
-            If Not objSecurity.blnPasswordMatches(strPassword) Then
-                MsgBox("Invalid login or password")
-                Return False
-            End If
-            If Not objSecurity.blnUserSignatureIsValid Then
-                MsgBox("User data is invalid")
-                Return False
-            End If
-
-            Return True
-        Catch ex As Exception
-            gNestedException(ex)
-        End Try
-    End Function
-
     Public Sub gSaveChangedAccounts(ByVal objHostUI As IHostUI)
         Dim objAccount As Account
         Dim objCompany As Company = objHostUI.objCompany

@@ -205,7 +205,7 @@ Friend Class RegisterForm
             Dim objTrx As NormalTrx = New NormalTrx(mobjReg)
             objTrx.NewEmptyNormal(mdatDefaultNewDate)
             If mobjHostUI.blnAddNormalTrx(objTrx, mdatDefaultNewDate, True, "RegForm.NewNormal") Then
-                MsgBox("Canceled.")
+                mobjHostUI.ErrorMessageBox("Canceled.")
             End If
             DiagnosticValidate()
             Exit Sub
@@ -216,7 +216,7 @@ Friend Class RegisterForm
     Private Sub cmdNewBudget_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewBudget.Click
         Try
             If mobjHostUI.blnAddBudgetTrx(mobjReg, mdatDefaultNewDate, "RegForm.NewBudget") Then
-                MsgBox("Canceled.")
+                mobjHostUI.ErrorMessageBox("Canceled.")
             End If
             DiagnosticValidate()
             Exit Sub
@@ -228,7 +228,7 @@ Friend Class RegisterForm
     Private Sub cmdNewXfer_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewXfer.Click
         Try
             If mobjHostUI.blnAddTransferTrx(mobjReg, mdatDefaultNewDate, "RegForm.NewXfer") Then
-                MsgBox("Canceled.")
+                mobjHostUI.ErrorMessageBox("Canceled.")
             End If
             DiagnosticValidate()
             Exit Sub

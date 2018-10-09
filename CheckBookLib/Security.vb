@@ -142,6 +142,19 @@ Public Class Security
         blnPasswordMatches = (CStr(melmUser.GetAttribute("passwordhash")) = strMakeHash(strPassword))
     End Function
 
+    Public Function blnAuthenticate(ByVal strLogin As String, ByVal strPassword As String) As Boolean
+        If Not blnFindUser(strLogin) Then
+            Return False
+        End If
+        If Not blnPasswordMatches(strPassword) Then
+            Return False
+        End If
+        If Not blnUserSignatureIsValid() Then
+            Return False
+        End If
+        Return True
+    End Function
+
     Public Sub SetPassword(ByVal strPassword As String)
         melmUser.SetAttribute("passwordhash", strMakeHash(strPassword))
         Dim strSignature As String = strCreateUserSignature(melmUser)

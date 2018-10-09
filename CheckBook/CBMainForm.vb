@@ -49,7 +49,17 @@ Friend Class CBMainForm
             mobjSecurity = mobjCompany.objSecurity
             mobjSecurity.Load()
             If Not mobjSecurity.blnNoFile Then
-                If Not gblnUserAuthenticated(mobjSecurity) Then
+                Dim strLogin As String = ""
+                Dim strPassword As String = ""
+
+                Using frmLogin As LoginForm = New LoginForm
+                    If Not frmLogin.blnGetCredentials(strLogin, strPassword) Then
+                        frmStartup.Close()
+                        Exit Sub
+                    End If
+                End Using
+                If Not mobjSecurity.blnAuthenticate(strLogin, strPassword) Then
+                    ErrorMessageBox("Invalid login or password")
                     frmStartup.Close()
                     Exit Sub
                 End If
