@@ -936,7 +936,14 @@ Friend Class UTMainForm
         objReg.Init(objAccount, "Regular", "reg", False, 3, System.DateTime.FromOADate(0))
         objRepeatSummarizer = New RepeatSummarizer()
         lngLinesRead = 0
-        objLoader.LoadFileUT(objReg, objRepeatSummarizer, mobjCompany.strAddPath("UTData\" & strFileName), False, #1/1/1980#, lngLinesRead)
+        Try
+            objReg.objAccount.OpenInputFile(mobjCompany.strAddPath("UTData\" & strFileName))
+            objLoader.LoadFile(objReg, objRepeatSummarizer, False, lngLinesRead)
+        Catch ex As Exception
+            Throw ex
+        Finally
+            objReg.objAccount.CloseInputFile()
+        End Try
         objReg.LoadApply()
         objReg.LoadFinish()
         objLoadFile = objReg

@@ -42,8 +42,8 @@ Public Class Account
     Private mblnUnsavedChanges As Boolean
     'File number for Save().
     Private mintSaveFile As Integer
-    'File number for Load().
-    Private mintLoadFile As Integer
+    'File for Load().
+    Private mobjLoadFile As System.IO.TextReader
     'RegisterLoader object used by LoadRegister().
     'Is Nothing unless LoadRegister() is on the call stack.
     Private WithEvents mobjLoader As RegisterLoader
@@ -405,25 +405,23 @@ Public Class Account
                         gRaiseError("Unrecognized line in account file: " & strLine)
                 End Select
             Loop
-
-            CloseInputFile()
         Catch ex As Exception
-            CloseInputFile()
             Throw New Exception("Error in Account.LoadIndividual(" & mstrFileNameRoot & ";" & lngLinesRead & ")", ex)
+        Finally
+            CloseInputFile()
         End Try
     End Sub
 
-    Friend Sub OpenInputFile(ByVal strFileName As String)
-        mintLoadFile = FreeFile()
-        FileOpen(mintLoadFile, strFileName, OpenMode.Input)
+    Public Sub OpenInputFile(ByVal strFileName As String)
+        mobjLoadFile = New StreamReader(strFileName)
     End Sub
 
-    Friend Sub CloseInputFile()
-        FileClose(mintLoadFile)
+    Public Sub CloseInputFile()
+        mobjLoadFile.Close()
     End Sub
 
     Friend Function strReadLine() As String
-        Return LineInput(mintLoadFile)
+        Return mobjLoadFile.ReadLine()
     End Function
 
     Private Function intLoadParseRelatedAccountKey(ByVal strLine As String) As Integer

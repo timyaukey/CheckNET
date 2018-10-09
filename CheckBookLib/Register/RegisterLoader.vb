@@ -71,17 +71,6 @@ Public Class RegisterLoader
         End Try
     End Sub
 
-    '$Description Used only for unit tests, because in .NET file numbers are local
-    '   to the assembly that opens them.
-
-    Public Sub LoadFileUT(ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer, ByVal strFile As String, ByVal blnFake As Boolean, ByVal datRptEndMax_ As Date, ByRef lngLinesRead As Integer)
-
-        objReg.objAccount.OpenInputFile(strFile)
-        LoadFile(objReg, objRepeatSummarizer, False, lngLinesRead)
-        objReg.objAccount.CloseInputFile()
-
-    End Sub
-
     Private Sub LoadInit(ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer, ByVal blnFake As Boolean, ByRef lngLinesRead As Integer)
 
         mobjReg = objReg
