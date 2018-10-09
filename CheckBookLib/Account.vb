@@ -40,10 +40,10 @@ Public Class Account
     Private mcolRegisters As List(Of Register)
     'Account has unsaved changes.
     Private mblnUnsavedChanges As Boolean
-    'File number for Save().
-    Private mintSaveFile As Integer
+    'File for Save().
+    Private mobjSaveFile As StreamWriter
     'File for Load().
-    Private mobjLoadFile As System.IO.TextReader
+    Private mobjLoadFile As TextReader
     'RegisterLoader object used by LoadRegister().
     'Is Nothing unless LoadRegister() is on the call stack.
     Private WithEvents mobjLoader As RegisterLoader
@@ -418,6 +418,7 @@ Public Class Account
 
     Public Sub CloseInputFile()
         mobjLoadFile.Close()
+        mobjLoadFile = Nothing
     End Sub
 
     Friend Function strReadLine() As String
@@ -609,15 +610,12 @@ Public Class Account
     End Sub
 
     Public Sub Save(ByVal strPath_ As String)
-        Dim blnFileOpen As Boolean
         Dim objReg As Register
         Dim objSubTypeMatched As SubTypeDef = Nothing
 
         Try
 
-            mintSaveFile = FreeFile()
-            FileOpen(mintSaveFile, mobjCompany.strAccountPath() & "\" & strPath_, OpenMode.Output)
-            blnFileOpen = True
+            mobjSaveFile = New StreamWriter(mobjCompany.strAccountPath() & "\" & strPath_)
 
             SaveLine("FHCKBK2")
             If mstrTitle <> "" Then
@@ -651,16 +649,16 @@ Public Class Account
             Next objReg
             SaveLine(".A")
 
-            FileClose(mintSaveFile)
-            blnFileOpen = False
             mblnUnsavedChanges = False
 
             Exit Sub
         Catch ex As Exception
-            If blnFileOpen Then
-                FileClose(mintSaveFile)
-            End If
             gNestedException(ex)
+        Finally
+            If Not mobjSaveFile Is Nothing Then
+                mobjSaveFile.Close()
+                mobjSaveFile = Nothing
+            End If
         End Try
     End Sub
 
@@ -714,7 +712,7 @@ Public Class Account
     '$Param strLine The line to write.
 
     Friend Sub SaveLine(ByVal strLine As String)
-        PrintLine(mintSaveFile, strLine)
+        mobjSaveFile.WriteLine(strLine)
     End Sub
 
     Public Overrides Function ToString() As String
