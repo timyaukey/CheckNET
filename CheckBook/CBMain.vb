@@ -72,8 +72,9 @@ Public Module CBMain
         End Try
     End Function
 
-    Public Sub gSaveChangedAccounts(ByVal objCompany As Company)
+    Public Sub gSaveChangedAccounts(ByVal objHostUI As IHostUI)
         Dim objAccount As Account
+        Dim objCompany As Company = objHostUI.objCompany
         Dim strBackupFile As String
         For Each objAccount In objCompany.colAccounts
             If objAccount.blnUnsavedChanges Then
@@ -84,7 +85,7 @@ Public Module CBMain
                 Rename(objCompany.strAccountPath() & "\" & objAccount.strFileNameRoot, strBackupFile)
                 PurgeAccountBackups(objAccount)
                 objAccount.Save(objAccount.strFileNameRoot)
-                MsgBox("Saved " & objAccount.strTitle)
+                objHostUI.InfoMessageBox("Saved " & objAccount.strTitle)
             End If
         Next objAccount
     End Sub

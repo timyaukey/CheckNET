@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports VB = Microsoft.VisualBasic
@@ -7,6 +7,7 @@ Imports CheckBookLib
 Friend Class ListEditorForm
     Inherits System.Windows.Forms.Form
 
+    Private mobjHostUI As IHostUI
     Private mlngListType As ListType
     Private mobjList As SimpleStringTranslator
     Private mstrFile As String
@@ -22,11 +23,13 @@ Friend Class ListEditorForm
 
     Public Delegate Function EditStringTransElement(ByVal objTransElem As StringTransElement, ByVal blnNew As Boolean) As Boolean
 
-    Public Function blnShowMe(ByVal objCompany As Company, ByVal lngListType As ListType, ByVal strFile As String,
+    Public Function blnShowMe(ByVal objHostUI As IHostUI, ByVal lngListType As ListType, ByVal strFile As String,
                               ByVal objList As SimpleStringTranslator, ByVal strCaption As String,
                               ByVal blnEditElem As EditStringTransElement) As Boolean
 
         Dim frm As System.Windows.Forms.Form
+        mobjHostUI = objHostUI
+        mobjCompany = mobjHostUI.objCompany
 
         Try
             For Each frm In gcolForms()
@@ -35,12 +38,11 @@ Friend Class ListEditorForm
                 ElseIf TypeOf frm Is CBMainForm Then
                     '
                 Else
-                    MsgBox("Lists may not be edited if any windows other than registers " & "are open.", MsgBoxStyle.Critical)
+                    mobjHostUI.ErrorMessageBox("Lists may not be edited if any windows other than registers " & "are open.")
                     Return False
                 End If
             Next frm
             Me.Text = strCaption
-            mobjCompany = objCompany
             mlngListType = lngListType
             mobjList = objList
             mstrFile = strFile
@@ -60,7 +62,7 @@ Friend Class ListEditorForm
     Private Sub cmdSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSave.Click
         Try
 
-            gSaveChangedAccounts(mobjCompany)
+            gSaveChangedAccounts(mobjHostUI)
             RebuildTranslator()
             WriteFile()
             mobjCompany.BuildShortTermsCatKeys()
@@ -84,15 +86,15 @@ Friend Class ListEditorForm
         Try
 
             If mblnModified Then
-                If MsgBox("Do you wish to discard changes made on this window?", MsgBoxStyle.OkCancel + MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
-                    eventArgs.Cancel = 1
+                If MsgBox("Do you wish to discard changes made on this window?", MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                    eventArgs.Cancel = True
                     Exit Sub
                 End If
             End If
 
             Exit Sub
         Catch ex As Exception
-            eventArgs.Cancel = 1
+            eventArgs.Cancel = True
             gTopException(ex)
         End Try
     End Sub
@@ -137,11 +139,11 @@ Friend Class ListEditorForm
         Dim strOrigValue1 As String
         Dim objNewTransElem As StringTransElement
         Dim strNewValue1 As String
-        Dim intIndex As Short
+        Dim intIndex As Integer
         Dim strError As String = ""
         Dim blnFoundChild As Boolean
         Dim strChildMatchPrefix As String
-        Dim intMatchLen As Short
+        Dim intMatchLen As Integer
         Dim objScanTransElem As StringTransElement
 
         Try
@@ -206,7 +208,7 @@ Friend Class ListEditorForm
 
     Private Sub cmdDelete_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdDelete.Click
         Dim strValue1 As String
-        Dim intIndex As Short
+        Dim intIndex As Integer
 
         Try
 
@@ -248,7 +250,7 @@ Friend Class ListEditorForm
     '   lstElements.ItemData() is index of that element in mobjList.
 
     Private Sub LoadList()
-        Dim intIndex As Short
+        Dim intIndex As Integer
         Dim strError As String = ""
         Dim blnFoundPersonal As Boolean = False
         Dim objTransElem As StringTransElement
@@ -311,12 +313,12 @@ Friend Class ListEditorForm
 
     Private Function blnInsertElement(ByVal objTransElem As StringTransElement, ByVal blnInLoad As Boolean, ByRef strError As String) As Boolean
 
-        Dim intIndex As Short
+        Dim intIndex As Integer
         Dim strExistingElementUCS As String
         Dim strNewElement As String
         Dim strNewElementUCS As String
         Dim strNewParentUCS As String
-        Dim intLastColon As Short
+        Dim intLastColon As Integer
         Dim strPrecedingUCS As String
 
         Try
@@ -396,8 +398,8 @@ Friend Class ListEditorForm
     End Function
 
     Private Function intCompareCatNames(ByVal strName1 As String, ByVal strName2 As String) As Integer
-        Dim strParts1() As String = strName1.Split(":")
-        Dim strParts2() As String = strName2.Split(":")
+        Dim strParts1() As String = strName1.Split(":"(0))
+        Dim strParts2() As String = strName2.Split(":"(0))
         Dim intIndex As Integer
         intIndex = LBound(strParts1)
         Do
@@ -445,7 +447,7 @@ Friend Class ListEditorForm
     '$Description Remove an element from the list. Does not do any validation
     '   checking - the caller is responsible for things like key in use.
 
-    Private Sub DeleteElement(ByVal intListIndex As Short)
+    Private Sub DeleteElement(ByVal intListIndex As Integer)
         lstElements.Items.RemoveAt(intListIndex)
     End Sub
 
@@ -453,7 +455,7 @@ Friend Class ListEditorForm
     '   sorted order.
 
     Private Sub RebuildTranslator()
-        Dim intIndex As Short
+        Dim intIndex As Integer
         Dim objTransElem As StringTransElement
 
         Try
@@ -471,9 +473,9 @@ Friend Class ListEditorForm
     End Sub
 
     Private Function strMakeValue2(ByVal strValue1 As String) As String
-        Dim intColonPos As Short
-        Dim intColonPos2 As Short
-        Dim intIndent As Short
+        Dim intColonPos As Integer
+        Dim intColonPos2 As Integer
+        Dim intIndent As Integer
         If blnMultipleLevelsAllowed Then
             intColonPos = 0
             intIndent = 0
@@ -494,8 +496,8 @@ Friend Class ListEditorForm
     '$Description Write new file from mobjList. mobjList is assumed to be in sorted order.
 
     Private Sub WriteFile()
-        Dim intFile As Short
-        Dim intIndex As Short
+        Dim intFile As Integer
+        Dim intIndex As Integer
         Dim strTmpFile As String
 
         Try
@@ -528,7 +530,7 @@ Friend Class ListEditorForm
     '$Description Determine if lstElements entry intListIndex is used in any account.
     '   Checks for usage indicated by mlngListType.
 
-    Private Function blnElementIsUsed(ByVal intListIndex As Short) As Boolean
+    Private Function blnElementIsUsed(ByVal intListIndex As Integer) As Boolean
         Dim strKey As String
         Dim objAccount As Account
 
@@ -614,9 +616,9 @@ Friend Class ListEditorForm
     '   because all used key values must be present in the list and an element cannot
     '   be deleted if the key is in use.
 
-    Private Function intGetUnusedKey() As Short
-        Dim intKey As Short
-        Dim intIndex As Short
+    Private Function intGetUnusedKey() As Integer
+        Dim intKey As Integer
+        Dim intIndex As Integer
         Dim blnFound As Boolean
 
         intKey = 1
@@ -642,7 +644,7 @@ Friend Class ListEditorForm
     '   converted to a key string. The only plausible reason for failure is if
     '   there are too many keys, so the integer is too large.
 
-    Private Function strMakeKey(ByVal intKey As Short) As String
+    Private Function strMakeKey(ByVal intKey As Integer) As String
         If intKey < 1 Or intKey > 999 Then
             strMakeKey = ""
         Else

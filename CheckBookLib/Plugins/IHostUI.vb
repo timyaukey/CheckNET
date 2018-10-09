@@ -27,4 +27,7 @@ Public Interface IHostUI
                                ByVal strLogTitle As String) As Boolean
     Function blnUpdateTrx(ByVal objTrx As Trx, ByRef datDefaultDate As Date,
                           ByVal strLogTitle As String) As Boolean
+    Sub InfoMessageBox(ByVal strMessage As String)
+    Sub ErrorMessageBox(ByVal strMessage As String)
+    ReadOnly Property strSoftwareName() As String
 End Interface

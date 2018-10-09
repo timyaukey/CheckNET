@@ -128,11 +128,11 @@ Friend Class SearchForm
             Select Case lngSearchField
                 Case Trx.TrxSearchField.Category
                     If lngSearchType <> Trx.TrxSearchType.EqualTo And lngSearchType <> Trx.TrxSearchType.StartsWith Then
-                        MsgBox("Category searches must be ""equal to"" or ""starts with"".", MsgBoxStyle.Critical)
+                        mobjHostUI.ErrorMessageBox("Category searches must be ""equal to"" or ""starts with"".")
                         Exit Sub
                     End If
                     If cboSearchCats.SelectedIndex = -1 Then
-                        MsgBox("Please select a category to search for.", MsgBoxStyle.Critical)
+                        mobjHostUI.ErrorMessageBox("Please select a category to search for.")
                         Exit Sub
                     Else
                         lngItemData = UITools.GetItemData(cboSearchCats, cboSearchCats.SelectedIndex)
@@ -174,7 +174,7 @@ Friend Class SearchForm
 
             mcurAmountTotal = mcurAmountTotal + mcurAmountMatched
             ShowTotals()
-            MsgBox(mintMatchCount & " matches found.", MsgBoxStyle.Information)
+            mobjHostUI.InfoMessageBox(mintMatchCount & " matches found.")
 
             Exit Sub
         Catch ex As Exception
@@ -421,7 +421,7 @@ Friend Class SearchForm
             Dim objTrx As NormalTrx = New NormalTrx(mobjReg)
             objTrx.NewEmptyNormal(mdatDefaultDate)
             If mobjHostUI.blnAddNormalTrx(objTrx, mdatDefaultDate, True, "SearchForm.NewNormal") Then
-                MsgBox("Canceled.")
+                mobjHostUI.InfoMessageBox("Canceled.")
             End If
             mobjReg.ValidateRegister()
             Exit Sub

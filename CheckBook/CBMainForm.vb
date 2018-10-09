@@ -24,6 +24,7 @@ Friend Class CBMainForm
         Try
             mblnCancelStart = True
 
+            Me.Text = strSoftwareTitle
             frmStartup = New StartupForm
             frmStartup.Show()
             frmStartup.ShowStatus("Initializing")
@@ -60,7 +61,7 @@ Friend Class CBMainForm
 
             LoadPlugins()
 
-            Me.Text = "Willow Creek Checkbook " & My.Application.Info.Version.Major & "." &
+            Me.Text = strSoftwareTitle & " " & My.Application.Info.Version.Major & "." &
                         My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build &
                         " [" & LCase(mobjCompany.strDataPath()) & "]"
 
@@ -185,7 +186,7 @@ Friend Class CBMainForm
         Try
 
             If Not mblnCancelStart Then
-                gSaveChangedAccounts(mobjCompany)
+                gSaveChangedAccounts(Me)
             End If
             mobjCompany.Teardown()
 
@@ -289,6 +290,19 @@ Friend Class CBMainForm
         frmReg.ShowMe(Me, objReg)
     End Sub
 
+    Private Sub InfoMessageBox(ByVal strMessage As String) Implements IHostUI.InfoMessageBox
+        MessageBox.Show(strMessage, strSoftwareTitle, MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    Private Sub ErrorMessageBox(ByVal strMessage As String) Implements IHostUI.ErrorMessageBox
+        MessageBox.Show(strMessage, strSoftwareTitle, MessageBoxButtons.OK, MessageBoxIcon.Error)
+    End Sub
+
+    Private ReadOnly Property strSoftwareTitle() As String Implements IHostUI.strSoftwareName
+        Get
+            Return "Willow Creek Checkbook"
+        End Get
+    End Property
 
     Public Sub mnuListBudgets_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuListBudgets.Click
         Dim frm As ListEditorForm
@@ -296,7 +310,7 @@ Friend Class CBMainForm
         Try
 
             frm = New ListEditorForm
-            frm.blnShowMe(mobjCompany, ListEditorForm.ListType.Budget, mobjCompany.strBudgetPath(),
+            frm.blnShowMe(Me, ListEditorForm.ListType.Budget, mobjCompany.strBudgetPath(),
                           mobjCompany.objBudgets, "Budget List", AddressOf blnEditStringTransElem)
 
             Exit Sub
@@ -309,7 +323,7 @@ Friend Class CBMainForm
         Try
             Using frmListEditor As ListEditorForm = New ListEditorForm()
                 Using frmCatEditor As CategoryEditorForm = New CategoryEditorForm()
-                    If frmListEditor.blnShowMe(mobjCompany, ListEditorForm.ListType.Category, mobjCompany.strCategoryPath(),
+                    If frmListEditor.blnShowMe(Me, ListEditorForm.ListType.Category, mobjCompany.strCategoryPath(),
                              mobjCompany.objIncExpAccounts, "Category List", AddressOf frmCatEditor.blnShowDialog) Then
                         mobjCompany.LoadCategories()
                     End If
@@ -368,7 +382,7 @@ Friend Class CBMainForm
     Public Sub mnuFileSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileSave.Click
         Try
 
-            gSaveChangedAccounts(mobjCompany)
+            gSaveChangedAccounts(Me)
             mnuFileSave.Enabled = False
 
             Exit Sub
