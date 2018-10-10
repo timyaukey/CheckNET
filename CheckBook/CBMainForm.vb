@@ -108,6 +108,10 @@ Friend Class CBMainForm
         End Try
     End Sub
 
+    Private Sub SavedAccount(ByVal strAccountTitle As String) Handles mobjCompany.SavedAccount
+        InfoMessageBox("Saved " + strAccountTitle)
+    End Sub
+
     Private Sub ShowCreateMessage(ByVal strMessage As String)
         MsgBox(strMessage, MsgBoxStyle.Information)
     End Sub
@@ -196,7 +200,7 @@ Friend Class CBMainForm
         Try
 
             If Not mblnCancelStart Then
-                gSaveChangedAccounts(Me)
+                mobjCompany.SaveChangedAccounts()
             End If
             mobjCompany.Teardown()
 
@@ -392,7 +396,7 @@ Friend Class CBMainForm
     Public Sub mnuFileSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileSave.Click
         Try
 
-            gSaveChangedAccounts(Me)
+            mobjCompany.SaveChangedAccounts()
             mnuFileSave.Enabled = False
 
             Exit Sub

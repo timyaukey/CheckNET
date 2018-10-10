@@ -66,8 +66,10 @@
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp.Features" RuleNamespace="Microsoft.CodeAnalysis.CSharp.Features">
     <Rule Id="IDE0017" Action="None" />
+    <Rule Id="IDE1006" Action="Info" />
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeAnalysis.VisualBasic.Features" RuleNamespace="Microsoft.CodeAnalysis.VisualBasic.Features">
     <Rule Id="IDE0017" Action="None" />
+    <Rule Id="IDE1006" Action="Info" />
   </Rules>
 </RuleSet>

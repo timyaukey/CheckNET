@@ -62,7 +62,7 @@ Friend Class ListEditorForm
     Private Sub cmdSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSave.Click
         Try
 
-            gSaveChangedAccounts(mobjHostUI)
+            mobjHostUI.objCompany.SaveChangedAccounts()
             RebuildTranslator()
             WriteFile()
             mobjCompany.BuildShortTermsCatKeys()
