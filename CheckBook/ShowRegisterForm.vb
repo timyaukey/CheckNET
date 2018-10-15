@@ -71,10 +71,10 @@ Friend Class ShowRegisterForm
                     Exit Sub
                 End If
                 objReg = .objSelectedReg
-                If MsgBox("Do you really want to delete register """ & objReg.strTitle & """?", MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+                If mobjHostUI.OkCancelMessageBox("Do you really want to delete register """ & objReg.strTitle & """?") <> DialogResult.OK Then
                     Exit Sub
                 End If
-                If MsgBox("Are you really sure you want to delete it?", MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+                If mobjHostUI.OkCancelMessageBox("Are you really sure you want to delete it?") <> DialogResult.OK Then
                     Exit Sub
                 End If
                 mobjHostUI.InfoMessageBox("Will delete all transfers to/from other registers.")
@@ -149,10 +149,10 @@ Friend Class ShowRegisterForm
 
             With maudtElement(lstRegisters.SelectedIndex)
                 strNameRoot = Replace(LCase(.objAccount.strFileNameRoot), ".act", "")
-                If MsgBox("Are you sure you want to delete account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+                If mobjHostUI.OkCancelMessageBox("Are you sure you want to delete account """ & .objAccount.strTitle & """?") <> DialogResult.OK Then
                     Exit Sub
                 End If
-                If MsgBox("Are you REALLY, REALLY, SURE you want to delete account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+                If mobjHostUI.OkCancelMessageBox("Are you REALLY, REALLY, SURE you want to delete account """ & .objAccount.strTitle & """?") <> DialogResult.OK Then
                     Exit Sub
                 End If
             End With
@@ -215,7 +215,7 @@ Friend Class ShowRegisterForm
             End If
 
             With maudtElement(lstRegisters.SelectedIndex)
-                If MsgBox("Do you really want to create a new register named """ & strName & """ in account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+                If mobjHostUI.OkCancelMessageBox("Do you really want to create a new register named """ & strName & """ in account """ & .objAccount.strTitle & """?") <> DialogResult.OK Then
                     Exit Sub
                 End If
                 For Each objReg In .objAccount.colRegisters

@@ -101,11 +101,11 @@ Friend Class RegisterForm
                     MsgBox("You can delete this transaction, but it has a repeat key " & "so the software will probably just recreate it." & vbCrLf &
                            "If you don't want to use this transaction it is much better " & "to change the amount to zero than to delete it.", MsgBoxStyle.Critical)
                 End If
-                If MsgBox("Do you really want to delete the transaction dated " & Utilities.strFormatDate(.datDate) & " for $" & Utilities.strFormatCurrency(.curAmount) & " made out to " & .strDescription & "?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+                If mobjHostUI.OkCancelMessageBox("Do you really want to delete the transaction dated " & Utilities.strFormatDate(.datDate) & " for $" & Utilities.strFormatCurrency(.curAmount) & " made out to " & .strDescription & "?") <> DialogResult.OK Then
                     Exit Sub
                 End If
                 If .lngStatus = Trx.TrxStatus.Reconciled Then
-                    If MsgBox("This transaction has been reconciled to a bank statement. " & "Are you sure you want to delete it?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+                    If mobjHostUI.OkCancelMessageBox("This transaction has been reconciled to a bank statement. " & "Are you sure you want to delete it?") <> DialogResult.OK Then
                         Exit Sub
                     End If
                 End If

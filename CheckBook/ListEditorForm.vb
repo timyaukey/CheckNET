@@ -86,7 +86,7 @@ Friend Class ListEditorForm
         Try
 
             If mblnModified Then
-                If MsgBox("Do you wish to discard changes made on this window?", MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+                If mobjHostUI.OkCancelMessageBox("Do you wish to discard changes made on this window?") <> DialogResult.OK Then
                     eventArgs.Cancel = True
                     Exit Sub
                 End If

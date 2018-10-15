@@ -41,5 +41,7 @@ Public Interface IHostUI
 
     Sub ErrorMessageBox(ByVal strMessage As String)
 
+    Function OkCancelMessageBox(ByVal strMessage As String) As System.Windows.Forms.DialogResult
+
     ReadOnly Property strSoftwareName() As String
 End Interface

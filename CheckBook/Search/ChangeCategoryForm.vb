@@ -43,7 +43,7 @@ Friend Class ChangeCategoryForm
             Exit Sub
 		End If
 
-        If MsgBox("Are you sure you want to change all splits in the selected transactions " & "with the old category to the new category?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+        If mobjHostUI.OkCancelMessageBox("Are you sure you want to change all splits in the selected transactions " & "with the old category to the new category?") <> DialogResult.OK Then
             Exit Sub
         End If
 

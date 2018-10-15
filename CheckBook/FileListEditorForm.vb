@@ -124,7 +124,7 @@ Public Class FileListEditorForm
         If Not CheckNewFileName(strNewFile) Then
             Exit Sub
         End If
-        If MsgBox("Are you sure you want to rename this file?", MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+        If mobjHostUI.OkCancelMessageBox("Are you sure you want to rename this file?") <> DialogResult.OK Then
             mobjHostUI.InfoMessageBox("File not renamed.")
             Exit Sub
         End If
@@ -140,7 +140,7 @@ Public Class FileListEditorForm
             mobjHostUI.InfoMessageBox("Please select file to delete.")
             Exit Sub
         End If
-        If MsgBox("Are you sure you want to delete this file?", MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+        If mobjHostUI.OkCancelMessageBox("Are you sure you want to delete this file?") <> DialogResult.OK Then
             mobjHostUI.InfoMessageBox("File not deleted.")
             Exit Sub
         End If

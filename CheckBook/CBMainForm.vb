@@ -314,6 +314,11 @@ Friend Class CBMainForm
         MessageBox.Show(strMessage, strSoftwareTitle, MessageBoxButtons.OK, MessageBoxIcon.Error)
     End Sub
 
+    Private Function OkCancelMessageBox(ByVal strMessage As String) As DialogResult Implements IHostUI.OkCancelMessageBox
+        Dim res As DialogResult = MessageBox.Show(strMessage, strSoftwareTitle, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+        Return res
+    End Function
+
     Private ReadOnly Property strSoftwareTitle() As String Implements IHostUI.strSoftwareName
         Get
             Return "Willow Creek Checkbook"
@@ -579,7 +584,7 @@ Friend Class CBMainForm
             mobjSecurity.RestoreUserContext()
             Exit Sub
         End If
-        If MsgBox("Are you sure you want to delete login """ + strDeleteLogin + """?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+        If mobjHostUI.OkCancelMessageBox("Are you sure you want to delete login """ + strDeleteLogin + """?") <> DialogResult.OK Then
             Exit Sub
         End If
         mobjSecurity.DeleteUser()
