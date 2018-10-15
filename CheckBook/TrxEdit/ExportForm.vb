@@ -7,6 +7,7 @@ Friend Class ExportForm
     Inherits System.Windows.Forms.Form
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
+    Private mobjHostUI As IHostUI
     Private mobjCompany As Company
 
     Private mblnCancel As Short
@@ -29,8 +30,9 @@ Friend Class ExportForm
     Private mdatInvDate As Date
     Private mintInvDays As Short
 
-    Public Function blnGetSettings(ByVal objCompany As Company) As Boolean
-        mobjCompany = objCompany
+    Public Function blnGetSettings(ByVal objHostUI As IHostUI) As Boolean
+        mobjHostUI = objHostUI
+        mobjCompany = mobjHostUI.objCompany
         mblnCancel = True
         mstrOutputFile = mobjCompany.strReportPath() & "\ExportSplits.csv"
         lblOutputFile.Text = "Will output to " & mstrOutputFile
@@ -95,18 +97,18 @@ Friend Class ExportForm
                         Exit Function
                     End If
                 End If
-                MsgBox("Invalid " & strLabel & " bracket start date.")
+                mobjHostUI.InfoMessageBox("Invalid " & strLabel & " bracket start date.")
                 Exit Function
             End If
             If Not ((txtDays.Text Like "#") Or (txtDays.Text Like "##") Or (txtDays.Text Like "###")) Then
-                MsgBox("Invalid number of days in " & strLabel & " bracket.")
+                mobjHostUI.InfoMessageBox("Invalid number of days in " & strLabel & " bracket.")
                 Exit Function
             End If
             blnInclude = True
             datDate = CDate(txtDate.Text)
             intDays = CShort(txtDays.Text)
             If intDays < 1 Then
-                MsgBox("Invalid number of days in " & strLabel & " bracket.")
+                mobjHostUI.InfoMessageBox("Invalid number of days in " & strLabel & " bracket.")
                 Exit Function
             End If
         Else

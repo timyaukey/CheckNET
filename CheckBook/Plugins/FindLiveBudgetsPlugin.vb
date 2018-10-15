@@ -14,11 +14,11 @@ Public Class FindLiveBudgetsPlugin
         Try
             Dim objReg As Register = HostUI.objGetCurrentRegister()
             If objReg Is Nothing Then
-                MsgBox("Please click on the register window you wish to search.", MsgBoxStyle.Critical)
+                HostUI.ErrorMessageBox("Please click on the register window you wish to search.")
                 Exit Sub
             End If
             Dim frmFind As LiveBudgetListForm = New LiveBudgetListForm
-            frmFind.ShowModal(objReg, HostUI.objCompany.objBudgets)
+            frmFind.ShowModal(HostUI, objReg, HostUI.objCompany.objBudgets)
             Exit Sub
         Catch ex As Exception
             gTopException(ex)

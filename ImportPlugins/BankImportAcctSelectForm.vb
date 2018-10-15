@@ -6,17 +6,18 @@ Imports CheckBookLib
 Public Class BankImportAcctSelectForm
     Inherits System.Windows.Forms.Form
 
+    Private mobjHostUI As IHostUI
     Private mobjCompany As Company
     Private mobjAccount As Account
 
-    Public Sub ShowMe(ByVal objCompany As Company, ByVal strTitle As String, ByVal objImportHandler As IImportHandler,
-                      ByVal objTrxReader As ITrxReader, ByVal objHostUI As IHostUI)
+    Public Sub ShowMe(ByVal objHostUI As IHostUI, ByVal strTitle As String, ByVal objImportHandler As IImportHandler, ByVal objTrxReader As ITrxReader)
 
         Dim frm As BankImportForm
         Try
-            mobjCompany = objCompany
+            mobjHostUI = objHostUI
+            mobjCompany = mobjHostUI.objCompany
             mobjAccount = Nothing
-            UITools.LoadAccountListBox(lstAccounts, objCompany)
+            UITools.LoadAccountListBox(lstAccounts, mobjCompany)
             Me.ShowDialog()
             Application.DoEvents()
             If Not mobjAccount Is Nothing Then
@@ -38,7 +39,7 @@ Public Class BankImportAcctSelectForm
 
             mobjAccount = UITools.objGetSelectedAccountAndUnload(lstAccounts, Me, mobjCompany)
             If mobjAccount Is Nothing Then
-                MsgBox("Please select the account to import into.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Please select the account to import into.")
                 Exit Sub
             End If
 

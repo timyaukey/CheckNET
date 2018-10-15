@@ -4,11 +4,13 @@ Option Explicit On
 Imports CheckBookLib
 
 Public Class TrialBalanceForm
+    Private mobjHostUI As IHostUI
     Private mobjCompany As Company
 
-    Public Sub ShowWindow(ByVal objCompany As Company, ByVal objHostUI As IHostUI)
-        mobjCompany = objCompany
-        Me.MdiParent = objHostUI.objGetMainForm()
+    Public Sub ShowWindow(ByVal objHostUI As IHostUI)
+        mobjHostUI = objHostUI
+        mobjCompany = mobjHostUI.objCompany
+        Me.MdiParent = mobjHostUI.objGetMainForm()
         ConfigureStatementButtons(False)
         Me.Show()
     End Sub
@@ -23,7 +25,7 @@ Public Class TrialBalanceForm
             Dim objIncExp As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value.Date, True)
             ShowInListView(lvwBalanceSheetAccounts, objBalSheet, "Balance Sheet Through End Date")
             ShowInListView(lvwIncExpAccounts, objIncExp, "Income/Expenses Through End Date")
-            ConfigureStatementButtons(true)
+            ConfigureStatementButtons(True)
             Dim curBalanceError As Decimal = objBalSheet.curGrandTotal - objIncExp.curGrandTotal
             If curBalanceError <> 0D Then
                 lblResultSummary.Text = "Accounts out of balance by " + Utilities.strFormatCurrency(curBalanceError)
@@ -73,7 +75,7 @@ Public Class TrialBalanceForm
     Private Sub btnBalanceSheet_Click(sender As Object, e As EventArgs) Handles btnBalanceSheet.Click
         Try
             Dim objBalSheet As AccountGroupManager = objGetBalanceSheetData()
-            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "BalanceSheet", True)
+            Dim objWriter As HTMLWriter = New HTMLWriter(mobjHostUI, "BalanceSheet", True)
             Dim objAccumAssets As ReportAccumulator = New ReportAccumulator()
             Dim objAccumLiabilities As ReportAccumulator = New ReportAccumulator()
             Dim objAccumEquity As ReportAccumulator = New ReportAccumulator()
@@ -167,7 +169,7 @@ Public Class TrialBalanceForm
     Private Sub btnIncomeExpenseStatement_Click(sender As Object, e As EventArgs) Handles btnIncomeExpenseStatement.Click
         Try
             Dim objIncExp As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, ctlStartDate.Value.Date, ctlEndDate.Value.Date, False)
-            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "ProfitAndLoss", True)
+            Dim objWriter As HTMLWriter = New HTMLWriter(mobjHostUI, "ProfitAndLoss", True)
             Dim objAccumIncome As ReportAccumulator = New ReportAccumulator()
             Dim objAccumOperExp As ReportAccumulator = New ReportAccumulator()
             Dim objAccumOtherExp As ReportAccumulator = New ReportAccumulator()
@@ -220,7 +222,7 @@ Public Class TrialBalanceForm
 
             objWriter.EndReport()
             objWriter.CheckPrinted(objIncExp)
-            MsgBox("Net profit bottom line is: " + Utilities.strFormatCurrency(objAccumTotal.curTotal))
+            mobjHostUI.InfoMessageBox("Net profit bottom line is: " + Utilities.strFormatCurrency(objAccumTotal.curTotal))
             objWriter.ShowReport()
         Catch ex As Exception
             gTopException(ex)
@@ -231,7 +233,7 @@ Public Class TrialBalanceForm
         Try
             Dim objRegister As Register = Nothing
             If MsgBox("This will transfer all income and expense balances to retained earnings as of " + ctlEndDate.Value.Date.ToShortDateString() +
-                      ". Are you sure you want to do this?", MsgBoxStyle.DefaultButton2 Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+                      ". Are you sure you want to do this?", MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
                 Exit Sub
             End If
             'Find a Retained Earnings register to add NormalTrx to.
@@ -242,7 +244,7 @@ Public Class TrialBalanceForm
                 End If
             Next
             If objRegister Is Nothing Then
-                MsgBox("Unable to find Retained Earnings register")
+                mobjHostUI.InfoMessageBox("Unable to find Retained Earnings register")
                 Exit Sub
             End If
             Dim objIncExpTotal As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value.Date, True)
@@ -255,7 +257,7 @@ Public Class TrialBalanceForm
                 Next
             Next
             objRegister.NewAddEnd(objTrx, New LogAdd(), "PostRetainedEarnings.AddTrx")
-            MsgBox("Income and expenses posted to retained earnings.")
+            mobjHostUI.InfoMessageBox("Income and expenses posted to retained earnings.")
         Catch ex As Exception
             gTopException(ex)
         End Try
@@ -263,7 +265,7 @@ Public Class TrialBalanceForm
 
     Private Sub btnLoanBalances_Click(sender As Object, e As EventArgs) Handles btnLoanBalances.Click
         Try
-            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "LoanBalances", False)
+            Dim objWriter As HTMLWriter = New HTMLWriter(mobjHostUI, "LoanBalances", False)
             Dim objBalSheet As AccountGroupManager = objGetBalanceSheetData()
             Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
             Dim objAccumDummy As ReportAccumulator = New ReportAccumulator()
@@ -296,7 +298,7 @@ Public Class TrialBalanceForm
 
     Private Sub btnVendorBalances_Click(sender As Object, e As EventArgs) Handles btnVendorBalances.Click
         Try
-            Dim objWriter As HTMLWriter = New HTMLWriter(mobjCompany, "VendorBalances", False)
+            Dim objWriter As HTMLWriter = New HTMLWriter(mobjHostUI, "VendorBalances", False)
             Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
             Dim objAccumDummy As ReportAccumulator = New ReportAccumulator()
             Dim strLineHeaderClass As String = "ReportHeader2"

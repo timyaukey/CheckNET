@@ -12,6 +12,8 @@ Public Interface IImportHandler
     Sub AutoNewSearch(ByVal objImportedTrx As ImportedTrx, ByVal objReg As Register,
         ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)
 
+    Sub Init(ByVal objHostUI As IHostUI)
+
     ReadOnly Property strBatchUpdateFields() As String
     ReadOnly Property blnAllowBatchUpdates() As Boolean
     ReadOnly Property blnAllowMultiPartMatches() As Boolean
@@ -26,7 +28,9 @@ Public Interface IImportHandler
         ByVal colAllMatchedTrx As IEnumerable(Of NormalTrx), ByRef colUnusedMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)
 
     ReadOnly Property blnAllowIndividualUpdates() As Boolean
+
     Sub IndividualSearch(ByVal objReg As Register, ByVal objImportedTrx As ImportedTrx,
         ByVal blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)
+
     Function blnIndividualUpdate(ByVal objImportedTrx As ImportedTrx, ByVal objMatchedTrx As NormalTrx) As Boolean
 End Interface

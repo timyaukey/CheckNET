@@ -8,13 +8,15 @@ Friend Class RepeatSeqInfoForm
     Inherits System.Windows.Forms.Form
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
+    Private mobjHostUI As IHostUI
     Private mobjReg As Register
     Private mstrRepeatKey As String
 
-    Public Sub ShowMe(ByVal objReg As Register, ByVal strRepeatKey As String)
+    Public Sub ShowMe(ByVal objHostUI As IHostUI, ByVal objReg As Register, ByVal strRepeatKey As String)
+        mobjHostUI = objHostUI
         mobjReg = objReg
         If strRepeatKey = "" Then
-            MsgBox("Transaction has no repeat key.")
+            mobjHostUI.InfoMessageBox("Transaction has no repeat key.")
             Exit Sub
         End If
         mstrRepeatKey = strRepeatKey

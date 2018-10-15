@@ -57,7 +57,6 @@ Public Class CategoryTranslator
             strRoot = "TmpCat#" & strKey
             strName = "E:" & strRoot
             Me.Add(New StringTransElement(Me, strKey, strName, " " & strRoot))
-            MsgBox("Error: Could not find code " & strKey & " in category " & "list. Have assigned it temporary category name " & strName & ", which " & "you will probably want to edit to make this category " & "permanent.", MsgBoxStyle.Information)
         End If
         Return strName
     End Function

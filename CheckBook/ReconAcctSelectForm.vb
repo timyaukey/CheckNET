@@ -6,10 +6,12 @@ Imports CheckBookLib
 Friend Class ReconAcctSelectForm
     Inherits System.Windows.Forms.Form
 
+    Private mobjHostUI As IHostUI
     Private mobjCompany As Company
 
-    Public Sub Init(ByVal objCompany As Company)
-        mobjCompany = objCompany
+    Public Sub Init(ByVal objHostUI As IHostUI)
+        mobjHostUI = objHostUI
+        mobjCompany = mobjHostUI.objCompany
     End Sub
 
     Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCancel.Click
@@ -24,12 +26,12 @@ Friend Class ReconAcctSelectForm
 
             objAccount = UITools.objGetSelectedAccountAndUnload(lstAccounts, Me, mobjCompany)
             If objAccount Is Nothing Then
-                MsgBox("Please select the account to reconcile.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Please select the account to reconcile.")
                 Exit Sub
             End If
 
             frm = New ReconcileForm
-            frm.ShowMe(objAccount)
+            frm.ShowMe(mobjHostUI, objAccount)
 
             Exit Sub
         Catch ex As Exception

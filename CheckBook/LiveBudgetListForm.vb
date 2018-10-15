@@ -7,11 +7,13 @@ Friend Class LiveBudgetListForm
     Inherits System.Windows.Forms.Form
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
+    Private mobjHostUI As IHostUI
     Private mobjReg As Register
     Private mobjBudgets As IStringTranslator
 
-    Public Sub ShowModal(ByVal objReg_ As Register, ByVal objBudgets_ As IStringTranslator)
+    Public Sub ShowModal(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register, ByVal objBudgets_ As IStringTranslator)
 
+        mobjHostUI = objHostUI_
         mobjReg = objReg_
         mobjBudgets = objBudgets_
         Me.Text = "Live Budgets In " & mobjReg.strTitle
@@ -28,7 +30,7 @@ Friend Class LiveBudgetListForm
         Try
 
             If Not Utilities.blnIsValidDate(txtTargetDate.Text) Then
-                MsgBox("Invalid target date.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Invalid target date.")
                 Exit Sub
             End If
             datTarget = CDate(txtTargetDate.Text)

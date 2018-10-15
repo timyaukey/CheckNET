@@ -5,11 +5,13 @@ Imports CheckBookLib
 
 Public Class ObjectEditorForm
 
+    Private mobjHostUI As IHostUI
     Private mobjData As IFilePersistable
 
-    Public Function ShowEditor(ByVal objCompany As Company, ByVal objData As IFilePersistable, ByVal strTitle As String) As Boolean
+    Public Function ShowEditor(ByVal objHostUI As IHostUI, ByVal objData As IFilePersistable, ByVal strTitle As String) As Boolean
         Dim result As DialogResult
-        StringTranslatorUIEditor.objCompany = objCompany
+        mobjHostUI = objHostUI
+        StringTranslatorUIEditor.objCompany = mobjHostUI.objCompany
         mobjData = objData
         grdData.SelectedObject = mobjData
         Me.Text = strTitle
@@ -25,7 +27,7 @@ Public Class ObjectEditorForm
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         Dim validationError As String = mobjData.Validate()
         If Not validationError Is Nothing Then
-            MsgBox(validationError, MsgBoxStyle.OkOnly)
+            mobjHostUI.InfoMessageBox(validationError)
             Return
         End If
         Me.DialogResult = Windows.Forms.DialogResult.OK

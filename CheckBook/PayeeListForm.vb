@@ -1,12 +1,14 @@
 Option Strict Off
 Option Explicit On
 
+Imports System.ComponentModel
 Imports CheckBookLib
 
 Friend Class PayeeListForm
     Inherits System.Windows.Forms.Form
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
+    Private mobjHostUI As IHostUI
     Private mobjCompany As Company
     'A deep clone of gdomTransTable.
     Private mdomNewTransTable As VB6XmlDocument
@@ -21,14 +23,17 @@ Friend Class PayeeListForm
     Private mobjDisplayedPayee As System.Windows.Forms.ListViewItem
     'True iff Form_Activate event has fired.
     Private mblnActivated As Boolean
+    'Ignore this number of selected item changed event.
+    Private mintIgnoreSelectionEvents As Integer
 
-    Public Sub ShowMe(ByVal objCompany As Company)
+    Public Sub ShowMe(ByVal objHostUI As IHostUI)
         Try
 
-            mobjCompany = objCompany
+            mobjHostUI = objHostUI
+            mobjCompany = mobjHostUI.objCompany
             LoadSharedDocument()
-            UITools.LoadComboFromStringTranslator(cboCategory, objCompany.objCategories, True)
-            UITools.LoadComboFromStringTranslator(cboBudget, objCompany.objBudgets, True)
+            UITools.LoadComboFromStringTranslator(cboCategory, mobjCompany.objCategories, True)
+            UITools.LoadComboFromStringTranslator(cboBudget, mobjCompany.objBudgets, True)
             gLoadMatchNarrowingMethods(cboNarrowMethod)
             Me.ShowDialog()
 
@@ -109,7 +114,7 @@ Friend Class PayeeListForm
         Try
 
             If melmPayeeToSave Is Nothing Then
-                MsgBox("You must select a memorized transaction to delete.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("You must select a memorized transaction to delete.")
                 Exit Sub
             End If
 
@@ -122,45 +127,37 @@ Friend Class PayeeListForm
         End Try
     End Sub
 
-    'lvwPayees_ItemClick is not converted to an event handler in .NET,
-    'so we have to add our own ItemSelectionChanged handler which calls it.
-
     Private Sub lvwPayees_ItemSelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.ListViewItemSelectionChangedEventArgs) Handles lvwPayees.ItemSelectionChanged
-        If e.IsSelected Then
-            lvwPayees_ItemClick(e.Item)
+        If mintIgnoreSelectionEvents <= 0 Then
+            If e.IsSelected Then
+                SelectedItemChanged(e.Item)
+            End If
         End If
+        mintIgnoreSelectionEvents = mintIgnoreSelectionEvents - 1
     End Sub
 
-    'UPGRADE_ISSUE: MSComctlLib.ListView event lvwPayees.ItemClick was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="ABD9AF39-7E24-4AFF-AD8D-3675C1AA3054"'
-    Private Sub lvwPayees_ItemClick(ByVal Item As System.Windows.Forms.ListViewItem)
-        'It does not appear this event is fired by setting .SelectedItem,
-        'but just to be sure...
-        Static sblnInItemClick As Boolean
-
+    Private Sub SelectedItemChanged(ByVal Item As System.Windows.Forms.ListViewItem)
         Try
 
-            If sblnInItemClick Then
-                Exit Sub
-            End If
-            sblnInItemClick = True
             If lvwPayees.FocusedItem Is Nothing Then
-                sblnInItemClick = False
                 Exit Sub
             End If
             If Not mobjDisplayedPayee Is Nothing Then
                 If blnDisplayedPayeeInvalid() Then
-                    lvwPayees.FocusedItem = mobjDisplayedPayee
-                    sblnInItemClick = False
+                    'TO DO: Fix display bug. It shows both old and new selected items,
+                    'for reasons I do not understand. The software works correctly, it
+                    'just shows the extra selected item.
+                    mintIgnoreSelectionEvents = 3 + lvwPayees.SelectedItems.Count
+                    lvwPayees.SelectedItems.Clear()
+                    mobjDisplayedPayee.Selected = True
                     Exit Sub
                 End If
                 CopyPayeeToXML()
             End If
             ShowSelectedPayee()
-            sblnInItemClick = False
 
             Exit Sub
         Catch ex As Exception
-            sblnInItemClick = False
             gTopException(ex)
         End Try
     End Sub
@@ -312,26 +309,26 @@ Friend Class PayeeListForm
     Private Function blnDisplayedPayeeInvalid() As Boolean
         blnDisplayedPayeeInvalid = True
         If Trim(txtPayee.Text) = "" Then
-            MsgBox("Name (or other transaction description) is required.", MsgBoxStyle.Critical)
+            mobjHostUI.ErrorMessageBox("Name (or other transaction description) is required.")
             Exit Function
         End If
         If txtAmount.Text <> "" Then
             If Not IsNumeric(txtAmount.Text) Then
-                MsgBox("Invalid amount.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Invalid amount.")
                 Exit Function
             End If
         End If
         If (txtMinAmount.Text <> "") <> (txtMaxAmount.Text <> "") Then
-            MsgBox("Min and max match amounts must either both be specified, " & "or both blank.", MsgBoxStyle.Critical)
+            mobjHostUI.ErrorMessageBox("Min and max match amounts must either both be specified, " & "or both blank.")
             Exit Function
         End If
         If txtMinAmount.Text <> "" Then
             If Not IsNumeric(txtMinAmount.Text) Then
-                MsgBox("Min match amount must be numeric.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Min match amount must be numeric.")
                 Exit Function
             End If
             If Not IsNumeric(txtMaxAmount.Text) Then
-                MsgBox("Max match amount must be numeric.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Max match amount must be numeric.")
                 Exit Function
             End If
         End If

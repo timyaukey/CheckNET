@@ -5,6 +5,12 @@ Imports CheckBookLib
 Public Class ImportHandlerChecks
     Implements IImportHandler
 
+    Private mobjHostUI As IHostUI
+
+    Public Sub Init(ByVal objHostUI As IHostUI) Implements IImportHandler.Init
+        mobjHostUI = objHostUI
+    End Sub
+
     Public ReadOnly Property blnAllowNew As Boolean Implements IImportHandler.blnAllowNew
         Get
             Return True

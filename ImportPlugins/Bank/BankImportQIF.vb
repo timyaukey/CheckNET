@@ -22,7 +22,7 @@ Public Class BankImportQIF
     Public Overrides Function GetTrxReader() As ITrxReader
         Dim objInput As TrxImportPlugin.InputFile = objAskForFile("Select QIF File From Bank To Import", "QIF", "BankQIFPath")
         If Not objInput Is Nothing Then
-            Return New ReadBankQIF(objInput.objFile, objInput.strFile)
+            Return New ReadBankQIF(HostUI, objInput.objFile, objInput.strFile)
         End If
         Return Nothing
     End Function

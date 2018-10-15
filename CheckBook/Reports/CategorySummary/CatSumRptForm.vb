@@ -8,6 +8,7 @@ Imports CheckBookLib
 Friend Class CatSumRptForm
 	Inherits System.Windows.Forms.Form
 
+    Private mobjHostUI As IHostUI
     Private mobjCompany As Company
     Private maudtCatTotals() As PublicTypes.CategoryInfo 'Indexed by index in gobjCategories.
     Private mcolSelectedAccounts As IEnumerable(Of Account)
@@ -23,11 +24,12 @@ Friend Class CatSumRptForm
 	
 	Private Const mintAMOUNT_WIDTH As Short = 24
 
-    Public Sub ShowMe(ByVal objCompany As Company, ByRef audtCatTotals() As PublicTypes.CategoryInfo, ByVal colSelectedAccounts As IEnumerable(Of Account),
+    Public Sub ShowMe(ByVal objHostUI As IHostUI, ByRef audtCatTotals() As PublicTypes.CategoryInfo, ByVal colSelectedAccounts As IEnumerable(Of Account),
                       ByVal objCats As IStringTranslator, ByVal datStart As Date, ByVal datEnd As Date,
-                      ByVal blnIncludeFake As Boolean, ByVal blnIncludeGenerated As Boolean, ByVal objHostUI As IHostUI)
+                      ByVal blnIncludeFake As Boolean, ByVal blnIncludeGenerated As Boolean)
 
-        mobjCompany = objCompany
+        mobjHostUI = objHostUI
+        mobjCompany = mobjHostUI.objCompany
         maudtCatTotals = audtCatTotals.Clone()
         mcolSelectedAccounts = colSelectedAccounts
         mobjCats = objCats
@@ -41,7 +43,7 @@ Friend Class CatSumRptForm
         ' loading and showing an MDI
         ' child's parent.
         Me.MdiParent = objHostUI.objGetMainForm()
-        objHostUI.objGetMainForm().Show()
+        mobjHostUI.objGetMainForm().Show()
 
         Me.Show()
 
@@ -79,7 +81,7 @@ Friend Class CatSumRptForm
             FileClose(mintOutFile)
             mintOutFile = 0
 
-            MsgBox("Report also written to """ & strOutFile & """.")
+            mobjHostUI.InfoMessageBox("Report also written to """ & strOutFile & """.")
 
             Exit Sub
         Catch ex As Exception
@@ -267,7 +269,7 @@ Friend Class CatSumRptForm
             My.Computer.Clipboard.Clear()
             My.Computer.Clipboard.SetText(strResult)
 
-            MsgBox("Results copied for clipboard.")
+            mobjHostUI.InfoMessageBox("Results copied for clipboard.")
 
             Exit Sub
         Catch ex As Exception

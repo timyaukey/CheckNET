@@ -368,8 +368,7 @@ Public Class BankImportForm
                 If colUnusedMatches.Count() = 1 Then
                     blnNonExactConfirmed = False
                     If blnAllowNonExact And Not blnExactMatch Then
-                        If MsgBox(strDescribeItem(intItemIndex) & " is only a partial match. " & "Update it anyway?",
-                                  MsgBoxStyle.YesNo Or MsgBoxStyle.DefaultButton1, "Confirm") = MsgBoxResult.Yes Then
+                        If MsgBox(strDescribeItem(intItemIndex) & " is only a partial match. " & "Update it anyway?", MsgBoxStyle.YesNo, "Confirm") = MsgBoxResult.Yes Then
                             blnNonExactConfirmed = True
                         End If
                     End If
@@ -749,12 +748,12 @@ Public Class BankImportForm
             Dim strFailReason As String = ""
 
             If mobjSelectedRegister Is Nothing Then
-                MsgBox("First select the register to create the transactions in.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("First select the register to create the transactions in.")
                 Exit Sub
             End If
 
             If MsgBox("Do you really want to create new transactions for everything" & " you have checked?",
-                      MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                      MsgBoxStyle.Question Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
                 Exit Sub
             End If
 
@@ -1183,7 +1182,7 @@ Public Class BankImportForm
 
             'Did they select anything?
             If lvwTrx.FocusedItem Is Nothing Then
-                MsgBox("Select an item in the top list first.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Select an item in the top list first.")
                 Exit Sub
             End If
             SearchForMatches()
@@ -1376,7 +1375,7 @@ Public Class BankImportForm
                 Exit Sub
             End If
             If mobjSelectedRegister Is Nothing Then
-                MsgBox("First select the register to create the transaction in.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("First select the register to create the transaction in.")
                 Exit Sub
             End If
 
@@ -1405,12 +1404,12 @@ Public Class BankImportForm
                 Exit Sub
             End If
             If mobjSelectedRegister Is Nothing Then
-                MsgBox("First select the register to create the transaction in.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("First select the register to create the transaction in.")
                 Exit Sub
             End If
 
             With maudtItem(intSelectedItemIndex())
-                If MsgBox("Create transaction " & strDescribeTrx(.objImportedTrx) & "?", MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton1, "Create Transaction") <> MsgBoxResult.Ok Then
+                If MsgBox("Create transaction " & strDescribeTrx(.objImportedTrx) & "?", MsgBoxStyle.OkCancel, "Create Transaction") <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
                 .objImportedTrx.SetReg(mobjSelectedRegister)
@@ -1436,13 +1435,13 @@ Public Class BankImportForm
                 Exit Sub
             End If
             If lvwMatches.FocusedItem Is Nothing Then
-                MsgBox("First select the matched transaction to update.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("First select the matched transaction to update.")
                 Exit Sub
             End If
 
             objMatchedTrx = maudtMatch(intSelectedMatchIndex())
             If objMatchedTrx.strImportKey <> "" Then
-                MsgBox("You may not update a transaction that has already been imported.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("You may not update a transaction that has already been imported.")
                 Exit Sub
             End If
             With maudtItem(intSelectedItemIndex())
@@ -1463,17 +1462,17 @@ Public Class BankImportForm
 
     Private Function blnValidImportItemSelected() As Boolean
         If lvwTrx.FocusedItem Is Nothing Then
-            MsgBox("First select the import item in the top list.", MsgBoxStyle.Critical)
+            mobjHostUI.ErrorMessageBox("First select the import item in the top list.")
             Exit Function
         End If
         Select Case maudtItem(intSelectedItemIndex()).lngStatus
             Case ImportStatus.mlngIMPSTS_UNRESOLVED
             Case ImportStatus.mlngIMPSTS_NEW, ImportStatus.mlngIMPSTS_UPDATE
-                MsgBox("This import item has already been processed.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("This import item has already been processed.")
                 Exit Function
             Case ImportStatus.mlngIMPSTS_PRIOR
                 If MsgBox("This item exactly matches an item imported in " & "a previous import session. Do you wish to import it anyway?",
-                          MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                          MsgBoxStyle.Question Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
                     Exit Function
                 End If
             Case Else

@@ -15,14 +15,15 @@ Public Class ReadBankOFX
     'list of possible payees. Payees not in the list are allowed, but no category
     'information will be added for them.
 
-
+    Private mobjHostUI As IHostUI
     Private mobjFile As TextReader
     Private mstrFile As String
     Private mstrInputLine As String
     Private mblnInputEOF As Boolean
     Private mobjUtil As ImportUtilities
 
-    Public Sub New(ByVal objFile As TextReader, ByVal strFile As String)
+    Public Sub New(ByVal objHostUI As IHostUI, ByVal objFile As TextReader, ByVal strFile As String)
+        mobjHostUI = objHostUI
         mobjFile = objFile
         mstrFile = strFile
     End Sub
@@ -40,21 +41,21 @@ Public Class ReadBankOFX
             If strHeaderLine = "OFXHEADER:100" Then
                 mobjUtil.blnMakeFakeTrx = False
             Else
-                MsgBox("File is not an OFX file.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("File is not an OFX file.")
                 mobjFile.Close()
                 Exit Function
             End If
             mobjFile.ReadLine()
             strHeaderLine = mobjFile.ReadLine()
             If strHeaderLine <> "VERSION:102" Then
-                MsgBox("File is not correct OFX version.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("File is not correct OFX version.")
                 mobjFile.Close()
                 Exit Function
             End If
             Do
                 strHeaderLine = mobjFile.ReadLine()
                 If strHeaderLine Is Nothing Then
-                    MsgBox("Unexpected EOF in header section of OFX file.", MsgBoxStyle.Critical)
+                    mobjHostUI.ErrorMessageBox("Unexpected EOF in header section of OFX file.")
                     mobjFile.Close()
                     Exit Function
                 End If

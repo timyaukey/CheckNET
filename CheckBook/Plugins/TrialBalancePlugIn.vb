@@ -12,7 +12,7 @@ Public Class TrialBalancePlugIn
 
     Public Overrides Sub ClickHandler(sender As Object, e As EventArgs)
         Dim frm As TrialBalanceForm = New TrialBalanceForm()
-        frm.ShowWindow(Me.HostUI.objCompany, HostUI)
+        frm.ShowWindow(Me.HostUI)
     End Sub
 
     Public Overrides Function GetMenuTitle() As String

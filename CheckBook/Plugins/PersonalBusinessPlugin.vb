@@ -14,11 +14,11 @@ Public Class PersonalBusinessPlugin
         Try
             Dim objReg As Register = HostUI.objGetCurrentRegister()
             If objReg Is Nothing Then
-                MsgBox("Please click on the register window you wish to adjust.", MsgBoxStyle.Critical)
+                HostUI.ErrorMessageBox("Please click on the register window you wish to adjust.")
                 Exit Sub
             End If
             Dim frmAdjust As AdjustPersonalBusinessForm = New AdjustPersonalBusinessForm
-            frmAdjust.ShowModal(objReg.objAccount)
+            frmAdjust.ShowModal(HostUI, objReg.objAccount)
             Exit Sub
         Catch ex As Exception
             gTopException(ex)

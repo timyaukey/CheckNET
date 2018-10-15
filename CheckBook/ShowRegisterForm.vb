@@ -48,36 +48,36 @@ Friend Class ShowRegisterForm
         Try
 
             If Not mobjCompany.objSecurity.blnIsAdministrator Then
-                MsgBox("Your login is not authorized to delete registers.")
+                mobjHostUI.InfoMessageBox("Your login is not authorized to delete registers.")
                 Exit Sub
             End If
 
             If gcolForms().Count() <> 1 Then
-                MsgBox("You may not delete a register while other windows are open.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("You may not delete a register while other windows are open.")
                 Exit Sub
             End If
 
             With maudtElement(lstRegisters.SelectedIndex)
                 If .objSelectedReg Is Nothing Then
-                    MsgBox("You must select a register, not an account.", MsgBoxStyle.Information)
+                    mobjHostUI.InfoMessageBox("You must select a register, not an account.")
                     Exit Sub
                 End If
                 If .objAccount.blnUnsavedChanges Then
-                    MsgBox("You may not delete a register from an account " & "with unsaved changes.", MsgBoxStyle.Critical)
+                    mobjHostUI.ErrorMessageBox("You may not delete a register from an account " & "with unsaved changes.")
                     Exit Sub
                 End If
                 If .objAccount.colRegisters.Count() <= 1 Then
-                    MsgBox("You may not delete the last register from an account.", MsgBoxStyle.Critical)
+                    mobjHostUI.ErrorMessageBox("You may not delete the last register from an account.")
                     Exit Sub
                 End If
                 objReg = .objSelectedReg
-                If MsgBox("Do you really want to delete register """ & objReg.strTitle & """?", MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                If MsgBox("Do you really want to delete register """ & objReg.strTitle & """?", MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
-                If MsgBox("Are you really sure you want to delete it?", MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                If MsgBox("Are you really sure you want to delete it?", MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
-                MsgBox("Will delete all transfers to/from other registers.", MsgBoxStyle.Information)
+                mobjHostUI.InfoMessageBox("Will delete all transfers to/from other registers.")
                 'Now look for non-generated transfers and delete them,
                 'so the other half of the transfer is deleted from whatever
                 'register it belongs to. Don't worry about generated transfers,
@@ -105,7 +105,7 @@ Friend Class ShowRegisterForm
                 objReg.blnDeleted = True
                 .objAccount.SetChanged()
             End With
-            MsgBox("Register deleted. Will quit program now, to save this change to the account.", MsgBoxStyle.Information)
+            mobjHostUI.InfoMessageBox("Register deleted. Will quit program now, to save this change to the account.")
             CBMainForm.Close()
 
             Exit Sub
@@ -118,12 +118,12 @@ Friend Class ShowRegisterForm
         Try
 
             If Not mobjCompany.objSecurity.blnIsAdministrator Then
-                MsgBox("Your login is not authorized to create accounts.")
+                mobjHostUI.InfoMessageBox("Your login is not authorized to create accounts.")
                 Exit Sub
             End If
 
-            If gblnAskAndCreateAccount(mobjCompany) Then
-                MsgBox("Account will appear the next time you start the software.", MsgBoxStyle.Information)
+            If gblnAskAndCreateAccount(mobjHostUI) Then
+                mobjHostUI.InfoMessageBox("Account will appear the next time you start the software.")
             End If
 
             Exit Sub
@@ -138,26 +138,26 @@ Friend Class ShowRegisterForm
         Try
 
             If Not mobjCompany.objSecurity.blnIsAdministrator Then
-                MsgBox("Your login is not authorized to delete accounts.")
+                mobjHostUI.InfoMessageBox("Your login is not authorized to delete accounts.")
                 Exit Sub
             End If
 
             If gcolForms().Count() <> 1 Then
-                MsgBox("You may not delete an account while other windows are open.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("You may not delete an account while other windows are open.")
                 Exit Sub
             End If
 
             With maudtElement(lstRegisters.SelectedIndex)
                 strNameRoot = Replace(LCase(.objAccount.strFileNameRoot), ".act", "")
-                If MsgBox("Are you sure you want to delete account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                If MsgBox("Are you sure you want to delete account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
-                If MsgBox("Are you REALLY, REALLY, SURE you want to delete account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                If MsgBox("Are you REALLY, REALLY, SURE you want to delete account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
             End With
             DeleteAccount(strNameRoot)
-            MsgBox("Account deleted. Will quit program now, to save this change.", MsgBoxStyle.Information)
+            mobjHostUI.InfoMessageBox("Account deleted. Will quit program now, to save this change.")
             CBMainForm.Close()
 
             Exit Sub
@@ -205,7 +205,7 @@ Friend Class ShowRegisterForm
         Try
 
             If Not mobjCompany.objSecurity.blnIsAdministrator Then
-                MsgBox("Your login is not authorized to create a new register.")
+                mobjHostUI.InfoMessageBox("Your login is not authorized to create a new register.")
                 Exit Sub
             End If
 
@@ -215,7 +215,7 @@ Friend Class ShowRegisterForm
             End If
 
             With maudtElement(lstRegisters.SelectedIndex)
-                If MsgBox("Do you really want to create a new register named """ & strName & """ in account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                If MsgBox("Do you really want to create a new register named """ & strName & """ in account """ & .objAccount.strTitle & """?", MsgBoxStyle.Question Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
                 For Each objReg In .objAccount.colRegisters
@@ -225,7 +225,7 @@ Friend Class ShowRegisterForm
                 Next objReg
                 .objAccount.CreateRegister(CStr(intHighestKey + 1), strName, True)
                 .objAccount.SetChanged()
-                MsgBox("New register has been added to account and will appear the " & "next time you start the software.", MsgBoxStyle.Information)
+                mobjHostUI.InfoMessageBox("New register has been added to account and will appear the " & "next time you start the software.")
             End With
 
             Exit Sub
@@ -238,8 +238,8 @@ Friend Class ShowRegisterForm
         Try
             With maudtElement(lstRegisters.SelectedIndex)
                 Using frm As AccountForm = New AccountForm
-                    If frm.ShowDialog(.objAccount, True, Not mobjCompany.objSecurity.blnIsAdministrator) = DialogResult.OK Then
-                        MsgBox("Account property changes will take effect the next time you start the software.", MsgBoxStyle.Information)
+                    If frm.ShowDialog(mobjHostUI, .objAccount, True, Not mobjCompany.objSecurity.blnIsAdministrator) = DialogResult.OK Then
+                        mobjHostUI.InfoMessageBox("Account property changes will take effect the next time you start the software.")
                     End If
                 End Using
             End With
@@ -254,13 +254,13 @@ Friend Class ShowRegisterForm
         Try
 
             If lstRegisters.SelectedIndex < 0 Then
-                MsgBox("Please select a register first.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Please select a register first.")
                 Exit Sub
             End If
 
             With maudtElement(lstRegisters.SelectedIndex)
                 If .objSelectedReg Is Nothing Then
-                    MsgBox("You must select a register, not an account.", MsgBoxStyle.Information)
+                    mobjHostUI.InfoMessageBox("You must select a register, not an account.")
                     Exit Sub
                 End If
                 mobjHostUI.ShowRegister(.objSelectedReg)
@@ -279,17 +279,17 @@ Friend Class ShowRegisterForm
         Try
 
             If lstRegisters.SelectedIndex < 0 Then
-                MsgBox("Please select a register first.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Please select a register first.")
                 Exit Sub
             End If
 
             With maudtElement(lstRegisters.SelectedIndex)
                 If .objSelectedReg Is Nothing Then
-                    MsgBox("You must select a register, not an account.", MsgBoxStyle.Information)
+                    mobjHostUI.InfoMessageBox("You must select a register, not an account.")
                     Exit Sub
                 End If
                 objProps = New RegPropertiesForm
-                objProps.ShowModal(.objSelectedReg, Not mobjCompany.objSecurity.blnIsAdministrator)
+                objProps.ShowModal(mobjHostUI, .objSelectedReg, Not mobjCompany.objSecurity.blnIsAdministrator)
             End With
 
             Exit Sub
@@ -328,10 +328,10 @@ Friend Class ShowRegisterForm
                         Next
                         System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
                     Else
-                        MsgBox("Invalid cutoff date.")
+                        mobjHostUI.InfoMessageBox("Invalid cutoff date.")
                     End If
                 Else
-                    MsgBox("Invalid ending date.")
+                    mobjHostUI.InfoMessageBox("Invalid ending date.")
                 End If
             End If
 
@@ -413,7 +413,7 @@ Friend Class ShowRegisterForm
         With maudtElement(lstRegisters.SelectedIndex)
 
             Using frm As New FileListEditorForm
-                frm.ShowDialogForPath(mobjCompany, "Transaction Generators", gstrGeneratorPath(.objAccount, .objSelectedReg),
+                frm.ShowDialogForPath(mobjHostUI, "Transaction Generators", gstrGeneratorPath(.objAccount, .objSelectedReg),
                     "gen", New TrxGenFilePersister())
             End Using
         End With

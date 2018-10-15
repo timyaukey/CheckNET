@@ -6,14 +6,16 @@ Imports CheckBookLib
 Friend Class PayeeMatchForm
     Inherits System.Windows.Forms.Form
 
+    Private mobjHostUI As IHostUI
     Private mcolPayees As VB6XmlNodeList
     Private melmSelect As VB6XmlElement
     Private mblnActivated As Boolean
 
-    Public Function elmSelect(ByVal colPayees As VB6XmlNodeList) As VB6XmlElement
+    Public Function elmSelect(ByVal objHostUI As IHostUI, ByVal colPayees As VB6XmlNodeList) As VB6XmlElement
         Dim elmPayee As VB6XmlElement
         Dim intIndex As Short
 
+        mobjHostUI = objHostUI
         elmSelect = Nothing
         Try
 
@@ -63,7 +65,7 @@ Friend Class PayeeMatchForm
         Try
 
             If lvwPayees.FocusedItem Is Nothing Then
-                MsgBox("Select a payee first.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Select a payee first.")
                 Exit Sub
             End If
             melmSelect = mcolPayees.Item(lvwPayees.FocusedItem.Tag)

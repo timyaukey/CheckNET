@@ -112,24 +112,24 @@ Friend Class RptScanSplitsForm
 
             blnBadSpecs = True
             If lstAccounts.SelectedItems.Count < 1 Then
-                MsgBox("You must select at least one account.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("You must select at least one account.")
                 Exit Function
             End If
 
             If Not Utilities.blnIsValidDate(txtStartDate.Text) Then
-                MsgBox("Invalid transaction starting date.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Invalid transaction starting date.")
                 Exit Function
             End If
             mdatStart = CDate(txtStartDate.Text)
 
             If Not Utilities.blnIsValidDate(txtEndDate.Text) Then
-                MsgBox("Invalid transaction ending date.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Invalid transaction ending date.")
                 Exit Function
             End If
             mdatEnd = CDate(txtEndDate.Text)
 
             If mdatEnd < mdatStart Then
-                MsgBox("Ending date may not be earlier than starting date.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Ending date may not be earlier than starting date.")
                 Exit Function
             End If
 
@@ -145,7 +145,7 @@ Friend Class RptScanSplitsForm
 
             If txtReportDate.Visible Then
                 If Not Utilities.blnIsValidDate(txtReportDate.Text) Then
-                    MsgBox("Invalid report date.", MsgBoxStyle.Critical)
+                    mobjHostUI.ErrorMessageBox("Invalid report date.")
                     Exit Function
                 End If
                 mdatReportDate = CDate(txtReportDate.Text)
@@ -204,7 +204,7 @@ Friend Class RptScanSplitsForm
                 End If
             Next
             lblProgress.Text = ""
-            MsgBox("Checked " & mlngSplitCount & " splits.", MsgBoxStyle.Information)
+            mobjHostUI.InfoMessageBox("Checked " & mlngSplitCount & " splits.")
 
             Exit Sub
         Catch ex As Exception
@@ -268,7 +268,7 @@ Friend Class RptScanSplitsForm
                 Case SplitReportType.Totals
                     intCatIndex = mobjCompany.objCategories.intLookupKey(objSplit.strCategoryKey)
                     If intCatIndex = 0 Then
-                        MsgBox("Could not find category key " & objSplit.strCategoryKey & " for " & "trx dated " & Utilities.strFormatDate(objTrx.datDate) & " " & "in register " & objReg.strTitle)
+                        mobjHostUI.InfoMessageBox("Could not find category key " & objSplit.strCategoryKey & " for " & "trx dated " & Utilities.strFormatDate(objTrx.datDate) & " " & "in register " & objReg.strTitle)
                     Else
                         With maudtCatTotals(intCatIndex)
                             .lngCount = .lngCount + 1
@@ -293,8 +293,8 @@ Friend Class RptScanSplitsForm
             Select Case mlngRptType
                 Case SplitReportType.Totals
                     frmSumRpt = New CatSumRptForm
-                    frmSumRpt.ShowMe(mobjCompany, maudtCatTotals, mcolSelectAccounts, mobjCompany.objCategories, mdatStart, mdatEnd,
-                                     mblnIncludeFake, mblnIncludeGenerated, mobjHostUI)
+                    frmSumRpt.ShowMe(mobjHostUI, maudtCatTotals, mcolSelectAccounts, mobjCompany.objCategories, mdatStart, mdatEnd,
+                                     mblnIncludeFake, mblnIncludeGenerated)
                 Case Else
                     gRaiseError("Unrecognized category report type")
             End Select

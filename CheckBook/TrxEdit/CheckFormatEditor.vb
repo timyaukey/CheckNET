@@ -5,11 +5,13 @@ Imports CheckBookLib
 Imports System.Xml.Serialization
 
 Public Class CheckFormatEditor
+    Private mobjHostUI As IHostUI
     Private mobjCompany As Company
     Private mobjFormat As CheckFormat
 
-    Public Sub ShowMe(ByVal objCompany As Company)
-        mobjCompany = objCompany
+    Public Sub ShowMe(ByVal objHostUI As IHostUI)
+        mobjHostUI = objHostUI
+        mobjCompany = mobjHostUI.objCompany
         Me.ShowDialog()
     End Sub
 
@@ -22,7 +24,7 @@ Public Class CheckFormatEditor
             End Using
         Catch ex As System.IO.FileNotFoundException
             prpDetails.SelectedObject = New CheckFormat()
-            MsgBox("Creating default check format. You will need to fix it to match your check stock, and then save it.")
+            mobjHostUI.InfoMessageBox("Creating default check format. You will need to fix it to match your check stock, and then save it.")
         Catch ex As Exception
             gTopException(ex)
         End Try

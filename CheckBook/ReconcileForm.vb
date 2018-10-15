@@ -7,6 +7,7 @@ Imports CheckBookLib
 Friend Class ReconcileForm
     Inherits System.Windows.Forms.Form
 
+    Private mobjHostUI As IHostUI
     Private mobjAccount As Account
 
     'Describe one normal, non-fake Trx in mobjAccount which is not already reconciled.
@@ -42,7 +43,8 @@ Friend Class ReconcileForm
 
     Private Const mstrREG_ENDING_BAL As String = "Ending Balances"
 
-    Public Sub ShowMe(ByVal objAccount_ As Account)
+    Public Sub ShowMe(ByVal objHostUI_ As IHostUI, ByVal objAccount_ As Account)
+        mobjHostUI = objHostUI_
         mobjAccount = objAccount_
         'This form must be modal because ReconTrx has a Register index,
         'which cannot change.
@@ -237,14 +239,14 @@ Friend Class ReconcileForm
         Try
 
             If txtClearedBalance.Text <> txtEndingBalance.Text Then
-                MsgBox("The cleared balance is not equal to the ending statement balance.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("The cleared balance is not equal to the ending statement balance.")
                 Exit Sub
             End If
 
             SaveChanges(Trx.TrxStatus.Reconciled)
             SaveSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.strTitle, "")
 
-            MsgBox("Congratulations!" & vbCrLf & vbCrLf & "You have reconciled your account to the ending balance " & "on your bank statement. This means that the total of transactions marked as " & "reconciled in the software equals the bank statement ending balance.", MsgBoxStyle.Information)
+            mobjHostUI.InfoMessageBox("Congratulations!" & vbCrLf & vbCrLf & "You have reconciled your account to the ending balance " & "on your bank statement. This means that the total of transactions marked as " & "reconciled in the software equals the bank statement ending balance.")
             Me.Close()
 
             Exit Sub
@@ -259,7 +261,7 @@ Friend Class ReconcileForm
             SaveChanges(Trx.TrxStatus.Selected)
             SaveSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.strTitle, txtEndingBalance.Text)
 
-            MsgBox("Your work has been saved. To resume this reconciliation, just " & "reconcile normally. The software will remember what you have already done.", MsgBoxStyle.Information)
+            mobjHostUI.InfoMessageBox("Your work has been saved. To resume this reconciliation, just " & "reconcile normally. The software will remember what you have already done.")
 
             Me.Close()
 
@@ -295,7 +297,7 @@ Friend Class ReconcileForm
         Dim intSelectCount As Integer
 
         If Not IsDate(txtSelectThroughDate.Text) Then
-            MsgBox("Invalid select-through date", MsgBoxStyle.Exclamation)
+            mobjHostUI.InfoMessageBox("Invalid select-through date")
             Return
         End If
         datCutoff = CDate(txtSelectThroughDate.Text)
@@ -318,6 +320,6 @@ Friend Class ReconcileForm
                 End With
             End With
         Next
-        MsgBox("Selected " & intSelectCount & " transactions to clear.", MsgBoxStyle.Information)
+        mobjHostUI.InfoMessageBox("Selected " & intSelectCount & " transactions to clear.")
     End Sub
 End Class

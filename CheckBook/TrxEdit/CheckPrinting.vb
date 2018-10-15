@@ -9,6 +9,7 @@ Module CheckPrinting
 
     Public gstrNextCheckNumToPrint As String
 
+    Private mobjHostUI As IHostUI
     Private mobjCompany As Company
     Private mdblMarginLeft As Double
     Private mdblMarginTop As Double
@@ -18,18 +19,19 @@ Module CheckPrinting
     Private mobjTrx As Trx
     Private mobjFont As Font
 
-    Public Function gdomGetCheckFormat(ByVal objCompany_ As Company) As VB6XmlDocument
+    Public Function gdomGetCheckFormat(ByVal objHostUI As IHostUI) As VB6XmlDocument
         Dim domCheckFormat As VB6XmlDocument
         Dim strCheckFormatFile As String
         Dim objParseError As VB6XmlParseError
 
+        mobjHostUI = objHostUI
         gdomGetCheckFormat = Nothing
         domCheckFormat = New VB6XmlDocument
-        strCheckFormatFile = objCompany_.strCheckFormatPath()
+        strCheckFormatFile = mobjHostUI.objCompany.strCheckFormatPath()
         domCheckFormat.Load(strCheckFormatFile)
         objParseError = domCheckFormat.ParseError
         If Not objParseError Is Nothing Then
-            MsgBox("Error loading check format file: " & gstrXMLParseErrorText(objParseError))
+            mobjHostUI.InfoMessageBox("Error loading check format file: " & gstrXMLParseErrorText(objParseError))
             Exit Function
         End If
 
@@ -38,11 +40,12 @@ Module CheckPrinting
 
     End Function
 
-    Public Function gblnPrintCheck(ByVal objCompany_ As Company, ByVal domCheckFormat_ As VB6XmlDocument, ByVal objTrx_ As Trx) As Boolean
+    Public Function gblnPrintCheck(ByVal objHostUI As IHostUI, ByVal domCheckFormat_ As VB6XmlDocument, ByVal objTrx_ As Trx) As Boolean
         Dim objPrintDoc As PrintDocument
         Dim blnPreview As Boolean = False
 
-        mobjCompany = objCompany_
+        mobjHostUI = objHostUI
+        mobjCompany = mobjHostUI.objCompany
         mdomCheckFormat = domCheckFormat_
         mobjTrx = objTrx_
         objPrintDoc = New PrintDocument
@@ -188,21 +191,21 @@ Module CheckPrinting
 
         vntAttrib = elmInvoiceList.GetAttribute("rows")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            MsgBox("Could not find ""rows"" attribute of <" & strItemName & "> in check format file")
+            mobjHostUI.InfoMessageBox("Could not find ""rows"" attribute of <" & strItemName & "> in check format file")
             Exit Sub
         End If
         intMaxRows = Val(vntAttrib)
 
         vntAttrib = elmInvoiceList.GetAttribute("cols")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            MsgBox("Could not find ""cols"" attribute of <" & strItemName & "> in check format file")
+            mobjHostUI.InfoMessageBox("Could not find ""cols"" attribute of <" & strItemName & "> in check format file")
             Exit Sub
         End If
         intMaxCols = Val(vntAttrib)
 
         vntAttrib = elmInvoiceList.GetAttribute("colwidth")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            MsgBox("Could not find ""colwidth"" attribute of <" & strItemName & "> in check format file")
+            mobjHostUI.InfoMessageBox("Could not find ""colwidth"" attribute of <" & strItemName & "> in check format file")
             Exit Sub
         End If
         dblColWidth = Val(vntAttrib)
@@ -222,7 +225,7 @@ Module CheckPrinting
                     intRowNum = 1
                     intColNum = intColNum + 1
                     If intColNum > intMaxCols Then
-                        MsgBox("There are too many invoice numbers to print. " & "Will print as many as possible.")
+                        mobjHostUI.InfoMessageBox("There are too many invoice numbers to print. " & "Will print as many as possible.")
                         Exit Sub
                     End If
                     dblY = dblStartY
@@ -301,7 +304,7 @@ Module CheckPrinting
 
         elmItem = objGetCheckPrintPos(domCheckFormat, strItemName, dblX, dblY)
         If elmItem Is Nothing Then
-            MsgBox("Could not find <" & strItemName & "> in check format file")
+            mobjHostUI.InfoMessageBox("Could not find <" & strItemName & "> in check format file")
             Exit Sub
         End If
     End Sub
@@ -320,14 +323,14 @@ Module CheckPrinting
 
         vntAttrib = elmItem.GetAttribute("x")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            MsgBox("Could not find ""x"" attribute of <" & strItemName & "> in check format file")
+            mobjHostUI.InfoMessageBox("Could not find ""x"" attribute of <" & strItemName & "> in check format file")
             Exit Function
         End If
         dblX = Val(vntAttrib)
 
         vntAttrib = elmItem.GetAttribute("y")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            MsgBox("Could not find ""y"" attribute of <" & strItemName & "> in check format file")
+            mobjHostUI.InfoMessageBox("Could not find ""y"" attribute of <" & strItemName & "> in check format file")
             Exit Function
         End If
         dblY = Val(vntAttrib)

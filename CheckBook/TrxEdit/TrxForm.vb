@@ -7,6 +7,7 @@ Imports VB = Microsoft.VisualBasic
 Friend Class TrxForm
     Inherits System.Windows.Forms.Form
 
+    Private mobjHostUI As IHostUI
     Private mobjCompany As Company
     Private mobjAccount As Account
     Private mobjReg As Register
@@ -67,11 +68,11 @@ Friend Class TrxForm
     '$Description Enter a new normal Trx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddNormal(ByVal objTrx_ As NormalTrx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
+    Public Function blnAddNormal(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As NormalTrx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
 
         Try
 
-            Init(objTrx_.objReg, False, 0, Trx.TrxType.Normal, blnCheckInvoiceNum_, strLogTitle)
+            Init(objHostUI_, objTrx_.objReg, False, 0, Trx.TrxType.Normal, blnCheckInvoiceNum_, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             SetSharedControls(objTrx_)
@@ -93,11 +94,11 @@ Friend Class TrxForm
     '   has validation errors.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddNormalSilent(ByVal objTrx_ As NormalTrx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
+    Public Function blnAddNormalSilent(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As NormalTrx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
 
         Try
 
-            Init(objTrx_.objReg, False, 0, Trx.TrxType.Normal, blnCheckInvoiceNum_, strLogTitle)
+            Init(objHostUI_, objTrx_.objReg, False, 0, Trx.TrxType.Normal, blnCheckInvoiceNum_, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             SetSharedControls(objTrx_)
@@ -122,11 +123,11 @@ Friend Class TrxForm
     '$Description Enter a new budget Trx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddBudget(ByVal objReg_ As Register, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
+    Public Function blnAddBudget(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
 
         Try
 
-            Init(objReg_, False, 0, Trx.TrxType.Budget, False, strLogTitle)
+            Init(objHostUI_, objReg_, False, 0, Trx.TrxType.Budget, False, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             ClearSharedControls()
@@ -148,11 +149,11 @@ Friend Class TrxForm
     '$Description Enter a new transfer Trx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddTransfer(ByVal objReg_ As Register, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
+    Public Function blnAddTransfer(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
 
         Try
 
-            Init(objReg_, False, 0, Trx.TrxType.Transfer, False, strLogTitle)
+            Init(objHostUI_, objReg_, False, 0, Trx.TrxType.Transfer, False, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             ClearSharedControls()
@@ -173,29 +174,29 @@ Friend Class TrxForm
     '$Description Edit and existing Trx in the Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnUpdate(ByVal objTrx As Trx, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
+    Public Function blnUpdate(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As Trx, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
 
         Try
 
-            Init(objTrx.objReg, True, objTrx.lngIndex, objTrx.lngType, True, strLogTitle)
+            Init(objHostUI_, objTrx_.objReg, True, objTrx_.lngIndex, objTrx_.lngType, True, strLogTitle)
             ConfigSharedControls()
-            SetSharedControls(objTrx)
-            mstrOldRepeatKey = objTrx.strRepeatKey
-            mintOldRepeatSeq = objTrx.intRepeatSeq
-            Select Case objTrx.lngType
+            SetSharedControls(objTrx_)
+            mstrOldRepeatKey = objTrx_.strRepeatKey
+            mintOldRepeatSeq = objTrx_.intRepeatSeq
+            Select Case objTrx_.lngType
                 Case Trx.TrxType.Normal
                     ConfigNormalControls()
-                    SetNormalControls(DirectCast(objTrx, NormalTrx))
+                    SetNormalControls(DirectCast(objTrx_, NormalTrx))
                     CheckForPlaceholderBudget()
-                    mcurOldAmount = objTrx.curAmount
-                    mlngOldStatus = objTrx.lngStatus
+                    mcurOldAmount = objTrx_.curAmount
+                    mlngOldStatus = objTrx_.lngStatus
                 Case Trx.TrxType.Budget
                     ConfigBudgetControls()
-                    SetBudgetControls(DirectCast(objTrx, BudgetTrx))
-                    ShowBudgetApplied(DirectCast(objTrx, BudgetTrx))
+                    SetBudgetControls(DirectCast(objTrx_, BudgetTrx))
+                    ShowBudgetApplied(DirectCast(objTrx_, BudgetTrx))
                 Case Trx.TrxType.Transfer
                     ConfigTransferControls()
-                    SetTransferControls(DirectCast(objTrx, TransferTrx))
+                    SetTransferControls(DirectCast(objTrx_, TransferTrx))
             End Select
             Me.ShowDialog()
             If Not mblnCancel Then
@@ -384,7 +385,7 @@ Friend Class TrxForm
         Loop
 
         If curTotalApplied <> objBudget.curBudgetApplied Then
-            MsgBox("ERROR: Amount applied in budget trx does not equal sum " & "of matched splits (" & curTotalApplied & " vs " & objBudget.curBudgetApplied & ").", MsgBoxStyle.Critical)
+            mobjHostUI.ErrorMessageBox("ERROR: Amount applied in budget trx does not equal sum " & "of matched splits (" & curTotalApplied & " vs " & objBudget.curBudgetApplied & ").")
         End If
 
     End Sub
@@ -424,7 +425,8 @@ Friend Class TrxForm
         End With
     End Sub
 
-    Private Sub Init(ByVal objReg_ As Register, ByVal blnEditMode_ As Boolean, ByVal lngIndex_ As Integer, ByVal lngType_ As Trx.TrxType, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String)
+    Private Sub Init(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register, ByVal blnEditMode_ As Boolean,
+                     ByVal lngIndex_ As Integer, ByVal lngType_ As Trx.TrxType, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String)
 
         cboSplitCategory = {_cboSplitCategory_0, _cboSplitCategory_1, _cboSplitCategory_2, _cboSplitCategory_3, _cboSplitCategory_4, _cboSplitCategory_5, _cboSplitCategory_6, _cboSplitCategory_7, _cboSplitCategory_8, _cboSplitCategory_9}
         cboSplitBudget = {_cboSplitBudget_0, _cboSplitBudget_1, _cboSplitBudget_2, _cboSplitBudget_3, _cboSplitBudget_4, _cboSplitBudget_5, _cboSplitBudget_6, _cboSplitBudget_7, _cboSplitBudget_8, _cboSplitBudget_9}
@@ -438,9 +440,10 @@ Friend Class TrxForm
         txtSplitPONum = {_txtSplitPONum_0, _txtSplitPONum_1, _txtSplitPONum_2, _txtSplitPONum_3, _txtSplitPONum_4, _txtSplitPONum_5, _txtSplitPONum_6, _txtSplitPONum_7, _txtSplitPONum_8, _txtSplitPONum_9}
         txtSplitTerms = {_txtSplitTerms_0, _txtSplitTerms_1, _txtSplitTerms_2, _txtSplitTerms_3, _txtSplitTerms_4, _txtSplitTerms_5, _txtSplitTerms_6, _txtSplitTerms_7, _txtSplitTerms_8, _txtSplitTerms_9}
 
+        mobjHostUI = objHostUI_
         mobjReg = objReg_
         mobjAccount = mobjReg.objAccount
-        mobjCompany = mobjAccount.objCompany
+        mobjCompany = mobjHostUI.objCompany
         mblnEditMode = blnEditMode_
         mlngIndex = lngIndex_
         mlngType = lngType_
@@ -937,7 +940,7 @@ Friend Class TrxForm
                           "It is usually better to set the amount to zero if you simply don't " &
                           "want to use that transaction." & vbCrLf & vbCrLf &
                           "Do you really want to change the sequence number?",
-                          MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2 Or MsgBoxStyle.Exclamation,
+                          MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation,
                           "Repeat Sequence Warning") <> MsgBoxResult.Ok Then
                     Exit Function
                 End If
@@ -955,7 +958,7 @@ Friend Class TrxForm
                       "It is usually better to set the amount " &
                       "to zero than to change the repeat key or delete the transaction." & vbCrLf & vbCrLf &
                       "Do you really want to change the repeat key?",
-                      MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2 Or MsgBoxStyle.Exclamation,
+                      MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation,
                       "Repeat Key Warning") <> MsgBoxResult.Ok Then
                 Exit Function
             End If
@@ -1118,7 +1121,7 @@ Friend Class TrxForm
                 If MsgBox("Saving this will change the amount of a transaction " &
                           "which has already been reconciled to a bank statement. " &
                           "Do you really want to do this?",
-                          MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) = MsgBoxResult.Cancel Then
+                          MsgBoxStyle.Question Or MsgBoxStyle.OkCancel) = MsgBoxResult.Cancel Then
                     Exit Function
                 End If
             End If
@@ -1266,7 +1269,7 @@ Friend Class TrxForm
             Exit Function
         End If
         strMsg = strCheckLabel & " " & Utilities.strFormatDate(datCheck) & " is more than " & intWeeks & " weeks " & strRelationship & " " & strAnchorLabel & "." & vbCrLf & vbCrLf & "Is this date correct?"
-        blnDeclineInvalidDate = MsgBox(strMsg, MsgBoxStyle.YesNo Or MsgBoxStyle.DefaultButton2, "Date Validation") <> MsgBoxResult.Yes
+        blnDeclineInvalidDate = MsgBox(strMsg, MsgBoxStyle.YesNo, "Date Validation") <> MsgBoxResult.Yes
 
     End Function
 
@@ -1288,7 +1291,7 @@ Friend Class TrxForm
             mobjReg.NewAddEnd(objTrx, New LogAdd, mstrLogTitle)
         End If
         If objTrx.blnAnyUnmatchedBudget Then
-            MsgBox("One or more budgeted splits in this transaction could not be " & "matched to budgets.", MsgBoxStyle.Information)
+            mobjHostUI.InfoMessageBox("One or more budgeted splits in this transaction could not be " & "matched to budgets.")
         End If
     End Sub
 
@@ -1396,16 +1399,16 @@ Friend Class TrxForm
 
         Try
             If Not System.IO.File.Exists(mobjCompany.strCheckFormatPath()) Then
-                MsgBox("You must set up your check format first, using the option on the ""Setup"" menu.")
+                mobjHostUI.InfoMessageBox("You must set up your check format first, using the option on the ""Setup"" menu.")
                 Exit Sub
             End If
 
             If chkFake.CheckState <> System.Windows.Forms.CheckState.Checked Or chkAutoGenerated.CheckState = System.Windows.Forms.CheckState.Checked Then
-                MsgBox("You may only print a check for a fake, non-generated transaction.")
+                mobjHostUI.InfoMessageBox("You may only print a check for a fake, non-generated transaction.")
                 Exit Sub
             End If
             If mcurTotalAmount >= 0 Then
-                MsgBox("You may only print a check for a debit transaction.")
+                mobjHostUI.InfoMessageBox("You may only print a check for a debit transaction.")
                 Exit Sub
             End If
 
@@ -1427,7 +1430,7 @@ Friend Class TrxForm
 
             gstrNextCheckNumToPrint = CStr(Val(strNumber) + 1)
 
-            domCheckFormat = gdomGetCheckFormat(mobjCompany)
+            domCheckFormat = gdomGetCheckFormat(mobjHostUI)
             If domCheckFormat Is Nothing Then
                 Exit Sub
             End If
@@ -1435,7 +1438,7 @@ Friend Class TrxForm
             mobjReg.LogAction("PrintCheck:" & strNumber)
             objTrx = objCreateThrowawayTrx()
             AddSplits(objTrx)
-            If gblnPrintCheck(mobjCompany, domCheckFormat, objTrx) Then
+            If gblnPrintCheck(mobjHostUI, domCheckFormat, objTrx) Then
                 SaveNormal()
                 Me.Close()
             End If
@@ -1472,9 +1475,9 @@ Friend Class TrxForm
             Next
             DisplaySplits(mintSplitOffset)
             If intDeleteCount = 0 Then
-                MsgBox("Please check one or more splits to delete.")
+                mobjHostUI.InfoMessageBox("Please check one or more splits to delete.")
             Else
-                MsgBox("Deleted " & intDeleteCount & " splits.")
+                mobjHostUI.InfoMessageBox("Deleted " & intDeleteCount & " splits.")
             End If
             Exit Sub
         Catch ex As Exception
@@ -1548,7 +1551,7 @@ Friend Class TrxForm
 
             'Make sure all controls are valid.
             If chkFake.CheckState <> System.Windows.Forms.CheckState.Checked Then
-                MsgBox("Only fake transactions may be divided.")
+                mobjHostUI.InfoMessageBox("Only fake transactions may be divided.")
                 Exit Sub
             End If
             If blnValidateShared() Then
@@ -1570,17 +1573,17 @@ Friend Class TrxForm
                 End If
             Next
             If intNewTrxSplitCount = 0 Then
-                MsgBox("Please check the splits you want to move to a new transaction.")
+                mobjHostUI.InfoMessageBox("Please check the splits you want to move to a new transaction.")
                 Exit Sub
             End If
             If intOldTrxSplitCount = 0 Then
-                MsgBox("You cannot move all the splits to a new transaction.")
+                mobjHostUI.InfoMessageBox("You cannot move all the splits to a new transaction.")
                 Exit Sub
             End If
 
             'Confirmation.
             If MsgBox("Are you sure you want to move the " & intNewTrxSplitCount & " checked " & "splits to a new transaction?",
-                      MsgBoxStyle.Question Or MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                      MsgBoxStyle.Question Or MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
                 Exit Sub
             End If
 
@@ -1711,7 +1714,7 @@ Friend Class TrxForm
                 elmPayee = DirectCast(colPayees.Item(0), VB6XmlElement)
             Else
                 frm = New PayeeMatchForm
-                elmPayee = frm.elmSelect(colPayees)
+                elmPayee = frm.elmSelect(mobjHostUI, colPayees)
                 If elmPayee Is Nothing Then
                     Exit Function
                 End If
@@ -1801,7 +1804,7 @@ Friend Class TrxForm
     Private Sub cmdRptInfo_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRptInfo.Click
         Dim frm As RepeatSeqInfoForm
         frm = New RepeatSeqInfoForm
-        frm.ShowMe(mobjReg, strRepeatKey())
+        frm.ShowMe(mobjHostUI, mobjReg, strRepeatKey())
     End Sub
 
     Private Sub txtSplitPONum_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
@@ -1902,7 +1905,7 @@ Friend Class TrxForm
 
             'Current split amount must be numeric and non-zero.
             If Not IsNumeric(txtSplitAmount(index).Text) Then
-                MsgBox("Invalid split amount.")
+                mobjHostUI.InfoMessageBox("Invalid split amount.")
                 Exit Sub
             End If
             Dim intSplit As Integer
@@ -1910,7 +1913,7 @@ Friend Class TrxForm
             intSplit = intGetSplitIndex(index)
             curSplitAmount = CDec(maudtSplits(intSplit).strAmount)
             If curSplitAmount = 0 Then
-                MsgBox("Split to divide must not be zero amount.")
+                mobjHostUI.InfoMessageBox("Split to divide must not be zero amount.")
                 Exit Sub
             End If
 
@@ -1922,16 +1925,16 @@ Friend Class TrxForm
                 Exit Sub
             End If
             If Not IsNumeric(strNewAmount) Then
-                MsgBox("Invalid amount.")
+                mobjHostUI.InfoMessageBox("Invalid amount.")
                 Exit Sub
             End If
             curNewAmount = CDec(strNewAmount)
             If System.Math.Sign(curSplitAmount) <> System.Math.Sign(curNewAmount) Then
-                MsgBox("New split amount must have the same sign as the old one.")
+                mobjHostUI.InfoMessageBox("New split amount must have the same sign as the old one.")
                 Exit Sub
             End If
             If System.Math.Abs(curNewAmount) >= System.Math.Abs(curSplitAmount) Then
-                MsgBox("New split amount must be smaller than the old amount.")
+                mobjHostUI.InfoMessageBox("New split amount must be smaller than the old amount.")
                 Exit Sub
             End If
 

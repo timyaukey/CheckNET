@@ -31,20 +31,20 @@ Public Module CBMain
         gcolForms = colResult
     End Function
 
-    Public Function gblnAskAndCreateAccount(ByVal objCompany As Company) As Boolean
+    Public Function gblnAskAndCreateAccount(ByVal objHostUI As IHostUI) As Boolean
         Dim objAccount As Account
         Dim strFile As String
 
         objAccount = New Account()
-        objAccount.Init(objCompany)
-        objAccount.intKey = objCompany.intGetUnusedAccountKey()
+        objAccount.Init(objHostUI.objCompany)
+        objAccount.intKey = objHostUI.objCompany.intGetUnusedAccountKey()
         objAccount.lngSubType = Account.SubType.Liability_LoanPayable
 
         Using frm As AccountForm = New AccountForm()
-            If frm.ShowDialog(objAccount, False, False) = DialogResult.OK Then
-                strFile = objCompany.strAccountPath() & "\" & objAccount.strFileNameRoot & ".act"
+            If frm.ShowDialog(objHostUI, objAccount, False, False) = DialogResult.OK Then
+                strFile = objHostUI.objCompany.strAccountPath() & "\" & objAccount.strFileNameRoot & ".act"
                 If Dir(strFile) <> "" Then
-                    MsgBox("Account file already exists with that name.", MsgBoxStyle.Critical)
+                    objHostUI.ErrorMessageBox("Account file already exists with that name.")
                     Exit Function
                 End If
                 objAccount.Create()

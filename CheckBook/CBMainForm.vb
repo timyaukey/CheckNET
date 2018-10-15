@@ -15,6 +15,7 @@ Friend Class CBMainForm
     Private mobjSecurity As Security
     Private mblnCancelStart As Boolean
     Private WithEvents mobjCompany As Company
+    Private mobjHostUI As IHostUI
 
     Private Sub CBMainForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Dim objAccount As Account
@@ -23,6 +24,7 @@ Friend Class CBMainForm
 
         Try
             mblnCancelStart = True
+            mobjHostUI = Me
 
             Me.Text = strSoftwareTitle
             frmStartup = New StartupForm
@@ -41,7 +43,7 @@ Friend Class CBMainForm
             End If
 
             If mobjCompany.blnDataIsLocked() Then
-                MsgBox("Data files are in use by someone else running this software.")
+                mobjHostUI.InfoMessageBox("Data files are in use by someone else running this software.")
                 frmStartup.Close()
                 Exit Sub
             End If
@@ -113,7 +115,7 @@ Friend Class CBMainForm
     End Sub
 
     Private Sub ShowCreateMessage(ByVal strMessage As String)
-        MsgBox(strMessage, MsgBoxStyle.Information)
+        mobjHostUI.InfoMessageBox(strMessage)
     End Sub
 
     Private colBankImportPlugins As List(Of IBankImportPlugin) = New List(Of IBankImportPlugin)
@@ -236,7 +238,7 @@ Friend Class CBMainForm
                                     ByVal datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrx
         Using frm As TrxForm = New TrxForm()
-            If frm.blnAddNormal(objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
+            If frm.blnAddNormal(Me, objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
                 Return True
             End If
             Return False
@@ -247,7 +249,7 @@ Friend Class CBMainForm
                                     ByVal datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrxSilent
         Using frm As TrxForm = New TrxForm()
-            If frm.blnAddNormalSilent(objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
+            If frm.blnAddNormalSilent(Me, objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
                 Return True
             End If
             Return False
@@ -257,7 +259,7 @@ Friend Class CBMainForm
     Private Function blnAddBudgetTrx(ByVal objReg As Register, ByVal datDefaultDate As DateTime,
                                      ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddBudgetTrx
         Using frm As TrxForm = New TrxForm()
-            If frm.blnAddBudget(objReg, datDefaultDate, strLogTitle) Then
+            If frm.blnAddBudget(Me, objReg, datDefaultDate, strLogTitle) Then
                 Return True
             End If
         End Using
@@ -267,7 +269,7 @@ Friend Class CBMainForm
     Private Function blnAddTransferTrx(ByVal objReg As Register, ByVal datDefaultDate As DateTime,
                                      ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddTransferTrx
         Using frm As TrxForm = New TrxForm()
-            If frm.blnAddTransfer(objReg, datDefaultDate, strLogTitle) Then
+            If frm.blnAddTransfer(Me, objReg, datDefaultDate, strLogTitle) Then
                 Return True
             End If
         End Using
@@ -277,7 +279,7 @@ Friend Class CBMainForm
     Private Function blnUpdateTrx(ByVal objTrx As Trx, ByRef datDefaultDate As Date,
                                   ByVal strLogTitle As String) As Boolean Implements IHostUI.blnUpdateTrx
         Using frmEdit As TrxForm = New TrxForm()
-            If frmEdit.blnUpdate(objTrx, datDefaultDate, strLogTitle) Then
+            If frmEdit.blnUpdate(Me, objTrx, datDefaultDate, strLogTitle) Then
                 Return True
             End If
         End Using
@@ -367,7 +369,7 @@ Friend Class CBMainForm
         Try
 
             frm = New PayeeListForm
-            frm.ShowMe(mobjCompany)
+            frm.ShowMe(Me)
 
             Exit Sub
         Catch ex As Exception
@@ -381,7 +383,7 @@ Friend Class CBMainForm
         Try
 
             frm = New TrxTypeListForm
-            frm.ShowMe(mobjCompany)
+            frm.ShowMe(Me)
 
             Exit Sub
         Catch ex As Exception
@@ -440,7 +442,7 @@ Friend Class CBMainForm
             mobjSecurity.Save()
             mobjSecurity.blnFindUser(mobjSecurity.strAdminLogin)
             mobjSecurity.blnPasswordMatches(strPassword)
-            MsgBox("User logins enabled. Added administrator login """ & mobjSecurity.strLogin & """, with empty password.")
+            mobjHostUI.InfoMessageBox("User logins enabled. Added administrator login """ & mobjSecurity.strLogin & """, with empty password.")
             Exit Sub
         Catch ex As Exception
             gTopException(ex)
@@ -464,7 +466,7 @@ Friend Class CBMainForm
             Exit Sub
         End If
         If mobjSecurity.blnFindUser(strLogin) Then
-            MsgBox("Login name already exists.")
+            mobjHostUI.InfoMessageBox("Login name already exists.")
             Exit Sub
         End If
         Dim strName As String = InputBox("Please enter person's name:", "Person Name")
@@ -478,7 +480,7 @@ Friend Class CBMainForm
         mobjSecurity.CreateUser(strLogin, strName)
         mobjSecurity.SetPassword(strPassword)
         mobjSecurity.Save()
-        MsgBox("New login """ & strLogin & """ created.")
+        mobjHostUI.InfoMessageBox("New login """ & strLogin & """ created.")
     End Sub
 
     Private Sub mnuChangeCurrentPassword_Click(sender As Object, e As EventArgs) Handles mnuChangeCurrentPassword.Click
@@ -499,7 +501,7 @@ Friend Class CBMainForm
         End If
         mobjSecurity.SetPassword(strPassword)
         mobjSecurity.Save()
-        MsgBox("Password changed for current user login.")
+        mobjHostUI.InfoMessageBox("Password changed for current user login.")
     End Sub
 
     Private Sub mnuChangeOtherPassword_Click(sender As Object, e As EventArgs) Handles mnuChangeOtherPassword.Click
@@ -520,7 +522,7 @@ Friend Class CBMainForm
             Exit Sub
         End If
         If Not mobjSecurity.blnFindUser(strLogin) Then
-            MsgBox("Login name does not exist.")
+            mobjHostUI.InfoMessageBox("Login name does not exist.")
             Exit Sub
         End If
         Dim strPassword As String = strAskNewPassword(strLogin)
@@ -529,14 +531,14 @@ Friend Class CBMainForm
         End If
         mobjSecurity.SetPassword(strPassword)
         mobjSecurity.Save()
-        MsgBox("Password changed for login """ & strLogin & """.")
+        mobjHostUI.InfoMessageBox("Password changed for login """ & strLogin & """.")
     End Sub
 
     Private Function strAskNewPassword(ByVal strLoginName As String) As String
         Dim strPassword1 As String = InputBox("Please enter new password for login """ + strLoginName + """:", "Password")
         Dim strPassword2 As String = InputBox("Please confirm password for login """ + strLoginName + """:", "Password")
         If strPassword1 <> strPassword2 Then
-            MsgBox("Passwords do not match.", MsgBoxStyle.Exclamation)
+            mobjHostUI.InfoMessageBox("Passwords do not match.")
             Return Nothing
         End If
         If strPassword1 = "" Then
@@ -563,17 +565,17 @@ Friend Class CBMainForm
             Exit Sub
         End If
         If LCase(strDeleteLogin) = mobjSecurity.strAdminLogin Then
-            MsgBox("Cannot delete the """ + mobjSecurity.strAdminLogin + """ login.")
+            mobjHostUI.InfoMessageBox("Cannot delete the """ + mobjSecurity.strAdminLogin + """ login.")
             mobjSecurity.RestoreUserContext()
             Exit Sub
         End If
         If LCase(strDeleteLogin) = LCase(mobjSecurity.strLogin) Then
-            MsgBox("Cannot delete the login you are currently using.")
+            mobjHostUI.InfoMessageBox("Cannot delete the login you are currently using.")
             mobjSecurity.RestoreUserContext()
             Exit Sub
         End If
         If Not mobjSecurity.blnFindUser(strDeleteLogin) Then
-            MsgBox("No such login.")
+            mobjHostUI.InfoMessageBox("No such login.")
             mobjSecurity.RestoreUserContext()
             Exit Sub
         End If
@@ -582,14 +584,14 @@ Friend Class CBMainForm
         End If
         mobjSecurity.DeleteUser()
         mobjSecurity.Save()
-        MsgBox("Login deleted.")
+        mobjHostUI.InfoMessageBox("Login deleted.")
     End Sub
 
     Private Sub mnuRepairUserAccounts_Click(sender As Object, e As EventArgs) Handles mnuRepairUserAccounts.Click
         Try
             mobjSecurity.CreateSignatures()
             mobjSecurity.Save()
-            MsgBox("User login database repaired.")
+            mobjHostUI.InfoMessageBox("User login database repaired.")
         Catch ex As Exception
             gTopException(ex)
         End Try
@@ -598,7 +600,7 @@ Friend Class CBMainForm
     Private Sub mnuCheckFormat_Click(sender As Object, e As EventArgs) Handles mnuCheckFormat.Click
         Try
             Using frm As CheckFormatEditor = New CheckFormatEditor()
-                frm.ShowMe(mobjCompany)
+                frm.ShowMe(Me)
             End Using
         Catch ex As Exception
             gTopException(ex)

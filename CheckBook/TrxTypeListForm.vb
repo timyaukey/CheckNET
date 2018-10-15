@@ -8,6 +8,7 @@ Friend Class TrxTypeListForm
     Inherits System.Windows.Forms.Form
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
+    Private mobjHostUI As IHostUI
     Private mobjCompany As Company
     Private mdomTypeTable As VB6XmlDocument
     'This is the <Table> element that will be modified.
@@ -22,12 +23,12 @@ Friend Class TrxTypeListForm
     'True iff Form_Activate event has fired.
     Private mblnActivated As Boolean
 
-    Public Sub ShowMe(ByVal objCompany_ As Company)
+    Public Sub ShowMe(ByVal objHostUI As IHostUI)
         Dim strTableFile As String
 
         Try
-
-            mobjCompany = objCompany_
+            mobjHostUI = objHostUI
+            mobjCompany = mobjHostUI.objCompany
             strTableFile = mobjCompany.strTrxTypeFilePath()
             mdomTypeTable = mobjCompany.domLoadFile(strTableFile)
             melmTypeTable = mdomTypeTable.DocumentElement
@@ -62,7 +63,7 @@ Friend Class TrxTypeListForm
                 Exit Sub
             End If
             mdomTypeTable.Save(mobjCompany.strTrxTypeFilePath())
-            MsgBox("Changes saved.", MsgBoxStyle.Information)
+            mobjHostUI.InfoMessageBox("Changes saved.")
             Me.Close()
 
             Exit Sub
@@ -152,7 +153,7 @@ Friend Class TrxTypeListForm
         Try
 
             If melmTrxTypeToSave Is Nothing Then
-                MsgBox("You must select a transaction type to delete.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("You must select a transaction type to delete.")
                 Exit Sub
             End If
 
@@ -307,17 +308,17 @@ Friend Class TrxTypeListForm
     Private Function blnDisplayedTrxTypeInvalid() As Boolean
         blnDisplayedTrxTypeInvalid = True
         If txtBefore.Text = "" And txtAfter.Text = "" Then
-            MsgBox("Either ""starts with"" or ""ends with"" must be specified.", MsgBoxStyle.Critical)
+            mobjHostUI.ErrorMessageBox("Either ""starts with"" or ""ends with"" must be specified.")
             Exit Function
         End If
         If txtAfter.Text <> "" Then
             If txtMinAfter.Text <> "" Then
                 If Not IsNumeric(txtMinAfter.Text) Then
-                    MsgBox("Min. after must be a number.", MsgBoxStyle.Critical)
+                    mobjHostUI.ErrorMessageBox("Min. after must be a number.")
                     Exit Function
                 End If
                 If CShort(txtMinAfter.Text) < 2 Then
-                    MsgBox("Min. after must be at least 2.", MsgBoxStyle.Critical)
+                    mobjHostUI.ErrorMessageBox("Min. after must be at least 2.")
                     Exit Function
                 End If
             End If

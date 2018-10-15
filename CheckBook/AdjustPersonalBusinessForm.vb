@@ -4,6 +4,7 @@ Option Explicit On
 Imports CheckBookLib
 
 Public Class AdjustPersonalBusinessForm
+    Private mobjHostUI As IHostUI
     Private mobjBusinessAccount As Account
     Private mobjCompany As Company
     Private mobjPersonalAccount As Account
@@ -17,24 +18,25 @@ Public Class AdjustPersonalBusinessForm
     Private ReadOnly mstrPaymentMarker As String = ":PERSONAL-PAY"
     Private ReadOnly mstrExpenseMarker As String = ":PERSONAL-EXP"
 
-    Public Sub ShowModal(ByVal objBusinessAccount As Account)
+    Public Sub ShowModal(ByVal objHostUI As IHostUI, ByVal objBusinessAccount As Account)
+        mobjHostUI = objHostUI
+        mobjCompany = mobjHostUI.objCompany
         mobjBusinessAccount = objBusinessAccount
-        mobjCompany = mobjBusinessAccount.objCompany
 
         If objBusinessAccount.lngType <> Account.AccountType.Liability Then
-            MsgBox("Only liability accounts may be adjusted for personal/business use", MsgBoxStyle.Critical)
+            mobjHostUI.ErrorMessageBox("Only liability accounts may be adjusted for personal/business use")
             Exit Sub
         End If
 
         If objBusinessAccount.objRelatedAcct1 Is Nothing Then
-            MsgBox("Related account #1 is not set (this is the related personal account)", MsgBoxStyle.Critical)
+            mobjHostUI.ErrorMessageBox("Related account #1 is not set (this is the related personal account)")
             Exit Sub
         End If
         mobjPersonalAccount = objBusinessAccount.objRelatedAcct1
         txtPersonalAccount.Text = mobjPersonalAccount.strTitle
 
         If objBusinessAccount.objRelatedAcct2 Is Nothing Then
-            MsgBox("Related account #2 is not set (this is the loan to person account)", MsgBoxStyle.Critical)
+            mobjHostUI.ErrorMessageBox("Related account #2 is not set (this is the loan to person account)")
             Exit Sub
         End If
         mobjLoanToAccount = objBusinessAccount.objRelatedAcct2
@@ -54,11 +56,11 @@ Public Class AdjustPersonalBusinessForm
             End If
         Next
         If mstrPersonalPaymentKey Is Nothing Then
-            MsgBox("Cannot find a category with ""Personal"" and ""Payment"" in the name", MsgBoxStyle.Critical)
+            mobjHostUI.ErrorMessageBox("Cannot find a category with ""Personal"" and ""Payment"" in the name")
             Exit Sub
         End If
         If mstrPersonalExpenseKey Is Nothing Then
-            MsgBox("Cannot find a category with ""Personal"" and ""Expense"" in the name", MsgBoxStyle.Critical)
+            mobjHostUI.ErrorMessageBox("Cannot find a category with ""Personal"" and ""Expense"" in the name")
             Exit Sub
         End If
         Me.ShowDialog()
@@ -75,7 +77,7 @@ Public Class AdjustPersonalBusinessForm
             Dim intDeleteCount As Integer =
                 intDeleteAdjustments(mobjBusinessAccount) +
                 intDeleteAdjustments(mobjPersonalAccount)
-            MsgBox(intDeleteCount.ToString() + " adjustment transactions deleted")
+            mobjHostUI.InfoMessageBox(intDeleteCount.ToString() + " adjustment transactions deleted")
         Catch ex As Exception
             gTopException(ex)
         End Try
@@ -93,7 +95,7 @@ Public Class AdjustPersonalBusinessForm
                 intDeleteAdjustments(mobjBusinessAccount) +
                 intDeleteAdjustments(mobjPersonalAccount)
             Dim intAdjustCount As Integer = intCreateAdjustments()
-            MsgBox(intDeleteCount.ToString() + " adjustments transactions deleted, " + intAdjustCount.ToString() + " adjustment transactions created")
+            mobjHostUI.InfoMessageBox(intDeleteCount.ToString() + " adjustments transactions deleted, " + intAdjustCount.ToString() + " adjustment transactions created")
         Catch ex As Exception
             gTopException(ex)
         End Try
@@ -101,7 +103,7 @@ Public Class AdjustPersonalBusinessForm
 
     Private Function blnValidDates() As Boolean
         If ctlStartDate.Value > ctlEndDate.Value Then
-            MsgBox("Start date must be before end date")
+            mobjHostUI.InfoMessageBox("Start date must be before end date")
             Return False
         End If
         Return True
@@ -115,7 +117,7 @@ Public Class AdjustPersonalBusinessForm
             ShowProgress("Scanning " + objReg.strTitle)
             For Each objTrx In objReg.colDateRange(ctlStartDate.Value, ctlEndDate.Value)
                 If blnIsInvalid(objTrx) Then
-                    MsgBox("Invalid transaction found: " + objTrx.ToString())
+                    mobjHostUI.InfoMessageBox("Invalid transaction found: " + objTrx.ToString())
                 End If
                 If blnIsAdjustment(objTrx) Then
                     colToDelete.Add(objTrx)
@@ -159,7 +161,7 @@ Public Class AdjustPersonalBusinessForm
             intAdjustCount += intCreateAdjustments(objBusinessReg, objPersonalReg)
         Next
         If mblnFakeTrxFound Then
-            MsgBox("Note: There were fake transactions in the business account in this date range.")
+            mobjHostUI.InfoMessageBox("Note: There were fake transactions in the business account in this date range.")
         End If
         Return intAdjustCount
     End Function

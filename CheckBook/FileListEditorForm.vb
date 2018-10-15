@@ -6,14 +6,16 @@ Imports CheckBookLib
 
 Public Class FileListEditorForm
 
+    Private mobjHostUI As IHostUI
     Private mobjCompany As Company
     Private mstrFolder As String
     Private mstrFileType As String
     Private mobjPersister As IFilePersister
 
-    Public Sub ShowDialogForPath(ByVal objCompany As Company, ByVal strTitle As String, ByVal strFolder As String,
+    Public Sub ShowDialogForPath(ByVal objHostUI As IHostUI, ByVal strTitle As String, ByVal strFolder As String,
         ByVal strFileType As String, ByVal objPersister As IFilePersister)
-        mobjCompany = objCompany
+        mobjHostUI = objHostUI
+        mobjCompany = mobjHostUI.objCompany
         Me.Text = strTitle
         mstrFolder = strFolder
         mstrFileType = strFileType
@@ -78,14 +80,14 @@ Public Class FileListEditorForm
             Try
                 objData = mobjPersister.Load(strFile)
                 Using frm As New ObjectEditorForm
-                    If frm.ShowEditor(mobjCompany, objData, Path.GetFileNameWithoutExtension(strFile)) Then
+                    If frm.ShowEditor(mobjHostUI, objData, Path.GetFileNameWithoutExtension(strFile)) Then
                         objData.CleanForSave()
                         mobjPersister.Save(objData, strFile)
-                        MsgBox("File saved.", MsgBoxStyle.Information)
+                        mobjHostUI.InfoMessageBox("File saved.")
                     End If
                 End Using
             Catch ex As FilePersisterException
-                MsgBox(ex.Message)
+                mobjHostUI.InfoMessageBox(ex.Message)
             End Try
         End If
     End Sub
@@ -95,7 +97,7 @@ Public Class FileListEditorForm
         Dim strFile As String = Nothing
 
         If cboNewType.SelectedItem Is Nothing Then
-            MsgBox("Please select new file type.")
+            mobjHostUI.InfoMessageBox("Please select new file type.")
             Exit Sub
         End If
         If Not CheckNewFileName(strFile) Then
@@ -103,10 +105,10 @@ Public Class FileListEditorForm
         End If
         objData = mobjPersister.Create(DirectCast(cboNewType.SelectedItem, FilePersistableType).strType, strFile)
         Using frm As New ObjectEditorForm
-            If frm.ShowEditor(mobjCompany, objData, Path.GetFileNameWithoutExtension(strFile)) Then
+            If frm.ShowEditor(mobjHostUI, objData, Path.GetFileNameWithoutExtension(strFile)) Then
                 objData.CleanForSave()
                 mobjPersister.Save(objData, strFile)
-                MsgBox("File saved.", MsgBoxStyle.Information)
+                mobjHostUI.InfoMessageBox("File saved.")
                 LoadFileList()
             End If
         End Using
@@ -116,35 +118,35 @@ Public Class FileListEditorForm
         Dim strNewFile As String = Nothing
         Dim strOldFile As String = GetCurrentFile()
         If strOldFile = Nothing Then
-            MsgBox("Please select file to rename.")
+            mobjHostUI.InfoMessageBox("Please select file to rename.")
             Exit Sub
         End If
         If Not CheckNewFileName(strNewFile) Then
             Exit Sub
         End If
-        If MsgBox("Are you sure you want to rename this file?", MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
-            MsgBox("File not renamed.")
+        If MsgBox("Are you sure you want to rename this file?", MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+            mobjHostUI.InfoMessageBox("File not renamed.")
             Exit Sub
         End If
         File.Move(strOldFile, strNewFile)
         LoadFileList()
-        MsgBox("Renamed """ + Path.GetFileName(strOldFile) + """ to """ + Path.GetFileName(strNewFile) + """.")
+        mobjHostUI.InfoMessageBox("Renamed """ + Path.GetFileName(strOldFile) + """ to """ + Path.GetFileName(strNewFile) + """.")
     End Sub
 
     Private Sub btnDeleteFile_Click(sender As Object, e As EventArgs) Handles btnDeleteFile.Click
         Dim strOldFile As String
         strOldFile = GetCurrentFile()
         If strOldFile = Nothing Then
-            MsgBox("Please select file to delete.")
+            mobjHostUI.InfoMessageBox("Please select file to delete.")
             Exit Sub
         End If
-        If MsgBox("Are you sure you want to delete this file?", MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
-            MsgBox("File not deleted.")
+        If MsgBox("Are you sure you want to delete this file?", MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+            mobjHostUI.InfoMessageBox("File not deleted.")
             Exit Sub
         End If
         File.Delete(strOldFile)
         LoadFileList()
-        MsgBox("Deleted """ + Path.GetFileName(strOldFile) + """.")
+        mobjHostUI.InfoMessageBox("Deleted """ + Path.GetFileName(strOldFile) + """.")
     End Sub
 
     Private Function GetCurrentFile() As String
@@ -158,16 +160,16 @@ Public Class FileListEditorForm
     Private Function CheckNewFileName(ByRef strFile As String) As Boolean
         Dim strName As String = txtNewName.Text
         If String.IsNullOrEmpty(strName) Then
-            MsgBox("Please enter new file name.")
+            mobjHostUI.InfoMessageBox("Please enter new file name.")
             Return False
         End If
         If strName.Contains(".") Or strName.Contains("\") Or strName.Contains("/") Then
-            MsgBox("Do not enter path or file type for new file.")
+            mobjHostUI.InfoMessageBox("Do not enter path or file type for new file.")
             Return False
         End If
         strFile = Path.Combine(mstrFolder, strName) + "." + mstrFileType
         If File.Exists(strFile) Then
-            MsgBox("New file name already exists.")
+            mobjHostUI.InfoMessageBox("New file name already exists.")
             Return False
         End If
         Return True

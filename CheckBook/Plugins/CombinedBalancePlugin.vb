@@ -14,22 +14,22 @@ Public Class CombinedBalancePlugin
         Try
             Dim objReg As Register = HostUI.objGetCurrentRegister()
             If objReg Is Nothing Then
-                MsgBox("Please click on the register window you wish to calculate combined personal and business balance for.", MsgBoxStyle.Critical)
+                HostUI.ErrorMessageBox("Please click on the register window you wish to calculate combined personal and business balance for.")
                 Exit Sub
             End If
             Dim objLiabilityAcct As Account = objReg.objAccount
             If objLiabilityAcct.lngType <> Account.AccountType.Liability Then
-                MsgBox("Combined personal and business balance may only be computed for liability accounts.", MsgBoxStyle.Critical)
+                HostUI.ErrorMessageBox("Combined personal and business balance may only be computed for liability accounts.")
                 Exit Sub
             End If
             Dim objPersonalAcct As Account = objLiabilityAcct.objRelatedAcct1
             If objPersonalAcct Is Nothing Then
-                MsgBox("Account does not have a ""Related account #1"" (this is the related personal account)", MsgBoxStyle.Critical)
+                HostUI.ErrorMessageBox("Account does not have a ""Related account #1"" (this is the related personal account)")
                 Exit Sub
             End If
             Dim strEndDate As String = InputBox("Enter date to compute combined balance for:", "Balance Date", DateTime.Today.ToShortDateString())
             If Not IsDate(strEndDate) Then
-                MsgBox("Invalid Date", MsgBoxStyle.Critical)
+                HostUI.ErrorMessageBox("Invalid Date")
                 Exit Sub
             End If
             Dim datEndDate As DateTime = CDate(strEndDate)
@@ -40,7 +40,7 @@ Public Class CombinedBalancePlugin
             For Each objPersonalReg As Register In objPersonalAcct.colRegisters
                 curCombinedBalance = curCombinedBalance + curRegisterBalance(objPersonalReg, datEndDate)
             Next
-            MsgBox("Combined personal and business balance as of " & datEndDate.ToShortDateString() & " is " & Utilities.strFormatCurrency(curCombinedBalance) & ".")
+            HostUI.InfoMessageBox("Combined personal and business balance as of " & datEndDate.ToShortDateString() & " is " & Utilities.strFormatCurrency(curCombinedBalance) & ".")
             Exit Sub
         Catch ex As Exception
             gTopException(ex)

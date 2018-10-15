@@ -3,14 +3,16 @@ Option Explicit On
 Imports CheckBookLib
 
 Public Class HTMLWriter
+    Private mobjHostUI As IHostUI
     Private mobjCompany As Company
     Private mstrFileNameRoot As String
     Private mblnLocalStylesheet As Boolean
     Private mobjBuilder As System.Text.StringBuilder
     Public blnUseMinusNumbers As Boolean
 
-    Public Sub New(ByVal objCompany As Company, ByVal strFileNameRoot As String, ByVal blnLocalStylesheet As Boolean)
-        mobjCompany = objCompany
+    Public Sub New(ByVal objHostUI As IHostUI, ByVal strFileNameRoot As String, ByVal blnLocalStylesheet As Boolean)
+        mobjHostUI = objHostUI
+        mobjCompany = mobjHostUI.objCompany
         mstrFileNameRoot = strFileNameRoot
         mblnLocalStylesheet = blnLocalStylesheet
         mobjBuilder = New System.Text.StringBuilder()
@@ -116,7 +118,7 @@ Public Class HTMLWriter
             If Not objGroup.blnPrinted Then
                 For Each objItem As ReportLineItem In objGroup.colItems
                     If Not objItem.blnPrinted Then
-                        MsgBox("Report line item with key [" + objItem.strItemKey + "] was not printed")
+                        mobjHostUI.InfoMessageBox("Report line item with key [" + objItem.strItemKey + "] was not printed")
                     End If
                 Next
             End If

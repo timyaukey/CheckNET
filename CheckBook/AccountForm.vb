@@ -5,11 +5,13 @@ Imports CheckBookLib
 
 Public Class AccountForm
     Private mblnUpdateMode As Boolean
+    Private mobjHostUI As IHostUI
     Private mobjCompany As Company
 
-    Public Overloads Function ShowDialog(ByRef objAccount As Account, ByVal blnUpdateMode As Boolean, ByVal blnReadOnly As Boolean) As DialogResult
+    Public Overloads Function ShowDialog(ByVal objHostUI As IHostUI, ByRef objAccount As Account, ByVal blnUpdateMode As Boolean, ByVal blnReadOnly As Boolean) As DialogResult
         mblnUpdateMode = blnUpdateMode
-        mobjCompany = objAccount.objCompany
+        mobjHostUI = objHostUI
+        mobjCompany = mobjHostUI.objCompany
         txtAccountName.Text = objAccount.strTitle
         txtFileName.Text = objAccount.strFileNameRoot
         For Each objSubType As Account.SubTypeDef In Account.arrSubTypeDefs
@@ -68,17 +70,17 @@ Public Class AccountForm
 
     Private Sub btnOkay_Click(sender As Object, e As EventArgs) Handles btnOkay.Click
         If txtAccountName.Text.Length = 0 Then
-            MsgBox("Account name is required.")
+            mobjHostUI.InfoMessageBox("Account name is required.")
             Exit Sub
         End If
         If Not mblnUpdateMode Then
             If txtFileName.Text.Length = 0 Then
-                MsgBox("File name is required.")
+                mobjHostUI.InfoMessageBox("File name is required.")
                 Exit Sub
             End If
             For Each c As Char In ":/\.,!@$%^&()={}[]|<>()*?"
                 If txtFileName.Text.Contains(c) Then
-                    MsgBox("Invalid character in file name.")
+                    mobjHostUI.InfoMessageBox("Invalid character in file name.")
                     Exit Sub
                 End If
             Next

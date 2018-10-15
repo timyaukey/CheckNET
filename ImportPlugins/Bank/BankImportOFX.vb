@@ -22,7 +22,7 @@ Public Class BankImportOFX
     Public Overrides Function GetTrxReader() As ITrxReader
         Dim objInput As TrxImportPlugin.InputFile = objAskForFile("Select OFX File From Bank To Import", "OFX", "BankOFXPath")
         If Not objInput Is Nothing Then
-            Return New ReadBankOFX(objInput.objFile, objInput.strFile)
+            Return New ReadBankOFX(HostUI, objInput.objFile, objInput.strFile)
         End If
         Return Nothing
     End Function

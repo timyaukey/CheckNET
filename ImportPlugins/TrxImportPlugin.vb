@@ -39,7 +39,9 @@ Public MustInherit Class TrxImportPlugin
             Dim objReader As ITrxReader = GetTrxReader()
             If Not objReader Is Nothing Then
                 Using frm As BankImportAcctSelectForm = New BankImportAcctSelectForm()
-                    frm.ShowMe(Me.HostUI.objCompany, GetImportWindowCaption(), GetImportHandler(), objReader, Me.HostUI)
+                    Dim objImportHandler As IImportHandler = GetImportHandler()
+                    objImportHandler.Init(HostUI)
+                    frm.ShowMe(Me.HostUI, GetImportWindowCaption(), GetImportHandler(), objReader)
                 End Using
             End If
             Exit Sub

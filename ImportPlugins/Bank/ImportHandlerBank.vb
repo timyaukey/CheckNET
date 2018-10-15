@@ -5,6 +5,12 @@ Imports CheckBookLib
 Public Class ImportHandlerBank
     Implements IImportHandler
 
+    Private mobjHostUI As IHostUI
+
+    Public Sub Init(ByVal objHostUI As IHostUI) Implements IImportHandler.Init
+        mobjHostUI = objHostUI
+    End Sub
+
     Public ReadOnly Property blnAllowNew As Boolean Implements IImportHandler.blnAllowNew
         Get
             Return True
@@ -115,8 +121,8 @@ Public Class ImportHandlerBank
         If (objImportedTrx.curAmount <> objMatchedTrx.curAmount) And Not blnPreserveNumAmt Then
             If MsgBox("NOTE: The amount of the imported transaction is " & "different than the amount of the match you selected. " &
                 "Updating the matched transaction will change its amount to " & "equal the amount of the import." & vbCrLf & vbCrLf &
-                "Do you really want to do this?", MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
-                MsgBox("Update cancelled.", MsgBoxStyle.Information)
+                "Do you really want to do this?", MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
+                mobjHostUI.InfoMessageBox("Update cancelled.")
                 Return False
             End If
         End If

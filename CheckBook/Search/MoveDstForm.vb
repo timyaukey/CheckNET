@@ -6,17 +6,19 @@ Imports CheckBookLib
 Friend Class MoveDstForm
     Inherits System.Windows.Forms.Form
 
+    Private mobjHostUI As IHostUI
     Private mblnSuccess As Boolean
     Private mcolRegisters As List(Of Register)
     Private mobjOldReg As Register
     Private mstrNewDate As String
     Private mobjNewReg As Register
 
-    Public Function blnShowModal(ByVal colRegisters As List(Of Register), ByVal objOldReg As Register, ByRef strNewDate As String, ByRef objNewReg As Register) As Boolean
+    Public Function blnShowModal(ByVal objHostUI As IHostUI, ByVal colRegisters As List(Of Register), ByVal objOldReg As Register, ByRef strNewDate As String, ByRef objNewReg As Register) As Boolean
 
         Dim objReg As Register
         Dim intRegIdx As Short
 
+        mobjHostUI = objHostUI
         mblnSuccess = False
         mcolRegisters = colRegisters
         mobjOldReg = objOldReg
@@ -44,19 +46,19 @@ Friend Class MoveDstForm
 
         strDateOrDays = Trim(txtDateOrDays.Text)
         If strDateOrDays = "" And cboRegister.SelectedIndex < 1 Then
-            MsgBox("At least one of the inputs must be specified.")
+            mobjHostUI.InfoMessageBox("At least one of the inputs must be specified.")
             Exit Sub
         End If
         If strDateOrDays <> "" Then
             If Not (Utilities.blnIsValidDate(strDateOrDays) Or IsNumeric(strDateOrDays)) Then
-                MsgBox("Invalid date or number of days.")
+                mobjHostUI.InfoMessageBox("Invalid date or number of days.")
                 Exit Sub
             End If
         End If
         If cboRegister.SelectedIndex > 0 Then
             objNewReg = mcolRegisters.Item(UITools.GetItemData(cboRegister, cboRegister.SelectedIndex))
             If objNewReg Is mobjOldReg Then
-                MsgBox("You may not choose the same register (select no register " & "to leave in the same register.")
+                mobjHostUI.InfoMessageBox("You may not choose the same register (select no register " & "to leave in the same register.")
                 Exit Sub
             End If
         Else

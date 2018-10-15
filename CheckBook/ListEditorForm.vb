@@ -67,7 +67,7 @@ Friend Class ListEditorForm
             WriteFile()
             mobjCompany.BuildShortTermsCatKeys()
             mobjCompany.FindPlaceholderBudget()
-            MsgBox("Updated list has been saved. The new names will not appear in " & "register windows until you close and re-open those windows.", MsgBoxStyle.Information)
+            mobjHostUI.InfoMessageBox("Updated list has been saved. The new names will not appear in " & "register windows until you close and re-open those windows.")
             mblnModified = False
             mblnSaved = True
             Me.Close()
@@ -86,7 +86,7 @@ Friend Class ListEditorForm
         Try
 
             If mblnModified Then
-                If MsgBox("Do you wish to discard changes made on this window?", MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton2) <> MsgBoxResult.Ok Then
+                If MsgBox("Do you wish to discard changes made on this window?", MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
                     eventArgs.Cancel = True
                     Exit Sub
                 End If
@@ -113,7 +113,7 @@ Friend Class ListEditorForm
             'End If
             strKey = strMakeKey(intGetUnusedKey())
             If strKey = "" Then
-                MsgBox("Too many entries in list.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Too many entries in list.")
                 Exit Sub
             End If
             'objTransElem = New StringTransElement(strKey, strValue1, strMakeValue2(strValue1))
@@ -123,7 +123,7 @@ Friend Class ListEditorForm
             End If
             objTransElem.strValue2 = strMakeValue2(objTransElem.strValue1)
             If blnInsertElement(objTransElem, False, strError) Then
-                MsgBox(strError, MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox(strError)
                 Exit Sub
             End If
             mblnModified = True
@@ -151,7 +151,7 @@ Friend Class ListEditorForm
             'Get the new name, and validate.
             intIndex = lstElements.SelectedIndex
             If intIndex = -1 Then
-                MsgBox("Please select the list entry to change.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Please select the list entry to change.")
                 Exit Sub
             End If
             objOrigTransElem = DirectCast(lstElements.SelectedItem, StringTransElement)
@@ -173,7 +173,7 @@ Friend Class ListEditorForm
             If blnInsertElement(objNewTransElem, False, strError) Then
                 'Insert failed, so put back the entry we just deleted.
                 lstElements.Items.Insert(intIndex, objOrigTransElem)
-                MsgBox(strError, MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox(strError)
                 Exit Sub
             End If
 
@@ -214,26 +214,26 @@ Friend Class ListEditorForm
 
             intIndex = lstElements.SelectedIndex
             If intIndex < 0 Then
-                MsgBox("Please select the list entry to delete.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("Please select the list entry to delete.")
                 Exit Sub
             End If
             strValue1 = DirectCast(lstElements.Items(intIndex), StringTransElement).strValue1
             If InStr(strValue1, ":") = 0 Then
                 If Not blnFirstLevelChangesAllowed Then
-                    MsgBox("You may not delete top level entries in this list.", MsgBoxStyle.Critical)
+                    mobjHostUI.ErrorMessageBox("You may not delete top level entries in this list.")
                     Exit Sub
                 End If
             End If
             If blnMultipleLevelsAllowed Then
                 If intIndex < (lstElements.Items.Count - 1) Then
                     If UCase(strValue1 & ":") = UCase(VB.Left(DirectCast(lstElements.Items(intIndex + 1), StringTransElement).strValue1, Len(strValue1) + 1)) Then
-                        MsgBox("You may not delete a list entry with child entries.", MsgBoxStyle.Critical)
+                        mobjHostUI.ErrorMessageBox("You may not delete a list entry with child entries.")
                         Exit Sub
                     End If
                 End If
             End If
             If blnElementIsUsed(intIndex) Then
-                MsgBox("List entry is used by an account.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("List entry is used by an account.")
                 Exit Sub
             End If
 
@@ -278,7 +278,7 @@ Friend Class ListEditorForm
                 For intIndex = 1 To mobjList.intElements
                     objTransElem = mobjList.objElement(intIndex)
                     If blnInsertElement(objTransElem.objClone(), True, strError) Then
-                        MsgBox(strError)
+                        mobjHostUI.InfoMessageBox(strError)
                     End If
                     If mlngListType = ListType.Category Then
                         If CategoryTranslator.blnIsPersonal(objTransElem.strValue1) Then
@@ -290,7 +290,7 @@ Friend Class ListEditorForm
                     Dim intKey As Integer = intGetUnusedKey()
                     objTransElem = New StringTransElement(mobjList, strMakeKey(intKey), "C", "C")
                     If blnInsertElement(objTransElem, True, strError) Then
-                        MsgBox(strError)
+                        mobjHostUI.InfoMessageBox(strError)
                     End If
                 End If
             End With

@@ -15,11 +15,13 @@ Public Class ReadBankQIF
     'list of possible payees. Payees not in the list are allowed, but no category
     'information will be added for them.
 
+    Private mobjHostUI As IHostUI
     Private mobjFile As TextReader
     Private mstrFile As String
     Private mobjUtil As ImportUtilities
 
-    Public Sub New(ByVal objFile As TextReader, ByVal strFile As String)
+    Public Sub New(ByVal objHostUI As IHostUI, ByVal objFile As TextReader, ByVal strFile As String)
+        mobjHostUI = objHostUI
         mobjFile = objFile
         mstrFile = strFile
     End Sub
@@ -39,7 +41,7 @@ Public Class ReadBankQIF
             ElseIf strFirstLine = "!Type:Docs" Then
                 mobjUtil.blnMakeFakeTrx = True
             Else
-                MsgBox("File is not a QIF file.", MsgBoxStyle.Critical)
+                mobjHostUI.ErrorMessageBox("File is not a QIF file.")
                 mobjFile.Close()
                 Exit Function
             End If
