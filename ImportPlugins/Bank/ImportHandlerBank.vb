@@ -37,8 +37,12 @@ Public Class ImportHandlerBank
         Dim strImportName As String = objImportedTrx.strDescription
         For Each objReg As Register In objAccount.colRegisters
             For Each objTrx As Trx In objReg.colDbgRepeatTrx.Values
-                If String.Compare(objTrx.strDescription, 0, strImportName, 0, intCompareLen, True) = 0 Then
-                    Return "There is a repeating transaction with a similar name"
+                If TypeOf objTrx Is NormalTrx Then
+                    If String.Compare(objTrx.strDescription, 0, strImportName, 0, intCompareLen, True) = 0 Then
+                        If Math.Abs(objImportedTrx.datDate.Subtract(objTrx.datDate).TotalDays) < 30D Then
+                            Return "There is a repeating bank transaction with a similar name"
+                        End If
+                    End If
                 End If
             Next
         Next
