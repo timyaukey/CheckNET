@@ -52,7 +52,7 @@ Friend Class TrxForm
     Private mintSplitOffset As Integer
     Private Const mintSPLIT_CTRL_ARRAY_SIZE As Short = 10
 
-    Public blnBypassConfirmation As Boolean
+    Private mblnSilentMode As Boolean
 
     'Definitions: "Shared" controls are those used exactly the same for all Trx types.
     '             "Normal" controls are those used for normal Trx type, unless they
@@ -99,6 +99,7 @@ Friend Class TrxForm
         Try
 
             Init(objHostUI_, objTrx_.objReg, False, 0, Trx.TrxType.Normal, blnCheckInvoiceNum_, strLogTitle)
+            mblnSilentMode = True
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             SetSharedControls(objTrx_)
@@ -1264,10 +1265,6 @@ Friend Class TrxForm
     Private Function blnDeclineInvalidDate(ByVal strCheckLabel As String, ByVal datCheck As Date, ByVal strAnchorLabel As String, ByVal intWeeks As Integer, ByVal strRelationship As String) As Boolean
 
         Dim strMsg As String
-        If blnBypassConfirmation Then
-            blnDeclineInvalidDate = False
-            Exit Function
-        End If
         strMsg = strCheckLabel & " " & Utilities.strFormatDate(datCheck) & " is more than " & intWeeks & " weeks " & strRelationship & " " & strAnchorLabel & "." & vbCrLf & vbCrLf & "Is this date correct?"
         blnDeclineInvalidDate = MsgBox(strMsg, MsgBoxStyle.YesNo, "Date Validation") <> MsgBoxResult.Yes
 
@@ -1290,7 +1287,7 @@ Friend Class TrxForm
             AddSplits(objTrx)
             mobjReg.NewAddEnd(objTrx, New LogAdd, mstrLogTitle)
         End If
-        If objTrx.blnAnyUnmatchedBudget Then
+        If objTrx.blnAnyUnmatchedBudget And Not mblnSilentMode Then
             mobjHostUI.InfoMessageBox("One or more budgeted splits in this transaction could not be " & "matched to budgets.")
         End If
     End Sub
