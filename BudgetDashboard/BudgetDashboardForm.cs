@@ -175,7 +175,7 @@ namespace BudgetDashboard
             {
                 foreach(TrxSplit split in budget.colAppliedSplits)
                 {
-                    ShowDetailValues(budget.datDate, budget.strDescription, split.curAmount);
+                    ShowDetailValues(split.objParent.datDate, split.objParent.strDescription, split.curAmount);
                 }
             }
         }

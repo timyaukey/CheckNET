@@ -28,6 +28,8 @@ Public Class TrxSplit
     'Amount of this Split.
     Private mcurAmount As Decimal
 
+    'Parent NormalTrx for this TrxSplit.
+    Private mobjParent As NormalTrx
     'Possible reference to BudgetTrx for this TrxSplit.
     Private mobjBudget As BudgetTrx
     'Possible reference to ReplicaTrxManager for this TrxSplit.
@@ -46,6 +48,7 @@ Public Class TrxSplit
         mstrTerms = strTerms_
         mstrBudgetKey = strBudgetKey_
         mcurAmount = curAmount_
+        mobjParent = Nothing
         mobjBudget = Nothing
 
     End Sub
@@ -128,6 +131,15 @@ Public Class TrxSplit
         End Get
         Set(ByVal Value As BudgetTrx)
             mobjBudget = Value
+        End Set
+    End Property
+
+    Public Property objParent() As NormalTrx
+        Get
+            Return mobjParent
+        End Get
+        Set(value As NormalTrx)
+            mobjParent = value
         End Set
     End Property
 

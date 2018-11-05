@@ -559,6 +559,7 @@ Public Class NormalTrx
         Dim objSplit As TrxSplit
         objSplit = New TrxSplit
         objSplit.Init(strMemo_, strCategoryKey_, strPONumber_, strInvoiceNum_, datInvoiceDate_, datDueDate_, strTerms_, strBudgetKey_, curAmount_)
+        objSplit.objParent = Me
         mcolSplits.Add(objSplit)
         mcurAmount = mcurAmount + curAmount_
 
@@ -571,6 +572,7 @@ Public Class NormalTrx
         objDstSplit = New TrxSplit
         With objSrcSplit
             objDstSplit.Init(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount)
+            objDstSplit.objParent = Me
             mcolSplits.Add(objDstSplit)
             mcurAmount = mcurAmount + .curAmount
         End With
