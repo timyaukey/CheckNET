@@ -16,6 +16,7 @@ namespace BudgetDashboard
         private Company mCompany;
         private IHostUI mHostUI;
         private DashboardData mData;
+        private const int NonPeriodColumns = 3;
 
         public BudgetDashboardForm()
         {
@@ -35,8 +36,8 @@ namespace BudgetDashboard
         private void DisplayData()
         {
             grdMain.ColumnCount = mData.PeriodCount + 3;
-            ConfigureColumn(0, "Category", 200, DataGridViewContentAlignment.MiddleLeft, DataGridViewContentAlignment.MiddleLeft);
-            ConfigureColumn(1, "Sequence", 200, DataGridViewContentAlignment.MiddleLeft, DataGridViewContentAlignment.MiddleLeft);
+            ConfigureColumn(0, "Category", 160, DataGridViewContentAlignment.MiddleLeft, DataGridViewContentAlignment.MiddleLeft);
+            ConfigureColumn(1, "Sequence", 160, DataGridViewContentAlignment.MiddleLeft, DataGridViewContentAlignment.MiddleLeft);
             ConfigureColumn(2, "Row Total", 100, DataGridViewContentAlignment.MiddleRight, DataGridViewContentAlignment.MiddleRight);
             DateTime periodStart = mData.StartDate;
             for (int colIndex = 1; colIndex <= mData.PeriodCount; colIndex++)
@@ -47,7 +48,7 @@ namespace BudgetDashboard
             grdMain.Columns[0].Frozen = true;
             grdMain.Columns[1].Frozen = true;
             grdMain.Columns[2].Frozen = true;
-            foreach(var row in mData.UnbudgetedIncome)
+            foreach (var row in mData.UnbudgetedIncome)
             {
                 AddGridRow<SplitDetailRow, SplitDetailCell>(row, Color.White, false);
             }
@@ -60,7 +61,7 @@ namespace BudgetDashboard
             {
                 AddGridRow<SplitDetailRow, SplitDetailCell>(row, Color.White, false);
             }
-            foreach(var row in mData.BudgetedExpenses)
+            foreach (var row in mData.BudgetedExpenses)
             {
                 AddGridRow<BudgetDetailRow, BudgetDetailCell>(row, Color.White, true);
             }
@@ -68,7 +69,7 @@ namespace BudgetDashboard
             AddGridRow<TotalRow, DataCell>(mData.NetProfit, Color.LightGreen, false);
         }
 
-        private void ConfigureColumn(int colIndex, string title, int width, 
+        private void ConfigureColumn(int colIndex, string title, int width,
             DataGridViewContentAlignment headerAlignment, DataGridViewContentAlignment dataAlignment)
         {
             var col = grdMain.Columns[colIndex];
@@ -78,11 +79,12 @@ namespace BudgetDashboard
             col.DefaultCellStyle.Alignment = dataAlignment;
         }
 
-        private void AddGridRow<TRow, TCell2>(TRow row, Color rowBackgroundColor, bool useBudgetCell)
-            where TRow : DataRow<TCell2>
-            where TCell2 : DataCell, new()
+        private void AddGridRow<TRow, TCell>(TRow row, Color rowBackgroundColor, bool useBudgetCell)
+            where TRow : DataRow<TCell>
+            where TCell : DataCell, new()
         {
             DataGridViewRow gridRow = new DataGridViewRow();
+            gridRow.Tag = row;
             AddTextCell(gridRow, row.Label, rowBackgroundColor);
             AddTextCell(gridRow, row.Sequence, rowBackgroundColor);
             if (useBudgetCell)
@@ -107,7 +109,7 @@ namespace BudgetDashboard
 
         private void AddBudgetCell(DataGridViewRow gridRow, DataCell dataCell, Color cellBackgroundColor)
         {
-            AddCell(gridRow, new BudgetGridCell(dataCell.BudgetLimit, dataCell.BudgetApplied), 
+            AddCell(gridRow, new BudgetGridCell(dataCell.BudgetLimit, dataCell.BudgetApplied),
                 dataCell.CellAmount.ToString("F2"), cellBackgroundColor);
         }
 
@@ -122,6 +124,65 @@ namespace BudgetDashboard
             cell.Value = text;
             cell.Style.BackColor = cellBackgroundColor;
             gridRow.Cells.Add(cell);
+        }
+
+        private void grdMain_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow row = grdMain.Rows[e.RowIndex];
+            if (row.Tag is SplitDetailRow)
+            {
+                SplitDetailRow detailRow = row.Tag as SplitDetailRow;
+                ShowGridCell<SplitDetailRow, SplitDetailCell>(detailRow, e.ColumnIndex);
+            }
+            else if (row.Tag is BudgetDetailRow)
+            {
+                BudgetDetailRow budgetRow = row.Tag as BudgetDetailRow;
+                ShowGridCell<BudgetDetailRow, BudgetDetailCell>(budgetRow, e.ColumnIndex);
+                
+            }
+        }
+
+        private void ShowGridCell<TRow, TCell>(TRow row, int columnIndex)
+            where TRow : DataRow<TCell>
+            where TCell : DataCell, new()
+        {
+            if (columnIndex >= NonPeriodColumns)
+            {
+                TCell cell = row.Cells[columnIndex - NonPeriodColumns];
+                lblRowLabel.Text = "Category: " + row.Label;
+                lblRowSequence.Text = "Sequence: " + row.Sequence;
+                lblColumnDate.Text = "Period Starts: " + grdMain.Columns[columnIndex].HeaderText;
+                if (cell is SplitDetailCell)
+                    ShowSplitCellDetails(cell as SplitDetailCell);
+                else if (cell is BudgetDetailCell)
+                    ShowBudgetDetailCell(cell as BudgetDetailCell);
+            }
+        }
+
+        private void ShowSplitCellDetails(SplitDetailCell cell)
+        {
+            lvwDetails.Items.Clear();
+            foreach(SplitCarrier carrier in cell.Details)
+            {
+                ShowDetailValues(carrier.Trx.datDate, carrier.Trx.strDescription, carrier.Split.curAmount);
+            }
+        }
+
+        private void ShowBudgetDetailCell(BudgetDetailCell cell)
+        {
+            lvwDetails.Items.Clear();
+            foreach (BudgetTrx budget in cell.Details)
+            {
+                foreach(TrxSplit split in budget.colAppliedSplits)
+                {
+                    ShowDetailValues(budget.datDate, budget.strDescription, split.curAmount);
+                }
+            }
+        }
+
+        private void ShowDetailValues(DateTime trxDate, string descr, decimal amount)
+        {
+            lvwDetails.Items.Add(new ListViewItem(new string[] { trxDate.ToString("MM/dd/yy"), descr, amount.ToString("F2") }));
         }
     }
 }
