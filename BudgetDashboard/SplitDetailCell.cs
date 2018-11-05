@@ -4,7 +4,7 @@ using CheckBookLib;
 
 namespace BudgetDashboard
 {
-    public class SplitDetailCell : DetailCell<SplitCarrier>
+    public class SplitDetailCell : DetailCell<TrxSplit>
     {
         public SplitDetailCell()
         {

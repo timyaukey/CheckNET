@@ -118,8 +118,7 @@ namespace BudgetDashboard
                                 Company.objCategories.strKeyToValue1(split.strCategoryKey), sequence);
                             SplitDetailRows[rowKey] = row;
                         }
-                        SplitCarrier carrier = new SplitCarrier(split, normalTrx);
-                        row.AddToPeriod(period, carrier);
+                        row.AddToPeriod(period, split);
                     }
                 }
             }

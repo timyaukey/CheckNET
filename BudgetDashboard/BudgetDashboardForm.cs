@@ -132,24 +132,24 @@ namespace BudgetDashboard
             if (row.Tag is SplitDetailRow)
             {
                 SplitDetailRow detailRow = row.Tag as SplitDetailRow;
-                ShowGridCell<SplitDetailRow, SplitDetailCell>(detailRow, e.ColumnIndex);
+                ShowGridCell<SplitDetailRow, SplitDetailCell>(detailRow, e.ColumnIndex, "Category");
             }
             else if (row.Tag is BudgetDetailRow)
             {
                 BudgetDetailRow budgetRow = row.Tag as BudgetDetailRow;
-                ShowGridCell<BudgetDetailRow, BudgetDetailCell>(budgetRow, e.ColumnIndex);
+                ShowGridCell<BudgetDetailRow, BudgetDetailCell>(budgetRow, e.ColumnIndex, "Budget");
                 
             }
         }
 
-        private void ShowGridCell<TRow, TCell>(TRow row, int columnIndex)
+        private void ShowGridCell<TRow, TCell>(TRow row, int columnIndex, string labelType)
             where TRow : DataRow<TCell>
             where TCell : DataCell, new()
         {
             if (columnIndex >= NonPeriodColumns)
             {
                 TCell cell = row.Cells[columnIndex - NonPeriodColumns];
-                lblRowLabel.Text = "Category: " + row.Label;
+                lblRowLabel.Text = labelType + ": " + row.Label;
                 lblRowSequence.Text = "Sequence: " + row.Sequence;
                 lblColumnDate.Text = "Period Starts: " + grdMain.Columns[columnIndex].HeaderText;
                 if (cell is SplitDetailCell)
@@ -162,9 +162,9 @@ namespace BudgetDashboard
         private void ShowSplitCellDetails(SplitDetailCell cell)
         {
             lvwDetails.Items.Clear();
-            foreach(SplitCarrier carrier in cell.Details)
+            foreach(TrxSplit split in cell.Details)
             {
-                ShowDetailValues(carrier.Trx.datDate, carrier.Trx.strDescription, carrier.Split.curAmount);
+                ShowDetailValues(split.objParent.datDate, split.objParent.strDescription, split.curAmount);
             }
         }
 
