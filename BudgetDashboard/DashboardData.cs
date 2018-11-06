@@ -23,6 +23,8 @@ namespace BudgetDashboard
         public readonly TotalRow TotalExpense;
         public readonly TotalRow NetProfit;
 
+        public bool HasUnalignedBudgetPeriods;
+
         public DashboardData(Account account, int periodDays, int periodCount, DateTime startDate)
         {
             this.Company = account.objCompany;
@@ -40,6 +42,7 @@ namespace BudgetDashboard
             TotalIncome = new TotalRow(periodCount, "", "Total Credits", "");
             TotalExpense = new TotalRow(periodCount, "", "Total Debits", "");
             NetProfit = new TotalRow(periodCount, "", "Net Debits/Credits", "");
+            HasUnalignedBudgetPeriods = false;
         }
 
         public void Load()
@@ -141,6 +144,11 @@ namespace BudgetDashboard
                         BudgetDetailRows[rowKey] = row;
                     }
                     row.AddToPeriod(period, budgetTrx);
+                    if (period != GetPeriod(budgetTrx.datBudgetStarts))
+                    {
+                        row.HasUnalignedPeriods = true;
+                        HasUnalignedBudgetPeriods = true;
+                    }
                 }
             }
         }

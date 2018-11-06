@@ -35,6 +35,7 @@ namespace BudgetDashboard
 
         private void DisplayData()
         {
+            this.Text = "Budget Dashboard - " + mData.Account.strTitle;
             grdMain.ColumnCount = mData.PeriodCount + 3;
             ConfigureColumn(0, "Category", 160, DataGridViewContentAlignment.MiddleLeft, DataGridViewContentAlignment.MiddleLeft);
             ConfigureColumn(1, "Sequence", 160, DataGridViewContentAlignment.MiddleLeft, DataGridViewContentAlignment.MiddleLeft);
@@ -42,7 +43,7 @@ namespace BudgetDashboard
             DateTime periodStart = mData.StartDate;
             for (int colIndex = 1; colIndex <= mData.PeriodCount; colIndex++)
             {
-                ConfigureColumn(colIndex + 2, periodStart.ToShortDateString(), 100, DataGridViewContentAlignment.MiddleRight, DataGridViewContentAlignment.MiddleRight);
+                ConfigureColumn(colIndex + 2, periodStart.ToShortDateString(), 80, DataGridViewContentAlignment.MiddleRight, DataGridViewContentAlignment.MiddleRight);
                 periodStart = periodStart.AddDays(mData.PeriodDays);
             }
             grdMain.Columns[0].Frozen = true;
@@ -54,7 +55,7 @@ namespace BudgetDashboard
             }
             foreach (var row in mData.BudgetedIncome)
             {
-                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row, Color.White, true);
+                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row, row.HasUnalignedPeriods ? Color.Red : Color.White, true);
             }
             AddGridRow<TotalRow, DataCell>(mData.TotalIncome, Color.LightGray, false);
             foreach (var row in mData.UnbudgetedExpenses)
@@ -63,10 +64,13 @@ namespace BudgetDashboard
             }
             foreach (var row in mData.BudgetedExpenses)
             {
-                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row, Color.White, true);
+                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row, row.HasUnalignedPeriods ? Color.Red : Color.White, true);
             }
             AddGridRow<TotalRow, DataCell>(mData.TotalExpense, Color.LightGray, false);
             AddGridRow<TotalRow, DataCell>(mData.NetProfit, Color.LightGreen, false);
+            if (mData.HasUnalignedBudgetPeriods)
+                mHostUI.ErrorMessageBox("One or more budget rows has budget transaction(s) whose period does not fit in a single dashboard column. " + 
+                    "All such budget rows are highlighted in red.");
         }
 
         private void ConfigureColumn(int colIndex, string title, int width,
