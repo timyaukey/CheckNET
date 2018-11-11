@@ -35,10 +35,10 @@ Public Class CombinedBalancePlugin
             Dim datEndDate As DateTime = CDate(strEndDate)
             Dim curCombinedBalance As Decimal = 0
             For Each objLiabilityReg As Register In objLiabilityAcct.colRegisters
-                curCombinedBalance = curCombinedBalance + curRegisterBalance(objLiabilityReg, datEndDate)
+                curCombinedBalance = curCombinedBalance + objLiabilityReg.curEndingBalance(datEndDate)
             Next
             For Each objPersonalReg As Register In objPersonalAcct.colRegisters
-                curCombinedBalance = curCombinedBalance + curRegisterBalance(objPersonalReg, datEndDate)
+                curCombinedBalance = curCombinedBalance + objPersonalReg.curEndingBalance(datEndDate)
             Next
             HostUI.InfoMessageBox("Combined personal and business balance as of " & datEndDate.ToShortDateString() & " is " & Utilities.strFormatCurrency(curCombinedBalance) & ".")
             Exit Sub
@@ -46,19 +46,6 @@ Public Class CombinedBalancePlugin
             gTopException(ex)
         End Try
     End Sub
-
-    Private Function curRegisterBalance(ByVal objReg As Register, ByVal datEndDate As DateTime) As Decimal
-        Dim lngIndex As Integer
-        Dim curBalance As Decimal
-        For lngIndex = 1 To objReg.lngTrxCount
-            Dim objTrx As Trx = objReg.objTrx(lngIndex)
-            If objTrx.datDate > datEndDate Then
-                Exit For
-            End If
-            curBalance = curBalance + objTrx.curAmount
-        Next
-        Return curBalance
-    End Function
 
     Public Overrides Function GetMenuTitle() As String
         Return "Combined Personal and Business Balance"

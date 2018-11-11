@@ -30,13 +30,13 @@
         {
             this.grdMain = new System.Windows.Forms.DataGridView();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.lblRowLabel = new System.Windows.Forms.Label();
-            this.lblRowSequence = new System.Windows.Forms.Label();
-            this.lblColumnDate = new System.Windows.Forms.Label();
             this.lvwDetails = new System.Windows.Forms.ListView();
             this.colDtlDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colDtlDescr = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colDtlAmount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lblColumnDate = new System.Windows.Forms.Label();
+            this.lblRowSequence = new System.Windows.Forms.Label();
+            this.lblRowLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.grdMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -81,36 +81,6 @@
             this.splitContainer.SplitterDistance = 914;
             this.splitContainer.TabIndex = 1;
             // 
-            // lblRowLabel
-            // 
-            this.lblRowLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblRowLabel.Location = new System.Drawing.Point(3, 0);
-            this.lblRowLabel.Name = "lblRowLabel";
-            this.lblRowLabel.Size = new System.Drawing.Size(329, 20);
-            this.lblRowLabel.TabIndex = 0;
-            this.lblRowLabel.Text = "(row label)";
-            // 
-            // lblRowSequence
-            // 
-            this.lblRowSequence.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblRowSequence.Location = new System.Drawing.Point(2, 20);
-            this.lblRowSequence.Name = "lblRowSequence";
-            this.lblRowSequence.Size = new System.Drawing.Size(329, 20);
-            this.lblRowSequence.TabIndex = 1;
-            this.lblRowSequence.Text = "(row sequence)";
-            // 
-            // lblColumnDate
-            // 
-            this.lblColumnDate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblColumnDate.Location = new System.Drawing.Point(2, 40);
-            this.lblColumnDate.Name = "lblColumnDate";
-            this.lblColumnDate.Size = new System.Drawing.Size(329, 20);
-            this.lblColumnDate.TabIndex = 2;
-            this.lblColumnDate.Text = "(date)";
-            // 
             // lvwDetails
             // 
             this.lvwDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -141,6 +111,36 @@
             // 
             this.colDtlAmount.Text = "Amount";
             this.colDtlAmount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // lblColumnDate
+            // 
+            this.lblColumnDate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblColumnDate.Location = new System.Drawing.Point(2, 40);
+            this.lblColumnDate.Name = "lblColumnDate";
+            this.lblColumnDate.Size = new System.Drawing.Size(291, 20);
+            this.lblColumnDate.TabIndex = 2;
+            this.lblColumnDate.Text = "(date)";
+            // 
+            // lblRowSequence
+            // 
+            this.lblRowSequence.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblRowSequence.Location = new System.Drawing.Point(2, 20);
+            this.lblRowSequence.Name = "lblRowSequence";
+            this.lblRowSequence.Size = new System.Drawing.Size(329, 20);
+            this.lblRowSequence.TabIndex = 1;
+            this.lblRowSequence.Text = "(row sequence)";
+            // 
+            // lblRowLabel
+            // 
+            this.lblRowLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblRowLabel.Location = new System.Drawing.Point(3, 0);
+            this.lblRowLabel.Name = "lblRowLabel";
+            this.lblRowLabel.Size = new System.Drawing.Size(329, 20);
+            this.lblRowLabel.TabIndex = 0;
+            this.lblRowLabel.Text = "(row label)";
             // 
             // BudgetDashboardForm
             // 

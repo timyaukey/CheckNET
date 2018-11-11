@@ -28,7 +28,9 @@ namespace BudgetDashboard
             mHostUI = hostUI;
             mCompany = mHostUI.objCompany;
             mData = data;
+            mData.Load();
             DisplayData();
+            SetCellDetailVisiblity(false);
             this.MdiParent = mHostUI.objGetMainForm();
             this.Show();
         }
@@ -55,7 +57,7 @@ namespace BudgetDashboard
             }
             foreach (var row in mData.BudgetedIncome)
             {
-                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row, row.HasUnalignedPeriods ? Color.Red : Color.White, true);
+                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row, row.HasUnalignedPeriods ? Color.SandyBrown : Color.White, true);
             }
             AddGridRow<TotalRow, DataCell>(mData.TotalIncome, Color.LightGray, false);
             foreach (var row in mData.UnbudgetedExpenses)
@@ -64,13 +66,14 @@ namespace BudgetDashboard
             }
             foreach (var row in mData.BudgetedExpenses)
             {
-                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row, row.HasUnalignedPeriods ? Color.Red : Color.White, true);
+                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row, row.HasUnalignedPeriods ? Color.SandyBrown : Color.White, true);
             }
             AddGridRow<TotalRow, DataCell>(mData.TotalExpense, Color.LightGray, false);
             AddGridRow<TotalRow, DataCell>(mData.NetProfit, Color.LightGreen, false);
+            AddGridRow<TotalRow, DataCell>(mData.RunningBalance, Color.LightBlue, false);
             if (mData.HasUnalignedBudgetPeriods)
                 mHostUI.ErrorMessageBox("One or more budget rows has budget transaction(s) whose period does not fit in a single dashboard column. " + 
-                    "All such budget rows are highlighted in red.");
+                    "All such budget rows are highlighted in light brown.");
         }
 
         private void ConfigureColumn(int colIndex, string title, int width,
@@ -144,6 +147,8 @@ namespace BudgetDashboard
                 ShowGridCell<BudgetDetailRow, BudgetDetailCell>(budgetRow, e.ColumnIndex, "Budget");
                 
             }
+            else
+                CheckCellDetailVisibility(false);
         }
 
         private void ShowGridCell<TRow, TCell>(TRow row, int columnIndex, string labelType)
@@ -152,6 +157,7 @@ namespace BudgetDashboard
         {
             if (columnIndex >= NonPeriodColumns)
             {
+                CheckCellDetailVisibility(true);
                 TCell cell = row.Cells[columnIndex - NonPeriodColumns];
                 lblRowLabel.Text = labelType + ": " + row.Label;
                 lblRowSequence.Text = "Sequence: " + row.Sequence;
@@ -160,6 +166,10 @@ namespace BudgetDashboard
                     ShowSplitCellDetails(cell as SplitDetailCell);
                 else if (cell is BudgetDetailCell)
                     ShowBudgetDetailCell(cell as BudgetDetailCell);
+            }
+            else
+            {
+                CheckCellDetailVisibility(false);
             }
         }
 
@@ -187,6 +197,22 @@ namespace BudgetDashboard
         private void ShowDetailValues(DateTime trxDate, string descr, decimal amount)
         {
             lvwDetails.Items.Add(new ListViewItem(new string[] { trxDate.ToString("MM/dd/yy"), descr, amount.ToString("F2") }));
+        }
+
+        private void CheckCellDetailVisibility(bool showDetail)
+        {
+            if (lvwDetails.Visible != showDetail)
+            {
+                SetCellDetailVisiblity(showDetail);
+            }
+        }
+
+        private void SetCellDetailVisiblity(bool showDetail)
+        {
+            lblRowLabel.Visible = showDetail;
+            lblRowSequence.Visible = showDetail;
+            lblColumnDate.Visible = showDetail;
+            lvwDetails.Visible = showDetail;
         }
     }
 }

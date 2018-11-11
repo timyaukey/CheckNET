@@ -1190,6 +1190,17 @@ Public Class Register
         Return objRange.colTrx()
     End Function
 
+    Public Function curEndingBalance(ByVal datEndDate As DateTime) As Decimal
+        Dim curBalance As Decimal
+        For Each objTrx As Trx In colAllTrx()
+            If objTrx.datDate > datEndDate Then
+                Exit For
+            End If
+            curBalance = curBalance + objTrx.curAmount
+        Next
+        Return curBalance
+    End Function
+
     '$Description Validate the register, and report all errors by firing
     '   ValidationError events. Checks balances, sort order, and consistency
     '   of data in individual Trx.

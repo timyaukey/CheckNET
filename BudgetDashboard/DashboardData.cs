@@ -13,6 +13,7 @@ namespace BudgetDashboard
         public readonly int PeriodCount;
         public readonly DateTime StartDate;
         public readonly DateTime EndDate;
+        public Decimal StartingBalance;
         public readonly Dictionary<string, BudgetDetailRow> BudgetDetailRows;
         public readonly Dictionary<string, SplitDetailRow> SplitDetailRows;
         public readonly List<BudgetDetailRow> BudgetedIncome;
@@ -22,6 +23,7 @@ namespace BudgetDashboard
         public readonly TotalRow TotalIncome;
         public readonly TotalRow TotalExpense;
         public readonly TotalRow NetProfit;
+        public readonly TotalRow RunningBalance;
 
         public bool HasUnalignedBudgetPeriods;
 
@@ -42,13 +44,16 @@ namespace BudgetDashboard
             TotalIncome = new TotalRow(periodCount, "", "Total Credits", "");
             TotalExpense = new TotalRow(periodCount, "", "Total Debits", "");
             NetProfit = new TotalRow(periodCount, "", "Net Debits/Credits", "");
+            RunningBalance = new TotalRow(periodCount, "", "Running Balance", "");
             HasUnalignedBudgetPeriods = false;
         }
 
         public void Load()
         {
+            StartingBalance = 0m;
             foreach(Register reg in Account.colRegisters)
             {
+                StartingBalance += reg.curEndingBalance(StartDate.AddDays(-1d));
                 foreach(Trx trx in reg.colDateRange(StartDate, EndDate))
                 {
                     LoadTrx(trx);
@@ -84,6 +89,13 @@ namespace BudgetDashboard
             }
             NetProfit.AddRow<TotalRow, DataCell>(TotalIncome);
             NetProfit.AddRow<TotalRow, DataCell>(TotalExpense);
+            decimal currentBalance = StartingBalance;
+            RunningBalance.RowTotal.CellAmount = StartingBalance;
+            for (var cellIndex = 0; cellIndex < PeriodCount; cellIndex++)
+            {
+                currentBalance += NetProfit.Cells[cellIndex].CellAmount;
+                RunningBalance.Cells[cellIndex].CellAmount = currentBalance;
+            }
             UnbudgetedIncome.Sort(DataRowComparer);
             UnbudgetedExpenses.Sort(DataRowComparer);
         }

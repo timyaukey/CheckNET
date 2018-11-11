@@ -28,7 +28,6 @@ namespace BudgetDashboard
                 {
                     Account account = reg.objAccount;
                     DashboardData data = new DashboardData(account, specsForm.PeriodDays, specsForm.PeriodCount, specsForm.StartDate);
-                    data.Load();
                     var budgetForm = new BudgetDashboardForm();
                     budgetForm.Show(HostUI, data);
                 }
