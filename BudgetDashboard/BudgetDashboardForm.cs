@@ -162,6 +162,10 @@ namespace BudgetDashboard
                 lblRowLabel.Text = labelType + ": " + row.Label;
                 lblRowSequence.Text = "Sequence: " + row.Sequence;
                 lblColumnDate.Text = "Period Starts: " + grdMain.Columns[columnIndex].HeaderText;
+                lblTrxAmount.Text = "Register Amount: " + cell.TrxAmount.ToString("F2");
+                lblBudgetLimit.Text = "Budget Limit: " + cell.BudgetLimit.ToString("F2");
+                lblBudgetApplied.Text = "Budget Applied: " + cell.BudgetApplied.ToString("F2");
+                lblDashboardAmount.Text = "Dashboard Amount: " + cell.CellAmount.ToString("F2");
                 if (cell is SplitDetailCell)
                     ShowSplitCellDetails(cell as SplitDetailCell);
                 else if (cell is BudgetDetailCell)
@@ -212,6 +216,10 @@ namespace BudgetDashboard
             lblRowLabel.Visible = showDetail;
             lblRowSequence.Visible = showDetail;
             lblColumnDate.Visible = showDetail;
+            lblTrxAmount.Visible = showDetail;
+            lblBudgetLimit.Visible = showDetail;
+            lblBudgetApplied.Visible = showDetail;
+            lblDashboardAmount.Visible = showDetail;
             lvwDetails.Visible = showDetail;
         }
     }
