@@ -53,24 +53,24 @@ namespace BudgetDashboard
             grdMain.Columns[2].Frozen = true;
             foreach (var row in mData.UnbudgetedIncome)
             {
-                AddGridRow<SplitDetailRow, SplitDetailCell>(row, Color.White, false);
+                AddGridRow<SplitDetailRow, SplitDetailCell>(row, Color.White);
             }
             foreach (var row in mData.BudgetedIncome)
             {
-                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row, row.HasUnalignedPeriods ? Color.SandyBrown : Color.White, true);
+                AddGridRow(row, row.HasUnalignedPeriods ? Color.SandyBrown : Color.White);
             }
-            AddGridRow<TotalRow, DataCell>(mData.TotalIncome, Color.LightGray, false);
+            AddGridRow<TotalRow, DataCell>(mData.TotalIncome, Color.LightGray);
             foreach (var row in mData.UnbudgetedExpenses)
             {
-                AddGridRow<SplitDetailRow, SplitDetailCell>(row, Color.White, false);
+                AddGridRow<SplitDetailRow, SplitDetailCell>(row, Color.White);
             }
             foreach (var row in mData.BudgetedExpenses)
             {
-                AddGridRow<BudgetDetailRow, BudgetDetailCell>(row, row.HasUnalignedPeriods ? Color.SandyBrown : Color.White, true);
+                AddGridRow(row, row.HasUnalignedPeriods ? Color.SandyBrown : Color.White);
             }
-            AddGridRow<TotalRow, DataCell>(mData.TotalExpense, Color.LightGray, false);
-            AddGridRow<TotalRow, DataCell>(mData.NetProfit, Color.LightGreen, false);
-            AddGridRow<TotalRow, DataCell>(mData.RunningBalance, Color.LightBlue, false);
+            AddGridRow<TotalRow, DataCell>(mData.TotalExpense, Color.LightGray);
+            AddGridRow<TotalRow, DataCell>(mData.NetProfit, Color.LightGreen);
+            AddGridRow<TotalRow, DataCell>(mData.RunningBalance, Color.LightBlue);
             if (mData.HasUnalignedBudgetPeriods)
                 mHostUI.ErrorMessageBox("One or more budget rows has budget transaction(s) whose period does not fit in a single dashboard column. " + 
                     "All such budget rows are highlighted in light brown.");
@@ -86,7 +86,7 @@ namespace BudgetDashboard
             col.DefaultCellStyle.Alignment = dataAlignment;
         }
 
-        private void AddGridRow<TRow, TCell>(TRow row, Color rowBackgroundColor, bool useBudgetCell)
+        private void AddGridRow<TRow, TCell>(TRow row, Color rowBackgroundColor)
             where TRow : DataRow<TCell>
             where TCell : DataCell, new()
         {
@@ -94,16 +94,24 @@ namespace BudgetDashboard
             gridRow.Tag = row;
             AddTextCell(gridRow, row.Label, rowBackgroundColor);
             AddTextCell(gridRow, row.Sequence, rowBackgroundColor);
-            if (useBudgetCell)
-                AddBudgetCell(gridRow, row.RowTotal, rowBackgroundColor);
-            else
-                AddDecimalCell(gridRow, row.RowTotal.CellAmount, rowBackgroundColor);
+            AddDecimalCell(gridRow, row.RowTotal.CellAmount, rowBackgroundColor);
             for (int periodIndex = 0; periodIndex < mData.PeriodCount; periodIndex++)
             {
-                if (useBudgetCell)
-                    AddBudgetCell(gridRow, row.Cells[periodIndex], rowBackgroundColor);
-                else
-                    AddDecimalCell(gridRow, row.Cells[periodIndex].CellAmount, rowBackgroundColor);
+                AddDecimalCell(gridRow, row.Cells[periodIndex].CellAmount, rowBackgroundColor);
+            }
+            grdMain.Rows.Add(gridRow);
+        }
+
+        private void AddGridRow(BudgetDetailRow row, Color rowBackgroundColor)
+        {
+            DataGridViewRow gridRow = new DataGridViewRow();
+            gridRow.Tag = row;
+            AddTextCell(gridRow, row.Label, rowBackgroundColor);
+            AddTextCell(gridRow, row.Sequence, rowBackgroundColor);
+            AddDecimalCell(gridRow, row.RowTotal.CellAmount, rowBackgroundColor);
+            for (int periodIndex = 0; periodIndex < mData.PeriodCount; periodIndex++)
+            {
+                AddBudgetCell(gridRow, row.Cells[periodIndex], rowBackgroundColor);
             }
             grdMain.Rows.Add(gridRow);
         }
@@ -114,7 +122,7 @@ namespace BudgetDashboard
                 text, cellBackgroundColor);
         }
 
-        private void AddBudgetCell(DataGridViewRow gridRow, DataCell dataCell, Color cellBackgroundColor)
+        private void AddBudgetCell(DataGridViewRow gridRow, BudgetDetailCell dataCell, Color cellBackgroundColor)
         {
             AddCell(gridRow, new BudgetGridCell(dataCell.BudgetLimit, dataCell.BudgetApplied),
                 dataCell.CellAmount.ToString("F2"), cellBackgroundColor);
@@ -138,38 +146,30 @@ namespace BudgetDashboard
             DataGridViewRow row = grdMain.Rows[e.RowIndex];
             if (row.Tag is SplitDetailRow)
             {
-                SplitDetailRow detailRow = row.Tag as SplitDetailRow;
-                ShowGridCell<SplitDetailRow, SplitDetailCell>(detailRow, e.ColumnIndex, "Category");
+                ShowSplitCell(row.Tag as SplitDetailRow, e.ColumnIndex);
             }
             else if (row.Tag is BudgetDetailRow)
             {
-                BudgetDetailRow budgetRow = row.Tag as BudgetDetailRow;
-                ShowGridCell<BudgetDetailRow, BudgetDetailCell>(budgetRow, e.ColumnIndex, "Budget");
+                ShowBudgetCell(row.Tag as BudgetDetailRow, e.ColumnIndex);
                 
             }
             else
                 CheckCellDetailVisibility(false);
         }
 
-        private void ShowGridCell<TRow, TCell>(TRow row, int columnIndex, string labelType)
-            where TRow : DataRow<TCell>
-            where TCell : DataCell, new()
+        private void ShowSplitCell(SplitDetailRow row, int columnIndex)
         {
             if (columnIndex >= NonPeriodColumns)
             {
-                CheckCellDetailVisibility(true);
-                TCell cell = row.Cells[columnIndex - NonPeriodColumns];
-                lblRowLabel.Text = labelType + ": " + row.Label;
-                lblRowSequence.Text = "Sequence: " + row.Sequence;
-                lblColumnDate.Text = "Period Starts: " + grdMain.Columns[columnIndex].HeaderText;
-                lblTrxAmount.Text = "Register Amount: " + cell.TrxAmount.ToString("F2");
-                lblBudgetLimit.Text = "Budget Limit: " + cell.BudgetLimit.ToString("F2");
-                lblBudgetApplied.Text = "Budget Applied: " + cell.BudgetApplied.ToString("F2");
-                lblDashboardAmount.Text = "Dashboard Amount: " + cell.CellAmount.ToString("F2");
-                if (cell is SplitDetailCell)
-                    ShowSplitCellDetails(cell as SplitDetailCell);
-                else if (cell is BudgetDetailCell)
-                    ShowBudgetDetailCell(cell as BudgetDetailCell);
+                SplitDetailCell cell = row.Cells[columnIndex - NonPeriodColumns];
+                StartShowCell(row, columnIndex, "Category");
+                lblDashboardAmount.Text = "Amount: " + cell.CellAmount.ToString("F2");
+                lblBudgetLimit.Text = "";
+                lblBudgetApplied.Text = "";
+                foreach (TrxSplit split in cell.Details)
+                {
+                    ShowDetailValues(split.objParent.datDate, split.objParent.strDescription, split.curAmount);
+                }
             }
             else
             {
@@ -177,25 +177,37 @@ namespace BudgetDashboard
             }
         }
 
-        private void ShowSplitCellDetails(SplitDetailCell cell)
+        private void ShowBudgetCell(BudgetDetailRow row, int columnIndex)
         {
-            lvwDetails.Items.Clear();
-            foreach(TrxSplit split in cell.Details)
+            if (columnIndex >= NonPeriodColumns)
             {
-                ShowDetailValues(split.objParent.datDate, split.objParent.strDescription, split.curAmount);
+                BudgetDetailCell cell = row.Cells[columnIndex - NonPeriodColumns];
+                StartShowCell(row, columnIndex, "Budget");
+                lblDashboardAmount.Text = "Dashboard Amount: " + cell.CellAmount.ToString("F2");
+                lblBudgetLimit.Text = "Budget Limit: " + cell.BudgetLimit.ToString("F2");
+                lblBudgetApplied.Text = "Budget Applied: " + cell.BudgetApplied.ToString("F2");
+                foreach (BudgetTrx budget in cell.Details)
+                {
+                    foreach (TrxSplit split in budget.colAppliedSplits)
+                    {
+                        ShowDetailValues(split.objParent.datDate, split.objParent.strDescription, split.curAmount);
+                    }
+                }
+            }
+            else
+            {
+                CheckCellDetailVisibility(false);
             }
         }
 
-        private void ShowBudgetDetailCell(BudgetDetailCell cell)
+        private void StartShowCell<TCell>(DataRow<TCell> row, int columnIndex, string labelType)
+            where TCell : DataCell, new()
         {
+            CheckCellDetailVisibility(true);
+            lblRowLabel.Text = labelType + ": " + row.Label;
+            lblRowSequence.Text = "Sequence: " + row.Sequence;
+            lblColumnDate.Text = "Period Starts: " + grdMain.Columns[columnIndex].HeaderText;
             lvwDetails.Items.Clear();
-            foreach (BudgetTrx budget in cell.Details)
-            {
-                foreach(TrxSplit split in budget.colAppliedSplits)
-                {
-                    ShowDetailValues(split.objParent.datDate, split.objParent.strDescription, split.curAmount);
-                }
-            }
         }
 
         private void ShowDetailValues(DateTime trxDate, string descr, decimal amount)
@@ -216,7 +228,6 @@ namespace BudgetDashboard
             lblRowLabel.Visible = showDetail;
             lblRowSequence.Visible = showDetail;
             lblColumnDate.Visible = showDetail;
-            lblTrxAmount.Visible = showDetail;
             lblBudgetLimit.Visible = showDetail;
             lblBudgetApplied.Visible = showDetail;
             lblDashboardAmount.Visible = showDetail;

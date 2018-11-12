@@ -11,9 +11,13 @@ namespace BudgetDashboard
         {
         }
 
-        public override SplitDetailCell MakeDataCell(TrxSplit detail)
+        protected override SplitDetailCell MakeDataCell(TrxSplit detail)
         {
             return new SplitDetailCell(detail);
+        }
+
+        protected override void AddExtraData(SplitDetailCell accumulator, SplitDetailCell source)
+        {
         }
     }
 }

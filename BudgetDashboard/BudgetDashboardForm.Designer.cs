@@ -33,7 +33,6 @@
             this.lblDashboardAmount = new System.Windows.Forms.Label();
             this.lblBudgetApplied = new System.Windows.Forms.Label();
             this.lblBudgetLimit = new System.Windows.Forms.Label();
-            this.lblTrxAmount = new System.Windows.Forms.Label();
             this.lvwDetails = new System.Windows.Forms.ListView();
             this.colDtlDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colDtlDescr = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -80,7 +79,6 @@
             this.splitContainer.Panel2.Controls.Add(this.lblDashboardAmount);
             this.splitContainer.Panel2.Controls.Add(this.lblBudgetApplied);
             this.splitContainer.Panel2.Controls.Add(this.lblBudgetLimit);
-            this.splitContainer.Panel2.Controls.Add(this.lblTrxAmount);
             this.splitContainer.Panel2.Controls.Add(this.lvwDetails);
             this.splitContainer.Panel2.Controls.Add(this.lblColumnDate);
             this.splitContainer.Panel2.Controls.Add(this.lblRowSequence);
@@ -91,9 +89,9 @@
             // 
             // lblDashboardAmount
             // 
-            this.lblDashboardAmount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDashboardAmount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblDashboardAmount.Location = new System.Drawing.Point(3, 411);
+            this.lblDashboardAmount.Location = new System.Drawing.Point(3, 372);
             this.lblDashboardAmount.Name = "lblDashboardAmount";
             this.lblDashboardAmount.Size = new System.Drawing.Size(291, 20);
             this.lblDashboardAmount.TabIndex = 7;
@@ -101,9 +99,9 @@
             // 
             // lblBudgetApplied
             // 
-            this.lblBudgetApplied.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblBudgetApplied.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblBudgetApplied.Location = new System.Drawing.Point(3, 391);
+            this.lblBudgetApplied.Location = new System.Drawing.Point(3, 392);
             this.lblBudgetApplied.Name = "lblBudgetApplied";
             this.lblBudgetApplied.Size = new System.Drawing.Size(291, 20);
             this.lblBudgetApplied.TabIndex = 6;
@@ -111,23 +109,13 @@
             // 
             // lblBudgetLimit
             // 
-            this.lblBudgetLimit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblBudgetLimit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblBudgetLimit.Location = new System.Drawing.Point(3, 371);
+            this.lblBudgetLimit.Location = new System.Drawing.Point(3, 412);
             this.lblBudgetLimit.Name = "lblBudgetLimit";
             this.lblBudgetLimit.Size = new System.Drawing.Size(291, 20);
             this.lblBudgetLimit.TabIndex = 5;
             this.lblBudgetLimit.Text = "(budget limit)";
-            // 
-            // lblTrxAmount
-            // 
-            this.lblTrxAmount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblTrxAmount.Location = new System.Drawing.Point(3, 351);
-            this.lblTrxAmount.Name = "lblTrxAmount";
-            this.lblTrxAmount.Size = new System.Drawing.Size(291, 20);
-            this.lblTrxAmount.TabIndex = 4;
-            this.lblTrxAmount.Text = "(register amount)";
             // 
             // lvwDetails
             // 
@@ -140,7 +128,7 @@
             this.colDtlAmount});
             this.lvwDetails.Location = new System.Drawing.Point(5, 63);
             this.lvwDetails.Name = "lvwDetails";
-            this.lvwDetails.Size = new System.Drawing.Size(326, 271);
+            this.lvwDetails.Size = new System.Drawing.Size(326, 306);
             this.lvwDetails.TabIndex = 3;
             this.lvwDetails.UseCompatibleStateImageBehavior = false;
             this.lvwDetails.View = System.Windows.Forms.View.Details;
@@ -221,6 +209,5 @@
         private System.Windows.Forms.Label lblDashboardAmount;
         private System.Windows.Forms.Label lblBudgetApplied;
         private System.Windows.Forms.Label lblBudgetLimit;
-        private System.Windows.Forms.Label lblTrxAmount;
     }
 }

@@ -12,8 +12,8 @@ namespace BudgetDashboard
         {
         }
 
-        public DetailCell(decimal trxAmount, decimal budgetLimit, decimal budgetApplied, decimal cellAmount)
-            : base(trxAmount, budgetLimit, budgetApplied, cellAmount)
+        public DetailCell(decimal cellAmount)
+            : base(cellAmount)
         {
         }
 

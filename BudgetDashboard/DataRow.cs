@@ -30,9 +30,9 @@ namespace BudgetDashboard
         {
             for (int i = 0; i < Cells.Length; i++)
             {
-                this.Cells[i].AddData(row.Cells[i]);
+                this.Cells[i].AddData(row.Cells[i].CellAmount);
             }
-            this.RowTotal.AddData(row.RowTotal);
+            this.RowTotal.AddData(row.RowTotal.CellAmount);
         }
 
         public override string ToString()

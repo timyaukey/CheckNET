@@ -11,7 +11,7 @@ namespace BudgetDashboard
         }
 
         public SplitDetailCell(TrxSplit split)
-            : base(split.curAmount, 0M, 0M, split.curAmount)
+            : base(split.curAmount)
         {
         }
     }

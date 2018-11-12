@@ -13,9 +13,15 @@ namespace BudgetDashboard
         {
         }
 
-        public override BudgetDetailCell MakeDataCell(BudgetTrx detail)
+        protected override BudgetDetailCell MakeDataCell(BudgetTrx detail)
         {
             return new BudgetDetailCell(detail);
+        }
+
+        protected override void AddExtraData(BudgetDetailCell accumulator, BudgetDetailCell source)
+        {
+            accumulator.BudgetApplied += source.BudgetApplied;
+            accumulator.BudgetLimit += source.BudgetLimit;
         }
     }
 }
