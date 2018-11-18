@@ -16,6 +16,7 @@ namespace BudgetDashboard
         private Company mCompany;
         private IHostUI mHostUI;
         private DashboardData mData;
+        private BudgetDetailCell mSelectedBudgetCell;
         private const int NonPeriodColumns = 3;
 
         public BudgetDashboardForm()
@@ -143,6 +144,7 @@ namespace BudgetDashboard
 
         private void grdMain_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            mSelectedBudgetCell = null;
             DataGridViewRow row = grdMain.Rows[e.RowIndex];
             if (row.Tag is SplitDetailRow)
             {
@@ -166,9 +168,10 @@ namespace BudgetDashboard
                 lblDashboardAmount.Text = "Amount: " + cell.CellAmount.ToString("F2");
                 lblBudgetLimit.Text = "";
                 lblBudgetApplied.Text = "";
+                SetBudgetDetailVisibility(false);
                 foreach (TrxSplit split in cell.Details)
                 {
-                    ShowDetailValues(split.objParent.datDate, split.objParent.strDescription, split.curAmount);
+                    ShowDetailValues(split.objParent.datDate, split.objParent.strDescription, split.curAmount, null, null);
                 }
             }
             else
@@ -182,15 +185,35 @@ namespace BudgetDashboard
             if (columnIndex >= NonPeriodColumns)
             {
                 BudgetDetailCell cell = row.Cells[columnIndex - NonPeriodColumns];
+                mSelectedBudgetCell = cell;
                 StartShowCell(row, columnIndex, "Budget");
                 lblDashboardAmount.Text = "Dashboard Amount: " + cell.CellAmount.ToString("F2");
                 lblBudgetLimit.Text = "Budget Limit: " + cell.BudgetLimit.ToString("F2");
                 lblBudgetApplied.Text = "Budget Applied: " + cell.BudgetApplied.ToString("F2");
+                SetBudgetDetailVisibility(true);
+                bool useGroups = false;
+                if (OSFeature.Feature.IsPresent(OSFeature.Themes))
+                    useGroups = true;
+                lvwDetails.ShowGroups = useGroups;
                 foreach (BudgetTrx budget in cell.Details)
                 {
-                    foreach (TrxSplit split in budget.colAppliedSplits)
+                    ListViewGroup currentGroup = null;
+                    if (useGroups)
                     {
-                        ShowDetailValues(split.objParent.datDate, split.objParent.strDescription, split.curAmount);
+                        currentGroup = new ListViewGroup(budget.datBudgetEnds.ToString("MM/dd/yy") + " " + 
+                            budget.strDescription + " $" + budget.curBudgetLimit.ToString("F2"));
+                        lvwDetails.Groups.Add(currentGroup);
+                    }
+                    if (budget.colAppliedSplits.Count > 0)
+                    {
+                        foreach (TrxSplit split in budget.colAppliedSplits)
+                        {
+                            ShowDetailValues(split.objParent.datDate, split.objParent.strDescription, split.curAmount, currentGroup, budget);
+                        }
+                    }
+                    else
+                    {
+                        ShowDetailValues("", "(unused budget)", "", currentGroup, budget);
                     }
                 }
             }
@@ -208,11 +231,22 @@ namespace BudgetDashboard
             lblRowSequence.Text = "Sequence: " + row.Sequence;
             lblColumnDate.Text = "Period Starts: " + grdMain.Columns[columnIndex].HeaderText;
             lvwDetails.Items.Clear();
+            lvwDetails.Groups.Clear();
+            lvwDetails.ShowGroups = false;
         }
 
-        private void ShowDetailValues(DateTime trxDate, string descr, decimal amount)
+        private void ShowDetailValues(DateTime trxDate, string descr, decimal amount, ListViewGroup group, object itemTag)
         {
-            lvwDetails.Items.Add(new ListViewItem(new string[] { trxDate.ToString("MM/dd/yy"), descr, amount.ToString("F2") }));
+            ShowDetailValues(trxDate.ToString("MM/dd/yy"), descr, amount.ToString("F2"), group, itemTag);
+        }
+
+        private void ShowDetailValues(string trxDateFormatted, string descr, string amountFormatted, ListViewGroup group, object itemTag)
+        {
+            ListViewItem item = new ListViewItem(new string[] { trxDateFormatted, descr, amountFormatted });
+            item.Tag = itemTag;
+            if (group != null)
+                item.Group = group;
+            lvwDetails.Items.Add(item);
         }
 
         private void CheckCellDetailVisibility(bool showDetail)
@@ -223,15 +257,95 @@ namespace BudgetDashboard
             }
         }
 
-        private void SetCellDetailVisiblity(bool showDetail)
+        private void SetCellDetailVisiblity(bool showControls)
         {
-            lblRowLabel.Visible = showDetail;
-            lblRowSequence.Visible = showDetail;
-            lblColumnDate.Visible = showDetail;
-            lblBudgetLimit.Visible = showDetail;
-            lblBudgetApplied.Visible = showDetail;
-            lblDashboardAmount.Visible = showDetail;
-            lvwDetails.Visible = showDetail;
+            lblRowLabel.Visible = showControls;
+            lblRowSequence.Visible = showControls;
+            lblColumnDate.Visible = showControls;
+            lblBudgetLimit.Visible = showControls;
+            lblBudgetApplied.Visible = showControls;
+            lblDashboardAmount.Visible = showControls;
+            lvwDetails.Visible = showControls;
+            SetBudgetDetailVisibility(showControls);
+        }
+
+        private void SetBudgetDetailVisibility(bool showControls)
+        {
+            lblAdjustment.Visible = showControls;
+            txtAdjustment.Visible = showControls;
+            btnAddAdj.Visible = showControls;
+            btnSubAdj.Visible = showControls;
+            btnSetAdj.Visible = showControls;
+        }
+
+        private void btnAddAdj_Click(object sender, EventArgs e)
+        {
+            if (!TryGetAdjustment(out decimal adjAmount))
+                return;
+            BudgetTrx budgetTrx = GetAdjustmentBudget();
+            if (budgetTrx == null)
+                return;
+            SetBudgetAmount(budgetTrx, budgetTrx.curBudgetLimit + adjAmount);
+        }
+
+        private void btnSubAdj_Click(object sender, EventArgs e)
+        {
+            if (!TryGetAdjustment(out decimal adjAmount))
+                return;
+            BudgetTrx budgetTrx = GetAdjustmentBudget();
+            if (budgetTrx == null)
+                return;
+            SetBudgetAmount(budgetTrx, budgetTrx.curBudgetLimit - adjAmount);
+        }
+
+        private void btnSetAdj_Click(object sender, EventArgs e)
+        {
+            if (!TryGetAdjustment(out decimal adjAmount))
+                return;
+            BudgetTrx budgetTrx = GetAdjustmentBudget();
+            if (budgetTrx == null)
+                return;
+            SetBudgetAmount(budgetTrx, adjAmount);
+        }
+
+        private bool TryGetAdjustment(out decimal adjAmount)
+        {
+            if (decimal.TryParse(txtAdjustment.Text, out adjAmount))
+                return true;
+            adjAmount = 0m;
+            mHostUI.ErrorMessageBox("Invalid adjustment amount");
+            return false;
+        }
+
+        private BudgetTrx GetAdjustmentBudget()
+        {
+            if (mSelectedBudgetCell == null) // Should be impossible
+                return null;
+            if (mSelectedBudgetCell.Details.Count < 1)
+            {
+                mHostUI.InfoMessageBox("The selected cell has no budget transaction to adjust");
+                return null;
+            }
+            if (mSelectedBudgetCell.Details.Count == 1)
+                return mSelectedBudgetCell.Details[0];
+            if (lvwDetails.SelectedItems.Count < 1)
+            {
+                mHostUI.InfoMessageBox("Select a detail row belonging to the budget you want to change");
+                return null;
+            }
+            return ((BudgetTrx)lvwDetails.SelectedItems[0].Tag);
+        }
+
+        private void SetBudgetAmount(BudgetTrx budgetTrx, decimal newAmount)
+        {
+            mHostUI.InfoMessageBox("Budget amount set to " + newAmount.ToString("F2"));
+            BudgetTrxManager mgr = budgetTrx.objGetTrxManager();
+            mgr.UpdateStart();
+            mgr.objTrx.UpdateStartBudget(budgetTrx.datDate, budgetTrx.strDescription, budgetTrx.strMemo,
+                budgetTrx.blnAwaitingReview, false, budgetTrx.intRepeatSeq, budgetTrx.strRepeatKey,
+                newAmount, budgetTrx.datBudgetStarts, budgetTrx.strBudgetKey, budgetTrx.objReg.datOldestBudgetEndAllowed);
+            mgr.UpdateEnd(new LogChange(), "BudgetDashboard.Adjustment");
+            // TO DO: Adjust the cell
         }
     }
 }

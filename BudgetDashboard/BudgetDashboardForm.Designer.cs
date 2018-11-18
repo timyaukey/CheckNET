@@ -30,6 +30,11 @@
         {
             this.grdMain = new System.Windows.Forms.DataGridView();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.btnSetAdj = new System.Windows.Forms.Button();
+            this.btnSubAdj = new System.Windows.Forms.Button();
+            this.btnAddAdj = new System.Windows.Forms.Button();
+            this.txtAdjustment = new System.Windows.Forms.TextBox();
+            this.lblAdjustment = new System.Windows.Forms.Label();
             this.lblDashboardAmount = new System.Windows.Forms.Label();
             this.lblBudgetApplied = new System.Windows.Forms.Label();
             this.lblBudgetLimit = new System.Windows.Forms.Label();
@@ -54,10 +59,11 @@
             this.grdMain.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grdMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grdMain.Location = new System.Drawing.Point(0, 0);
+            this.grdMain.MultiSelect = false;
             this.grdMain.Name = "grdMain";
             this.grdMain.ReadOnly = true;
             this.grdMain.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.grdMain.Size = new System.Drawing.Size(914, 518);
+            this.grdMain.Size = new System.Drawing.Size(661, 482);
             this.grdMain.TabIndex = 0;
             this.grdMain.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdMain_CellClick);
             // 
@@ -76,6 +82,11 @@
             // 
             // splitContainer.Panel2
             // 
+            this.splitContainer.Panel2.Controls.Add(this.btnSetAdj);
+            this.splitContainer.Panel2.Controls.Add(this.btnSubAdj);
+            this.splitContainer.Panel2.Controls.Add(this.btnAddAdj);
+            this.splitContainer.Panel2.Controls.Add(this.txtAdjustment);
+            this.splitContainer.Panel2.Controls.Add(this.lblAdjustment);
             this.splitContainer.Panel2.Controls.Add(this.lblDashboardAmount);
             this.splitContainer.Panel2.Controls.Add(this.lblBudgetApplied);
             this.splitContainer.Panel2.Controls.Add(this.lblBudgetLimit);
@@ -83,15 +94,70 @@
             this.splitContainer.Panel2.Controls.Add(this.lblColumnDate);
             this.splitContainer.Panel2.Controls.Add(this.lblRowSequence);
             this.splitContainer.Panel2.Controls.Add(this.lblRowLabel);
-            this.splitContainer.Size = new System.Drawing.Size(1253, 518);
-            this.splitContainer.SplitterDistance = 914;
+            this.splitContainer.Size = new System.Drawing.Size(1000, 482);
+            this.splitContainer.SplitterDistance = 661;
             this.splitContainer.TabIndex = 1;
+            // 
+            // btnSetAdj
+            // 
+            this.btnSetAdj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSetAdj.Location = new System.Drawing.Point(289, 456);
+            this.btnSetAdj.Margin = new System.Windows.Forms.Padding(1, 3, 1, 3);
+            this.btnSetAdj.Name = "btnSetAdj";
+            this.btnSetAdj.Size = new System.Drawing.Size(42, 23);
+            this.btnSetAdj.TabIndex = 12;
+            this.btnSetAdj.Text = "Set";
+            this.btnSetAdj.UseVisualStyleBackColor = true;
+            this.btnSetAdj.Click += new System.EventHandler(this.btnSetAdj_Click);
+            // 
+            // btnSubAdj
+            // 
+            this.btnSubAdj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSubAdj.Location = new System.Drawing.Point(245, 456);
+            this.btnSubAdj.Margin = new System.Windows.Forms.Padding(1, 3, 1, 3);
+            this.btnSubAdj.Name = "btnSubAdj";
+            this.btnSubAdj.Size = new System.Drawing.Size(42, 23);
+            this.btnSubAdj.TabIndex = 11;
+            this.btnSubAdj.Text = "Sub";
+            this.btnSubAdj.UseVisualStyleBackColor = true;
+            this.btnSubAdj.Click += new System.EventHandler(this.btnSubAdj_Click);
+            // 
+            // btnAddAdj
+            // 
+            this.btnAddAdj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAddAdj.Location = new System.Drawing.Point(201, 456);
+            this.btnAddAdj.Margin = new System.Windows.Forms.Padding(1, 3, 1, 3);
+            this.btnAddAdj.Name = "btnAddAdj";
+            this.btnAddAdj.Size = new System.Drawing.Size(42, 23);
+            this.btnAddAdj.TabIndex = 10;
+            this.btnAddAdj.Text = "Add";
+            this.btnAddAdj.UseVisualStyleBackColor = true;
+            this.btnAddAdj.Click += new System.EventHandler(this.btnAddAdj_Click);
+            // 
+            // txtAdjustment
+            // 
+            this.txtAdjustment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAdjustment.Location = new System.Drawing.Point(120, 458);
+            this.txtAdjustment.Name = "txtAdjustment";
+            this.txtAdjustment.Size = new System.Drawing.Size(67, 20);
+            this.txtAdjustment.TabIndex = 9;
+            // 
+            // lblAdjustment
+            // 
+            this.lblAdjustment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblAdjustment.Location = new System.Drawing.Point(49, 461);
+            this.lblAdjustment.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.lblAdjustment.Name = "lblAdjustment";
+            this.lblAdjustment.Size = new System.Drawing.Size(68, 18);
+            this.lblAdjustment.TabIndex = 8;
+            this.lblAdjustment.Text = "Adjustment:";
+            this.lblAdjustment.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // lblDashboardAmount
             // 
             this.lblDashboardAmount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblDashboardAmount.Location = new System.Drawing.Point(3, 372);
+            this.lblDashboardAmount.Location = new System.Drawing.Point(3, 384);
             this.lblDashboardAmount.Name = "lblDashboardAmount";
             this.lblDashboardAmount.Size = new System.Drawing.Size(291, 20);
             this.lblDashboardAmount.TabIndex = 7;
@@ -101,7 +167,7 @@
             // 
             this.lblBudgetApplied.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblBudgetApplied.Location = new System.Drawing.Point(3, 392);
+            this.lblBudgetApplied.Location = new System.Drawing.Point(3, 404);
             this.lblBudgetApplied.Name = "lblBudgetApplied";
             this.lblBudgetApplied.Size = new System.Drawing.Size(291, 20);
             this.lblBudgetApplied.TabIndex = 6;
@@ -111,7 +177,7 @@
             // 
             this.lblBudgetLimit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblBudgetLimit.Location = new System.Drawing.Point(3, 412);
+            this.lblBudgetLimit.Location = new System.Drawing.Point(3, 424);
             this.lblBudgetLimit.Name = "lblBudgetLimit";
             this.lblBudgetLimit.Size = new System.Drawing.Size(291, 20);
             this.lblBudgetLimit.TabIndex = 5;
@@ -126,9 +192,11 @@
             this.colDtlDate,
             this.colDtlDescr,
             this.colDtlAmount});
+            this.lvwDetails.FullRowSelect = true;
+            this.lvwDetails.HideSelection = false;
             this.lvwDetails.Location = new System.Drawing.Point(5, 63);
             this.lvwDetails.Name = "lvwDetails";
-            this.lvwDetails.Size = new System.Drawing.Size(326, 306);
+            this.lvwDetails.Size = new System.Drawing.Size(326, 318);
             this.lvwDetails.TabIndex = 3;
             this.lvwDetails.UseCompatibleStateImageBehavior = false;
             this.lvwDetails.View = System.Windows.Forms.View.Details;
@@ -152,7 +220,7 @@
             // 
             this.lblColumnDate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblColumnDate.Location = new System.Drawing.Point(2, 40);
+            this.lblColumnDate.Location = new System.Drawing.Point(3, 40);
             this.lblColumnDate.Name = "lblColumnDate";
             this.lblColumnDate.Size = new System.Drawing.Size(291, 20);
             this.lblColumnDate.TabIndex = 2;
@@ -162,7 +230,7 @@
             // 
             this.lblRowSequence.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblRowSequence.Location = new System.Drawing.Point(2, 20);
+            this.lblRowSequence.Location = new System.Drawing.Point(3, 20);
             this.lblRowSequence.Name = "lblRowSequence";
             this.lblRowSequence.Size = new System.Drawing.Size(329, 20);
             this.lblRowSequence.TabIndex = 1;
@@ -182,13 +250,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1277, 570);
+            this.ClientSize = new System.Drawing.Size(1024, 534);
             this.Controls.Add(this.splitContainer);
             this.Name = "BudgetDashboardForm";
             this.Text = "Budget Dashboard";
             ((System.ComponentModel.ISupportInitialize)(this.grdMain)).EndInit();
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
+            this.splitContainer.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -209,5 +278,10 @@
         private System.Windows.Forms.Label lblDashboardAmount;
         private System.Windows.Forms.Label lblBudgetApplied;
         private System.Windows.Forms.Label lblBudgetLimit;
+        private System.Windows.Forms.Button btnSetAdj;
+        private System.Windows.Forms.Button btnSubAdj;
+        private System.Windows.Forms.Button btnAddAdj;
+        private System.Windows.Forms.TextBox txtAdjustment;
+        private System.Windows.Forms.Label lblAdjustment;
     }
 }
