@@ -15,6 +15,13 @@ namespace BudgetDashboard
             BudgetApplied = 0M;
         }
 
+        public override void ClearAmounts()
+        {
+            base.ClearAmounts();
+            BudgetLimit = 0M;
+            BudgetApplied = 0M;
+        }
+
         public BudgetDetailCell(BudgetTrx budgetTrx)
             : base(budgetTrx.blnIsExpired ? budgetTrx.curBudgetApplied : budgetTrx.curBudgetLimit)
         {

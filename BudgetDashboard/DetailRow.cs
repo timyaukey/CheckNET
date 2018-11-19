@@ -15,11 +15,23 @@ namespace BudgetDashboard
 
         public void AddToPeriod(int period, TData detail)
         {
-            TCell cell = MakeDataCell(detail);
             Cells[period].AddDetail(detail);
-            Cells[period].AddData(cell.CellAmount);
-            AddExtraData(Cells[period], cell);
-            this.RowTotal.AddData(cell.CellAmount);
+        }
+
+        public void ComputeTotals()
+        {
+            RowTotal.ClearAmounts();
+            foreach(var periodCell in Cells)
+            {
+                periodCell.ClearAmounts();
+                foreach(var detail in periodCell.Details)
+                {
+                    TCell cell = MakeDataCell(detail);
+                    periodCell.AddData(cell.CellAmount);
+                    AddExtraData(periodCell, cell);
+                }
+                RowTotal.AddData(periodCell.CellAmount);
+            }
         }
 
         protected abstract TCell MakeDataCell(TData detail);

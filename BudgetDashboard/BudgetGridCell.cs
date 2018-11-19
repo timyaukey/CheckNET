@@ -18,6 +18,12 @@ namespace BudgetDashboard
             BudgetApplied = budgetApplied;
         }
 
+        public void UpdateBudgets(decimal budgetLimit, decimal budgetApplied)
+        {
+            BudgetLimit = budgetLimit;
+            BudgetApplied = budgetApplied;
+        }
+
         protected override void Paint(Graphics graphics, Rectangle clipBounds, Rectangle cellBounds, 
             int rowIndex, DataGridViewElementStates cellState, object value, object formattedValue, 
             string errorText, DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle, 

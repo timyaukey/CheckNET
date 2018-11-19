@@ -16,35 +16,27 @@ namespace BudgetDashboard
         public Decimal StartingBalance;
         public readonly Dictionary<string, BudgetDetailRow> BudgetDetailRows;
         public readonly Dictionary<string, SplitDetailRow> SplitDetailRows;
-        public readonly List<BudgetDetailRow> BudgetedIncome;
-        public readonly List<SplitDetailRow> UnbudgetedIncome;
-        public readonly List<BudgetDetailRow> BudgetedExpenses;
-        public readonly List<SplitDetailRow> UnbudgetedExpenses;
-        public readonly TotalRow TotalIncome;
-        public readonly TotalRow TotalExpense;
-        public readonly TotalRow NetProfit;
-        public readonly TotalRow RunningBalance;
+        public List<BudgetDetailRow> BudgetedIncome;
+        public List<SplitDetailRow> UnbudgetedIncome;
+        public List<BudgetDetailRow> BudgetedExpenses;
+        public List<SplitDetailRow> UnbudgetedExpenses;
+        public TotalRow TotalIncome;
+        public TotalRow TotalExpense;
+        public TotalRow NetProfit;
+        public TotalRow RunningBalance;
 
         public bool HasUnalignedBudgetPeriods;
 
         public DashboardData(Account account, int periodDays, int periodCount, DateTime startDate)
         {
-            this.Company = account.objCompany;
-            this.Account = account;
-            this.PeriodDays = periodDays;
-            this.PeriodCount = periodCount;
-            this.StartDate = startDate;
-            this.EndDate = startDate.AddDays(periodCount * periodDays -1);
+            Company = account.objCompany;
+            Account = account;
+            PeriodDays = periodDays;
+            PeriodCount = periodCount;
+            StartDate = startDate;
+            EndDate = startDate.AddDays(periodCount * periodDays -1);
             BudgetDetailRows = new Dictionary<string, BudgetDetailRow>();
             SplitDetailRows = new Dictionary<string, SplitDetailRow>();
-            BudgetedIncome = new List<BudgetDetailRow>();
-            UnbudgetedIncome = new List<SplitDetailRow>();
-            BudgetedExpenses = new List<BudgetDetailRow>();
-            UnbudgetedExpenses = new List<SplitDetailRow>();
-            TotalIncome = new TotalRow(periodCount, "", "Total Credits", "");
-            TotalExpense = new TotalRow(periodCount, "", "Total Debits", "");
-            NetProfit = new TotalRow(periodCount, "", "Net Debits/Credits", "");
-            RunningBalance = new TotalRow(periodCount, "", "Running Balance", "");
             HasUnalignedBudgetPeriods = false;
         }
 
@@ -59,45 +51,40 @@ namespace BudgetDashboard
                     LoadTrx(trx);
                 }
             }
-            foreach(var row in BudgetDetailRows.Values)
+
+            BudgetedIncome = new List<BudgetDetailRow>();
+            BudgetedExpenses = new List<BudgetDetailRow>();
+            foreach (var row in BudgetDetailRows.Values)
             {
                 if (row.RowTotal.CellAmount > 0)
                 {
                     BudgetedIncome.Add(row);
-                    TotalIncome.AddRow<BudgetDetailRow, BudgetDetailCell>(row);
                 }
                 else
                 {
                     BudgetedExpenses.Add(row);
-                    TotalExpense.AddRow<BudgetDetailRow, BudgetDetailCell>(row);
                 }
             }
             BudgetedIncome.Sort(DataRowComparer);
             BudgetedExpenses.Sort(DataRowComparer);
-            foreach(var row in SplitDetailRows.Values)
+
+            UnbudgetedIncome = new List<SplitDetailRow>();
+            UnbudgetedExpenses = new List<SplitDetailRow>();
+            foreach (var row in SplitDetailRows.Values)
             {
                 if (row.RowTotal.CellAmount > 0)
                 {
                     UnbudgetedIncome.Add(row);
-                    TotalIncome.AddRow<SplitDetailRow, SplitDetailCell>(row);
                 }
                 else
                 {
                     UnbudgetedExpenses.Add(row);
-                    TotalExpense.AddRow<SplitDetailRow, SplitDetailCell>(row);
                 }
-            }
-            NetProfit.AddRow<TotalRow, DataCell>(TotalIncome);
-            NetProfit.AddRow<TotalRow, DataCell>(TotalExpense);
-            decimal currentBalance = StartingBalance;
-            RunningBalance.RowTotal.CellAmount = StartingBalance;
-            for (var cellIndex = 0; cellIndex < PeriodCount; cellIndex++)
-            {
-                currentBalance += NetProfit.Cells[cellIndex].CellAmount;
-                RunningBalance.Cells[cellIndex].CellAmount = currentBalance;
             }
             UnbudgetedIncome.Sort(DataRowComparer);
             UnbudgetedExpenses.Sort(DataRowComparer);
+
+            ComputeTotals();
         }
 
         private int DataRowComparer<TCell, TData>(DetailRow<TCell, TData> row1, DetailRow<TCell, TData> row2)
@@ -168,6 +155,43 @@ namespace BudgetDashboard
         private int GetPeriod(DateTime trxDate)
         {
             return (int)trxDate.Subtract(StartDate).TotalDays / PeriodDays;
+        }
+
+        private void ComputeTotals()
+        {
+            TotalIncome = new TotalRow(PeriodCount, "", "Total Credits", "");
+            TotalExpense = new TotalRow(PeriodCount, "", "Total Debits", "");
+            foreach (var row in BudgetedIncome)
+            {
+                row.ComputeTotals();
+                TotalIncome.AddRow<BudgetDetailRow, BudgetDetailCell>(row);
+            }
+            foreach (var row in BudgetedExpenses)
+            {
+                row.ComputeTotals();
+                TotalExpense.AddRow<BudgetDetailRow, BudgetDetailCell>(row);
+            }
+            foreach (var row in UnbudgetedIncome)
+            {
+                row.ComputeTotals();
+                TotalIncome.AddRow<SplitDetailRow, SplitDetailCell>(row);
+            }
+            foreach (var row in UnbudgetedExpenses)
+            {
+                row.ComputeTotals();
+                TotalExpense.AddRow<SplitDetailRow, SplitDetailCell>(row);
+            }
+            NetProfit = new TotalRow(PeriodCount, "", "Net Debits/Credits", "");
+            NetProfit.AddRow<TotalRow, DataCell>(TotalIncome);
+            NetProfit.AddRow<TotalRow, DataCell>(TotalExpense);
+            decimal currentBalance = StartingBalance;
+            RunningBalance = new TotalRow(PeriodCount, "", "Running Balance", "");
+            RunningBalance.RowTotal.CellAmount = StartingBalance;
+            for (var cellIndex = 0; cellIndex < PeriodCount; cellIndex++)
+            {
+                currentBalance += NetProfit.Cells[cellIndex].CellAmount;
+                RunningBalance.Cells[cellIndex].CellAmount = currentBalance;
+            }
         }
     }
 }

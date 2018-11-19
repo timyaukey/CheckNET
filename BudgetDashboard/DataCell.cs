@@ -21,6 +21,11 @@ namespace BudgetDashboard
             this.CellAmount += cellAmount;
         }
 
+        public virtual void ClearAmounts()
+        {
+            this.CellAmount = 0M;
+        }
+
         public override string ToString()
         {
             return "(cellamount=" + CellAmount.ToString("F2") + ")";
