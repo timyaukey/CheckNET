@@ -113,7 +113,7 @@
             // btnSubAdj
             // 
             this.btnSubAdj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSubAdj.Location = new System.Drawing.Point(245, 456);
+            this.btnSubAdj.Location = new System.Drawing.Point(201, 456);
             this.btnSubAdj.Margin = new System.Windows.Forms.Padding(1, 3, 1, 3);
             this.btnSubAdj.Name = "btnSubAdj";
             this.btnSubAdj.Size = new System.Drawing.Size(42, 23);
@@ -125,7 +125,7 @@
             // btnAddAdj
             // 
             this.btnAddAdj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddAdj.Location = new System.Drawing.Point(201, 456);
+            this.btnAddAdj.Location = new System.Drawing.Point(245, 456);
             this.btnAddAdj.Margin = new System.Windows.Forms.Padding(1, 3, 1, 3);
             this.btnAddAdj.Name = "btnAddAdj";
             this.btnAddAdj.Size = new System.Drawing.Size(42, 23);

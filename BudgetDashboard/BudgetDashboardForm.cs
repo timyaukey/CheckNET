@@ -17,6 +17,9 @@ namespace BudgetDashboard
         private IHostUI mHostUI;
         private DashboardData mData;
         private BudgetDetailCell mSelectedBudgetCell;
+        private BudgetDetailRow mSelectedBudgetRow;
+        private int mSelectedBudgetColumn;
+        private BudgetGridCell mSelectedBudgetGridCell;
         private const int NonPeriodColumns = 3;
 
         public BudgetDashboardForm()
@@ -145,6 +148,9 @@ namespace BudgetDashboard
         private void grdMain_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             mSelectedBudgetCell = null;
+            mSelectedBudgetRow = null;
+            mSelectedBudgetColumn = 0;
+            mSelectedBudgetGridCell = null;
             DataGridViewRow row = grdMain.Rows[e.RowIndex];
             if (row.Tag is SplitDetailRow)
             {
@@ -152,8 +158,7 @@ namespace BudgetDashboard
             }
             else if (row.Tag is BudgetDetailRow)
             {
-                ShowBudgetCell(row.Tag as BudgetDetailRow, e.ColumnIndex);
-                
+                ShowBudgetCell(row.Tag as BudgetDetailRow, e.ColumnIndex, row.Cells[e.ColumnIndex]);
             }
             else
                 CheckCellDetailVisibility(false);
@@ -180,12 +185,15 @@ namespace BudgetDashboard
             }
         }
 
-        private void ShowBudgetCell(BudgetDetailRow row, int columnIndex)
+        private void ShowBudgetCell(BudgetDetailRow row, int columnIndex, DataGridViewCell gridCell)
         {
             if (columnIndex >= NonPeriodColumns)
             {
                 BudgetDetailCell cell = row.Cells[columnIndex - NonPeriodColumns];
                 mSelectedBudgetCell = cell;
+                mSelectedBudgetRow = row;
+                mSelectedBudgetColumn = columnIndex;
+                mSelectedBudgetGridCell = (BudgetGridCell)gridCell;
                 StartShowCell(row, columnIndex, "Budget");
                 lblDashboardAmount.Text = "Dashboard Amount: " + cell.CellAmount.ToString("F2");
                 lblBudgetLimit.Text = "Budget Limit: " + cell.BudgetLimit.ToString("F2");
@@ -345,7 +353,12 @@ namespace BudgetDashboard
                 budgetTrx.blnAwaitingReview, false, budgetTrx.intRepeatSeq, budgetTrx.strRepeatKey,
                 newAmount, budgetTrx.datBudgetStarts, budgetTrx.strBudgetKey, budgetTrx.objReg.datOldestBudgetEndAllowed);
             mgr.UpdateEnd(new LogChange(), "BudgetDashboard.Adjustment");
-            // TO DO: Adjust the cell
+            mSelectedBudgetRow.ComputeTotals();
+            mSelectedBudgetGridCell.UpdateBudgets(mSelectedBudgetCell.BudgetLimit, mSelectedBudgetCell.BudgetApplied);
+            mSelectedBudgetGridCell.Value = mSelectedBudgetCell.CellAmount.ToString("F2");
+            ShowBudgetCell(mSelectedBudgetRow, mSelectedBudgetColumn, mSelectedBudgetGridCell);
+            // TO DO: Adjust all the totals
+            grdMain.Refresh();
         }
     }
 }
