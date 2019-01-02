@@ -54,7 +54,7 @@
         Me.cmdSearch.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdSearch.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdSearch.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdSearch.Location = New System.Drawing.Point(439, 358)
+        Me.cmdSearch.Location = New System.Drawing.Point(439, 472)
         Me.cmdSearch.Name = "cmdSearch"
         Me.cmdSearch.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdSearch.Size = New System.Drawing.Size(62, 23)
@@ -69,7 +69,7 @@
         Me.cmdNewXfer.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdNewXfer.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdNewXfer.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdNewXfer.Location = New System.Drawing.Point(193, 358)
+        Me.cmdNewXfer.Location = New System.Drawing.Point(193, 472)
         Me.cmdNewXfer.Name = "cmdNewXfer"
         Me.cmdNewXfer.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdNewXfer.Size = New System.Drawing.Size(90, 23)
@@ -84,7 +84,7 @@
         Me.cmdNewBudget.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdNewBudget.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdNewBudget.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdNewBudget.Location = New System.Drawing.Point(99, 358)
+        Me.cmdNewBudget.Location = New System.Drawing.Point(99, 472)
         Me.cmdNewBudget.Name = "cmdNewBudget"
         Me.cmdNewBudget.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdNewBudget.Size = New System.Drawing.Size(90, 23)
@@ -99,7 +99,7 @@
         Me.cmdDelete.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdDelete.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdDelete.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdDelete.Location = New System.Drawing.Point(373, 358)
+        Me.cmdDelete.Location = New System.Drawing.Point(373, 472)
         Me.cmdDelete.Name = "cmdDelete"
         Me.cmdDelete.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdDelete.Size = New System.Drawing.Size(62, 23)
@@ -114,7 +114,7 @@
         Me.cmdEdit.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdEdit.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdEdit.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdEdit.Location = New System.Drawing.Point(307, 358)
+        Me.cmdEdit.Location = New System.Drawing.Point(307, 472)
         Me.cmdEdit.Name = "cmdEdit"
         Me.cmdEdit.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdEdit.Size = New System.Drawing.Size(62, 23)
@@ -129,7 +129,7 @@
         Me.cmdNewNormal.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdNewNormal.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdNewNormal.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdNewNormal.Location = New System.Drawing.Point(5, 358)
+        Me.cmdNewNormal.Location = New System.Drawing.Point(5, 472)
         Me.cmdNewNormal.Name = "cmdNewNormal"
         Me.cmdNewNormal.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdNewNormal.Size = New System.Drawing.Size(90, 23)
@@ -149,7 +149,7 @@
         Me.grdReg.Name = "grdReg"
         Me.grdReg.ReadOnly = True
         Me.grdReg.RowHeadersWidth = 24
-        Me.grdReg.Size = New System.Drawing.Size(706, 340)
+        Me.grdReg.Size = New System.Drawing.Size(994, 454)
         Me.grdReg.TabIndex = 7
         Me.grdReg.VirtualMode = True
         '
@@ -158,7 +158,7 @@
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(730, 386)
+        Me.ClientSize = New System.Drawing.Size(1018, 500)
         Me.Controls.Add(Me.grdReg)
         Me.Controls.Add(Me.cmdSearch)
         Me.Controls.Add(Me.cmdNewXfer)

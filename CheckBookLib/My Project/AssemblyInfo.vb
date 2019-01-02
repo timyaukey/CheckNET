@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("Willow Creek Software")>
 <Assembly: AssemblyProduct("CheckBookLib")>
-<Assembly: AssemblyCopyright("Copyright ©  2005-2018 Willow Creek Software")>
+<Assembly: AssemblyCopyright("Copyright © 2005-2019 Willow Creek Software")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("2.3.5")>
-<Assembly: AssemblyFileVersion("2.3.5")>
+<Assembly: AssemblyVersion("2.3.6")>
+<Assembly: AssemblyFileVersion("2.3.6")>

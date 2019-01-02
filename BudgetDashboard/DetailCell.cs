@@ -7,6 +7,7 @@ namespace BudgetDashboard
         where T : class
     {
         public readonly List<T> Details = new List<T>();
+        public decimal GeneratedAmount = 0m;
 
         public DetailCell()
         {

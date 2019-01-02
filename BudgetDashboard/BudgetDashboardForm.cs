@@ -170,7 +170,8 @@ namespace BudgetDashboard
             {
                 SplitDetailCell cell = row.Cells[columnIndex - NonPeriodColumns];
                 StartShowCell(row, columnIndex, "Category");
-                lblDashboardAmount.Text = "Amount: " + cell.CellAmount.ToString("F2");
+                lblDashboardAmount.Text = "Dashboard Amount: " + cell.CellAmount.ToString("F2");
+                lblGeneratedAmount.Text = "Generated Amount: " + cell.GeneratedAmount.ToString("F2");
                 lblBudgetLimit.Text = "";
                 lblBudgetApplied.Text = "";
                 SetBudgetDetailVisibility(false);
@@ -196,6 +197,7 @@ namespace BudgetDashboard
                 mSelectedBudgetGridCell = (BudgetGridCell)gridCell;
                 StartShowCell(row, columnIndex, "Budget");
                 lblDashboardAmount.Text = "Dashboard Amount: " + cell.CellAmount.ToString("F2");
+                lblGeneratedAmount.Text = "Generated Amount: " + cell.GeneratedAmount.ToString("F2");
                 lblBudgetLimit.Text = "Budget Limit: " + cell.BudgetLimit.ToString("F2");
                 lblBudgetApplied.Text = "Budget Applied: " + cell.BudgetApplied.ToString("F2");
                 SetBudgetDetailVisibility(true);
@@ -273,6 +275,7 @@ namespace BudgetDashboard
             lblBudgetLimit.Visible = showControls;
             lblBudgetApplied.Visible = showControls;
             lblDashboardAmount.Visible = showControls;
+            lblGeneratedAmount.Visible = showControls;
             lvwDetails.Visible = showControls;
             SetBudgetDetailVisibility(showControls);
         }

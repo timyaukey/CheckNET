@@ -100,11 +100,11 @@ namespace BudgetDashboard
             NormalTrx normalTrx = trx as NormalTrx;
             if (normalTrx != null)
             {
+                SplitDetailRow row = null;
                 foreach (TrxSplit split in normalTrx.colSplits)
                 {
                     if (split.objBudget == null)
                     {
-                        SplitDetailRow row;
                         // Unlike for BudgetTrx we do not incorporate repeat key in the row key,
                         // because there are so many different generated NormalTrx sequences it
                         // would make the resulting grid unwieldy.
@@ -123,6 +123,8 @@ namespace BudgetDashboard
                         row.AddToPeriod(period, split);
                     }
                 }
+                if (row != null)
+                    row.AddGeneratedToPeriod(period, normalTrx.curGeneratedAmount);
             }
             else
             {
@@ -143,6 +145,7 @@ namespace BudgetDashboard
                         BudgetDetailRows[rowKey] = row;
                     }
                     row.AddToPeriod(period, budgetTrx);
+                    row.AddGeneratedToPeriod(period, budgetTrx.curGeneratedAmount);
                     if (period != GetPeriod(budgetTrx.datBudgetStarts))
                     {
                         row.HasUnalignedPeriods = true;

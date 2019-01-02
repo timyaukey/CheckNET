@@ -18,6 +18,11 @@ namespace BudgetDashboard
             Cells[period].AddDetail(detail);
         }
 
+        public void AddGeneratedToPeriod(int period, decimal generated)
+        {
+            Cells[period].GeneratedAmount += generated;
+        }
+
         public void ComputeTotals()
         {
             RowTotal.ClearAmounts();
