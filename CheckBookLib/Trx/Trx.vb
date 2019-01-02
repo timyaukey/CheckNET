@@ -108,6 +108,8 @@ Public MustInherit Class Trx
     'Computed from the sum of the Split amounts for normal trx.
     'Set directly for other trx types.
     Protected mcurAmount As Decimal
+    'Original amount for a generated trx. This value is not persisted.
+    Protected mcurGeneratedAmount As Decimal
     'Register balance after mcurAmount added.
     Protected mcurBalance As Decimal
     'Key for sorting register entries.
@@ -285,6 +287,15 @@ Public MustInherit Class Trx
         Get
             curAmount = mcurAmount
         End Get
+    End Property
+
+    Public Property curGeneratedAmount() As Decimal
+        Get
+            curGeneratedAmount = mcurGeneratedAmount
+        End Get
+        Set(value As Decimal)
+            mcurGeneratedAmount = value
+        End Set
     End Property
 
     Public ReadOnly Property curBalance() As Decimal

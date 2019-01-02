@@ -384,6 +384,7 @@
         Me.lblDescription = New System.Windows.Forms.Label()
         Me.lblNumber = New System.Windows.Forms.Label()
         Me.lblDate = New System.Windows.Forms.Label()
+        Me.lblGeneratedAmount = New System.Windows.Forms.Label()
         Me.frmNormal.SuspendLayout()
         Me.frmTransfer.SuspendLayout()
         Me.frmBudget.SuspendLayout()
@@ -2754,7 +2755,7 @@
         Me.cmdMailingAddress.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdMailingAddress.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdMailingAddress.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdMailingAddress.Location = New System.Drawing.Point(900, 34)
+        Me.cmdMailingAddress.Location = New System.Drawing.Point(803, 60)
         Me.cmdMailingAddress.Name = "cmdMailingAddress"
         Me.cmdMailingAddress.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdMailingAddress.Size = New System.Drawing.Size(91, 23)
@@ -3067,6 +3068,15 @@
         Me.lblDate.TabIndex = 0
         Me.lblDate.Text = "Date:"
         '
+        'lblGeneratedAmount
+        '
+        Me.lblGeneratedAmount.Location = New System.Drawing.Point(803, 34)
+        Me.lblGeneratedAmount.Name = "lblGeneratedAmount"
+        Me.lblGeneratedAmount.Size = New System.Drawing.Size(188, 18)
+        Me.lblGeneratedAmount.TabIndex = 172
+        Me.lblGeneratedAmount.Text = "(gen amount)"
+        Me.lblGeneratedAmount.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
         'TrxForm
         '
         Me.AcceptButton = Me.cmdOkay
@@ -3075,6 +3085,7 @@
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.CancelButton = Me.cmdCancel
         Me.ClientSize = New System.Drawing.Size(999, 445)
+        Me.Controls.Add(Me.lblGeneratedAmount)
         Me.Controls.Add(Me.cmdCopyInvoiceNumbers)
         Me.Controls.Add(Me.cmdPrintCheck)
         Me.Controls.Add(Me.cmdRptInfo)
@@ -3126,5 +3137,7 @@
         Me.PerformLayout()
 
     End Sub
+
+    Friend WithEvents lblGeneratedAmount As Label
 #End Region
 End Class

@@ -236,6 +236,11 @@ Friend Class TrxForm
             If .intRepeatSeq <> 0 Then
                 txtRepeatSeq.Text = CStr(.intRepeatSeq)
             End If
+            If .curGeneratedAmount <> 0 Then
+                lblGeneratedAmount.Text = "(generated: " + Utilities.strFormatCurrency(.curGeneratedAmount) + ")"
+            Else
+                lblGeneratedAmount.Text = ""
+            End If
         End With
     End Sub
 
