@@ -404,7 +404,7 @@ namespace BudgetDashboard
             mgr.UpdateStart();
             mgr.objTrx.UpdateStartBudget(budgetTrx.datDate, budgetTrx.strDescription, budgetTrx.strMemo,
                 budgetTrx.blnAwaitingReview, false, budgetTrx.intRepeatSeq, budgetTrx.strRepeatKey,
-                newAmount, budgetTrx.datBudgetStarts, budgetTrx.strBudgetKey, budgetTrx.objReg.datOldestBudgetEndAllowed);
+                newAmount, budgetTrx.datBudgetStarts, budgetTrx.strBudgetKey);
             mgr.UpdateEnd(new LogChange(), "BudgetDashboard.Adjustment");
         }
     }
