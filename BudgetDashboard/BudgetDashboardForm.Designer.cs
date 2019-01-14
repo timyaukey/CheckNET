@@ -30,6 +30,7 @@
         {
             this.grdMain = new System.Windows.Forms.DataGridView();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.btnCancelAdj = new System.Windows.Forms.Button();
             this.lblGeneratedAmount = new System.Windows.Forms.Label();
             this.lblBudgetLimit = new System.Windows.Forms.Label();
             this.btnSetAdj = new System.Windows.Forms.Button();
@@ -64,7 +65,7 @@
             this.grdMain.Name = "grdMain";
             this.grdMain.ReadOnly = true;
             this.grdMain.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.grdMain.Size = new System.Drawing.Size(837, 540);
+            this.grdMain.Size = new System.Drawing.Size(851, 548);
             this.grdMain.TabIndex = 0;
             this.grdMain.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdMain_CellClick);
             // 
@@ -83,6 +84,7 @@
             // 
             // splitContainer.Panel2
             // 
+            this.splitContainer.Panel2.Controls.Add(this.btnCancelAdj);
             this.splitContainer.Panel2.Controls.Add(this.lblGeneratedAmount);
             this.splitContainer.Panel2.Controls.Add(this.lblBudgetLimit);
             this.splitContainer.Panel2.Controls.Add(this.btnSetAdj);
@@ -96,15 +98,27 @@
             this.splitContainer.Panel2.Controls.Add(this.lblColumnDate);
             this.splitContainer.Panel2.Controls.Add(this.lblRowSequence);
             this.splitContainer.Panel2.Controls.Add(this.lblRowLabel);
-            this.splitContainer.Size = new System.Drawing.Size(1176, 540);
-            this.splitContainer.SplitterDistance = 837;
+            this.splitContainer.Size = new System.Drawing.Size(1190, 548);
+            this.splitContainer.SplitterDistance = 851;
             this.splitContainer.TabIndex = 1;
+            // 
+            // btnCancelAdj
+            // 
+            this.btnCancelAdj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancelAdj.Location = new System.Drawing.Point(221, 522);
+            this.btnCancelAdj.Margin = new System.Windows.Forms.Padding(1, 3, 1, 3);
+            this.btnCancelAdj.Name = "btnCancelAdj";
+            this.btnCancelAdj.Size = new System.Drawing.Size(54, 23);
+            this.btnCancelAdj.TabIndex = 14;
+            this.btnCancelAdj.Text = "Cancel";
+            this.btnCancelAdj.UseVisualStyleBackColor = true;
+            this.btnCancelAdj.Click += new System.EventHandler(this.btnCancelAdj_Click);
             // 
             // lblGeneratedAmount
             // 
             this.lblGeneratedAmount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblGeneratedAmount.Location = new System.Drawing.Point(3, 451);
+            this.lblGeneratedAmount.Location = new System.Drawing.Point(3, 459);
             this.lblGeneratedAmount.Name = "lblGeneratedAmount";
             this.lblGeneratedAmount.Size = new System.Drawing.Size(291, 20);
             this.lblGeneratedAmount.TabIndex = 13;
@@ -114,19 +128,19 @@
             // 
             this.lblBudgetLimit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblBudgetLimit.Location = new System.Drawing.Point(3, 491);
+            this.lblBudgetLimit.Location = new System.Drawing.Point(3, 479);
             this.lblBudgetLimit.Name = "lblBudgetLimit";
-            this.lblBudgetLimit.Size = new System.Drawing.Size(291, 20);
+            this.lblBudgetLimit.Size = new System.Drawing.Size(159, 20);
             this.lblBudgetLimit.TabIndex = 5;
             this.lblBudgetLimit.Text = "(budget limit)";
             // 
             // btnSetAdj
             // 
             this.btnSetAdj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSetAdj.Location = new System.Drawing.Point(289, 514);
+            this.btnSetAdj.Location = new System.Drawing.Point(277, 522);
             this.btnSetAdj.Margin = new System.Windows.Forms.Padding(1, 3, 1, 3);
             this.btnSetAdj.Name = "btnSetAdj";
-            this.btnSetAdj.Size = new System.Drawing.Size(42, 23);
+            this.btnSetAdj.Size = new System.Drawing.Size(54, 23);
             this.btnSetAdj.TabIndex = 12;
             this.btnSetAdj.Text = "Set";
             this.btnSetAdj.UseVisualStyleBackColor = true;
@@ -135,22 +149,22 @@
             // btnSubAdj
             // 
             this.btnSubAdj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSubAdj.Location = new System.Drawing.Point(201, 514);
+            this.btnSubAdj.Location = new System.Drawing.Point(80, 522);
             this.btnSubAdj.Margin = new System.Windows.Forms.Padding(1, 3, 1, 3);
             this.btnSubAdj.Name = "btnSubAdj";
-            this.btnSubAdj.Size = new System.Drawing.Size(42, 23);
+            this.btnSubAdj.Size = new System.Drawing.Size(82, 23);
             this.btnSubAdj.TabIndex = 11;
-            this.btnSubAdj.Text = "Sub";
+            this.btnSubAdj.Text = "Subtract";
             this.btnSubAdj.UseVisualStyleBackColor = true;
             this.btnSubAdj.Click += new System.EventHandler(this.btnSubAdj_Click);
             // 
             // btnAddAdj
             // 
             this.btnAddAdj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddAdj.Location = new System.Drawing.Point(245, 514);
+            this.btnAddAdj.Location = new System.Drawing.Point(165, 522);
             this.btnAddAdj.Margin = new System.Windows.Forms.Padding(1, 3, 1, 3);
             this.btnAddAdj.Name = "btnAddAdj";
-            this.btnAddAdj.Size = new System.Drawing.Size(42, 23);
+            this.btnAddAdj.Size = new System.Drawing.Size(54, 23);
             this.btnAddAdj.TabIndex = 10;
             this.btnAddAdj.Text = "Add";
             this.btnAddAdj.UseVisualStyleBackColor = true;
@@ -159,27 +173,27 @@
             // txtAdjustment
             // 
             this.txtAdjustment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAdjustment.Location = new System.Drawing.Point(120, 516);
+            this.txtAdjustment.Location = new System.Drawing.Point(277, 499);
             this.txtAdjustment.Name = "txtAdjustment";
-            this.txtAdjustment.Size = new System.Drawing.Size(67, 20);
+            this.txtAdjustment.Size = new System.Drawing.Size(54, 20);
             this.txtAdjustment.TabIndex = 9;
             // 
             // lblAdjustment
             // 
             this.lblAdjustment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblAdjustment.Location = new System.Drawing.Point(49, 519);
+            this.lblAdjustment.Location = new System.Drawing.Point(224, 502);
             this.lblAdjustment.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.lblAdjustment.Name = "lblAdjustment";
-            this.lblAdjustment.Size = new System.Drawing.Size(68, 18);
+            this.lblAdjustment.Size = new System.Drawing.Size(50, 18);
             this.lblAdjustment.TabIndex = 8;
-            this.lblAdjustment.Text = "Adjustment:";
+            this.lblAdjustment.Text = "Amount:";
             this.lblAdjustment.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // lblDashboardAmount
             // 
             this.lblDashboardAmount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblDashboardAmount.Location = new System.Drawing.Point(3, 431);
+            this.lblDashboardAmount.Location = new System.Drawing.Point(3, 439);
             this.lblDashboardAmount.Name = "lblDashboardAmount";
             this.lblDashboardAmount.Size = new System.Drawing.Size(291, 20);
             this.lblDashboardAmount.TabIndex = 7;
@@ -189,9 +203,9 @@
             // 
             this.lblBudgetApplied.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblBudgetApplied.Location = new System.Drawing.Point(3, 471);
+            this.lblBudgetApplied.Location = new System.Drawing.Point(3, 499);
             this.lblBudgetApplied.Name = "lblBudgetApplied";
-            this.lblBudgetApplied.Size = new System.Drawing.Size(291, 20);
+            this.lblBudgetApplied.Size = new System.Drawing.Size(159, 20);
             this.lblBudgetApplied.TabIndex = 6;
             this.lblBudgetApplied.Text = "(budget applied)";
             // 
@@ -208,7 +222,7 @@
             this.lvwDetails.HideSelection = false;
             this.lvwDetails.Location = new System.Drawing.Point(5, 63);
             this.lvwDetails.Name = "lvwDetails";
-            this.lvwDetails.Size = new System.Drawing.Size(326, 365);
+            this.lvwDetails.Size = new System.Drawing.Size(326, 373);
             this.lvwDetails.TabIndex = 3;
             this.lvwDetails.UseCompatibleStateImageBehavior = false;
             this.lvwDetails.View = System.Windows.Forms.View.Details;
@@ -262,7 +276,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 592);
+            this.ClientSize = new System.Drawing.Size(1214, 600);
             this.Controls.Add(this.splitContainer);
             this.Name = "BudgetDashboardForm";
             this.Text = "Budget Dashboard";
@@ -296,5 +310,6 @@
         private System.Windows.Forms.TextBox txtAdjustment;
         private System.Windows.Forms.Label lblAdjustment;
         private System.Windows.Forms.Label lblGeneratedAmount;
+        private System.Windows.Forms.Button btnCancelAdj;
     }
 }

@@ -25,10 +25,9 @@ namespace BudgetDashboard
 
         public void ComputeTotals()
         {
-            RowTotal.ClearAmounts();
+            ClearAmounts();
             foreach(var periodCell in Cells)
             {
-                periodCell.ClearAmounts();
                 foreach(var detail in periodCell.Details)
                 {
                     TCell cell = MakeDataCell(detail);

@@ -84,6 +84,10 @@ namespace BudgetDashboard
             UnbudgetedIncome.Sort(DataRowComparer);
             UnbudgetedExpenses.Sort(DataRowComparer);
 
+            TotalIncome = new TotalRow(PeriodCount, "", "Total Credits", "");
+            TotalExpense = new TotalRow(PeriodCount, "", "Total Debits", "");
+            NetProfit = new TotalRow(PeriodCount, "", "Net Debits/Credits", "");
+            RunningBalance = new TotalRow(PeriodCount, "", "Running Balance", "");
             ComputeTotals();
         }
 
@@ -160,10 +164,12 @@ namespace BudgetDashboard
             return (int)trxDate.Subtract(StartDate).TotalDays / PeriodDays;
         }
 
-        private void ComputeTotals()
+        public void ComputeTotals()
         {
-            TotalIncome = new TotalRow(PeriodCount, "", "Total Credits", "");
-            TotalExpense = new TotalRow(PeriodCount, "", "Total Debits", "");
+            TotalIncome.ClearAmounts();
+            TotalExpense.ClearAmounts();
+            NetProfit.ClearAmounts();
+            RunningBalance.ClearAmounts();
             foreach (var row in BudgetedIncome)
             {
                 row.ComputeTotals();
@@ -184,11 +190,9 @@ namespace BudgetDashboard
                 row.ComputeTotals();
                 TotalExpense.AddRow<SplitDetailRow, SplitDetailCell>(row);
             }
-            NetProfit = new TotalRow(PeriodCount, "", "Net Debits/Credits", "");
             NetProfit.AddRow<TotalRow, DataCell>(TotalIncome);
             NetProfit.AddRow<TotalRow, DataCell>(TotalExpense);
             decimal currentBalance = StartingBalance;
-            RunningBalance = new TotalRow(PeriodCount, "", "Running Balance", "");
             RunningBalance.RowTotal.CellAmount = StartingBalance;
             for (var cellIndex = 0; cellIndex < PeriodCount; cellIndex++)
             {

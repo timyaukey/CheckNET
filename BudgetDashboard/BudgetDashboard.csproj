@@ -60,6 +60,7 @@
     <Compile Include="DashboardData.cs" />
     <Compile Include="DashboardPlugin.cs" />
     <Compile Include="DataCell.cs" />
+    <Compile Include="DataCellGridCell.cs" />
     <Compile Include="DetailCell.cs" />
     <Compile Include="DataRow.cs" />
     <Compile Include="DetailRow.cs" />

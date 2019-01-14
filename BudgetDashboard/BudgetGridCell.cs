@@ -7,21 +7,11 @@ using System.Windows.Forms;
 
 namespace BudgetDashboard
 {
-    public class BudgetGridCell : DataGridViewTextBoxCell
+    public class BudgetGridCell : DataCellGridCell<BudgetDetailCell>
     {
-        private decimal BudgetLimit;
-        private decimal BudgetApplied;
-
-        public BudgetGridCell(decimal budgetLimit, decimal budgetApplied)
+        public BudgetGridCell(BudgetDetailCell dataCell)
+            : base(dataCell)
         {
-            BudgetLimit = budgetLimit;
-            BudgetApplied = budgetApplied;
-        }
-
-        public void UpdateBudgets(decimal budgetLimit, decimal budgetApplied)
-        {
-            BudgetLimit = budgetLimit;
-            BudgetApplied = budgetApplied;
         }
 
         protected override void Paint(Graphics graphics, Rectangle clipBounds, Rectangle cellBounds, 
@@ -34,14 +24,14 @@ namespace BudgetDashboard
                 errorText, cellStyle, advancedBorderStyle, 
                 paintParts);
             // If there is no budget limit then no budget analysis is possible.
-            if (BudgetLimit != 0M)
+            if (mDataCell.BudgetLimit != 0M)
             {
                 int barMaxWidth = cellBounds.Width - 3;
                 int barWidth;
                 Brush barBrush;
                 // This tests for applied and limit having opposite signs -
                 // which means the amount applied is "less than zero".
-                double budgetFraction = (double)BudgetApplied / (double)BudgetLimit;
+                double budgetFraction = (double)mDataCell.BudgetApplied / (double)mDataCell.BudgetLimit;
                 if (budgetFraction > 0d)
                 {
                     if (budgetFraction <= 1.0d)

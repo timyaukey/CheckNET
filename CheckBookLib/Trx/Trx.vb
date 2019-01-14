@@ -480,7 +480,11 @@ Public MustInherit Class Trx
 
     Public MustOverride Function objClone(ByVal blnWillAddToRegister As Boolean) As Trx
 
-    Public Overrides Function ToString() As String
+    Public Overridable Function strSummary() As String
         Return Me.datDate.ToShortDateString() + " " + Me.strDescription + " " + Me.curAmount.ToString()
+    End Function
+
+    Public Overrides Function ToString() As String
+        Return strSummary()
     End Function
 End Class

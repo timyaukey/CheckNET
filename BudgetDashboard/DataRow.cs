@@ -35,6 +35,15 @@ namespace BudgetDashboard
             this.RowTotal.AddData(row.RowTotal.CellAmount);
         }
 
+        public void ClearAmounts()
+        {
+            RowTotal.ClearAmounts();
+            foreach (var periodCell in Cells)
+            {
+                periodCell.ClearAmounts();
+            }
+        }
+
         public override string ToString()
         {
             return Label + " " + Sequence + " " + RowTotal.ToString();

@@ -341,4 +341,8 @@ Public Class BudgetTrx
             objReg.RaiseValidationError(lngIndex, "Budget trx must be fake")
         End If
     End Sub
+
+    Public Overrides Function strSummary() As String
+        Return Me.datDate.ToShortDateString() + " " + Me.strDescription + " " + Me.curBudgetLimit.ToString()
+    End Function
 End Class
