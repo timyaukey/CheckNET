@@ -38,6 +38,7 @@ Public Class Account
     'All LoadedRegister objects for account, whether or not
     'displayed in any UI.
     Private mcolRegisters As List(Of Register)
+    Private mdatLastReconciled As DateTime
     'Account has unsaved changes.
     Private mblnUnsavedChanges As Boolean
     'File for Save().
@@ -233,6 +234,12 @@ Public Class Account
     Public ReadOnly Property strType() As String
         Get
             Return strTypeToLetter(lngType)
+        End Get
+    End Property
+
+    Public ReadOnly Property datLastReconciled() As DateTime
+        Get
+            Return mdatLastReconciled
         End Get
     End Property
 
@@ -597,6 +604,19 @@ Public Class Account
         Next objReg
         objRegisterList = objResult
     End Function
+
+    Public Sub SetLastReconciledDate()
+        mdatLastReconciled = DateTime.MinValue
+        For Each reg In mcolRegisters
+            For Each objTrx In reg.colAllTrx()
+                If objTrx.lngStatus = Trx.TrxStatus.Reconciled Then
+                    If objTrx.datDate > mdatLastReconciled Then
+                        mdatLastReconciled = objTrx.datDate
+                    End If
+                End If
+            Next
+        Next
+    End Sub
 
     Private Sub mobjLoader_FindRegister(ByVal strRegisterKey As String, ByRef objReg As Register) Handles mobjLoader.FindRegister
         objReg = objFindReg(strRegisterKey)

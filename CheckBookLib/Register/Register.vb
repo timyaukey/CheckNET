@@ -436,7 +436,7 @@ Public Class Register
         lngLastChange = lngStartIndex
         For lngIndex = lngStartIndex To mlngTrxUsed
             With Me.objTrx(lngIndex)
-                curBalance = curBalance + .curAmount
+                curBalance = curBalance + .curBalanceChange
                 If curBalance <> .curBalance Then
                     .SetBalance(curBalance)
                     lngLastChange = lngIndex
@@ -464,7 +464,11 @@ Public Class Register
     '   The register is ready to display in a UI after this.
 
     Public Sub LoadFinish()
-        lngFixBalances(1)
+        Dim curBalance As Decimal = 0
+        For Each objTrx As Trx In colAllTrx()
+            curBalance = curBalance + objTrx.curBalanceChange
+            objTrx.SetBalance(curBalance)
+        Next
     End Sub
 
     '$Description Remove all generated Trx from the Register, and clear

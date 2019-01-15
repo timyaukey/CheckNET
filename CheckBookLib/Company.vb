@@ -90,17 +90,12 @@ Public Class Company
     End Function
 
     Public Function datLastReconciled() As Date
-        Dim datResult As Date = New Date(1900, 1, 1)
+        Dim datResult As DateTime = DateTime.MinValue
         For Each act As Account In colAccounts
-            For Each reg In act.colRegisters
-                For Each objTrx In reg.colAllTrx()
-                    If objTrx.lngStatus = Trx.TrxStatus.Reconciled Then
-                        If objTrx.datDate > datResult Then
-                            datResult = objTrx.datDate
-                        End If
-                    End If
-                Next
-            Next
+            act.SetLastReconciledDate()
+            If act.datLastReconciled > datResult Then
+                datResult = act.datLastReconciled
+            End If
         Next
         Return datResult
     End Function
