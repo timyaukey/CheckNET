@@ -547,7 +547,7 @@ Public Class Account
             gRaiseError("Reg key already used in RI line")
         End If
         objReg = New Register
-        objReg.Init(Me, strRegTitle, strRegKey, blnRegShow, 32, DateAdd(Microsoft.VisualBasic.DateInterval.Day, -1, Today))
+        objReg.Init(Me, strRegTitle, strRegKey, blnRegShow, 128)
         mcolRegisters.Add(objReg)
     End Sub
 

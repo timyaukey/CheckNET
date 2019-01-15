@@ -53,7 +53,8 @@ Public Class UTRegister
         mobjAccount = New Account()
         mobjAccount.Init(mobjCompany)
         mobjReg = New Register
-        mobjReg.Init(mobjAccount, "title", strRegisterKey, False, 3, DateAdd(Microsoft.VisualBasic.DateInterval.Year, -20, Today))
+        mobjReg.Init(mobjAccount, "title", strRegisterKey, False, 3)
+        mobjReg.datOldestBudgetEndAllowed = DateTime.Today.AddYears(-20)
     End Sub
 
     'The Register managed by this UTRegister.

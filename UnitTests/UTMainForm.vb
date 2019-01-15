@@ -933,7 +933,7 @@ Friend Class UTMainForm
 
         objLoader = New RegisterLoader
         objReg = New Register
-        objReg.Init(objAccount, "Regular", "reg", False, 3, System.DateTime.FromOADate(0))
+        objReg.Init(objAccount, "Regular", "reg", False, 3)
         objRepeatSummarizer = New RepeatSummarizer()
         lngLinesRead = 0
         Try

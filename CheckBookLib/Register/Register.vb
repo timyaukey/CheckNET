@@ -87,7 +87,7 @@ Public Class Register
     'error is detected.
     Public Event ValidationError(ByVal lngIndex As Integer, ByVal strMsg As String)
 
-    Friend Sub Init(ByVal objAccount_ As Account, ByVal strTitle_ As String, ByVal strRegisterKey_ As String, ByVal blnShowInitially_ As Boolean, ByVal lngAllocationUnit_ As Integer, ByVal datOldestBudgetEndAllowed_ As Date)
+    Friend Sub Init(ByVal objAccount_ As Account, ByVal strTitle_ As String, ByVal strRegisterKey_ As String, ByVal blnShowInitially_ As Boolean, ByVal lngAllocationUnit_ As Integer)
 
         mobjAccount = objAccount_
         mstrTitle = strTitle_
@@ -97,7 +97,7 @@ Public Class Register
         If mstrRegisterKey = "" Then
             gRaiseError("Missing register key in Register.Init")
         End If
-        mdatOldestBudgetEndAllowed = datOldestBudgetEndAllowed_
+        mdatOldestBudgetEndAllowed = DateTime.MinValue
         mcolRepeatTrx = New Dictionary(Of String, Trx)
         Erase maobjTrx
         mlngTrxAllocated = 0
@@ -465,7 +465,11 @@ Public Class Register
 
     Public Sub LoadFinish()
         Dim curBalance As Decimal = 0
+        mdatOldestBudgetEndAllowed = mobjAccount.datLastReconciled.AddDays(1D)
         For Each objTrx As Trx In colAllTrx()
+            If TypeOf (objTrx) Is BudgetTrx Then
+                DirectCast(objTrx, BudgetTrx).SetAmountForBudget()
+            End If
             curBalance = curBalance + objTrx.curBalanceChange
             objTrx.SetBalance(curBalance)
         Next
@@ -1109,10 +1113,13 @@ Public Class Register
         End Set
     End Property
 
-    Public ReadOnly Property datOldestBudgetEndAllowed() As Date
+    Public Property datOldestBudgetEndAllowed() As Date
         Get
-            datOldestBudgetEndAllowed = mdatOldestBudgetEndAllowed
+            Return mdatOldestBudgetEndAllowed
         End Get
+        Set(value As Date)
+            mdatOldestBudgetEndAllowed = value
+        End Set
     End Property
 
     Public Property blnShowInitially() As Boolean
