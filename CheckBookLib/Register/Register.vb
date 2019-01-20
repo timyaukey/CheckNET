@@ -1077,7 +1077,7 @@ Public Class Register
 
     Public ReadOnly Property lngTrxCount() As Integer
         Get
-            lngTrxCount = mlngTrxUsed
+            Return mlngTrxUsed
         End Get
     End Property
 
@@ -1086,7 +1086,7 @@ Public Class Register
 
     Public ReadOnly Property strRegisterKey() As String
         Get
-            strRegisterKey = mstrRegisterKey
+            Return mstrRegisterKey
         End Get
     End Property
 
@@ -1104,7 +1104,7 @@ Public Class Register
 
     Public Property strTitle() As String
         Get
-            strTitle = mstrTitle
+            Return mstrTitle
         End Get
         Set(ByVal Value As String)
             mstrTitle = Value
@@ -1124,7 +1124,7 @@ Public Class Register
 
     Public Property blnShowInitially() As Boolean
         Get
-            blnShowInitially = mblnShowInitially
+            Return mblnShowInitially
         End Get
         Set(ByVal Value As Boolean)
             mblnShowInitially = Value
@@ -1135,7 +1135,7 @@ Public Class Register
 
     Public Property blnDeleted() As Boolean
         Get
-            blnDeleted = mblnDeleted
+            Return mblnDeleted
         End Get
         Set(ByVal Value As Boolean)
             mblnDeleted = Value
@@ -1146,7 +1146,7 @@ Public Class Register
 
     Public ReadOnly Property colDbgRepeatTrx() As Dictionary(Of String, Trx)
         Get
-            colDbgRepeatTrx = mcolRepeatTrx
+            Return mcolRepeatTrx
         End Get
     End Property
 
