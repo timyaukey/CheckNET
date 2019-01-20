@@ -119,10 +119,13 @@ Public MustInherit Class Trx
         mobjReg = objReg_
     End Sub
 
-    Public ReadOnly Property objReg() As Register
+    Public Property objReg() As Register
         Get
             Return mobjReg
         End Get
+        Set(value As Register)
+            mobjReg = value
+        End Set
     End Property
 
     Public Sub ClearRepeatTrx()
@@ -227,10 +230,13 @@ Public MustInherit Class Trx
         End Get
     End Property
 
-    Public ReadOnly Property lngStatus() As TrxStatus
+    Public Property lngStatus() As TrxStatus
         Get
             Return mlngStatus
         End Get
+        Set(value As TrxStatus)
+            mlngStatus = value
+        End Set
     End Property
 
     Public ReadOnly Property strStatus() As String
@@ -287,10 +293,13 @@ Public MustInherit Class Trx
     ''' The face value amount of the transaction.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property curAmount() As Decimal
+    Public Property curAmount() As Decimal
         Get
             Return mcurAmount
         End Get
+        Set(value As Decimal)
+            mcurAmount = value
+        End Set
     End Property
 
     ''' <summary>
@@ -318,10 +327,13 @@ Public MustInherit Class Trx
     ''' The register balance after adding this transaction.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property curBalance() As Decimal
+    Public Property curBalance() As Decimal
         Get
             Return mcurBalance
         End Get
+        Set(value As Decimal)
+            mcurBalance = value
+        End Set
     End Property
 
     Protected Sub RaiseErrorOnBadData(ByVal strRoutine As String)
@@ -349,26 +361,6 @@ Public MustInherit Class Trx
         End If
         mstrSortKey = mdatDate.ToString("yyyyMMdd") & strDebitCredit & Mid("ZYX", lngType + 1, 1) &
             Left(mstrNumber & "          ", 10) & Left(mstrDescription & "                    ", 20) & Left(strInvNum & "                ", 16)
-    End Sub
-
-    '$Description Used only by Register.SetTrxStatus().
-
-    Public Sub SetStatus(ByVal lngNewStatus As TrxStatus)
-        mlngStatus = lngNewStatus
-    End Sub
-
-    Public Sub SetAmount(ByVal curNewAmount As Decimal)
-        mcurAmount = curNewAmount
-    End Sub
-
-    Public Sub SetReg(ByVal objNewReg As Register)
-        mobjReg = objNewReg
-    End Sub
-
-    '$Description Called only by Register.lngFixBalances().
-
-    Public Sub SetBalance(ByVal curNewBal As Decimal)
-        mcurBalance = curNewBal
     End Sub
 
     Public Sub Delete(ByVal objDeleteLogger As ILogDelete, ByVal strLogTitle As String,

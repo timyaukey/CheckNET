@@ -283,7 +283,7 @@ Public Class BankImportForm
                             If Not .objMatchedReg Is Nothing Then
                                 'Insert .objImportedTrx in .objMatchedReg with .objImportedTrx.strImportKey
                                 Dim datDummy As DateTime
-                                .objImportedTrx.SetReg(.objMatchedReg)
+                                .objImportedTrx.objReg = .objMatchedReg
                                 If mobjHostUI.blnAddNormalTrxSilent(.objImportedTrx, datDummy, True, "ImportAutoBatch") Then
                                     MsgBox("Failed to insert transaction " + strDescribeItem(intItemIndex) + " required as part of a multi-part match.")
                                 End If
@@ -780,7 +780,7 @@ Public Class BankImportForm
                     blnItemImported = mobjImportHandler.blnAlternateAutoNewHandling(objImportedTrx, mobjSelectedRegister)
                     'If we did not use alternate handling.
                     If Not blnItemImported Then
-                        objImportedTrx.SetReg(mobjSelectedRegister)
+                        objImportedTrx.objReg = mobjSelectedRegister
                         If Not mobjHostUI.blnAddNormalTrxSilent(objImportedTrx, datDummy, True, "ImportNewBatch") Then
                             blnItemImported = True
                         End If
@@ -1380,7 +1380,7 @@ Public Class BankImportForm
             End If
 
             With maudtItem(intSelectedItemIndex())
-                .objImportedTrx.SetReg(mobjSelectedRegister)
+                .objImportedTrx.objReg = mobjSelectedRegister
                 If mobjHostUI.blnAddNormalTrx(.objImportedTrx, datDummy, True, "Import.CreateNew") Then
                     Exit Sub
                 End If
@@ -1412,7 +1412,7 @@ Public Class BankImportForm
                 If MsgBox("Create transaction " & strDescribeTrx(.objImportedTrx) & "?", MsgBoxStyle.OkCancel, "Create Transaction") <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
-                .objImportedTrx.SetReg(mobjSelectedRegister)
+                .objImportedTrx.objReg = mobjSelectedRegister
                 If mobjHostUI.blnAddNormalTrxSilent(.objImportedTrx, datDummy, True, "ImportNewSilent") Then
                     Exit Sub
                 End If

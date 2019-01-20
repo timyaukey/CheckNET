@@ -350,7 +350,7 @@ Public Class Register
 
         Dim objStatusTrx As Trx
         objStatusTrx = Me.objTrx(lngIndex)
-        objStatusTrx.SetStatus(lngStatus)
+        objStatusTrx.lngStatus = lngStatus
         RaiseEvent StatusChanged(lngIndex)
         mobjAccount.SetChanged()
         'Use an ILogAdd instead of a specialized logger because it's a cheap
@@ -438,7 +438,7 @@ Public Class Register
             With Me.objTrx(lngIndex)
                 curBalance = curBalance + .curBalanceChange
                 If curBalance <> .curBalance Then
-                    .SetBalance(curBalance)
+                    .curBalance = curBalance
                     lngLastChange = lngIndex
                 End If
             End With
@@ -471,7 +471,7 @@ Public Class Register
                 DirectCast(objTrx, BudgetTrx).SetAmountForBudget()
             End If
             curBalance = curBalance + objTrx.curBalanceChange
-            objTrx.SetBalance(curBalance)
+            objTrx.curBalance = curBalance
         Next
     End Sub
 
