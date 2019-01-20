@@ -134,13 +134,13 @@ Public Class Account
 
     Public ReadOnly Property objCompany() As Company
         Get
-            objCompany = mobjCompany
+            Return mobjCompany
         End Get
     End Property
 
     Public Property strFileNameRoot() As String
         Get
-            strFileNameRoot = mstrFileNameRoot
+            Return mstrFileNameRoot
         End Get
         Set(value As String)
             mstrFileNameRoot = value
@@ -150,9 +150,9 @@ Public Class Account
     Public Property strTitle() As String
         Get
             If Len(mstrTitle) > 0 Then
-                strTitle = mstrTitle
+                Return mstrTitle
             Else
-                strTitle = mstrFileNameRoot
+                Return mstrFileNameRoot
             End If
         End Get
         Set(ByVal Value As String)
@@ -262,19 +262,19 @@ Public Class Account
 
     Public ReadOnly Property objRepeats() As SimpleStringTranslator
         Get
-            objRepeats = mobjRepeats
+            Return mobjRepeats
         End Get
     End Property
 
     Friend ReadOnly Property objRepeatSummarizer() As RepeatSummarizer
         Get
-            objRepeatSummarizer = mobjRepeatSummarizer
+            Return mobjRepeatSummarizer
         End Get
     End Property
 
     Public ReadOnly Property blnUnsavedChanges() As Boolean
         Get
-            blnUnsavedChanges = mblnUnsavedChanges
+            Return mblnUnsavedChanges
         End Get
     End Property
 
