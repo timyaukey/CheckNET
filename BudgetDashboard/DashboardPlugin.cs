@@ -19,10 +19,10 @@ namespace BudgetDashboard
             Register reg = HostUI.objGetCurrentRegister();
             if (reg == null)
             {
-                System.Windows.Forms.MessageBox.Show("Select a register window first");
+                HostUI.ErrorMessageBox("Select a register window first");
                 return;
             }
-            using (var specsForm = new BudgetSpecsForm())
+            using (var specsForm = new BudgetSpecsForm(HostUI))
             {
                 if (specsForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {

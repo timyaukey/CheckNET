@@ -7,16 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using CheckBookLib;
+
 namespace BudgetDashboard
 {
     public partial class BudgetSpecsForm : Form
     {
+        private IHostUI HostUI;
         public DateTime StartDate;
         public int PeriodDays;
         public int PeriodCount;
 
-        public BudgetSpecsForm()
+        public BudgetSpecsForm(IHostUI hostUI)
         {
+            HostUI = hostUI;
             InitializeComponent();
             ctlStartDate.Value = new DateTime(DateTime.Today.Year, 1, 1);
         }
@@ -39,7 +43,7 @@ namespace BudgetDashboard
                     return;
                 }
             }
-            MessageBox.Show("Invalid budget specs");
+            HostUI.ErrorMessageBox("Invalid budget specs");
         }
     }
 }
