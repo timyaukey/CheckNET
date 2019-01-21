@@ -203,7 +203,7 @@ Public Class BudgetTrx
     '   mcurBudgetApplied or mcurBudgetLimit changes.
 
     Public Sub SetAmountForBudget()
-        If System.Math.Abs(mcurBudgetApplied) > System.Math.Abs(mcurBudgetLimit) Or mdatBudgetEnds < mobjReg.datOldestBudgetEndAllowed Then
+        If mdatBudgetEnds < mobjReg.datOldestBudgetEndAllowed Or System.Math.Abs(mcurBudgetApplied) > System.Math.Abs(mcurBudgetLimit) Then
             mcurAmount = 0
             mblnIsExpired = True
         Else
