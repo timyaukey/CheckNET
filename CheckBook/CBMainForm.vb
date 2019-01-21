@@ -122,7 +122,7 @@ Friend Class CBMainForm
     Private colCheckImportPlugins As List(Of ICheckImportPlugin) = New List(Of ICheckImportPlugin)
     Private colDepositImportPlugins As List(Of IDepositImportPlugin) = New List(Of IDepositImportPlugin)
     Private colInvoiceImportPlugins As List(Of IInvoiceImportPlugin) = New List(Of IInvoiceImportPlugin)
-    Private colReportPlugins As List(Of IToolPlugin) = New List(Of IToolPlugin)
+    Private colReportPlugins As List(Of IReportPlugin) = New List(Of IReportPlugin)
     Private colToolPlugins As List(Of IToolPlugin) = New List(Of IToolPlugin)
 
     Private Sub LoadPlugins()
@@ -178,7 +178,11 @@ Friend Class CBMainForm
     End Sub
 
     Private Function PluginComparer(ByVal objPlugin1 As IToolPlugin, ByVal objPlugin2 As IToolPlugin) As Integer
-        Return objPlugin1.SortCode().CompareTo(objPlugin2.SortCode())
+        Dim intCompare As Integer = objPlugin1.SortCode().CompareTo(objPlugin2.SortCode())
+        If intCompare = 0 Then
+            intCompare = objPlugin1.GetMenuTitle().CompareTo(objPlugin2.GetMenuTitle())
+        End If
+        Return intCompare
     End Function
 
     Private Sub AddMenuOption(ByVal parent As ToolStripMenuItem, ByVal plugin As IToolPlugin)
@@ -616,6 +620,17 @@ Friend Class CBMainForm
         Try
             Using frm As CompanyInfoEditor = New CompanyInfoEditor()
                 frm.ShowMe(mobjCompany)
+            End Using
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
+    End Sub
+
+    Private Sub mnuFilePlugins_Click(sender As Object, e As EventArgs) Handles mnuFilePlugins.Click
+        Try
+            Using frm As PluginList = New PluginList()
+                frm.ShowMe(mobjHostUI, colBankImportPlugins, colCheckImportPlugins, colDepositImportPlugins,
+                           colInvoiceImportPlugins, colReportPlugins, colToolPlugins)
             End Using
         Catch ex As Exception
             gTopException(ex)

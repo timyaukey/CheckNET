@@ -154,6 +154,12 @@
     <Compile Include="Plugins\CombinedBalancePlugin.vb" />
     <Compile Include="Plugins\FindLiveBudgetsPlugin.vb" />
     <Compile Include="Plugins\PersonalBusinessPlugin.vb" />
+    <Compile Include="Plugins\PluginList.Designer.vb">
+      <DependentUpon>PluginList.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Plugins\PluginList.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Plugins\ReconcilePlugin.vb" />
     <Compile Include="Plugins\ToolPlugins.vb" />
     <Compile Include="Plugins\TrialBalancePlugIn.vb" />
@@ -370,6 +376,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ObjectEditorForm.resx">
       <DependentUpon>ObjectEditorForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Plugins\PluginList.resx">
+      <DependentUpon>PluginList.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\CategorySummary\CatSumRptForm.resX">
       <DependentUpon>CatSumRptForm.vb</DependentUpon>
