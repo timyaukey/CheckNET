@@ -476,6 +476,10 @@
       <Project>{73A968C7-281A-45DC-8360-2E44B3C9510B}</Project>
       <Name>CheckBookLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GeneralPlugins\GeneralPlugins.csproj">
+      <Project>{02d39d1b-a3ee-4721-83bf-ca8812985006}</Project>
+      <Name>GeneralPlugins</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ImportPlugins\ImportPlugins.vbproj">
       <Project>{67bc9967-b09a-4a5a-9bf5-40c9c9af79ef}</Project>
       <Name>ImportPlugins</Name>

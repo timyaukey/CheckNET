@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 using CheckBookLib;
 
-[assembly: PluginFactory(typeof(BudgetDashboard.PluginFactory))]
+[assembly: PluginFactory(typeof(GeneralPlugins.PluginFactory))]
 
-namespace BudgetDashboard
+namespace GeneralPlugins
 {
     public class PluginFactory : IPluginFactory
     {
         public IEnumerable<IPlugin> colGetPlugins(IHostUI hostUI_)
         {
-            yield return new DashboardPlugin(hostUI_);
+            yield return new IntuitExport.IntuitExportPlugin(hostUI_);
         }
     }
 }
