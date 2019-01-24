@@ -16,7 +16,11 @@ namespace GeneralPlugins.IntuitExport
 
         public override void ClickHandler(object sender, EventArgs e)
         {
-            HostUI.InfoMessageBox("Done...");
+            DateTime startDate = new DateTime(2018, 1, 1);
+            DateTime endDate = new DateTime(2018, 1, 31);
+            ExportEngine engine = new ExportEngine(HostUI, startDate, endDate);
+            engine.Run();
+            HostUI.InfoMessageBox("Exported to " + engine.OutputPath);
         }
 
         public override string GetMenuTitle()
