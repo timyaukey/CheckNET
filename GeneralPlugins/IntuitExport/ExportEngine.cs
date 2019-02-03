@@ -11,19 +11,21 @@ namespace GeneralPlugins.IntuitExport
     {
         private IHostUI HostUI;
         private Company Company;
-        private DateTime StartDate;
-        private DateTime EndDate;
+        public DateTime StartDate;
+        public DateTime EndDate;
+        public Dictionary<string, BalanceSheetMap> BalanceSheetTranslator;
+        public Dictionary<string, CategoryMap> CategoryTranslator;
         private Dictionary<string, PayeeDef> Payees;
         private Dictionary<string, CatDef> Categories;
         private string OutputPath_;
         private System.IO.TextWriter OutputWriter;
 
-        public ExportEngine(IHostUI hostUI, DateTime startDate, DateTime endDate)
+        public ExportEngine(IHostUI hostUI)
         {
             HostUI = hostUI;
             Company = HostUI.objCompany;
-            StartDate = startDate;
-            EndDate = endDate;
+            BalanceSheetTranslator = new Dictionary<string, BalanceSheetMap>();
+            CategoryTranslator = new Dictionary<string, CategoryMap>();
             Payees = new Dictionary<string, PayeeDef>();
             Categories = new Dictionary<string, CatDef>();
         }
@@ -50,12 +52,16 @@ namespace GeneralPlugins.IntuitExport
         {
             foreach (Account acct in Company.colAccounts)
             {
-                foreach (Register reg in acct.colRegisters)
+                if (acct.lngType != Account.AccountType.Personal)
                 {
-                    foreach (Trx trx in reg.colDateRange(StartDate, EndDate))
+                    foreach (Register reg in acct.colRegisters)
                     {
-                        if (trx is NormalTrx)
-                            AnalyzeNormalTrx(trx as NormalTrx);
+                        foreach (Trx trx in reg.colDateRange(StartDate, EndDate))
+                        {
+                            NormalTrx normalTrx = trx as NormalTrx;
+                            if (normalTrx != null && !normalTrx.blnFake)
+                                AnalyzeNormalTrx(normalTrx);
+                        }
                     }
                 }
             }
@@ -67,8 +73,7 @@ namespace GeneralPlugins.IntuitExport
             PayeeDef payee;
             if (!Payees.TryGetValue(trx.strDescription, out payee))
             {
-                payee = new PayeeDef();
-                payee.Name = trx.strDescription;
+                payee = new PayeeDef(trx.strDescription, GetValidPayeeExportBase(trx.strDescription));
                 Payees.Add(trx.strDescription, payee);
             }
             switch (GetPayeeUsage(trx))
@@ -91,23 +96,82 @@ namespace GeneralPlugins.IntuitExport
                     string catName = catTrans.strKeyToValue1(split.strCategoryKey);
                     string exportName = GetBuiltinIntuitCatName(catName);
                     if (exportName == null)
-                        exportName = catName;
+                    {
+                        exportName = GetValidCategoryExport(catName);
+                    }
                     cat = new CatDef(split.strCategoryKey, catName, exportName);
                     Categories.Add(cat.Key, cat);
                 }
             }
         }
 
-        private void OutputAccounts()
+        private string GetValidPayeeExportBase(string rawInputName)
         {
-            OutputLine("!ACCNT\tNAME\tACCNTTYPE");
-            foreach (Account acct in Company.colAccounts)
+            int maxLength = 40;
+            string normalizedInputName = rawInputName.Replace(':', '-');
+            string candidateName = normalizedInputName;
+            if (candidateName.Length > maxLength)
+                candidateName = normalizedInputName.Substring(0, maxLength);
+            for (int suffix = 2; ; suffix++)
             {
-                OutputAccount(acct);
+                bool payeeFound = false;
+                foreach (PayeeDef payee in Payees.Values)
+                {
+                    if (payee.ExportBase == candidateName)
+                    {
+                        payeeFound = true;
+                        break;
+                    }
+                }
+                if (!payeeFound)
+                    return candidateName;
+                candidateName = normalizedInputName;
+                if (candidateName.Length > (maxLength - 3))
+                    candidateName = candidateName.Substring(0, (maxLength - 3));
+                candidateName = candidateName + suffix.ToString();
             }
         }
 
-        private void OutputAccount(Account acct)
+        private string GetValidCategoryExport(string rawInputName)
+        {
+            int maxLength = 40;
+            string normalizedInputName = rawInputName.Replace(':', '-');
+            if (normalizedInputName.Length > 2)
+                normalizedInputName = normalizedInputName.Substring(2);
+            string candidateName = normalizedInputName;
+            if (candidateName.Length > maxLength)
+                candidateName = normalizedInputName.Substring(0, maxLength);
+            for (int suffix = 2; ; suffix++)
+            {
+                bool catFound = false;
+                foreach (CatDef cat in Categories.Values)
+                {
+                    if (cat.ExportName == candidateName)
+                    {
+                        catFound = true;
+                        break;
+                    }
+                }
+                if (!catFound)
+                    return candidateName;
+                candidateName = normalizedInputName;
+                if (candidateName.Length > (maxLength - 3))
+                    candidateName = candidateName.Substring(0, (maxLength - 3));
+                candidateName = candidateName + suffix.ToString();
+            }
+        }
+
+        private void OutputAccounts()
+        {
+            bool retEarningsCreated = false;
+            OutputLine("!ACCNT\tNAME\tACCNTTYPE\tEXTRA");
+            foreach (Account acct in Company.colAccounts)
+            {
+                OutputAccount(acct, ref retEarningsCreated);
+            }
+        }
+
+        private void OutputAccount(Account acct, ref bool retEarningsCreated)
         {
             if (acct.lngType == Account.AccountType.Personal)
                 return;
@@ -146,7 +210,13 @@ namespace GeneralPlugins.IntuitExport
                     OutputAccount(acct, "EQUITY");
                     break;
                 case Account.SubType.Equity_RetainedEarnings:
-                    OutputAccount(acct, "EQUITY");
+                    string retEarningsExtra = "";
+                    if (!retEarningsCreated)
+                    {
+                        retEarningsExtra = "RETEARNINGS";
+                        retEarningsCreated = true;
+                    }
+                    OutputAccount(acct, "EQUITY", extra: retEarningsExtra);
                     break;
                 case Account.SubType.Equity_Stock:
                     OutputAccount(acct, "EQUITY");
@@ -168,7 +238,7 @@ namespace GeneralPlugins.IntuitExport
             }
         }
 
-        private void OutputAccount(Account acct, string acctType)
+        private void OutputAccount(Account acct, string acctType, string extra = "")
         {
             OutputLine("ACCNT\t" + acct.strTitle + "\t" + acctType);
         }
@@ -176,7 +246,7 @@ namespace GeneralPlugins.IntuitExport
         private void OutputCategories()
         {
             OutputLine("!ACCNT\tNAME\tACCNTTYPE");
-            foreach(CatDef cat in Categories.Values)
+            foreach (CatDef cat in Categories.Values)
             {
                 if (GetBuiltinIntuitCatName(cat.Name) != null)
                     continue;
@@ -194,17 +264,19 @@ namespace GeneralPlugins.IntuitExport
 
         private string GetBuiltinIntuitAccountName(Account acct)
         {
-            // TO DO: Get actual special account names
-            if (acct.strTitle == "asdf")
-                return "BuiltInName";
+            if (BalanceSheetTranslator.TryGetValue(acct.strFileNameRoot, out BalanceSheetMap balMap))
+            {
+                return balMap.IntuitName;
+            }
             return null;
         }
 
         private string GetBuiltinIntuitCatName(string catName)
         {
-            // TO DO: Get actual special category names
-            if (catName == "I:?????")
-                return "Sales";
+            if (CategoryTranslator.TryGetValue(catName, out CategoryMap catMap))
+            {
+                return catMap.IntuitName;
+            }
             return null;
         }
 
@@ -223,7 +295,7 @@ namespace GeneralPlugins.IntuitExport
             if (payee.DepositCount > 0)
                 OutputPayee(payee.ExportName(PayeeUsage.Income), "CUST");
             if (payee.OtherCount > 0)
-                OutputPayee(payee.ExportName(PayeeUsage.Other), "OTHER");
+                OutputPayee(payee.ExportName(PayeeUsage.Other), "OTHERNAME");
         }
 
         private void OutputPayee(string payeeName, string tag)
@@ -240,12 +312,16 @@ namespace GeneralPlugins.IntuitExport
 
             foreach (Account acct in Company.colAccounts)
             {
-                foreach (Register reg in acct.colRegisters)
+                if (acct.lngType != Account.AccountType.Personal)
                 {
-                    foreach (Trx trx in reg.colDateRange(StartDate, EndDate))
+                    foreach (Register reg in acct.colRegisters)
                     {
-                        if (trx is NormalTrx)
-                            OutputNormalTrx(trx as NormalTrx);
+                        foreach (Trx trx in reg.colDateRange(StartDate, EndDate))
+                        {
+                            NormalTrx normalTrx = trx as NormalTrx;
+                            if (normalTrx != null && !normalTrx.blnFake)
+                                OutputNormalTrx(normalTrx);
+                        }
                     }
                 }
             }
@@ -284,7 +360,7 @@ namespace GeneralPlugins.IntuitExport
 
         private void OutputNormalTrx(NormalTrx trx, string transType, string registerAccountName, string payeeName)
         {
-            OutputLine("TRNS\t\t" + transType + "\t" + trx.datDate.ToString("MM/dd/yyyy") + "\t" + registerAccountName + 
+            OutputLine("TRNS\t\t" + transType + "\t" + trx.datDate.ToString("MM/dd/yyyy") + "\t" + registerAccountName +
                 "\t" + payeeName + "\t" + trx.curAmount.ToString("##############0.00") +
                 "\t" + trx.strNumber + "\t" + trx.strMemo + "\tY\tN");
         }
@@ -304,7 +380,7 @@ namespace GeneralPlugins.IntuitExport
             {
                 int incCount = 0;
                 int expCount = 0;
-                foreach(TrxSplit split in trx.colSplits)
+                foreach (TrxSplit split in trx.colSplits)
                 {
                     if (split.curAmount < 0)
                         expCount++;
@@ -331,20 +407,27 @@ namespace GeneralPlugins.IntuitExport
         private class PayeeDef
         {
             public string Name;
+            public string ExportBase;
             public int PaymentCount = 0;
             public int DepositCount = 0;
             public int OtherCount = 0;
+
+            public PayeeDef(string name, string exportBase)
+            {
+                Name = name;
+                ExportBase = exportBase;
+            }
 
             public string ExportName(PayeeUsage usage)
             {
                 switch (usage)
                 {
                     case PayeeUsage.Expense:
-                        return Name;
+                        return ExportBase;
                     case PayeeUsage.Income:
-                        return Name + "(I)";
+                        return ExportBase + "(I)";
                     case PayeeUsage.Other:
-                        return Name + "(O)";
+                        return ExportBase + "(O)";
                     default:
                         throw new ArgumentOutOfRangeException("Invalid PayeeUsage");
                 }
@@ -380,6 +463,20 @@ namespace GeneralPlugins.IntuitExport
             Expense = 1,
             Income = 2,
             Other = 3
+        }
+
+        public class AccountMap
+        {
+            public string LocalName;
+            public string IntuitName;
+        }
+
+        public class BalanceSheetMap : AccountMap
+        {
+        }
+
+        public class CategoryMap : AccountMap
+        {
         }
     }
 }
