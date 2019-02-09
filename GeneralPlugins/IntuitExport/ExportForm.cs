@@ -16,9 +16,9 @@ namespace GeneralPlugins.IntuitExport
         private ExportEngine ExportEngine;
         private IHostUI HostUI;
         private string BalSheetTranslatorFileName;
-        private Dictionary<string, ExportEngine.BalanceSheetMap> BalSheetTranslator;
+        private Dictionary<string, ExportEngine.BalanceSheetMap> BalanceSheetMaps;
         private string CatTranslatorFileName;
-        private Dictionary<string, ExportEngine.CategoryMap> CatTranslator;
+        private Dictionary<string, ExportEngine.CategoryMap> CategoryMaps;
 
         public ExportForm()
         {
@@ -37,8 +37,8 @@ namespace GeneralPlugins.IntuitExport
                 // Set ExportEngine properties
                 ExportEngine.StartDate = ctlStartDate.Value;
                 ExportEngine.EndDate = ctlEndDate.Value;
-                ExportEngine.BalanceSheetTranslator = BalSheetTranslator;
-                ExportEngine.CategoryTranslator = CatTranslator;
+                ExportEngine.BalanceSheetMaps = BalanceSheetMaps;
+                ExportEngine.CategoryMaps = CategoryMaps;
             }
             return result;
         }
@@ -105,9 +105,9 @@ namespace GeneralPlugins.IntuitExport
 
         private void btnOkay_Click(object sender, EventArgs e)
         {
-            if (!TryLoadFile(BalSheetTranslatorFileName, out BalSheetTranslator))
+            if (!TryLoadFile(BalSheetTranslatorFileName, out BalanceSheetMaps))
                 return;
-            if (!TryLoadFile(CatTranslatorFileName, out CatTranslator))
+            if (!TryLoadFile(CatTranslatorFileName, out CategoryMaps))
                 return;
             this.Close();
         }
