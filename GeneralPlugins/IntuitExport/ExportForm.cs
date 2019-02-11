@@ -54,21 +54,21 @@ namespace GeneralPlugins.IntuitExport
 
         private void btnBalSheetTranslatorHelp_Click(object sender, EventArgs e)
         {
-            HostUI.InfoMessageBox("A new account will be be created in QuickBooks " +
+            HostUI.InfoMessageBox("A new balance sheet account will be be created in QuickBooks " +
                 "for every balance sheet account in " + HostUI.strSoftwareName + 
                 ", unless you use a balance sheet translation file to specify " +
                 "existing QuickBooks accounts to use instead " +
                 "for some of your accounts." +
                 Environment.NewLine + Environment.NewLine +
-                "The balance sheet translation file is text file that contains one " +
+                "The balance sheet translation file is a text file that contains one " +
                 "line for each account you want to use an existing QuickBooks account for. " +
                 "You can create this file with Windows Notepad, or any other text editor. " +
                 "You cannot use Microsoft Word, or any other word processing software, " + 
                 "because these do not create a simple text file! " +
                 Environment.NewLine + Environment.NewLine +
-                "Each line starts with the " + HostUI.strSoftwareName + " account name, " +
-                "then a tab, and ends with the equivalent QuickBooks account name. " +
-                "Two names, separated by a tab. " +
+                "Each line starts with the " + HostUI.strSoftwareName + " account file name (e.g. \"Checking.act\"), " +
+                "then a tab, and ends with the equivalent QuickBooks account name (e.g. \"Checking\"). " +
+                "Two names, separated by a tab, no quotes. " +
                 "You do not have to add a line for every account - any accounts you do not " +
                 "mention will simply be created as new accounts in QuickBooks.");
         }
@@ -85,7 +85,7 @@ namespace GeneralPlugins.IntuitExport
         private void btnCatTranslatorHelp_Click(object sender, EventArgs e)
         {
             HostUI.InfoMessageBox("A new income or expense account will be created in QuickBooks " +
-                "for every category in " + HostUI.strSoftwareName +
+                "for every income and expense category in " + HostUI.strSoftwareName +
                 ", unless you use a category translation file to specify " +
                 "existing QuickBooks income or expense accounts to use instead " + 
                 "for some of your categories. " +
@@ -96,9 +96,9 @@ namespace GeneralPlugins.IntuitExport
                 "You cannot use Microsoft Word, or any other word processing software, " +
                 "because these do not create a simple text file! " +
                 Environment.NewLine + Environment.NewLine +
-                "Each line starts with the " + HostUI.strSoftwareName + " category name, " +
-                "then a tab, and ends with the QuickBooks income or expense account name. " +
-                "Two names, separated by a tab. " +
+                "Each line starts with the " + HostUI.strSoftwareName + " category name (e.g. \"E:Advertising\"), " +
+                "then a tab, and ends with the QuickBooks income or expense account name (e.g. \"Advertising\"). " +
+                "Two names, separated by a tab, no quotes. " +
                 "You do not have to add a line for every category - any categories you do not " +
                 "mention will simply be created as new income/expense accounts in QuickBooks.");
         }

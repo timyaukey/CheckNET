@@ -31,9 +31,11 @@ namespace GeneralPlugins.IntuitExport
          * A "CHECK" entry can be used for ANY debit use in an asset account, for example an ACH transfer or debit card use.
          * A "CHECK" may have a split with a credit amount, so long as the net total of the transaction is a debit.
          * A "CHECK" entry can use Accounts Payable for a split account.
-         * A transaction in Accounts Payable should be "BILL" for a debit amount, and "BILL REFUND" for a credit amount.
-         * A "BILL" or "BILL REFUND" entry, or a transaction in Accounts Payable, requires a non-blank payee name for the "NAME" field.
-         * A split to an Accounts Payable account requires a non-blank payee name for the "NAME" field.
+         * A transaction in an A/P account should be "BILL" for a net debit amount, and "BILL REFUND" for a net credit amount.
+         * A transaction in an A/P account requires a non-blank vendor name for the "NAME" field.
+         * A transaction in an A/P account may have multiple splits, and all of them should have a blank "NAME" field.
+         * A transaction in a non-A/P account with a split pointing an A/P account requires a non-blank vendor name for the "NAME" field.
+         * A transaction in a non-A/P account may have only one split pointing to an A/P account.
          * A "DEPOSIT" entry must have a credit net amount.
          * A "DEPOSIT" entry may use a vendor name or other name, but the name will be blank in the transaction created.
          * A "DEPOSIT" entry can leave the name field blank.
@@ -125,7 +127,7 @@ namespace GeneralPlugins.IntuitExport
             string normalizedPayee = trimmedPayee.ToLower();
             if (!Payees.TryGetValue(normalizedPayee, out payee))
             {
-                payee = new PayeeDef(trimmedPayee, GetValidPayeeExportName(trimmedPayee));
+                payee = new PayeeDef(trimmedPayee, MakeUniquePayeeExportName(trimmedPayee));
                 Payees.Add(normalizedPayee, payee);
             }
             if (trx.datDate >= StartDate)
@@ -143,18 +145,17 @@ namespace GeneralPlugins.IntuitExport
             foreach (TrxSplit split in trx.colSplits)
             {
                 CatDef cat;
-                if (!Categories.TryGetValue(split.strCategoryKey, out cat))
+                string catExportKey = GetCatExportKey(split.strCategoryKey);
+                if (!Categories.TryGetValue(catExportKey, out cat))
                 {
                     string catName = CatTrans.strKeyToValue1(split.strCategoryKey);
-                    string exportName = GetBuiltinIntuitCatName(catName);
-                    if (exportName == null)
-                    {
-                        exportName = GetValidCategoryExportName(catName);
-                    }
                     StringTransElement catElem = this.Company.objCategories.get_objElement(this.Company.objCategories.intLookupKey(split.strCategoryKey));
                     string catType;
                     if (!catElem.colValues.TryGetValue(CategoryTranslator.strTypeKey, out catType))
                         catType = CategoryTranslator.strTypeOfficeExpense;
+                    // A null intuitCatType value will cause this category to NOT be output to the IIF file.
+                    // This is how we prevent categories that are actually asset, liability and equity accounts
+                    // from being output to the IIF as income, expense or COGS account.
                     string intuitCatType = null;
                     if (catType == CategoryTranslator.strTypeCOGS)
                         intuitCatType = "COGS";
@@ -162,62 +163,34 @@ namespace GeneralPlugins.IntuitExport
                         intuitCatType = "EXP";
                     else if (catName.ToUpper().StartsWith("I:"))
                         intuitCatType = "INC";
-                    cat = new CatDef(split.strCategoryKey, catName, exportName, intuitCatType);
-                    Categories.Add(cat.Key, cat);
+                    cat = new CatDef(catName, MakeCatExportName(split, catName), intuitCatType);
+                    Categories.Add(catExportKey, cat);
                 }
             }
         }
 
-        private string TrimPayeeName(string originalName)
+        private string MakeCatExportName(TrxSplit split, string catName)
         {
-            // Remove everything inside paired parentheses, and trim leading and trailing whitespace.
-            string result = originalName;
-            for (; ; )
+            string exportName;
+            int periodIndex = split.strCategoryKey.IndexOf('.');
+            if (periodIndex < 0)
             {
-                if (result.Length <= 15)
-                    break;
-                int startIndex = result.IndexOf('(', 15);
-                if (startIndex < 0)
-                    break;
-                int endIndex = result.IndexOf(')', startIndex);
-                if (endIndex < 0)
-                    break;
-                if (endIndex == result.Length - 1)
-                    result = result.Substring(0, startIndex);
-                else
-                    result = result.Substring(0, startIndex) + result.Substring(endIndex + 1);
+                exportName = GetPreExistingIntuitCatName(catName);
+                if (exportName == null)
+                    exportName = MakeUniqueCategoryExportName(catName);
             }
-            return result.Trim();
+            else
+            {
+                int acctKey = int.Parse(split.strCategoryKey.Substring(0, periodIndex));
+                Account matchingAcct = Company.colAccounts.First(acct => acct.intKey == acctKey);
+                exportName = GetPreExistingIntuitAccountName(matchingAcct);
+                if (exportName == null)
+                    exportName = MakeValidExportAccountName(matchingAcct);
+            }
+            return exportName;
         }
 
-        private string GetValidPayeeExportName(string rawInputName)
-        {
-            int maxLength = 40;
-            string normalizedInputName = rawInputName.Replace(':', '-');
-            string candidateName = normalizedInputName;
-            if (candidateName.Length > maxLength)
-                candidateName = normalizedInputName.Substring(0, maxLength);
-            for (int suffix = 2; ; suffix++)
-            {
-                bool payeeFound = false;
-                foreach (PayeeDef payee in Payees.Values)
-                {
-                    if (payee.ExportName == candidateName)
-                    {
-                        payeeFound = true;
-                        break;
-                    }
-                }
-                if (!payeeFound)
-                    return candidateName;
-                candidateName = normalizedInputName;
-                if (candidateName.Length > (maxLength - 3))
-                    candidateName = candidateName.Substring(0, (maxLength - 3));
-                candidateName = candidateName + suffix.ToString();
-            }
-        }
-
-        private string GetValidCategoryExportName(string rawInputName)
+        private string MakeUniqueCategoryExportName(string rawInputName)
         {
             int maxLength = 40;
             string normalizedInputName = rawInputName.Replace(':', '-');
@@ -246,6 +219,68 @@ namespace GeneralPlugins.IntuitExport
             }
         }
 
+        private string GetCatExportKey(string catKey)
+        {
+            int periodIndex = catKey.IndexOf('.');
+            if (periodIndex < 0)
+                return catKey;
+            return catKey.Substring(0, periodIndex + 1) + "Act";
+        }
+
+        private string TrimPayeeName(string originalName)
+        {
+            // Remove everything inside paired parentheses, and trim leading and trailing whitespace.
+            string result = originalName;
+            for (; ; )
+            {
+                if (result.Length <= 15)
+                    break;
+                int startIndex = result.IndexOf('(', 15);
+                if (startIndex < 0)
+                    break;
+                int endIndex = result.IndexOf(')', startIndex);
+                if (endIndex < 0)
+                    break;
+                if (endIndex == result.Length - 1)
+                    result = result.Substring(0, startIndex);
+                else
+                    result = result.Substring(0, startIndex) + result.Substring(endIndex + 1);
+            }
+            return result.Trim();
+        }
+
+        private string MakeUniquePayeeExportName(string rawInputName)
+        {
+            int maxLength = 40;
+            string normalizedInputName = rawInputName.Replace(':', '-').Replace(",", "");
+            string candidateName = normalizedInputName;
+            if (candidateName.Length > maxLength)
+                candidateName = normalizedInputName.Substring(0, maxLength);
+            for (int suffix = 2; ; suffix++)
+            {
+                bool payeeFound = false;
+                foreach (PayeeDef payee in Payees.Values)
+                {
+                    if (payee.ExportName == candidateName)
+                    {
+                        payeeFound = true;
+                        break;
+                    }
+                }
+                if (!payeeFound)
+                    return candidateName;
+                candidateName = normalizedInputName;
+                if (candidateName.Length > (maxLength - 3))
+                    candidateName = candidateName.Substring(0, (maxLength - 3));
+                candidateName = candidateName + suffix.ToString();
+            }
+        }
+
+        private string MakeValidExportAccountName(Account acct)
+        {
+            return acct.strTitle;
+        }
+
         private void OutputAccounts()
         {
             bool retEarningsCreated = false;
@@ -260,7 +295,7 @@ namespace GeneralPlugins.IntuitExport
         {
             if (acct.lngType == Account.AccountType.Personal)
                 return;
-            if (GetBuiltinIntuitAccountName(acct) != null)
+            if (GetPreExistingIntuitAccountName(acct) != null)
                 return;
             switch (acct.lngSubType)
             {
@@ -325,7 +360,7 @@ namespace GeneralPlugins.IntuitExport
 
         private void OutputAccount(Account acct, string acctType, string extra = "")
         {
-            OutputLine("ACCNT\t" + acct.strTitle + "\t" + acctType);
+            OutputLine("ACCNT\t" + MakeValidExportAccountName(acct) + "\t" + acctType);
         }
 
         private void OutputCategories()
@@ -333,19 +368,15 @@ namespace GeneralPlugins.IntuitExport
             OutputLine("!ACCNT\tNAME\tACCNTTYPE");
             foreach (CatDef cat in Categories.Values)
             {
-                if (GetBuiltinIntuitCatName(cat.Name) != null)
+                if (GetPreExistingIntuitCatName(cat.Name) != null)
                     continue;
-                if (!string.IsNullOrEmpty(cat.IntuitCatType ))
-                    OutputCategory(cat.ExportName, cat.IntuitCatType);
+                // Will be null for categories that point to asset, liability or equity accounts.
+                if (!string.IsNullOrEmpty(cat.IntuitCatType))
+                    OutputLine("ACCNT\t" + cat.ExportName + "\t" + cat.IntuitCatType);
             }
         }
 
-        private void OutputCategory(string name, string catType)
-        {
-            OutputLine("ACCNT\t" + name + "\t" + catType);
-        }
-
-        private string GetBuiltinIntuitAccountName(Account acct)
+        private string GetPreExistingIntuitAccountName(Account acct)
         {
             if (BalanceSheetMaps.TryGetValue(acct.strFileNameRoot, out BalanceSheetMap balMap))
             {
@@ -354,7 +385,7 @@ namespace GeneralPlugins.IntuitExport
             return null;
         }
 
-        private string GetBuiltinIntuitCatName(string catName)
+        private string GetPreExistingIntuitCatName(string catName)
         {
             if (CategoryMaps.TryGetValue(catName, out CategoryMap catMap))
             {
@@ -369,15 +400,10 @@ namespace GeneralPlugins.IntuitExport
             {
                 if (payee.UsedForCheck || payee.UsedForGeneralJournal)
                 {
-                    OutputPayee(payee.ExportName, "VEND");
+                    OutputLine("!VEND\tNAME");
+                    OutputLine("VEND\t" + payee.ExportName);
                 }
             }
-        }
-
-        private void OutputPayee(string payeeName, string tag)
-        {
-            OutputLine("!" + tag + "\tNAME");
-            OutputLine(tag + "\t" + payeeName);
         }
 
         private void OutputTransactions()
@@ -407,76 +433,85 @@ namespace GeneralPlugins.IntuitExport
         {
             PayeeDef payee = Payees[TrimPayeeName(trx.strDescription).ToLower()];
             TrxOutputType usage = GetPayeeUsage(trx);
-            string registerAccountName = GetBuiltinIntuitAccountName(trx.objReg.objAccount);
+            string registerAccountName = GetPreExistingIntuitAccountName(trx.objReg.objAccount);
             if (registerAccountName == null)
                 registerAccountName = trx.objReg.objAccount.strTitle;
             switch (usage)
             {
                 case TrxOutputType.Check:
-                    OutputNormalTrx(trx, "CHECK", registerAccountName, payee.ExportName);
-                    foreach (TrxSplit split in trx.colSplits)
-                        OutputSplit(split, "CHECK", GetPayeeNameIfRequired(split, payee.ExportName));
-                    OutputLine("ENDTRNS");
+                    if (ContainsPayablesSplit(trx.colSplits))
+                        OutputTransactionPerSplit(trx, registerAccountName, payee, "CHECK", usePayeeOnSplit: SplitIsToAccountsPayable);
+                    else
+                        OutputOneTransaction(trx, registerAccountName, payee, "CHECK", usePayeeOnTrx: true);
                     break;
                 case TrxOutputType.Deposit:
-                    OutputNormalTrx(trx, "DEPOSIT", registerAccountName, "");
-                    foreach (TrxSplit split in trx.colSplits)
-                        OutputSplit(split, "DEPOSIT", GetPayeeNameIfRequired(split, payee.ExportName));
-                    OutputLine("ENDTRNS");
+                    OutputOneTransaction(trx, registerAccountName, payee, "DEPOSIT", usePayeeOnTrx: false);
                     break;
                 case TrxOutputType.JournalEntry:
-                    OutputNormalTrx(trx, "GENERAL JOURNAL", registerAccountName, payee.ExportName);
-                    foreach (TrxSplit split in trx.colSplits)
-                        OutputSplit(split, "GENERAL JOURNAL", GetPayeeNameIfRequired(split, payee.ExportName));
-                    OutputLine("ENDTRNS");
+                    if (ContainsPayablesSplit(trx.colSplits))
+                        OutputTransactionPerSplit(trx, registerAccountName, payee, "GENERAL JOURNAL", usePayeeOnSplit: SplitIsToAccountsPayable);
+                    else
+                        OutputOneTransaction(trx, registerAccountName, payee, "GENERAL JOURNAL", usePayeeOnTrx: true);
                     break;
                 case TrxOutputType.Bill:
-                    OutputNormalTrx(trx, "BILL", registerAccountName, payee.ExportName);
-                    foreach (TrxSplit split in trx.colSplits)
-                        OutputSplit(split, "BILL", "");
-                    OutputLine("ENDTRNS");
+                    OutputOneTransaction(trx, registerAccountName, payee, "BILL", usePayeeOnTrx: true);
                     break;
                 case TrxOutputType.BillCredit:
-                    OutputNormalTrx(trx, "BILL REFUND", registerAccountName, payee.ExportName);
-                    foreach (TrxSplit split in trx.colSplits)
-                        OutputSplit(split, "BILL REFUND", "");
-                    OutputLine("ENDTRNS");
+                    OutputOneTransaction(trx, registerAccountName, payee, "BILL REFUND", usePayeeOnTrx: true);
                     break;
             }
         }
 
-        private void OutputNormalTrx(NormalTrx trx, string transType, string registerAccountName, string payeeName)
+        private void OutputOneTransaction(NormalTrx trx, string registerAccountName, PayeeDef payee, string intuitTrxType, bool usePayeeOnTrx)
+        {
+            OutputNormalTrx(trx, intuitTrxType, registerAccountName, usePayeeOnTrx ? payee.ExportName : "", trx.curAmount);
+            foreach (TrxSplit split in trx.colSplits)
+            {
+                OutputSplit(split, intuitTrxType, "");
+            }
+            OutputLine("ENDTRNS");
+        }
+
+        private void OutputTransactionPerSplit(NormalTrx trx, string registerAccountName, PayeeDef payee, 
+            string intuitTrxType, Func<TrxSplit, bool> usePayeeOnSplit)
+        {
+            foreach (TrxSplit split in trx.colSplits)
+            {
+                // Notice we pass the split amount instead of the trx amount, because every split
+                // of this transaction type must be a separate transaction in an IIF file.
+                OutputNormalTrx(trx, intuitTrxType, registerAccountName, payee.ExportName, split.curAmount);
+                OutputSplit(split, intuitTrxType, usePayeeOnSplit(split) ? payee.ExportName : "");
+                OutputLine("ENDTRNS");
+            }
+        }
+
+        private bool ContainsPayablesSplit(IEnumerable<TrxSplit> splits)
+        {
+            return splits.Any(split => SplitIsToAccountsPayable(split));
+        }
+
+        private bool SplitIsToAccountsPayable(TrxSplit split)
+        {
+            int dotIndex = split.strCategoryKey.IndexOf('.');
+            if (dotIndex < 0)
+                return false;
+            int acctKey = int.Parse(split.strCategoryKey.Substring(0, dotIndex));
+            return Company.colAccounts.First(acct => acct.intKey == acctKey).lngSubType == Account.SubType.Liability_AccountsPayable;
+        }
+
+        private void OutputNormalTrx(NormalTrx trx, string transType, string registerAccountName, string payeeName, decimal amount)
         {
             OutputLine("TRNS\t\t" + transType + "\t" + trx.datDate.ToString("MM/dd/yyyy") + "\t" + registerAccountName +
-                "\t" + payeeName + "\t" + trx.curAmount.ToString("##############0.00") +
+                "\t" + payeeName + "\t" + amount.ToString("##############0.00") +
                 "\t" + trx.strNumber + "\t" + trx.strMemo + "\tY\tN");
         }
 
         private void OutputSplit(TrxSplit split, string transType, string payeeName)
         {
-            CatDef cat = Categories[split.strCategoryKey];
+            CatDef cat = Categories[GetCatExportKey(split.strCategoryKey)];
             OutputLine("SPL\t\t" + transType + "\t" + split.objParent.datDate.ToString("MM/dd/yyyy") +
                 "\t" + cat.ExportName + "\t" + payeeName + "\t" + (-split.curAmount).ToString("##############0.00") +
                 "\t\t" + split.strMemo + "\tY");
-        }
-
-        private string GetPayeeNameIfRequired(TrxSplit split, string payeeName)
-        {
-            int dotIndex = split.strCategoryKey.IndexOf('.');
-            if (dotIndex < 0)
-                return "";
-            int acctKey = int.Parse(split.strCategoryKey.Substring(0, dotIndex));
-            foreach(Account acct in Company.colAccounts)
-            {
-                if (acct.intKey == acctKey)
-                {
-                    if (acct.lngSubType == Account.SubType.Liability_AccountsPayable)
-                        return payeeName;
-                    else
-                        return "";
-                }
-            }
-            throw new Exception("Could not find account key in split");
         }
 
         private TrxOutputType GetPayeeUsage(NormalTrx trx)
@@ -488,7 +523,12 @@ namespace GeneralPlugins.IntuitExport
                 if (trx.curAmount < 0)
                     return TrxOutputType.Check;
                 else if (trx.curAmount > 0)
-                    return TrxOutputType.Deposit;
+                {
+                    if (ContainsPayablesSplit(trx.colSplits))
+                        return TrxOutputType.JournalEntry;
+                    else
+                        return TrxOutputType.Deposit;
+                }
             }
             else if (subType == Account.SubType.Liability_AccountsPayable)
             {
@@ -521,14 +561,12 @@ namespace GeneralPlugins.IntuitExport
 
         private class CatDef
         {
-            public string Key;
             public string Name;
             public string ExportName;
             public string IntuitCatType;
 
-            public CatDef(string key, string name, string exportName, string intuitCatType)
+            public CatDef(string name, string exportName, string intuitCatType)
             {
-                Key = key;
                 Name = name;
                 ExportName = exportName;
                 IntuitCatType = intuitCatType;
