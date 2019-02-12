@@ -82,7 +82,7 @@ namespace GeneralPlugins.IntuitExport
             List<NormalTrx> normalTrxToAnalyze = new List<NormalTrx>();
             foreach (Account acct in Company.colAccounts)
             {
-                if (acct.lngType != Account.AccountType.Personal)
+                if (!SkipAccount(acct))
                 {
                     foreach (Register reg in acct.colRegisters)
                     {
@@ -118,6 +118,18 @@ namespace GeneralPlugins.IntuitExport
             {
                 AnalyzeNormalTrx(trx);
             }
+        }
+
+        private bool SkipAccount(Account acct)
+        {
+            // We can't export retained earnings because QuickBooks creates entries in
+            // that account from the balances in the income and expense accounts,
+            // and there is no way to edit or delete those transactions. Strangely,
+            // it is possible to import transactions into that account, but those
+            // cannot be edited either. So we need to let QuickBooks manufacture
+            // everything in that account instead of importing it.
+            return (acct.lngType == Account.AccountType.Personal) ||
+                (acct.lngSubType == Account.SubType.Equity_RetainedEarnings);
         }
 
         private void AnalyzeNormalTrx(NormalTrx trx)
@@ -329,6 +341,7 @@ namespace GeneralPlugins.IntuitExport
                 case Account.SubType.Equity_Capital:
                     OutputAccount(acct, "EQUITY");
                     break;
+                // I don't think this is actually used, unless we decide to export retained earnings.
                 case Account.SubType.Equity_RetainedEarnings:
                     string retEarningsExtra = "";
                     if (!retEarningsCreated)
@@ -414,7 +427,7 @@ namespace GeneralPlugins.IntuitExport
 
             foreach (Account acct in Company.colAccounts)
             {
-                if (acct.lngType != Account.AccountType.Personal)
+                if (!SkipAccount(acct))
                 {
                     foreach (Register reg in acct.colRegisters)
                     {
