@@ -232,8 +232,9 @@ Friend Class ListEditorForm
                     End If
                 End If
             End If
-            If blnElementIsUsed(intIndex) Then
-                mobjHostUI.ErrorMessageBox("List entry is used by an account.")
+            Dim strAccounts As String = ""
+            If blnElementIsUsed(intIndex, strAccounts) Then
+                mobjHostUI.ErrorMessageBox("Cannot delete list entry, because it is used by these accounts: " + strAccounts)
                 Exit Sub
             End If
 
@@ -530,22 +531,25 @@ Friend Class ListEditorForm
     '$Description Determine if lstElements entry intListIndex is used in any account.
     '   Checks for usage indicated by mlngListType.
 
-    Private Function blnElementIsUsed(ByVal intListIndex As Integer) As Boolean
+    Private Function blnElementIsUsed(ByVal intListIndex As Integer, ByRef strAccounts As String) As Boolean
         Dim strKey As String
         Dim objAccount As Account
 
         Try
 
             strKey = DirectCast(lstElements.Items(intListIndex), StringTransElement).strKey
+            strAccounts = ""
+            Dim strSep As String = ""
+            Dim isUsed As Boolean = False
             For Each objAccount In mobjCompany.colAccounts
                 If blnElementIsUsedInAccount(objAccount, strKey) Then
-                    blnElementIsUsed = True
-                    Exit Function
+                    strAccounts = strAccounts + strSep + objAccount.strTitle
+                    strSep = ", "
+                    isUsed = True
                 End If
             Next objAccount
-            blnElementIsUsed = False
 
-            Exit Function
+            Return isUsed
         Catch ex As Exception
             gNestedException(ex)
         End Try
