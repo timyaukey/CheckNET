@@ -65,6 +65,9 @@
   <ItemGroup>
     <Compile Include="IHostUI.vb" />
     <Compile Include="IPluginFactory.vb" />
+    <Compile Include="MenuBuilder.vb" />
+    <Compile Include="MenuElementAction.vb" />
+    <Compile Include="MenuElementBase.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

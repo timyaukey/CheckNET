@@ -119,14 +119,21 @@ Friend Class CBMainForm
         mobjHostUI.InfoMessageBox(strMessage)
     End Sub
 
-    Private colBankImportPlugins As List(Of IBankImportPlugin) = New List(Of IBankImportPlugin)
-    Private colCheckImportPlugins As List(Of ICheckImportPlugin) = New List(Of ICheckImportPlugin)
-    Private colDepositImportPlugins As List(Of IDepositImportPlugin) = New List(Of IDepositImportPlugin)
-    Private colInvoiceImportPlugins As List(Of IInvoiceImportPlugin) = New List(Of IInvoiceImportPlugin)
-    Private colReportPlugins As List(Of IReportPlugin) = New List(Of IReportPlugin)
-    Private colToolPlugins As List(Of IToolPlugin) = New List(Of IToolPlugin)
+    Private objBankImportMenu As MenuBuilder
+    Private objCheckImportMenu As MenuBuilder
+    Private objDepositImportMenu As MenuBuilder
+    Private objInvoiceImportMenu As MenuBuilder
+    Private objReportMenu As MenuBuilder
+    Private objToolMenu As MenuBuilder
 
     Private Sub LoadPlugins()
+        objBankImportMenu = New MenuBuilder(mnuImportBank)
+        objCheckImportMenu = New MenuBuilder(mnuImportChecks)
+        objDepositImportMenu = New MenuBuilder(mnuImportDeposits)
+        objInvoiceImportMenu = New MenuBuilder(mnuImportInvoices)
+        objReportMenu = New MenuBuilder(mnuRpt)
+        objToolMenu = New MenuBuilder(mnuTools)
+
         LoadPluginsFromAssembly(Assembly.GetEntryAssembly())
         Dim strEntryAssembly As String = Assembly.GetEntryAssembly().Location
         Dim strEntryFolder As String = Path.GetDirectoryName(strEntryAssembly)
@@ -134,12 +141,12 @@ Friend Class CBMainForm
             Dim assembly As Assembly = Assembly.LoadFrom(strFile)
             LoadPluginsFromAssembly(assembly)
         Next
-        AddPluginsToMenu(mnuImportBank, colBankImportPlugins)
-        AddPluginsToMenu(mnuImportChecks, colCheckImportPlugins)
-        AddPluginsToMenu(mnuImportDeposits, colDepositImportPlugins)
-        AddPluginsToMenu(mnuImportInvoices, colInvoiceImportPlugins)
-        AddPluginsToMenu(mnuRpt, colReportPlugins)
-        AddPluginsToMenu(mnuTools, colToolPlugins)
+        objBankImportMenu.AddElementsToMenu()
+        objCheckImportMenu.AddElementsToMenu()
+        objDepositImportMenu.AddElementsToMenu()
+        objInvoiceImportMenu.AddElementsToMenu()
+        objReportMenu.AddElementsToMenu()
+        objToolMenu.AddElementsToMenu()
     End Sub
 
     Private Sub LoadPluginsFromAssembly(ByVal objAssembly As Assembly)
@@ -153,44 +160,29 @@ Friend Class CBMainForm
 
     Private Sub LoadPluginsFromFactory(ByVal objFactory As IPluginFactory)
         For Each objPlugin As IPlugin In objFactory.colGetPlugins(Me)
-            If TypeOf objPlugin Is IBankImportPlugin Then
-                colBankImportPlugins.Add(DirectCast(objPlugin, IBankImportPlugin))
-            ElseIf TypeOf objPlugin Is ICheckImportPlugin Then
-                colCheckImportPlugins.Add(DirectCast(objPlugin, ICheckImportPlugin))
-            ElseIf TypeOf objPlugin Is IDepositImportPlugin Then
-                colDepositImportPlugins.Add(DirectCast(objPlugin, IDepositImportPlugin))
-            ElseIf TypeOf objPlugin Is IInvoiceImportPlugin Then
-                colInvoiceImportPlugins.Add(DirectCast(objPlugin, IInvoiceImportPlugin))
-            ElseIf TypeOf objPlugin Is IReportPlugin Then
-                colReportPlugins.Add(DirectCast(objPlugin, IReportPlugin))
-            ElseIf TypeOf objPlugin Is IToolPlugin Then
-                colToolPlugins.Add(DirectCast(objPlugin, IToolPlugin))
-            Else
-                'Plugin is of a type we don't know what to do with.
+            Dim objToolPlugin As IToolPlugin
+            If TypeOf objPlugin Is IToolPlugin Then
+                objToolPlugin = DirectCast(objPlugin, IToolPlugin)
+                Dim objAction As MenuElementAction = New MenuElementAction(objToolPlugin.GetMenuTitle(),
+                    objToolPlugin.SortCode(), AddressOf objToolPlugin.ClickHandler,
+                    Path.GetFileName(objPlugin.GetType().Assembly.Location))
+                If TypeOf objPlugin Is IBankImportPlugin Then
+                    objBankImportMenu.Add(objAction)
+                ElseIf TypeOf objPlugin Is ICheckImportPlugin Then
+                    objCheckImportMenu.Add(objAction)
+                ElseIf TypeOf objPlugin Is IDepositImportPlugin Then
+                    objDepositImportMenu.Add(objAction)
+                ElseIf TypeOf objPlugin Is IInvoiceImportPlugin Then
+                    objInvoiceImportMenu.Add(objAction)
+                ElseIf TypeOf objPlugin Is IReportPlugin Then
+                    objReportMenu.Add(objAction)
+                ElseIf TypeOf objPlugin Is IToolPlugin Then
+                    objToolMenu.Add(objAction)
+                Else
+                    'Plugin is of a type we don't know what to do with.
+                End If
             End If
         Next
-    End Sub
-
-    Private Sub AddPluginsToMenu(Of TPlugin As IToolPlugin)(ByVal objMenu As ToolStripMenuItem, ByVal colPlugins As List(Of TPlugin))
-        colPlugins.Sort(AddressOf PluginComparer)
-        For Each objPlugin As IToolPlugin In colPlugins
-            AddMenuOption(objMenu, objPlugin)
-        Next
-    End Sub
-
-    Private Function PluginComparer(ByVal objPlugin1 As IToolPlugin, ByVal objPlugin2 As IToolPlugin) As Integer
-        Dim intCompare As Integer = objPlugin1.SortCode().CompareTo(objPlugin2.SortCode())
-        If intCompare = 0 Then
-            intCompare = objPlugin1.GetMenuTitle().CompareTo(objPlugin2.GetMenuTitle())
-        End If
-        Return intCompare
-    End Function
-
-    Private Sub AddMenuOption(ByVal parent As ToolStripMenuItem, ByVal plugin As IToolPlugin)
-        Dim mnuNewItem As ToolStripMenuItem = New ToolStripMenuItem()
-        mnuNewItem.Text = plugin.GetMenuTitle()
-        AddHandler mnuNewItem.Click, AddressOf plugin.ClickHandler
-        parent.DropDownItems.Add(mnuNewItem)
     End Sub
 
     Private Sub CBMainForm_Activated(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Activated
@@ -630,8 +622,8 @@ Friend Class CBMainForm
     Private Sub mnuFilePlugins_Click(sender As Object, e As EventArgs) Handles mnuFilePlugins.Click
         Try
             Using frm As PluginList = New PluginList()
-                frm.ShowMe(mobjHostUI, colBankImportPlugins, colCheckImportPlugins, colDepositImportPlugins,
-                           colInvoiceImportPlugins, colReportPlugins, colToolPlugins)
+                frm.ShowMe(mobjHostUI, objBankImportMenu, objCheckImportMenu, objDepositImportMenu,
+                           objInvoiceImportMenu, objReportMenu, objToolMenu)
             End Using
         Catch ex As Exception
             gTopException(ex)
