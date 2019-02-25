@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using CheckBookLib;
+using PluginCore;
 
 [assembly: PluginFactory(typeof(BudgetDashboard.PluginFactory))]
 

@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using CheckBookLib;
+using PluginCore;
 
 namespace GeneralPlugins.IntuitExport
 {

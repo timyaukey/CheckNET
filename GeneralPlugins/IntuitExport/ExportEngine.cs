@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using CheckBookLib;
+using PluginCore;
 
 namespace GeneralPlugins.IntuitExport
 {

@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{67BC9967-B09A-4A5A-9BF5-40C9C9AF79EF}</ProjectGuid>
+    <ProjectGuid>{DF8C4177-36C2-414D-A363-09C33CB56FD4}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>ImportPlugins</RootNamespace>
-    <AssemblyName>ImportPlugins</AssemblyName>
+    <RootNamespace>PluginCore</RootNamespace>
+    <AssemblyName>PluginCore</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -18,9 +18,8 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>ImportPlugins.xml</DocumentationFile>
+    <DocumentationFile>PluginCore.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
-    <CodeAnalysisRuleSet>ImportPlugins.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,9 +27,8 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>ImportPlugins.xml</DocumentationFile>
+    <DocumentationFile>PluginCore.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
-    <CodeAnalysisRuleSet>ImportPlugins.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -45,60 +43,28 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic.Compatibility" />
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
   </ItemGroup>
   <ItemGroup>
+    <Import Include="CheckBookLib" />
     <Import Include="Microsoft.VisualBasic" />
+    <Import Include="Microsoft.VisualBasic.Compatibility" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Data" />
     <Import Include="System.Diagnostics" />
-    <Import Include="System.Drawing" />
-    <Import Include="System.Linq" />
-    <Import Include="System.Windows.Forms" />
-    <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BankImportAcctSelectForm.Designer.vb">
-      <DependentUpon>BankImportAcctSelectForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="BankImportAcctSelectForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BankImportForm.Designer.vb">
-      <DependentUpon>BankImportForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="BankImportForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Bank\BankImportOFX.vb" />
-    <Compile Include="Bank\BankImportPlugin.vb" />
-    <Compile Include="Bank\BankImportQIF.vb" />
-    <Compile Include="Bank\ImportHandlerBank.vb" />
-    <Compile Include="Checks\CheckImportCompuPay.vb" />
-    <Compile Include="Checks\CheckImportInsight.vb" />
-    <Compile Include="Checks\CheckImportPlugin.vb" />
-    <Compile Include="Checks\CheckImportStandard.vb" />
-    <Compile Include="Checks\ImportHandlerChecks.vb" />
-    <Compile Include="Deposits\DepositImportPlugin.vb" />
-    <Compile Include="Deposits\DepositImportStandard.vb" />
-    <Compile Include="Deposits\ImportHandlerDeposits.vb" />
-    <Compile Include="IImportHandler.vb" />
-    <Compile Include="ImportedTrx.vb" />
-    <Compile Include="ImportPlugins.vb" />
-    <Compile Include="ImportUtilities.vb" />
-    <Compile Include="Invoices\ImportHandlerInvoices.vb" />
-    <Compile Include="Invoices\InvoiceImportPlugin.vb" />
-    <Compile Include="Invoices\InvoiceImportStandard.vb" />
-    <Compile Include="ITrxReader.vb" />
+    <Compile Include="IHostUI.vb" />
+    <Compile Include="IPluginFactory.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -114,23 +80,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Bank\ReadBankOFX.vb" />
-    <Compile Include="Bank\ReadBankQIF.vb" />
-    <Compile Include="Checks\ReadChecks.vb" />
-    <Compile Include="Checks\ReadChecksSpec.vb" />
-    <Compile Include="Deposits\ReadDeposits.vb" />
-    <Compile Include="Invoices\ReadInvoices.vb" />
-    <Compile Include="TrxImportPlugin.vb" />
+    <Compile Include="PluginInterfaces.vb" />
+    <Compile Include="ReportPlugin.vb" />
+    <Compile Include="ToolPlugin.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="BankImportAcctSelectForm.resX">
-      <DependentUpon>BankImportAcctSelectForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="BankImportForm.resx">
-      <DependentUpon>BankImportForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -139,7 +93,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ImportPlugins.ruleset" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -154,10 +107,6 @@
     <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
       <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
       <Name>CheckBookLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PluginCore\PluginCore.vbproj">
-      <Project>{df8c4177-36c2-414d-a363-09c33cb56fd4}</Project>
-      <Name>PluginCore</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

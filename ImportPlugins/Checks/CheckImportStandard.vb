@@ -2,6 +2,7 @@
 Option Explicit On
 
 Imports CheckBookLib
+Imports PluginCore
 
 Public Class CheckImportStandard
     Inherits CheckImportPlugin

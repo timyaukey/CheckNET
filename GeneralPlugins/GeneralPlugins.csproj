@@ -57,6 +57,10 @@
       <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
       <Name>CheckBookLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PluginCore\PluginCore.vbproj">
+      <Project>{df8c4177-36c2-414d-a363-09c33cb56fd4}</Project>
+      <Name>PluginCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="IntuitExport\ExportForm.resx">

@@ -2,6 +2,7 @@
 Option Explicit On
 
 Imports CheckBookLib
+Imports PluginCore
 
 ''' <summary>
 ''' All deposit import plugins must inherit from this.

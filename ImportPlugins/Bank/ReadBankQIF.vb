@@ -2,6 +2,7 @@ Option Strict On
 Option Explicit On
 
 Imports CheckBookLib
+Imports PluginCore
 Imports System.IO
 
 Public Class ReadBankQIF

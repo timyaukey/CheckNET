@@ -94,6 +94,7 @@
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="Microsoft.VisualBasic.Compatibility" />
+    <Import Include="PluginCore" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
@@ -492,6 +493,10 @@
     <ProjectReference Include="..\ImportPlugins\ImportPlugins.vbproj">
       <Project>{67bc9967-b09a-4a5a-9bf5-40c9c9af79ef}</Project>
       <Name>ImportPlugins</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PluginCore\PluginCore.vbproj">
+      <Project>{df8c4177-36c2-414d-a363-09c33cb56fd4}</Project>
+      <Name>PluginCore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

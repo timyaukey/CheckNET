@@ -1,6 +1,7 @@
 ﻿Option Strict On
 Option Explicit On
 Imports CheckBookLib
+Imports PluginCore
 
 Public Class ImportHandlerBank
     Implements IImportHandler

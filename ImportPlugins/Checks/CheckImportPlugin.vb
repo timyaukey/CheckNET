@@ -2,6 +2,7 @@
 Option Explicit On
 
 Imports CheckBookLib
+Imports PluginCore
 
 ''' <summary>
 ''' All check import plugins must inherit from this.
