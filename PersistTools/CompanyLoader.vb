@@ -82,7 +82,9 @@ Public Class CompanyLoader
             Dim intFiles As Integer = 0
             Dim datCutoff As Date
             Dim astrFiles() As String = Nothing
+            Dim objLoader As AccountLoader
             Dim objAccount As Account
+            Dim colLoaders As List(Of AccountLoader) = New List(Of AccountLoader)
 
             While strFile <> ""
                 intFiles = intFiles + 1
@@ -95,8 +97,10 @@ Public Class CompanyLoader
             For Each strFile In astrFiles
                 objAccount = New Account
                 objAccount.Init(objCompany)
+                objLoader = New AccountLoader(objAccount)
+                colLoaders.Add(objLoader)
                 showAccount(objAccount)
-                objAccount.LoadStart(strFile)
+                objLoader.LoadStart(strFile)
                 objCompany.colAccounts.Add(objAccount)
                 showAccount(Nothing)
             Next strFile
@@ -108,24 +112,27 @@ Public Class CompanyLoader
             LoadCategories(objCompany)
 
             'Load generated transactions for all of them.
-            For Each objAccount In objCompany.colAccounts
+            For Each objLoader In colLoaders
+                objAccount = objLoader.objAccount
                 showAccount(objAccount)
-                objAccount.LoadGenerated(datCutoff)
+                objLoader.LoadGenerated(datCutoff)
                 showAccount(Nothing)
             Next
 
             'Call Trx.Apply() for all Trx loaded above.
             'This will create ReplicaTrx.
-            For Each objAccount In objCompany.colAccounts
+            For Each objLoader In colLoaders
+                objAccount = objLoader.objAccount
                 showAccount(objAccount)
-                objAccount.LoadApply()
+                objLoader.LoadApply()
                 showAccount(Nothing)
             Next
 
             'Perform final steps after all Trx exist, including computing running balances.
-            For Each objAccount In objCompany.colAccounts
+            For Each objLoader In colLoaders
+                objAccount = objLoader.objAccount
                 showAccount(objAccount)
-                objAccount.LoadFinish()
+                objLoader.LoadFinish()
                 showAccount(Nothing)
             Next
         Catch ex As Exception

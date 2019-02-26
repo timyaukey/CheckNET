@@ -937,13 +937,14 @@ Friend Class UTMainForm
         objReg.Init(objAccount, "Regular", "reg", False, 3)
         objRepeatSummarizer = New RepeatSummarizer()
         lngLinesRead = 0
+        Dim objReader As PersistTools.FileReader = New FileReader()
         Try
-            objReg.objAccount.OpenInputFile(mobjCompany.strAddPath("UTData\" & strFileName))
-            objLoader.LoadFile(objReg, objRepeatSummarizer, False, lngLinesRead)
+            objReader.OpenInputFile(mobjCompany.strAddPath("UTData\" & strFileName))
+            objLoader.LoadFile(objReader, objReg, objRepeatSummarizer, False, lngLinesRead)
         Catch ex As Exception
             Throw ex
         Finally
-            objReg.objAccount.CloseInputFile()
+            objReader.CloseInputFile()
         End Try
         objReg.LoadApply()
         objReg.LoadFinish()

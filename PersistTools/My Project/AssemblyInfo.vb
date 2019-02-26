@@ -10,9 +10,9 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("PersistTools")>
 <Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("")>
+<Assembly: AssemblyCompany("Willow Creek Software")>
 <Assembly: AssemblyProduct("PersistTools")>
-<Assembly: AssemblyCopyright("Copyright ©  2019")>
+<Assembly: AssemblyCopyright("Copyright © 2005-2019 Willow Creek Software")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>

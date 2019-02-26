@@ -147,7 +147,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Register\Register.vb" />
-    <Compile Include="Register\RegisterLoader.vb" />
     <Compile Include="Register\RegisterSaver.vb" />
     <Compile Include="Security.vb" />
     <Compile Include="TrxGen\TGERepeat.vb" />

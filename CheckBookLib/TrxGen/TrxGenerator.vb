@@ -1,7 +1,7 @@
 Option Strict On
 Option Explicit On
 
-Module TrxGenerator
+Public Module TrxGenerator
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     'Routines related to creating Trx with ITrxGenerator objects.

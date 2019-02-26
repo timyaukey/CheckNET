@@ -22,10 +22,6 @@ Public Class Account
     Private mintKey As Integer
     Private mlngType As AccountType
     Private mlngSubType As SubType
-    Private mintRelatedKey1 As Integer
-    Private mintRelatedKey2 As Integer
-    Private mintRelatedKey3 As Integer
-    Private mintRelatedKey4 As Integer
     Private mobjRelatedAcct1 As Account
     Private mobjRelatedAcct2 As Account
     Private mobjRelatedAcct3 As Account
@@ -43,11 +39,6 @@ Public Class Account
     Private mblnUnsavedChanges As Boolean
     'File for Save().
     Private mobjSaveFile As StreamWriter
-    'File for Load().
-    Private mobjLoadFile As TextReader
-    'RegisterLoader object used by LoadRegister().
-    'Is Nothing unless LoadRegister() is on the call stack.
-    Private WithEvents mobjLoader As RegisterLoader
 
     Public Enum AccountType
         Unspecified = 0
@@ -124,6 +115,10 @@ Public Class Account
 
     'Fired multiple times by register loading process.
     Public Event LoadStatus(ByVal strMessage As String)
+
+    Public Sub RaiseLoadStatus(ByVal strMessage As String)
+        RaiseEvent LoadStatus(strMessage)
+    End Sub
 
     '$Description Initialize a new instance.
     '   Must always be the first member used for a new instance.
@@ -266,271 +261,27 @@ Public Class Account
         End Get
     End Property
 
-    Friend ReadOnly Property objRepeatSummarizer() As RepeatSummarizer
+    Public Sub BuildRepeatList()
+        mobjRepeats = mobjRepeatSummarizer.BuildStringTranslator()
+    End Sub
+
+    Public ReadOnly Property objRepeatSummarizer() As RepeatSummarizer
         Get
             Return mobjRepeatSummarizer
         End Get
     End Property
 
-    Public ReadOnly Property blnUnsavedChanges() As Boolean
+    Public Property blnUnsavedChanges() As Boolean
         Get
             Return mblnUnsavedChanges
         End Get
+        Set(value As Boolean)
+            mblnUnsavedChanges = value
+        End Set
     End Property
-
-    Friend Sub RaiseLoadStatus(ByVal strMessage As String)
-        RaiseEvent LoadStatus(strMessage)
-    End Sub
 
     Friend Sub Teardown()
         mobjCompany = Nothing
-    End Sub
-
-    '$Description Load a new instance from an account file.
-    '   Must always be called immediately after Init().
-    '$Param strAcctFile Name of account file, without path.
-
-    Public Sub LoadStart(ByVal strAcctFile As String)
-
-        RaiseEvent LoadStatus("Loading " & strAcctFile)
-        mstrFileNameRoot = strAcctFile
-        mblnUnsavedChanges = False
-        mcolRegisters = New List(Of Register)
-        LoadIndividual()
-        'LoadGenerated()
-    End Sub
-
-    Private Sub LoadIndividual()
-        Dim strLine As String
-        Dim lngLinesRead As Integer
-        Dim strRegKey As String = ""
-        Dim strRegTitle As String = ""
-        Dim blnRegShow As Boolean
-        Dim blnAccountPropertiesValidated As Boolean
-
-        Try
-
-            OpenInputFile(mobjCompany.strAccountPath() & "\" & mstrFileNameRoot)
-
-            strLine = strReadLine()
-            lngLinesRead = lngLinesRead + 1
-            'The difference between FHCKBK1 and FHCKBK2 is that FHCKBK2 is hardcoded
-            'to use a specific budget file name and category file name, and repeat group
-            'file (acctfilename).rep instead of getting the file names from FC, FB and FR
-            'lines in the .act file.
-            If strLine <> "FHCKBK2" Then
-                gRaiseError("Invalid header line")
-            End If
-
-            'mobjRepeats = New StringTranslator()
-            mobjRepeatSummarizer = New RepeatSummarizer()
-            'mstrRepeatsFile = gstrAccountPath() & "\" & Replace(LCase(strAcctFile), ".act", ".rep")
-            'mobjRepeats.LoadFile(mstrRepeatsFile)
-            mlngType = AccountType.Unspecified
-
-            Do
-                strLine = strReadLine()
-                lngLinesRead = lngLinesRead + 1
-                Select Case Left(strLine, 2)
-                    Case "AT"
-                        mstrTitle = Mid(strLine, 3)
-                    Case "AK"
-                        Dim intNewKey As Integer = CInt(Mid(strLine, 3))
-                        If mobjCompany.blnAccountKeyUsed(intNewKey) Then
-                            Throw New Exception("Duplicate use of account key " & intNewKey)
-                        End If
-                        mintKey = intNewKey
-                        mobjCompany.UseAccountKey(mintKey)
-                    Case "AY"
-                        Dim objSubTypeMatched As SubTypeDef = Nothing
-                        For Each objSubType In arrSubTypeDefs
-                            If objSubType.strSaveCode = Mid(strLine, 3) Then
-                                objSubTypeMatched = objSubType
-                            End If
-                        Next
-                        If objSubTypeMatched Is Nothing Then
-                            Throw New Exception("Unrecognized account subtype")
-                        End If
-                        mlngType = objSubTypeMatched.lngType
-                        mlngSubType = objSubTypeMatched.lngSubType
-                    Case "AR"
-                        Select Case Mid(strLine, 3, 1)
-                            Case "1"
-                                mintRelatedKey1 = intLoadParseRelatedAccountKey(strLine)
-                            Case "2"
-                                mintRelatedKey2 = intLoadParseRelatedAccountKey(strLine)
-                            Case "3"
-                                mintRelatedKey3 = intLoadParseRelatedAccountKey(strLine)
-                            Case "4"
-                                mintRelatedKey4 = intLoadParseRelatedAccountKey(strLine)
-                            Case Else
-                                Throw New Exception("Invalid related account selector")
-                        End Select
-                    Case "RK"
-                        If Not blnAccountPropertiesValidated Then
-                            'The lines that set these properties come before the first "RK" line.
-                            If mintKey = 0 Then
-                                Throw New Exception("Account key not specified")
-                            End If
-                            If mlngType = AccountType.Unspecified Then
-                                Throw New Exception("Account type not specified")
-                            End If
-                            blnAccountPropertiesValidated = True
-                        End If
-                        strRegKey = Mid(strLine, 3)
-                    Case "RT"
-                        strRegTitle = Mid(strLine, 3)
-                    Case "RS"
-                        blnRegShow = True
-                    Case "RN"
-                        'Ignore this for backward compatibility until all .act files are resaved without it.
-                        'blnRegNonBank = True
-                    Case "RI"
-                        CreateRegister(strRegKey, strRegTitle, blnRegShow)
-                        strRegKey = ""
-                        strRegTitle = ""
-                        blnRegShow = False
-                    Case "RL"
-                        'Load individual non-fake Trx into Register.
-                        LoadRegister(strLine, False, lngLinesRead)
-                    Case "RF"
-                        'Load individual fake Trx into Register.
-                        LoadRegister(strLine, True, lngLinesRead)
-                    Case "RR"
-                        'Was the repeating register
-                        SkipLegacyRegister()
-                    Case ".A"
-                        Exit Do
-                    Case Else
-                        gRaiseError("Unrecognized line in account file: " & strLine)
-                End Select
-            Loop
-        Catch ex As Exception
-            Throw New Exception("Error in Account.LoadIndividual(" & mstrFileNameRoot & ";" & lngLinesRead & ")", ex)
-        Finally
-            CloseInputFile()
-        End Try
-    End Sub
-
-    Friend Sub OpenInputFile(ByVal strFileName As String)
-        mobjLoadFile = New StreamReader(strFileName)
-    End Sub
-
-    Friend Sub CloseInputFile()
-        mobjLoadFile.Close()
-        mobjLoadFile = Nothing
-    End Sub
-
-    Friend Function strReadLine() As String
-        Return mobjLoadFile.ReadLine()
-    End Function
-
-    Private Function intLoadParseRelatedAccountKey(ByVal strLine As String) As Integer
-        Dim intRelatedKey As Integer
-        If Int32.TryParse(strLine.Substring(4), intRelatedKey) Then
-            Return intRelatedKey
-        End If
-        Throw New Exception("Invalid related account key")
-    End Function
-
-    Public Sub LoadGenerated(ByVal datCutoff As Date)
-        Dim objReg As Register
-
-        Try
-            Dim datRegisterEndDate As Date = DateAdd(Microsoft.VisualBasic.DateInterval.Day, 45, Today)
-            'Create generated Trx.
-            'Have to generate for all registers before computing
-            'balances or doing any post processing for any of them,
-            'because generating a transfer adds Trx to two registers.
-            RaiseEvent LoadStatus("Generate for " + mstrTitle)
-            For Each objReg In mcolRegisters
-                gCreateGeneratedTrx(Me, objReg, datRegisterEndDate, datCutoff)
-            Next objReg
-        Catch ex As Exception
-            Throw New Exception("Error in Account.LoadGenerated(" & mstrFileNameRoot & ")", ex)
-        End Try
-    End Sub
-
-    Public Sub LoadApply()
-        Try
-            RaiseEvent LoadStatus("Apply for " + mstrTitle)
-            For Each objReg As Register In mcolRegisters
-                objReg.LoadApply()
-            Next
-
-            Exit Sub
-        Catch ex As Exception
-            Throw New Exception("Error in Account.LoadApply(" & mstrFileNameRoot & ")", ex)
-        End Try
-    End Sub
-
-    Public Sub LoadFinish()
-        Try
-            'This has to happen after all Account objects are loaded, not when the "AR" lines are read.
-            mobjRelatedAcct1 = objLoadResolveRelatedAccount(mintRelatedKey1)
-            mobjRelatedAcct2 = objLoadResolveRelatedAccount(mintRelatedKey2)
-            mobjRelatedAcct3 = objLoadResolveRelatedAccount(mintRelatedKey3)
-            mobjRelatedAcct4 = objLoadResolveRelatedAccount(mintRelatedKey4)
-
-            'Construct repeat key StringTranslator from actual transaction
-            'data and info in .GEN files.
-            mobjRepeats = mobjRepeatSummarizer.BuildStringTranslator()
-
-            'Call LoadPostProcessing after everything has been loaded.
-            RaiseEvent LoadStatus("Finish " + mstrTitle)
-            For Each objReg As Register In mcolRegisters
-                objReg.LoadFinish()
-            Next
-
-            Exit Sub
-        Catch ex As Exception
-            Throw New Exception("Error in Account.LoadFinish(" & mstrFileNameRoot & ")", ex)
-        End Try
-    End Sub
-
-    Private Function objLoadResolveRelatedAccount(ByVal intRelatedKey As Integer) As Account
-        If intRelatedKey = 0 Then
-            Return Nothing
-        End If
-        For Each objAccount As Account In mobjCompany.colAccounts
-            If objAccount.intKey = intRelatedKey Then
-                Return objAccount
-            End If
-        Next
-        Throw New Exception("Related account key " + intRelatedKey.ToString() + " not found")
-    End Function
-
-    '$Description Remove all generated Trx from Registers for this account,
-    '   then recreate generated Trx through the specified end date.
-
-    Public Sub RecreateGeneratedTrx(ByVal datRegisterEndDate As Date, ByVal datCutoff As Date)
-        Dim objReg As Register
-
-        'Purge generated Trx and clear all budget allocations for each register.
-        For Each objReg In mcolRegisters
-            objReg.FireHideTrx()
-            objReg.PurgeGenerated()
-        Next objReg
-
-        'Generate all Trx.
-        'Have to generate for all registers before computing
-        'balances or doing any post processing for any of them,
-        'because generating a transfer adds Trx to two registers.
-        'This only takes 5 to 10 percent of the total time spent
-        'in this routine. The rest is divided fairly evenly between
-        'LoadPostProcessing() and FireRedisplayTrx().
-        For Each objReg In mcolRegisters
-            gCreateGeneratedTrx(Me, objReg, datRegisterEndDate, datCutoff)
-        Next objReg
-
-        'In case trx generators have been edited.
-        mobjRepeats = mobjRepeatSummarizer.BuildStringTranslator()
-
-        'Compute budgets and balances.
-        For Each objReg In mcolRegisters
-            objReg.LoadApply()
-        Next objReg
-
     End Sub
 
     Public Sub CreateRegister(ByVal strRegKey As String, ByVal strRegTitle As String, ByVal blnRegShow As Boolean)
@@ -555,32 +306,6 @@ Public Class Account
         mblnUnsavedChanges = True
         RaiseEvent ChangeMade()
         objCompany.FireSomethingModified()
-    End Sub
-
-    Private Sub LoadRegister(ByVal strLine As String, ByVal blnFake As Boolean, ByRef lngLinesRead As Integer)
-
-        Dim strSearchRegKey As String
-        Dim objReg As Register
-
-        strSearchRegKey = Mid(strLine, 3)
-        objReg = objFindReg(strSearchRegKey)
-        If objReg Is Nothing Then
-            gRaiseError("Register key " & strSearchRegKey & " not found in " & Left(strLine, 2) & " line")
-        Else
-            mobjLoader = New RegisterLoader
-            mobjLoader.LoadFile(objReg, mobjRepeatSummarizer, blnFake, lngLinesRead)
-            mobjLoader = Nothing
-        End If
-    End Sub
-
-    Private Sub SkipLegacyRegister()
-        Dim strLine As String
-        Do
-            strLine = strReadLine()
-            If strLine = ".R" Then
-                Exit Sub
-            End If
-        Loop
     End Sub
 
     Public Function objFindReg(ByVal strRegisterKey As String) As Register
@@ -618,8 +343,14 @@ Public Class Account
         Next
     End Sub
 
-    Private Sub mobjLoader_FindRegister(ByVal strRegisterKey As String, ByRef objReg As Register) Handles mobjLoader.FindRegister
-        objReg = objFindReg(strRegisterKey)
+    Public Sub InitForLoad()
+        mblnUnsavedChanges = False
+        mcolRegisters = New List(Of Register)
+        'mobjRepeats = New StringTranslator()
+        mobjRepeatSummarizer = New RepeatSummarizer()
+        'mstrRepeatsFile = gstrAccountPath() & "\" & Replace(LCase(strAcctFile), ".act", ".rep")
+        'mobjRepeats.LoadFile(mstrRepeatsFile)
+        mlngType = Account.AccountType.Unspecified
     End Sub
 
     Public Sub Save(ByVal strPath_ As String)

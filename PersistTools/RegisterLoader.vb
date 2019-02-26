@@ -51,7 +51,7 @@ Public Class RegisterLoader
     '   of lines previously read, on exit is incremented to include lines read by
     '   this method.
 
-    Public Sub LoadFile(ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer,
+    Public Sub LoadFile(ByVal objReader As FileReader, ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer,
             ByVal blnFake As Boolean, ByRef lngLinesRead As Integer)
 
         Try
@@ -59,7 +59,7 @@ Public Class RegisterLoader
             LoadInit(objReg, objRepeatSummarizer, blnFake, lngLinesRead)
 
             Do
-                mstrLine = objReg.objAccount.strReadLine()
+                mstrLine = objReader.strReadLine()
                 If blnLoadLine(lngLinesRead) Then
                     Exit Sub
                 End If

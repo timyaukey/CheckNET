@@ -316,7 +316,8 @@ Friend Class ShowRegisterForm
                         'accounts and even there are only a few each one can create trx in others through
                         'balance sheet categories in trx.
                         For Each objAccount In mobjCompany.colAccounts
-                            objAccount.RecreateGeneratedTrx(CDate(strRegisterEndDate), CDate(strCutoffDate))
+                            Dim objLoader As PersistTools.AccountLoader = New PersistTools.AccountLoader(objAccount)
+                            objLoader.RecreateGeneratedTrx(CDate(strRegisterEndDate), CDate(strCutoffDate))
                         Next
                         For Each objAccount In mobjCompany.colAccounts
                             'Tell all register windows to refresh themselves.
