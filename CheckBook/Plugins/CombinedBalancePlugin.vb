@@ -10,7 +10,11 @@ Public Class CombinedBalancePlugin
         MyBase.New(hostUI_)
     End Sub
 
-    Public Overrides Sub ClickHandler(sender As Object, e As EventArgs)
+    Public Overrides Sub Register()
+        HostUI.objToolMenu.Add(New MenuElementAction("Combined Personal and Business Balance", 120, AddressOf ClickHandler, GetPluginPath()))
+    End Sub
+
+    Private Sub ClickHandler(sender As Object, e As EventArgs)
         Try
             Dim objReg As Register = HostUI.objGetCurrentRegister()
             If objReg Is Nothing Then
@@ -46,12 +50,4 @@ Public Class CombinedBalancePlugin
             gTopException(ex)
         End Try
     End Sub
-
-    Public Overrides Function GetMenuTitle() As String
-        Return "Combined Personal and Business Balance"
-    End Function
-
-    Public Overrides Function SortCode() As Integer
-        Return 120
-    End Function
 End Class

@@ -8,18 +8,16 @@ Imports CheckBookLib
 ''' </summary>
 
 Public MustInherit Class ToolPlugin
-    Implements IToolPlugin
+    Implements IPlugin
     Protected ReadOnly HostUI As IHostUI
 
     Public Sub New(ByVal hostUI_ As IHostUI)
         HostUI = hostUI_
     End Sub
 
-    Public MustOverride Function GetMenuTitle() As String Implements IToolPlugin.GetMenuTitle
+    Public MustOverride Sub Register() Implements IPlugin.Register
 
-    Public MustOverride Sub ClickHandler(ByVal sender As Object, ByVal e As EventArgs) Implements IToolPlugin.ClickHandler
-
-    Public Overridable Function SortCode() As Integer Implements IToolPlugin.SortCode
-        Return 10
+    Protected Function GetPluginPath() As String
+        Return System.IO.Path.GetFileName(Me.GetType().Assembly.Location)
     End Function
 End Class

@@ -6,21 +6,15 @@ Imports CheckBookLib
 Public Class PluginList
     Private mobjHostUI As IHostUI
 
-    Public Sub ShowMe(ByVal objHostUI As IHostUI,
-            objBankImportMenu As MenuBuilder,
-            objCheckImportMenu As MenuBuilder,
-            objDepositImportMenu As MenuBuilder,
-            objInvoiceImportMenu As MenuBuilder,
-            objReportMenu As MenuBuilder,
-            objToolMenu As MenuBuilder)
+    Public Sub ShowMe(ByVal objHostUI As IHostUI)
         mobjHostUI = objHostUI
         lvwPlugins.Items.Clear()
-        AddPlugins("Bank Import", objBankImportMenu)
-        AddPlugins("Check Import", objCheckImportMenu)
-        AddPlugins("Deposit Import", objDepositImportMenu)
-        AddPlugins("Invoice Import", objInvoiceImportMenu)
-        AddPlugins("Reports", objReportMenu)
-        AddPlugins("Tools", objToolMenu)
+        AddPlugins("Bank Import", mobjHostUI.objBankImportMenu)
+        AddPlugins("Check Import", mobjHostUI.objCheckImportMenu)
+        AddPlugins("Deposit Import", mobjHostUI.objDepositImportMenu)
+        AddPlugins("Invoice Import", mobjHostUI.objInvoiceImportMenu)
+        AddPlugins("Reports", mobjHostUI.objReportMenu)
+        AddPlugins("Tools", mobjHostUI.objToolMenu)
         Me.ShowDialog()
     End Sub
 

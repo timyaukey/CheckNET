@@ -15,7 +15,12 @@ namespace GeneralPlugins.IntuitExport
         {
         }
 
-        public override void ClickHandler(object sender, EventArgs e)
+        public override void Register()
+        {
+            HostUI.objToolMenu.Add(new MenuElementAction("Intuit Export (IIF Format)", 102, ClickHandler, GetPluginPath()));
+        }
+
+        private void ClickHandler(object sender, EventArgs e)
         {
             try
             {
@@ -35,16 +40,6 @@ namespace GeneralPlugins.IntuitExport
             {
                 ErrorHandling.gTopException(ex);
             }
-        }
-
-        public override string GetMenuTitle()
-        {
-            return "Intuit Export (IIF Format)";
-        }
-
-        public override int SortCode()
-        {
-            return 102;
         }
     }
 }

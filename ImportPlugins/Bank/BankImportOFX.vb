@@ -12,12 +12,12 @@ Public Class BankImportOFX
         MyBase.New(hostUI_)
     End Sub
 
+    Public Overrides Sub Register()
+        HostUI.objBankImportMenu.Add(New MenuElementAction("OFX File", StandardSortCode(), AddressOf ClickHandler, GetPluginPath()))
+    End Sub
+
     Public Overrides Function GetImportWindowCaption() As String
         Return "Import OFX File From Bank"
-    End Function
-
-    Public Overrides Function GetMenuTitle() As String
-        Return "OFX File"
     End Function
 
     Public Overrides Function GetTrxReader() As ITrxReader

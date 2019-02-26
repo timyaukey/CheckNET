@@ -13,25 +13,21 @@ Imports System.IO
 ''' </summary>
 
 Public MustInherit Class TrxImportPlugin
-    Implements IToolPlugin
+    Inherits ToolPlugin
 
     Public MustOverride Function GetImportWindowCaption() As String
     Public MustOverride Function GetTrxReader() As ITrxReader
     Public MustOverride Function GetImportHandler() As IImportHandler
 
-    Protected ReadOnly HostUI As IHostUI
-
     Public Sub New(ByVal hostUI_ As IHostUI)
-        HostUI = hostUI_
+        MyBase.New(hostUI_)
     End Sub
 
-    Public MustOverride Function GetMenuTitle() As String Implements IToolPlugin.GetMenuTitle
-
-    Public Overridable Function SortCode() As Integer Implements IToolPlugin.SortCode
+    Protected Function StandardSortCode() As Integer
         Return 10
     End Function
 
-    Public Sub ClickHandler(sender As Object, e As EventArgs) Implements IToolPlugin.ClickHandler
+    Protected Sub ClickHandler(sender As Object, e As EventArgs)
         Try
             If BankImportForm.intOpenCount > 0 Then
                 MsgBox("An import form is already open, and only one can be open at a time.")

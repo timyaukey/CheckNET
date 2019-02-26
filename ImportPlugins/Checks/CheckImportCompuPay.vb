@@ -11,12 +11,12 @@ Public Class CheckImportCompuPay
         MyBase.New(hostUI_)
     End Sub
 
+    Public Overrides Sub Register()
+        HostUI.objCheckImportMenu.Add(New MenuElementAction("CompuPay Payroll Clipboard", StandardSortCode(), AddressOf ClickHandler, GetPluginPath()))
+    End Sub
+
     Public Overrides Function GetImportWindowCaption() As String
         Return "Import CompuPay Payroll Checks"
-    End Function
-
-    Public Overrides Function GetMenuTitle() As String
-        Return "CompuPay Payroll Clipboard"
     End Function
 
     Public Overrides Function GetTrxReader() As ITrxReader

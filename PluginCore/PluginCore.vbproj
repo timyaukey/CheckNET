@@ -84,7 +84,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="PluginInterfaces.vb" />
-    <Compile Include="ReportPlugin.vb" />
     <Compile Include="ToolPlugin.vb" />
   </ItemGroup>
   <ItemGroup>

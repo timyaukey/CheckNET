@@ -10,7 +10,11 @@ Public Class PersonalBusinessPlugin
         MyBase.New(hostUI_)
     End Sub
 
-    Public Overrides Sub ClickHandler(sender As Object, e As EventArgs)
+    Public Overrides Sub Register()
+        HostUI.objToolMenu.Add(New MenuElementAction("Adjust Account For Personal Use", 110, AddressOf ClickHandler, GetPluginPath()))
+    End Sub
+
+    Private Sub ClickHandler(sender As Object, e As EventArgs)
         Try
             Dim objReg As Register = HostUI.objGetCurrentRegister()
             If objReg Is Nothing Then
@@ -24,12 +28,4 @@ Public Class PersonalBusinessPlugin
             gTopException(ex)
         End Try
     End Sub
-
-    Public Overrides Function GetMenuTitle() As String
-        Return "Adjust Account For Personal Use"
-    End Function
-
-    Public Overrides Function SortCode() As Integer
-        Return 110
-    End Function
 End Class

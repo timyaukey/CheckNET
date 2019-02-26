@@ -10,7 +10,6 @@ Imports PluginCore
 
 Public MustInherit Class InvoiceImportPlugin
     Inherits TrxImportPlugin
-    Implements IInvoiceImportPlugin
 
     Public Sub New(ByVal hostUI_ As IHostUI)
         MyBase.New(hostUI_)

@@ -15,7 +15,12 @@ namespace BudgetDashboard
         {
         }
 
-        public override void ClickHandler(object sender, EventArgs e)
+        public override void Register()
+        {
+            HostUI.objToolMenu.Add(new MenuElementAction("Budget Dashboard", 101, ClickHandler, GetPluginPath()));
+        }
+
+        private void ClickHandler(object sender, EventArgs e)
         {
             Register reg = HostUI.objGetCurrentRegister();
             if (reg == null)
@@ -33,16 +38,6 @@ namespace BudgetDashboard
                     budgetForm.Show(HostUI, data);
                 }
             }
-        }
-
-        public override string GetMenuTitle()
-        {
-            return "Budget Dashboard";
-        }
-
-        public override int SortCode()
-        {
-            return 101;
         }
     }
 }

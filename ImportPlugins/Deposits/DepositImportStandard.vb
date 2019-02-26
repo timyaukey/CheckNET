@@ -11,12 +11,12 @@ Public Class DepositImportStandard
         MyBase.New(hostUI_)
     End Sub
 
+    Public Overrides Sub Register()
+        HostUI.objDepositImportMenu.Add(New MenuElementAction("Standard Clipboard", 1, AddressOf ClickHandler, GetPluginPath()))
+    End Sub
+
     Public Overrides Function GetImportWindowCaption() As String
         Return "Import Deposit Amounts"
-    End Function
-
-    Public Overrides Function GetMenuTitle() As String
-        Return "Standard Clipboard"
     End Function
 
     Public Overrides Function GetTrxReader() As ITrxReader

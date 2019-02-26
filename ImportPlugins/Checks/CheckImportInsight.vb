@@ -11,12 +11,12 @@ Public Class CheckImportInsight
         MyBase.New(hostUI_)
     End Sub
 
+    Public Overrides Sub Register()
+        HostUI.objCheckImportMenu.Add(New MenuElementAction("Digital Insight Clipboard", StandardSortCode(), AddressOf ClickHandler, GetPluginPath()))
+    End Sub
+
     Public Overrides Function GetImportWindowCaption() As String
         Return "Import Digital Insight Online Banking Checks"
-    End Function
-
-    Public Overrides Function GetMenuTitle() As String
-        Return "Digital Insight Clipboard"
     End Function
 
     Public Overrides Function GetTrxReader() As ITrxReader

@@ -13,6 +13,13 @@ Imports CheckBookLib
 Public Interface IHostUI
     ReadOnly Property objCompany() As Company
 
+    Property objBankImportMenu As MenuBuilder
+    Property objCheckImportMenu As MenuBuilder
+    Property objDepositImportMenu As MenuBuilder
+    Property objInvoiceImportMenu As MenuBuilder
+    Property objReportMenu As MenuBuilder
+    Property objToolMenu As MenuBuilder
+
     Sub ShowRegister(ByVal objReg As Register)
 
     Function strChooseFile(ByVal strWindowCaption As String, ByVal strFileType As String,

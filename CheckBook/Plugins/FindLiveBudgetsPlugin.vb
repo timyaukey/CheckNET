@@ -10,7 +10,11 @@ Public Class FindLiveBudgetsPlugin
         MyBase.New(hostUI_)
     End Sub
 
-    Public Overrides Sub ClickHandler(sender As Object, e As EventArgs)
+    Public Overrides Sub Register()
+        HostUI.objToolMenu.Add(New MenuElementAction("Find Live Budgets", 4, AddressOf ClickHandler, GetPluginPath()))
+    End Sub
+
+    Private Sub ClickHandler(sender As Object, e As EventArgs)
         Try
             Dim objReg As Register = HostUI.objGetCurrentRegister()
             If objReg Is Nothing Then
@@ -24,12 +28,4 @@ Public Class FindLiveBudgetsPlugin
             gTopException(ex)
         End Try
     End Sub
-
-    Public Overrides Function GetMenuTitle() As String
-        Return "Find Live Budgets"
-    End Function
-
-    Public Overrides Function SortCode() As Integer
-        Return 4
-    End Function
 End Class
