@@ -113,7 +113,7 @@
         Me.chkAllowManualBatchNew.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkAllowManualBatchNew.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkAllowManualBatchNew.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkAllowManualBatchNew.Location = New System.Drawing.Point(724, 478)
+        Me.chkAllowManualBatchNew.Location = New System.Drawing.Point(724, 621)
         Me.chkAllowManualBatchNew.Name = "chkAllowManualBatchNew"
         Me.chkAllowManualBatchNew.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkAllowManualBatchNew.Size = New System.Drawing.Size(281, 16)
@@ -129,7 +129,7 @@
         Me.cboDefaultCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboDefaultCategory.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboDefaultCategory.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboDefaultCategory.Location = New System.Drawing.Point(830, 496)
+        Me.cboDefaultCategory.Location = New System.Drawing.Point(830, 639)
         Me.cboDefaultCategory.Name = "cboDefaultCategory"
         Me.cboDefaultCategory.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboDefaultCategory.Size = New System.Drawing.Size(176, 22)
@@ -142,7 +142,7 @@
         Me.cmdBatchNew.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdBatchNew.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdBatchNew.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdBatchNew.Location = New System.Drawing.Point(248, 493)
+        Me.cmdBatchNew.Location = New System.Drawing.Point(248, 636)
         Me.cmdBatchNew.Name = "cmdBatchNew"
         Me.cmdBatchNew.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdBatchNew.Size = New System.Drawing.Size(120, 23)
@@ -157,7 +157,7 @@
         Me.cmdFindUpdates.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdFindUpdates.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdFindUpdates.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdFindUpdates.Location = New System.Drawing.Point(126, 518)
+        Me.cmdFindUpdates.Location = New System.Drawing.Point(126, 661)
         Me.cmdFindUpdates.Name = "cmdFindUpdates"
         Me.cmdFindUpdates.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdFindUpdates.Size = New System.Drawing.Size(120, 23)
@@ -172,7 +172,7 @@
         Me.cmdBatchUpdates.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdBatchUpdates.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdBatchUpdates.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdBatchUpdates.Location = New System.Drawing.Point(248, 518)
+        Me.cmdBatchUpdates.Location = New System.Drawing.Point(248, 661)
         Me.cmdBatchUpdates.Name = "cmdBatchUpdates"
         Me.cmdBatchUpdates.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdBatchUpdates.Size = New System.Drawing.Size(120, 23)
@@ -187,7 +187,7 @@
         Me.cmdFindNew.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdFindNew.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdFindNew.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdFindNew.Location = New System.Drawing.Point(126, 493)
+        Me.cmdFindNew.Location = New System.Drawing.Point(126, 636)
         Me.cmdFindNew.Name = "cmdFindNew"
         Me.cmdFindNew.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdFindNew.Size = New System.Drawing.Size(120, 23)
@@ -218,7 +218,7 @@
         Me.cmdRefreshItems.Location = New System.Drawing.Point(620, 23)
         Me.cmdRefreshItems.Name = "cmdRefreshItems"
         Me.cmdRefreshItems.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdRefreshItems.Size = New System.Drawing.Size(64, 18)
+        Me.cmdRefreshItems.Size = New System.Drawing.Size(64, 22)
         Me.cmdRefreshItems.TabIndex = 6
         Me.cmdRefreshItems.Text = "Refresh"
         Me.cmdRefreshItems.UseVisualStyleBackColor = False
@@ -244,7 +244,7 @@
         Me.cmdClose.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdClose.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdClose.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdClose.Location = New System.Drawing.Point(1014, 518)
+        Me.cmdClose.Location = New System.Drawing.Point(1014, 661)
         Me.cmdClose.Name = "cmdClose"
         Me.cmdClose.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdClose.Size = New System.Drawing.Size(79, 23)
@@ -259,7 +259,7 @@
         Me.cmdUpdateExisting.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdUpdateExisting.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdUpdateExisting.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdUpdateExisting.Location = New System.Drawing.Point(8, 518)
+        Me.cmdUpdateExisting.Location = New System.Drawing.Point(8, 661)
         Me.cmdUpdateExisting.Name = "cmdUpdateExisting"
         Me.cmdUpdateExisting.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdUpdateExisting.Size = New System.Drawing.Size(104, 23)
@@ -269,8 +269,7 @@
         '
         'lvwMatches
         '
-        Me.lvwMatches.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.lvwMatches.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lvwMatches.BackColor = System.Drawing.SystemColors.Window
         Me.lvwMatches.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me._lvwMatches_CH_Date, Me._lvwMatches_CH_Number, Me._lvwMatches_CH_Descr, Me._lvwMatches_CH_Amount, Me._lvwMatches_CH_Category, Me._lvwMatches_CH_DueDate, Me._lvwMatches_CH_Fake, Me._lvwMatches_CH_Gen, Me._lvwMatches_CH_Imported, Me._lvwMatches_CH_Register, Me._lvwMatches_CH_Hidden})
@@ -279,9 +278,9 @@
         Me.lvwMatches.FullRowSelect = True
         Me.lvwMatches.GridLines = True
         Me.lvwMatches.HideSelection = False
-        Me.lvwMatches.Location = New System.Drawing.Point(5, 318)
+        Me.lvwMatches.Location = New System.Drawing.Point(5, 398)
         Me.lvwMatches.Name = "lvwMatches"
-        Me.lvwMatches.Size = New System.Drawing.Size(1088, 154)
+        Me.lvwMatches.Size = New System.Drawing.Size(1088, 217)
         Me.lvwMatches.TabIndex = 12
         Me.lvwMatches.UseCompatibleStateImageBehavior = False
         Me.lvwMatches.View = System.Windows.Forms.View.Details
@@ -343,15 +342,15 @@
         '
         'cmdRepeatSearch
         '
-        Me.cmdRepeatSearch.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdRepeatSearch.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmdRepeatSearch.BackColor = System.Drawing.SystemColors.Control
         Me.cmdRepeatSearch.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdRepeatSearch.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdRepeatSearch.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdRepeatSearch.Location = New System.Drawing.Point(988, 294)
+        Me.cmdRepeatSearch.Location = New System.Drawing.Point(989, 370)
         Me.cmdRepeatSearch.Name = "cmdRepeatSearch"
         Me.cmdRepeatSearch.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdRepeatSearch.Size = New System.Drawing.Size(104, 23)
+        Me.cmdRepeatSearch.Size = New System.Drawing.Size(104, 22)
         Me.cmdRepeatSearch.TabIndex = 11
         Me.cmdRepeatSearch.Text = "Repeat Search"
         Me.cmdRepeatSearch.UseVisualStyleBackColor = False
@@ -363,7 +362,7 @@
         Me.cmdCreateNew.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdCreateNew.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdCreateNew.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdCreateNew.Location = New System.Drawing.Point(8, 493)
+        Me.cmdCreateNew.Location = New System.Drawing.Point(8, 636)
         Me.cmdCreateNew.Name = "cmdCreateNew"
         Me.cmdCreateNew.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdCreateNew.Size = New System.Drawing.Size(104, 23)
@@ -379,7 +378,7 @@
         Me.cboRegister.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboRegister.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboRegister.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboRegister.Location = New System.Drawing.Point(830, 520)
+        Me.cboRegister.Location = New System.Drawing.Point(830, 663)
         Me.cboRegister.Name = "cboRegister"
         Me.cboRegister.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboRegister.Size = New System.Drawing.Size(176, 22)
@@ -387,7 +386,8 @@
         '
         'lvwTrx
         '
-        Me.lvwTrx.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.lvwTrx.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lvwTrx.BackColor = System.Drawing.SystemColors.Window
         Me.lvwTrx.CheckBoxes = True
@@ -397,10 +397,10 @@
         Me.lvwTrx.FullRowSelect = True
         Me.lvwTrx.GridLines = True
         Me.lvwTrx.HideSelection = False
-        Me.lvwTrx.Location = New System.Drawing.Point(5, 42)
+        Me.lvwTrx.Location = New System.Drawing.Point(5, 51)
         Me.lvwTrx.Name = "lvwTrx"
         Me.lvwTrx.ShowItemToolTips = True
-        Me.lvwTrx.Size = New System.Drawing.Size(1088, 250)
+        Me.lvwTrx.Size = New System.Drawing.Size(1088, 313)
         Me.lvwTrx.TabIndex = 8
         Me.lvwTrx.UseCompatibleStateImageBehavior = False
         Me.lvwTrx.View = System.Windows.Forms.View.Details
@@ -453,7 +453,7 @@
         Me.lblDefaultCategory.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblDefaultCategory.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblDefaultCategory.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblDefaultCategory.Location = New System.Drawing.Point(724, 500)
+        Me.lblDefaultCategory.Location = New System.Drawing.Point(724, 643)
         Me.lblDefaultCategory.Name = "lblDefaultCategory"
         Me.lblDefaultCategory.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblDefaultCategory.Size = New System.Drawing.Size(101, 15)
@@ -462,12 +462,12 @@
         '
         'lblSearchFor
         '
-        Me.lblSearchFor.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblSearchFor.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblSearchFor.BackColor = System.Drawing.SystemColors.Control
         Me.lblSearchFor.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblSearchFor.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblSearchFor.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSearchFor.Location = New System.Drawing.Point(558, 296)
+        Me.lblSearchFor.Location = New System.Drawing.Point(558, 374)
         Me.lblSearchFor.Name = "lblSearchFor"
         Me.lblSearchFor.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblSearchFor.Size = New System.Drawing.Size(425, 15)
@@ -486,18 +486,19 @@
         Me.lblDoubleClickHint.Location = New System.Drawing.Point(777, 25)
         Me.lblDoubleClickHint.Name = "lblDoubleClickHint"
         Me.lblDoubleClickHint.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblDoubleClickHint.Size = New System.Drawing.Size(312, 52)
+        Me.lblDoubleClickHint.Size = New System.Drawing.Size(312, 195)
         Me.lblDoubleClickHint.TabIndex = 7
         Me.lblDoubleClickHint.Text = "Double-click a row to create a quick transaction from it"
         Me.lblDoubleClickHint.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label2
         '
+        Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label2.BackColor = System.Drawing.SystemColors.Control
         Me.Label2.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label2.Location = New System.Drawing.Point(5, 295)
+        Me.Label2.Location = New System.Drawing.Point(5, 380)
         Me.Label2.Name = "Label2"
         Me.Label2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label2.Size = New System.Drawing.Size(143, 15)
@@ -511,7 +512,7 @@
         Me.Label1.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label1.Location = New System.Drawing.Point(724, 524)
+        Me.Label1.Location = New System.Drawing.Point(724, 667)
         Me.Label1.Name = "Label1"
         Me.Label1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label1.Size = New System.Drawing.Size(101, 15)
@@ -556,7 +557,7 @@
         Me.cmdSelectAll.Location = New System.Drawing.Point(5, 23)
         Me.cmdSelectAll.Name = "cmdSelectAll"
         Me.cmdSelectAll.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdSelectAll.Size = New System.Drawing.Size(64, 18)
+        Me.cmdSelectAll.Size = New System.Drawing.Size(64, 22)
         Me.cmdSelectAll.TabIndex = 1
         Me.cmdSelectAll.Text = "Select All"
         Me.cmdSelectAll.UseVisualStyleBackColor = False
@@ -566,7 +567,7 @@
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(1099, 548)
+        Me.ClientSize = New System.Drawing.Size(1099, 691)
         Me.Controls.Add(Me.cmdSelectAll)
         Me.Controls.Add(Me.txtDescriptionFilter)
         Me.Controls.Add(Me.lblDescriptionFilter)
