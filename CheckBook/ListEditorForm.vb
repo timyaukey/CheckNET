@@ -3,6 +3,7 @@ Option Explicit On
 
 Imports VB = Microsoft.VisualBasic
 Imports CheckBookLib
+Imports PersistTools
 
 Friend Class ListEditorForm
     Inherits System.Windows.Forms.Form
@@ -66,7 +67,7 @@ Friend Class ListEditorForm
             RebuildTranslator()
             WriteFile()
             mobjCompany.BuildShortTermsCatKeys()
-            mobjCompany.FindPlaceholderBudget()
+            CompanyLoader.FindPlaceholderBudget(mobjCompany)
             mobjHostUI.InfoMessageBox("Updated list has been saved. The new names will not appear in " & "register windows until you close and re-open those windows.")
             mblnModified = False
             mblnSaved = True

@@ -494,6 +494,10 @@
       <Project>{67bc9967-b09a-4a5a-9bf5-40c9c9af79ef}</Project>
       <Name>ImportPlugins</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PersistTools\PersistTools.vbproj">
+      <Project>{00f98ca0-114a-4a84-b093-d6b88d7de686}</Project>
+      <Name>PersistTools</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PluginCore\PluginCore.vbproj">
       <Project>{df8c4177-36c2-414d-a363-09c33cb56fd4}</Project>
       <Name>PluginCore</Name>

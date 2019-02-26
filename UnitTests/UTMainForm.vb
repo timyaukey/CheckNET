@@ -2,6 +2,7 @@ Option Strict On
 Option Explicit On
 
 Imports CheckBookLib
+Imports PersistTools
 
 Friend Class UTMainForm
     Inherits System.Windows.Forms.Form
@@ -1463,7 +1464,7 @@ Friend Class UTMainForm
     Private Sub UTMainForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Dim strDataPathValue As String = My.Application.Info.DirectoryPath & "\..\..\Data"
         mobjCompany = New Company(strDataPathValue)
-        mobjCompany.LoadGlobalLists()
+        CompanyLoader.LoadGlobalLists(mobjCompany)
         mobjCompany.objSecurity.CreateEmpty()
     End Sub
 

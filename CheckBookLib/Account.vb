@@ -290,7 +290,7 @@ Public Class Account
     '   Must always be called immediately after Init().
     '$Param strAcctFile Name of account file, without path.
 
-    Friend Sub LoadStart(ByVal strAcctFile As String)
+    Public Sub LoadStart(ByVal strAcctFile As String)
 
         RaiseEvent LoadStatus("Loading " & strAcctFile)
         mstrFileNameRoot = strAcctFile
@@ -433,7 +433,7 @@ Public Class Account
         Throw New Exception("Invalid related account key")
     End Function
 
-    Friend Sub LoadGenerated(ByVal datCutoff As Date)
+    Public Sub LoadGenerated(ByVal datCutoff As Date)
         Dim objReg As Register
 
         Try
@@ -451,7 +451,7 @@ Public Class Account
         End Try
     End Sub
 
-    Friend Sub LoadApply()
+    Public Sub LoadApply()
         Try
             RaiseEvent LoadStatus("Apply for " + mstrTitle)
             For Each objReg As Register In mcolRegisters
@@ -464,7 +464,7 @@ Public Class Account
         End Try
     End Sub
 
-    Friend Sub LoadFinish()
+    Public Sub LoadFinish()
         Try
             'This has to happen after all Account objects are loaded, not when the "AR" lines are read.
             mobjRelatedAcct1 = objLoadResolveRelatedAccount(mintRelatedKey1)

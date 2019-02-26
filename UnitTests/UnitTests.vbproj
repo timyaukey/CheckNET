@@ -126,6 +126,10 @@
       <Project>{73A968C7-281A-45DC-8360-2E44B3C9510B}</Project>
       <Name>CheckBookLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PersistTools\PersistTools.vbproj">
+      <Project>{00f98ca0-114a-4a84-b093-d6b88d7de686}</Project>
+      <Name>PersistTools</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\PayeeList.xml" />

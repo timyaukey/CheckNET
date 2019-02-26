@@ -6,6 +6,7 @@ Imports System.Reflection
 Imports VB = Microsoft.VisualBasic
 Imports CheckBookLib
 Imports PluginCore
+Imports PersistTools
 Imports ImportPlugins
 
 Friend Class CBMainForm
@@ -68,7 +69,7 @@ Friend Class CBMainForm
                 End If
             End If
 
-            mobjCompany.Load(AddressOf frmStartup.Configure)
+            CompanyLoader.Load(mobjCompany, AddressOf frmStartup.Configure)
 
             frmStartup.ShowStatus("Loading main window")
 
@@ -322,7 +323,7 @@ Friend Class CBMainForm
                 Using frmCatEditor As CategoryEditorForm = New CategoryEditorForm()
                     If frmListEditor.blnShowMe(Me, ListEditorForm.ListType.Category, mobjCompany.strCategoryPath(),
                              mobjCompany.objIncExpAccounts, "Category List", AddressOf frmCatEditor.blnShowDialog) Then
-                        mobjCompany.LoadCategories()
+                        CompanyLoader.LoadCategories(mobjCompany)
                     End If
                 End Using
             End Using
