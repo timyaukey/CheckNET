@@ -83,7 +83,6 @@ Public Class CompanyLoader
             Dim datCutoff As Date
             Dim astrFiles() As String = Nothing
             Dim objLoader As AccountLoader
-            Dim objAccount As Account
             Dim colLoaders As List(Of AccountLoader) = New List(Of AccountLoader)
 
             While strFile <> ""
@@ -95,7 +94,7 @@ Public Class CompanyLoader
 
             'Load real trx, and non-generated fake trx, for all of them.
             For Each strFile In astrFiles
-                objAccount = New Account
+                Dim objAccount As Account = New Account
                 objAccount.Init(objCompany)
                 objLoader = New AccountLoader(objAccount)
                 colLoaders.Add(objLoader)
@@ -113,8 +112,7 @@ Public Class CompanyLoader
 
             'Load generated transactions for all of them.
             For Each objLoader In colLoaders
-                objAccount = objLoader.objAccount
-                showAccount(objAccount)
+                showAccount(objLoader.objAccount)
                 objLoader.LoadGenerated(datCutoff)
                 showAccount(Nothing)
             Next
@@ -122,16 +120,14 @@ Public Class CompanyLoader
             'Call Trx.Apply() for all Trx loaded above.
             'This will create ReplicaTrx.
             For Each objLoader In colLoaders
-                objAccount = objLoader.objAccount
-                showAccount(objAccount)
+                showAccount(objLoader.objAccount)
                 objLoader.LoadApply()
                 showAccount(Nothing)
             Next
 
             'Perform final steps after all Trx exist, including computing running balances.
             For Each objLoader In colLoaders
-                objAccount = objLoader.objAccount
-                showAccount(objAccount)
+                showAccount(objLoader.objAccount)
                 objLoader.LoadFinish()
                 showAccount(Nothing)
             Next

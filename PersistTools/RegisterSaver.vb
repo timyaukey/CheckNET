@@ -1,6 +1,8 @@
 Option Strict On
 Option Explicit On
 
+Imports System.IO
+
 Public Class RegisterSaver
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
@@ -10,11 +12,13 @@ Public Class RegisterSaver
     'The Trx currently being saved.
     Private mblnFake As Boolean
     Private mobjTrx As Trx
+    Private mobjSaveFile As StreamWriter
 
-    Public Sub Save(ByVal objReg_ As Register, ByVal colFakeLines_ As ICollection(Of String))
+    Public Sub Save(ByVal objSaveFile_ As StreamWriter, ByVal objReg_ As Register, ByVal colFakeLines_ As ICollection(Of String))
 
         Dim lngIndex As Integer
 
+        mobjSaveFile = objSaveFile_
         mobjReg = objReg_
         mcolFakeLines = colFakeLines_
         For lngIndex = 1 To objReg_.lngTrxCount
@@ -141,7 +145,7 @@ Public Class RegisterSaver
         If mblnFake Then
             mcolFakeLines.Add(strLine)
         Else
-            mobjReg.objAccount.SaveLine(strLine)
+            mobjSaveFile.WriteLine(strLine)
         End If
     End Sub
 End Class

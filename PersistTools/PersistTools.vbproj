@@ -65,7 +65,7 @@
     <Compile Include="AccountLoader.vb" />
     <Compile Include="AccountSaver.vb" />
     <Compile Include="CompanyLoader.vb" />
-    <Compile Include="FileReader.vb" />
+    <Compile Include="CompanySaver.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -82,6 +82,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="RegisterLoader.vb" />
+    <Compile Include="RegisterSaver.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

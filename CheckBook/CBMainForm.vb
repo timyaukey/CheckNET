@@ -179,7 +179,7 @@ Friend Class CBMainForm
         Try
 
             If Not mblnCancelStart Then
-                mobjCompany.SaveChangedAccounts()
+                CompanySaver.SaveChangedAccounts(mobjCompany)
             End If
             mobjCompany.Teardown()
 
@@ -380,7 +380,7 @@ Friend Class CBMainForm
     Public Sub mnuFileSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileSave.Click
         Try
 
-            mobjCompany.SaveChangedAccounts()
+            CompanySaver.SaveChangedAccounts(mobjCompany)
             mnuFileSave.Enabled = False
 
             Exit Sub

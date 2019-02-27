@@ -10,7 +10,7 @@ Public Class AccountLoader
     'RegisterLoader object used by LoadRegister().
     'Is Nothing unless LoadRegister() is on the call stack.
     Private WithEvents mobjLoader As RegisterLoader
-    Private mobjReader As FileReader
+    Private mobjLoadFile As TextReader
 
     Private mintRelatedKey1 As Integer
     Private mintRelatedKey2 As Integer
@@ -49,10 +49,9 @@ Public Class AccountLoader
         Dim blnAccountPropertiesValidated As Boolean
 
         Try
-            mobjReader = New FileReader()
-            mobjReader.OpenInputFile(mobjCompany.strAccountPath() & "\" & mobjAccount.strFileNameRoot)
+            mobjLoadFile = New StreamReader(mobjCompany.strAccountPath() & "\" & mobjAccount.strFileNameRoot)
 
-            strLine = mobjReader.strReadLine()
+            strLine = mobjLoadFile.ReadLine()
             lngLinesRead = lngLinesRead + 1
             'The difference between FHCKBK1 and FHCKBK2 is that FHCKBK2 is hardcoded
             'to use a specific budget file name and category file name, and repeat group
@@ -65,7 +64,7 @@ Public Class AccountLoader
             mobjAccount.InitForLoad()
 
             Do
-                strLine = mobjReader.strReadLine()
+                strLine = mobjLoadFile.ReadLine()
                 lngLinesRead = lngLinesRead + 1
                 Select Case Left(strLine, 2)
                     Case "AT"
@@ -144,7 +143,8 @@ Public Class AccountLoader
         Catch ex As Exception
             Throw New Exception("Error in Account.LoadIndividual(" & mobjAccount.strFileNameRoot & ";" & lngLinesRead & ")", ex)
         Finally
-            mobjReader.CloseInputFile()
+            mobjLoadFile.Close()
+            mobjLoadFile = Nothing
         End Try
     End Sub
 
@@ -268,7 +268,7 @@ Public Class AccountLoader
             gRaiseError("Register key " & strSearchRegKey & " not found in " & Left(strLine, 2) & " line")
         Else
             mobjLoader = New RegisterLoader
-            mobjLoader.LoadFile(mobjReader, objReg, mobjAccount.objRepeatSummarizer, blnFake, lngLinesRead)
+            mobjLoader.LoadFile(mobjLoadFile, objReg, mobjAccount.objRepeatSummarizer, blnFake, lngLinesRead)
             mobjLoader = Nothing
         End If
     End Sub
@@ -276,7 +276,7 @@ Public Class AccountLoader
     Private Sub SkipLegacyRegister()
         Dim strLine As String
         Do
-            strLine = mobjReader.strReadLine()
+            strLine = mobjLoadFile.ReadLine()
             If strLine = ".R" Then
                 Exit Sub
             End If

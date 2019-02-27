@@ -1,6 +1,8 @@
 Option Strict On
 Option Explicit On
 
+Imports System.IO
+
 Public Class RegisterLoader
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
@@ -51,7 +53,7 @@ Public Class RegisterLoader
     '   of lines previously read, on exit is incremented to include lines read by
     '   this method.
 
-    Public Sub LoadFile(ByVal objReader As FileReader, ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer,
+    Public Sub LoadFile(ByVal objLoadFile As TextReader, ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer,
             ByVal blnFake As Boolean, ByRef lngLinesRead As Integer)
 
         Try
@@ -59,7 +61,7 @@ Public Class RegisterLoader
             LoadInit(objReg, objRepeatSummarizer, blnFake, lngLinesRead)
 
             Do
-                mstrLine = objReader.strReadLine()
+                mstrLine = objLoadFile.ReadLine()
                 If blnLoadLine(lngLinesRead) Then
                     Exit Sub
                 End If

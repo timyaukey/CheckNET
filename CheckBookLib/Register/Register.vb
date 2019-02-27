@@ -1272,7 +1272,7 @@ Public Class Register
         mobjLog.AddILogAction(New LogAction, strTitle)
     End Sub
 
-    Friend Sub LogSave()
+    Public Sub LogSave()
         mobjLog.AddILogAction(New LogSave, "Register.Save")
     End Sub
 
@@ -1287,7 +1287,7 @@ Public Class Register
         mobjLog.AddILogGroupEnd(New LogGroupEnd, objStartLogger)
     End Sub
 
-    Friend Sub WriteEventLog(ByVal strAccountTitle As String, ByVal objRepeats As IStringTranslator)
+    Public Sub WriteEventLog(ByVal strAccountTitle As String, ByVal objRepeats As IStringTranslator)
         mobjLog.WriteAll(strAccountTitle, objRepeats)
     End Sub
 
