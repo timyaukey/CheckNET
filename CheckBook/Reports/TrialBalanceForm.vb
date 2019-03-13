@@ -255,7 +255,9 @@ Public Class TrialBalanceForm
                                   False, 0D, False, False, 0, "", "")
             For Each objGroup As LineItemGroup In objIncExpTotal.colGroups
                 For Each objItem As ReportLineItem In objGroup.colItems
-                    objTrx.AddSplit("", objItem.strItemKey, "", "", System.DateTime.FromOADate(0), System.DateTime.FromOADate(0), "", "", -objItem.curTotal)
+                    If objItem.curTotal <> 0 Then
+                        objTrx.AddSplit("", objItem.strItemKey, "", "", System.DateTime.FromOADate(0), System.DateTime.FromOADate(0), "", "", -objItem.curTotal)
+                    End If
                 Next
             Next
             objRegister.NewAddEnd(objTrx, New LogAdd(), "PostRetainedEarnings.AddTrx")
