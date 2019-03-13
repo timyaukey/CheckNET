@@ -5,6 +5,13 @@ Imports CheckBookLib
 Public Class CategoryTranslator
     Inherits SimpleStringTranslator
 
+    ''' <summary>
+    ''' To add a new category type, define a constant here and add code to the following places:
+    ''' 1) CategoryTranslator.strTranslateType().
+    ''' 2) CategoryEditorForm.blnShowDialog().
+    ''' 3) TrialBalanceForm.btnIncomeExpenseStatement_Click().
+    ''' 4) CategoryGroupManager.strGetGroupTitle().
+    ''' </summary>
     Public Shared ReadOnly strTypeKey As String = "Type"
     Public Shared ReadOnly strTypeSales As String = "SALES"
     Public Shared ReadOnly strTypeReturns As String = "RETS"
@@ -17,6 +24,7 @@ Public Class CategoryTranslator
     Public Shared ReadOnly strTypeOtherIncome As String = "OTINC"
     Public Shared ReadOnly strTypeOtherExpense As String = "OTEXP"
     Public Shared ReadOnly strTypeTaxes As String = "TAXES"
+    Public Shared ReadOnly strTypeDepreciation As String = "DEPREC"
 
     Public Shared Function blnIsPersonal(ByVal strValue1 As String) As Boolean
         If strValue1 = "" Then
@@ -46,6 +54,7 @@ Public Class CategoryTranslator
         If strType = CategoryTranslator.strTypeOtherIncome Then Return "Other Income"
         If strType = CategoryTranslator.strTypeOtherExpense Then Return "Other Expenses"
         If strType = CategoryTranslator.strTypeTaxes Then Return "Taxes"
+        If strType = CategoryTranslator.strTypeDepreciation Then Return "Depreciation"
         Return strType
     End Function
 

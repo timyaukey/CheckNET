@@ -202,8 +202,8 @@ Public Class TrialBalanceForm
                 objIncExp, CategoryTranslator.strTypeOperatingExpenses, objAccumOperExp)
             objWriter.OutputGroupSummary(strLineTitleClass, "Office Expense", strLineAmountClass, strMinusClass,
                 objIncExp, CategoryTranslator.strTypeOfficeExpense, False, objAccumOperExp)
-            objWriter.OutputGroupSummary(strLineTitleClass, "Payroll", strLineAmountClass, strMinusClass,
-                objIncExp, CategoryTranslator.strTypePayroll, False, objAccumOperExp)
+            objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
+                objIncExp, CategoryTranslator.strTypePayroll, objAccumOperExp)
             objWriter.OutputGroupSummary(strLineTitleClass, "Rental Income", strLineAmountClass, strMinusClass,
                 objIncExp, CategoryTranslator.strTypeRentInc, True, objAccumOperExp)
             objWriter.OutputGroupSummary(strLineTitleClass, "Rental Expense", strLineAmountClass, strMinusClass,
@@ -213,8 +213,10 @@ Public Class TrialBalanceForm
             objWriter.OutputText(strLineHeaderClass, "Other Expenses")
             objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
                 objIncExp, CategoryTranslator.strTypeOtherExpense, objAccumOtherExp)
-            objWriter.OutputGroupSummary(strLineTitleClass, "Taxes", strLineAmountClass, strMinusClass,
-                objIncExp, CategoryTranslator.strTypeTaxes, True, objAccumOtherExp)
+            objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
+                objIncExp, CategoryTranslator.strTypeTaxes, objAccumOtherExp)
+            objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
+                objIncExp, CategoryTranslator.strTypeDepreciation, objAccumOtherExp)
             objWriter.OutputAmount(strLineFooterTitleClass, "Total Other Expenses", strLineFooterAmountClass, strMinusClass, objAccumOtherExp.curTotal, objAccumTotal)
 
             objWriter.OutputText(strLineHeaderClass, "Grand Total Income/Expense")

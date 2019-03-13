@@ -22,6 +22,7 @@ Public Class CategoryEditorForm
         AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeOtherIncome)
         AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeOtherExpense)
         AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeTaxes)
+        AddComboItem(cboType, strCatTypeCode, CategoryTranslator.strTypeDepreciation)
         Me.ShowDialog()
         If mblnSaved Then
             objTransElem.strValue1 = txtName.Text

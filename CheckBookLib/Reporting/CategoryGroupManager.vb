@@ -30,6 +30,7 @@ Public Class CategoryGroupManager
             Case CategoryTranslator.strTypeOtherIncome : Return "Other Income"
             Case CategoryTranslator.strTypeOtherExpense : Return "Other Expense"
             Case CategoryTranslator.strTypeTaxes : Return "Taxes"
+            Case CategoryTranslator.strTypeDepreciation : Return "Depreciation"
             Case Else : Return strGroupKey
         End Select
         Throw New NotImplementedException()
