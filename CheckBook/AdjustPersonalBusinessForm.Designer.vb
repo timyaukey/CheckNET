@@ -37,6 +37,7 @@ Partial Class AdjustPersonalBusinessForm
         Me.txtLoanToAccount = New System.Windows.Forms.TextBox()
         Me.lblLoanToAccount = New System.Windows.Forms.Label()
         Me.lblProgress = New System.Windows.Forms.Label()
+        Me.btnHelp = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'lblStartDate
@@ -77,7 +78,7 @@ Partial Class AdjustPersonalBusinessForm
         Me.btnDeleteAdjustments.Location = New System.Drawing.Point(336, 229)
         Me.btnDeleteAdjustments.Name = "btnDeleteAdjustments"
         Me.btnDeleteAdjustments.Size = New System.Drawing.Size(184, 23)
-        Me.btnDeleteAdjustments.TabIndex = 12
+        Me.btnDeleteAdjustments.TabIndex = 14
         Me.btnDeleteAdjustments.Text = "Delete Adjustments"
         Me.btnDeleteAdjustments.UseVisualStyleBackColor = True
         '
@@ -87,7 +88,7 @@ Partial Class AdjustPersonalBusinessForm
         Me.btnRecreateAdjustments.Location = New System.Drawing.Point(336, 258)
         Me.btnRecreateAdjustments.Name = "btnRecreateAdjustments"
         Me.btnRecreateAdjustments.Size = New System.Drawing.Size(184, 23)
-        Me.btnRecreateAdjustments.TabIndex = 13
+        Me.btnRecreateAdjustments.TabIndex = 15
         Me.btnRecreateAdjustments.Text = "(Re)create Adjustments"
         Me.btnRecreateAdjustments.UseVisualStyleBackColor = True
         '
@@ -173,14 +174,25 @@ Partial Class AdjustPersonalBusinessForm
         Me.lblProgress.Location = New System.Drawing.Point(12, 178)
         Me.lblProgress.Name = "lblProgress"
         Me.lblProgress.Size = New System.Drawing.Size(62, 13)
-        Me.lblProgress.TabIndex = 14
+        Me.lblProgress.TabIndex = 12
         Me.lblProgress.Text = "(progress...)"
+        '
+        'btnHelp
+        '
+        Me.btnHelp.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnHelp.Location = New System.Drawing.Point(15, 258)
+        Me.btnHelp.Name = "btnHelp"
+        Me.btnHelp.Size = New System.Drawing.Size(138, 23)
+        Me.btnHelp.TabIndex = 13
+        Me.btnHelp.Text = "Help"
+        Me.btnHelp.UseVisualStyleBackColor = True
         '
         'AdjustPersonalBusinessForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(532, 293)
+        Me.Controls.Add(Me.btnHelp)
         Me.Controls.Add(Me.lblProgress)
         Me.Controls.Add(Me.txtLoanToAccount)
         Me.Controls.Add(Me.lblLoanToAccount)
@@ -221,4 +233,5 @@ Partial Class AdjustPersonalBusinessForm
     Friend WithEvents txtLoanToAccount As TextBox
     Friend WithEvents lblLoanToAccount As Label
     Friend WithEvents lblProgress As Label
+    Friend WithEvents btnHelp As Button
 End Class

@@ -290,4 +290,29 @@ Public Class AdjustPersonalBusinessForm
         lblProgress.Text = strMessage
         lblProgress.Refresh()
     End Sub
+
+    Private Sub btnHelp_Click(sender As Object, e As EventArgs) Handles btnHelp.Click
+        mobjHostUI.InfoMessageBox("Divide payment, interest and fee transactions in the current " +
+            "account into personal " +
+            "and business parts. May only be used on a liability account, e.g. a credit card used " +
+            "for both business and personal purchases. Finds all expense transactions ending in """ +
+            mstrDivideMarker + """ (normally only interest And fees), and all payments made to the account, " +
+            "and divides them into business and personal amounts in proportion to the balances " +
+            "on that date of the liability account and its related personal account. Business and " +
+            "personal purchases are recorded directly in their respective accounts without any " +
+            "special handling.")
+        mobjHostUI.InfoMessageBox("Divides the transactions by creating " +
+            "additional transactions to move the personal amount to its related personal account " +
+            "and an account recording loans to that person. This way personal use becomes a loan " +
+            "to the person. The new transactions always end in """ + mstrPaymentMarker + """ and """ +
+            mstrExpenseMarker + """ to indicate to the system what they are for.")
+        mobjHostUI.InfoMessageBox("Requires two related accounts to be indicated in the definition for this account: " +
+            "#1 is the related account representing the personal portion of the balance " +
+            "(account type ""personal""), and #2 is the loan to person account (account type ""asset""). " +
+            "Also requires two personal categories to be set up with " +
+            "specific text in their names to use in the related personal account to record " +
+            "the personal parts of purchases and payments that have been divided. " +
+            "Try to use this tool without setting these things " +
+            "up to see error messages with specific guidance.")
+    End Sub
 End Class
