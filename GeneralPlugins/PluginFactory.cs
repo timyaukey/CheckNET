@@ -15,6 +15,7 @@ namespace GeneralPlugins
         public IEnumerable<IPlugin> colGetPlugins(IHostUI hostUI_)
         {
             yield return new IntuitExport.IntuitExportPlugin(hostUI_);
+            yield return new RenumberChecks.RenumberChecksPlugin(hostUI_);
         }
     }
 }

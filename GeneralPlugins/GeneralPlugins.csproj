@@ -51,6 +51,13 @@
     <Compile Include="IntuitExport\IntuitExportPlugin.cs" />
     <Compile Include="PluginFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RenumberChecks\RenumberChecksForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RenumberChecks\RenumberChecksForm.Designer.cs">
+      <DependentUpon>RenumberChecksForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RenumberChecks\RenumberChecksPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
@@ -65,6 +72,9 @@
   <ItemGroup>
     <EmbeddedResource Include="IntuitExport\ExportForm.resx">
       <DependentUpon>ExportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RenumberChecks\RenumberChecksForm.resx">
+      <DependentUpon>RenumberChecksForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

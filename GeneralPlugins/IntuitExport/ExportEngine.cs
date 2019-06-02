@@ -172,6 +172,12 @@ namespace GeneralPlugins.IntuitExport
                     string intuitCatType = null;
                     if (catType == CategoryTranslator.strTypeCOGS)
                         intuitCatType = "COGS";
+                    else if (catType == CategoryTranslator.strTypeOtherIncome)
+                        intuitCatType = "EXINC";
+                    else if (catType == CategoryTranslator.strTypeOtherExpense)
+                        intuitCatType = "EXEXP";
+                    else if (catType == CategoryTranslator.strTypeTaxes)
+                        intuitCatType = "EXEXP";
                     else if (catName.ToUpper().StartsWith("E:"))
                         intuitCatType = "EXP";
                     else if (catName.ToUpper().StartsWith("I:"))

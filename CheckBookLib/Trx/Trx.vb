@@ -201,10 +201,13 @@ Public MustInherit Class Trx
 
     Public MustOverride ReadOnly Property lngType() As TrxType
 
-    Public ReadOnly Property strNumber() As String
+    Public Property strNumber() As String
         Get
             Return mstrNumber
         End Get
+        Set(value As String)
+            mstrNumber = value
+        End Set
     End Property
 
     Public Property datDate() As Date
