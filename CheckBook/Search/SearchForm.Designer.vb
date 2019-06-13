@@ -169,7 +169,7 @@
         Me.chkIncludeGenerated.Location = New System.Drawing.Point(87, 79)
         Me.chkIncludeGenerated.Name = "chkIncludeGenerated"
         Me.chkIncludeGenerated.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkIncludeGenerated.Size = New System.Drawing.Size(181, 22)
+        Me.chkIncludeGenerated.Size = New System.Drawing.Size(181, 18)
         Me.chkIncludeGenerated.TabIndex = 7
         Me.chkIncludeGenerated.Text = "Include generated transactions"
         Me.chkIncludeGenerated.UseVisualStyleBackColor = False
