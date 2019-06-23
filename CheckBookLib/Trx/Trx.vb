@@ -376,6 +376,8 @@ Public MustInherit Class Trx
 
     Public Delegate Sub AddSearchMaxTrxDelegate(ByVal objTrx As Trx)
     Public Delegate Sub AddSearchMaxSplitDelegate(ByVal objTrx As Trx, ByVal objSplit As TrxSplit)
+    Public Delegate Function GetSplitMatchValue(ByVal objSplit As TrxSplit) As String
+    Public Delegate Function GetTrxMatchValue(ByVal objTrx As Trx) As String
 
     '$Description Determine if this Trx is a match to search criteria.
     '$Param lngSearchField Which Trx data to search.
@@ -391,63 +393,154 @@ Public MustInherit Class Trx
         ByVal dlgAddTrxResult As AddSearchMaxTrxDelegate,
         ByVal dlgAddSplitResult As AddSearchMaxSplitDelegate)
 
-        Dim objSplit As TrxSplit
-        Dim strTrxData As String = ""
-        Dim strCatName As String
-
         Select Case lngSearchField
             Case TrxSearchField.Category
-                If lngType = TrxType.Normal Then
-                    For Each objSplit In DirectCast(Me, NormalTrx).colSplits
-                        If lngSearchType = TrxSearchType.EqualTo Then
-                            If objSplit.strCategoryKey = strSearchFor Then
-                                dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
-                            End If
-                        Else
-                            strCatName = objCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey)
-                            If (Left(strCatName, Len(strSearchFor) + 1) = (strSearchFor & ":")) Or (strCatName = strSearchFor) Then
-                                dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
-                            End If
-                        End If
-                    Next
-                End If
-                Exit Sub
+                CheckMatchCategoryName(objCompany, lngSearchType, strSearchFor, dlgAddTrxResult, dlgAddSplitResult)
+                'If lngType = TrxType.Normal Then
+                '    For Each objSplit In DirectCast(Me, NormalTrx).colSplits
+                '        strCatName = objCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey)
+                '        If blnIsStringMatch(lngSearchType, strCatName, strSearchFor) Then
+                '            dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
+                '        End If
+                '    Next
+                'End If
             Case TrxSearchField.InvoiceNumber
-                If lngType = TrxType.Normal Then
-                    For Each objSplit In DirectCast(Me, NormalTrx).colSplits
-                        If blnIsStringMatch(lngSearchType, (objSplit.strInvoiceNum), strSearchFor) Then
-                            dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
-                        End If
-                    Next
-                End If
-                Exit Sub
+                CheckMatchInvoiceNumber(objCompany, lngSearchType, strSearchFor, dlgAddTrxResult, dlgAddSplitResult)
+                'If lngType = TrxType.Normal Then
+                '    For Each objSplit In DirectCast(Me, NormalTrx).colSplits
+                '        If blnIsStringMatch(lngSearchType, objSplit.strInvoiceNum, strSearchFor) Then
+                '            dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
+                '        End If
+                '    Next
+                'End If
             Case TrxSearchField.PONumber
-                If lngType = TrxType.Normal Then
-                    For Each objSplit In DirectCast(Me, NormalTrx).colSplits
-                        If blnIsStringMatch(lngSearchType, (objSplit.strPONumber), strSearchFor) Then
-                            dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
-                        End If
-                    Next
-                End If
-                Exit Sub
+                CheckMatchPONumber(objCompany, lngSearchType, strSearchFor, dlgAddTrxResult, dlgAddSplitResult)
+                'If lngType = TrxType.Normal Then
+                '    For Each objSplit In DirectCast(Me, NormalTrx).colSplits
+                '        If blnIsStringMatch(lngSearchType, objSplit.strPONumber, strSearchFor) Then
+                '            dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
+                '        End If
+                '    Next
+                'End If
             Case TrxSearchField.Description
-                strTrxData = mstrDescription
+                CheckMatchDescription(objCompany, lngSearchType, strSearchFor, dlgAddTrxResult, dlgAddSplitResult)
+                'If blnIsStringMatch(lngSearchType, mstrDescription, strSearchFor) Then
+                '    dlgAddTrxResult(Me)
+                'End If
             Case TrxSearchField.Number
-                strTrxData = mstrNumber
+                CheckMatchNumber(objCompany, lngSearchType, strSearchFor, dlgAddTrxResult, dlgAddSplitResult)
+                'If blnIsStringMatch(lngSearchType, mstrNumber, strSearchFor) Then
+                '    dlgAddTrxResult(Me)
+                'End If
             Case TrxSearchField.Amount
-                strTrxData = Utilities.strFormatCurrency(mcurAmount)
+                CheckMatchAmount(objCompany, lngSearchType, strSearchFor, dlgAddTrxResult, dlgAddSplitResult)
+                'If blnIsStringMatch(lngSearchType, Utilities.strFormatCurrency(mcurAmount), strSearchFor) Then
+                '    dlgAddTrxResult(Me)
+                'End If
             Case TrxSearchField.Memo
-                strTrxData = mstrMemo
+                CheckMatchMemo(objCompany, lngSearchType, strSearchFor, dlgAddTrxResult, dlgAddSplitResult)
+                'If blnIsStringMatch(lngSearchType, mstrMemo, strSearchFor) Then
+                '    dlgAddTrxResult(Me)
+                'End If
             Case Else
                 gRaiseError("Unrecognized field in Trx.blnIsSearchMatch")
         End Select
+    End Sub
 
-        'All the searches that check and report individual splits report their 
-        'results and exit BEFORE here.
-        If blnIsStringMatch(lngSearchType, strTrxData, strSearchFor) Then
+    Public Sub CheckMatchCategoryName(
+        ByVal objCompany As Company,
+        ByVal lngSearchType As TrxSearchType,
+        ByVal strSearchFor As String,
+        ByVal dlgAddTrxResult As AddSearchMaxTrxDelegate,
+        ByVal dlgAddSplitResult As AddSearchMaxSplitDelegate)
+
+        CheckSplitMatch(lngSearchType, strSearchFor, Function(ByVal objSplit As TrxSplit) objCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey), dlgAddSplitResult)
+    End Sub
+
+    Public Sub CheckMatchInvoiceNumber(
+        ByVal objCompany As Company,
+        ByVal lngSearchType As TrxSearchType,
+        ByVal strSearchFor As String,
+        ByVal dlgAddTrxResult As AddSearchMaxTrxDelegate,
+        ByVal dlgAddSplitResult As AddSearchMaxSplitDelegate)
+
+        CheckSplitMatch(lngSearchType, strSearchFor, Function(ByVal objSplit As TrxSplit) objSplit.strInvoiceNum, dlgAddSplitResult)
+    End Sub
+
+    Public Sub CheckMatchPONumber(
+        ByVal objCompany As Company,
+        ByVal lngSearchType As TrxSearchType,
+        ByVal strSearchFor As String,
+        ByVal dlgAddTrxResult As AddSearchMaxTrxDelegate,
+        ByVal dlgAddSplitResult As AddSearchMaxSplitDelegate)
+
+        CheckSplitMatch(lngSearchType, strSearchFor, Function(ByVal objSplit As TrxSplit) objSplit.strPONumber, dlgAddSplitResult)
+    End Sub
+
+    Public Sub CheckMatchDescription(
+        ByVal objCompany As Company,
+        ByVal lngSearchType As TrxSearchType,
+        ByVal strSearchFor As String,
+        ByVal dlgAddTrxResult As AddSearchMaxTrxDelegate,
+        ByVal dlgAddSplitResult As AddSearchMaxSplitDelegate)
+
+        CheckTrxMatch(lngSearchType, strSearchFor, Function(ByVal objTrx As Trx) objTrx.strDescription, dlgAddTrxResult)
+    End Sub
+
+    Public Sub CheckMatchAmount(
+        ByVal objCompany As Company,
+        ByVal lngSearchType As TrxSearchType,
+        ByVal strSearchFor As String,
+        ByVal dlgAddTrxResult As AddSearchMaxTrxDelegate,
+        ByVal dlgAddSplitResult As AddSearchMaxSplitDelegate)
+
+        CheckTrxMatch(lngSearchType, strSearchFor, Function(ByVal objTrx As Trx) Utilities.strFormatCurrency(objTrx.curAmount), dlgAddTrxResult)
+    End Sub
+
+    Public Sub CheckMatchNumber(
+        ByVal objCompany As Company,
+        ByVal lngSearchType As TrxSearchType,
+        ByVal strSearchFor As String,
+        ByVal dlgAddTrxResult As AddSearchMaxTrxDelegate,
+        ByVal dlgAddSplitResult As AddSearchMaxSplitDelegate)
+
+        CheckTrxMatch(lngSearchType, strSearchFor, Function(ByVal objTrx As Trx) objTrx.strNumber, dlgAddTrxResult)
+    End Sub
+
+    Public Sub CheckMatchMemo(
+        ByVal objCompany As Company,
+        ByVal lngSearchType As TrxSearchType,
+        ByVal strSearchFor As String,
+        ByVal dlgAddTrxResult As AddSearchMaxTrxDelegate,
+        ByVal dlgAddSplitResult As AddSearchMaxSplitDelegate)
+
+        CheckTrxMatch(lngSearchType, strSearchFor, Function(ByVal objTrx As Trx) objTrx.strMemo, dlgAddTrxResult)
+    End Sub
+
+    Public Sub CheckSplitMatch(
+        ByVal lngSearchType As TrxSearchType,
+        ByVal strSearchFor As String,
+        ByVal dlgGetSplitValue As GetSplitMatchValue,
+        ByVal dlgAddSplitResult As AddSearchMaxSplitDelegate)
+
+        If lngType = TrxType.Normal Then
+            For Each objSplit In DirectCast(Me, NormalTrx).colSplits
+                If blnIsStringMatch(lngSearchType, dlgGetSplitValue(objSplit), strSearchFor) Then
+                    dlgAddSplitResult(DirectCast(Me, NormalTrx), objSplit)
+                End If
+            Next
+        End If
+    End Sub
+
+    Public Sub CheckTrxMatch(
+        ByVal lngSearchType As TrxSearchType,
+        ByVal strSearchFor As String,
+        ByVal dlgGetTrxValue As GetTrxMatchValue,
+        ByVal dlgAddTrxResult As AddSearchMaxTrxDelegate)
+
+        If blnIsStringMatch(lngSearchType, dlgGetTrxValue(Me), strSearchFor) Then
             dlgAddTrxResult(Me)
         End If
-
     End Sub
 
     Private Function blnIsStringMatch(ByVal lngSearchType As TrxSearchType, ByRef strTrxData As String, ByRef strSearchFor As String) As Boolean

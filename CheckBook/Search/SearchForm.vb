@@ -12,6 +12,12 @@ Friend Class SearchForm
     Private mobjCompany As Company
     Private mdatDefaultDate As Date
 
+    Private mobjSearchHandler As ISearchHandler
+    Private mobjSearchDescription As ISearchHandler
+    Private mobjSearchMemo As ISearchHandler
+    Private mobjSearchCategory As ISearchHandler
+    Private mobjSearchInvoice As ISearchHandler
+
     Private Class SearchMatch
         Public objTrx As Trx
     End Class
@@ -51,6 +57,18 @@ Friend Class SearchForm
         cboSearchIn.SelectedIndex = 0
         cboSearchType.SelectedIndex = 2
         txtSearchFor.Focus()
+
+        TrxSearchHandler.txtSearchFor = txtSearchFor
+        TrxSearchHandler.cboSearchType = cboSearchType
+        SplitSearchHandler.txtSearchFor = txtSearchFor
+        SplitSearchHandler.cboSearchType = cboSearchType
+        CategorySearchHandler.cboSearchCats = cboSearchCats
+        CategorySearchHandler.cboSearchType = cboSearchType
+
+        mobjSearchMemo = New TrxSearchHandler(mobjHostUI, "Memo", Function(ByVal objTrx As Trx) objTrx.strMemo)
+        mobjSearchDescription = New TrxSearchHandler(mobjHostUI, "Description", Function(ByVal objTrx As Trx) objTrx.strDescription)
+        mobjSearchInvoice = New SplitSearchHandler(mobjHostUI, "Invoice #", Function(ByVal objSplit As TrxSplit) objSplit.strInvoiceNum)
+        mobjSearchCategory = New CategorySearchHandler(mobjHostUI, "Category")
         Me.Show()
 
     End Sub
@@ -118,8 +136,8 @@ Friend Class SearchForm
     Private Sub cmdSearch_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSearch.Click
         Dim lngSearchType As Trx.TrxSearchType
         Dim lngSearchField As Trx.TrxSearchField
-        Dim strSearchFor As String
-        Dim lngItemData As Integer
+        Dim strSearchFor As String = ""
+        'Dim lngItemData As Integer
 
         Try
 
@@ -127,20 +145,21 @@ Friend Class SearchForm
             lngSearchField = CType(UITools.GetItemData(cboSearchIn, cboSearchIn.SelectedIndex), Trx.TrxSearchField)
             Select Case lngSearchField
                 Case Trx.TrxSearchField.Category
-                    If lngSearchType <> Trx.TrxSearchType.EqualTo And lngSearchType <> Trx.TrxSearchType.StartsWith Then
-                        mobjHostUI.ErrorMessageBox("Category searches must be ""equal to"" or ""starts with"".")
-                        Exit Sub
-                    End If
-                    If cboSearchCats.SelectedIndex = -1 Then
-                        mobjHostUI.ErrorMessageBox("Please select a category to search for.")
-                        Exit Sub
-                    Else
-                        lngItemData = UITools.GetItemData(cboSearchCats, cboSearchCats.SelectedIndex)
-                        strSearchFor = mobjCompany.objCategories.strKey(lngItemData)
-                        If lngSearchType = Trx.TrxSearchType.StartsWith Then
-                            strSearchFor = mobjCompany.objCategories.strKeyToValue1(strSearchFor)
-                        End If
-                    End If
+                    'If cboSearchCats.SelectedIndex = -1 Then
+                    '    mobjHostUI.ErrorMessageBox("Please select a category to search for.")
+                    '    Exit Sub
+                    'Else
+                    '    lngItemData = UITools.GetItemData(cboSearchCats, cboSearchCats.SelectedIndex)
+                    '    strSearchFor = mobjCompany.objCategories.strKey(lngItemData)
+                    '    strSearchFor = mobjCompany.objCategories.strKeyToValue1(strSearchFor)
+                    'End If
+                    mobjSearchHandler = mobjSearchCategory
+                Case Trx.TrxSearchField.Memo
+                    mobjSearchHandler = mobjSearchMemo
+                Case Trx.TrxSearchField.Description
+                    mobjSearchHandler = mobjSearchDescription
+                Case Trx.TrxSearchField.InvoiceNumber
+                    mobjSearchHandler = mobjSearchInvoice
                 Case Else
                     'Allow "search for nothing" so you can find all trx in a date range.
                     'If txtSearchFor = "" Then
@@ -148,7 +167,13 @@ Friend Class SearchForm
                     '    Exit Sub
                     'End If
                     strSearchFor = txtSearchFor.Text
+                    mobjSearchHandler = Nothing
             End Select
+            If Not mobjSearchHandler Is Nothing Then
+                If Not mobjSearchHandler.blnPrepareSearch() Then
+                    Exit Sub
+                End If
+            End If
 
             If Not Utilities.blnIsValidDate(txtStartDate.Text) Then
                 mobjHostUI.ErrorMessageBox("Invalid starting date.")
@@ -194,8 +219,12 @@ Friend Class SearchForm
                     Else
                         dlgTrx = AddressOf AddSearchMatchTrx
                     End If
-                    objTrx.CheckSearchMatch(mobjCompany, mlngLastSearchField, mstrLastSearchFor, mlngLastSearchType,
-                       dlgTrx, AddressOf AddSearchMatchSplit)
+                    If mobjSearchHandler Is Nothing Then
+                        objTrx.CheckSearchMatch(mobjCompany, mlngLastSearchField, mstrLastSearchFor, mlngLastSearchType,
+                            dlgTrx, AddressOf AddSearchMatchSplit)
+                    Else
+                        mobjSearchHandler.ProcessTrx(objTrx, dlgTrx, AddressOf AddSearchMatchSplit)
+                    End If
                 End If
             Next
         Finally
