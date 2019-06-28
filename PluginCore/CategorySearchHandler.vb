@@ -8,11 +8,8 @@ Public Class CategorySearchHandler
     Implements ISearchHandler
 
     Private mobjHostUI As IHostUI
-    Private dlgComparer As SearchComparerDelegate
+    Private objComparer As SearchComparer
     Private strParameter As String
-
-    Public Shared cboSearchType As System.Windows.Forms.ComboBox
-    Public Shared cboSearchCats As System.Windows.Forms.ComboBox
 
     Public Sub New(
         ByVal objHostUI_ As IHostUI,
@@ -25,16 +22,25 @@ Public Class CategorySearchHandler
     Public ReadOnly Property strName As String _
         Implements ISearchHandler.strName
 
-    Public Function blnPrepareSearch() As Boolean _
+    Public Overrides Function ToString() As String
+        Return Me.strName
+    End Function
+
+    Public Sub HandlerSelected(ByVal objHostSearchUI As IHostSearchUI) _
+        Implements ISearchHandler.HandlerSelected
+        objHostSearchUI.UseComboBoxCriteria(objGetCategories(mobjHostUI.objCompany))
+    End Sub
+
+    Public Function blnPrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean _
         Implements ISearchHandler.blnPrepareSearch
 
-        If cboSearchCats.SelectedIndex = -1 Then
+        If objHostSearchUI.objGetComboBoxSearchFor() Is Nothing Then
             mobjHostUI.ErrorMessageBox("Please select a category to search for.")
             Return False
         End If
 
-        dlgComparer = SearchComparers.objGetComparer(cboSearchType)
-        Dim lngItemData As Integer = UITools.GetItemData(cboSearchCats, cboSearchCats.SelectedIndex)
+        objComparer = DirectCast(objHostSearchUI.objGetSearchType(), SearchComparer)
+        Dim lngItemData As Integer = DirectCast(objHostSearchUI.objGetComboBoxSearchFor(), CBListBoxItem).intValue
         strParameter = mobjHostUI.objCompany.objCategories.strKey(lngItemData)
         strParameter = mobjHostUI.objCompany.objCategories.strKeyToValue1(strParameter)
         Return True
@@ -42,16 +48,25 @@ Public Class CategorySearchHandler
 
     Public Sub ProcessTrx(
         ByVal objTrx As Trx,
-        ByVal dlgAddTrxResult As Trx.AddSearchMaxTrxDelegate,
-        ByVal dlgAddSplitResult As Trx.AddSearchMaxSplitDelegate) _
+        ByVal dlgAddTrxResult As AddSearchMatchTrxDelegate,
+        ByVal dlgAddSplitResult As AddSearchMatchSplitDelegate) _
         Implements ISearchHandler.ProcessTrx
 
         If TypeOf (objTrx) Is NormalTrx Then
             For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
-                If dlgComparer(mobjHostUI.objCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey), strParameter) Then
+                If objComparer.blnCompare(mobjHostUI.objCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey), strParameter) Then
                     dlgAddSplitResult(DirectCast(objTrx, NormalTrx), objSplit)
                 End If
             Next
         End If
     End Sub
+
+    Private Iterator Function objGetCategories(ByVal objCompany As Company) As IEnumerable(Of Object)
+        Dim objList As IStringTranslator = objCompany.objCategories
+        Dim intIndex As Integer
+        For intIndex = 1 To objList.intElements
+            Yield UITools.CreateListBoxItem(objList.strValue1(intIndex), intIndex)
+        Next
+    End Function
+
 End Class

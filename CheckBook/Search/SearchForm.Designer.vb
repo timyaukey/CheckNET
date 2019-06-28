@@ -166,7 +166,8 @@
         Me.chkIncludeGenerated.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkIncludeGenerated.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkIncludeGenerated.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkIncludeGenerated.Location = New System.Drawing.Point(87, 79)
+        Me.chkIncludeGenerated.Location = New System.Drawing.Point(87, 82)
+        Me.chkIncludeGenerated.Margin = New System.Windows.Forms.Padding(2)
         Me.chkIncludeGenerated.Name = "chkIncludeGenerated"
         Me.chkIncludeGenerated.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkIncludeGenerated.Size = New System.Drawing.Size(181, 18)

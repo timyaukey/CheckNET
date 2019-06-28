@@ -9,11 +9,8 @@ Public Class TrxSearchHandler
 
     Private mobjHostUI As IHostUI
     Private dlgGetTrxData As GetTrxSearchDataDelegate
-    Private dlgComparer As SearchComparerDelegate
+    Private objComparer As SearchComparer
     Private strParameter As String
-
-    Public Shared txtSearchFor As System.Windows.Forms.TextBox
-    Public Shared cboSearchType As System.Windows.Forms.ComboBox
 
     Public Sub New(
         ByVal objHostUI_ As IHostUI,
@@ -28,20 +25,29 @@ Public Class TrxSearchHandler
     Public ReadOnly Property strName As String _
         Implements ISearchHandler.strName
 
-    Public Function blnPrepareSearch() As Boolean _
+    Public Overrides Function ToString() As String
+        Return Me.strName
+    End Function
+
+    Public Sub HandlerSelected(ByVal objHostSearchUI As IHostSearchUI) _
+        Implements ISearchHandler.HandlerSelected
+        objHostSearchUI.UseTextCriteria()
+    End Sub
+
+    Public Function blnPrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean _
         Implements ISearchHandler.blnPrepareSearch
-        dlgComparer = SearchComparers.objGetComparer(cboSearchType)
-        strParameter = txtSearchFor.Text
+        objComparer = DirectCast(objHostSearchUI.objGetSearchType(), SearchComparer)
+        strParameter = objHostSearchUI.strGetTextSearchFor()
         Return True
     End Function
 
     Public Sub ProcessTrx(
         ByVal objTrx As Trx,
-        ByVal dlgAddTrxResult As Trx.AddSearchMaxTrxDelegate,
-        ByVal dlgAddSplitResult As Trx.AddSearchMaxSplitDelegate) _
+        ByVal dlgAddTrxResult As AddSearchMatchTrxDelegate,
+        ByVal dlgAddSplitResult As AddSearchMatchSplitDelegate) _
         Implements ISearchHandler.ProcessTrx
 
-        If dlgComparer(dlgGetTrxData(objTrx), strParameter) Then
+        If objComparer.blnCompare(dlgGetTrxData(objTrx), strParameter) Then
             dlgAddTrxResult(objTrx)
         End If
     End Sub

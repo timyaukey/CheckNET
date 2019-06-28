@@ -5,18 +5,14 @@ Imports CheckBookLib
 
 Friend Class SearchForm
     Inherits System.Windows.Forms.Form
+    Implements IHostSearchUI
 
     Private mobjHostUI As IHostUI
     Private WithEvents mobjReg As Register
     Private mobjAccount As Account
     Private mobjCompany As Company
     Private mdatDefaultDate As Date
-
-    Private mobjSearchHandler As ISearchHandler
-    Private mobjSearchDescription As ISearchHandler
-    Private mobjSearchMemo As ISearchHandler
-    Private mobjSearchCategory As ISearchHandler
-    Private mobjSearchInvoice As ISearchHandler
+    Private mobjSelectedSearchHandler As ISearchHandler
 
     Private Class SearchMatch
         Public objTrx As Trx
@@ -31,12 +27,10 @@ Friend Class SearchForm
     Private objSelectedTrx As Trx
 
     'Parameters of most recent successful search
-    Private mlngLastSearchType As Trx.TrxSearchType
-    Private mlngLastSearchField As Trx.TrxSearchField
-    Private mstrLastSearchFor As String
     Private mdatLastStart As Date
     Private mdatLastEnd As Date
     Private mblnLastIncludeGenerated As Boolean
+    Private mobjLastSearchHandler As ISearchHandler
 
     Public Sub ShowMe(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register)
 
@@ -53,22 +47,10 @@ Friend Class SearchForm
         txtEndDate.Text = Utilities.strFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Month, 6, Today))
         LoadSearchIn()
         LoadSearchType()
-        LoadComboFromStringTranslator(cboSearchCats, mobjCompany.objCategories)
         cboSearchIn.SelectedIndex = 0
-        cboSearchType.SelectedIndex = 2
+        cboSearchType.SelectedIndex = 0
         txtSearchFor.Focus()
 
-        TrxSearchHandler.txtSearchFor = txtSearchFor
-        TrxSearchHandler.cboSearchType = cboSearchType
-        SplitSearchHandler.txtSearchFor = txtSearchFor
-        SplitSearchHandler.cboSearchType = cboSearchType
-        CategorySearchHandler.cboSearchCats = cboSearchCats
-        CategorySearchHandler.cboSearchType = cboSearchType
-
-        mobjSearchMemo = New TrxSearchHandler(mobjHostUI, "Memo", Function(ByVal objTrx As Trx) objTrx.strMemo)
-        mobjSearchDescription = New TrxSearchHandler(mobjHostUI, "Description", Function(ByVal objTrx As Trx) objTrx.strDescription)
-        mobjSearchInvoice = New SplitSearchHandler(mobjHostUI, "Invoice #", Function(ByVal objSplit As TrxSplit) objSplit.strInvoiceNum)
-        mobjSearchCategory = New CategorySearchHandler(mobjHostUI, "Category")
         Me.Show()
 
     End Sub
@@ -79,116 +61,58 @@ Friend Class SearchForm
     End Sub
 
     Private Sub SearchForm_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
-        'UPGRADE_NOTE: Object mobjReg may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         mobjReg = Nothing
     End Sub
 
     Private Sub LoadSearchIn()
         cboSearchIn.Items.Clear()
-        LoadSearchInOne("Description", Trx.TrxSearchField.Description)
-        LoadSearchInOne("Memo", Trx.TrxSearchField.Memo)
-        LoadSearchInOne("Category", Trx.TrxSearchField.Category)
-        LoadSearchInOne("Number", Trx.TrxSearchField.Number)
-        LoadSearchInOne("Amount", Trx.TrxSearchField.Amount)
-        LoadSearchInOne("Invoice #", Trx.TrxSearchField.InvoiceNumber)
-        LoadSearchInOne("PO #", Trx.TrxSearchField.PONumber)
-    End Sub
-
-    Private Sub LoadSearchInOne(ByVal strTitle As String, ByVal lngFieldID As Trx.TrxSearchField)
-        With cboSearchIn
-            .Items.Add(UITools.CreateListBoxItem(strTitle, lngFieldID))
-        End With
+        cboSearchIn.Items.Add(New TrxSearchHandler(mobjHostUI, "Description", Function(ByVal objTrx As Trx) objTrx.strDescription))
+        cboSearchIn.Items.Add(New TrxSearchHandler(mobjHostUI, "Memo", Function(ByVal objTrx As Trx) objTrx.strMemo))
+        cboSearchIn.Items.Add(New CategorySearchHandler(mobjHostUI, "Category"))
+        cboSearchIn.Items.Add(New TrxSearchHandler(mobjHostUI, "Number", Function(ByVal objTrx As Trx) objTrx.strNumber))
+        cboSearchIn.Items.Add(New TrxSearchHandler(mobjHostUI, "Amount", Function(ByVal objTrx As Trx) Utilities.strFormatCurrency(objTrx.curAmount)))
+        cboSearchIn.Items.Add(New SplitSearchHandler(mobjHostUI, "Invoice #", Function(ByVal objSplit As TrxSplit) objSplit.strInvoiceNum))
+        cboSearchIn.Items.Add(New SplitSearchHandler(mobjHostUI, "PO #", Function(ByVal objSplit As TrxSplit) objSplit.strPONumber))
+        mobjLastSearchHandler = Nothing
     End Sub
 
     Private Sub LoadSearchType()
         cboSearchType.Items.Clear()
-        LoadSearchTypeOne("Equal To", Trx.TrxSearchType.EqualTo)
-        LoadSearchTypeOne("Starts With", Trx.TrxSearchType.StartsWith)
-        LoadSearchTypeOne("Contains", Trx.TrxSearchType.Contains)
+        cboSearchType.Items.Add(New SearchComparerEqualTo())
+        cboSearchType.Items.Add(New SearchComparerStartsWith())
+        cboSearchType.Items.Add(New SearchComparerContains())
     End Sub
 
-    Private Sub LoadSearchTypeOne(ByVal strTitle As String, ByVal lngTypeID As Trx.TrxSearchType)
-        With cboSearchType
-            .Items.Add(UITools.CreateListBoxItem(strTitle, lngTypeID))
-        End With
-    End Sub
-
-    Private Sub LoadComboFromStringTranslator(ByVal cbo As System.Windows.Forms.ComboBox, ByVal objList As IStringTranslator)
-
-        UITools.LoadComboFromStringTranslator(cbo, objList, False)
-        With cbo
-            .Left = txtSearchFor.Left
-            .Top = txtSearchFor.Top
-        End With
-    End Sub
-
-    Private Sub cboSearchIn_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboSearchIn.SelectedIndexChanged
-        Select Case UITools.GetItemData(cboSearchIn, cboSearchIn.SelectedIndex)
-            Case Trx.TrxSearchField.Category
-                txtSearchFor.Visible = False
-                cboSearchCats.Visible = True
-            Case Else
-                txtSearchFor.Visible = True
-                cboSearchCats.Visible = False
-        End Select
+    Private Sub cboSearchIn_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearchIn.SelectedIndexChanged
+        mobjSelectedSearchHandler = DirectCast(cboSearchIn.SelectedItem, ISearchHandler)
+        If Not mobjSelectedSearchHandler Is Nothing Then
+            mobjSelectedSearchHandler.HandlerSelected(Me)
+        End If
     End Sub
 
     Private Sub cmdSearch_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSearch.Click
-        Dim lngSearchType As Trx.TrxSearchType
-        Dim lngSearchField As Trx.TrxSearchField
-        Dim strSearchFor As String = ""
-        'Dim lngItemData As Integer
-
         Try
-
-            lngSearchType = CType(UITools.GetItemData(cboSearchType, cboSearchType.SelectedIndex), Trx.TrxSearchType)
-            lngSearchField = CType(UITools.GetItemData(cboSearchIn, cboSearchIn.SelectedIndex), Trx.TrxSearchField)
-            Select Case lngSearchField
-                Case Trx.TrxSearchField.Category
-                    'If cboSearchCats.SelectedIndex = -1 Then
-                    '    mobjHostUI.ErrorMessageBox("Please select a category to search for.")
-                    '    Exit Sub
-                    'Else
-                    '    lngItemData = UITools.GetItemData(cboSearchCats, cboSearchCats.SelectedIndex)
-                    '    strSearchFor = mobjCompany.objCategories.strKey(lngItemData)
-                    '    strSearchFor = mobjCompany.objCategories.strKeyToValue1(strSearchFor)
-                    'End If
-                    mobjSearchHandler = mobjSearchCategory
-                Case Trx.TrxSearchField.Memo
-                    mobjSearchHandler = mobjSearchMemo
-                Case Trx.TrxSearchField.Description
-                    mobjSearchHandler = mobjSearchDescription
-                Case Trx.TrxSearchField.InvoiceNumber
-                    mobjSearchHandler = mobjSearchInvoice
-                Case Else
-                    'Allow "search for nothing" so you can find all trx in a date range.
-                    'If txtSearchFor = "" Then
-                    '    MsgBox "Please enter something to search for.", vbCritical
-                    '    Exit Sub
-                    'End If
-                    strSearchFor = txtSearchFor.Text
-                    mobjSearchHandler = Nothing
-            End Select
-            If Not mobjSearchHandler Is Nothing Then
-                If Not mobjSearchHandler.blnPrepareSearch() Then
-                    Exit Sub
-                End If
+            If mobjSelectedSearchHandler Is Nothing Then
+                Exit Sub
             End If
 
             If Not Utilities.blnIsValidDate(txtStartDate.Text) Then
                 mobjHostUI.ErrorMessageBox("Invalid starting date.")
                 Exit Sub
             End If
+
             If Not Utilities.blnIsValidDate(txtEndDate.Text) Then
                 mobjHostUI.ErrorMessageBox("Invalid ending date.")
                 Exit Sub
             End If
 
+            If Not mobjSelectedSearchHandler.blnPrepareSearch(Me) Then
+                Exit Sub
+            End If
+
             ClearResults()
 
-            mlngLastSearchField = lngSearchField
-            mstrLastSearchFor = strSearchFor
-            mlngLastSearchType = lngSearchType
+            mobjLastSearchHandler = mobjSelectedSearchHandler
             mblnLastIncludeGenerated = (chkIncludeGenerated.CheckState = System.Windows.Forms.CheckState.Checked)
             mdatLastStart = CDate(txtStartDate.Text)
             mdatLastEnd = CDate(txtEndDate.Text)
@@ -208,25 +132,22 @@ Friend Class SearchForm
     End Sub
 
     Private Sub SearchInternal()
-        Dim dlgTrx As Trx.AddSearchMaxTrxDelegate
+        Dim dlgTrx As AddSearchMatchTrxDelegate
 
         Try
             mblnSkipRemember = True
-            For Each objTrx As Trx In mobjReg.colDateRange(mdatLastStart, mdatLastEnd)
-                If mblnLastIncludeGenerated Or Not objTrx.blnAutoGenerated Then
-                    If chkShowAllSplits.Checked And objTrx.lngType = Trx.TrxType.Normal Then
-                        dlgTrx = AddressOf AddSearchMatchAllSplits
-                    Else
-                        dlgTrx = AddressOf AddSearchMatchTrx
+            If Not mobjLastSearchHandler Is Nothing Then
+                For Each objTrx As Trx In mobjReg.colDateRange(mdatLastStart, mdatLastEnd)
+                    If mblnLastIncludeGenerated Or Not objTrx.blnAutoGenerated Then
+                        If chkShowAllSplits.Checked And objTrx.lngType = Trx.TrxType.Normal Then
+                            dlgTrx = AddressOf AddSearchMatchAllSplits
+                        Else
+                            dlgTrx = AddressOf AddSearchMatchTrx
+                        End If
+                        mobjLastSearchHandler.ProcessTrx(objTrx, dlgTrx, AddressOf AddSearchMatchSplit)
                     End If
-                    If mobjSearchHandler Is Nothing Then
-                        objTrx.CheckSearchMatch(mobjCompany, mlngLastSearchField, mstrLastSearchFor, mlngLastSearchType,
-                            dlgTrx, AddressOf AddSearchMatchSplit)
-                    Else
-                        mobjSearchHandler.ProcessTrx(objTrx, dlgTrx, AddressOf AddSearchMatchSplit)
-                    End If
-                End If
-            Next
+                Next
+            End If
         Finally
             mblnSkipRemember = False
         End Try
@@ -859,4 +780,35 @@ Friend Class SearchForm
             mblnSkipRemember = False
         End Try
     End Sub
+
+    Public Sub UseTextCriteria() Implements IHostSearchUI.UseTextCriteria
+        txtSearchFor.Visible = True
+        cboSearchCats.Visible = False
+    End Sub
+
+    Public Sub UseComboBoxCriteria(ByVal objChoices As IEnumerable(Of Object)) Implements IHostSearchUI.UseComboBoxCriteria
+        txtSearchFor.Visible = False
+        cboSearchCats.Visible = True
+        cboSearchCats.Items.Clear()
+        Dim objChoice As Object
+        For Each objChoice In objChoices
+            cboSearchCats.Items.Add(objChoice)
+        Next
+        With cboSearchCats
+            .Left = txtSearchFor.Left
+            .Top = txtSearchFor.Top
+        End With
+    End Sub
+
+    Public Function strGetTextSearchFor() As String Implements IHostSearchUI.strGetTextSearchFor
+        Return txtSearchFor.Text
+    End Function
+
+    Public Function objGetComboBoxSearchFor() As Object Implements IHostSearchUI.objGetComboBoxSearchFor
+        Return cboSearchCats.SelectedItem
+    End Function
+
+    Public Function objGetSearchType() As Object Implements IHostSearchUI.objGetSearchType
+        Return cboSearchType.SelectedItem
+    End Function
 End Class

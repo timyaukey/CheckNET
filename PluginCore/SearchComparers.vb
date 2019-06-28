@@ -4,30 +4,36 @@ Option Explicit On
 Imports CheckBookLib
 Imports PluginCore
 
-Public Class SearchComparers
-    Public Shared Function objGetComparer(ByVal cboSearchType As Windows.Forms.ComboBox) As SearchComparerDelegate
-        Dim lngSearchType As Trx.TrxSearchType = CType(UITools.GetItemData(cboSearchType, cboSearchType.SelectedIndex), Trx.TrxSearchType)
-        Select Case lngSearchType
-            Case Trx.TrxSearchType.EqualTo
-                Return AddressOf SearchComparers.blnEqualTo
-            Case Trx.TrxSearchType.StartsWith
-                Return AddressOf SearchComparers.blnStartsWith
-            Case Trx.TrxSearchType.Contains
-                Return AddressOf SearchComparers.blnContains
-            Case Else
-                Throw New Exception("Unrecognized search type")
-        End Select
-    End Function
+Public MustInherit Class SearchComparer
+    Public MustOverride Function blnCompare(ByVal str1 As String, ByVal str2 As String) As Boolean
+End Class
 
-    Public Shared Function blnEqualTo(ByVal str1 As String, ByVal str2 As String) As Boolean
+Public Class SearchComparerEqualTo
+    Inherits SearchComparer
+    Public Overrides Function blnCompare(str1 As String, str2 As String) As Boolean
         Return StrComp(str1, str2, CompareMethod.Text) = 0
     End Function
+    Public Overrides Function ToString() As String
+        Return "Equal To"
+    End Function
+End Class
 
-    Public Shared Function blnStartsWith(ByVal str1 As String, ByVal str2 As String) As Boolean
+Public Class SearchComparerStartsWith
+    Inherits SearchComparer
+    Public Overrides Function blnCompare(str1 As String, str2 As String) As Boolean
         Return StrComp(Left(str1, Len(str2)), str2, CompareMethod.Text) = 0
     End Function
+    Public Overrides Function ToString() As String
+        Return "Starts With"
+    End Function
+End Class
 
-    Public Shared Function blnContains(ByVal str1 As String, ByVal str2 As String) As Boolean
+Public Class SearchComparerContains
+    Inherits SearchComparer
+    Public Overrides Function blnCompare(str1 As String, str2 As String) As Boolean
         Return InStr(1, str1, str2, CompareMethod.Text) > 0
+    End Function
+    Public Overrides Function ToString() As String
+        Return "Contains"
     End Function
 End Class
