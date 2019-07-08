@@ -64,9 +64,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CategorySearchHandler.vb" />
+    <Compile Include="IHostSearchToolUI.vb" />
     <Compile Include="IHostSearchUI.vb" />
     <Compile Include="IHostUI.vb" />
     <Compile Include="IPluginFactory.vb" />
+    <Compile Include="ISearchTool.vb" />
     <Compile Include="MenuBuilder.vb" />
     <Compile Include="MenuElementAction.vb" />
     <Compile Include="MenuElementBase.vb" />
