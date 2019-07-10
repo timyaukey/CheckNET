@@ -64,7 +64,6 @@
     <Compile Include="DetailCell.cs" />
     <Compile Include="DataRow.cs" />
     <Compile Include="DetailRow.cs" />
-    <Compile Include="PluginFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SplitDetailCell.cs" />
     <Compile Include="SplitDetailRow.cs" />

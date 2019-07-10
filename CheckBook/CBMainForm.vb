@@ -151,17 +151,19 @@ Friend Class CBMainForm
     End Sub
 
     Private Sub LoadPluginsFromAssembly(ByVal objAssembly As Assembly)
-        For Each objAttrib As Object In objAssembly.GetCustomAttributes(GetType(PluginFactoryAttribute), False)
-            Dim objPluginFactoryAttr As PluginFactoryAttribute = CType(objAttrib, PluginFactoryAttribute)
-            Dim objFactoryType As Type = objPluginFactoryAttr.objFactoryType
-            Dim objFactory As IPluginFactory = DirectCast(System.Activator.CreateInstance(objFactoryType), IPluginFactory)
-            LoadPluginsFromFactory(objFactory)
-        Next
-    End Sub
-
-    Private Sub LoadPluginsFromFactory(ByVal objFactory As IPluginFactory)
-        For Each objPlugin As IPlugin In objFactory.colGetPlugins(Me)
-            objPlugin.Register()
+        For Each objAttrib As Object In objAssembly.GetCustomAttributes(GetType(PluginAssemblyAttribute), False)
+            For Each objType As Type In objAssembly.GetExportedTypes()
+                Dim objPluginType As Type = objType.GetInterface("IPlugin")
+                If Not objPluginType Is Nothing Then
+                    If Not objType.IsAbstract Then
+                        Dim objConstructor As ConstructorInfo = objType.GetConstructor({GetType(IHostUI)})
+                        If Not objConstructor Is Nothing Then
+                            Dim objPlugin As IPlugin = DirectCast(objConstructor.Invoke({mobjHostUI}), IPlugin)
+                            objPlugin.Register()
+                        End If
+                    End If
+                End If
+            Next
         Next
     End Sub
 

@@ -5,6 +5,8 @@ Imports CheckBookLib
 Imports PluginCore
 Imports System.IO
 
+<Assembly: PluginAssembly()>
+
 ''' <summary>
 ''' All plugins that import Trx using ITrxReader and IImportHandler
 ''' inherit from this. This class is subclassed several different

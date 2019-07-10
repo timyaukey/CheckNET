@@ -67,7 +67,6 @@
     <Compile Include="IHostSearchToolUI.vb" />
     <Compile Include="IHostSearchUI.vb" />
     <Compile Include="IHostUI.vb" />
-    <Compile Include="IPluginFactory.vb" />
     <Compile Include="ISearchTool.vb" />
     <Compile Include="MenuBuilder.vb" />
     <Compile Include="MenuElementAction.vb" />
@@ -87,6 +86,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="PluginAssemblyAttribute.vb" />
     <Compile Include="PluginInterfaces.vb" />
     <Compile Include="SearchComparers.vb" />
     <Compile Include="SplitSearchHandler.vb" />

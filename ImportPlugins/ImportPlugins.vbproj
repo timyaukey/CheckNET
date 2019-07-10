@@ -93,7 +93,6 @@
     <Compile Include="Deposits\ImportHandlerDeposits.vb" />
     <Compile Include="IImportHandler.vb" />
     <Compile Include="ImportedTrx.vb" />
-    <Compile Include="ImportPlugins.vb" />
     <Compile Include="ImportUtilities.vb" />
     <Compile Include="Invoices\ImportHandlerInvoices.vb" />
     <Compile Include="Invoices\InvoiceImportPlugin.vb" />

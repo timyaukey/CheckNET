@@ -49,7 +49,7 @@
       <DependentUpon>ExportForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IntuitExport\IntuitExportPlugin.cs" />
-    <Compile Include="PluginFactory.cs" />
+    <Compile Include="PluginMarker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RenumberChecks\RenumberChecksForm.cs">
       <SubType>Form</SubType>

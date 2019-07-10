@@ -6,6 +6,8 @@ using System.Text;
 using CheckBookLib;
 using PluginCore;
 
+[assembly: PluginAssembly()]
+
 namespace BudgetDashboard
 {
     public class DashboardPlugin : ToolPlugin
