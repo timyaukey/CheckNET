@@ -12,7 +12,7 @@ Friend Class ExportForm
 
     Private mblnCancel As Short
     Private mstrOutputFile As String
-    Private mintOutputFile As Short
+    Private mobjOutputFile As IO.StreamWriter
 
     Private mblnIncludeAging As Boolean
     Private mdatAgingDate As Date
@@ -134,9 +134,8 @@ Friend Class ExportForm
         If mblnIncludeInv Then
             strExtraFields = strExtraFields & ",InvoiceDateBracket"
         End If
-        mintOutputFile = FreeFile()
-        FileOpen(mintOutputFile, mstrOutputFile, OpenMode.Output)
-        PrintLine(mintOutputFile, "TransDate,Number,Payee,Amount,Category," & "DueDate,DueDateToUse,InvoiceDate,InvoiceDateToUse,PONumber,InvoiceNumber,Terms" & strExtraFields)
+        mobjOutputFile = New IO.StreamWriter(mstrOutputFile)
+        mobjOutputFile.WriteLine("TransDate,Number,Payee,Amount,Category," & "DueDate,DueDateToUse,InvoiceDate,InvoiceDateToUse,PONumber,InvoiceNumber,Terms" & strExtraFields)
     End Sub
 
     Public Sub WriteSplit(ByVal objTrx As Trx, ByVal objSplit As TrxSplit)
@@ -185,7 +184,7 @@ Friend Class ExportForm
                 strLine = strLine & ",""" & strBracket & """"
             End If
 
-            PrintLine(mintOutputFile, strLine)
+            mobjOutputFile.WriteLine(strLine)
 
             Exit Sub
         Catch ex As Exception
@@ -194,6 +193,6 @@ Friend Class ExportForm
     End Sub
 
     Public Sub CloseOutput()
-        FileClose(mintOutputFile)
+        mobjOutputFile.Close()
     End Sub
 End Class

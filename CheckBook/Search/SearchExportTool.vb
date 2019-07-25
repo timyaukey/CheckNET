@@ -36,7 +36,7 @@ Public Class SearchExportTool
             For Each objTrx In objHostSearchToolUI.objAllSelectedTrx()
                 'Ignore budgets and transfers instead of showing an error, because
                 'it is common to export all trx in a date range except these.
-                If objTrx.lngType = Trx.TrxType.Normal Then
+                If TypeOf objTrx Is NormalTrx Then
                     colSplits = DirectCast(objTrx, NormalTrx).colSplits
                     For Each objSplit In colSplits
                         frmExport.WriteSplit(objTrx, objSplit)
