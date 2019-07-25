@@ -17,12 +17,12 @@ Friend Class CatSumRptForm
 	Private mdatEnd As Date
 	Private mblnIncludeFake As Boolean
 	Private mblnIncludeGenerated As Boolean
-	Private mintOutFile As Short
-	Private mblnLoadComplete As Boolean
+    Private mobjOutFile As IO.StreamWriter
+    Private mblnLoadComplete As Boolean
     Private mintMaxCatNameWidth As Short
     Private mcolResultRows As List(Of ResultRow)
-	
-	Private Const mintAMOUNT_WIDTH As Short = 24
+
+    Private Const mintAMOUNT_WIDTH As Short = 24
 
     Public Sub ShowMe(ByVal objHostUI As IHostUI, ByRef audtCatTotals() As PublicTypes.CategoryInfo, ByVal colSelectedAccounts As IEnumerable(Of Account),
                       ByVal objCats As IStringTranslator, ByVal datStart As Date, ByVal datEnd As Date,
@@ -50,7 +50,7 @@ Friend Class CatSumRptForm
     End Sub
 
     Private Sub CatSumRptForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-		
+
         Try
 
             'Force the window to the size specified in the IDE, because MDI child windows
@@ -67,28 +67,22 @@ Friend Class CatSumRptForm
             gTopException(ex)
         End Try
     End Sub
-	
-	Private Sub LoadUI()
-		Dim strOutFile As String
-		
+
+    Private Sub LoadUI()
+        Dim strOutFile As String
+
         Try
 
             strOutFile = mobjCompany.strReportPath() & "\CatSum.rpt"
-            mintOutFile = FreeFile()
-            FileOpen(mintOutFile, strOutFile, OpenMode.Output)
-            ShowSpecs(mcolSelectedAccounts, mdatStart, mdatEnd, mblnIncludeFake, mblnIncludeGenerated)
-            LoadGrid()
-            FileClose(mintOutFile)
-            mintOutFile = 0
-
+            Using objOutFile As IO.StreamWriter = New IO.StreamWriter(strOutFile)
+                mobjOutFile = objOutFile
+                ShowSpecs(mcolSelectedAccounts, mdatStart, mdatEnd, mblnIncludeFake, mblnIncludeGenerated)
+                LoadGrid()
+            End Using
             mobjHostUI.InfoMessageBox("Report also written to """ & strOutFile & """.")
 
             Exit Sub
         Catch ex As Exception
-            If mintOutFile <> 0 Then
-                FileClose(mintOutFile)
-                mintOutFile = 0
-            End If
             gNestedException(ex)
         End Try
     End Sub
@@ -132,9 +126,9 @@ Friend Class CatSumRptForm
     End Sub
 
     Private Sub LoadGrid()
-		Dim intCatIndex As Short
-		Dim intCatNameWidth As Short
-		
+        Dim intCatIndex As Short
+        Dim intCatNameWidth As Short
+
         Try
 
             mintMaxCatNameWidth = 0
@@ -162,21 +156,21 @@ Friend Class CatSumRptForm
             gNestedException(ex)
         End Try
     End Sub
-	
-	'Description:
-	'   Process categories with the specified nesting level starting at the specified
-	'   category index, until no more categories or a category with a lower nesting
-	'   level is encountered.
-	'Return Value:
-	'   Return the sum of all the direct and indirect child amounts. Does not
-	'   include the parent amount.
-	
-	Private Function curProcessChildren(ByRef intCatIndex As Short, ByVal intNestingLevel As Short, ByVal strLabel As String, ByVal curParentAmount As Decimal) As Decimal
-		
+
+    'Description:
+    '   Process categories with the specified nesting level starting at the specified
+    '   category index, until no more categories or a category with a lower nesting
+    '   level is encountered.
+    'Return Value:
+    '   Return the sum of all the direct and indirect child amounts. Does not
+    '   include the parent amount.
+
+    Private Function curProcessChildren(ByRef intCatIndex As Short, ByVal intNestingLevel As Short, ByVal strLabel As String, ByVal curParentAmount As Decimal) As Decimal
+
         Dim strCatName As String = ""
-		Dim curAmount As Decimal
-		Dim curChildTotal As Decimal
-		
+        Dim curAmount As Decimal
+        Dim curChildTotal As Decimal
+
         Try
 
             Do
@@ -206,15 +200,15 @@ Friend Class CatSumRptForm
             gNestedException(ex)
         End Try
     End Function
-	
-	Private Sub AddOutputRow(ByVal strLabel As String, ByVal curAmount As Decimal, ByVal intNestingLevel As Short)
-		
-		Dim strRightPad As String
+
+    Private Sub AddOutputRow(ByVal strLabel As String, ByVal curAmount As Decimal, ByVal intNestingLevel As Short)
+
+        Dim strRightPad As String
         Dim strAmount As String
         Dim objResultRow As ResultRow
 
         objResultRow = New ResultRow()
-		
+
         strRightPad = New String(" ", intNestingLevel + 1)
         objResultRow.Label = strRightPad & strRightPad & strRightPad & strLabel
         strAmount = Utilities.strFormatCurrency(curAmount)
@@ -222,7 +216,7 @@ Friend Class CatSumRptForm
         mcolResultRows.Add(objResultRow)
 
         WriteRptLine(VB.Left(strLabel & Space(mintMaxCatNameWidth), mintMaxCatNameWidth) & VB.Right(Space(mintAMOUNT_WIDTH) & strAmount, mintAMOUNT_WIDTH))
-	End Sub
+    End Sub
 
     Private Class ResultRow
         Private mLabel As String
@@ -246,9 +240,9 @@ Friend Class CatSumRptForm
         End Property
     End Class
 
-	Private Sub WriteRptLine(ByVal strLine As String)
-		PrintLine(mintOutFile, strLine)
-	End Sub
+    Private Sub WriteRptLine(ByVal strLine As String)
+        mobjOutFile.WriteLine(strLine)
+    End Sub
 	
 	Private Sub cmdResultToClipboard_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdResultToClipboard.Click
         Try
