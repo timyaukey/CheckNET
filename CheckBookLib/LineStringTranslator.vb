@@ -11,27 +11,23 @@ Public MustInherit Class LineStringTranslator(Of TElement As StringTransElement)
     Inherits StringTranslator(Of TElement)
 
     Public Overrides Sub LoadFile(ByVal strPath As String)
-
-        Dim intFile As Integer
-        Dim strLine As String
-
         Try
-
+            Dim strLine As String
             Init()
-            intFile = FreeFile()
-            FileOpen(intFile, strPath, OpenMode.Input)
-
-            'Skip first line.
-            'First line can contain anything, like a comment indicating the
-            'next available key value.
-            strLine = LineInput(intFile)
-            While Not EOF(intFile)
-                strLine = LineInput(intFile)
-                Dim elm As TElement = ParseLine(strLine)
-                Add(elm)
-            End While
-
-            FileClose(intFile)
+            Using objFile = New IO.StreamReader(strPath)
+                'Skip first line.
+                'First line can contain anything, like a comment indicating the
+                'next available key value.
+                objFile.ReadLine()
+                Do
+                    strLine = objFile.ReadLine()
+                    If strLine Is Nothing Then
+                        Exit Do
+                    End If
+                    Dim elm As TElement = ParseLine(strLine)
+                    Add(elm)
+                Loop
+            End Using
 
             Exit Sub
         Catch ex As Exception
