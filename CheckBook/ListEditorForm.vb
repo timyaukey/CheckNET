@@ -498,26 +498,23 @@ Friend Class ListEditorForm
     '$Description Write new file from mobjList. mobjList is assumed to be in sorted order.
 
     Private Sub WriteFile()
-        Dim intFile As Integer
         Dim intIndex As Integer
         Dim strTmpFile As String
 
         Try
-
             strTmpFile = mobjCompany.strAddPath("NewList.tmp")
-            intFile = FreeFile()
-            FileOpen(intFile, strTmpFile, OpenMode.Output)
-            PrintLine(intFile, "Generated " & Now)
-            With mobjList
-                For intIndex = 1 To .intElements
-                    Dim strExtraPairs As String = ""
-                    For Each objPair As KeyValuePair(Of String, String) In .objElement(intIndex).colValues
-                        strExtraPairs += ("/" + objPair.Key + ":" + objPair.Value)
+            Using objFile As IO.StreamWriter = New IO.StreamWriter(strTmpFile)
+                objFile.WriteLine("Generated " & Now)
+                With mobjList
+                    For intIndex = 1 To .intElements
+                        Dim strExtraPairs As String = ""
+                        For Each objPair As KeyValuePair(Of String, String) In .objElement(intIndex).colValues
+                            strExtraPairs += ("/" + objPair.Key + ":" + objPair.Value)
+                        Next
+                        objFile.WriteLine("/" & .strKey(intIndex) & "/" & .strValue1(intIndex) & "/" & .strValue2(intIndex) & strExtraPairs)
                     Next
-                    PrintLine(intFile, "/" & .strKey(intIndex) & "/" & .strValue1(intIndex) & "/" & .strValue2(intIndex) & strExtraPairs)
-                Next
-            End With
-            FileClose(intFile)
+                End With
+            End Using
             If Dir(mstrFile) <> "" Then
                 Kill(mstrFile)
             End If
