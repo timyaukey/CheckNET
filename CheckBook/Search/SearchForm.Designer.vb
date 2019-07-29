@@ -26,64 +26,56 @@
 	Public ToolTip1 As System.Windows.Forms.ToolTip
 	Public WithEvents cmdNewNormal As System.Windows.Forms.Button
 	Public WithEvents cmdEditTrx As System.Windows.Forms.Button
-	Public WithEvents cmdRecategorize As System.Windows.Forms.Button
-	Public WithEvents chkIncludeGenerated As System.Windows.Forms.CheckBox
-	Public WithEvents cmdSelect As System.Windows.Forms.Button
-	Public WithEvents cmdExport As System.Windows.Forms.Button
-	Public WithEvents txtAddMultAmount As System.Windows.Forms.TextBox
-	Public WithEvents cmdMultTotalBy As System.Windows.Forms.Button
-	Public WithEvents cmdAddToTotal As System.Windows.Forms.Button
-	Public WithEvents cmdTotalToClipboard As System.Windows.Forms.Button
-	Public WithEvents cmdClearTotal As System.Windows.Forms.Button
-	Public WithEvents cmdMove As System.Windows.Forms.Button
-	Public WithEvents cmdCombine As System.Windows.Forms.Button
-	Public WithEvents txtEndDate As System.Windows.Forms.TextBox
-	Public WithEvents cmdSearch As System.Windows.Forms.Button
-	Public WithEvents txtSearchFor As System.Windows.Forms.TextBox
-	Public WithEvents txtStartDate As System.Windows.Forms.TextBox
-	Public WithEvents cboSearchType As System.Windows.Forms.ComboBox
-	Public WithEvents cboSearchIn As System.Windows.Forms.ComboBox
-	Public WithEvents _lvwMatches_ColumnHeader_1 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_2 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_3 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_4 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_5 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_6 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_7 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_8 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_9 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_10 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_11 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_12 As System.Windows.Forms.ColumnHeader
-	Public WithEvents _lvwMatches_ColumnHeader_13 As System.Windows.Forms.ColumnHeader
-	Public WithEvents lvwMatches As System.Windows.Forms.ListView
-	Public WithEvents cboSearchCats As System.Windows.Forms.ComboBox
-	Public WithEvents lblAddMultAmout As System.Windows.Forms.Label
-	Public WithEvents lblTotalDollars As System.Windows.Forms.Label
-	Public WithEvents lblEndDate As System.Windows.Forms.Label
-	Public WithEvents Label4 As System.Windows.Forms.Label
-	Public WithEvents lblStartDate As System.Windows.Forms.Label
-	Public WithEvents Label2 As System.Windows.Forms.Label
-	Public WithEvents Label1 As System.Windows.Forms.Label
-	'NOTE: The following procedure is required by the Windows Form Designer
-	'It can be modified using the Windows Form Designer.
-	'Do not modify it using the code editor.
-	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
+    Public WithEvents chkIncludeGenerated As System.Windows.Forms.CheckBox
+    Public WithEvents cmdSelect As System.Windows.Forms.Button
+    Public WithEvents txtAddMultAmount As System.Windows.Forms.TextBox
+    Public WithEvents cmdMultTotalBy As System.Windows.Forms.Button
+    Public WithEvents cmdAddToTotal As System.Windows.Forms.Button
+    Public WithEvents cmdTotalToClipboard As System.Windows.Forms.Button
+    Public WithEvents cmdClearTotal As System.Windows.Forms.Button
+    Public WithEvents txtEndDate As System.Windows.Forms.TextBox
+    Public WithEvents cmdSearch As System.Windows.Forms.Button
+    Public WithEvents txtSearchFor As System.Windows.Forms.TextBox
+    Public WithEvents txtStartDate As System.Windows.Forms.TextBox
+    Public WithEvents cboSearchType As System.Windows.Forms.ComboBox
+    Public WithEvents cboSearchIn As System.Windows.Forms.ComboBox
+    Public WithEvents _lvwMatches_ColumnHeader_1 As System.Windows.Forms.ColumnHeader
+    Public WithEvents _lvwMatches_ColumnHeader_2 As System.Windows.Forms.ColumnHeader
+    Public WithEvents _lvwMatches_ColumnHeader_3 As System.Windows.Forms.ColumnHeader
+    Public WithEvents _lvwMatches_ColumnHeader_4 As System.Windows.Forms.ColumnHeader
+    Public WithEvents _lvwMatches_ColumnHeader_5 As System.Windows.Forms.ColumnHeader
+    Public WithEvents _lvwMatches_ColumnHeader_6 As System.Windows.Forms.ColumnHeader
+    Public WithEvents _lvwMatches_ColumnHeader_7 As System.Windows.Forms.ColumnHeader
+    Public WithEvents _lvwMatches_ColumnHeader_8 As System.Windows.Forms.ColumnHeader
+    Public WithEvents _lvwMatches_ColumnHeader_9 As System.Windows.Forms.ColumnHeader
+    Public WithEvents _lvwMatches_ColumnHeader_10 As System.Windows.Forms.ColumnHeader
+    Public WithEvents _lvwMatches_ColumnHeader_11 As System.Windows.Forms.ColumnHeader
+    Public WithEvents _lvwMatches_ColumnHeader_12 As System.Windows.Forms.ColumnHeader
+    Public WithEvents _lvwMatches_ColumnHeader_13 As System.Windows.Forms.ColumnHeader
+    Public WithEvents lvwMatches As System.Windows.Forms.ListView
+    Public WithEvents cboSearchCats As System.Windows.Forms.ComboBox
+    Public WithEvents lblAddMultAmout As System.Windows.Forms.Label
+    Public WithEvents lblTotalDollars As System.Windows.Forms.Label
+    Public WithEvents lblEndDate As System.Windows.Forms.Label
+    Public WithEvents Label4 As System.Windows.Forms.Label
+    Public WithEvents lblStartDate As System.Windows.Forms.Label
+    Public WithEvents Label2 As System.Windows.Forms.Label
+    Public WithEvents Label1 As System.Windows.Forms.Label
+    'NOTE: The following procedure is required by the Windows Form Designer
+    'It can be modified using the Windows Form Designer.
+    'Do not modify it using the code editor.
+    <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.cmdNewNormal = New System.Windows.Forms.Button()
         Me.cmdEditTrx = New System.Windows.Forms.Button()
-        Me.cmdRecategorize = New System.Windows.Forms.Button()
         Me.chkIncludeGenerated = New System.Windows.Forms.CheckBox()
         Me.cmdSelect = New System.Windows.Forms.Button()
-        Me.cmdExport = New System.Windows.Forms.Button()
         Me.txtAddMultAmount = New System.Windows.Forms.TextBox()
         Me.cmdMultTotalBy = New System.Windows.Forms.Button()
         Me.cmdAddToTotal = New System.Windows.Forms.Button()
         Me.cmdTotalToClipboard = New System.Windows.Forms.Button()
         Me.cmdClearTotal = New System.Windows.Forms.Button()
-        Me.cmdMove = New System.Windows.Forms.Button()
-        Me.cmdCombine = New System.Windows.Forms.Button()
         Me.txtEndDate = New System.Windows.Forms.TextBox()
         Me.cmdSearch = New System.Windows.Forms.Button()
         Me.txtSearchFor = New System.Windows.Forms.TextBox()
@@ -113,6 +105,8 @@
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.chkShowAllSplits = New System.Windows.Forms.CheckBox()
+        Me.btnRunTool = New System.Windows.Forms.Button()
+        Me.cboTools = New System.Windows.Forms.ComboBox()
         Me.SuspendLayout()
         '
         'cmdNewNormal
@@ -145,21 +139,6 @@
         Me.cmdEditTrx.Text = "Edit"
         Me.cmdEditTrx.UseVisualStyleBackColor = False
         '
-        'cmdRecategorize
-        '
-        Me.cmdRecategorize.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdRecategorize.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdRecategorize.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdRecategorize.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdRecategorize.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdRecategorize.Location = New System.Drawing.Point(587, 475)
-        Me.cmdRecategorize.Name = "cmdRecategorize"
-        Me.cmdRecategorize.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdRecategorize.Size = New System.Drawing.Size(95, 25)
-        Me.cmdRecategorize.TabIndex = 25
-        Me.cmdRecategorize.Text = "Recategorize"
-        Me.cmdRecategorize.UseVisualStyleBackColor = False
-        '
         'chkIncludeGenerated
         '
         Me.chkIncludeGenerated.BackColor = System.Drawing.SystemColors.Control
@@ -189,21 +168,6 @@
         Me.cmdSelect.TabIndex = 22
         Me.cmdSelect.Text = "(Un)Select All"
         Me.cmdSelect.UseVisualStyleBackColor = False
-        '
-        'cmdExport
-        '
-        Me.cmdExport.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdExport.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdExport.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdExport.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdExport.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdExport.Location = New System.Drawing.Point(687, 475)
-        Me.cmdExport.Name = "cmdExport"
-        Me.cmdExport.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdExport.Size = New System.Drawing.Size(95, 25)
-        Me.cmdExport.TabIndex = 26
-        Me.cmdExport.Text = "Export"
-        Me.cmdExport.UseVisualStyleBackColor = False
         '
         'txtAddMultAmount
         '
@@ -274,36 +238,6 @@
         Me.cmdClearTotal.TabIndex = 9
         Me.cmdClearTotal.Text = "Clear Total"
         Me.cmdClearTotal.UseVisualStyleBackColor = False
-        '
-        'cmdMove
-        '
-        Me.cmdMove.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdMove.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdMove.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdMove.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdMove.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdMove.Location = New System.Drawing.Point(787, 475)
-        Me.cmdMove.Name = "cmdMove"
-        Me.cmdMove.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdMove.Size = New System.Drawing.Size(95, 25)
-        Me.cmdMove.TabIndex = 27
-        Me.cmdMove.Text = "Move"
-        Me.cmdMove.UseVisualStyleBackColor = False
-        '
-        'cmdCombine
-        '
-        Me.cmdCombine.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdCombine.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdCombine.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdCombine.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdCombine.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdCombine.Location = New System.Drawing.Point(887, 475)
-        Me.cmdCombine.Name = "cmdCombine"
-        Me.cmdCombine.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdCombine.Size = New System.Drawing.Size(95, 25)
-        Me.cmdCombine.TabIndex = 28
-        Me.cmdCombine.Text = "Combine"
-        Me.cmdCombine.UseVisualStyleBackColor = False
         '
         'txtEndDate
         '
@@ -602,6 +536,30 @@
         Me.chkShowAllSplits.Text = "Show all splits for matched transactions"
         Me.chkShowAllSplits.UseVisualStyleBackColor = False
         '
+        'btnRunTool
+        '
+        Me.btnRunTool.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnRunTool.BackColor = System.Drawing.SystemColors.Control
+        Me.btnRunTool.Cursor = System.Windows.Forms.Cursors.Default
+        Me.btnRunTool.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnRunTool.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnRunTool.Location = New System.Drawing.Point(876, 475)
+        Me.btnRunTool.Name = "btnRunTool"
+        Me.btnRunTool.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.btnRunTool.Size = New System.Drawing.Size(107, 25)
+        Me.btnRunTool.TabIndex = 26
+        Me.btnRunTool.Text = "Run Tool"
+        Me.btnRunTool.UseVisualStyleBackColor = False
+        '
+        'cboTools
+        '
+        Me.cboTools.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cboTools.FormattingEnabled = True
+        Me.cboTools.Location = New System.Drawing.Point(674, 477)
+        Me.cboTools.Name = "cboTools"
+        Me.cboTools.Size = New System.Drawing.Size(196, 22)
+        Me.cboTools.TabIndex = 25
+        '
         'SearchForm
         '
         Me.AcceptButton = Me.cmdSearch
@@ -609,20 +567,18 @@
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(995, 508)
+        Me.Controls.Add(Me.cboTools)
+        Me.Controls.Add(Me.btnRunTool)
         Me.Controls.Add(Me.chkShowAllSplits)
         Me.Controls.Add(Me.cmdNewNormal)
         Me.Controls.Add(Me.cmdEditTrx)
-        Me.Controls.Add(Me.cmdRecategorize)
         Me.Controls.Add(Me.chkIncludeGenerated)
         Me.Controls.Add(Me.cmdSelect)
-        Me.Controls.Add(Me.cmdExport)
         Me.Controls.Add(Me.txtAddMultAmount)
         Me.Controls.Add(Me.cmdMultTotalBy)
         Me.Controls.Add(Me.cmdAddToTotal)
         Me.Controls.Add(Me.cmdTotalToClipboard)
         Me.Controls.Add(Me.cmdClearTotal)
-        Me.Controls.Add(Me.cmdMove)
-        Me.Controls.Add(Me.cmdCombine)
         Me.Controls.Add(Me.txtEndDate)
         Me.Controls.Add(Me.cmdSearch)
         Me.Controls.Add(Me.txtSearchFor)
@@ -651,5 +607,7 @@
     End Sub
 
     Public WithEvents chkShowAllSplits As CheckBox
+    Public WithEvents btnRunTool As Button
+    Friend WithEvents cboTools As ComboBox
 #End Region
 End Class

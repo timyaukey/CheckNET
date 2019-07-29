@@ -18,6 +18,10 @@ Public Class SearchRecategorizeTool
         End Get
     End Property
 
+    Public Overrides Function ToString() As String
+        Return strTitle
+    End Function
+
     Public Sub Run(objHostSearchToolUI As IHostSearchToolUI) Implements ISearchTool.Run
         Dim strOldCatKey As String = ""
         Dim strNewCatKey As String = ""

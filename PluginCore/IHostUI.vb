@@ -20,6 +20,8 @@ Public Interface IHostUI
     Property objReportMenu As MenuBuilder
     Property objToolMenu As MenuBuilder
 
+    Function objSearchTools() As IEnumerable(Of ISearchTool)
+
     Sub ShowRegister(ByVal objReg As Register)
 
     Function strChooseFile(ByVal strWindowCaption As String, ByVal strFileType As String,

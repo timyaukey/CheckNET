@@ -50,6 +50,7 @@ Friend Class SearchForm
         cboSearchIn.SelectedIndex = 0
         cboSearchType.SelectedIndex = 0
         txtSearchFor.Focus()
+        LoadTools()
 
         Me.Show()
 
@@ -81,6 +82,13 @@ Friend Class SearchForm
         cboSearchType.Items.Add(New SearchComparerEqualTo())
         cboSearchType.Items.Add(New SearchComparerStartsWith())
         cboSearchType.Items.Add(New SearchComparerContains())
+    End Sub
+
+    Private Sub LoadTools()
+        cboTools.Items.Clear()
+        For Each objTool As ISearchTool In mobjHostUI.objSearchTools
+            cboTools.Items.Add(objTool)
+        Next
     End Sub
 
     Private Sub cboSearchIn_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearchIn.SelectedIndexChanged
@@ -402,43 +410,19 @@ Friend Class SearchForm
         Next
     End Function
 
-    Private Sub cmdExport_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdExport.Click
+    Private Sub btnRunTool_Click(sender As Object, e As EventArgs) Handles btnRunTool.Click
         Try
-            Dim objTool As ISearchTool = New SearchExportTool(mobjHostUI)
-            objTool.Run(Me)
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
-
-    Private Sub cmdRecategorize_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRecategorize.Click
-        Try
-            Dim objTool As ISearchTool = New SearchRecategorizeTool(mobjHostUI)
+            Dim objTool As ISearchTool = DirectCast(cboTools.SelectedItem, ISearchTool)
+            If objTool Is Nothing Then
+                mobjHostUI.ErrorMessageBox("Select a tool from the drop down list first")
+                Return
+            End If
             objTool.Run(Me)
             Exit Sub
         Catch ex As Exception
             gTopException(ex)
         End Try
-    End Sub
 
-    Private Sub cmdCombine_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCombine.Click
-        Try
-            Dim objTool As ISearchTool = New SearchCombineTool(mobjHostUI)
-            objTool.Run(Me)
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
-
-    Private Sub cmdMove_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdMove.Click
-        Try
-            Dim objTool As ISearchTool = New SearchMoveTool(mobjHostUI)
-            objTool.Run(Me)
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
     End Sub
 
     Private Function blnValidTrxForBulkOperation(ByVal objTrx As Trx, ByVal strOperation As String) As Boolean _

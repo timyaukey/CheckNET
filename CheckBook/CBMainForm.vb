@@ -127,6 +127,13 @@ Friend Class CBMainForm
     Private Property objReportMenu As MenuBuilder Implements IHostUI.objReportMenu
     Private Property objToolMenu As MenuBuilder Implements IHostUI.objToolMenu
 
+    Public Iterator Function objSearchTools() As IEnumerable(Of ISearchTool) Implements IHostUI.objSearchTools
+        Yield New SearchCombineTool(Me)
+        Yield New SearchMoveTool(Me)
+        Yield New SearchExportTool(Me)
+        Yield New SearchRecategorizeTool(Me)
+    End Function
+
     Private Sub LoadPlugins()
         objBankImportMenu = New MenuBuilder(mnuImportBank)
         objCheckImportMenu = New MenuBuilder(mnuImportChecks)

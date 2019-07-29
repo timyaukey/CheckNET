@@ -18,6 +18,10 @@ Public Class SearchExportTool
         End Get
     End Property
 
+    Public Overrides Function ToString() As String
+        Return strTitle
+    End Function
+
     Public Sub Run(objHostSearchToolUI As IHostSearchToolUI) Implements ISearchTool.Run
         Using frmExport As ExportForm = New ExportForm
             Dim objTrx As Trx

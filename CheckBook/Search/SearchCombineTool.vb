@@ -18,6 +18,10 @@ Public Class SearchCombineTool
         End Get
     End Property
 
+    Public Overrides Function ToString() As String
+        Return strTitle
+    End Function
+
     Public Sub Run(objHostSearchToolUI As IHostSearchToolUI) Implements ISearchTool.Run
         Dim objNewTrx As NormalTrx = Nothing
         Dim objOldTrx As NormalTrx
