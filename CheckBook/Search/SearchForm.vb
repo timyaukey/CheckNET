@@ -67,13 +67,9 @@ Friend Class SearchForm
 
     Private Sub LoadSearchIn()
         cboSearchIn.Items.Clear()
-        cboSearchIn.Items.Add(New TrxSearchHandler(mobjHostUI, "Description", Function(ByVal objTrx As Trx) objTrx.strDescription))
-        cboSearchIn.Items.Add(New TrxSearchHandler(mobjHostUI, "Memo", Function(ByVal objTrx As Trx) objTrx.strMemo))
-        cboSearchIn.Items.Add(New CategorySearchHandler(mobjHostUI, "Category"))
-        cboSearchIn.Items.Add(New TrxSearchHandler(mobjHostUI, "Number", Function(ByVal objTrx As Trx) objTrx.strNumber))
-        cboSearchIn.Items.Add(New TrxSearchHandler(mobjHostUI, "Amount", Function(ByVal objTrx As Trx) Utilities.strFormatCurrency(objTrx.curAmount)))
-        cboSearchIn.Items.Add(New SplitSearchHandler(mobjHostUI, "Invoice #", Function(ByVal objSplit As TrxSplit) objSplit.strInvoiceNum))
-        cboSearchIn.Items.Add(New SplitSearchHandler(mobjHostUI, "PO #", Function(ByVal objSplit As TrxSplit) objSplit.strPONumber))
+        For Each objHandler As ISearchHandler In mobjHostUI.objSearchHandlers
+            cboSearchIn.Items.Add(objHandler)
+        Next
         mobjLastSearchHandler = Nothing
     End Sub
 

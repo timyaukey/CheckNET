@@ -127,6 +127,16 @@ Friend Class CBMainForm
     Private Property objReportMenu As MenuBuilder Implements IHostUI.objReportMenu
     Private Property objToolMenu As MenuBuilder Implements IHostUI.objToolMenu
 
+    Public Iterator Function objSearchHandlers() As IEnumerable(Of ISearchHandler) Implements IHostUI.objSearchHandlers
+        Yield New TrxSearchHandler(Me, "Description", Function(ByVal objTrx As Trx) objTrx.strDescription)
+        Yield New TrxSearchHandler(Me, "Memo", Function(ByVal objTrx As Trx) objTrx.strMemo)
+        Yield New CategorySearchHandler(Me, "Category")
+        Yield New TrxSearchHandler(Me, "Number", Function(ByVal objTrx As Trx) objTrx.strNumber)
+        Yield New TrxSearchHandler(Me, "Amount", Function(ByVal objTrx As Trx) Utilities.strFormatCurrency(objTrx.curAmount))
+        Yield New SplitSearchHandler(Me, "Invoice #", Function(ByVal objSplit As TrxSplit) objSplit.strInvoiceNum)
+        Yield New SplitSearchHandler(Me, "PO #", Function(ByVal objSplit As TrxSplit) objSplit.strPONumber)
+    End Function
+
     Public Iterator Function objSearchTools() As IEnumerable(Of ISearchTool) Implements IHostUI.objSearchTools
         Yield New SearchCombineTool(Me)
         Yield New SearchMoveTool(Me)
