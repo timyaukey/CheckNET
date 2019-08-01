@@ -6,11 +6,26 @@ Imports System.Xml.Serialization
 
 Public Class CompanyLoader
 
-    Public Shared Sub Load(ByVal objCompany As Company, ByVal showAccount As Company.ShowStartupAccount)
+    Public Shared Function objLoad(ByVal objCompany As Company,
+        ByVal showAccount As Company.ShowStartupAccount,
+        ByVal authenticator As Func(Of CompanyLoadError)) As CompanyLoadError
+
+        If Not objCompany.blnDataPathExists() Then
+            Return New CompanyLoadNotFound()
+        End If
+        objCompany.objSecurity.Load()
+        Dim objAuthenticatorError As CompanyLoadError = authenticator()
+        If Not objAuthenticatorError Is Nothing Then
+            Return objAuthenticatorError
+        End If
+        If objCompany.blnDataIsLocked() Then
+            Return New CompanyLoadInUse()
+        End If
         LoadGlobalLists(objCompany)
         objCompany.LoadTransTable()
         LoadAccountFiles(objCompany, showAccount)
-    End Sub
+        Return Nothing
+    End Function
 
     Public Shared Sub LoadGlobalLists(ByVal objCompany As Company)
         Try
@@ -143,4 +158,51 @@ Public Class CompanyLoader
         Return objAcct1.strTitle.CompareTo(objAcct2.strTitle)
     End Function
 
+End Class
+
+Public MustInherit Class CompanyLoadError
+    Private mstrMessage As String
+
+    Public Sub New(ByVal strMessage_ As String)
+        mstrMessage = strMessage_
+    End Sub
+
+    Public ReadOnly Property strMessage() As String
+        Get
+            Return mstrMessage
+        End Get
+    End Property
+
+End Class
+
+Public Class CompanyLoadNotFound
+    Inherits CompanyLoadError
+
+    Public Sub New()
+        MyBase.New("Company data files not found")
+    End Sub
+End Class
+
+Public Class CompanyLoadInUse
+    Inherits CompanyLoadError
+
+    Public Sub New()
+        MyBase.New("Company data files are being used by someone else")
+    End Sub
+End Class
+
+Public Class CompanyLoadNotAuthorized
+    Inherits CompanyLoadError
+
+    Public Sub New()
+        MyBase.New("Invalid login or password")
+    End Sub
+End Class
+
+Public Class CompanyLoadCanceled
+    Inherits CompanyLoadError
+
+    Public Sub New()
+        MyBase.New("Operator canceled")
+    End Sub
 End Class

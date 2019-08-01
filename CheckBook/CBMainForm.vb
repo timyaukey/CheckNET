@@ -38,38 +38,23 @@ Friend Class CBMainForm
                 strDataPathValue = Company.strExecutableFolder() & "\Data"
             End If
 
+            'This line, plus the call to CompanyLoader.objLoad(), are the only
+            'things that have to happen to load everything for a Company into memory.
+            'The rest of this routine is load the UI (this program).
             mobjCompany = New Company(strDataPathValue)
+            mobjSecurity = mobjCompany.objSecurity
 
             If Not mobjCompany.blnDataPathExists() Then
                 mobjCompany.CreateInitialData(AddressOf ShowCreateMessage)
             End If
 
-            If mobjCompany.blnDataIsLocked() Then
-                mobjHostUI.InfoMessageBox("Data files are in use by someone else running this software.")
+            Dim objError As CompanyLoadError = CompanyLoader.objLoad(mobjCompany,
+                AddressOf frmStartup.Configure, AddressOf objAuthenticate)
+            If Not objError Is Nothing Then
+                mobjHostUI.InfoMessageBox(objError.strMessage)
                 frmStartup.Close()
                 Exit Sub
             End If
-
-            mobjSecurity = mobjCompany.objSecurity
-            mobjSecurity.Load()
-            If Not mobjSecurity.blnNoFile Then
-                Dim strLogin As String = ""
-                Dim strPassword As String = ""
-
-                Using frmLogin As LoginForm = New LoginForm
-                    If Not frmLogin.blnGetCredentials(strLogin, strPassword) Then
-                        frmStartup.Close()
-                        Exit Sub
-                    End If
-                End Using
-                If Not mobjSecurity.blnAuthenticate(strLogin, strPassword) Then
-                    ErrorMessageBox("Invalid login or password")
-                    frmStartup.Close()
-                    Exit Sub
-                End If
-            End If
-
-            CompanyLoader.Load(mobjCompany, AddressOf frmStartup.Configure)
 
             frmStartup.ShowStatus("Loading main window")
 
@@ -111,6 +96,26 @@ Friend Class CBMainForm
             gTopException(ex)
         End Try
     End Sub
+
+    Private Function objAuthenticate() As CompanyLoadError
+        If mobjSecurity.blnNoFile Then
+            Return Nothing
+        End If
+        Do
+            Dim strLogin As String = ""
+            Dim strPassword As String = ""
+
+            Using frmLogin As LoginForm = New LoginForm
+                If Not frmLogin.blnGetCredentials(strLogin, strPassword) Then
+                    Return New CompanyLoadCanceled()
+                End If
+            End Using
+            If mobjSecurity.blnAuthenticate(strLogin, strPassword) Then
+                Return Nothing
+            End If
+            mobjHostUI.ErrorMessageBox((New CompanyLoadNotAuthorized()).strMessage)
+        Loop
+    End Function
 
     Private Sub SavedAccount(ByVal strAccountTitle As String) Handles mobjCompany.SavedAccount
         InfoMessageBox("Saved " + strAccountTitle)
