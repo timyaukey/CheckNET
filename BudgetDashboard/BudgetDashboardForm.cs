@@ -44,7 +44,7 @@ namespace BudgetDashboard
 
         private void DisplayData()
         {
-            this.Text = "Budget Dashboard - " + mData.Account.strTitle;
+            this.Text = "Budget Dashboard";
             grdMain.ColumnCount = mData.PeriodCount + 3;
             ConfigureColumn(0, "Category", 160, DataGridViewContentAlignment.MiddleLeft, DataGridViewContentAlignment.MiddleLeft);
             ConfigureColumn(1, "Sequence", 160, DataGridViewContentAlignment.MiddleLeft, DataGridViewContentAlignment.MiddleLeft);

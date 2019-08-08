@@ -8,7 +8,6 @@ namespace BudgetDashboard
     public class DashboardData
     {
         private readonly Company Company;
-        public readonly Account Account;
         public readonly int PeriodDays;
         public readonly int PeriodCount;
         public readonly DateTime StartDate;
@@ -27,10 +26,9 @@ namespace BudgetDashboard
 
         public bool HasUnalignedBudgetPeriods;
 
-        public DashboardData(Account account, int periodDays, int periodCount, DateTime startDate)
+        public DashboardData(Company objCompany, int periodDays, int periodCount, DateTime startDate)
         {
-            Company = account.objCompany;
-            Account = account;
+            Company = objCompany;
             PeriodDays = periodDays;
             PeriodCount = periodCount;
             StartDate = startDate;
@@ -43,12 +41,15 @@ namespace BudgetDashboard
         public void Load()
         {
             StartingBalance = 0m;
-            foreach(Register reg in Account.colRegisters)
+            foreach(Account account in Company.colAccounts)
             {
-                StartingBalance += reg.curEndingBalance(StartDate.AddDays(-1d));
-                foreach(Trx trx in reg.colDateRange(StartDate, EndDate))
+                foreach (Register reg in account.colRegisters)
                 {
-                    LoadTrx(trx);
+                    StartingBalance += reg.curEndingBalance(StartDate.AddDays(-1d));
+                    foreach (Trx trx in reg.colDateRange(StartDate, EndDate))
+                    {
+                        LoadTrx(trx);
+                    }
                 }
             }
 
