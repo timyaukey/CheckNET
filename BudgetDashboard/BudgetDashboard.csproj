@@ -60,6 +60,9 @@
     <Compile Include="BudgetSpecsForm.Designer.cs">
       <DependentUpon>BudgetSpecsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="BudgetTypeCash.cs" />
+    <Compile Include="BudgetTypeHandler.cs" />
+    <Compile Include="BudgetTypeIncExp.cs" />
     <Compile Include="DashboardData.cs" />
     <Compile Include="DashboardPlugin.cs" />
     <Compile Include="DataCell.cs" />

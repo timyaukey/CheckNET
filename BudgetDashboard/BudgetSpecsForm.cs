@@ -18,12 +18,16 @@ namespace BudgetDashboard
         public DateTime StartDate;
         public int PeriodDays;
         public int PeriodCount;
+        public BudgetTypeHandler Handler;
 
         public BudgetSpecsForm(IHostUI hostUI)
         {
             HostUI = hostUI;
             InitializeComponent();
             ctlStartDate.Value = new DateTime(DateTime.Today.Year, 1, 1);
+            cboBudgetType.Items.Add(new BudgetTypeCash());
+            cboBudgetType.Items.Add(new BudgetTypeIncExp());
+            cboBudgetType.SelectedIndex = 0;
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
@@ -34,6 +38,7 @@ namespace BudgetDashboard
 
         private void cmdOkay_Click(object sender, EventArgs e)
         {
+            Handler = (BudgetTypeHandler)cboBudgetType.SelectedItem;
             StartDate = ctlStartDate.Value.Date;
             if (int.TryParse(txtPeriodDays.Text, out PeriodDays))
             {

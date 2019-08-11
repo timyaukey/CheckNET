@@ -36,6 +36,8 @@
             this.lblPeriodCount = new System.Windows.Forms.Label();
             this.cmdOkay = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
+            this.cboBudgetType = new System.Windows.Forms.ComboBox();
+            this.lblBudgetType = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // ctlStartDate
@@ -60,9 +62,9 @@
             this.lblPeriodDays.AutoSize = true;
             this.lblPeriodDays.Location = new System.Drawing.Point(12, 44);
             this.lblPeriodDays.Name = "lblPeriodDays";
-            this.lblPeriodDays.Size = new System.Drawing.Size(116, 13);
+            this.lblPeriodDays.Size = new System.Drawing.Size(123, 13);
             this.lblPeriodDays.TabIndex = 2;
-            this.lblPeriodDays.Text = "Days In Budget Period:";
+            this.lblPeriodDays.Text = "Days Per Budget Period:";
             // 
             // txtPeriodDays
             // 
@@ -92,7 +94,7 @@
             // cmdOkay
             // 
             this.cmdOkay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdOkay.Location = new System.Drawing.Point(128, 171);
+            this.cmdOkay.Location = new System.Drawing.Point(192, 141);
             this.cmdOkay.Name = "cmdOkay";
             this.cmdOkay.Size = new System.Drawing.Size(75, 23);
             this.cmdOkay.TabIndex = 6;
@@ -103,7 +105,7 @@
             // cmdCancel
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdCancel.Location = new System.Drawing.Point(209, 171);
+            this.cmdCancel.Location = new System.Drawing.Point(273, 141);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(75, 23);
             this.cmdCancel.TabIndex = 7;
@@ -111,11 +113,32 @@
             this.cmdCancel.UseVisualStyleBackColor = true;
             this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
             // 
+            // cboBudgetType
+            // 
+            this.cboBudgetType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboBudgetType.FormattingEnabled = true;
+            this.cboBudgetType.Location = new System.Drawing.Point(167, 93);
+            this.cboBudgetType.Name = "cboBudgetType";
+            this.cboBudgetType.Size = new System.Drawing.Size(181, 21);
+            this.cboBudgetType.TabIndex = 8;
+            // 
+            // lblBudgetType
+            // 
+            this.lblBudgetType.AutoSize = true;
+            this.lblBudgetType.Location = new System.Drawing.Point(12, 96);
+            this.lblBudgetType.Name = "lblBudgetType";
+            this.lblBudgetType.Size = new System.Drawing.Size(71, 13);
+            this.lblBudgetType.TabIndex = 9;
+            this.lblBudgetType.Text = "Budget Type:";
+            // 
             // BudgetSpecsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 206);
+            this.ClientSize = new System.Drawing.Size(360, 176);
+            this.Controls.Add(this.lblBudgetType);
+            this.Controls.Add(this.cboBudgetType);
             this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.cmdOkay);
             this.Controls.Add(this.txtPeriodCount);
@@ -144,5 +167,7 @@
         private System.Windows.Forms.Label lblPeriodCount;
         private System.Windows.Forms.Button cmdOkay;
         private System.Windows.Forms.Button cmdCancel;
+        private System.Windows.Forms.ComboBox cboBudgetType;
+        private System.Windows.Forms.Label lblBudgetType;
     }
 }

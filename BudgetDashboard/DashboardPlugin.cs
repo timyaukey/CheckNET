@@ -28,7 +28,7 @@ namespace BudgetDashboard
             {
                 if (specsForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    DashboardData data = new DashboardData(HostUI.objCompany, specsForm.PeriodDays, specsForm.PeriodCount, specsForm.StartDate);
+                    DashboardData data = new DashboardData(HostUI.objCompany, specsForm.Handler, specsForm.PeriodDays, specsForm.PeriodCount, specsForm.StartDate);
                     var budgetForm = new BudgetDashboardForm();
                     budgetForm.Show(HostUI, data);
                 }
