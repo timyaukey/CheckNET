@@ -42,8 +42,10 @@
             this.lblBudgetApplied = new System.Windows.Forms.Label();
             this.lvwDetails = new System.Windows.Forms.ListView();
             this.colDtlDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colDtlNum = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colDtlDescr = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colDtlAmount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colDtlAccount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lblColumnDate = new System.Windows.Forms.Label();
             this.lblRowSequence = new System.Windows.Forms.Label();
             this.lblRowLabel = new System.Windows.Forms.Label();
@@ -65,7 +67,7 @@
             this.grdMain.Name = "grdMain";
             this.grdMain.ReadOnly = true;
             this.grdMain.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.grdMain.Size = new System.Drawing.Size(851, 548);
+            this.grdMain.Size = new System.Drawing.Size(731, 548);
             this.grdMain.TabIndex = 0;
             this.grdMain.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdMain_CellClick);
             // 
@@ -99,13 +101,13 @@
             this.splitContainer.Panel2.Controls.Add(this.lblRowSequence);
             this.splitContainer.Panel2.Controls.Add(this.lblRowLabel);
             this.splitContainer.Size = new System.Drawing.Size(1190, 548);
-            this.splitContainer.SplitterDistance = 851;
+            this.splitContainer.SplitterDistance = 731;
             this.splitContainer.TabIndex = 1;
             // 
             // btnCancelAdj
             // 
             this.btnCancelAdj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancelAdj.Location = new System.Drawing.Point(221, 522);
+            this.btnCancelAdj.Location = new System.Drawing.Point(341, 522);
             this.btnCancelAdj.Margin = new System.Windows.Forms.Padding(1, 3, 1, 3);
             this.btnCancelAdj.Name = "btnCancelAdj";
             this.btnCancelAdj.Size = new System.Drawing.Size(54, 23);
@@ -120,7 +122,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblGeneratedAmount.Location = new System.Drawing.Point(3, 459);
             this.lblGeneratedAmount.Name = "lblGeneratedAmount";
-            this.lblGeneratedAmount.Size = new System.Drawing.Size(291, 20);
+            this.lblGeneratedAmount.Size = new System.Drawing.Size(411, 20);
             this.lblGeneratedAmount.TabIndex = 13;
             this.lblGeneratedAmount.Text = "(generated amount)";
             // 
@@ -130,14 +132,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblBudgetLimit.Location = new System.Drawing.Point(3, 479);
             this.lblBudgetLimit.Name = "lblBudgetLimit";
-            this.lblBudgetLimit.Size = new System.Drawing.Size(159, 20);
+            this.lblBudgetLimit.Size = new System.Drawing.Size(279, 20);
             this.lblBudgetLimit.TabIndex = 5;
             this.lblBudgetLimit.Text = "(budget limit)";
             // 
             // btnSetAdj
             // 
             this.btnSetAdj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSetAdj.Location = new System.Drawing.Point(277, 522);
+            this.btnSetAdj.Location = new System.Drawing.Point(397, 522);
             this.btnSetAdj.Margin = new System.Windows.Forms.Padding(1, 3, 1, 3);
             this.btnSetAdj.Name = "btnSetAdj";
             this.btnSetAdj.Size = new System.Drawing.Size(54, 23);
@@ -149,7 +151,7 @@
             // btnSubAdj
             // 
             this.btnSubAdj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSubAdj.Location = new System.Drawing.Point(80, 522);
+            this.btnSubAdj.Location = new System.Drawing.Point(200, 522);
             this.btnSubAdj.Margin = new System.Windows.Forms.Padding(1, 3, 1, 3);
             this.btnSubAdj.Name = "btnSubAdj";
             this.btnSubAdj.Size = new System.Drawing.Size(82, 23);
@@ -161,7 +163,7 @@
             // btnAddAdj
             // 
             this.btnAddAdj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddAdj.Location = new System.Drawing.Point(165, 522);
+            this.btnAddAdj.Location = new System.Drawing.Point(285, 522);
             this.btnAddAdj.Margin = new System.Windows.Forms.Padding(1, 3, 1, 3);
             this.btnAddAdj.Name = "btnAddAdj";
             this.btnAddAdj.Size = new System.Drawing.Size(54, 23);
@@ -173,7 +175,7 @@
             // txtAdjustment
             // 
             this.txtAdjustment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAdjustment.Location = new System.Drawing.Point(277, 499);
+            this.txtAdjustment.Location = new System.Drawing.Point(397, 499);
             this.txtAdjustment.Name = "txtAdjustment";
             this.txtAdjustment.Size = new System.Drawing.Size(54, 20);
             this.txtAdjustment.TabIndex = 9;
@@ -181,7 +183,7 @@
             // lblAdjustment
             // 
             this.lblAdjustment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblAdjustment.Location = new System.Drawing.Point(224, 502);
+            this.lblAdjustment.Location = new System.Drawing.Point(344, 502);
             this.lblAdjustment.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.lblAdjustment.Name = "lblAdjustment";
             this.lblAdjustment.Size = new System.Drawing.Size(50, 18);
@@ -195,7 +197,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDashboardAmount.Location = new System.Drawing.Point(3, 439);
             this.lblDashboardAmount.Name = "lblDashboardAmount";
-            this.lblDashboardAmount.Size = new System.Drawing.Size(291, 20);
+            this.lblDashboardAmount.Size = new System.Drawing.Size(411, 20);
             this.lblDashboardAmount.TabIndex = 7;
             this.lblDashboardAmount.Text = "(dashboard amount)";
             // 
@@ -205,7 +207,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblBudgetApplied.Location = new System.Drawing.Point(3, 499);
             this.lblBudgetApplied.Name = "lblBudgetApplied";
-            this.lblBudgetApplied.Size = new System.Drawing.Size(159, 20);
+            this.lblBudgetApplied.Size = new System.Drawing.Size(279, 20);
             this.lblBudgetApplied.TabIndex = 6;
             this.lblBudgetApplied.Text = "(budget applied)";
             // 
@@ -216,13 +218,15 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvwDetails.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colDtlDate,
+            this.colDtlNum,
             this.colDtlDescr,
-            this.colDtlAmount});
+            this.colDtlAmount,
+            this.colDtlAccount});
             this.lvwDetails.FullRowSelect = true;
             this.lvwDetails.HideSelection = false;
             this.lvwDetails.Location = new System.Drawing.Point(5, 63);
             this.lvwDetails.Name = "lvwDetails";
-            this.lvwDetails.Size = new System.Drawing.Size(326, 373);
+            this.lvwDetails.Size = new System.Drawing.Size(446, 373);
             this.lvwDetails.TabIndex = 3;
             this.lvwDetails.UseCompatibleStateImageBehavior = false;
             this.lvwDetails.View = System.Windows.Forms.View.Details;
@@ -232,15 +236,25 @@
             this.colDtlDate.Text = "Date";
             this.colDtlDate.Width = 64;
             // 
+            // colDtlNum
+            // 
+            this.colDtlNum.Text = "Num";
+            this.colDtlNum.Width = 50;
+            // 
             // colDtlDescr
             // 
             this.colDtlDescr.Text = "Description";
-            this.colDtlDescr.Width = 170;
+            this.colDtlDescr.Width = 150;
             // 
             // colDtlAmount
             // 
             this.colDtlAmount.Text = "Amount";
             this.colDtlAmount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // colDtlAccount
+            // 
+            this.colDtlAccount.Text = "Account";
+            this.colDtlAccount.Width = 100;
             // 
             // lblColumnDate
             // 
@@ -248,7 +262,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblColumnDate.Location = new System.Drawing.Point(3, 40);
             this.lblColumnDate.Name = "lblColumnDate";
-            this.lblColumnDate.Size = new System.Drawing.Size(291, 20);
+            this.lblColumnDate.Size = new System.Drawing.Size(411, 20);
             this.lblColumnDate.TabIndex = 2;
             this.lblColumnDate.Text = "(date)";
             // 
@@ -258,7 +272,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblRowSequence.Location = new System.Drawing.Point(3, 20);
             this.lblRowSequence.Name = "lblRowSequence";
-            this.lblRowSequence.Size = new System.Drawing.Size(329, 20);
+            this.lblRowSequence.Size = new System.Drawing.Size(449, 20);
             this.lblRowSequence.TabIndex = 1;
             this.lblRowSequence.Text = "(row sequence)";
             // 
@@ -268,7 +282,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblRowLabel.Location = new System.Drawing.Point(3, 0);
             this.lblRowLabel.Name = "lblRowLabel";
-            this.lblRowLabel.Size = new System.Drawing.Size(329, 20);
+            this.lblRowLabel.Size = new System.Drawing.Size(449, 20);
             this.lblRowLabel.TabIndex = 0;
             this.lblRowLabel.Text = "(row label)";
             // 
@@ -311,5 +325,7 @@
         private System.Windows.Forms.Label lblAdjustment;
         private System.Windows.Forms.Label lblGeneratedAmount;
         private System.Windows.Forms.Button btnCancelAdj;
+        private System.Windows.Forms.ColumnHeader colDtlNum;
+        private System.Windows.Forms.ColumnHeader colDtlAccount;
     }
 }

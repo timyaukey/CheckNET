@@ -25,8 +25,6 @@ namespace BudgetDashboard
         public TotalRow NetProfit;
         public TotalRow RunningBalance;
 
-        public bool HasUnalignedBudgetPeriods;
-
         public DashboardData(Company objCompany, BudgetTypeHandler handler, int periodDays, int periodCount, DateTime startDate)
         {
             Company = objCompany;
@@ -37,7 +35,6 @@ namespace BudgetDashboard
             EndDate = startDate.AddDays(periodCount * periodDays -1);
             BudgetDetailRows = new Dictionary<string, BudgetDetailRow>();
             SplitDetailRows = new Dictionary<string, SplitDetailRow>();
-            HasUnalignedBudgetPeriods = false;
         }
 
         public void Load()
@@ -97,9 +94,8 @@ namespace BudgetDashboard
             ComputeTotals();
         }
 
-        private int DataRowComparer<TCell, TData>(DetailRow<TCell, TData> row1, DetailRow<TCell, TData> row2)
-            where TCell : DetailCell<TData>, new()
-            where TData : class
+        private int DataRowComparer<TCell>(DataRow<TCell> row1, DataRow<TCell> row2)
+            where TCell : DataCell, new()
         {
             return row1.Label.CompareTo(row2.Label);
         }
@@ -115,31 +111,24 @@ namespace BudgetDashboard
                     SplitDetailRow row = null;
                     foreach (TrxSplit split in normalTrx.colSplits)
                     {
-                        if (split.objBudget == null)
+                        if (Handler.IncludeSplit(split))
                         {
-                            if (Handler.IncludeSplit(split))
+                            if (split.objBudget == null)
                             {
-                                // Unlike for BudgetTrx we do not incorporate repeat key in the row key,
-                                // because there are so many different generated NormalTrx sequences it
-                                // would make the resulting grid unwieldy.
-                                string rowKey = split.strCategoryKey;
-                                if (!SplitDetailRows.TryGetValue(rowKey, out row))
-                                {
-                                    string sequence = "";
-                                    if (!string.IsNullOrEmpty(normalTrx.strRepeatKey))
-                                    {
-                                        sequence = normalTrx.objReg.objAccount.objRepeats.strKeyToValue1(normalTrx.strRepeatKey);
-                                    }
-                                    row = new SplitDetailRow(PeriodCount, split.strCategoryKey,
-                                        Company.objCategories.strKeyToValue1(split.strCategoryKey), sequence);
-                                    SplitDetailRows[rowKey] = row;
-                                }
-                                row.AddToPeriod(period, split);
+                                row = GetSplitDetailRow(split);
+                                row.Cells[period].CellAmount += split.curAmount;
+                                row.Cells[period].Splits.Add(split);
+                            }
+                            else
+                            {
+                                BudgetDetailRow budgetRow = GetBudgetDetailRow(split.objBudget);
+                                budgetRow.Cells[period].CellAmount += split.curAmount;
+                                budgetRow.Cells[period].Splits.Add(split);
                             }
                         }
                     }
                     if (row != null)
-                        row.AddGeneratedToPeriod(period, normalTrx.curGeneratedAmount);
+                        row.Cells[period].GeneratedAmount += normalTrx.curGeneratedAmount;
                 }
             }
             else
@@ -149,26 +138,13 @@ namespace BudgetDashboard
                 {
                     if (Handler.IncludeBudgetTrx(budgetTrx))
                     {
-                        BudgetDetailRow row;
-                        string rowKey = budgetTrx.strBudgetKey + ":" + budgetTrx.strRepeatKey;
-                        if (!BudgetDetailRows.TryGetValue(rowKey, out row))
-                        {
-                            string sequence = "(none)";
-                            if (!string.IsNullOrEmpty(budgetTrx.strRepeatKey))
-                            {
-                                sequence = budgetTrx.objReg.objAccount.objRepeats.strKeyToValue1(budgetTrx.strRepeatKey);
-                            }
-                            row = new BudgetDetailRow(PeriodCount, budgetTrx.strBudgetKey,
-                                Company.objBudgets.strKeyToValue1(budgetTrx.strBudgetKey), sequence);
-                            BudgetDetailRows[rowKey] = row;
-                        }
-                        row.AddToPeriod(period, budgetTrx);
-                        row.AddGeneratedToPeriod(period, budgetTrx.curGeneratedAmount);
-                        if (period != GetPeriod(budgetTrx.datBudgetStarts))
-                        {
-                            row.HasUnalignedPeriods = true;
-                            HasUnalignedBudgetPeriods = true;
-                        }
+                        BudgetDetailRow row = GetBudgetDetailRow(budgetTrx);
+                        BudgetDetailCell cell = row.Cells[period];
+                        cell.CellAmount += budgetTrx.curAmount;
+                        cell.GeneratedAmount += budgetTrx.curGeneratedAmount;
+                        cell.BudgetLimit += budgetTrx.curBudgetLimit;
+                        cell.BudgetUsed += budgetTrx.curBudgetApplied;
+                        cell.Budgets.Add(budgetTrx);
                     }
                 }
             }
@@ -177,6 +153,43 @@ namespace BudgetDashboard
         private int GetPeriod(DateTime trxDate)
         {
             return (int)trxDate.Subtract(StartDate).TotalDays / PeriodDays;
+        }
+
+        private SplitDetailRow GetSplitDetailRow(TrxSplit split)
+        {
+            // Unlike for BudgetTrx we do not incorporate repeat key in the row key,
+            // because there are so many different generated NormalTrx sequences it
+            // would make the resulting grid unwieldy.
+            string rowKey = split.strCategoryKey;
+            if (!SplitDetailRows.TryGetValue(rowKey, out SplitDetailRow row))
+            {
+                string sequence = "";
+                if (!string.IsNullOrEmpty(split.objParent.strRepeatKey))
+                {
+                    sequence = split.objParent.objReg.objAccount.objRepeats.strKeyToValue1(split.objParent.strRepeatKey);
+                }
+                row = new SplitDetailRow(PeriodCount, split.strCategoryKey,
+                    Company.objCategories.strKeyToValue1(split.strCategoryKey), sequence);
+                SplitDetailRows[rowKey] = row;
+            }
+            return row;
+        }
+
+        private BudgetDetailRow GetBudgetDetailRow(BudgetTrx budgetTrx)
+        {
+            string rowKey = budgetTrx.strBudgetKey + ":" + budgetTrx.strRepeatKey;
+            if (!BudgetDetailRows.TryGetValue(rowKey, out BudgetDetailRow row))
+            {
+                string sequence = "(none)";
+                if (!string.IsNullOrEmpty(budgetTrx.strRepeatKey))
+                {
+                    sequence = budgetTrx.objReg.objAccount.objRepeats.strKeyToValue1(budgetTrx.strRepeatKey);
+                }
+                row = new BudgetDetailRow(PeriodCount, budgetTrx.strBudgetKey,
+                    Company.objBudgets.strKeyToValue1(budgetTrx.strBudgetKey), sequence);
+                BudgetDetailRows[rowKey] = row;
+            }
+            return row;
         }
 
         public void ComputeTotals()

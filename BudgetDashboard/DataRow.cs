@@ -8,7 +8,7 @@ namespace BudgetDashboard
         where TCell : DataCell, new()
     {
         public readonly TCell[] Cells;
-        public DataCell RowTotal;
+        public TCell RowTotal;
         public readonly string Key;
         public readonly string Label;
         public readonly string Sequence;
@@ -21,7 +21,7 @@ namespace BudgetDashboard
             this.Cells = new TCell[periodCount];
             for (int i = 0; i < periodCount; i++)
                 Cells[i] = new TCell();
-            RowTotal = new DataCell();
+            RowTotal = new TCell();
         }
 
         public void AddRow<TRow, TCell2>(TRow row)
@@ -30,9 +30,18 @@ namespace BudgetDashboard
         {
             for (int i = 0; i < Cells.Length; i++)
             {
-                this.Cells[i].AddData(row.Cells[i].CellAmount);
+                this.Cells[i].Add(row.Cells[i]);
             }
-            this.RowTotal.AddData(row.RowTotal.CellAmount);
+            this.RowTotal.Add(row.RowTotal);
+        }
+
+        public void ComputeTotals()
+        {
+            RowTotal.ClearAmounts();
+            for (int i = 0; i < Cells.Length; i++)
+            {
+                RowTotal.Add(this.Cells[i]);
+            }
         }
 
         public void ClearAmounts()

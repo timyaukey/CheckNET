@@ -1,32 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using CheckBookLib;
 
 namespace BudgetDashboard
 {
-    public class BudgetDetailCell : DetailCell<BudgetTrx>
+    public class BudgetDetailCell : DataCell
     {
-        public decimal BudgetLimit;
-        public decimal BudgetApplied;
+        public List<TrxSplit> Splits;
+        public List<BudgetTrx> Budgets;
 
         public BudgetDetailCell()
         {
-            BudgetLimit = 0M;
-            BudgetApplied = 0M;
-        }
-
-        public override void ClearAmounts()
-        {
-            base.ClearAmounts();
-            BudgetLimit = 0M;
-            BudgetApplied = 0M;
-        }
-
-        public BudgetDetailCell(BudgetTrx budgetTrx)
-            : base(budgetTrx.blnIsExpired ? budgetTrx.curBudgetApplied : budgetTrx.curBudgetLimit)
-        {
-            BudgetLimit = budgetTrx.curBudgetLimit;
-            BudgetApplied = budgetTrx.curBudgetApplied;
+            Splits = new List<TrxSplit>();
+            Budgets = new List<BudgetTrx>();
         }
     }
 }

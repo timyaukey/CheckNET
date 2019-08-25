@@ -1,18 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using CheckBookLib;
 
 namespace BudgetDashboard
 {
-    public class SplitDetailCell : DetailCell<TrxSplit>
+    public class SplitDetailCell : DataCell
     {
+        public List<TrxSplit> Splits;
+
         public SplitDetailCell()
         {
-        }
-
-        public SplitDetailCell(TrxSplit split)
-            : base(split.curAmount)
-        {
+            Splits = new List<TrxSplit>();
         }
     }
 }

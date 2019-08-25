@@ -31,7 +31,7 @@ namespace BudgetDashboard
                 Brush barBrush;
                 // This tests for applied and limit having opposite signs -
                 // which means the amount applied is "less than zero".
-                double budgetFraction = (double)mDataCell.BudgetApplied / (double)mDataCell.BudgetLimit;
+                double budgetFraction = (double)mDataCell.BudgetUsed / (double)mDataCell.BudgetLimit;
                 if (budgetFraction > 0d)
                 {
                     if (budgetFraction <= 1.0d)

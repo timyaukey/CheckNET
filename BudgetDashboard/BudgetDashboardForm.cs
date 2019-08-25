@@ -64,7 +64,7 @@ namespace BudgetDashboard
             }
             foreach (var row in mData.BudgetedIncome)
             {
-                AddGridRow(row, row.HasUnalignedPeriods ? Color.SandyBrown : Color.White);
+                AddGridRow(row, Color.White);
             }
             AddGridRow<TotalRow, DataCell>(mData.TotalIncome, Color.LightGray);
             foreach (var row in mData.UnbudgetedExpenses)
@@ -73,14 +73,11 @@ namespace BudgetDashboard
             }
             foreach (var row in mData.BudgetedExpenses)
             {
-                AddGridRow(row, row.HasUnalignedPeriods ? Color.SandyBrown : Color.White);
+                AddGridRow(row, Color.White);
             }
             AddGridRow<TotalRow, DataCell>(mData.TotalExpense, Color.LightGray);
             AddGridRow<TotalRow, DataCell>(mData.NetProfit, Color.LightGreen);
             AddGridRow<TotalRow, DataCell>(mData.RunningBalance, Color.LightBlue);
-            if (mData.HasUnalignedBudgetPeriods)
-                mHostUI.ErrorMessageBox("One or more budget rows has budget transaction(s) whose period does not fit in a single dashboard column. " + 
-                    "All such budget rows are highlighted in light brown.");
         }
 
         private void ConfigureColumn(int colIndex, string title, int width,
@@ -170,14 +167,14 @@ namespace BudgetDashboard
             {
                 SplitDetailCell cell = row.Cells[columnIndex - NonPeriodColumns];
                 StartShowCell(row, columnIndex, "Category");
-                lblDashboardAmount.Text = "Dashboard Amount: " + cell.CellAmount.ToString("F2");
-                lblGeneratedAmount.Text = "Generated Amount: " + cell.GeneratedAmount.ToString("F2");
+                lblDashboardAmount.Text = "Total Of Above Detail: " + cell.CellAmount.ToString("F2");
+                lblGeneratedAmount.Text = "Original Generated Amounts For Above: " + cell.GeneratedAmount.ToString("F2");
                 lblBudgetLimit.Text = "";
                 lblBudgetApplied.Text = "";
                 SetBudgetDetailVisibility(false);
-                foreach (TrxSplit split in cell.Details)
+                foreach (TrxSplit split in cell.Splits)
                 {
-                    ShowDetailValues(split.objParent.datDate, split.objParent.strDescription, split.curAmount, null, null);
+                    lvwDetails.Items.Add((new SplitDetailItemBuilder(split)).Build());
                 }
             }
             else
@@ -196,38 +193,24 @@ namespace BudgetDashboard
                 mSelectedBudgetColumn = columnIndex;
                 mSelectedBudgetGridCell = (BudgetGridCell)gridCell;
                 StartShowCell(row, columnIndex, "Budget");
-                lblDashboardAmount.Text = "Dashboard Amount: " + cell.CellAmount.ToString("F2");
-                lblGeneratedAmount.Text = "Original Limit: " + cell.GeneratedAmount.ToString("F2");
-                lblBudgetLimit.Text = "Current Limit: " + cell.BudgetLimit.ToString("F2");
-                lblBudgetApplied.Text = "Amount Used: " + cell.BudgetApplied.ToString("F2");
+                lblDashboardAmount.Text = "Total Of Above Detail: " + cell.CellAmount.ToString("F2");
+                lblGeneratedAmount.Text = "Original Combined Limit Of Above Budgets: " + cell.GeneratedAmount.ToString("F2");
+                lblBudgetLimit.Text = "Current Combined Limit Of Above Budgets: " + cell.BudgetLimit.ToString("F2");
+                lblBudgetApplied.Text = "Amount Used From Above Budgets: " + cell.BudgetUsed.ToString("F2");
                 SetBudgetDetailVisibility(true);
-                bool useGroups = false;
-                if (OSFeature.Feature.IsPresent(OSFeature.Themes))
-                    useGroups = true;
-                lvwDetails.ShowGroups = useGroups;
-                foreach (BudgetTrx budget in cell.Details)
+                List<IDetailItemBuilder> builders = new List<IDetailItemBuilder>();
+                foreach (BudgetTrx budget in cell.Budgets)
                 {
-                    ListViewGroup currentGroup = null;
-                    if (useGroups)
-                    {
-                        string originally = "";
-                        if (budget.curGeneratedAmount != 0m && budget.curGeneratedAmount != budget.curBudgetLimit)
-                            originally = " (orig $" + budget.curGeneratedAmount.ToString("F2") + ")";
-                        currentGroup = new ListViewGroup(budget.datBudgetEnds.ToString("MM/dd/yy") + " " + 
-                            budget.strDescription + " $" + budget.curBudgetLimit.ToString("F2") + originally);
-                        lvwDetails.Groups.Add(currentGroup);
-                    }
-                    if (budget.colAppliedSplits.Count > 0)
-                    {
-                        foreach (TrxSplit split in budget.colAppliedSplits)
-                        {
-                            ShowDetailValues(split.objParent.datDate, split.objParent.strDescription, split.curAmount, currentGroup, budget);
-                        }
-                    }
-                    else
-                    {
-                        ShowDetailValues("", "(unused budget)", "", currentGroup, budget);
-                    }
+                    builders.Add(new BudgetDetailItemBuilder(budget));
+                }
+                foreach (TrxSplit split in cell.Splits)
+                {
+                    builders.Add(new SplitDetailItemBuilder(split));
+                }
+                builders.Sort(DetailItemComparer);
+                foreach(var builder in builders)
+                {
+                    lvwDetails.Items.Add(builder.Build());
                 }
             }
             else
@@ -244,22 +227,74 @@ namespace BudgetDashboard
             lblRowSequence.Text = "Sequence: " + row.Sequence;
             lblColumnDate.Text = "Period Starts: " + grdMain.Columns[columnIndex].HeaderText;
             lvwDetails.Items.Clear();
-            lvwDetails.Groups.Clear();
-            lvwDetails.ShowGroups = false;
         }
 
-        private void ShowDetailValues(DateTime trxDate, string descr, decimal amount, ListViewGroup group, object itemTag)
+        private interface IDetailItemBuilder
         {
-            ShowDetailValues(trxDate.ToString("MM/dd/yy"), descr, amount.ToString("F2"), group, itemTag);
+            DateTime Date { get; }
+            string Number { get; }
+            ListViewItem Build();
         }
 
-        private void ShowDetailValues(string trxDateFormatted, string descr, string amountFormatted, ListViewGroup group, object itemTag)
+        private int DetailItemComparer(IDetailItemBuilder builder1, IDetailItemBuilder builder2)
         {
-            ListViewItem item = new ListViewItem(new string[] { trxDateFormatted, descr, amountFormatted });
-            item.Tag = itemTag;
-            if (group != null)
-                item.Group = group;
-            lvwDetails.Items.Add(item);
+            if (builder1.Date != builder2.Date)
+                return builder1.Date.CompareTo(builder2.Date);
+            return builder1.Number.CompareTo(builder2.Number);
+        }
+
+        private class SplitDetailItemBuilder : IDetailItemBuilder
+        {
+            private readonly TrxSplit Split;
+
+            public SplitDetailItemBuilder(TrxSplit split)
+            {
+                Split = split;
+            }
+
+            public DateTime Date => Split.objParent.datDate;
+
+            public string Number => Split.objParent.strNumber;
+
+            public ListViewItem Build()
+            {
+                ListViewItem item = new ListViewItem(new string[] {
+                    Date.ToString("MM/dd/yy"),
+                    Number,
+                    Split.objParent.strDescription,
+                    Split.curAmount.ToString("F2"),
+                    Split.objParent.objReg.objAccount.strTitle
+                });
+                item.Tag = Split;
+                return item;
+            }
+        }
+
+        private class BudgetDetailItemBuilder : IDetailItemBuilder
+        {
+            private readonly BudgetTrx Budget;
+
+            public BudgetDetailItemBuilder(BudgetTrx budget)
+            {
+                Budget = budget;
+            }
+
+            public DateTime Date => Budget.datDate;
+
+            public string Number => Budget.strNumber;
+
+            public ListViewItem Build()
+            {
+                ListViewItem item = new ListViewItem(new string[] {
+                    Date.ToString("MM/dd/yy"),
+                    Number,
+                    Budget.strDescription,
+                    Budget.curAmount.ToString("F2"),
+                    Budget.objReg.objAccount.strTitle
+                });
+                item.Tag = Budget;
+                return item;
+            }
         }
 
         private void CheckCellDetailVisibility(bool showDetail)
@@ -384,13 +419,13 @@ namespace BudgetDashboard
         {
             if (mSelectedBudgetCell == null) // Should be impossible
                 return null;
-            if (mSelectedBudgetCell.Details.Count < 1)
+            if (mSelectedBudgetCell.Budgets.Count < 1)
             {
                 mHostUI.ErrorMessageBox("The selected cell has no budget transaction to adjust.");
                 return null;
             }
-            if (mSelectedBudgetCell.Details.Count == 1)
-                return mSelectedBudgetCell.Details[0];
+            if (mSelectedBudgetCell.Budgets.Count == 1)
+                return mSelectedBudgetCell.Budgets[0];
             if (lvwDetails.SelectedItems.Count < 1)
             {
                 mHostUI.ErrorMessageBox("Select a detail row belonging to the budget you want to change.");
