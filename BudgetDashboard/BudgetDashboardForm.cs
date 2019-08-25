@@ -428,10 +428,16 @@ namespace BudgetDashboard
                 return mSelectedBudgetCell.Budgets[0];
             if (lvwDetails.SelectedItems.Count < 1)
             {
-                mHostUI.ErrorMessageBox("Select a detail row belonging to the budget you want to change.");
+                mHostUI.ErrorMessageBox("Select the budget you want to change in the detail area.");
                 return null;
             }
-            return ((BudgetTrx)lvwDetails.SelectedItems[0].Tag);
+            object tag = lvwDetails.SelectedItems[0].Tag;
+            if (!(tag is BudgetTrx))
+            {
+                mHostUI.ErrorMessageBox("Selected item in detail area is not a budget.");
+                return null;
+            }
+            return (BudgetTrx)tag;
         }
 
         private void SetBudgetAmount(BudgetTrx budgetTrx, decimal newAmount)
