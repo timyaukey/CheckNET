@@ -30,6 +30,7 @@ Friend Class CBMainForm
 
             Me.Text = strSoftwareTitle
             frmStartup = New StartupForm
+            frmStartup.Init(Me)
             frmStartup.Show()
             frmStartup.ShowStatus("Initializing")
 

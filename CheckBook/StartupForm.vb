@@ -8,6 +8,12 @@ Friend Class StartupForm
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     Public WithEvents mobjAccount As Account
+    Private mobjHostUI As IHostUI
+
+    Public Sub Init(objHostUI As IHostUI)
+        mobjHostUI = objHostUI
+        lblTitle.Text = mobjHostUI.strSoftwareName
+    End Sub
 
     Public Sub Configure(ByVal objAccount As Account)
         mobjAccount = objAccount

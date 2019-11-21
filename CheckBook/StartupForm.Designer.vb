@@ -65,7 +65,7 @@
         Me.lblTitle.Name = "lblTitle"
         Me.lblTitle.Size = New System.Drawing.Size(435, 37)
         Me.lblTitle.TabIndex = 2
-        Me.lblTitle.Text = "Willow Creek Checkbook"
+        Me.lblTitle.Text = "zzz"
         Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'picSplash
