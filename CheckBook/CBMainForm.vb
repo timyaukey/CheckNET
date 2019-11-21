@@ -327,6 +327,14 @@ Friend Class CBMainForm
         End Get
     End Property
 
+    Private ReadOnly Property strSplashImagePath() As String Implements IHostUI.strSplashImagePath
+        Get
+            Dim objAssembly As Assembly = Assembly.GetEntryAssembly()
+            Dim strFolder As String = Path.GetDirectoryName(objAssembly.Location)
+            Return Path.Combine(strFolder, "AltSplash.jpg")
+        End Get
+    End Property
+
     Public Sub mnuListBudgets_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuListBudgets.Click
         Dim frm As ListEditorForm
 

@@ -13,6 +13,10 @@ Friend Class StartupForm
     Public Sub Init(objHostUI As IHostUI)
         mobjHostUI = objHostUI
         lblTitle.Text = mobjHostUI.strSoftwareName
+        Dim strSplash As String = mobjHostUI.strSplashImagePath
+        Dim objImage As Image = Image.FromFile(strSplash)
+        'Image will be stretched to aspect ratio 4:3 (widht:height)
+        picSplash.BackgroundImage = objImage
     End Sub
 
     Public Sub Configure(ByVal objAccount As Account)

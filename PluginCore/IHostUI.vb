@@ -57,4 +57,6 @@ Public Interface IHostUI
     Function OkCancelMessageBox(ByVal strMessage As String) As System.Windows.Forms.DialogResult
 
     ReadOnly Property strSoftwareName() As String
+
+    ReadOnly Property strSplashImagePath() As String
 End Interface

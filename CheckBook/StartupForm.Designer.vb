@@ -21,7 +21,6 @@
     'It can be modified using the Windows Form Designer.
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(StartupForm))
         Me.lblMessage = New System.Windows.Forms.Label()
         Me.lblCopyright = New System.Windows.Forms.Label()
         Me.lblTitle = New System.Windows.Forms.Label()
@@ -40,7 +39,7 @@
         Me.lblMessage.Location = New System.Drawing.Point(12, 427)
         Me.lblMessage.Name = "lblMessage"
         Me.lblMessage.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblMessage.Size = New System.Drawing.Size(435, 19)
+        Me.lblMessage.Size = New System.Drawing.Size(440, 19)
         Me.lblMessage.TabIndex = 0
         Me.lblMessage.Text = "-"
         Me.lblMessage.TextAlign = System.Drawing.ContentAlignment.TopCenter
@@ -51,7 +50,7 @@
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblCopyright.Location = New System.Drawing.Point(12, 446)
         Me.lblCopyright.Name = "lblCopyright"
-        Me.lblCopyright.Size = New System.Drawing.Size(435, 20)
+        Me.lblCopyright.Size = New System.Drawing.Size(440, 20)
         Me.lblCopyright.TabIndex = 1
         Me.lblCopyright.Text = "Copyright..."
         Me.lblCopyright.TextAlign = System.Drawing.ContentAlignment.TopCenter
@@ -63,17 +62,17 @@
         Me.lblTitle.Font = New System.Drawing.Font("Arial", 20.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblTitle.Location = New System.Drawing.Point(12, 19)
         Me.lblTitle.Name = "lblTitle"
-        Me.lblTitle.Size = New System.Drawing.Size(435, 37)
+        Me.lblTitle.Size = New System.Drawing.Size(440, 37)
         Me.lblTitle.TabIndex = 2
         Me.lblTitle.Text = "zzz"
         Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'picSplash
         '
-        Me.picSplash.BackgroundImage = CType(resources.GetObject("picSplash.BackgroundImage"), System.Drawing.Image)
+        Me.picSplash.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.picSplash.Location = New System.Drawing.Point(12, 59)
         Me.picSplash.Name = "picSplash"
-        Me.picSplash.Size = New System.Drawing.Size(435, 343)
+        Me.picSplash.Size = New System.Drawing.Size(440, 330)
         Me.picSplash.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
         Me.picSplash.TabIndex = 3
         Me.picSplash.TabStop = False
@@ -84,7 +83,7 @@
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.ClientSize = New System.Drawing.Size(459, 475)
+        Me.ClientSize = New System.Drawing.Size(464, 475)
         Me.ControlBox = False
         Me.Controls.Add(Me.picSplash)
         Me.Controls.Add(Me.lblTitle)
