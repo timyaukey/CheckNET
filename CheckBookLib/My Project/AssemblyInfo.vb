@@ -8,8 +8,8 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("CheckBookLib")> 
-<Assembly: AssemblyDescription("")>
+<Assembly: AssemblyTitle("Willowsoft.CheckBook.Lib")>
+<Assembly: AssemblyDescription("Core library for Willowsoft Checkbook system")>
 <Assembly: AssemblyCompany("Willow Creek Software")>
 <Assembly: AssemblyProduct("CheckBookLib")>
 <Assembly: AssemblyCopyright("Copyright © 2005-2019 Willow Creek Software")>

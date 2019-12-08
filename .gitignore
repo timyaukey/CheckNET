@@ -157,3 +157,4 @@ $RECYCLE.BIN/
 /.vs/CheckNET/v15/Server/sqlite3
 /.vs/CheckNET/DesignTimeBuild
 /.vs/CheckNET/v16/Server/sqlite3
+*.nupkg

@@ -8,7 +8,7 @@
     <ProjectGuid>{73A968C7-281A-45DC-8360-2E44B3C9510B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>CheckBookLib</RootNamespace>
-    <AssemblyName>CheckBookLib</AssemblyName>
+    <AssemblyName>Willowsoft.CheckBook.Lib</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -29,7 +29,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>CheckBookLib.xml</DocumentationFile>
+    <DocumentationFile>Willowsoft.CheckBook.Lib.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <CodeAnalysisRuleSet>CheckBookLib.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
@@ -40,7 +40,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>CheckBookLib.xml</DocumentationFile>
+    <DocumentationFile>Willowsoft.CheckBook.Lib.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <CodeAnalysisRuleSet>CheckBookLib.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
