@@ -8,8 +8,8 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("PersistTools")>
-<Assembly: AssemblyDescription("")>
+<Assembly: AssemblyTitle("Willowsoft.CheckBook.Persist")>
+<Assembly: AssemblyDescription("Load save accounts to disk for Willowsoft.Checkbook.Lib")>
 <Assembly: AssemblyCompany("Willow Creek Software")>
 <Assembly: AssemblyProduct("PersistTools")>
 <Assembly: AssemblyCopyright("Copyright © 2005-2019 Willow Creek Software")>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.2.0.0")>
-<Assembly: AssemblyFileVersion("1.2.0.0")>
+<Assembly: AssemblyVersion("2.5.1.0")>
+<Assembly: AssemblyFileVersion("2.5.1.0")>
