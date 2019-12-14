@@ -17,7 +17,6 @@ Public Class UTRegister
         Dim strDescription As String
         Dim curAmount As Decimal
         Dim blnFake As Boolean
-        Dim lngType As Trx.TrxType
         Dim strRepeatKey As String
         Dim intRepeatSeq As Integer
     End Structure
@@ -269,7 +268,6 @@ Public Class UTRegister
         With maudtTrx(intTrx)
             .datDate = objTrx.datDate
             .curAmount = objTrx.curAmount
-            .lngType = objTrx.lngType
             .blnFake = objTrx.blnFake
             .strDescription = objTrx.strDescription
             .strNumber = objTrx.strNumber

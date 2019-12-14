@@ -57,7 +57,7 @@ Public Class TransferManager
 
         objTrxManager1 = objReg1.objGetTransferTrxManager(lngIndex1)
         objTrx1 = DirectCast(objTrxManager1.objTrx, TransferTrx)
-        If objTrx1.lngType <> Trx.TrxType.Transfer Then
+        If objTrx1.GetType() IsNot GetType(TransferTrx) Then
             gRaiseError("Trx is not a transfer in TransferManager.UpdateTransfer")
         End If
         'objTrx1.strTransferKey is the OLD transfer key, because objTrx1 hasn't been
@@ -86,7 +86,7 @@ Public Class TransferManager
         Dim objTrx1 As Trx
 
         objTrx1 = objReg1.objTrx(lngIndex1)
-        If objTrx1.lngType <> Trx.TrxType.Transfer Then
+        If objTrx1.GetType() IsNot GetType(TransferTrx) Then
             gRaiseError("Trx is not a transfer in TransferManager.DeleteTransfer")
         End If
         lngIndex2 = objReg2.lngMatchTransfer(objTrx1.datDate, objReg1.strRegisterKey, -objTrx1.curAmount)

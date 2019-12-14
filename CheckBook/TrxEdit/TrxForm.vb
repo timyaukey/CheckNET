@@ -15,7 +15,7 @@ Friend Class TrxForm
     Private mblnEditMode As Boolean
     Private mdatDefaultDate As Date
     Private mblnCancel As Boolean
-    Private mlngType As Trx.TrxType
+    Private mobjTrxType As Type
     Private mblnInSetNormalControls As Boolean
     Private mstrImportKey As String
     Private mintSplitCatKeyCode As Integer
@@ -72,7 +72,7 @@ Friend Class TrxForm
 
         Try
 
-            Init(objHostUI_, objTrx_.objReg, False, 0, Trx.TrxType.Normal, blnCheckInvoiceNum_, strLogTitle)
+            Init(objHostUI_, objTrx_.objReg, False, 0, GetType(NormalTrx), blnCheckInvoiceNum_, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             SetSharedControls(objTrx_)
@@ -98,7 +98,7 @@ Friend Class TrxForm
 
         Try
 
-            Init(objHostUI_, objTrx_.objReg, False, 0, Trx.TrxType.Normal, blnCheckInvoiceNum_, strLogTitle)
+            Init(objHostUI_, objTrx_.objReg, False, 0, GetType(NormalTrx), blnCheckInvoiceNum_, strLogTitle)
             mblnSilentMode = True
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
@@ -128,7 +128,7 @@ Friend Class TrxForm
 
         Try
 
-            Init(objHostUI_, objReg_, False, 0, Trx.TrxType.Budget, False, strLogTitle)
+            Init(objHostUI_, objReg_, False, 0, GetType(BudgetTrx), False, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             ClearSharedControls()
@@ -154,7 +154,7 @@ Friend Class TrxForm
 
         Try
 
-            Init(objHostUI_, objReg_, False, 0, Trx.TrxType.Transfer, False, strLogTitle)
+            Init(objHostUI_, objReg_, False, 0, GetType(TransferTrx), False, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             ClearSharedControls()
@@ -179,26 +179,25 @@ Friend Class TrxForm
 
         Try
 
-            Init(objHostUI_, objTrx_.objReg, True, objTrx_.lngIndex, objTrx_.lngType, True, strLogTitle)
+            Init(objHostUI_, objTrx_.objReg, True, objTrx_.lngIndex, objTrx_.GetType(), True, strLogTitle)
             ConfigSharedControls()
             SetSharedControls(objTrx_)
             mstrOldRepeatKey = objTrx_.strRepeatKey
             mintOldRepeatSeq = objTrx_.intRepeatSeq
-            Select Case objTrx_.lngType
-                Case Trx.TrxType.Normal
-                    ConfigNormalControls()
-                    SetNormalControls(DirectCast(objTrx_, NormalTrx))
-                    CheckForPlaceholderBudget()
-                    mcurOldAmount = objTrx_.curAmount
-                    mlngOldStatus = objTrx_.lngStatus
-                Case Trx.TrxType.Budget
-                    ConfigBudgetControls()
-                    SetBudgetControls(DirectCast(objTrx_, BudgetTrx))
-                    ShowBudgetApplied(DirectCast(objTrx_, BudgetTrx))
-                Case Trx.TrxType.Transfer
-                    ConfigTransferControls()
-                    SetTransferControls(DirectCast(objTrx_, TransferTrx))
-            End Select
+            If TypeOf objTrx_ Is NormalTrx Then
+                ConfigNormalControls()
+                SetNormalControls(DirectCast(objTrx_, NormalTrx))
+                CheckForPlaceholderBudget()
+                mcurOldAmount = objTrx_.curAmount
+                mlngOldStatus = objTrx_.lngStatus
+            ElseIf TypeOf objTrx_ Is BudgetTrx Then
+                ConfigBudgetControls()
+                SetBudgetControls(DirectCast(objTrx_, BudgetTrx))
+                ShowBudgetApplied(DirectCast(objTrx_, BudgetTrx))
+            ElseIf TypeOf objTrx_ Is TransferTrx Then
+                ConfigTransferControls()
+                SetTransferControls(DirectCast(objTrx_, TransferTrx))
+            End If
             Me.ShowDialog()
             If Not mblnCancel Then
                 datDefaultDate_ = mdatDefaultDate
@@ -368,7 +367,7 @@ Friend Class TrxForm
             If objCurrent.datDate > objBudget.datBudgetEnds Then
                 Exit Do
             End If
-            If objCurrent.lngType = Trx.TrxType.Normal Then
+            If objCurrent.GetType() Is GetType(NormalTrx) Then
                 For Each objSplit In DirectCast(objCurrent, NormalTrx).colSplits
                     If objSplit.objBudget Is objBudget Then
                         'Show it.
@@ -432,7 +431,7 @@ Friend Class TrxForm
     End Sub
 
     Private Sub Init(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register, ByVal blnEditMode_ As Boolean,
-                     ByVal lngIndex_ As Integer, ByVal lngType_ As Trx.TrxType, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String)
+                     ByVal lngIndex_ As Integer, ByVal objTrxType_ As Type, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String)
 
         cboSplitCategory = {_cboSplitCategory_0, _cboSplitCategory_1, _cboSplitCategory_2, _cboSplitCategory_3, _cboSplitCategory_4, _cboSplitCategory_5, _cboSplitCategory_6, _cboSplitCategory_7, _cboSplitCategory_8, _cboSplitCategory_9}
         cboSplitBudget = {_cboSplitBudget_0, _cboSplitBudget_1, _cboSplitBudget_2, _cboSplitBudget_3, _cboSplitBudget_4, _cboSplitBudget_5, _cboSplitBudget_6, _cboSplitBudget_7, _cboSplitBudget_8, _cboSplitBudget_9}
@@ -452,7 +451,7 @@ Friend Class TrxForm
         mobjCompany = mobjHostUI.objCompany
         mblnEditMode = blnEditMode_
         mlngIndex = lngIndex_
-        mlngType = lngType_
+        mobjTrxType = objTrxType_
         mblnCancel = True
         mblnBudgetAppliedVisible = True
         mblnCheckInvoiceNum = blnCheckInvoiceNum_
@@ -795,11 +794,11 @@ Friend Class TrxForm
 
     Private Sub cmdCopyAmount_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCopyAmount.Click
         Dim strAmount As String = ""
-        If mlngType = Trx.TrxType.Normal Then
+        If mobjTrxType Is GetType(NormalTrx) Then
             strAmount = txtSplitTotal.Text
-        ElseIf mlngType = Trx.TrxType.Budget Then
+        ElseIf mobjTrxType Is GetType(BudgetTrx) Then
             strAmount = txtBudgetLimit.Text
-        ElseIf mlngType = Trx.TrxType.Transfer Then
+        ElseIf mobjTrxType Is GetType(TransferTrx) Then
             strAmount = txtTransferAmount.Text
         End If
         My.Computer.Clipboard.Clear()
@@ -865,18 +864,18 @@ Friend Class TrxForm
         If blnValidateShared() Then
             Exit Function
         End If
-        Select Case mlngType
-            Case Trx.TrxType.Normal
+        Select Case mobjTrxType
+            Case GetType(NormalTrx)
                 If blnValidateNormal() Then
                     Exit Function
                 End If
                 SaveNormal()
-            Case Trx.TrxType.Budget
+            Case GetType(BudgetTrx)
                 If blnValidateBudget() Then
                     Exit Function
                 End If
                 SaveBudget()
-            Case Trx.TrxType.Transfer
+            Case GetType(TransferTrx)
                 If blnValidateTransfer(strOtherRegisterKey) Then
                     Exit Function
                 End If
@@ -1179,7 +1178,7 @@ Friend Class TrxForm
                 Exit Do
             End If
             objTrx = objReg.objTrx(lngIndex)
-            If objTrx.lngType = Trx.TrxType.Normal Then
+            If objTrx.GetType() Is GetType(NormalTrx) Then
                 'If objTrx.datDate < datEarliestToCheck Then
                 '    Exit Do
                 'End If
@@ -1665,7 +1664,7 @@ Friend Class TrxForm
                     If strNumber <> "" Then
                         txtNumber.Text = strNumber
                     End If
-                    If mlngType = Trx.TrxType.Normal Then
+                    If mobjTrxType Is GetType(NormalTrx) Then
                         cboSplitCategory(0).Text = strCategory
                         If strBudget <> "" Then
                             cboSplitBudget(0).Text = strBudget
@@ -1675,11 +1674,11 @@ Friend Class TrxForm
                         End If
                         'txtSplitAmount(0).SetFocus
                         txtSplitInvoiceNum(0).Focus()
-                    ElseIf mlngType = Trx.TrxType.Transfer Then
+                    ElseIf mobjTrxType Is GetType(TransferTrx) Then
                         If strAmount <> "" Then
                             txtTransferAmount.Text = strAmount
                         End If
-                    ElseIf mlngType = Trx.TrxType.Budget Then
+                    ElseIf mobjTrxType Is GetType(BudgetTrx) Then
                         If strAmount <> "" Then
                             txtBudgetLimit.Text = strAmount
                         End If

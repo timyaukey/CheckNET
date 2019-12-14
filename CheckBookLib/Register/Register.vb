@@ -498,13 +498,6 @@ Public Class Register
             Else
                 lngOutIndex = lngOutIndex + 1
                 SetTrx(lngOutIndex, objTrx)
-                If objTrx.lngType = Trx.TrxType.Budget Then
-                    'DirectCast(objTrx, BudgetTrx).ClearThisBudget()
-                ElseIf objTrx.lngType = Trx.TrxType.Normal Then
-                    'For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
-                    '    objSplit.ClearBudgetReference()
-                    'Next objSplit
-                End If
             End If
         Next
         If lngOutIndex = 0 Then
@@ -547,7 +540,7 @@ Public Class Register
         Dim objTrx As Trx
         For lngIndex = mlngTrxUsed To 1 Step -1
             objTrx = Me.objTrx(lngIndex)
-            If objTrx.lngType = Trx.TrxType.Normal And Not objTrx.blnFake Then
+            If objTrx.GetType() Is GetType(NormalTrx) And Not objTrx.blnFake Then
                 If DirectCast(objTrx, NormalTrx).strImportKey = strImportKey Then
                     Return DirectCast(objTrx, NormalTrx)
                 End If
@@ -578,7 +571,7 @@ Public Class Register
                     Exit For
                 End If
                 If .datDate <= datLatestMatch Then
-                    If .lngType = Trx.TrxType.Normal And Not .blnFake Then
+                    If .GetType() Is GetType(NormalTrx) And Not .blnFake Then
                         If .strNumber = strNumber And (.curAmount = curAmount Or curAmount = 0.0#) Then
                             If Left(.strDescription, 10).ToLower() = Left(strDescription, 10).ToLower() Then
                                 Return DirectCast(Me.objTrx(lngIndex), NormalTrx)
@@ -715,7 +708,7 @@ Public Class Register
                 If .datDate > datEnd Then
                     Exit Do
                 End If
-                If .lngType = Trx.TrxType.Normal Then
+                If .GetType() Is GetType(NormalTrx) Then
                     objNormalTrx = DirectCast(objTrx, NormalTrx)
                     With objNormalTrx
                         blnMatched = False
@@ -812,7 +805,7 @@ Public Class Register
             If objTrx.datDate > datEnd Then
                 Exit Do
             End If
-            If objTrx.lngType = Trx.TrxType.Normal Then
+            If objTrx.GetType() Is GetType(NormalTrx) Then
                 objNormalTrx = DirectCast(objTrx, NormalTrx)
                 blnImportOkay = (objNormalTrx.strImportKey = "") Or (blnMatchImportedFromBank) 'Used to be (not blnMatchImportedFromBank)
                 If objNormalTrx.strDescription = strDescription And blnImportOkay Then
@@ -855,7 +848,7 @@ Public Class Register
                 If .datDate > datEnd Then
                     Exit Do
                 End If
-                If .lngType = Trx.TrxType.Normal Then
+                If .GetType() Is GetType(NormalTrx) Then
                     If .strDescription = strPayee Then
                         For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
                             If objSplit.strInvoiceNum = strInvoiceNum Then
@@ -898,7 +891,7 @@ Public Class Register
                 If .datDate > datEnd Then
                     Exit Do
                 End If
-                If .lngType = Trx.TrxType.Normal Then
+                If .GetType() Is GetType(NormalTrx) Then
                     If .strDescription = strPayee Then
                         For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
                             If objSplit.strPONumber = strPONumber Then
@@ -960,7 +953,7 @@ Public Class Register
             If objTrx.datDate < datDate Then
                 Exit Function
             End If
-            If objTrx.lngType = Trx.TrxType.Transfer Then
+            If objTrx.GetType() Is GetType(TransferTrx) Then
                 If objTrx.datDate = datDate Then
                     With DirectCast(objTrx, TransferTrx)
                         If .curAmount = curAmount Then

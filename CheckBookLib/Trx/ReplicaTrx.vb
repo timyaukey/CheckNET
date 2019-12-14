@@ -10,12 +10,6 @@ Public Class ReplicaTrx
         MyBase.New(objReg_)
     End Sub
 
-    Public Overrides ReadOnly Property lngType As TrxType
-        Get
-            Return Trx.TrxType.Replica
-        End Get
-    End Property
-
     Public Overrides ReadOnly Property strCategory As String
         Get
             Return mobjReg.objAccount.objCompany.objCategories.strTranslateKey(mstrCatKey)

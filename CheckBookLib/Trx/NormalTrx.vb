@@ -152,12 +152,6 @@ Public Class NormalTrx
         End With
     End Sub
 
-    Public Overrides ReadOnly Property lngType As TrxType
-        Get
-            Return TrxType.Normal
-        End Get
-    End Property
-
     Public ReadOnly Property strImportKey() As String
         Get
             strImportKey = mstrImportKey
@@ -610,7 +604,7 @@ Public Class NormalTrx
             For Each objSplit In mcolSplits
                 curTotal = curTotal + objSplit.curAmount
                 If Not objSplit.objBudget Is Nothing Then
-                    If objSplit.objBudget.lngType <> TrxType.Budget Then
+                    If objSplit.objBudget.GetType() IsNot GetType(BudgetTrx) Then
                         objReg.RaiseValidationError(lngIndex, "Split applied to non-budget trx")
                     End If
                     If objSplit.strBudgetKey = "" Then

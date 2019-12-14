@@ -33,17 +33,16 @@ Public Class RegisterSaver
             Exit Sub
         End If
         'Do not save ReplicaTrx, because they will be recreated on load.
-        Select Case mobjTrx.lngType
-            Case Trx.TrxType.Normal
-                SaveTrxNormal()
-                SaveLine(".T")
-            Case Trx.TrxType.Budget
-                SaveTrxBudget()
-                SaveLine(".T")
-            Case Trx.TrxType.Transfer
-                SaveTrxTransfer()
-                SaveLine(".T")
-        End Select
+        If TypeOf mobjTrx Is NormalTrx Then
+            SaveTrxNormal()
+            SaveLine(".T")
+        ElseIf TypeOf mobjTrx Is BudgetTrx Then
+            SaveTrxBudget()
+            SaveLine(".T")
+        ElseIf TypeOf mobjTrx Is TransferTrx Then
+            SaveTrxTransfer()
+            SaveLine(".T")
+        End If
     End Sub
 
     Private Sub SaveTrxNormal()

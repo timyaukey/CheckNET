@@ -132,12 +132,6 @@ Public Class BudgetTrx
         End If
     End Sub
 
-    Public Overrides ReadOnly Property lngType As TrxType
-        Get
-            Return TrxType.Budget
-        End Get
-    End Property
-
     Public Property curBudgetLimit() As Decimal
         Get
             Return mcurBudgetLimit
@@ -229,7 +223,7 @@ Public Class BudgetTrx
             If objScanTrx.datDate > mdatBudgetEnds Then
                 Exit For
             End If
-            If objScanTrx.lngType = TrxType.Normal Then
+            If objScanTrx.GetType() = GetType(NormalTrx) Then
                 Dim objNormalTrx As NormalTrx = DirectCast(objScanTrx, NormalTrx)
                 For Each objSplit As TrxSplit In objNormalTrx.colSplits
                     If objSplit.objBudget Is Nothing Then

@@ -163,51 +163,50 @@ Public Class EventLog
                 .SetAttribute("RptName", mobjRepeats.strKeyToValue1(objTrx.strRepeatKey))
                 .SetAttribute("RptSeq", CStr(objTrx.intRepeatSeq))
             End If
-            Select Case objTrx.lngType
-                Case Trx.TrxType.Normal
-                    .SetAttribute("Type", "Normal")
-                    elmSplitParent = elmTrx
-                    objNormalTrx = DirectCast(objTrx, NormalTrx)
-                    For Each objSplit In objNormalTrx.colSplits
+            If TypeOf objTrx Is NormalTrx Then
+                .SetAttribute("Type", "Normal")
+                elmSplitParent = elmTrx
+                objNormalTrx = DirectCast(objTrx, NormalTrx)
+                For Each objSplit In objNormalTrx.colSplits
+                    If objNormalTrx.lngSplits > 1 Then
+                        elmSplitParent = mdomOutput.CreateElement("Split")
+                        elmTrx.AppendChild(elmSplitParent)
+                    End If
+                    With elmSplitParent
+                        .SetAttribute("CatName", mobjCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey))
                         If objNormalTrx.lngSplits > 1 Then
-                            elmSplitParent = mdomOutput.CreateElement("Split")
-                            elmTrx.AppendChild(elmSplitParent)
+                            .SetAttribute("Amount", Utilities.strFormatCurrency(objSplit.curAmount))
                         End If
-                        With elmSplitParent
-                            .SetAttribute("CatName", mobjCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey))
-                            If objNormalTrx.lngSplits > 1 Then
-                                .SetAttribute("Amount", Utilities.strFormatCurrency(objSplit.curAmount))
-                            End If
-                            If objSplit.strPONumber <> "" Then
-                                .SetAttribute("PONum", objSplit.strPONumber)
-                            End If
-                            If objSplit.strInvoiceNum <> "" Then
-                                .SetAttribute("InvNum", objSplit.strInvoiceNum)
-                            End If
-                            If objSplit.datInvoiceDate <> System.DateTime.FromOADate(0) Then
-                                .SetAttribute("InvDate", Utilities.strFormatDate(objSplit.datInvoiceDate))
-                            End If
-                            If objSplit.datDueDate <> System.DateTime.FromOADate(0) Then
-                                .SetAttribute("DueDate", Utilities.strFormatDate(objSplit.datDueDate))
-                            End If
-                            If objSplit.strTerms <> "" Then
-                                .SetAttribute("Terms", objSplit.strTerms)
-                            End If
-                            If objSplit.strBudgetKey <> "" Then
-                                .SetAttribute("BudgetName", mobjCompany.objBudgets.strKeyToValue1(objSplit.strBudgetKey))
-                            End If
-                        End With
-                    Next objSplit
-                Case Trx.TrxType.Budget
-                    Dim objBudgetTrx As BudgetTrx = DirectCast(objTrx, BudgetTrx)
-                    .SetAttribute("Type", "Budget")
-                    .SetAttribute("BudgetLimit", Utilities.strFormatCurrency(objBudgetTrx.curBudgetLimit))
-                    .SetAttribute("BudgetName", mobjCompany.objBudgets.strKeyToValue1(objBudgetTrx.strBudgetKey))
-                Case Trx.TrxType.Transfer
-                    .SetAttribute("Type", "Transfer")
-                Case Else
-                    gRaiseError("Unsupported trx type")
-            End Select
+                        If objSplit.strPONumber <> "" Then
+                            .SetAttribute("PONum", objSplit.strPONumber)
+                        End If
+                        If objSplit.strInvoiceNum <> "" Then
+                            .SetAttribute("InvNum", objSplit.strInvoiceNum)
+                        End If
+                        If objSplit.datInvoiceDate <> System.DateTime.FromOADate(0) Then
+                            .SetAttribute("InvDate", Utilities.strFormatDate(objSplit.datInvoiceDate))
+                        End If
+                        If objSplit.datDueDate <> System.DateTime.FromOADate(0) Then
+                            .SetAttribute("DueDate", Utilities.strFormatDate(objSplit.datDueDate))
+                        End If
+                        If objSplit.strTerms <> "" Then
+                            .SetAttribute("Terms", objSplit.strTerms)
+                        End If
+                        If objSplit.strBudgetKey <> "" Then
+                            .SetAttribute("BudgetName", mobjCompany.objBudgets.strKeyToValue1(objSplit.strBudgetKey))
+                        End If
+                    End With
+                Next objSplit
+            ElseIf TypeOf objTrx Is BudgetTrx Then
+                Dim objBudgetTrx As BudgetTrx = DirectCast(objTrx, BudgetTrx)
+                .SetAttribute("Type", "Budget")
+                .SetAttribute("BudgetLimit", Utilities.strFormatCurrency(objBudgetTrx.curBudgetLimit))
+                .SetAttribute("BudgetName", mobjCompany.objBudgets.strKeyToValue1(objBudgetTrx.strBudgetKey))
+            ElseIf TypeOf objTrx Is TransferTrx Then
+                .SetAttribute("Type", "Transfer")
+            Else
+                gRaiseError("Unsupported trx type")
+            End If
         End With
     End Sub
 

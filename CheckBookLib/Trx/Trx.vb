@@ -183,8 +183,6 @@ Public MustInherit Class Trx
         End Get
     End Property
 
-    Public MustOverride ReadOnly Property lngType() As TrxType
-
     Public Property strNumber() As String
         Get
             Return mstrNumber
@@ -337,8 +335,16 @@ Public MustInherit Class Trx
 
     Public Sub SetSortKey()
         Dim strInvNum As String = ""
-        If lngType = TrxType.Normal Then
+        Dim strTypeCode As String
+        If TypeOf Me Is NormalTrx Then
             strInvNum = DirectCast(Me, NormalTrx).objFirstSplit.strInvoiceNum
+            strTypeCode = "4"
+        ElseIf TypeOf Me Is BudgetTrx Then
+            strTypeCode = "3"
+        ElseIf TypeOf Me Is TransferTrx Then
+            strTypeCode = "2"
+        Else
+            strTypeCode = "1"
         End If
         Dim strDebitCredit As String
         If mcurAmount > 0 Then
@@ -346,7 +352,7 @@ Public MustInherit Class Trx
         Else
             strDebitCredit = "D"
         End If
-        mstrSortKey = mdatDate.ToString("yyyyMMdd") & strDebitCredit & Mid("ZYX", lngType + 1, 1) &
+        mstrSortKey = mdatDate.ToString("yyyyMMdd") & strDebitCredit & strTypeCode &
             Left(mstrNumber & "          ", 10) & Left(mstrDescription & "                    ", 20) & Left(strInvNum & "                ", 16)
     End Sub
 

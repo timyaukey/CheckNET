@@ -81,7 +81,7 @@ Friend Class ReconcileForm
             For lngIndex = 1 To lngMaxRegIndex
                 objTrx = objReg.objTrx(lngIndex)
                 With objTrx
-                    If .lngType = Trx.TrxType.Normal And Not .blnFake Then
+                    If .GetType() Is GetType(NormalTrx) And Not .blnFake Then
                         If .lngStatus = Trx.TrxStatus.Reconciled Then
                             curStartingBalance = curStartingBalance + .curAmount
                         Else

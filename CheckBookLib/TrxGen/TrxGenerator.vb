@@ -56,7 +56,7 @@ Public Module TrxGenerator
                             End If
                         End If
                         If Not objRepeatTrx Is Nothing Then
-                            If datTrxToCreate.lngType = Trx.TrxType.Normal Then
+                            If datTrxToCreate.GetType() Is GetType(NormalTrx) Then
                                 objRepeatTrx.curGeneratedAmount = datTrxToCreate.adatSplits(1).curAmount
                             Else
                                 objRepeatTrx.curGeneratedAmount = datTrxToCreate.curAmount

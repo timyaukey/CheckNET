@@ -43,7 +43,7 @@ Public Class SearchRecategorizeTool
 
         colTrx = New List(Of NormalTrx)
         For Each objCheckedTrx In objHostSearchToolUI.objAllSelectedTrx()
-            If objCheckedTrx.lngType <> Trx.TrxType.Normal Then
+            If objCheckedTrx.GetType() IsNot GetType(NormalTrx) Then
                 mobjHostUI.ErrorMessageBox("Budgets and transfers may not be recategorized.")
                 Exit Sub
             End If

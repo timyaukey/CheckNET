@@ -38,7 +38,7 @@ Friend Class LiveBudgetListForm
             lvwMatches.Items.Clear()
             For lngIndex = 1 To mobjReg.lngTrxCount
                 objTrx = mobjReg.objTrx(lngIndex)
-                If objTrx.lngType = Trx.TrxType.Budget Then
+                If objTrx.GetType() Is GetType(BudgetTrx) Then
                     With DirectCast(objTrx, BudgetTrx)
                         If .InBudgetPeriod(datTarget) Then
                             objItem = UITools.ListViewAdd(lvwMatches)

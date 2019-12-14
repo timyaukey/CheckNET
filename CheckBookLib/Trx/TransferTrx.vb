@@ -79,12 +79,6 @@ Public Class TransferTrx
         RaiseErrorOnBadTransfer("UpdateStartTransfer")
     End Sub
 
-    Public Overrides ReadOnly Property lngType As TrxType
-        Get
-            Return TrxType.Transfer
-        End Get
-    End Property
-
     Public ReadOnly Property strTransferKey() As String
         Get
             strTransferKey = mstrTransferKey
