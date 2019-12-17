@@ -8,13 +8,13 @@ Public Class CompanyLoader
 
     Public Shared Function objLoad(ByVal objCompany As Company,
         ByVal showAccount As Company.ShowStartupAccount,
-        ByVal authenticator As Func(Of CompanyLoadError)) As CompanyLoadError
+        ByVal authenticator As Func(Of Company, CompanyLoadError)) As CompanyLoadError
 
         If Not objCompany.blnDataPathExists() Then
             Return New CompanyLoadNotFound()
         End If
         objCompany.objSecurity.Load()
-        Dim objAuthenticatorError As CompanyLoadError = authenticator()
+        Dim objAuthenticatorError As CompanyLoadError = authenticator(objCompany)
         If Not objAuthenticatorError Is Nothing Then
             Return objAuthenticatorError
         End If

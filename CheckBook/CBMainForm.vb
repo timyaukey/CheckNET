@@ -94,8 +94,8 @@ Friend Class CBMainForm
         End Try
     End Sub
 
-    Private Function objAuthenticate() As CompanyLoadError
-        If mobjSecurity.blnNoFile Then
+    Private Function objAuthenticate(ByVal objCompany As Company) As CompanyLoadError
+        If objCompany.objSecurity.blnNoFile Then
             Return Nothing
         End If
         Do
@@ -107,7 +107,7 @@ Friend Class CBMainForm
                     Return New CompanyLoadCanceled()
                 End If
             End Using
-            If mobjSecurity.blnAuthenticate(strLogin, strPassword) Then
+            If objCompany.objSecurity.blnAuthenticate(strLogin, strPassword) Then
                 Return Nothing
             End If
             mobjHostUI.ErrorMessageBox((New CompanyLoadNotAuthorized()).strMessage)
