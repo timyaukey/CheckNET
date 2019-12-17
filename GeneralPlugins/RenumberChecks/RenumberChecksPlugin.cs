@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using CheckBookLib;
-using PluginCore;
+using Willowsoft.CheckBook.Lib;
+using Willowsoft.CheckBook.PluginCore;
 
 namespace GeneralPlugins.RenumberChecks
 {

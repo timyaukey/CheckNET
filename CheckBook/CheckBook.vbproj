@@ -8,9 +8,9 @@
     <ProjectGuid>{4FD83DDC-A8F7-44E1-87B4-C12366D6468D}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <AssemblyName>CheckBook</AssemblyName>
+    <AssemblyName>Willowsoft.CheckBook.Main</AssemblyName>
     <OutputType>WinExe</OutputType>
-    <StartupObject>CheckBook.My.MyApplication</StartupObject>
+    <StartupObject>Willowsoft.CheckBook.Main.My.MyApplication</StartupObject>
     <AssemblyMajorVersion>1</AssemblyMajorVersion>
     <AssemblyMinorVersion>19</AssemblyMinorVersion>
     <AssemblyRevisionNumber>1</AssemblyRevisionNumber>
@@ -18,7 +18,7 @@
     <AssemblyCompanyName>Willow Creek Software</AssemblyCompanyName>
     <StartWithIE>False</StartWithIE>
     <ApplicationIcon>CheckBook.ico</ApplicationIcon>
-    <RootNamespace>CheckBook</RootNamespace>
+    <RootNamespace>Willowsoft.CheckBook.Main</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -44,7 +44,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
-    <DocumentationFile>CheckBook.xml</DocumentationFile>
+    <DocumentationFile>Willowsoft.CheckBook.Main.xml</DocumentationFile>
     <DebugSymbols>True</DebugSymbols>
     <DefineDebug>True</DefineDebug>
     <DefineTrace>True</DefineTrace>
@@ -58,7 +58,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
-    <DocumentationFile>CheckBook.xml</DocumentationFile>
+    <DocumentationFile>Willowsoft.CheckBook.Main.xml</DocumentationFile>
     <DebugSymbols>False</DebugSymbols>
     <DefineDebug>False</DefineDebug>
     <DefineTrace>True</DefineTrace>
@@ -97,7 +97,6 @@
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="Microsoft.VisualBasic.Compatibility" />
-    <Import Include="PluginCore" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
@@ -106,6 +105,9 @@
     <Import Include="System.Drawing" />
     <Import Include="System.Linq" />
     <Import Include="System.Windows.Forms" />
+    <Import Include="Willowsoft.CheckBook.Lib" />
+    <Import Include="Willowsoft.Checkbook.PersistTools" />
+    <Import Include="Willowsoft.CheckBook.PluginCore" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountForm.Designer.vb">
@@ -493,7 +495,7 @@
       <Name>BudgetDashboard</Name>
     </ProjectReference>
     <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
-      <Project>{73A968C7-281A-45DC-8360-2E44B3C9510B}</Project>
+      <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
       <Name>CheckBookLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\GeneralPlugins\GeneralPlugins.csproj">

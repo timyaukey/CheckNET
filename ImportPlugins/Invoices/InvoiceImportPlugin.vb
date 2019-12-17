@@ -1,8 +1,6 @@
 ﻿Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
-Imports PluginCore
 
 ''' <summary>
 ''' All invoice import plugins must inherit from this.

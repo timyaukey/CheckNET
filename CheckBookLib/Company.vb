@@ -4,7 +4,7 @@ Option Explicit On
 Imports System.IO
 Imports System.Xml.Serialization
 
-<Assembly: System.Runtime.CompilerServices.InternalsVisibleTo("UnitTests")>
+<Assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Willowsoft.CheckBook.UnitTests")>
 
 ''' <summary>
 ''' The core class of the object model. One instance contains all the data objects

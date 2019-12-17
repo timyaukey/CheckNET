@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using CheckBookLib;
+using Willowsoft.CheckBook.Lib;
 
 namespace BudgetDashboard
 {

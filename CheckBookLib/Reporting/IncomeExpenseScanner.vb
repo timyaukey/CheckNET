@@ -1,6 +1,5 @@
 ﻿Option Strict On
 Option Explicit On
-Imports CheckBookLib
 
 Public NotInheritable Class IncomeExpenseScanner
     Public Shared Function objRun(ByVal objCompany As Company, ByVal datStartDate As DateTime,

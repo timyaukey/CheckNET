@@ -2,8 +2,6 @@ Option Strict On
 Option Explicit On
 
 Imports VB = Microsoft.VisualBasic
-Imports CheckBookLib
-Imports PluginCore
 
 Public Class BankImportForm
     Inherits System.Windows.Forms.Form

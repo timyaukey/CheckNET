@@ -1,7 +1,6 @@
 ﻿Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
 
 Public Delegate Function GetTrxSearchDataDelegate(ByVal objTrx As Trx) As String
 Public Delegate Function GetSplitSearchDataDelegate(ByVal objSplit As TrxSplit) As String

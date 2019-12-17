@@ -4,10 +4,6 @@ Option Explicit On
 Imports System.IO
 Imports System.Reflection
 Imports VB = Microsoft.VisualBasic
-Imports CheckBookLib
-Imports PluginCore
-Imports PersistTools
-Imports ImportPlugins
 
 Friend Class CBMainForm
     Inherits System.Windows.Forms.Form

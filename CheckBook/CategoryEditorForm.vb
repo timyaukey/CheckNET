@@ -1,5 +1,4 @@
-﻿Imports CheckBookLib
-
+﻿
 Public Class CategoryEditorForm
     Private mblnSaved As Boolean
 

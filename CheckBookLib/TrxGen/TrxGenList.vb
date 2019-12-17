@@ -1,6 +1,5 @@
 Option Strict On
 Option Explicit On
-Imports CheckBookLib
 
 Public Class TrxGenList
     Inherits TrxGenBase

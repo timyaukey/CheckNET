@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{73A968C7-281A-45DC-8360-2E44B3C9510B}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>CheckBookLib</RootNamespace>
+    <RootNamespace>Willowsoft.CheckBook.Lib</RootNamespace>
     <AssemblyName>Willowsoft.CheckBook.Lib</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>

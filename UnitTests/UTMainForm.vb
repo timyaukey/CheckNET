@@ -1,9 +1,6 @@
 Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
-Imports PersistTools
-
 Friend Class UTMainForm
     Inherits System.Windows.Forms.Form
 

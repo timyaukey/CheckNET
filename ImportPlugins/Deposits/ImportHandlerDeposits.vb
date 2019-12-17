@@ -1,8 +1,6 @@
 ﻿Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
-Imports PluginCore
 
 Public Class ImportHandlerDeposits
     Implements IImportHandler

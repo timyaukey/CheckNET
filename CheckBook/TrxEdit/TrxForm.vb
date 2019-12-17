@@ -1,7 +1,6 @@
 Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
 Imports VB = Microsoft.VisualBasic
 
 Friend Class TrxForm

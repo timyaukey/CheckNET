@@ -1,6 +1,6 @@
 ﻿using System;
 
-using CheckBookLib;
+using Willowsoft.CheckBook.Lib;
 
 namespace BudgetDashboard
 {

@@ -1,8 +1,6 @@
 ﻿Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
-Imports PluginCore
 
 Public MustInherit Class SearchComparer
     Public MustOverride Function blnCompare(ByVal str1 As String, ByVal str2 As String) As Boolean

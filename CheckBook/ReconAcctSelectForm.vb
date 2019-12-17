@@ -1,7 +1,6 @@
 Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
 
 Friend Class ReconAcctSelectForm
     Inherits System.Windows.Forms.Form

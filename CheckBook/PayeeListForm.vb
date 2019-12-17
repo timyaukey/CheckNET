@@ -2,7 +2,6 @@ Option Strict Off
 Option Explicit On
 
 Imports System.ComponentModel
-Imports CheckBookLib
 
 Friend Class PayeeListForm
     Inherits System.Windows.Forms.Form

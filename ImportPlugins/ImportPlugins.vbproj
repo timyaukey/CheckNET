@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{67BC9967-B09A-4A5A-9BF5-40C9C9AF79EF}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>ImportPlugins</RootNamespace>
-    <AssemblyName>ImportPlugins</AssemblyName>
+    <RootNamespace>Willowsoft.CheckBook.ImportPlugins</RootNamespace>
+    <AssemblyName>Willowsoft.CheckBook.ImportPlugins</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -19,7 +19,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>ImportPlugins.xml</DocumentationFile>
+    <DocumentationFile>Willowsoft.CheckBook.ImportPlugins.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <CodeAnalysisRuleSet>ImportPlugins.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
@@ -30,7 +30,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>ImportPlugins.xml</DocumentationFile>
+    <DocumentationFile>Willowsoft.CheckBook.ImportPlugins.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <CodeAnalysisRuleSet>ImportPlugins.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
@@ -68,6 +68,8 @@
     <Import Include="System.Linq" />
     <Import Include="System.Windows.Forms" />
     <Import Include="System.Xml.Linq" />
+    <Import Include="Willowsoft.CheckBook.Lib" />
+    <Import Include="Willowsoft.CheckBook.PluginCore" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BankImportAcctSelectForm.Designer.vb">

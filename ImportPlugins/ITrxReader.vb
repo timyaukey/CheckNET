@@ -1,7 +1,6 @@
 Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
 
 'This interface allows the application to retrieve a series
 'of new ImportedTrx objects from some external source.

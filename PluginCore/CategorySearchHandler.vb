@@ -1,9 +1,6 @@
 ﻿Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
-Imports PluginCore
-
 Public Class CategorySearchHandler
     Implements ISearchHandler
 

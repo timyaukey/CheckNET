@@ -3,7 +3,6 @@ Option Explicit On
 
 Imports VB = Microsoft.VisualBasic
 Imports System.Collections.Generic
-Imports CheckBookLib
 
 Friend Class CatSumRptForm
 	Inherits System.Windows.Forms.Form

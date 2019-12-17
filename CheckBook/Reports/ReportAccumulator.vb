@@ -1,6 +1,5 @@
 ﻿Option Strict On
 Option Explicit On
-Imports CheckBookLib
 
 Public Class ReportAccumulator
     Private mcurTotal As Decimal = 0D

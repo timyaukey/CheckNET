@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DF8C4177-36C2-414D-A363-09C33CB56FD4}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>PluginCore</RootNamespace>
-    <AssemblyName>PluginCore</AssemblyName>
+    <RootNamespace>Willowsoft.CheckBook.PluginCore</RootNamespace>
+    <AssemblyName>Willowsoft.CheckBook.PluginCore</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -19,7 +19,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>PluginCore.xml</DocumentationFile>
+    <DocumentationFile>Willowsoft.CheckBook.PluginCore.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -29,7 +29,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>PluginCore.xml</DocumentationFile>
+    <DocumentationFile>Willowsoft.CheckBook.PluginCore.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -56,7 +56,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Import Include="CheckBookLib" />
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="Microsoft.VisualBasic.Compatibility" />
     <Import Include="System" />
@@ -64,6 +63,7 @@
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Data" />
     <Import Include="System.Diagnostics" />
+    <Import Include="Willowsoft.CheckBook.Lib" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CategorySearchHandler.vb" />

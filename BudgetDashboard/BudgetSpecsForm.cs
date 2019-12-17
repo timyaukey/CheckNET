@@ -7,8 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-using CheckBookLib;
-using PluginCore;
+using Willowsoft.CheckBook.Lib;
+using Willowsoft.CheckBook.PluginCore;
 
 namespace BudgetDashboard
 {

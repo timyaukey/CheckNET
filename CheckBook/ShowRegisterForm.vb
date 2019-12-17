@@ -1,7 +1,6 @@
 Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
 
 Friend Class ShowRegisterForm
     Inherits System.Windows.Forms.Form
@@ -316,7 +315,7 @@ Friend Class ShowRegisterForm
                         'accounts and even there are only a few each one can create trx in others through
                         'balance sheet categories in trx.
                         For Each objAccount In mobjCompany.colAccounts
-                            Dim objLoader As PersistTools.AccountLoader = New PersistTools.AccountLoader(objAccount)
+                            Dim objLoader As AccountLoader = New AccountLoader(objAccount)
                             objLoader.RecreateGeneratedTrx(CDate(strRegisterEndDate), CDate(strCutoffDate))
                         Next
                         For Each objAccount In mobjCompany.colAccounts

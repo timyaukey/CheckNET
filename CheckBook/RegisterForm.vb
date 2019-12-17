@@ -1,7 +1,6 @@
 Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
 
 Friend Class RegisterForm
 	Inherits System.Windows.Forms.Form

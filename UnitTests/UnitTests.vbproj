@@ -7,9 +7,9 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{95760BD6-36BF-4F48-99AB-0AADEF68FD91}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>UnitTests.My.MyApplication</StartupObject>
-    <RootNamespace>UnitTests</RootNamespace>
-    <AssemblyName>UnitTests</AssemblyName>
+    <StartupObject>Willowsoft.CheckBook.UnitTests.My.MyApplication</StartupObject>
+    <RootNamespace>Willowsoft.CheckBook.UnitTests</RootNamespace>
+    <AssemblyName>Willowsoft.CheckBook.UnitTests</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -30,7 +30,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>UnitTests.xml</DocumentationFile>
+    <DocumentationFile>Willowsoft.CheckBook.UnitTests.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <CodeAnalysisRuleSet>UnitTests.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
@@ -41,7 +41,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>UnitTests.xml</DocumentationFile>
+    <DocumentationFile>Willowsoft.CheckBook.UnitTests.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <CodeAnalysisRuleSet>UnitTests.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
@@ -49,6 +49,8 @@
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="Microsoft.VisualBasic.Compatibility" />
+    <Import Include="Willowsoft.CheckBook.Lib" />
+    <Import Include="Willowsoft.Checkbook.PersistTools" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -126,16 +128,6 @@
     <None Include="UnitTests.ruleset" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
-      <Project>{73A968C7-281A-45DC-8360-2E44B3C9510B}</Project>
-      <Name>CheckBookLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PersistTools\PersistTools.vbproj">
-      <Project>{00f98ca0-114a-4a84-b093-d6b88d7de686}</Project>
-      <Name>PersistTools</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Data\PayeeList.xml" />
     <Content Include="Data\QIFImportTrxTypes.xml" />
     <Content Include="Data\Security.xml" />
@@ -143,7 +135,16 @@
     <Content Include="Data\UTData\UTStringTran1.txt" />
     <Content Include="Data\UTSecurity.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
+      <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
+      <Name>CheckBookLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PersistTools\PersistTools.vbproj">
+      <Project>{00f98ca0-114a-4a84-b093-d6b88d7de686}</Project>
+      <Name>PersistTools</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

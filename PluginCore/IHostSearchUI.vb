@@ -1,8 +1,6 @@
 ﻿Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
-
 ''' <summary>
 ''' Implemented by host program search window to expose functionality
 ''' to ISearchHandler implementations.

@@ -2,7 +2,6 @@ Option Strict Off
 Option Explicit On
 
 Imports System.Collections.Generic
-Imports CheckBookLib
 
 Friend Class RepeatSeqInfoForm
     Inherits System.Windows.Forms.Form

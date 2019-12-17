@@ -1,7 +1,6 @@
 Option Strict Off
 Option Explicit On
 
-Imports CheckBookLib
 
 Friend Class LiveBudgetListForm
     Inherits System.Windows.Forms.Form

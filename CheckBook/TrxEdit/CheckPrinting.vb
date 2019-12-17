@@ -2,7 +2,6 @@ Option Strict Off
 Option Explicit On
 
 Imports System.Drawing.Printing
-Imports CheckBookLib
 
 Module CheckPrinting
     '23456678901234567890123456789012345678901234567890123456789012345678901234567890123456

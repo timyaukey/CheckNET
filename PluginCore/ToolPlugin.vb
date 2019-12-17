@@ -1,7 +1,6 @@
 ﻿Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
 
 ''' <summary>
 ''' A convenience implementation of IToolPlugin.

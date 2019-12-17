@@ -2,7 +2,6 @@ Option Strict On
 Option Explicit On
 
 Imports VB = Microsoft.VisualBasic
-Imports CheckBookLib
 
 Friend Class ReconcileForm
     Inherits System.Windows.Forms.Form

@@ -1,8 +1,6 @@
 ﻿Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
-
 ''' <summary>
 ''' Implemented by CBMainForm to provide plugins access
 ''' to the user interface and other services of the main window.

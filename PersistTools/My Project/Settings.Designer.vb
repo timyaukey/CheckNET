@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.PersistTools.My.MySettings
+        Friend ReadOnly Property Settings() As Global.Willowsoft.Checkbook.PersistTools.My.MySettings
             Get
-                Return Global.PersistTools.My.MySettings.Default
+                Return Global.Willowsoft.Checkbook.PersistTools.My.MySettings.Default
             End Get
         End Property
     End Module

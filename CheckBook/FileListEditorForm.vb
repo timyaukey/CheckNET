@@ -2,7 +2,6 @@
 Option Explicit On
 
 Imports System.IO
-Imports CheckBookLib
 
 Public Class FileListEditorForm
 

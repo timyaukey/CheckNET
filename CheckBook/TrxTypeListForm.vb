@@ -1,9 +1,6 @@
 Option Strict On
 Option Explicit On
 
-Imports CheckBookLib
-Imports ImportPlugins
-
 Friend Class TrxTypeListForm
     Inherits System.Windows.Forms.Form
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345

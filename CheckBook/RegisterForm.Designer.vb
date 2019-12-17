@@ -4,14 +4,14 @@
 		MyBase.New()
 		'This call is required by the Windows Form Designer.
 		InitializeComponent()
-		'This form is an MDI child.
-		'This code simulates the VB6 
-		' functionality of automatically
-		' loading and showing an MDI
-		' child's parent.
-		Me.MDIParent = CheckBook.CBMainForm
-		CheckBook.CBMainForm.Show
-	End Sub
+        'This form is an MDI child.
+        'This code simulates the VB6 
+        ' functionality of automatically
+        ' loading and showing an MDI
+        ' child's parent.
+        Me.MdiParent = CBMainForm
+        CBMainForm.Show()
+    End Sub
 	'Form overrides dispose to clean up the component list.
 	<System.Diagnostics.DebuggerNonUserCode()> Protected Overloads Overrides Sub Dispose(ByVal Disposing As Boolean)
 		If Disposing Then
@@ -54,7 +54,7 @@
         Me.cmdSearch.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdSearch.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdSearch.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdSearch.Location = New System.Drawing.Point(439, 472)
+        Me.cmdSearch.Location = New System.Drawing.Point(441, 472)
         Me.cmdSearch.Name = "cmdSearch"
         Me.cmdSearch.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdSearch.Size = New System.Drawing.Size(62, 23)

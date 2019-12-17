@@ -1,7 +1,6 @@
 ﻿Option Explicit On
 Option Strict On
 
-Imports CheckBookLib
 
 Public Class ObjectEditorForm
 

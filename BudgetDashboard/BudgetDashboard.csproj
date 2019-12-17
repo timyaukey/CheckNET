@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{050728F0-3AAD-42FB-A8A8-9E23A5DC4D0E}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>BudgetDashboard</RootNamespace>
-    <AssemblyName>BudgetDashboard</AssemblyName>
+    <RootNamespace>Willowsoft.CheckBook.BudgetDashboard</RootNamespace>
+    <AssemblyName>Willowsoft.CheckBook.BudgetDashboard</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -75,16 +75,6 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
-      <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
-      <Name>CheckBookLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PluginCore\PluginCore.vbproj">
-      <Project>{df8c4177-36c2-414d-a363-09c33cb56fd4}</Project>
-      <Name>PluginCore</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="BudgetDashboardForm.resx">
       <DependentUpon>BudgetDashboardForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -94,6 +84,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="BudgetDashboard.ruleset" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
+      <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
+      <Name>CheckBookLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PluginCore\PluginCore.vbproj">
+      <Project>{df8c4177-36c2-414d-a363-09c33cb56fd4}</Project>
+      <Name>PluginCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
