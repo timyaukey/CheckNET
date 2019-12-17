@@ -6,7 +6,7 @@ using System.Text;
 using Willowsoft.CheckBook.Lib;
 using Willowsoft.CheckBook.PluginCore;
 
-namespace GeneralPlugins.RenumberChecks
+namespace Willowsoft.CheckBook.GeneralPlugins
 {
     public class RenumberChecksPlugin : ToolPlugin
     {

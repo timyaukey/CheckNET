@@ -1,4 +1,4 @@
-﻿namespace GeneralPlugins.IntuitExport
+﻿namespace Willowsoft.CheckBook.GeneralPlugins
 {
     partial class ExportForm
     {

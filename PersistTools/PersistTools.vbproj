@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{00F98CA0-114A-4A84-B093-D6B88D7DE686}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Willowsoft.Checkbook.PersistTools</RootNamespace>
-    <AssemblyName>Willowsoft.Checkbook.PersistTools</AssemblyName>
+    <RootNamespace>Willowsoft.CheckBook.PersistTools</RootNamespace>
+    <AssemblyName>Willowsoft.CheckBook.PersistTools</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -19,7 +19,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>Willowsoft.Checkbook.PersistTools.xml</DocumentationFile>
+    <DocumentationFile>Willowsoft.CheckBook.PersistTools.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -29,7 +29,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>Willowsoft.Checkbook.PersistTools.xml</DocumentationFile>
+    <DocumentationFile>Willowsoft.CheckBook.PersistTools.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>

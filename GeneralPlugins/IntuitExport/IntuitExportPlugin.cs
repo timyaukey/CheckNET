@@ -6,7 +6,7 @@ using System.Text;
 using Willowsoft.CheckBook.Lib;
 using Willowsoft.CheckBook.PluginCore;
 
-namespace GeneralPlugins.IntuitExport
+namespace Willowsoft.CheckBook.GeneralPlugins
 {
     public class IntuitExportPlugin : ToolPlugin
     {

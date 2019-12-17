@@ -1,4 +1,4 @@
-﻿namespace GeneralPlugins.RenumberChecks
+﻿namespace Willowsoft.CheckBook.GeneralPlugins
 {
     partial class RenumberChecksForm
     {

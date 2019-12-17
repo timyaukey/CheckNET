@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using Willowsoft.CheckBook.Lib;
 using Willowsoft.CheckBook.PluginCore;
 
-namespace GeneralPlugins.RenumberChecks
+namespace Willowsoft.CheckBook.GeneralPlugins
 {
     public partial class RenumberChecksForm : Form
     {

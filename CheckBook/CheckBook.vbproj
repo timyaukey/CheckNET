@@ -106,7 +106,7 @@
     <Import Include="System.Linq" />
     <Import Include="System.Windows.Forms" />
     <Import Include="Willowsoft.CheckBook.Lib" />
-    <Import Include="Willowsoft.Checkbook.PersistTools" />
+    <Import Include="Willowsoft.CheckBook.PersistTools" />
     <Import Include="Willowsoft.CheckBook.PluginCore" />
   </ItemGroup>
   <ItemGroup>
