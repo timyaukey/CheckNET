@@ -355,7 +355,7 @@ Public Class Account
         Return Me.strTitle
     End Function
 
-    Public Shared Sub CreateStandardChecking(ByVal objCompany As Company, ByVal objShowMessage As Company.ShowCreateNewMessage)
+    Public Shared Sub CreateStandardChecking(ByVal objCompany As Company, ByVal objShowMessage As Action(Of String))
         Try
             objShowMessage("Creating first checking account...")
             Dim objAccount As Account = New Account()

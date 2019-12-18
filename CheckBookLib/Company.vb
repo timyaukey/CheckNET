@@ -44,9 +44,6 @@ Public Class Company
     'Key of budget used as placeholder in fake trx.
     Public strPlaceholderBudgetKey As String
 
-    Public Delegate Sub ShowStartupAccount(ByVal objAccount As Account)
-    Public Delegate Sub ShowCreateNewMessage(ByVal strMessage As String)
-
     Public Sub New(ByVal strDataPathValue As String)
         colAccounts = New List(Of Account)
         objCategories = New CategoryTranslator()
@@ -306,13 +303,13 @@ Public Class Company
         Return strAddPath("Backup")
     End Function
 
-    Public Sub CreateInitialData(ByVal objShowMessage As ShowCreateNewMessage)
+    Public Sub CreateInitialData(ByVal objShowMessage As Action(Of String))
         CreateStandardFolders(objShowMessage)
         CreateStandardFiles(objShowMessage)
         Account.CreateStandardChecking(Me, objShowMessage)
     End Sub
 
-    Private Sub CreateStandardFolders(ByVal objShowMessage As ShowCreateNewMessage)
+    Private Sub CreateStandardFolders(ByVal objShowMessage As Action(Of String))
         Try
             If Not Directory.Exists(strDataPath()) Then
                 Directory.CreateDirectory(strDataPath())
@@ -333,7 +330,7 @@ Public Class Company
         End Try
     End Sub
 
-    Private Sub CreateStandardFiles(ByVal objShowMessage As ShowCreateNewMessage)
+    Private Sub CreateStandardFiles(ByVal objShowMessage As Action(Of String))
         Try
             'Standard category file
             If Not File.Exists(strCategoryPath()) Then

@@ -6,8 +6,34 @@ Imports System.Xml.Serialization
 
 Public Class CompanyLoader
 
+    ''' <summary>
+    ''' Load all Account objects and other objects belonging to a Company, after
+    ''' authenticating the user if the Company requires authentication to access it.
+    ''' </summary>
+    ''' <param name="objCompany">The Company to load.</param>
+    ''' <param name="showAccount">
+    ''' This delegate is called every time the CompanyLoader switches to working
+    ''' on a different Account. Will be called multiple times for each Account,
+    ''' as CompanyLoader goes through different stages of loading the Accounts.
+    ''' May also be called with Null/Nothing, indicating that no particular
+    ''' Account is in the process of being loaded. The method pointed to by this
+    ''' delegate can listen to the Account.LoadStatus event of the Account passed
+    ''' to be notified when things happen during the loading process. This
+    ''' delegate does not have to do anything - it is purely to allow the UI
+    ''' to show some kind of status display.
+    ''' </param>
+    ''' <param name="authenticator">
+    ''' This delegate is called to authenticate the user. Must return Null/Nothing
+    ''' if the user successfully authenticates, or no authentication is required
+    ''' for the Company. Otherwise returns an object subclassing CompanyLoadError, 
+    ''' whose type indicates the specific problem encountered.
+    ''' Uses objCompany.objSecurity.blnNoFile to determine if authentication is 
+    ''' required, and objCompany.objSecurity.blnAuthenticate() to authenticate 
+    ''' user name and password if that is required.
+    ''' </param>
+    ''' <returns></returns>
     Public Shared Function objLoad(ByVal objCompany As Company,
-        ByVal showAccount As Company.ShowStartupAccount,
+        ByVal showAccount As Action(Of Account),
         ByVal authenticator As Func(Of Company, CompanyLoadError)) As CompanyLoadError
 
         If Not objCompany.blnDataPathExists() Then
@@ -90,7 +116,7 @@ Public Class CompanyLoader
         End If
     End Sub
 
-    Public Shared Sub LoadAccountFiles(ByVal objCompany As Company, ByVal showAccount As Company.ShowStartupAccount)
+    Public Shared Sub LoadAccountFiles(ByVal objCompany As Company, ByVal showAccount As Action(Of Account))
         Try
             'Find all ".act" files.
             Dim strFile As String = Dir(objCompany.strAccountPath() & "\*.act")
