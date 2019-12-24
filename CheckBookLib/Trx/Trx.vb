@@ -42,19 +42,6 @@ Public MustInherit Class Trx
         Selected = 4
     End Enum
 
-    Public Enum TrxType
-        'Missing value (should never be this).
-        Missing = 0
-        'Ordinary transaction.
-        Normal = 1
-        'Budget transaction (must be fake).
-        Budget = 2
-        'Transfer transaction.
-        Transfer = 3
-        'Replica transaction.
-        Replica = 4
-    End Enum
-
     Public Enum RepeatUnit
         Missing = 0
         Day = 1
