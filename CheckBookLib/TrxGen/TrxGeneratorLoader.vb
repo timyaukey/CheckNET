@@ -552,7 +552,7 @@ Public Module TrxGeneratorLoader
 
         Dim vntAttrib As Object
 
-        datTrxTemplate.lngType = Trx.TrxType.Transfer
+        datTrxTemplate.objTrxType = GetType(TransferTrx)
         datTrxTemplate.lngStatus = Trx.TrxStatus.NonBank
         'Amount.
         datTrxTemplate.curAmount = curAmount
@@ -576,7 +576,7 @@ Public Module TrxGeneratorLoader
 
         Dim vntAttrib As Object
 
-        datTrxTemplate.lngType = Trx.TrxType.Budget
+        datTrxTemplate.objTrxType = GetType(BudgetTrx)
         datTrxTemplate.lngStatus = Trx.TrxStatus.NonBank
         'Budget key.
         vntAttrib = elmTrxTpt.GetAttribute("budgetkey")
@@ -634,7 +634,7 @@ Public Module TrxGeneratorLoader
             Return strError
         End If
 
-        datTrxTemplate.lngType = Trx.TrxType.Normal
+        datTrxTemplate.objTrxType = GetType(NormalTrx)
         datTrxTemplate.lngStatus = Trx.TrxStatus.Unreconciled
         'Transaction number.
         vntAttrib = elmTrxTpt.GetAttribute("number")
