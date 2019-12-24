@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Willowsoft.CheckBook.Lib;
 
-namespace BudgetDashboard
+namespace Willowsoft.CheckBook.BudgetDashboard
 {
     public class BudgetTypeIncExp : BudgetTypeHandler
     {

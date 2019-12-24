@@ -1,4 +1,4 @@
-﻿namespace BudgetDashboard
+﻿namespace Willowsoft.CheckBook.BudgetDashboard
 {
     partial class BudgetDashboardForm
     {

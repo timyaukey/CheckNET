@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BudgetDashboard
+namespace Willowsoft.CheckBook.BudgetDashboard
 {
     public class DataCell
     {

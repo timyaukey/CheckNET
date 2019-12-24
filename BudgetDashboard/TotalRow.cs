@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BudgetDashboard
+namespace Willowsoft.CheckBook.BudgetDashboard
 {
     public class TotalRow : DataRow<DataCell>
     {

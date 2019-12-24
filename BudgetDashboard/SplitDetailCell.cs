@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Willowsoft.CheckBook.Lib;
 
-namespace BudgetDashboard
+namespace Willowsoft.CheckBook.BudgetDashboard
 {
     public class SplitDetailCell : DataCell
     {

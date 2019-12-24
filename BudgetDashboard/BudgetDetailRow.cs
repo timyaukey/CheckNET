@@ -2,7 +2,7 @@
 
 using Willowsoft.CheckBook.Lib;
 
-namespace BudgetDashboard
+namespace Willowsoft.CheckBook.BudgetDashboard
 {
     public class BudgetDetailRow : DataRow<BudgetDetailCell>
     {

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using Willowsoft.CheckBook.Lib;
 using Willowsoft.CheckBook.PluginCore;
 
-namespace BudgetDashboard
+namespace Willowsoft.CheckBook.BudgetDashboard
 {
     public partial class BudgetDashboardForm : Form
     {

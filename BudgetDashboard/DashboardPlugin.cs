@@ -8,7 +8,7 @@ using Willowsoft.CheckBook.PluginCore;
 
 [assembly: PluginAssembly()]
 
-namespace BudgetDashboard
+namespace Willowsoft.CheckBook.BudgetDashboard
 {
     public class DashboardPlugin : ToolPlugin
     {

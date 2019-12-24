@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace BudgetDashboard
+namespace Willowsoft.CheckBook.BudgetDashboard
 {
     /// <summary>
     /// A DataGridViewTextBoxCell that displays the CellAmount property of the DataCell
