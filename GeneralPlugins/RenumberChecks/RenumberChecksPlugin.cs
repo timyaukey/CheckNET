@@ -8,16 +8,16 @@ using Willowsoft.CheckBook.PluginCore;
 
 namespace Willowsoft.CheckBook.GeneralPlugins
 {
-    public class RenumberChecksPlugin : ToolPlugin
+    public class RenumberChecksPlugin : PluginBase
     {
         public RenumberChecksPlugin(IHostUI hostUI)
             : base(hostUI)
         {
         }
 
-        public override void Register()
+        public override void Register(IHostSetup setup)
         {
-            HostUI.objToolMenu.Add(new MenuElementAction("Renumber Checks", 103, ClickHandler, GetPluginPath()));
+            setup.objToolMenu.Add(new MenuElementAction("Renumber Checks", 103, ClickHandler, GetPluginPath()));
         }
 
         private void ClickHandler(object sender, EventArgs e)

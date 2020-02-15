@@ -3,14 +3,14 @@ Option Explicit On
 
 
 Public Class CombinedBalancePlugin
-    Inherits ToolPlugin
+    Inherits PluginBase
 
     Public Sub New(hostUI_ As IHostUI)
         MyBase.New(hostUI_)
     End Sub
 
-    Public Overrides Sub Register()
-        HostUI.objToolMenu.Add(New MenuElementAction("Combined Personal and Business Balance", 120, AddressOf ClickHandler, GetPluginPath()))
+    Public Overrides Sub Register(ByVal setup As IHostSetup)
+        setup.objToolMenu.Add(New MenuElementAction("Combined Personal and Business Balance", 120, AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
     Private Sub ClickHandler(sender As Object, e As EventArgs)

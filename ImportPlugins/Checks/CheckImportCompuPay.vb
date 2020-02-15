@@ -9,8 +9,8 @@ Public Class CheckImportCompuPay
         MyBase.New(hostUI_)
     End Sub
 
-    Public Overrides Sub Register()
-        HostUI.objCheckImportMenu.Add(New MenuElementAction("CompuPay Payroll Clipboard", StandardSortCode(), AddressOf ClickHandler, GetPluginPath()))
+    Public Overrides Sub Register(ByVal setup As IHostSetup)
+        setup.objCheckImportMenu.Add(New MenuElementAction("CompuPay Payroll Clipboard", StandardSortCode(), AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String

@@ -3,14 +3,14 @@ Option Explicit On
 
 
 Public Class FindLiveBudgetsPlugin
-    Inherits ToolPlugin
+    Inherits PluginBase
 
     Public Sub New(hostUI_ As IHostUI)
         MyBase.New(hostUI_)
     End Sub
 
-    Public Overrides Sub Register()
-        HostUI.objToolMenu.Add(New MenuElementAction("Find Live Budgets", 4, AddressOf ClickHandler, GetPluginPath()))
+    Public Overrides Sub Register(ByVal setup As IHostSetup)
+        setup.objToolMenu.Add(New MenuElementAction("Find Live Budgets", 4, AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
     Private Sub ClickHandler(sender As Object, e As EventArgs)

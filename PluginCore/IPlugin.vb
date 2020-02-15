@@ -14,5 +14,5 @@ Public Interface IPlugin
     ''' <summary>
     ''' Called to let the plugin wire itself into the software.
     ''' </summary>
-    Sub Register()
+    Sub Register(ByVal setup As IHostSetup)
 End Interface

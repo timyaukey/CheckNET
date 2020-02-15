@@ -2,21 +2,13 @@
 Option Explicit On
 
 ''' <summary>
-''' Implemented by CBMainForm to provide plugins access
-''' to the user interface and other services of the main window.
-''' An instance of this is passed to every plugin constructor,
-''' and many forms.
+''' Provide plugins a way to access to the user interface and other 
+''' services of the main window.
+''' An instance of this is passed to all plugin constructors, and many forms.
 ''' </summary>
 
 Public Interface IHostUI
     ReadOnly Property objCompany() As Company
-
-    Property objBankImportMenu As MenuBuilder
-    Property objCheckImportMenu As MenuBuilder
-    Property objDepositImportMenu As MenuBuilder
-    Property objInvoiceImportMenu As MenuBuilder
-    Property objReportMenu As MenuBuilder
-    Property objToolMenu As MenuBuilder
 
     Function objSearchTools() As IEnumerable(Of ISearchTool)
 

@@ -10,16 +10,16 @@ using Willowsoft.CheckBook.PluginCore;
 
 namespace Willowsoft.CheckBook.BudgetDashboard
 {
-    public class DashboardPlugin : ToolPlugin
+    public class DashboardPlugin : PluginBase
     {
         public DashboardPlugin(IHostUI hostUI)
             :base(hostUI)
         {
         }
 
-        public override void Register()
+        public override void Register(IHostSetup setup)
         {
-            HostUI.objToolMenu.Add(new MenuElementAction("Budget Dashboard", 101, ClickHandler, GetPluginPath()));
+            setup.objToolMenu.Add(new MenuElementAction("Budget Dashboard", 101, ClickHandler, GetPluginPath()));
         }
 
         private void ClickHandler(object sender, EventArgs e)

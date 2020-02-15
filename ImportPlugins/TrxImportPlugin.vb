@@ -13,7 +13,7 @@ Imports System.IO
 ''' </summary>
 
 Public MustInherit Class TrxImportPlugin
-    Inherits ToolPlugin
+    Inherits PluginBase
 
     Public MustOverride Function GetImportWindowCaption() As String
     Public MustOverride Function GetTrxReader() As ITrxReader

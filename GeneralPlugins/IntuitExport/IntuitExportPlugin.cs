@@ -8,16 +8,16 @@ using Willowsoft.CheckBook.PluginCore;
 
 namespace Willowsoft.CheckBook.GeneralPlugins
 {
-    public class IntuitExportPlugin : ToolPlugin
+    public class IntuitExportPlugin : PluginBase
     {
         public IntuitExportPlugin(IHostUI hostUI)
             : base(hostUI)
         {
         }
 
-        public override void Register()
+        public override void Register(IHostSetup setup)
         {
-            HostUI.objToolMenu.Add(new MenuElementAction("Intuit Export (IIF Format)", 102, ClickHandler, GetPluginPath()));
+            setup.objToolMenu.Add(new MenuElementAction("Intuit Export (IIF Format)", 102, ClickHandler, GetPluginPath()));
         }
 
         private void ClickHandler(object sender, EventArgs e)

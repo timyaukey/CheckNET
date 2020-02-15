@@ -8,6 +8,7 @@ Imports VB = Microsoft.VisualBasic
 Friend Class CBMainForm
     Inherits System.Windows.Forms.Form
     Implements IHostUI
+    Implements IHostSetup
 
     Private frmStartup As StartupForm
     Private mobjSecurity As Security
@@ -122,12 +123,12 @@ Friend Class CBMainForm
         mobjHostUI.InfoMessageBox(strMessage)
     End Sub
 
-    Private Property objBankImportMenu As MenuBuilder Implements IHostUI.objBankImportMenu
-    Private Property objCheckImportMenu As MenuBuilder Implements IHostUI.objCheckImportMenu
-    Private Property objDepositImportMenu As MenuBuilder Implements IHostUI.objDepositImportMenu
-    Private Property objInvoiceImportMenu As MenuBuilder Implements IHostUI.objInvoiceImportMenu
-    Private Property objReportMenu As MenuBuilder Implements IHostUI.objReportMenu
-    Private Property objToolMenu As MenuBuilder Implements IHostUI.objToolMenu
+    Private Property objBankImportMenu As MenuBuilder Implements IHostSetup.objBankImportMenu
+    Private Property objCheckImportMenu As MenuBuilder Implements IHostSetup.objCheckImportMenu
+    Private Property objDepositImportMenu As MenuBuilder Implements IHostSetup.objDepositImportMenu
+    Private Property objInvoiceImportMenu As MenuBuilder Implements IHostSetup.objInvoiceImportMenu
+    Private Property objReportMenu As MenuBuilder Implements IHostSetup.objReportMenu
+    Private Property objToolMenu As MenuBuilder Implements IHostSetup.objToolMenu
 
     Public Iterator Function objSearchHandlers() As IEnumerable(Of ISearchHandler) Implements IHostUI.objSearchHandlers
         Yield New TrxSearchHandler(Me, "Description", Function(ByVal objTrx As Trx) objTrx.strDescription)
@@ -178,7 +179,7 @@ Friend Class CBMainForm
                         Dim objConstructor As ConstructorInfo = objType.GetConstructor({GetType(IHostUI)})
                         If Not objConstructor Is Nothing Then
                             Dim objPlugin As IPlugin = DirectCast(objConstructor.Invoke({mobjHostUI}), IPlugin)
-                            objPlugin.Register()
+                            objPlugin.Register(Me)
                         End If
                     End If
                 End If
@@ -227,6 +228,12 @@ Friend Class CBMainForm
     End Function
 
     Private ReadOnly Property objCompany() As Company Implements IHostUI.objCompany
+        Get
+            Return mobjCompany
+        End Get
+    End Property
+
+    Private ReadOnly Property objCompany2() As Company Implements IHostSetup.objCompany
         Get
             Return mobjCompany
         End Get
@@ -631,7 +638,7 @@ Friend Class CBMainForm
     Private Sub mnuFilePlugins_Click(sender As Object, e As EventArgs) Handles mnuFilePlugins.Click
         Try
             Using frm As PluginList = New PluginList()
-                frm.ShowMe(mobjHostUI)
+                frm.ShowMe(Me)
             End Using
         Catch ex As Exception
             gTopException(ex)

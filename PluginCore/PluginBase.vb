@@ -1,12 +1,11 @@
 ﻿Option Strict On
 Option Explicit On
 
-
 ''' <summary>
-''' A convenience implementation of IToolPlugin.
+''' A convenience implementation of IPlugin.
 ''' </summary>
 
-Public MustInherit Class ToolPlugin
+Public MustInherit Class PluginBase
     Implements IPlugin
     Protected ReadOnly HostUI As IHostUI
 
@@ -14,7 +13,7 @@ Public MustInherit Class ToolPlugin
         HostUI = hostUI_
     End Sub
 
-    Public MustOverride Sub Register() Implements IPlugin.Register
+    Public MustOverride Sub Register(ByVal setup As IHostSetup) Implements IPlugin.Register
 
     Protected Function GetPluginPath() As String
         Return System.IO.Path.GetFileName(Me.GetType().Assembly.Location)

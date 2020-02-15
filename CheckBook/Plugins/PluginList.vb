@@ -1,19 +1,16 @@
 ﻿Option Strict On
 Option Explicit On
 
-
 Public Class PluginList
-    Private mobjHostUI As IHostUI
 
-    Public Sub ShowMe(ByVal objHostUI As IHostUI)
-        mobjHostUI = objHostUI
+    Public Sub ShowMe(ByVal objHostSetup As IHostSetup)
         lvwPlugins.Items.Clear()
-        AddPlugins("Bank Import", mobjHostUI.objBankImportMenu)
-        AddPlugins("Check Import", mobjHostUI.objCheckImportMenu)
-        AddPlugins("Deposit Import", mobjHostUI.objDepositImportMenu)
-        AddPlugins("Invoice Import", mobjHostUI.objInvoiceImportMenu)
-        AddPlugins("Reports", mobjHostUI.objReportMenu)
-        AddPlugins("Tools", mobjHostUI.objToolMenu)
+        AddPlugins("Bank Import", objHostSetup.objBankImportMenu)
+        AddPlugins("Check Import", objHostSetup.objCheckImportMenu)
+        AddPlugins("Deposit Import", objHostSetup.objDepositImportMenu)
+        AddPlugins("Invoice Import", objHostSetup.objInvoiceImportMenu)
+        AddPlugins("Reports", objHostSetup.objReportMenu)
+        AddPlugins("Tools", objHostSetup.objToolMenu)
         Me.ShowDialog()
     End Sub
 

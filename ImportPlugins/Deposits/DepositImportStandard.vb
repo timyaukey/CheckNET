@@ -9,8 +9,8 @@ Public Class DepositImportStandard
         MyBase.New(hostUI_)
     End Sub
 
-    Public Overrides Sub Register()
-        HostUI.objDepositImportMenu.Add(New MenuElementAction("Standard Clipboard", 1, AddressOf ClickHandler, GetPluginPath()))
+    Public Overrides Sub Register(ByVal setup As IHostSetup)
+        setup.objDepositImportMenu.Add(New MenuElementAction("Standard Clipboard", 1, AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String
