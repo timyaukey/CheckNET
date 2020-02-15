@@ -14,7 +14,7 @@ Friend Class StartupForm
         lblTitle.Text = mobjHostUI.strSoftwareName
         Dim strSplash As String = mobjHostUI.strSplashImagePath
         Dim objImage As Image = Image.FromFile(strSplash)
-        'Image will be stretched to aspect ratio 4:3 (widht:height)
+        'Image will be stretched to aspect ratio 4:3 (width:height)
         picSplash.BackgroundImage = objImage
     End Sub
 

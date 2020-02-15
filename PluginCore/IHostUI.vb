@@ -56,5 +56,10 @@ Public Interface IHostUI
 
     ReadOnly Property strSoftwareName() As String
 
+    ''' <summary>
+    ''' Image to display on splash form at startup.
+    ''' Image will be stretched to 4:3 (width:height).
+    ''' </summary>
+    ''' <returns></returns>
     ReadOnly Property strSplashImagePath() As String
 End Interface
