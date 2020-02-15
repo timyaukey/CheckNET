@@ -26,7 +26,6 @@
 	Public ToolTip1 As System.Windows.Forms.ToolTip
 	Public WithEvents cmdNewNormal As System.Windows.Forms.Button
 	Public WithEvents cmdEditTrx As System.Windows.Forms.Button
-    Public WithEvents chkIncludeGenerated As System.Windows.Forms.CheckBox
     Public WithEvents cmdSelect As System.Windows.Forms.Button
     Public WithEvents txtAddMultAmount As System.Windows.Forms.TextBox
     Public WithEvents cmdMultTotalBy As System.Windows.Forms.Button
@@ -69,7 +68,6 @@
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.cmdNewNormal = New System.Windows.Forms.Button()
         Me.cmdEditTrx = New System.Windows.Forms.Button()
-        Me.chkIncludeGenerated = New System.Windows.Forms.CheckBox()
         Me.cmdSelect = New System.Windows.Forms.Button()
         Me.txtAddMultAmount = New System.Windows.Forms.TextBox()
         Me.cmdMultTotalBy = New System.Windows.Forms.Button()
@@ -107,6 +105,8 @@
         Me.chkShowAllSplits = New System.Windows.Forms.CheckBox()
         Me.btnRunTool = New System.Windows.Forms.Button()
         Me.cboTools = New System.Windows.Forms.ComboBox()
+        Me.cboFilterType = New System.Windows.Forms.ComboBox()
+        Me.lblFilterType = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'cmdNewNormal
@@ -138,21 +138,6 @@
         Me.cmdEditTrx.TabIndex = 24
         Me.cmdEditTrx.Text = "Edit"
         Me.cmdEditTrx.UseVisualStyleBackColor = False
-        '
-        'chkIncludeGenerated
-        '
-        Me.chkIncludeGenerated.BackColor = System.Drawing.SystemColors.Control
-        Me.chkIncludeGenerated.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkIncludeGenerated.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkIncludeGenerated.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkIncludeGenerated.Location = New System.Drawing.Point(87, 82)
-        Me.chkIncludeGenerated.Margin = New System.Windows.Forms.Padding(2)
-        Me.chkIncludeGenerated.Name = "chkIncludeGenerated"
-        Me.chkIncludeGenerated.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkIncludeGenerated.Size = New System.Drawing.Size(181, 18)
-        Me.chkIncludeGenerated.TabIndex = 7
-        Me.chkIncludeGenerated.Text = "Include generated transactions"
-        Me.chkIncludeGenerated.UseVisualStyleBackColor = False
         '
         'cmdSelect
         '
@@ -337,9 +322,9 @@
         Me.lvwMatches.FullRowSelect = True
         Me.lvwMatches.GridLines = True
         Me.lvwMatches.HideSelection = False
-        Me.lvwMatches.Location = New System.Drawing.Point(10, 102)
+        Me.lvwMatches.Location = New System.Drawing.Point(10, 109)
         Me.lvwMatches.Name = "lvwMatches"
-        Me.lvwMatches.Size = New System.Drawing.Size(973, 366)
+        Me.lvwMatches.Size = New System.Drawing.Size(973, 359)
         Me.lvwMatches.TabIndex = 21
         Me.lvwMatches.UseCompatibleStateImageBehavior = False
         Me.lvwMatches.View = System.Windows.Forms.View.Details
@@ -418,7 +403,7 @@
         Me.cboSearchCats.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboSearchCats.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboSearchCats.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboSearchCats.Location = New System.Drawing.Point(98, 46)
+        Me.cboSearchCats.Location = New System.Drawing.Point(87, 39)
         Me.cboSearchCats.Name = "cboSearchCats"
         Me.cboSearchCats.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboSearchCats.Size = New System.Drawing.Size(220, 22)
@@ -560,6 +545,33 @@
         Me.cboTools.Size = New System.Drawing.Size(196, 22)
         Me.cboTools.TabIndex = 25
         '
+        'cboFilterType
+        '
+        Me.cboFilterType.BackColor = System.Drawing.SystemColors.Window
+        Me.cboFilterType.Cursor = System.Windows.Forms.Cursors.Default
+        Me.cboFilterType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboFilterType.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboFilterType.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.cboFilterType.Location = New System.Drawing.Point(87, 81)
+        Me.cboFilterType.Name = "cboFilterType"
+        Me.cboFilterType.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cboFilterType.Size = New System.Drawing.Size(220, 22)
+        Me.cboFilterType.TabIndex = 8
+        '
+        'lblFilterType
+        '
+        Me.lblFilterType.BackColor = System.Drawing.SystemColors.Control
+        Me.lblFilterType.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblFilterType.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblFilterType.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.lblFilterType.Location = New System.Drawing.Point(7, 82)
+        Me.lblFilterType.Name = "lblFilterType"
+        Me.lblFilterType.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblFilterType.Size = New System.Drawing.Size(72, 18)
+        Me.lblFilterType.TabIndex = 7
+        Me.lblFilterType.Text = "Filter:"
+        Me.lblFilterType.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
         'SearchForm
         '
         Me.AcceptButton = Me.cmdSearch
@@ -567,12 +579,13 @@
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(995, 508)
+        Me.Controls.Add(Me.cboFilterType)
+        Me.Controls.Add(Me.lblFilterType)
         Me.Controls.Add(Me.cboTools)
         Me.Controls.Add(Me.btnRunTool)
         Me.Controls.Add(Me.chkShowAllSplits)
         Me.Controls.Add(Me.cmdNewNormal)
         Me.Controls.Add(Me.cmdEditTrx)
-        Me.Controls.Add(Me.chkIncludeGenerated)
         Me.Controls.Add(Me.cmdSelect)
         Me.Controls.Add(Me.txtAddMultAmount)
         Me.Controls.Add(Me.cmdMultTotalBy)
@@ -581,12 +594,10 @@
         Me.Controls.Add(Me.cmdClearTotal)
         Me.Controls.Add(Me.txtEndDate)
         Me.Controls.Add(Me.cmdSearch)
-        Me.Controls.Add(Me.txtSearchFor)
         Me.Controls.Add(Me.txtStartDate)
         Me.Controls.Add(Me.cboSearchType)
         Me.Controls.Add(Me.cboSearchIn)
         Me.Controls.Add(Me.lvwMatches)
-        Me.Controls.Add(Me.cboSearchCats)
         Me.Controls.Add(Me.lblAddMultAmout)
         Me.Controls.Add(Me.lblTotalDollars)
         Me.Controls.Add(Me.lblEndDate)
@@ -594,6 +605,8 @@
         Me.Controls.Add(Me.lblStartDate)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.txtSearchFor)
+        Me.Controls.Add(Me.cboSearchCats)
         Me.Cursor = System.Windows.Forms.Cursors.Default
         Me.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Location = New System.Drawing.Point(7, 27)
@@ -609,5 +622,7 @@
     Public WithEvents chkShowAllSplits As CheckBox
     Public WithEvents btnRunTool As Button
     Friend WithEvents cboTools As ComboBox
+    Public WithEvents cboFilterType As ComboBox
+    Public WithEvents lblFilterType As Label
 #End Region
 End Class

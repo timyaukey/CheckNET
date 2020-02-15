@@ -201,6 +201,12 @@
     <Compile Include="Search\ChangeCategoryForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Search\FilterAll.vb" />
+    <Compile Include="Search\FilterFakeOnly.vb" />
+    <Compile Include="Search\FilterGeneratedOnly.vb" />
+    <Compile Include="Search\FilterNonReal.vb" />
+    <Compile Include="Search\FilterNonGenerated.vb" />
+    <Compile Include="Search\FilterNonRealBank.vb" />
     <Compile Include="Search\SearchCombineTool.vb" />
     <Compile Include="Search\SearchExportTool.vb" />
     <Compile Include="Search\SearchMoveTool.vb" />

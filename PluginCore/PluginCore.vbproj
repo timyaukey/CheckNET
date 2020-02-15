@@ -71,6 +71,7 @@
     <Compile Include="IHostSearchUI.vb" />
     <Compile Include="IHostSetup.vb" />
     <Compile Include="IHostUI.vb" />
+    <Compile Include="ISearchFilter.vb" />
     <Compile Include="ISearchTool.vb" />
     <Compile Include="MenuBuilder.vb" />
     <Compile Include="MenuElementAction.vb" />

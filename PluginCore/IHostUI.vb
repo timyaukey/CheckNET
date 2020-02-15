@@ -14,6 +14,8 @@ Public Interface IHostUI
 
     Function objSearchHandlers() As IEnumerable(Of ISearchHandler)
 
+    Function objSearchFilters() As IEnumerable(Of ISearchFilter)
+
     Sub ShowRegister(ByVal objReg As Register)
 
     Function strChooseFile(ByVal strWindowCaption As String, ByVal strFileType As String,

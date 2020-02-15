@@ -140,6 +140,15 @@ Friend Class CBMainForm
         Yield New SplitSearchHandler(Me, "PO #", Function(ByVal objSplit As TrxSplit) objSplit.strPONumber)
     End Function
 
+    Public Iterator Function objSearchFilters() As IEnumerable(Of ISearchFilter) Implements IHostUI.objSearchFilters
+        Yield New FilterAll()
+        Yield New FilterNonGenerated()
+        Yield New FilterFakeOnly()
+        Yield New FilterGeneratedOnly()
+        Yield New FilterNonReal()
+        Yield New FilterNonRealBank()
+    End Function
+
     Public Iterator Function objSearchTools() As IEnumerable(Of ISearchTool) Implements IHostUI.objSearchTools
         Yield New SearchCombineTool(Me)
         Yield New SearchMoveTool(Me)
