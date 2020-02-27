@@ -27,153 +27,152 @@
 	'It can be modified using the Windows Form Designer.
 	'Do not modify it using the code editor.
 	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.cmdCancel = New System.Windows.Forms.Button()
-        Me.cmdOkay = New System.Windows.Forms.Button()
-        Me.txtPassword = New System.Windows.Forms.TextBox()
-        Me.txtLogin = New System.Windows.Forms.TextBox()
-        Me.lblPassword = New System.Windows.Forms.Label()
-        Me.lblLogin = New System.Windows.Forms.Label()
-        Me.lstDataPaths = New System.Windows.Forms.ListBox()
-        Me.SuspendLayout()
-        '
-        'cmdCancel
-        '
-        Me.cmdCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdCancel.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdCancel.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.cmdCancel.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdCancel.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdCancel.Location = New System.Drawing.Point(315, 245)
-        Me.cmdCancel.Name = "cmdCancel"
-        Me.cmdCancel.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdCancel.Size = New System.Drawing.Size(65, 25)
-        Me.cmdCancel.TabIndex = 5
-        Me.cmdCancel.Text = "Cancel"
-        Me.cmdCancel.UseVisualStyleBackColor = False
-        '
-        'cmdOkay
-        '
-        Me.cmdOkay.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdOkay.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdOkay.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdOkay.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdOkay.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdOkay.Location = New System.Drawing.Point(247, 245)
-        Me.cmdOkay.Name = "cmdOkay"
-        Me.cmdOkay.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdOkay.Size = New System.Drawing.Size(65, 25)
-        Me.cmdOkay.TabIndex = 4
-        Me.cmdOkay.Text = "OK"
-        Me.cmdOkay.UseVisualStyleBackColor = False
-        '
-        'txtPassword
-        '
-        Me.txtPassword.AcceptsReturn = True
-        Me.txtPassword.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtPassword.BackColor = System.Drawing.SystemColors.Window
-        Me.txtPassword.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtPassword.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPassword.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtPassword.ImeMode = System.Windows.Forms.ImeMode.Disable
-        Me.txtPassword.Location = New System.Drawing.Point(82, 215)
-        Me.txtPassword.MaxLength = 0
-        Me.txtPassword.Name = "txtPassword"
-        Me.txtPassword.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.txtPassword.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtPassword.Size = New System.Drawing.Size(298, 23)
-        Me.txtPassword.TabIndex = 3
-        '
-        'txtLogin
-        '
-        Me.txtLogin.AcceptsReturn = True
-        Me.txtLogin.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtLogin.BackColor = System.Drawing.SystemColors.Window
-        Me.txtLogin.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtLogin.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtLogin.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtLogin.Location = New System.Drawing.Point(82, 187)
-        Me.txtLogin.MaxLength = 0
-        Me.txtLogin.Name = "txtLogin"
-        Me.txtLogin.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtLogin.Size = New System.Drawing.Size(298, 23)
-        Me.txtLogin.TabIndex = 1
-        '
-        'lblPassword
-        '
-        Me.lblPassword.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.lblPassword.BackColor = System.Drawing.SystemColors.Control
-        Me.lblPassword.Cursor = System.Windows.Forms.Cursors.Default
-        Me.lblPassword.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPassword.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblPassword.Location = New System.Drawing.Point(12, 215)
-        Me.lblPassword.Name = "lblPassword"
-        Me.lblPassword.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblPassword.Size = New System.Drawing.Size(64, 21)
-        Me.lblPassword.TabIndex = 2
-        Me.lblPassword.Text = "Password:"
-        '
-        'lblLogin
-        '
-        Me.lblLogin.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.lblLogin.BackColor = System.Drawing.SystemColors.Control
-        Me.lblLogin.Cursor = System.Windows.Forms.Cursors.Default
-        Me.lblLogin.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblLogin.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblLogin.Location = New System.Drawing.Point(12, 189)
-        Me.lblLogin.Name = "lblLogin"
-        Me.lblLogin.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblLogin.Size = New System.Drawing.Size(41, 21)
-        Me.lblLogin.TabIndex = 0
-        Me.lblLogin.Text = "Login:"
-        '
-        'lstDataPaths
-        '
-        Me.lstDataPaths.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lstDataPaths.FormattingEnabled = True
-        Me.lstDataPaths.ItemHeight = 14
-        Me.lstDataPaths.Location = New System.Drawing.Point(13, 13)
-        Me.lstDataPaths.Name = "lstDataPaths"
-        Me.lstDataPaths.Size = New System.Drawing.Size(367, 158)
-        Me.lstDataPaths.TabIndex = 6
-        '
-        'LoginForm
-        '
-        Me.AcceptButton = Me.cmdOkay
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 14.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.SystemColors.Control
-        Me.CancelButton = Me.cmdCancel
-        Me.ClientSize = New System.Drawing.Size(393, 283)
-        Me.ControlBox = False
-        Me.Controls.Add(Me.lstDataPaths)
-        Me.Controls.Add(Me.cmdCancel)
-        Me.Controls.Add(Me.cmdOkay)
-        Me.Controls.Add(Me.txtPassword)
-        Me.Controls.Add(Me.txtLogin)
-        Me.Controls.Add(Me.lblPassword)
-        Me.Controls.Add(Me.lblLogin)
-        Me.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
-        Me.Location = New System.Drawing.Point(3, 23)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.Name = "LoginForm"
-        Me.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Enter Login Name and Password"
-        Me.ResumeLayout(False)
-
-    End Sub
-
-    Friend WithEvents lstDataPaths As ListBox
-#End Region
+		Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(LoginForm))
+		Me.components = New System.ComponentModel.Container()
+		Me.ToolTip1 = New System.Windows.Forms.ToolTip(components)
+		Me.cmdCancel = New System.Windows.Forms.Button
+		Me.cmdOkay = New System.Windows.Forms.Button
+		Me.txtPassword = New System.Windows.Forms.TextBox
+		Me.txtLogin = New System.Windows.Forms.TextBox
+		Me.lblPassword = New System.Windows.Forms.Label
+		Me.lblLogin = New System.Windows.Forms.Label
+		Me.SuspendLayout()
+		Me.ToolTip1.Active = True
+		Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+		Me.Text = "Enter Login Name and Password"
+		Me.ClientSize = New System.Drawing.Size(216, 108)
+		Me.Location = New System.Drawing.Point(3, 23)
+		Me.ControlBox = False
+		Me.MaximizeBox = False
+		Me.MinimizeBox = False
+		Me.ShowInTaskbar = False
+		Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+		Me.Font = New System.Drawing.Font("Arial", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+		Me.BackColor = System.Drawing.SystemColors.Control
+		Me.Enabled = True
+		Me.KeyPreview = False
+		Me.Cursor = System.Windows.Forms.Cursors.Default
+		Me.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.HelpButton = False
+		Me.WindowState = System.Windows.Forms.FormWindowState.Normal
+		Me.Name = "LoginForm"
+		Me.cmdCancel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+		Me.CancelButton = Me.cmdCancel
+		Me.cmdCancel.Text = "Cancel"
+		Me.cmdCancel.Size = New System.Drawing.Size(65, 25)
+		Me.cmdCancel.Location = New System.Drawing.Point(138, 70)
+		Me.cmdCancel.TabIndex = 5
+		Me.cmdCancel.Font = New System.Drawing.Font("Arial", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.cmdCancel.BackColor = System.Drawing.SystemColors.Control
+		Me.cmdCancel.CausesValidation = True
+		Me.cmdCancel.Enabled = True
+		Me.cmdCancel.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.cmdCancel.Cursor = System.Windows.Forms.Cursors.Default
+		Me.cmdCancel.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.cmdCancel.TabStop = True
+		Me.cmdCancel.Name = "cmdCancel"
+		Me.cmdOkay.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+		Me.cmdOkay.Text = "OK"
+		Me.AcceptButton = Me.cmdOkay
+		Me.cmdOkay.Size = New System.Drawing.Size(65, 25)
+		Me.cmdOkay.Location = New System.Drawing.Point(70, 70)
+		Me.cmdOkay.TabIndex = 4
+		Me.cmdOkay.Font = New System.Drawing.Font("Arial", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.cmdOkay.BackColor = System.Drawing.SystemColors.Control
+		Me.cmdOkay.CausesValidation = True
+		Me.cmdOkay.Enabled = True
+		Me.cmdOkay.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.cmdOkay.Cursor = System.Windows.Forms.Cursors.Default
+		Me.cmdOkay.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.cmdOkay.TabStop = True
+		Me.cmdOkay.Name = "cmdOkay"
+		Me.txtPassword.AutoSize = False
+		Me.txtPassword.Size = New System.Drawing.Size(133, 23)
+		Me.txtPassword.IMEMode = System.Windows.Forms.ImeMode.Disable
+		Me.txtPassword.Location = New System.Drawing.Point(70, 40)
+		Me.txtPassword.PasswordChar = ChrW(42)
+		Me.txtPassword.TabIndex = 3
+		Me.txtPassword.Font = New System.Drawing.Font("Arial", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.txtPassword.AcceptsReturn = True
+		Me.txtPassword.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
+		Me.txtPassword.BackColor = System.Drawing.SystemColors.Window
+		Me.txtPassword.CausesValidation = True
+		Me.txtPassword.Enabled = True
+		Me.txtPassword.ForeColor = System.Drawing.SystemColors.WindowText
+		Me.txtPassword.HideSelection = True
+		Me.txtPassword.ReadOnly = False
+		Me.txtPassword.Maxlength = 0
+		Me.txtPassword.Cursor = System.Windows.Forms.Cursors.IBeam
+		Me.txtPassword.MultiLine = False
+		Me.txtPassword.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.txtPassword.ScrollBars = System.Windows.Forms.ScrollBars.None
+		Me.txtPassword.TabStop = True
+		Me.txtPassword.Visible = True
+		Me.txtPassword.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+		Me.txtPassword.Name = "txtPassword"
+		Me.txtLogin.AutoSize = False
+		Me.txtLogin.Size = New System.Drawing.Size(133, 23)
+		Me.txtLogin.Location = New System.Drawing.Point(70, 12)
+		Me.txtLogin.TabIndex = 1
+		Me.txtLogin.Font = New System.Drawing.Font("Arial", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.txtLogin.AcceptsReturn = True
+		Me.txtLogin.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
+		Me.txtLogin.BackColor = System.Drawing.SystemColors.Window
+		Me.txtLogin.CausesValidation = True
+		Me.txtLogin.Enabled = True
+		Me.txtLogin.ForeColor = System.Drawing.SystemColors.WindowText
+		Me.txtLogin.HideSelection = True
+		Me.txtLogin.ReadOnly = False
+		Me.txtLogin.Maxlength = 0
+		Me.txtLogin.Cursor = System.Windows.Forms.Cursors.IBeam
+		Me.txtLogin.MultiLine = False
+		Me.txtLogin.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.txtLogin.ScrollBars = System.Windows.Forms.ScrollBars.None
+		Me.txtLogin.TabStop = True
+		Me.txtLogin.Visible = True
+		Me.txtLogin.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+		Me.txtLogin.Name = "txtLogin"
+		Me.lblPassword.Text = "Password:"
+		Me.lblPassword.Size = New System.Drawing.Size(53, 21)
+		Me.lblPassword.Location = New System.Drawing.Point(12, 40)
+		Me.lblPassword.TabIndex = 2
+		Me.lblPassword.Font = New System.Drawing.Font("Arial", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.lblPassword.TextAlign = System.Drawing.ContentAlignment.TopLeft
+		Me.lblPassword.BackColor = System.Drawing.SystemColors.Control
+		Me.lblPassword.Enabled = True
+		Me.lblPassword.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.lblPassword.Cursor = System.Windows.Forms.Cursors.Default
+		Me.lblPassword.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.lblPassword.UseMnemonic = True
+		Me.lblPassword.Visible = True
+		Me.lblPassword.AutoSize = False
+		Me.lblPassword.BorderStyle = System.Windows.Forms.BorderStyle.None
+		Me.lblPassword.Name = "lblPassword"
+		Me.lblLogin.Text = "Login:"
+		Me.lblLogin.Size = New System.Drawing.Size(41, 21)
+		Me.lblLogin.Location = New System.Drawing.Point(12, 14)
+		Me.lblLogin.TabIndex = 0
+		Me.lblLogin.Font = New System.Drawing.Font("Arial", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.lblLogin.TextAlign = System.Drawing.ContentAlignment.TopLeft
+		Me.lblLogin.BackColor = System.Drawing.SystemColors.Control
+		Me.lblLogin.Enabled = True
+		Me.lblLogin.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.lblLogin.Cursor = System.Windows.Forms.Cursors.Default
+		Me.lblLogin.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.lblLogin.UseMnemonic = True
+		Me.lblLogin.Visible = True
+		Me.lblLogin.AutoSize = False
+		Me.lblLogin.BorderStyle = System.Windows.Forms.BorderStyle.None
+		Me.lblLogin.Name = "lblLogin"
+		Me.Controls.Add(cmdCancel)
+		Me.Controls.Add(cmdOkay)
+		Me.Controls.Add(txtPassword)
+		Me.Controls.Add(txtLogin)
+		Me.Controls.Add(lblPassword)
+		Me.Controls.Add(lblLogin)
+		Me.ResumeLayout(False)
+		Me.PerformLayout()
+	End Sub
+#End Region 
 End Class
