@@ -36,7 +36,7 @@ Public Class CompanyLoader
         ByVal showAccount As Action(Of Account),
         ByVal authenticator As Func(Of Company, CompanyLoadError)) As CompanyLoadError
 
-        If Not objCompany.blnDataPathExists() Then
+        If Not Company.blnDataPathExists(objCompany.strDataPath()) Then
             Return New CompanyLoadNotFound()
         End If
         objCompany.objSecurity.Load()

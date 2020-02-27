@@ -36,15 +36,16 @@ Friend Class CBMainForm
                 strDataPathValue = Company.strExecutableFolder() & "\Data"
             End If
 
+            If Not Company.blnDataPathExists(strDataPathValue) Then
+                Dim objCreateCompany As Company = New Company(strDataPathValue)
+                objCreateCompany.CreateInitialData(AddressOf ShowCreateMessage)
+            End If
+
             'This line, plus the call to CompanyLoader.objLoad(), are the only
             'things that have to happen to load everything for a Company into memory.
             'The rest of this routine is load the UI (this program).
             mobjCompany = New Company(strDataPathValue)
             mobjSecurity = mobjCompany.objSecurity
-
-            If Not mobjCompany.blnDataPathExists() Then
-                mobjCompany.CreateInitialData(AddressOf ShowCreateMessage)
-            End If
 
             Dim objError As CompanyLoadError = CompanyLoader.objLoad(mobjCompany,
                 AddressOf frmStartup.Configure, AddressOf objAuthenticate)

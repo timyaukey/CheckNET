@@ -259,8 +259,8 @@ Public Class Company
         Return mstrDataPathValue
     End Function
 
-    Public Function blnDataPathExists() As Boolean
-        Return System.IO.Directory.Exists(strDataPath())
+    Public Shared Function blnDataPathExists(ByVal strPath As String) As Boolean
+        Return System.IO.Directory.Exists(strPath)
     End Function
 
     Public Function strAddPath(ByVal strBareName As String) As String
