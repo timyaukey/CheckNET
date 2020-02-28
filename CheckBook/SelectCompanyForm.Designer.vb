@@ -78,10 +78,11 @@ Partial Class SelectCompanyForm
         Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.btnNew)
         Me.Controls.Add(Me.btnBrowse)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "SelectCompanyForm"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Select Company"
         Me.ResumeLayout(False)
 

@@ -10,6 +10,11 @@ Public Class SelectCompanyForm
     Public Function ShowCompanyDialog(ByVal hostUI As IHostUI, ByVal objShowMessage As Action(Of String)) As DialogResult
         mobjHostUI = hostUI
         mobjShowMessage = objShowMessage
+        Return ShowDialog()
+        Return DialogResult.OK
+    End Function
+
+    Private Sub btnOpen_Click(sender As Object, e As EventArgs) Handles btnOpen.Click
 
         Dim strDataPathValue As String = System.Configuration.ConfigurationManager.AppSettings("DataPath")
         If String.IsNullOrEmpty(strDataPathValue) Then
@@ -22,11 +27,6 @@ Public Class SelectCompanyForm
         End If
 
         strDataPath = strDataPathValue
-        'Return ShowDialog()
-        Return DialogResult.OK
-    End Function
-
-    Private Sub btnOpen_Click(sender As Object, e As EventArgs) Handles btnOpen.Click
 
         Me.DialogResult = DialogResult.OK
         Me.Close()

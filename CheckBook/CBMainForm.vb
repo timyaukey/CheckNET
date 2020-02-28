@@ -208,10 +208,12 @@ Friend Class CBMainForm
     Private Sub CBMainForm_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
         Try
 
-            If Not mblnCancelStart Then
-                CompanySaver.SaveChangedAccounts(mobjCompany)
+            If Not mobjCompany Is Nothing Then
+                If Not mblnCancelStart Then
+                    CompanySaver.SaveChangedAccounts(mobjCompany)
+                End If
+                mobjCompany.Teardown()
             End If
-            mobjCompany.Teardown()
 
             Exit Sub
         Catch ex As Exception
