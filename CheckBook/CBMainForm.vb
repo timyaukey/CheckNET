@@ -31,15 +31,13 @@ Friend Class CBMainForm
             frmStartup.Show()
             frmStartup.ShowStatus("Initializing")
 
-            strDataPathValue = System.Configuration.ConfigurationManager.AppSettings("DataPath")
-            If String.IsNullOrEmpty(strDataPathValue) Then
-                strDataPathValue = Company.strExecutableFolder() & "\Data"
-            End If
-
-            If Not Company.blnDataPathExists(strDataPathValue) Then
-                Dim objCreateCompany As Company = New Company(strDataPathValue)
-                objCreateCompany.CreateInitialData(AddressOf ShowCreateMessage)
-            End If
+            Using objSelectCompanyForm As SelectCompanyForm = New SelectCompanyForm()
+                If objSelectCompanyForm.ShowCompanyDialog(mobjHostUI, AddressOf ShowCreateMessage) <> DialogResult.OK Then
+                    frmStartup.Close()
+                    Exit Sub
+                End If
+                strDataPathValue = objSelectCompanyForm.strDataPath
+            End Using
 
             'This line, plus the call to CompanyLoader.objLoad(), are the only
             'things that have to happen to load everything for a Company into memory.
