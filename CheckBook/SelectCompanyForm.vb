@@ -4,6 +4,7 @@ Option Explicit On
 Public Class SelectCompanyForm
     Public strDataPath As String
     Private mstrDefaultRootFolder As String
+    Private mblnNewOnEmptyAsked As Boolean
 
     Private mobjHostUI As IHostUI
     Private mobjShowMessage As Action(Of String)
@@ -12,6 +13,7 @@ Public Class SelectCompanyForm
         mobjHostUI = objHostUI
         mobjShowMessage = objShowMessage
         mstrDefaultRootFolder = Company.strDefaultRootFolder(mobjHostUI.strSoftwareName)
+        mblnNewOnEmptyAsked = False
         If My.Settings.CompanyList Is Nothing Then
             My.Settings.CompanyList = New Specialized.StringCollection()
         End If
@@ -106,6 +108,15 @@ Public Class SelectCompanyForm
     Private Sub HistoryRemove(ByVal strDataPath As String)
         If My.Settings.CompanyList.Contains(strDataPath) Then
             My.Settings.CompanyList.Remove(strDataPath)
+        End If
+    End Sub
+
+    Private Sub SelectCompanyForm_Activated(sender As Object, e As EventArgs) Handles Me.Activated
+        If Not mblnNewOnEmptyAsked Then
+            If My.Settings.CompanyList.Count = 0 Then
+                btnNew_Click(sender, e)
+            End If
+            mblnNewOnEmptyAsked = True
         End If
     End Sub
 
