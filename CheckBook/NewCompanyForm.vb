@@ -15,9 +15,10 @@ Public Class NewCompanyForm
             mobjHostUI.ErrorMessageBox("A company name is required.")
             Return
         End If
-        Dim regex As System.Text.RegularExpressions.Regex = New System.Text.RegularExpressions.Regex("^[a-zA-Z0-9 \-_.]+$")
+        Dim regex As System.Text.RegularExpressions.Regex = New System.Text.RegularExpressions.Regex("^[a-zA-Z0-9][a-zA-Z0-9 \-_.]+$")
         If Not regex.IsMatch(txtCompanyName.Text) Then
-            mobjHostUI.ErrorMessageBox("Company name may only include letters, numbers, spaces, dashes, underscores and periods.")
+            mobjHostUI.ErrorMessageBox("Company name must start with a letter or number, and may only " +
+                "include letters, numbers, spaces, dashes, underscores and periods.")
             Return
         End If
         strCompanyName = txtCompanyName.Text
