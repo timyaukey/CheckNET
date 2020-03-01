@@ -74,7 +74,7 @@ Partial Class SelectCompanyForm
         'dlgBrowseCompany
         '
         Me.dlgBrowseCompany.Description = "Select the folder containing the desired company."
-        Me.dlgBrowseCompany.RootFolder = System.Environment.SpecialFolder.CommonApplicationData
+        Me.dlgBrowseCompany.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
         'lstHistory
         '
