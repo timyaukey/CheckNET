@@ -259,12 +259,24 @@ Public Class Company
         Return mstrDataPathValue
     End Function
 
-    Public Shared Function blnDataPathExists(ByVal strPath As String) As Boolean
-        Return System.IO.Directory.Exists(strPath)
+    Public Shared Function blnDataPathIsValid(ByVal strPath As String) As Boolean
+        If Not System.IO.Directory.Exists(strPath) Then
+            Return False
+        End If
+        If Not System.IO.Directory.Exists(Company.strAccountPath(strPath)) Then
+            Return False
+        End If
+        If Not System.IO.File.Exists(Company.strCategoryPath(strPath)) Then
+            Return False
+        End If
+        If Not System.IO.File.Exists(Company.strBudgetPath(strPath)) Then
+            Return False
+        End If
+        Return True
     End Function
 
     Public Function strAddPath(ByVal strBareName As String) As String
-        Return strDataPath() & "\" & strBareName
+        Return System.IO.Path.Combine(strDataPath(), strBareName)
     End Function
 
     Public Function strTrxTypeFilePath() As String
@@ -276,11 +288,19 @@ Public Class Company
     End Function
 
     Public Function strCategoryPath() As String
-        Return strAddPath("Shared.cat")
+        Return strCategoryPath(strDataPath())
+    End Function
+
+    Public Shared Function strCategoryPath(ByVal strDataPath As String) As String
+        Return System.IO.Path.Combine(strDataPath, "Shared.cat")
     End Function
 
     Public Function strBudgetPath() As String
-        Return strAddPath("Shared.bud")
+        Return strBudgetPath(strDataPath())
+    End Function
+
+    Public Shared Function strBudgetPath(ByVal strDataPath As String) As String
+        Return System.IO.Path.Combine(strDataPath, "Shared.bud")
     End Function
 
     Public Function strCheckFormatPath() As String
@@ -292,7 +312,11 @@ Public Class Company
     End Function
 
     Public Function strAccountPath() As String
-        Return strAddPath("Accounts")
+        Return strAccountPath(strDataPath())
+    End Function
+
+    Public Shared Function strAccountPath(ByVal strDataPath As String) As String
+        Return System.IO.Path.Combine(strDataPath, "Accounts")
     End Function
 
     Public Function strReportPath() As String
@@ -412,5 +436,10 @@ Public Class Company
             gNestedException(ex)
         End Try
     End Sub
+
+    Public Shared Function strDefaultRootFolder(ByVal strSoftwareTitle As String) As String
+        Return System.IO.Path.Combine(System.Environment.GetFolderPath(
+                                      Environment.SpecialFolder.CommonApplicationData), strSoftwareTitle)
+    End Function
 
 End Class

@@ -26,12 +26,14 @@ Partial Class SelectCompanyForm
         Me.btnNew = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.btnOpen = New System.Windows.Forms.Button()
+        Me.dlgBrowseCompany = New System.Windows.Forms.FolderBrowserDialog()
+        Me.lstHistory = New System.Windows.Forms.ListBox()
         Me.SuspendLayout()
         '
         'btnBrowse
         '
         Me.btnBrowse.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnBrowse.Location = New System.Drawing.Point(12, 258)
+        Me.btnBrowse.Location = New System.Drawing.Point(12, 320)
         Me.btnBrowse.Name = "btnBrowse"
         Me.btnBrowse.Size = New System.Drawing.Size(75, 23)
         Me.btnBrowse.TabIndex = 0
@@ -41,7 +43,7 @@ Partial Class SelectCompanyForm
         'btnNew
         '
         Me.btnNew.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnNew.Location = New System.Drawing.Point(93, 258)
+        Me.btnNew.Location = New System.Drawing.Point(93, 320)
         Me.btnNew.Name = "btnNew"
         Me.btnNew.Size = New System.Drawing.Size(75, 23)
         Me.btnNew.TabIndex = 1
@@ -52,7 +54,7 @@ Partial Class SelectCompanyForm
         '
         Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnCancel.Location = New System.Drawing.Point(425, 258)
+        Me.btnCancel.Location = New System.Drawing.Point(566, 320)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(75, 23)
         Me.btnCancel.TabIndex = 2
@@ -62,18 +64,36 @@ Partial Class SelectCompanyForm
         'btnOpen
         '
         Me.btnOpen.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnOpen.Location = New System.Drawing.Point(344, 258)
+        Me.btnOpen.Location = New System.Drawing.Point(485, 320)
         Me.btnOpen.Name = "btnOpen"
         Me.btnOpen.Size = New System.Drawing.Size(75, 23)
         Me.btnOpen.TabIndex = 3
         Me.btnOpen.Text = "Open"
         Me.btnOpen.UseVisualStyleBackColor = True
         '
+        'dlgBrowseCompany
+        '
+        Me.dlgBrowseCompany.Description = "Select the folder containing the desired company."
+        Me.dlgBrowseCompany.RootFolder = System.Environment.SpecialFolder.CommonApplicationData
+        '
+        'lstHistory
+        '
+        Me.lstHistory.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lstHistory.FormattingEnabled = True
+        Me.lstHistory.IntegralHeight = False
+        Me.lstHistory.Location = New System.Drawing.Point(12, 12)
+        Me.lstHistory.Name = "lstHistory"
+        Me.lstHistory.Size = New System.Drawing.Size(629, 302)
+        Me.lstHistory.TabIndex = 4
+        '
         'SelectCompanyForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(512, 293)
+        Me.ClientSize = New System.Drawing.Size(653, 355)
+        Me.Controls.Add(Me.lstHistory)
         Me.Controls.Add(Me.btnOpen)
         Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.btnNew)
@@ -83,7 +103,7 @@ Partial Class SelectCompanyForm
         Me.MinimizeBox = False
         Me.Name = "SelectCompanyForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Select Company"
+        Me.Text = "Select Company Folder"
         Me.ResumeLayout(False)
 
     End Sub
@@ -92,4 +112,6 @@ Partial Class SelectCompanyForm
     Friend WithEvents btnNew As Button
     Friend WithEvents btnCancel As Button
     Friend WithEvents btnOpen As Button
+    Friend WithEvents dlgBrowseCompany As FolderBrowserDialog
+    Friend WithEvents lstHistory As ListBox
 End Class

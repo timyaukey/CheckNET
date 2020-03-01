@@ -150,6 +150,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="NewCompanyForm.Designer.vb">
+      <DependentUpon>NewCompanyForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="NewCompanyForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ObjectEditorForm.Designer.vb">
       <DependentUpon>ObjectEditorForm.vb</DependentUpon>
     </Compile>
@@ -399,6 +410,9 @@
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="NewCompanyForm.resx">
+      <DependentUpon>NewCompanyForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ObjectEditorForm.resx">
       <DependentUpon>ObjectEditorForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -503,6 +517,10 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="CheckBook.ico" />
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BudgetDashboard\BudgetDashboard.csproj">
