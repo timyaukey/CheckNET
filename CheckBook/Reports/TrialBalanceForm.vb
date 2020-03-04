@@ -67,8 +67,10 @@ Public Class TrialBalanceForm
     Private Sub ConfigureStatementButtons(ByVal blnEnabled As Boolean)
         btnBalanceSheet.Enabled = blnEnabled
         btnIncomeExpenseStatement.Enabled = blnEnabled
-        btnLoanBalances.Enabled = blnEnabled
-        btnVendorBalances.Enabled = blnEnabled
+        btnLoansPayable.Enabled = blnEnabled
+        btnLoansReceivable.Enabled = blnEnabled
+        btnAccountsPayable.Enabled = blnEnabled
+        btnAccountsReceivable.Enabled = blnEnabled
     End Sub
 
     Private Sub btnBalanceSheet_Click(sender As Object, e As EventArgs) Handles btnBalanceSheet.Click
@@ -266,69 +268,106 @@ Public Class TrialBalanceForm
         End Try
     End Sub
 
-    Private Sub btnLoanBalances_Click(sender As Object, e As EventArgs) Handles btnLoanBalances.Click
+    Private Sub btnLoansPayable_Click(sender As Object, e As EventArgs) Handles btnLoansPayable.Click
         Try
-            Dim objWriter As HTMLWriter = New HTMLWriter(mobjHostUI, "LoanBalances", False)
-            Dim objBalSheet As AccountGroupManager = objGetBalanceSheetData()
-            Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
-            Dim objAccumDummy As ReportAccumulator = New ReportAccumulator()
-            Dim strLineHeaderClass As String = "ReportHeader2"
-            Dim strLineTitleClass As String = "ReportLineTitle2"
-            Dim strLineAmountClass As String = "ReportLineAmount2"
-            Dim strLineFooterTitleClass As String = "ReportFooterTitle2"
-            Dim strLineFooterAmountClass As String = "ReportFooterAmount2"
-            Dim strMinusClass As String = "Minus"
-
-            objWriter.BeginReport()
-            objWriter.OutputHeader("Long Term Debt Balances", "As Of " + ctlEndDate.Value.Date.ToShortDateString())
-
-            Dim objLoanGroup As LineItemGroup = objBalSheet.objGetGroup(Account.SubType.Liability_LoanPayable.ToString())
-            For Each objItem As ReportLineItem In objLoanGroup.colItems
-                If objItem.curTotal <> 0D Then
-                    objWriter.OutputAmount(strLineTitleClass, objItem.strItemTitle, strLineAmountClass, strMinusClass, objItem.curTotal, objAccumTotal)
-                End If
-            Next
-
-            objWriter.OutputText(strLineHeaderClass, "Total Long Term Debt")
-            objWriter.OutputAmount(strLineFooterTitleClass, "", strLineFooterAmountClass, strMinusClass, objAccumTotal.curTotal, objAccumDummy)
-
-            objWriter.EndReport()
-            objWriter.ShowReport()
+            OutputLoansPayableOrReceivable(Account.SubType.Liability_LoanPayable,
+                "LoansPayable", "Loans Payable Balances", "Total Loans Payable Balance")
         Catch ex As Exception
             gTopException(ex)
         End Try
     End Sub
 
-    Private Sub btnVendorBalances_Click(sender As Object, e As EventArgs) Handles btnVendorBalances.Click
+    Private Sub btnLoansReceivable_Click(sender As Object, e As EventArgs) Handles btnLoansReceivable.Click
         Try
-            Dim objWriter As HTMLWriter = New HTMLWriter(mobjHostUI, "VendorBalances", False)
-            Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
-            Dim objAccumDummy As ReportAccumulator = New ReportAccumulator()
-            Dim strLineHeaderClass As String = "ReportHeader2"
-            Dim strLineTitleClass As String = "ReportLineTitle2"
-            Dim strLineAmountClass As String = "ReportLineAmount2"
-            Dim strLineFooterTitleClass As String = "ReportFooterTitle2"
-            Dim strLineFooterAmountClass As String = "ReportFooterAmount2"
-            Dim strMinusClass As String = "Minus"
-
-            Dim colVendors As List(Of VendorSummary) = VendorSummary.colScanVendors(mobjCompany, ctlEndDate.Value.Date)
-
-            objWriter.BeginReport()
-            objWriter.OutputHeader("Vendor Balances", "As Of " + ctlEndDate.Value.Date.ToShortDateString())
-
-            For Each objVendor As VendorSummary In colVendors
-                If objVendor.curBalance <> 0D Then
-                    objWriter.OutputAmount(strLineTitleClass, objVendor.strVendorName, strLineAmountClass, strMinusClass, objVendor.curBalance, objAccumTotal)
-                End If
-            Next
-
-            objWriter.OutputText(strLineHeaderClass, "Total Vendor Debt")
-            objWriter.OutputAmount(strLineFooterTitleClass, "", strLineFooterAmountClass, strMinusClass, objAccumTotal.curTotal, objAccumDummy)
-
-            objWriter.EndReport()
-            objWriter.ShowReport()
+            OutputLoansPayableOrReceivable(Account.SubType.Asset_LoanReceivable,
+                "LoansReceivable", "Loans Receivable Balances", "Total Loans Receivable Balance")
         Catch ex As Exception
             gTopException(ex)
         End Try
+    End Sub
+
+    Private Sub OutputLoansPayableOrReceivable(ByVal lngSubType As Account.SubType,
+                                            ByVal strReportFileName As String,
+                                            ByVal strReportTitle As String,
+                                            ByVal strReportTotalTag As String)
+
+        Dim objWriter As HTMLWriter = New HTMLWriter(mobjHostUI, strReportFileName, False)
+        Dim objBalSheet As AccountGroupManager = objGetBalanceSheetData()
+        Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
+        Dim objAccumDummy As ReportAccumulator = New ReportAccumulator()
+        Dim strLineHeaderClass As String = "ReportHeader2"
+        Dim strLineTitleClass As String = "ReportLineTitle2"
+        Dim strLineAmountClass As String = "ReportLineAmount2"
+        Dim strLineFooterTitleClass As String = "ReportFooterTitle2"
+        Dim strLineFooterAmountClass As String = "ReportFooterAmount2"
+        Dim strMinusClass As String = "Minus"
+
+        objWriter.BeginReport()
+        objWriter.OutputHeader(strReportTitle, "As Of " + ctlEndDate.Value.Date.ToShortDateString())
+
+        Dim objLoanGroup As LineItemGroup = objBalSheet.objGetGroup(lngSubType.ToString())
+        For Each objItem As ReportLineItem In objLoanGroup.colItems
+            If objItem.curTotal <> 0D Then
+                objWriter.OutputAmount(strLineTitleClass, objItem.strItemTitle, strLineAmountClass, strMinusClass, objItem.curTotal, objAccumTotal)
+            End If
+        Next
+
+        objWriter.OutputText(strLineHeaderClass, strReportTotalTag)
+        objWriter.OutputAmount(strLineFooterTitleClass, "", strLineFooterAmountClass, strMinusClass, objAccumTotal.curTotal, objAccumDummy)
+
+        objWriter.EndReport()
+        objWriter.ShowReport()
+    End Sub
+
+    Private Sub btnAccountsPayable_Click(sender As Object, e As EventArgs) Handles btnAccountsPayable.Click
+        Try
+            OutputAccountsPayableOrReceivable(Account.SubType.Liability_AccountsPayable,
+                "AccountsPayable", "Accounts Payable", "Total Accounts Payable")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
+    End Sub
+
+    Private Sub btnAccountsReceivable_Click(sender As Object, e As EventArgs) Handles btnAccountsReceivable.Click
+        Try
+            OutputAccountsPayableOrReceivable(Account.SubType.Asset_AccountsReceivable,
+                "AccountsReceivable", "Accounts Receivable", "Total Accounts Receivable")
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
+    End Sub
+
+    Private Sub OutputAccountsPayableOrReceivable(ByVal lngSubType As Account.SubType,
+                                            ByVal strReportFileName As String,
+                                            ByVal strReportTitle As String,
+                                            ByVal strReportTotalTag As String)
+
+        Dim objWriter As HTMLWriter = New HTMLWriter(mobjHostUI, strReportFileName, False)
+        Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
+        Dim objAccumDummy As ReportAccumulator = New ReportAccumulator()
+        Dim strLineHeaderClass As String = "ReportHeader2"
+        Dim strLineTitleClass As String = "ReportLineTitle2"
+        Dim strLineAmountClass As String = "ReportLineAmount2"
+        Dim strLineFooterTitleClass As String = "ReportFooterTitle2"
+        Dim strLineFooterAmountClass As String = "ReportFooterAmount2"
+        Dim strMinusClass As String = "Minus"
+
+        Dim colVendors As List(Of VendorSummary) =
+            VendorSummary.colScanVendors(mobjCompany, ctlEndDate.Value.Date, lngSubType)
+
+        objWriter.BeginReport()
+        objWriter.OutputHeader(strReportTitle, "As Of " + ctlEndDate.Value.Date.ToShortDateString())
+
+        For Each objVendor As VendorSummary In colVendors
+            If objVendor.curBalance <> 0D Then
+                objWriter.OutputAmount(strLineTitleClass, objVendor.strVendorName, strLineAmountClass, strMinusClass, objVendor.curBalance, objAccumTotal)
+            End If
+        Next
+
+        objWriter.OutputText(strLineHeaderClass, strReportTotalTag)
+        objWriter.OutputAmount(strLineFooterTitleClass, "", strLineFooterAmountClass, strMinusClass, objAccumTotal.curTotal, objAccumDummy)
+
+        objWriter.EndReport()
+        objWriter.ShowReport()
     End Sub
 End Class

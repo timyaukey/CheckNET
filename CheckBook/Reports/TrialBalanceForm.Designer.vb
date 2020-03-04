@@ -39,8 +39,10 @@ Partial Class TrialBalanceForm
         Me.btnIncomeExpenseStatement = New System.Windows.Forms.Button()
         Me.lblResultSummary = New System.Windows.Forms.Label()
         Me.btnPostRetainedEarnings = New System.Windows.Forms.Button()
-        Me.btnVendorBalances = New System.Windows.Forms.Button()
-        Me.btnLoanBalances = New System.Windows.Forms.Button()
+        Me.btnAccountsPayable = New System.Windows.Forms.Button()
+        Me.btnLoansPayable = New System.Windows.Forms.Button()
+        Me.btnAccountsReceivable = New System.Windows.Forms.Button()
+        Me.btnLoansReceivable = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'ctlEndDate
@@ -65,9 +67,10 @@ Partial Class TrialBalanceForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lvwBalanceSheetAccounts.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.lvwBalSheetCol_Title, Me.lvwBalSheetCol_Amount})
         Me.lvwBalanceSheetAccounts.FullRowSelect = True
+        Me.lvwBalanceSheetAccounts.HideSelection = False
         Me.lvwBalanceSheetAccounts.Location = New System.Drawing.Point(12, 104)
         Me.lvwBalanceSheetAccounts.Name = "lvwBalanceSheetAccounts"
-        Me.lvwBalanceSheetAccounts.Size = New System.Drawing.Size(527, 146)
+        Me.lvwBalanceSheetAccounts.Size = New System.Drawing.Size(537, 146)
         Me.lvwBalanceSheetAccounts.TabIndex = 5
         Me.lvwBalanceSheetAccounts.UseCompatibleStateImageBehavior = False
         Me.lvwBalanceSheetAccounts.View = System.Windows.Forms.View.Details
@@ -89,9 +92,10 @@ Partial Class TrialBalanceForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lvwIncExpAccounts.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.lvwIncExpCol_Title, Me.lvwIncExpCol_Amount})
         Me.lvwIncExpAccounts.FullRowSelect = True
+        Me.lvwIncExpAccounts.HideSelection = False
         Me.lvwIncExpAccounts.Location = New System.Drawing.Point(12, 280)
         Me.lvwIncExpAccounts.Name = "lvwIncExpAccounts"
-        Me.lvwIncExpAccounts.Size = New System.Drawing.Size(527, 146)
+        Me.lvwIncExpAccounts.Size = New System.Drawing.Size(537, 146)
         Me.lvwIncExpAccounts.TabIndex = 7
         Me.lvwIncExpAccounts.UseCompatibleStateImageBehavior = False
         Me.lvwIncExpAccounts.View = System.Windows.Forms.View.Details
@@ -110,10 +114,10 @@ Partial Class TrialBalanceForm
         'btnTrialBalance
         '
         Me.btnTrialBalance.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnTrialBalance.Location = New System.Drawing.Point(389, 483)
+        Me.btnTrialBalance.Location = New System.Drawing.Point(399, 512)
         Me.btnTrialBalance.Name = "btnTrialBalance"
         Me.btnTrialBalance.Size = New System.Drawing.Size(150, 23)
-        Me.btnTrialBalance.TabIndex = 13
+        Me.btnTrialBalance.TabIndex = 15
         Me.btnTrialBalance.Text = "Trial Balance"
         Me.btnTrialBalance.UseVisualStyleBackColor = True
         '
@@ -164,7 +168,7 @@ Partial Class TrialBalanceForm
         'btnIncomeExpenseStatement
         '
         Me.btnIncomeExpenseStatement.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnIncomeExpenseStatement.Location = New System.Drawing.Point(12, 512)
+        Me.btnIncomeExpenseStatement.Location = New System.Drawing.Point(168, 483)
         Me.btnIncomeExpenseStatement.Name = "btnIncomeExpenseStatement"
         Me.btnIncomeExpenseStatement.Size = New System.Drawing.Size(150, 23)
         Me.btnIncomeExpenseStatement.TabIndex = 10
@@ -183,40 +187,62 @@ Partial Class TrialBalanceForm
         'btnPostRetainedEarnings
         '
         Me.btnPostRetainedEarnings.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnPostRetainedEarnings.Location = New System.Drawing.Point(389, 512)
+        Me.btnPostRetainedEarnings.Location = New System.Drawing.Point(399, 541)
         Me.btnPostRetainedEarnings.Name = "btnPostRetainedEarnings"
         Me.btnPostRetainedEarnings.Size = New System.Drawing.Size(150, 23)
-        Me.btnPostRetainedEarnings.TabIndex = 15
+        Me.btnPostRetainedEarnings.TabIndex = 16
         Me.btnPostRetainedEarnings.Text = "Post Retained Earnings"
         Me.btnPostRetainedEarnings.UseVisualStyleBackColor = True
         '
-        'btnVendorBalances
+        'btnAccountsPayable
         '
-        Me.btnVendorBalances.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnVendorBalances.Location = New System.Drawing.Point(168, 512)
-        Me.btnVendorBalances.Name = "btnVendorBalances"
-        Me.btnVendorBalances.Size = New System.Drawing.Size(150, 23)
-        Me.btnVendorBalances.TabIndex = 12
-        Me.btnVendorBalances.Text = "Vendor Balances"
-        Me.btnVendorBalances.UseVisualStyleBackColor = True
+        Me.btnAccountsPayable.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnAccountsPayable.Location = New System.Drawing.Point(168, 541)
+        Me.btnAccountsPayable.Name = "btnAccountsPayable"
+        Me.btnAccountsPayable.Size = New System.Drawing.Size(150, 23)
+        Me.btnAccountsPayable.TabIndex = 14
+        Me.btnAccountsPayable.Text = "Accounts Payable"
+        Me.btnAccountsPayable.UseVisualStyleBackColor = True
         '
-        'btnLoanBalances
+        'btnLoansPayable
         '
-        Me.btnLoanBalances.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnLoanBalances.Location = New System.Drawing.Point(168, 483)
-        Me.btnLoanBalances.Name = "btnLoanBalances"
-        Me.btnLoanBalances.Size = New System.Drawing.Size(150, 23)
-        Me.btnLoanBalances.TabIndex = 11
-        Me.btnLoanBalances.Text = "Loan Balances"
-        Me.btnLoanBalances.UseVisualStyleBackColor = True
+        Me.btnLoansPayable.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnLoansPayable.Location = New System.Drawing.Point(12, 541)
+        Me.btnLoansPayable.Name = "btnLoansPayable"
+        Me.btnLoansPayable.Size = New System.Drawing.Size(150, 23)
+        Me.btnLoansPayable.TabIndex = 13
+        Me.btnLoansPayable.Text = "Loans Payable"
+        Me.btnLoansPayable.UseVisualStyleBackColor = True
+        '
+        'btnAccountsReceivable
+        '
+        Me.btnAccountsReceivable.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnAccountsReceivable.Location = New System.Drawing.Point(168, 512)
+        Me.btnAccountsReceivable.Name = "btnAccountsReceivable"
+        Me.btnAccountsReceivable.Size = New System.Drawing.Size(150, 23)
+        Me.btnAccountsReceivable.TabIndex = 12
+        Me.btnAccountsReceivable.Text = "Accounts Receivable"
+        Me.btnAccountsReceivable.UseVisualStyleBackColor = True
+        '
+        'btnLoansReceivable
+        '
+        Me.btnLoansReceivable.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnLoansReceivable.Location = New System.Drawing.Point(12, 512)
+        Me.btnLoansReceivable.Name = "btnLoansReceivable"
+        Me.btnLoansReceivable.Size = New System.Drawing.Size(150, 23)
+        Me.btnLoansReceivable.TabIndex = 11
+        Me.btnLoansReceivable.Text = "Loans Receivable"
+        Me.btnLoansReceivable.UseVisualStyleBackColor = True
         '
         'TrialBalanceForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(551, 547)
-        Me.Controls.Add(Me.btnVendorBalances)
-        Me.Controls.Add(Me.btnLoanBalances)
+        Me.ClientSize = New System.Drawing.Size(561, 576)
+        Me.Controls.Add(Me.btnLoansReceivable)
+        Me.Controls.Add(Me.btnAccountsReceivable)
+        Me.Controls.Add(Me.btnAccountsPayable)
+        Me.Controls.Add(Me.btnLoansPayable)
         Me.Controls.Add(Me.btnPostRetainedEarnings)
         Me.Controls.Add(Me.lblResultSummary)
         Me.Controls.Add(Me.btnIncomeExpenseStatement)
@@ -258,6 +284,8 @@ Partial Class TrialBalanceForm
     Friend WithEvents btnIncomeExpenseStatement As Button
     Friend WithEvents lblResultSummary As Label
     Friend WithEvents btnPostRetainedEarnings As Button
-    Friend WithEvents btnVendorBalances As Button
-    Friend WithEvents btnLoanBalances As Button
+    Friend WithEvents btnAccountsPayable As Button
+    Friend WithEvents btnLoansPayable As Button
+    Friend WithEvents btnAccountsReceivable As Button
+    Friend WithEvents btnLoansReceivable As Button
 End Class

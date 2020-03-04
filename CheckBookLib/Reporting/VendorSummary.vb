@@ -5,12 +5,13 @@ Public Class VendorSummary
     Public strVendorName As String
     Public curBalance As Decimal
 
-    Public Shared Function colScanVendors(ByVal objCompany As Company, ByVal datEnd As DateTime) As List(Of VendorSummary)
+    Public Shared Function colScanVendors(ByVal objCompany As Company, ByVal datEnd As DateTime,
+                                          ByVal lngSubType As Account.SubType) As List(Of VendorSummary)
         Dim colVendors As List(Of VendorSummary) = New List(Of VendorSummary)()
         Dim objDict As Dictionary(Of String, VendorSummary) = New Dictionary(Of String, VendorSummary)()
 
         For Each objAccount As Account In objCompany.colAccounts
-            If objAccount.lngSubType = Account.SubType.Liability_AccountsPayable Then
+            If objAccount.lngSubType = lngSubType Then
                 For Each objReg As Register In objAccount.colRegisters
                     For Each objTrx As Trx In objReg.colDateRange(New DateTime(1900, 1, 1), datEnd)
                         If Not objTrx.blnFake Then
