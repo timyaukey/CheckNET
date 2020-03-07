@@ -33,66 +33,82 @@ Public Class SelectCompanyForm
     End Sub
 
     Private Sub btnOpen_Click(sender As Object, e As EventArgs) Handles btnOpen.Click
-
-        Dim objHistItem As CompanyHistoryItem = DirectCast(lstHistory.SelectedItem, CompanyHistoryItem)
-        If objHistItem Is Nothing Then
-            mobjHostUI.ErrorMessageBox("Please select a company folder from the list above.")
-            Return
-        End If
-        If Not Company.blnDataPathIsValid(objHistItem.strDataPath) Then
-            If mobjHostUI.OkCancelMessageBox("Could not find the selected company folder. " +
+        Try
+            Dim objHistItem As CompanyHistoryItem = DirectCast(lstHistory.SelectedItem, CompanyHistoryItem)
+            If objHistItem Is Nothing Then
+                mobjHostUI.ErrorMessageBox("Please select a company folder from the list above.")
+                Return
+            End If
+            If Not Company.blnDataPathIsValid(objHistItem.strDataPath) Then
+                If mobjHostUI.OkCancelMessageBox("Could not find the selected company folder. " +
                 "Do you want to remove it from the list?") = DialogResult.OK Then
-                HistoryRemove(objHistItem.strDataPath)
-                ShowHistoryList()
+                    HistoryRemove(objHistItem.strDataPath)
+                    ShowHistoryList()
+                    Return
+                End If
                 Return
             End If
-            Return
-        End If
 
-        Me.strDataPath = objHistItem.strDataPath
-        HistoryRemove(Me.strDataPath)
-        HistoryAdd(Me.strDataPath)
-        Me.DialogResult = DialogResult.OK
-        Me.Close()
-
-    End Sub
-
-    Private Sub btnNew_Click(sender As Object, e As EventArgs) Handles btnNew.Click
-        CreateDefaultRootFolder()
-        Using frmNewCompany As NewCompanyForm = New NewCompanyForm()
-            If frmNewCompany.ShowNewCompanyDialog(mobjHostUI) <> DialogResult.OK Then
-                Return
-            End If
-            Dim strDataPath As String = System.IO.Path.Combine(mstrDefaultRootFolder, frmNewCompany.strCompanyName)
-            If System.IO.Directory.Exists(strDataPath) Then
-                mobjHostUI.ErrorMessageBox("A company folder with that name already exists.")
-                Return
-            End If
-            Dim objCreateCompany As Company = New Company(strDataPath)
-            objCreateCompany.CreateInitialData(mobjShowMessage)
-            Me.strDataPath = strDataPath
-            HistoryAdd(Me.strDataPath)
-            Me.DialogResult = DialogResult.OK
-            Me.Close()
-        End Using
-    End Sub
-
-    Private Sub btnBrowse_Click(sender As Object, e As EventArgs) Handles btnBrowse.Click
-        CreateDefaultRootFolder()
-        dlgBrowseCompany.SelectedPath = mstrDefaultRootFolder
-        Dim result As DialogResult = dlgBrowseCompany.ShowDialog()
-        If result <> DialogResult.OK Then
-            Exit Sub
-        End If
-        If Company.blnDataPathIsValid(dlgBrowseCompany.SelectedPath) Then
-            Me.strDataPath = dlgBrowseCompany.SelectedPath
+            Me.strDataPath = objHistItem.strDataPath
             HistoryRemove(Me.strDataPath)
             HistoryAdd(Me.strDataPath)
             Me.DialogResult = DialogResult.OK
             Me.Close()
-        Else
-            mobjHostUI.ErrorMessageBox("Selected folder is not a company data folder.")
-        End If
+        Catch ex As Exception
+            CBMainForm.blnCancelStart = True
+            gTopException(ex)
+            Me.Close()
+        End Try
+    End Sub
+
+    Private Sub btnNew_Click(sender As Object, e As EventArgs) Handles btnNew.Click
+        Try
+            CreateDefaultRootFolder()
+            Using frmNewCompany As NewCompanyForm = New NewCompanyForm()
+                If frmNewCompany.ShowNewCompanyDialog(mobjHostUI) <> DialogResult.OK Then
+                    Return
+                End If
+                Dim strDataPath As String = System.IO.Path.Combine(mstrDefaultRootFolder, frmNewCompany.strCompanyName)
+                If System.IO.Directory.Exists(strDataPath) Then
+                    mobjHostUI.ErrorMessageBox("A company folder with that name already exists.")
+                    Return
+                End If
+                Dim objCreateCompany As Company = New Company(strDataPath)
+                objCreateCompany.CreateInitialData(mobjShowMessage)
+                Me.strDataPath = strDataPath
+                HistoryAdd(Me.strDataPath)
+                Me.DialogResult = DialogResult.OK
+                Me.Close()
+            End Using
+        Catch ex As Exception
+            CBMainForm.blnCancelStart = True
+            gTopException(ex)
+            Me.Close()
+        End Try
+    End Sub
+
+    Private Sub btnBrowse_Click(sender As Object, e As EventArgs) Handles btnBrowse.Click
+        Try
+            CreateDefaultRootFolder()
+            dlgBrowseCompany.SelectedPath = mstrDefaultRootFolder
+            Dim result As DialogResult = dlgBrowseCompany.ShowDialog()
+            If result <> DialogResult.OK Then
+                Exit Sub
+            End If
+            If Company.blnDataPathIsValid(dlgBrowseCompany.SelectedPath) Then
+                Me.strDataPath = dlgBrowseCompany.SelectedPath
+                HistoryRemove(Me.strDataPath)
+                HistoryAdd(Me.strDataPath)
+                Me.DialogResult = DialogResult.OK
+                Me.Close()
+            Else
+                mobjHostUI.ErrorMessageBox("Selected folder is not a company data folder.")
+            End If
+        Catch ex As Exception
+            CBMainForm.blnCancelStart = True
+            gTopException(ex)
+            Me.Close()
+        End Try
     End Sub
 
     Private Sub CreateDefaultRootFolder()

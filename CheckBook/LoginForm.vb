@@ -1,5 +1,6 @@
 Option Strict Off
 Option Explicit On
+
 Friend Class LoginForm
 	Inherits System.Windows.Forms.Form
 	

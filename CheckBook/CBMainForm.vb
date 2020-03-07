@@ -12,9 +12,10 @@ Friend Class CBMainForm
 
     Private frmStartup As StartupForm
     Private mobjSecurity As Security
-    Private mblnCancelStart As Boolean
     Private WithEvents mobjCompany As Company
     Private mobjHostUI As IHostUI
+
+    Public Shared blnCancelStart As Boolean
 
     Private Sub CBMainForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Dim objAccount As Account
@@ -22,7 +23,7 @@ Friend Class CBMainForm
         Dim strDataPathValue As String
 
         Try
-            mblnCancelStart = True
+            blnCancelStart = False
             mobjHostUI = Me
 
             Me.Text = strSoftwareTitle
@@ -34,6 +35,7 @@ Friend Class CBMainForm
             Using objSelectCompanyForm As SelectCompanyForm = New SelectCompanyForm()
                 If objSelectCompanyForm.ShowCompanyDialog(mobjHostUI, AddressOf ShowCreateMessage) <> DialogResult.OK Then
                     frmStartup.Close()
+                    Me.Close()
                     Exit Sub
                 End If
                 strDataPathValue = objSelectCompanyForm.strDataPath
@@ -50,6 +52,7 @@ Friend Class CBMainForm
             If Not objError Is Nothing Then
                 mobjHostUI.InfoMessageBox(objError.strMessage)
                 frmStartup.Close()
+                Me.Close()
                 Exit Sub
             End If
 
@@ -77,8 +80,6 @@ Friend Class CBMainForm
                 mnuRepairUserAccounts.Enabled = mobjSecurity.blnIsAdministrator
             End If
 
-            mblnCancelStart = False
-
             For Each objAccount In mobjCompany.colAccounts
                 For Each objReg In objAccount.colRegisters
                     If objReg.blnShowInitially Then
@@ -91,6 +92,7 @@ Friend Class CBMainForm
 
         Catch ex As Exception
             gTopException(ex)
+            Me.Close()
         End Try
     End Sub
 
@@ -196,7 +198,7 @@ Friend Class CBMainForm
     End Sub
 
     Private Sub CBMainForm_Activated(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Activated
-        If mblnCancelStart Then
+        If blnCancelStart Then
             If Not frmStartup Is Nothing Then
                 frmStartup.Close()
                 frmStartup = Nothing
@@ -209,7 +211,7 @@ Friend Class CBMainForm
         Try
 
             If Not mobjCompany Is Nothing Then
-                If Not mblnCancelStart Then
+                If Not blnCancelStart Then
                     CompanySaver.SaveChangedAccounts(mobjCompany)
                 End If
                 mobjCompany.Teardown()

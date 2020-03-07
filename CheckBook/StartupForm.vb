@@ -1,10 +1,8 @@
 Option Strict On
 Option Explicit On
 
-
 Friend Class StartupForm
     Inherits System.Windows.Forms.Form
-    '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
     Public WithEvents mobjAccount As Account
     Private mobjHostUI As IHostUI
