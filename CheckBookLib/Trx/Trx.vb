@@ -339,7 +339,7 @@ Public MustInherit Class Trx
         Else
             strDebitCredit = "D"
         End If
-        mstrSortKey = mdatDate.ToString("yyyyMMdd") & strDebitCredit & strTypeCode &
+        mstrSortKey = (mdatDate.Ticks / 10000000).ToString("0000000000000") & strDebitCredit & strTypeCode &
             Left(mstrNumber & "          ", 10) & Left(mstrDescription & "                    ", 20) & Left(strInvNum & "                ", 16)
     End Sub
 

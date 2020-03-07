@@ -122,6 +122,7 @@
     <Compile Include="AdjustPersonalBusinessForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="AssemblyInfo.vb" />
     <Compile Include="CategoryEditorForm.Designer.vb">
       <DependentUpon>CategoryEditorForm.vb</DependentUpon>
