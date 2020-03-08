@@ -166,7 +166,6 @@ Public Class Register
             mlngTrxAllocated = mlngTrxAllocated + mlngAllocationUnit
             ReDim Preserve maobjTrx(mlngTrxAllocated)
         End If
-        objNew.SetSortKey()
         mlngTrxUsed = mlngTrxUsed + 1
         lngIndex = lngMoveUp(mlngTrxUsed - 1, objNew)
         lngNewInsert = lngIndex
@@ -289,7 +288,6 @@ Public Class Register
         Dim objTrx As Trx
 
         objTrx = Me.objTrx(lngOldIndex)
-        objTrx.SetSortKey()
 
         If lngOldIndex > 1 Then
             If Register.intSortComparison(objTrx, Me.objTrx(lngOldIndex - 1)) < 0 Then
@@ -1231,12 +1229,12 @@ Public Class Register
         Dim lngIndex As Integer
         Dim objTrx As Trx
         Dim objTrx2 As Trx
-        Dim strPriorSortKey As String
+        Dim objPriorTrx As Trx
         Dim curPriorBalance As Decimal
         Dim intRepeatTrxCount As Short
 
         curPriorBalance = 0
-        strPriorSortKey = ""
+        objPriorTrx = Nothing
 
         For lngIndex = 1 To mlngTrxUsed
             objTrx = Me.objTrx(lngIndex)
@@ -1245,10 +1243,12 @@ Public Class Register
                     RaiseValidationError(lngIndex, "Incorrect balance")
                 End If
                 curPriorBalance = .curBalance
-                If .strSortKey < strPriorSortKey Then
-                    RaiseValidationError(lngIndex, "Not in correct sort order")
+                If Not objPriorTrx Is Nothing Then
+                    If Register.intSortComparison(objTrx, objPriorTrx) < 0 Then
+                        RaiseValidationError(lngIndex, "Not in correct sort order")
+                    End If
                 End If
-                strPriorSortKey = .strSortKey
+                objPriorTrx = objTrx
                 .Validate()
                 If .intRepeatSeq > 0 Then
                     intRepeatTrxCount = intRepeatTrxCount + 1S

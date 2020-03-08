@@ -83,8 +83,6 @@ Public MustInherit Class Trx
     Protected mcurGeneratedAmount As Decimal
     'Register balance after mcurAmount added.
     Protected mcurBalance As Decimal
-    'Key for sorting register entries.
-    Protected mstrSortKey As String
 
     Public Sub New(ByVal objReg_ As Register)
         mobjReg = objReg_
@@ -163,12 +161,6 @@ Public MustInherit Class Trx
         mintRepeatSeq = 0
         mstrRepeatKey = ""
     End Sub
-
-    Public ReadOnly Property strSortKey() As String
-        Get
-            Return mstrSortKey
-        End Get
-    End Property
 
     Public Property strNumber() As String
         Get
@@ -323,29 +315,6 @@ Public MustInherit Class Trx
     Public MustOverride ReadOnly Property intTrxTypeSortKey() As Integer
     Public MustOverride ReadOnly Property strDocNumberSortKey() As String
 
-    Public Sub SetSortKey()
-        Dim strInvNum As String = ""
-        Dim strTypeCode As String
-        If TypeOf Me Is NormalTrx Then
-            strInvNum = DirectCast(Me, NormalTrx).objFirstSplit.strInvoiceNum
-            strTypeCode = "4"
-        ElseIf TypeOf Me Is BudgetTrx Then
-            strTypeCode = "3"
-        ElseIf TypeOf Me Is TransferTrx Then
-            strTypeCode = "2"
-        Else
-            strTypeCode = "1"
-        End If
-        Dim strDebitCredit As String
-        If mcurAmount > 0 Then
-            strDebitCredit = "C"
-        Else
-            strDebitCredit = "D"
-        End If
-        mstrSortKey = (mdatDate.Ticks / 10000000).ToString("0000000000000") & strDebitCredit & strTypeCode &
-            Left(mstrNumber & "          ", 10) & Left(mstrDescription & "                    ", 20) & Left(strInvNum & "                ", 16)
-    End Sub
-
     Public Sub Delete(ByVal objDeleteLogger As ILogDelete, ByVal strLogTitle As String,
                       Optional ByVal blnSetChanged As Boolean = True)
         mobjReg.Delete(mlngIndex, objDeleteLogger, strLogTitle, blnSetChanged)
@@ -360,9 +329,6 @@ Public MustInherit Class Trx
         Dim objRepeatTrx As Trx
         If Not mobjReg.objTrx(mlngIndex) Is Me Then
             mobjReg.RaiseValidationError(mlngIndex, "lngIndex is wrong")
-        End If
-        If mstrSortKey = "" Then
-            mobjReg.RaiseValidationError(mlngIndex, "Missing sort key")
         End If
         If mdatDate = System.DateTime.FromOADate(0) Then
             mobjReg.RaiseValidationError(mlngIndex, "Missing date")
