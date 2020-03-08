@@ -126,6 +126,18 @@ Public Class TransferTrx
         End If
     End Sub
 
+    Public Overrides ReadOnly Property intTrxTypeSortKey As Integer
+        Get
+            Return 2
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property strDocNumberSortKey As String
+        Get
+            Return ""
+        End Get
+    End Property
+
     Protected Sub RaiseErrorOnBadTransfer(ByVal strRoutine As String)
         If mstrTransferKey = "" Then
             gRaiseError("Missing transfer key in " & strRoutine)

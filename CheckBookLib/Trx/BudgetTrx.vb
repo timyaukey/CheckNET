@@ -339,4 +339,16 @@ Public Class BudgetTrx
     Public Overrides Function strSummary() As String
         Return Me.datDate.ToShortDateString() + " " + Me.strDescription + " " + Me.curBudgetLimit.ToString()
     End Function
+
+    Public Overrides ReadOnly Property intTrxTypeSortKey As Integer
+        Get
+            Return 3
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property strDocNumberSortKey As String
+        Get
+            Return ""
+        End Get
+    End Property
 End Class

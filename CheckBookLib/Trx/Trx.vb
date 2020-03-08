@@ -320,6 +320,9 @@ Public MustInherit Class Trx
         End If
     End Sub
 
+    Public MustOverride ReadOnly Property intTrxTypeSortKey() As Integer
+    Public MustOverride ReadOnly Property strDocNumberSortKey() As String
+
     Public Sub SetSortKey()
         Dim strInvNum As String = ""
         Dim strTypeCode As String

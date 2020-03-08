@@ -52,6 +52,18 @@ Public Class ReplicaTrx
         Return objReplicaTrx
     End Function
 
+    Public Overrides ReadOnly Property intTrxTypeSortKey As Integer
+        Get
+            Return 1
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property strDocNumberSortKey As String
+        Get
+            Return ""
+        End Get
+    End Property
+
     Public Function objGetTrxManager() As ReplicaTrxManager
         Return New ReplicaTrxManager(Me)
     End Function

@@ -638,4 +638,17 @@ Public Class NormalTrx
             End If
         End If
     End Sub
+
+    Public Overrides ReadOnly Property intTrxTypeSortKey As Integer
+        Get
+            Return 4
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property strDocNumberSortKey As String
+        Get
+            Return Me.objFirstSplit.strInvoiceNum
+        End Get
+    End Property
+
 End Class

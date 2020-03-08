@@ -188,15 +188,13 @@ Public Class Register
     Private Function lngMoveUp(ByVal lngEndIndex As Integer, ByVal objTrx As Trx) As Integer
         Dim lngFirstLesser As Integer
         Dim lngMoveIndex As Integer
-        Dim strNewSortKey As String
-        strNewSortKey = objTrx.strSortKey
         If lngEndIndex < 0 Or lngEndIndex > (mlngTrxUsed - 1) Then
             gRaiseError("Register.lngMoveUp passed invalid lngEndIndex=" & lngEndIndex)
         End If
         'When the loop is done, lngFirstLesser will equal the largest index whose Trx
         'sort key is less than objNew.strSortKey, or zero if there is none.
         For lngFirstLesser = lngEndIndex To 1 Step -1
-            If strNewSortKey >= maobjTrx(lngFirstLesser).strSortKey Then
+            If Register.intSortComparison(objTrx, maobjTrx(lngFirstLesser)) >= 0 Then
                 Exit For
             End If
         Next
@@ -223,15 +221,13 @@ Public Class Register
     Private Function lngMoveDown(ByVal lngStartIndex As Integer, ByVal objTrx As Trx) As Integer
         Dim lngFirstGreater As Integer
         Dim lngMoveIndex As Integer
-        Dim strNewSortKey As String
         If lngStartIndex < 2 Or lngStartIndex > mlngTrxUsed Then
             gRaiseError("Register.lngMoveDown passed invalid lngStartIndex " & lngStartIndex)
         End If
-        strNewSortKey = objTrx.strSortKey
         'When the loop is done, lngFirstGreater will equal the smallest index whose Trx
         'sort key is greater than objNew.strSortKey, or zero if there is none.
         For lngFirstGreater = lngStartIndex To mlngTrxUsed
-            If strNewSortKey <= maobjTrx(lngFirstGreater).strSortKey Then
+            If Register.intSortComparison(objTrx, maobjTrx(lngFirstGreater)) <= 0 Then
                 Exit For
             End If
         Next
@@ -291,21 +287,19 @@ Public Class Register
 
     Private Function lngUpdateMove(ByVal lngOldIndex As Integer) As Integer
         Dim objTrx As Trx
-        Dim strNewSortKey As String
 
         objTrx = Me.objTrx(lngOldIndex)
         objTrx.SetSortKey()
-        strNewSortKey = objTrx.strSortKey
 
         If lngOldIndex > 1 Then
-            If strNewSortKey < Me.objTrx(lngOldIndex - 1).strSortKey Then
+            If Register.intSortComparison(objTrx, Me.objTrx(lngOldIndex - 1)) < 0 Then
                 lngUpdateMove = lngMoveUp(lngOldIndex - 1, objTrx)
                 Exit Function
             End If
         End If
 
         If lngOldIndex < mlngTrxUsed Then
-            If strNewSortKey > Me.objTrx(lngOldIndex + 1).strSortKey Then
+            If Register.intSortComparison(objTrx, Me.objTrx(lngOldIndex + 1)) > 0 Then
                 lngUpdateMove = lngMoveDown(lngOldIndex + 1, objTrx)
                 Exit Function
             End If
@@ -313,6 +307,30 @@ Public Class Register
 
         lngUpdateMove = lngOldIndex
 
+    End Function
+
+    Public Shared Function intSortComparison(ByVal objTrx1 As Trx, ByVal objTrx2 As Trx) As Integer
+        Dim result As Integer = objTrx1.datDate.CompareTo(objTrx2.datDate)
+        If result <> 0 Then
+            Return result
+        End If
+        result = Decimal.Compare(If(objTrx1.curAmount > 0, 0D, 1D), If(objTrx2.curAmount > 0, 0D, 1D))
+        If result <> 0 Then
+            Return result
+        End If
+        result = objTrx1.intTrxTypeSortKey.CompareTo(objTrx2.intTrxTypeSortKey)
+        If result <> 0 Then
+            Return result
+        End If
+        result = String.CompareOrdinal(objTrx1.strNumber, objTrx2.strNumber)
+        If result <> 0 Then
+            Return result
+        End If
+        result = String.CompareOrdinal(objTrx1.strDescription, objTrx2.strDescription)
+        If result <> 0 Then
+            Return result
+        End If
+        Return String.CompareOrdinal(objTrx1.strDocNumberSortKey, objTrx2.strDocNumberSortKey)
     End Function
 
     Friend Sub ClearFirstAffected()
