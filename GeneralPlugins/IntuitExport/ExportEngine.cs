@@ -8,17 +8,41 @@ using Willowsoft.CheckBook.PluginCore;
 
 namespace Willowsoft.CheckBook.GeneralPlugins
 {
+    /// <summary>
+    /// Generate an Intuit IIF file containing all account definitions,
+    /// payee definitions, and transaction information for all transcations
+    /// in all accounts in this software between a pair of dates. Skips
+    /// retained earnings accounts and personal accounts.
+    /// The generated account and payee names will automatically be modified
+    /// as needed to fit within the limitations of Quickbooks and avoid
+    /// duplicate names during that adjustment. Mostly this means that
+    /// names will be shortened, and where this would create duplicate names
+    /// it replaces the end of the name with a number. The target Quickbooks
+    /// database may optionally already have some account definitions you
+    /// wish to use instead of creating new ones. This can be accomodated
+    /// by passing appropriately populated BalanceSheetMaps and CategoryMaps
+    /// objects. These "maps" are dictionaries that supply the name mapping
+    /// between this software and Quickbooks.
+    /// </summary>
     public class ExportEngine
     {
         private IHostUI HostUI;
         private Company Company;
         public DateTime StartDate;
         public DateTime EndDate;
+        // The balance sheet map assigned by the caller.
+        // ExportEngine does not change the contents of this dictionary.
         public Dictionary<string, BalanceSheetMap> BalanceSheetMaps;
+        // The category map assigned by the caller. 
+        // ExportEngine does not change the contents of this dictionary.
         public Dictionary<string, CategoryMap> CategoryMaps;
+        // Payee (customer, vendor and other) list, keyed by normalized payee name.
         private Dictionary<string, PayeeDef> Payees;
+        // Category list, keyed by category key (not name).
+        // Includes balance sheet accounts.
         private Dictionary<string, CatDef> Categories;
-        CategoryTranslator CatTrans;
+        // Income, expense, and balance sheet accounts.
+        private CategoryTranslator CatTrans;
         private string OutputPath_;
         private System.IO.TextWriter OutputWriter;
 
@@ -46,8 +70,8 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         {
             HostUI = hostUI;
             Company = HostUI.objCompany;
-            BalanceSheetMaps = new Dictionary<string, BalanceSheetMap>();
-            CategoryMaps = new Dictionary<string, CategoryMap>();
+            BalanceSheetMaps = null;
+            CategoryMaps = null;
             Payees = new Dictionary<string, PayeeDef>();
             Categories = new Dictionary<string, CatDef>();
             CatTrans = HostUI.objCompany.objCategories;
@@ -71,6 +95,11 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             get { return OutputPath_; }
         }
 
+        /// <summary>
+        /// Scan all transactions before generating any output. Used to assemble
+        /// the list of account and payee names, and resolve things like
+        /// duplicate names.
+        /// </summary>
         private void AnalyzeTransactions()
         {
             // We collect all trx and sort them in date order before analyzing
@@ -133,6 +162,12 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 (acct.lngSubType == Account.SubType.Equity_RetainedEarnings);
         }
 
+        /// <summary>
+        /// Determine all names associated with the transaction, and add any
+        /// new ones to the list that must be defined in the IIF file.
+        /// Does not actually output anything to the IIF file here.
+        /// </summary>
+        /// <param name="trx"></param>
         private void AnalyzeNormalTrx(NormalTrx trx)
         {
             PayeeDef payee;
@@ -158,36 +193,56 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             foreach (TrxSplit split in trx.colSplits)
             {
                 CatDef cat;
+                // Create CatDef objects for balance sheet accounts as well as income/expense accounts.
                 string catExportKey = GetCatExportKey(split.strCategoryKey);
                 if (!Categories.TryGetValue(catExportKey, out cat))
                 {
                     string catName = CatTrans.strKeyToValue1(split.strCategoryKey);
+                    // objCategories includes balance sheet accounts
                     StringTransElement catElem = this.Company.objCategories.get_objElement(this.Company.objCategories.intLookupKey(split.strCategoryKey));
-                    string catType;
-                    if (!catElem.colValues.TryGetValue(CategoryTranslator.strTypeKey, out catType))
-                        catType = CategoryTranslator.strTypeOfficeExpense;
                     // A null intuitCatType value will cause this category to NOT be output to the IIF file.
                     // This is how we prevent categories that are actually asset, liability and equity accounts
                     // from being output to the IIF as income, expense or COGS account.
-                    string intuitCatType = null;
-                    if (catType == CategoryTranslator.strTypeCOGS)
-                        intuitCatType = "COGS";
-                    else if (catType == CategoryTranslator.strTypeOtherIncome)
-                        intuitCatType = "EXINC";
-                    else if (catType == CategoryTranslator.strTypeOtherExpense)
-                        intuitCatType = "EXEXP";
-                    else if (catType == CategoryTranslator.strTypeTaxes)
-                        intuitCatType = "EXEXP";
-                    else if (catName.ToUpper().StartsWith("E:"))
-                        intuitCatType = "EXP";
-                    else if (catName.ToUpper().StartsWith("I:"))
-                        intuitCatType = "INC";
+                    string intuitCatType;
+                    if (split.strCategoryKey.IndexOf('.') >= 0)
+                    {
+                        intuitCatType = null;
+                    }
+                    else
+                    {
+                        string catType;
+                        intuitCatType = null;
+                        if (!catElem.colValues.TryGetValue(CategoryTranslator.strTypeKey, out catType))
+                            catType = CategoryTranslator.strTypeOfficeExpense;
+                        if (catType == CategoryTranslator.strTypeCOGS)
+                            intuitCatType = "COGS";
+                        else if (catType == CategoryTranslator.strTypeOtherIncome)
+                            intuitCatType = "EXINC";
+                        else if (catType == CategoryTranslator.strTypeOtherExpense)
+                            intuitCatType = "EXEXP";
+                        else if (catType == CategoryTranslator.strTypeTaxes)
+                            intuitCatType = "EXEXP";
+                        else if (catName.ToUpper().StartsWith("E:"))
+                            intuitCatType = "EXP";
+                        else if (catName.ToUpper().StartsWith("I:"))
+                            intuitCatType = "INC";
+                    }
                     cat = new CatDef(catName, MakeCatExportName(split, catName), intuitCatType);
                     Categories.Add(catExportKey, cat);
                 }
             }
         }
 
+        /// <summary>
+        /// Construct the account name to write to the export file for the specified split.
+        /// Split category may be an income/expense account, or a balance sheet account.
+        /// The resulting name is guaranteed to not exist in this.Categories, and the result
+        /// is generally added to this.Categories by the caller.
+        /// This is how unique names are constructed, FROM A SPLIT, to add to this.Categories.
+        /// </summary>
+        /// <param name="split"></param>
+        /// <param name="catName"></param>
+        /// <returns></returns>
         private string MakeCatExportName(TrxSplit split, string catName)
         {
             string exportName;
@@ -196,44 +251,65 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             {
                 exportName = GetPreExistingIntuitCatName(catName);
                 if (exportName == null)
-                    exportName = MakeUniqueCategoryExportName(catName);
+                    exportName = MakeUniqueAccountExportName(catName.Length > 2 ? catName.Substring(2) : catName);
             }
             else
             {
                 int acctKey = int.Parse(split.strCategoryKey.Substring(0, periodIndex));
                 Account matchingAcct = Company.colAccounts.First(acct => acct.intKey == acctKey);
-                exportName = GetPreExistingIntuitAccountName(matchingAcct);
-                if (exportName == null)
-                    exportName = MakeValidExportAccountName(matchingAcct);
+                exportName = MakeBalanceSheetExportName(matchingAcct);
             }
             return exportName;
         }
 
-        private string MakeUniqueCategoryExportName(string rawInputName)
+        /// <summary>
+        /// Similar to MakeCatExportName(), but for balance sheet accounts ONLY.
+        /// </summary>
+        /// <param name="acct"></param>
+        /// <returns></returns>
+        private string MakeBalanceSheetExportName(Account acct)
         {
-            int maxLength = 40;
+            string exportName = GetPreExistingIntuitAccountName(acct);
+            if (exportName == null)
+                exportName = MakeUniqueAccountExportName(acct.strTitle);
+            return exportName;
+        }
+
+        /// <summary>
+        /// Deep down, this is how a unique export name is obtained to add to this.Categories.
+        /// Always returns a name short enough to be a valid Quickbooks account name.
+        /// Truncates rawInputName as necessary, and adds a sequence number as necessary, 
+        /// in order to construct a valid Quickbooks name that is also unique.
+        /// </summary>
+        /// <param name="rawInputName">
+        /// The input account name, like "Checking" or "Auto:Gas".
+        /// Names from the category list must have any single letter prefix and
+        /// a colon removed before passing, like "E:".
+        /// </param>
+        /// <returns></returns>
+        private string MakeUniqueAccountExportName(string rawInputName)
+        {
+            int maxQBAccountNameLen = 31;
             string normalizedInputName = rawInputName.Replace(':', '-');
-            if (normalizedInputName.Length > 2)
-                normalizedInputName = normalizedInputName.Substring(2);
             string candidateName = normalizedInputName;
-            if (candidateName.Length > maxLength)
-                candidateName = normalizedInputName.Substring(0, maxLength);
+            if (candidateName.Length > maxQBAccountNameLen)
+                candidateName = normalizedInputName.Substring(0, maxQBAccountNameLen);
             for (int suffix = 2; ; suffix++)
             {
-                bool catFound = false;
+                bool acctFound = false;
                 foreach (CatDef cat in Categories.Values)
                 {
                     if (cat.ExportName == candidateName)
                     {
-                        catFound = true;
+                        acctFound = true;
                         break;
                     }
                 }
-                if (!catFound)
+                if (!acctFound)
                     return candidateName;
                 candidateName = normalizedInputName;
-                if (candidateName.Length > (maxLength - 3))
-                    candidateName = candidateName.Substring(0, (maxLength - 3));
+                if (candidateName.Length > (maxQBAccountNameLen - 3))
+                    candidateName = candidateName.Substring(0, (maxQBAccountNameLen - 3));
                 candidateName = candidateName + suffix.ToString();
             }
         }
@@ -243,7 +319,12 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             int periodIndex = catKey.IndexOf('.');
             if (periodIndex < 0)
                 return catKey;
-            return catKey.Substring(0, periodIndex + 1) + "Act";
+            return GetBalanceSheetExportKey(catKey.Substring(0, periodIndex));
+        }
+
+        private string GetBalanceSheetExportKey(string acctKey)
+        {
+            return acctKey + ".Act";
         }
 
         private string TrimPayeeName(string originalName)
@@ -270,11 +351,11 @@ namespace Willowsoft.CheckBook.GeneralPlugins
 
         private string MakeUniquePayeeExportName(string rawInputName)
         {
-            int maxLength = 40;
+            int maxQBOtherNameLen = 41;
             string normalizedInputName = rawInputName.Replace(':', '-').Replace(",", "");
             string candidateName = normalizedInputName;
-            if (candidateName.Length > maxLength)
-                candidateName = normalizedInputName.Substring(0, maxLength);
+            if (candidateName.Length > maxQBOtherNameLen)
+                candidateName = normalizedInputName.Substring(0, maxQBOtherNameLen);
             for (int suffix = 2; ; suffix++)
             {
                 bool payeeFound = false;
@@ -289,15 +370,10 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 if (!payeeFound)
                     return candidateName;
                 candidateName = normalizedInputName;
-                if (candidateName.Length > (maxLength - 3))
-                    candidateName = candidateName.Substring(0, (maxLength - 3));
+                if (candidateName.Length > (maxQBOtherNameLen - 3))
+                    candidateName = candidateName.Substring(0, (maxQBOtherNameLen - 3));
                 candidateName = candidateName + suffix.ToString();
             }
-        }
-
-        private string MakeValidExportAccountName(Account acct)
-        {
-            return acct.strTitle;
         }
 
         private void OutputAccounts()
@@ -380,7 +456,17 @@ namespace Willowsoft.CheckBook.GeneralPlugins
 
         private void OutputAccount(Account acct, string acctType, string extra = "")
         {
-            OutputLine("ACCNT\t" + MakeValidExportAccountName(acct) + "\t" + acctType);
+            CatDef cat;
+            string balExportKey = GetBalanceSheetExportKey(acct.intKey.ToString());
+            if (!Categories.TryGetValue(balExportKey, out cat))
+            {
+                // We probably don't need to add this CatDef to Categories, because
+                // nothing will search for at after this point in the export, but
+                // we add it for consistency.
+                cat = new CatDef(acct.strTitle, MakeBalanceSheetExportName(acct), null);
+                Categories.Add(balExportKey, cat);
+            }
+            OutputLine("ACCNT\t" + cat.ExportName + "\t" + acctType);
         }
 
         private void OutputCategories()
@@ -453,38 +539,36 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         {
             PayeeDef payee = Payees[TrimPayeeName(trx.strDescription).ToLower()];
             TrxOutputType usage = GetPayeeUsage(trx);
-            string registerAccountName = GetPreExistingIntuitAccountName(trx.objReg.objAccount);
-            if (registerAccountName == null)
-                registerAccountName = trx.objReg.objAccount.strTitle;
+            string exportAccountName = Categories[GetBalanceSheetExportKey(trx.objReg.objAccount.intKey.ToString())].ExportName;
             switch (usage)
             {
                 case TrxOutputType.Check:
                     if (ContainsPayablesSplit(trx.colSplits))
-                        OutputTransactionPerSplit(trx, registerAccountName, payee, "CHECK", usePayeeOnSplit: SplitIsToAccountsPayable);
+                        OutputTransactionPerSplit(trx, exportAccountName, payee, "CHECK", usePayeeOnSplit: SplitIsToAccountsPayable);
                     else
-                        OutputOneTransaction(trx, registerAccountName, payee, "CHECK", usePayeeOnTrx: true);
+                        OutputOneTransaction(trx, exportAccountName, payee, "CHECK", usePayeeOnTrx: true);
                     break;
                 case TrxOutputType.Deposit:
-                    OutputOneTransaction(trx, registerAccountName, payee, "DEPOSIT", usePayeeOnTrx: false);
+                    OutputOneTransaction(trx, exportAccountName, payee, "DEPOSIT", usePayeeOnTrx: false);
                     break;
                 case TrxOutputType.JournalEntry:
                     if (ContainsPayablesSplit(trx.colSplits))
-                        OutputTransactionPerSplit(trx, registerAccountName, payee, "GENERAL JOURNAL", usePayeeOnSplit: SplitIsToAccountsPayable);
+                        OutputTransactionPerSplit(trx, exportAccountName, payee, "GENERAL JOURNAL", usePayeeOnSplit: SplitIsToAccountsPayable);
                     else
-                        OutputOneTransaction(trx, registerAccountName, payee, "GENERAL JOURNAL", usePayeeOnTrx: true);
+                        OutputOneTransaction(trx, exportAccountName, payee, "GENERAL JOURNAL", usePayeeOnTrx: true);
                     break;
                 case TrxOutputType.Bill:
-                    OutputOneTransaction(trx, registerAccountName, payee, "BILL", usePayeeOnTrx: true);
+                    OutputOneTransaction(trx, exportAccountName, payee, "BILL", usePayeeOnTrx: true);
                     break;
                 case TrxOutputType.BillCredit:
-                    OutputOneTransaction(trx, registerAccountName, payee, "BILL REFUND", usePayeeOnTrx: true);
+                    OutputOneTransaction(trx, exportAccountName, payee, "BILL REFUND", usePayeeOnTrx: true);
                     break;
             }
         }
 
-        private void OutputOneTransaction(NormalTrx trx, string registerAccountName, PayeeDef payee, string intuitTrxType, bool usePayeeOnTrx)
+        private void OutputOneTransaction(NormalTrx trx, string exportAccountName, PayeeDef payee, string intuitTrxType, bool usePayeeOnTrx)
         {
-            OutputNormalTrx(trx, intuitTrxType, registerAccountName, usePayeeOnTrx ? payee.ExportName : "", trx.curAmount);
+            OutputNormalTrx(trx, intuitTrxType, exportAccountName, usePayeeOnTrx ? payee.ExportName : "", trx.curAmount);
             foreach (TrxSplit split in trx.colSplits)
             {
                 OutputSplit(split, intuitTrxType, "");
@@ -492,14 +576,14 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             OutputLine("ENDTRNS");
         }
 
-        private void OutputTransactionPerSplit(NormalTrx trx, string registerAccountName, PayeeDef payee, 
+        private void OutputTransactionPerSplit(NormalTrx trx, string exportAccountName, PayeeDef payee, 
             string intuitTrxType, Func<TrxSplit, bool> usePayeeOnSplit)
         {
             foreach (TrxSplit split in trx.colSplits)
             {
                 // Notice we pass the split amount instead of the trx amount, because every split
                 // of this transaction type must be a separate transaction in an IIF file.
-                OutputNormalTrx(trx, intuitTrxType, registerAccountName, payee.ExportName, split.curAmount);
+                OutputNormalTrx(trx, intuitTrxType, exportAccountName, payee.ExportName, split.curAmount);
                 OutputSplit(split, intuitTrxType, usePayeeOnSplit(split) ? payee.ExportName : "");
                 OutputLine("ENDTRNS");
             }
@@ -519,9 +603,9 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             return Company.colAccounts.First(acct => acct.intKey == acctKey).lngSubType == Account.SubType.Liability_AccountsPayable;
         }
 
-        private void OutputNormalTrx(NormalTrx trx, string transType, string registerAccountName, string payeeName, decimal amount)
+        private void OutputNormalTrx(NormalTrx trx, string transType, string exportAccountName, string payeeName, decimal amount)
         {
-            OutputLine("TRNS\t\t" + transType + "\t" + trx.datDate.ToString("MM/dd/yyyy") + "\t" + registerAccountName +
+            OutputLine("TRNS\t\t" + transType + "\t" + trx.datDate.ToString("MM/dd/yyyy") + "\t" + exportAccountName +
                 "\t" + payeeName + "\t" + amount.ToString("##############0.00") +
                 "\t" + trx.strNumber + "\t" + trx.strMemo + "\tY\tN");
         }
@@ -583,6 +667,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         {
             public string Name;
             public string ExportName;
+            // Null for balance sheet accounts
             public string IntuitCatType;
 
             public CatDef(string name, string exportName, string intuitCatType)
