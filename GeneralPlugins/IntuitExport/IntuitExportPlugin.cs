@@ -33,8 +33,10 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                         return;
                     }
                 }
-                engine.Run();
-                HostUI.InfoMessageBox("Exported to " + engine.OutputPath);
+                if (engine.Run())
+                    HostUI.InfoMessageBox("Exported to " + engine.OutputPath);
+                else
+                    HostUI.ErrorMessageBox("Export canceled.");
             }
             catch (Exception ex)
             {

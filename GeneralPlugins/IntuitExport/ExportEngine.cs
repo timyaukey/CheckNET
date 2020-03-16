@@ -77,9 +77,14 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             CatTrans = HostUI.objCompany.objCategories;
         }
 
-        public void Run()
+        /// <summary>
+        /// Execute the export.
+        /// </summary>
+        /// <returns>Return "true" if the export completed successfully.</returns>
+        public bool Run()
         {
-            AnalyzeTransactions();
+            if (!AnalyzeTransactions())
+                return false;
             OutputPath_ = System.IO.Path.Combine(Company.strReportPath(), "IntuitExport.iif");
             using (OutputWriter = new System.IO.StreamWriter(OutputPath_))
             {
@@ -88,6 +93,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 OutputPayees();
                 OutputTransactions();
             }
+            return true;
         }
 
         public string OutputPath
@@ -100,7 +106,8 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         /// the list of account and payee names, and resolve things like
         /// duplicate names.
         /// </summary>
-        private void AnalyzeTransactions()
+        /// <returns>Returns "true" unless there was a problem or the user canceled.</returns>
+        private bool AnalyzeTransactions()
         {
             // We collect all trx and sort them in date order before analyzing
             // so that trx payee names and category names are given consistent
@@ -116,13 +123,33 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 {
                     foreach (Register reg in acct.colRegisters)
                     {
+                        bool fakeReportedInReg = false;
                         foreach (Trx trx in reg.colAllTrx())
                         {
                             if (trx.datDate > EndDate)
                                 break;
                             NormalTrx normalTrx = trx as NormalTrx;
-                            if (normalTrx != null && !normalTrx.blnFake)
-                                normalTrxToAnalyze.Add(normalTrx);
+                            if (normalTrx != null)
+                            {
+                                if (normalTrx.blnFake)
+                                {
+                                    if (!fakeReportedInReg)
+                                    {
+                                        var fakeFoundResponse = HostUI.OkCancelMessageBox("Register \"" + reg.strTitle + "\" contains fake transaction(s) " +
+                                            "dated on or before the end date of this export. These transactions will not be included " +
+                                            "in this export, and likely will be missed in future exports as well even if their " +
+                                            "\"fake\" box is unchecked because future exports will almost always be for dates " +
+                                            "after this export. In general you should move all fake transactions past the export end " +
+                                            "date before doing an export." + Environment.NewLine + Environment.NewLine +
+                                            "Are you sure you want to continue with this export?");
+                                        if (fakeFoundResponse != System.Windows.Forms.DialogResult.OK)
+                                            return false;
+                                        fakeReportedInReg = true;
+                                    }
+                                }
+                                else
+                                    normalTrxToAnalyze.Add(normalTrx);
+                            }
                         }
                     }
                 }
@@ -148,6 +175,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             {
                 AnalyzeNormalTrx(trx);
             }
+            return true;
         }
 
         private bool SkipAccount(Account acct)
