@@ -252,7 +252,7 @@ Friend Class CBMainForm
     End Property
 
     Private Function blnAddNormalTrx(ByVal objTrx As NormalTrx,
-                                    ByVal datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
+                                    ByRef datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrx
         Using frm As TrxForm = New TrxForm()
             If frm.blnAddNormal(Me, objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
@@ -263,7 +263,7 @@ Friend Class CBMainForm
     End Function
 
     Private Function blnAddNormalTrxSilent(ByVal objTrx As NormalTrx,
-                                    ByVal datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
+                                    ByRef datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrxSilent
         Using frm As TrxForm = New TrxForm()
             If frm.blnAddNormalSilent(Me, objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
@@ -273,7 +273,7 @@ Friend Class CBMainForm
         End Using
     End Function
 
-    Private Function blnAddBudgetTrx(ByVal objReg As Register, ByVal datDefaultDate As DateTime,
+    Private Function blnAddBudgetTrx(ByVal objReg As Register, ByRef datDefaultDate As DateTime,
                                      ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddBudgetTrx
         Using frm As TrxForm = New TrxForm()
             If frm.blnAddBudget(Me, objReg, datDefaultDate, strLogTitle) Then
@@ -283,7 +283,7 @@ Friend Class CBMainForm
         Return False
     End Function
 
-    Private Function blnAddTransferTrx(ByVal objReg As Register, ByVal datDefaultDate As DateTime,
+    Private Function blnAddTransferTrx(ByVal objReg As Register, ByRef datDefaultDate As DateTime,
                                      ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddTransferTrx
         Using frm As TrxForm = New TrxForm()
             If frm.blnAddTransfer(Me, objReg, datDefaultDate, strLogTitle) Then
