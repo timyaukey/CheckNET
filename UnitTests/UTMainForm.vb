@@ -573,7 +573,7 @@ Friend Class UTMainForm
 
         With objUTReg.objReg
             .MatchNormal(101, #4/1/2000#, 20, "", 555D, False, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = ";3", "Didn't find 101 (number only match)")
+            gUTAssert(strConcatMatchResults(colMatches) = "", "Should not find 101 (number only match)")
             'Verify date range filtering. Number, amount and descr always match,
             'so date filter is the only way to fail.
             'Date out of range before.

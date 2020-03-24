@@ -729,7 +729,7 @@ Public Class Register
                     With objNormalTrx
                         blnMatched = False
                         If lngNumber <> 0 Then
-                            If strComparableCheckNumber(.strNumber) = strNumber Then
+                            If (curAmount = .curAmount Or blnLooseMatch) And strComparableCheckNumber(.strNumber) = strNumber Then
                                 blnMatched = True
                             End If
                         End If
@@ -778,14 +778,15 @@ Public Class Register
     ''' <param name="strInput"></param>
     ''' <returns></returns>
     Private Function strComparableCheckNumber(ByVal strInput As String) As String
+        Dim CheckNumDigitsToUse As Integer = 3
         If Val(strInput) = 0 Then
             Return strInput
         End If
-        If Len(strInput) < 4 Then
-            Return strInput.PadLeft(4, "0"c)
+        If Len(strInput) < CheckNumDigitsToUse Then
+            Return strInput.PadLeft(CheckNumDigitsToUse, "0"c)
         End If
-        If Len(strInput) > 4 Then
-            Return Right(strInput, 4)
+        If Len(strInput) > CheckNumDigitsToUse Then
+            Return Right(strInput, CheckNumDigitsToUse)
         End If
         Return strInput
     End Function
