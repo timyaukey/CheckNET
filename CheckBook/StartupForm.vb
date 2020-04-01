@@ -7,9 +7,10 @@ Friend Class StartupForm
     Public WithEvents mobjAccount As Account
     Private mobjHostUI As IHostUI
 
-    Public Sub Init(objHostUI As IHostUI)
+    Public Sub Init(ByVal objHostUI As IHostUI, ByVal strUserLicenseStatement As String)
         mobjHostUI = objHostUI
         lblTitle.Text = mobjHostUI.strSoftwareName
+        lblUserLicenseStatement.Text = strUserLicenseStatement
         Dim strSplash As String = mobjHostUI.strSplashImagePath
         Dim objImage As Image = Image.FromFile(strSplash)
         'Image will be stretched to aspect ratio 4:3 (width:height)

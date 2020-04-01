@@ -25,6 +25,7 @@
         Me.lblCopyright = New System.Windows.Forms.Label()
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.picSplash = New System.Windows.Forms.PictureBox()
+        Me.lblUserLicenseStatement = New System.Windows.Forms.Label()
         CType(Me.picSplash, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -36,7 +37,7 @@
         Me.lblMessage.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblMessage.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblMessage.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblMessage.Location = New System.Drawing.Point(12, 427)
+        Me.lblMessage.Location = New System.Drawing.Point(9, 408)
         Me.lblMessage.Name = "lblMessage"
         Me.lblMessage.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblMessage.Size = New System.Drawing.Size(440, 19)
@@ -77,6 +78,22 @@
         Me.picSplash.TabIndex = 3
         Me.picSplash.TabStop = False
         '
+        'lblUserLicenseStatement
+        '
+        Me.lblUserLicenseStatement.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblUserLicenseStatement.BackColor = System.Drawing.SystemColors.Control
+        Me.lblUserLicenseStatement.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblUserLicenseStatement.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblUserLicenseStatement.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.lblUserLicenseStatement.Location = New System.Drawing.Point(9, 427)
+        Me.lblUserLicenseStatement.Name = "lblUserLicenseStatement"
+        Me.lblUserLicenseStatement.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblUserLicenseStatement.Size = New System.Drawing.Size(440, 19)
+        Me.lblUserLicenseStatement.TabIndex = 4
+        Me.lblUserLicenseStatement.Text = "User license statement..."
+        Me.lblUserLicenseStatement.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
         'StartupForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 14.0!)
@@ -85,6 +102,7 @@
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
         Me.ClientSize = New System.Drawing.Size(464, 475)
         Me.ControlBox = False
+        Me.Controls.Add(Me.lblUserLicenseStatement)
         Me.Controls.Add(Me.picSplash)
         Me.Controls.Add(Me.lblTitle)
         Me.Controls.Add(Me.lblCopyright)
@@ -107,5 +125,6 @@
     Friend WithEvents lblCopyright As Label
     Friend WithEvents lblTitle As Label
     Friend WithEvents picSplash As PictureBox
+    Public WithEvents lblUserLicenseStatement As Label
 #End Region
 End Class

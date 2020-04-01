@@ -26,9 +26,18 @@ Friend Class CBMainForm
             blnCancelStart = False
             mobjHostUI = Me
 
+            Dim strUserLicensePath As String = System.IO.Path.Combine(Company.strDefaultRootFolder(mobjHostUI.strSoftwareName), "user.lic")
+            Dim strUserLicenseStatement As String = "Licensed for non-commercial use only"
+            If System.IO.File.Exists(strUserLicensePath) Then
+                Using licenseStream As System.IO.Stream = New System.IO.FileStream(strUserLicensePath, FileMode.Open)
+                    Dim objValues As Dictionary(Of String, String) = Willowsoft.TamperProofData.LicenseReader.Read(licenseStream, New UserLicenseValidator())
+                    strUserLicenseStatement = "Licensed to " + objValues("UserName")
+                End Using
+            End If
+
             Me.Text = strSoftwareTitle
             frmStartup = New StartupForm
-            frmStartup.Init(Me)
+            frmStartup.Init(Me, strUserLicenseStatement)
             frmStartup.Show()
             frmStartup.ShowStatus("Initializing")
 

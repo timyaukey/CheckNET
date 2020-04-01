@@ -93,6 +93,9 @@
     <Reference Include="System.XML">
       <Name>System.XML</Name>
     </Reference>
+    <Reference Include="Willowsoft.TamperProofData, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Willowsoft.TamperProofData.1.0.0\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -375,6 +378,7 @@
     <Compile Include="TrxTypeListForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserLicenseValidator.vb" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -522,6 +526,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BudgetDashboard\BudgetDashboard.csproj">

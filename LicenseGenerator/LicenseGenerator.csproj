@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Willowsoft.CheckBook.LicenseGenerator</AssemblyName>
+    <RootNamespace>Willowsoft.CheckBook.LicenseGenerator</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Willowsoft.TamperProofData" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>
