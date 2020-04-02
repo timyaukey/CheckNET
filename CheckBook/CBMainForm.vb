@@ -135,6 +135,7 @@ Friend Class CBMainForm
     Private Property objInvoiceImportMenu As MenuBuilder Implements IHostSetup.objInvoiceImportMenu
     Private Property objReportMenu As MenuBuilder Implements IHostSetup.objReportMenu
     Private Property objToolMenu As MenuBuilder Implements IHostSetup.objToolMenu
+    Private Property objHelpMenu As MenuBuilder Implements IHostSetup.objHelpMenu
 
     Public Iterator Function objSearchHandlers() As IEnumerable(Of ISearchHandler) Implements IHostUI.objSearchHandlers
         Yield New TrxSearchHandler(Me, "Description", Function(ByVal objTrx As Trx) objTrx.strDescription)
@@ -169,6 +170,14 @@ Friend Class CBMainForm
         objInvoiceImportMenu = New MenuBuilder(mnuImportInvoices)
         objReportMenu = New MenuBuilder(mnuRpt)
         objToolMenu = New MenuBuilder(mnuTools)
+        objHelpMenu = New MenuBuilder(mnuHelp)
+
+        Dim strPlugInPath As String = System.IO.Path.GetFileName(Me.GetType().Assembly.Location)
+        objHelpMenu.Add(New MenuElementAction("Introduction", 1, AddressOf HelpIntro, strPlugInPath))
+        objHelpMenu.Add(New MenuElementAction("Setup and Configuration", 2, AddressOf HelpSetup, strPlugInPath))
+        objHelpMenu.Add(New MenuElementAction("Importing Transactions", 3, AddressOf HelpImporting, strPlugInPath))
+        objHelpMenu.Add(New MenuElementAction("Budgeting Tools", 4, AddressOf HelpBudget, strPlugInPath))
+        objHelpMenu.Add(New MenuElementAction("Technical Notes", 10000, AddressOf HelpTechnical, strPlugInPath))
 
         LoadPluginsFromAssembly(Assembly.GetEntryAssembly())
         Dim strEntryAssembly As String = Assembly.GetEntryAssembly().Location
@@ -183,6 +192,7 @@ Friend Class CBMainForm
         objInvoiceImportMenu.AddElementsToMenu()
         objReportMenu.AddElementsToMenu()
         objToolMenu.AddElementsToMenu()
+        objHelpMenu.AddElementsToMenu()
     End Sub
 
     Private Sub LoadPluginsFromAssembly(ByVal objAssembly As Assembly)
@@ -354,6 +364,43 @@ Friend Class CBMainForm
             Return Path.Combine(strFolder, "AltSplash.jpg")
         End Get
     End Property
+
+    Private Sub HelpIntro(ByVal sender As Object, ByVal e As EventArgs)
+        HelpShowFile("HelpIntro.html")
+    End Sub
+
+    Private Sub HelpSetup(ByVal sender As Object, ByVal e As EventArgs)
+        HelpShowFile("HelpSetup.html")
+    End Sub
+
+    Private Sub HelpImporting(ByVal sender As Object, ByVal e As EventArgs)
+        HelpShowFile("HelpImporting.html")
+    End Sub
+
+    Private Sub HelpBudget(ByVal sender As Object, ByVal e As EventArgs)
+        HelpShowFile("HelpBudget.html")
+    End Sub
+
+    Private Sub HelpTechnical(ByVal sender As Object, ByVal e As EventArgs)
+        HelpShowFile("HelpTechnical.html")
+    End Sub
+
+    Private Sub HelpShowFile(ByVal strHtmlFile As String) Implements IHostUI.ShowHelp
+        Try
+            Dim objProcessInfo As System.Diagnostics.ProcessStartInfo = New ProcessStartInfo()
+            Dim strFolder As String = System.IO.Path.GetDirectoryName(Me.GetType().Assembly.Location)
+            strFolder = System.IO.Path.Combine(strFolder, "Help")
+            objProcessInfo.FileName = System.IO.Path.Combine(strFolder, strHtmlFile)
+            If Not System.IO.File.Exists(objProcessInfo.FileName) Then
+                mobjHostUI.ErrorMessageBox("Could not find help file " + objProcessInfo.FileName)
+                Return
+            End If
+            objProcessInfo.UseShellExecute = True
+            System.Diagnostics.Process.Start(objProcessInfo)
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
+    End Sub
 
     Public Sub mnuListBudgets_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuListBudgets.Click
         Dim frm As ListEditorForm

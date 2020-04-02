@@ -42,8 +42,8 @@
         Me.mnuFile = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuFileShowReg = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuFileSave = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuFileExit = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuFilePlugins = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuFileExit = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuImport = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuImportBank = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuImportChecks = New System.Windows.Forms.ToolStripMenuItem()
@@ -66,12 +66,13 @@
         Me.mnuDeleteUserAccount = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuRepairUserAccounts = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuWindows = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuHelp = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuMain.SuspendLayout()
         Me.SuspendLayout()
         '
         'mnuMain
         '
-        Me.mnuMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuFile, Me.mnuImport, Me.mnuTools, Me.mnuRpt, Me.mnuSetup, Me.mnuWindows})
+        Me.mnuMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuFile, Me.mnuImport, Me.mnuTools, Me.mnuRpt, Me.mnuSetup, Me.mnuWindows, Me.mnuHelp})
         Me.mnuMain.Location = New System.Drawing.Point(0, 0)
         Me.mnuMain.MdiWindowListItem = Me.mnuWindows
         Me.mnuMain.Name = "mnuMain"
@@ -99,17 +100,17 @@
         Me.mnuFileSave.Size = New System.Drawing.Size(197, 22)
         Me.mnuFileSave.Text = "Save"
         '
-        'mnuFileExit
-        '
-        Me.mnuFileExit.Name = "mnuFileExit"
-        Me.mnuFileExit.Size = New System.Drawing.Size(197, 22)
-        Me.mnuFileExit.Text = "Exit"
-        '
         'mnuFilePlugins
         '
         Me.mnuFilePlugins.Name = "mnuFilePlugins"
         Me.mnuFilePlugins.Size = New System.Drawing.Size(197, 22)
         Me.mnuFilePlugins.Text = "Plugin List"
+        '
+        'mnuFileExit
+        '
+        Me.mnuFileExit.Name = "mnuFileExit"
+        Me.mnuFileExit.Size = New System.Drawing.Size(197, 22)
+        Me.mnuFileExit.Text = "Exit"
         '
         'mnuImport
         '
@@ -147,7 +148,7 @@
         '
         Me.mnuTools.MergeAction = System.Windows.Forms.MergeAction.Remove
         Me.mnuTools.Name = "mnuTools"
-        Me.mnuTools.Size = New System.Drawing.Size(47, 20)
+        Me.mnuTools.Size = New System.Drawing.Size(46, 20)
         Me.mnuTools.Text = "Tools"
         '
         'mnuRpt
@@ -168,44 +169,44 @@
         'mnuListPayees
         '
         Me.mnuListPayees.Name = "mnuListPayees"
-        Me.mnuListPayees.Size = New System.Drawing.Size(207, 22)
+        Me.mnuListPayees.Size = New System.Drawing.Size(205, 22)
         Me.mnuListPayees.Text = "Memorized Transactions"
         '
         'mnuListCategories
         '
         Me.mnuListCategories.Name = "mnuListCategories"
-        Me.mnuListCategories.Size = New System.Drawing.Size(207, 22)
+        Me.mnuListCategories.Size = New System.Drawing.Size(205, 22)
         Me.mnuListCategories.Text = "Categories"
         '
         'mnuListBudgets
         '
         Me.mnuListBudgets.Name = "mnuListBudgets"
-        Me.mnuListBudgets.Size = New System.Drawing.Size(207, 22)
+        Me.mnuListBudgets.Size = New System.Drawing.Size(205, 22)
         Me.mnuListBudgets.Text = "Budgets"
         '
         'mnuListTrxTypes
         '
         Me.mnuListTrxTypes.Name = "mnuListTrxTypes"
-        Me.mnuListTrxTypes.Size = New System.Drawing.Size(207, 22)
+        Me.mnuListTrxTypes.Size = New System.Drawing.Size(205, 22)
         Me.mnuListTrxTypes.Text = "Transaction Import Types"
         '
         'mnuCheckFormat
         '
         Me.mnuCheckFormat.Name = "mnuCheckFormat"
-        Me.mnuCheckFormat.Size = New System.Drawing.Size(207, 22)
+        Me.mnuCheckFormat.Size = New System.Drawing.Size(205, 22)
         Me.mnuCheckFormat.Text = "Check Format"
         '
         'mnuCompanyInformation
         '
         Me.mnuCompanyInformation.Name = "mnuCompanyInformation"
-        Me.mnuCompanyInformation.Size = New System.Drawing.Size(207, 22)
+        Me.mnuCompanyInformation.Size = New System.Drawing.Size(205, 22)
         Me.mnuCompanyInformation.Text = "Company Information"
         '
         'mnuUserAccounts
         '
         Me.mnuUserAccounts.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuEnableUserAccounts, Me.mnuAddUserAccount, Me.mnuChangeCurrentPassword, Me.mnuChangeOtherPassword, Me.mnuDeleteUserAccount, Me.mnuRepairUserAccounts})
         Me.mnuUserAccounts.Name = "mnuUserAccounts"
-        Me.mnuUserAccounts.Size = New System.Drawing.Size(207, 22)
+        Me.mnuUserAccounts.Size = New System.Drawing.Size(205, 22)
         Me.mnuUserAccounts.Text = "User Logins"
         '
         'mnuEnableUserAccounts
@@ -251,6 +252,12 @@
         Me.mnuWindows.Size = New System.Drawing.Size(68, 20)
         Me.mnuWindows.Text = "Windows"
         '
+        'mnuHelp
+        '
+        Me.mnuHelp.Name = "mnuHelp"
+        Me.mnuHelp.Size = New System.Drawing.Size(44, 20)
+        Me.mnuHelp.Text = "Help"
+        '
         'CBMainForm
         '
         Me.BackColor = System.Drawing.SystemColors.AppWorkspace
@@ -285,5 +292,6 @@
     Friend WithEvents mnuCheckFormat As ToolStripMenuItem
     Friend WithEvents mnuCompanyInformation As ToolStripMenuItem
     Friend WithEvents mnuFilePlugins As ToolStripMenuItem
+    Friend WithEvents mnuHelp As ToolStripMenuItem
 #End Region
 End Class

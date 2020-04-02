@@ -13,13 +13,14 @@ namespace Willowsoft.CheckBook.BudgetDashboard
     public class DashboardPlugin : PluginBase
     {
         public DashboardPlugin(IHostUI hostUI)
-            :base(hostUI)
+            : base(hostUI)
         {
         }
 
         public override void Register(IHostSetup setup)
         {
             setup.objToolMenu.Add(new MenuElementAction("Budget Dashboard", 101, ClickHandler, GetPluginPath()));
+            setup.objHelpMenu.Add(new MenuElementAction("Budget Dashboard", 100, HelpHandler, GetPluginPath()));
         }
 
         private void ClickHandler(object sender, EventArgs e)
@@ -33,6 +34,11 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                     budgetForm.Show(HostUI, data);
                 }
             }
+        }
+
+        private void HelpHandler(object sender, EventArgs e)
+        {
+            HostUI.ShowHelp("BudgetDashboard.html");
         }
     }
 }

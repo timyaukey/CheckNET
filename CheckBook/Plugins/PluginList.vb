@@ -11,6 +11,7 @@ Public Class PluginList
         AddPlugins("Invoice Import", objHostSetup.objInvoiceImportMenu)
         AddPlugins("Reports", objHostSetup.objReportMenu)
         AddPlugins("Tools", objHostSetup.objToolMenu)
+        AddPlugins("Help", objHostSetup.objHelpMenu)
         Me.ShowDialog()
     End Sub
 

@@ -15,5 +15,6 @@ Public Interface IHostSetup
     Property objInvoiceImportMenu As MenuBuilder
     Property objReportMenu As MenuBuilder
     Property objToolMenu As MenuBuilder
+    Property objHelpMenu As MenuBuilder
 
 End Interface
