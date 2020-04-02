@@ -68,6 +68,9 @@
     <Reference Include="System.XML">
       <Name>System.XML</Name>
     </Reference>
+    <Reference Include="Willowsoft.TamperProofData, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Willowsoft.TamperProofData.1.0.0\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -181,6 +184,7 @@
     <Compile Include="UITools.vb" />
     <Compile Include="UITypeEditors\DateConverter.vb" />
     <Compile Include="UITypeEditors\StringTranslatorUIEditor.vb" />
+    <Compile Include="UserLicenseValidator.vb" />
     <Compile Include="Utilities.vb" />
     <Compile Include="VB6Xml\VB6XmlDocument.vb" />
     <Compile Include="VB6Xml\VB6XmlElement.vb" />
@@ -210,6 +214,7 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
