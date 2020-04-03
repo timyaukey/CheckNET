@@ -9,20 +9,25 @@
 <body>
     <h1>Introduction</h1>
     <p>
-        Willow Creek Checkbook is a full featured double-entry bookkeeping system;
-        one that uses the familiar "checkbook" paradigm for entering and presenting transactions.
-        It can be used to keep the "books" for your family, a business, a charity, a club,
-        or any other entity that wants to keep track of money.
+        Willow Creek Checkbook uses the familiar "checkbook" paradigm for recording and
+        displaying your financial information. Under the hood it is actually a
+        full general ledger "double entry" bookkeeping system that will keep your accountant happy
+        (if you use one), but you will always see the information presented like a paper
+        check register.
+        Willow Creek Checkbook can be used to keep the "books" for your family, a business, a charity, a club,
+        or any other entity that owns accounts or wants to keep track of money.
         The software borrows many concepts from the familiar Quicken and Quickbooks software,
-        such as transactions with categories and splits, but has many unique features as well
+        such as transactions with categories and splits, but has many unique features as well,
         particularly in the area of budgeting.
     </p>
-    <h2>Concepts</h2>
     <p>
-        Like all accounting or checkbook software, Willow Creek Checkbook organizes transactions
+        Like most other accounting or checkbook software, Willow Creek Checkbook organizes transactions
         into accounts and displays those accounts in scrollable windows that are meant to
-        look like the familiar paper "checkbook register" booklets with the date, payee,
-        amount, running balance and other information for each transaction.
+        look like the familiar paper "checkbook register" booklets. Each register entry
+        contains the date, check number, payee, amount, running balance and other information for one transaction.
+        Registers always show transactions in transaction date order, regardless of the
+        order you entered them in, and will move transactions around in the register if
+        you change the date.
     </p>
     <p>
         The software can also print checks, import transactions from banks and other sources,
@@ -41,7 +46,7 @@
     <h2>Companies</h2>
     <p>
         A "company" is the top level organizational
-        unit holding accounting information in this software. A company in this software
+        unit holding information in this software. A company in this software
         can represent a business in the real world, your household if you are using
         the software for personal finance, or any other entity you wish to keep track
         of financial information for. When you start the software,
@@ -76,6 +81,12 @@
         at the top of this page all the budgeting tools in this software? Multiple
         registers in each account is one of those tools.
     </p>
+    <p>
+        See your list of accounts and registers by clicking "File" on the main menu,
+        and then "Registers and Accounts". You can open the register window for any
+        register here, and also create new accounts and registers
+        and perform several other maintenance tasks on them.
+    </p>
     <h2>Transactions</h2>
     <p>
         Each register is made up of transactions, like bank deposits, checks written,
@@ -100,6 +111,9 @@
         that budget, the amount of the budget transaction is automatically adjusted
         downward.
     </p>
+    <p>
+        Budgeting tools will be discussed in much greater detail elsewhere in this documentation.
+    </p>
     <h2>Categories</h2>
     <p>
         Transactions that represent something happening in the real world (checks,
@@ -121,6 +135,126 @@
         in your transactions as well. Thus you can enter your mortgage payment
         into your bank account, and for the category use the liability account
         representing the loan balance.
+    </p>
+    <p>
+        Now that I've explained about using balance sheet accounts as categories,
+        there is one other transaction type that may be confusing when you first see it -
+        a "replicated" transaction. These are created automatically in another register
+        when you use a balance sheet account as the category in a split. For example,
+        you can enter a loan payment into the register for your checking account, 
+        using the loan account as the category.
+        After doing this, if you open the register for your loan account you will see
+        a replicated transaction representing the split. Though it might seem like the
+        transaction has been entered twice, in fact you are seeing the two sides of
+        the same transaction. Don't worry, it won't be counted twice anywhere.
+    </p>
+    <h2>Memorized Transactions</h2>
+    <p>
+        To simplify the task of entering transactions the software lets you create
+        "memorized transactions", which are templates from which you can create
+        many real transactions with the same information. A memorized transaction
+        can be as minimal as a payee name, so you use the same payee name all the
+        time for transactions related to that payee. For example, you could have
+        a memorized transaction for "Amazon.com". That way you won't enter half of
+        your Amazon.com transactions as "Amazon.com" and the rest as "Amazon".
+    </p>
+    <p>
+        You can add other information to your memorized transaction as well, like
+        a category, memo, and/or amount.
+    </p>
+    <p>
+        You can create both regular bank transactions and budget transactions
+        through this mechanism.
+    </p>
+    <p>
+        Memorized transactions are used in two places. First, When you are entering a
+        transaction manually type a few characters of the payee name and then press
+        "control-S" to search for a memorized transaction whose payee name
+        starts with the same characters. It will
+        fill in the rest of the transaction from the matching memorized
+        transaction, if it can find one. If it finds several matching
+        memorized transactions you will have the opportunity to choose one.
+    </p>
+    <p>
+        Second, the process of importing transactions from a bank download will
+        automatically look up the imported transaction descriptions for matching
+        information in the memorized transactions and set the payee name and
+        category from the matching memorized transaction. The technique for
+        matching imported information to memorized transactions is a little
+        more sophisticated than that, but that's generally how it works.
+    </p>
+    <p>
+        You can manage your memorized transactions by clicking "Setup" on
+        the main menu, and then "Memorized Transactions".
+    </p>
+    <h2>Generated Transactions</h2>
+    <p>
+        The software can automatically create multiple copies of the same
+        transaction over time for you, like your monthly mortgage payment.
+        These are called "generated transactions". You can choose the pattern
+        of when the transactions are dated, for example once a month, once a
+        week, every 10 days, etc.
+    </p>
+    <p>
+        A generated transaction normally always has the same amount, but
+        there are ways to change the amount over time as well. For example,
+        you can set up a generated transaction for your electricity bill that
+        is higher during the summer when you are using electricity for air
+        conditioning.
+    </p>
+    <p>
+        Generated transactions are recreated every time you open a company, so
+        you can change the definition and see those changes reflected in your
+        registers the next time you open the company. You can also tell it
+        to recreate generated transactions while you have the company open.
+    </p>
+    <p>
+        Generated transactions are always created as "fake" transactions,
+        because they haven't happened yet in the real world. You can uncheck
+        the "fake" box as needed, for example when you actually pay the bill.
+        The "fake" box will automatically be unchecked when you match the
+        transaction in a bank import. Once you uncheck "fake" on a generated
+        transaction, whether manually or by matching it to a bank import,
+        it will no longer be touched when regenerating transactions. The
+        software will be smart enough to recognize that the transaction
+        was generated at one time, and won't touch it or create a new
+        generated transaction for it.
+    </p>
+    <p>
+        You can manage your generated transactions for each register (and regenerate them)
+        by clicking "File" on the main menu and then "Registers and Accounts".
+    </p>
+    <h2>Importing Transactions</h2>
+    <p>
+        This subject will be covered in greater depth elsewhere, but the software
+        has many ways to import transactions from external sources like files
+        downloaded from your bank and data copied and pasted from spreadsheets.
+    </p>
+    <h2>Double Entry Bookkeeping</h2>
+    <p>
+        This subject has been touched on in some of the discussions above,
+        but Willow Creek Checkbook is actually a full featured double entry
+        bookkeeping system. It has a full chart of accounts, a general ledger,
+        and if you need them all the special accounts like accounts receivable
+        and various equity accounts.
+    </p>
+    <p>
+        The register you create a transaction in identifies the account for
+        one half of the double entry, and the category you choose identifies
+        the other half of the entry. In the ordinary case there are just two
+        entries, both for the amount of the transaction. The first
+        entry will be for a balance sheet account, and the second will be
+        the income or expense account represented by the category you used. If you
+        enter multiple splits, there will be a separate bookkeeping entry
+        for each one. Notice how it is impossible to create a transaction
+        that is out of balance, because one side of the transaction is
+        always computed from the other!
+    </p>
+    <p>
+        For purposes of double entry bookkeeping, "fake" and "budget" transactions
+        are simply ignored because they don't represent real world activity.
+        They are merely placeholders for things we expect to happen. The financial
+        statement reports do this automatically.
     </p>
 </body>
 </html>
