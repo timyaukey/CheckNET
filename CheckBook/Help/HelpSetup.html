@@ -4,8 +4,165 @@
 <head>
     <meta charset="utf-8" />
     <title>Setup and Configuration</title>
+    <link rel="stylesheet" type="text/css" href="Styles.css">
 </head>
 <body>
-    Hello
+    <h1>Setup and Configuration</h1>
+    <p>
+        Setting up Willow Creek Checkbook is trivial,
+        if you don't mind using a bunch of default settings.
+        When you start the software, if it does not find any companies it will
+        create one for you. This is what will happen the first time you start
+        the software.
+    </p>
+    <h2>Creating Companies</h2>
+    <p>
+        The software creates your first company automatically the first time you
+        start it, but you can create more any time you like. When you start the
+        software it will show you the list of companies it already knows about,
+        but there will also be "New" button that will let you create a new company
+        at that time.
+    </p>
+    <p>
+        New companies automatically get a default set of categories and budget types,
+        suitable for personal finance. You can change them, following the instructions
+        below.
+    </p>
+    <p>
+        There are some other company configuration settings as well, such as the
+        company name to show on reports. These can be found by clicking "Setup"
+        on the main menu, then "Company Information".
+    </p>
+    <h2>Making Backups</h2>
+    <p>
+        You should ALWAYS make regular backups of every company you use. Each company
+        is stored in a separate folder, so to make a backup of it you just need to
+        make a backup of everything in that folder.
+    </p>
+    <h2>Creating Accounts</h2>
+    <p>
+        The software automatically creates one account when it creates a company,
+        for one bank account. Each account automatically gets one register in the
+        software. You can create more accounts any time you like,
+        by clicking "File" on the main menu and then "Registers and Accounts".
+        Then click "New Account". You can use this same window to rename and
+        delete accounts, and set up their registers.
+    </p>
+    <h2>Creating Categories</h2>
+    <p>
+        When the software creates a company it automatically creates a default
+        set of categories to go along with it. These categories were chosen to
+        be suitable for tracking home finances. You can change these categories,
+        add new ones or delete ones. Click "Setup" on the main menu, then click "Categories".
+    </p>
+    <p>
+        All accounts in a company share one set of categories.
+    </p>
+    <h2>Creating Memorized Transactions</h2>
+    <p>
+        Once you've settled on a list of categories, it is reasonable to set
+        up some memorized transactions that use those categories. The software
+        comes with NO memorized transactions - you'll have to add your own.
+        Click "Setup" on the main menu, and then click "Memorized Transactions".
+    </p>
+    <p>
+        There are many pieces of information you can enter for a memorized transaction,
+        but the only required information is the name. This will be used as the description
+        or payee name when a transaction is created from the memorized transaction.
+    </p>
+    <p>
+        You can use a memorized transaction to create a new transaction, or update
+        information in an existing transaction. This will change existing information
+        in the transaction you are updating, if that information was supplied in
+        the memorized transaction. 
+    </p>
+    <p>
+        The other major use of memorized transactions is to translate payee names on transactions
+        imported from bank downloads and add category information to them. Bank downloads
+        frequently use weirdly spelled payee names on debit/credit card purchases,
+        names that are recognizable but still not what you want to use in your own records.
+        And the bank downloads don't have any category information. There
+        are fields in a memorized transaction specifically for the purpose of matching
+        the information in the bank download to the memorized transaction
+        you want to use for it, and once it finds a matching memorized transaction
+        it will apply any category given in that memorized transaction.
+    </p>
+    <h2>Creating Budget Types</h2>
+    <p>
+        The software uses "budget types" to classify amounts of money set aside for
+        particular purposes. In general, each budget type will be associated with
+        multiple budgets - each for a separate and non-overlapping range of dates.
+        For example, you may have a budget type of "entertainment", with a separate
+        budget of this type for each month. And that budget amount may be different
+        for different months. 
+    </P>
+    <p>
+        These specific budget date ranges and amounts are
+        represented by budget transactions in your registers. Amounts are used
+        out of these budget transactions by including a budget type in your regular
+        transactions, on regular transactions dated inside the date range of the
+        budget.
+    </p>
+    <p>
+        All accounts in a company share a single list of budget types.
+    </p>
+    <p>
+        The software creates a default set up budget types when you create a company,
+        but you will probably want to customize it.
+    </p>
+    <h2>Preparing To Import From the Bank</h2>
+    <p>
+        Transactions downloaded from your bank frequently have extra characters added to
+        the beginning or the end of the description or payee name, indicating something about
+        the type of transaction. These extra "codes" are generally specific to each bank.
+        For example, a bank may put the letters "ACH PMT:" in front of the payee name for
+        all ACH payments you send through the banking website. Or "DEBIT-CARD/" for debit
+        card purchases.
+    </p>
+    <p>
+        You will need to import some representative transactions from your bank to see
+        what codes your bank uses. You generally don't want
+        to include these codes in your transaction descriptions, though you may want to
+        set certain transaction numbers like "card" for particular prefixes.
+    </p>
+    <p>
+        "Transaction import types" let you specify prefix (or ending) strings that you want to 
+        remove from downloaded transaction descriptions, and any transaction number you want
+        to use when these codes are encountered. To enter and manage transaction import types,
+        click "Setup" on the main menu and then "Transaction Import Types".
+    </p>
+    <h2>Preparing To Print Checks</h2>
+    <p>
+        The software can print checks on preprinted check paper that already has check
+        numbers, and magnetic "MICR" codes at the bottom of the check. However, the software
+        doesn't know what kind of checks you use. So will need to tell if where to print
+        each piece of information on the blank checks, as measured in inches from the top
+        left corner of the blank check. To do this, click "Setup" on the main menu and
+        then "Check Format".
+    </p>
+    <h2>Creating Additional Users</h2>
+    <p>
+        By default, companies do not require a user name or password to gain access to them.
+        You can define users and passwords if you like, by clicking "Setup" on the main menu
+        and then "User Logins". The choice to require user names and passwords is per company -
+        you can set this up for one company but not another.
+    </p>
+    <p>
+        Please be aware that the user name and password mechanism in this software is not
+        particularly strong from a security perspective. It will prevent unauthorized people
+        from accessing a company through the software, but it does not encrypt your
+        data or prevent technically sophisticated people from looking directly at the data
+        files to learn what they want. It is intended as a tool to keep curious people
+        from seeing things, not as a defense against hackers.
+        If you really want to protect your information, use
+        the security features of Windows to control access to the folder containing your
+        company.
+    </p>
+    <p>
+        If you change your mind about having user names and passwords, or forget your
+        password, you can remove all user names and passwords from a company by
+        deleting a file named "Security.xml" from the folder containing your
+        company files.
+    </p>
 </body>
 </html>

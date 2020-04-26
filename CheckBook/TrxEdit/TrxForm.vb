@@ -1039,12 +1039,6 @@ Friend Class TrxForm
                 ValidationError("Number must be a check number or one of the " & "following: ""dep"" (deposit), ""card"" (credit or debit card), " & """pmt"" (payment), ""ord"" (order), ""inv"" (invoice), " & """crm"" (credit memo), " & """eft"" (electronic funds transfer), ""xfr"" (transfer). " & "Any combination of upper and lower case is allowed, " & "like ""card"", ""Card"" or ""CARD"". ")
                 Exit Function
             End If
-            If strTrxNumLc = "inv" Or strTrxNumLc = "crm" Or strTrxNumLc = "ord" Then
-                If chkFake.CheckState <> System.Windows.Forms.CheckState.Checked Then
-                    ValidationError("Orders, invoices and credit memos must be also be fake.")
-                    Exit Function
-                End If
-            End If
         End If
         If chkFake.CheckState = System.Windows.Forms.CheckState.Checked Then
             If lngTrxStatus() <> Trx.TrxStatus.Unreconciled Then
@@ -1293,7 +1287,7 @@ Friend Class TrxForm
     End Function
 
     Private Sub ValidationError(ByVal strMsg As String)
-        MsgBox(strMsg, MsgBoxStyle.Critical Or MsgBoxStyle.OkOnly)
+        mobjHostUI.ErrorMessageBox(strMsg)
     End Sub
 
     Public Sub SaveNormal()

@@ -119,8 +119,11 @@ Public Class ImportUtilities
         mcurMatchMax = 0
     End Sub
 
-    '$Description Create a new Trx object.
-
+    ''' <summary>
+    ''' Create a new Trx object.
+    ''' This is where the payee name is translated using the memorized transaction list.
+    ''' </summary>
+    ''' <returns></returns>
     Public Function objMakeTrx() As ImportedTrx
         Dim objTrx As ImportedTrx
         Dim datDate As Date

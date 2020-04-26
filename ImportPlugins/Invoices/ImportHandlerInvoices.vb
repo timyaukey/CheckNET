@@ -25,7 +25,6 @@ Public Class ImportHandlerInvoices
     Public Function blnAlternateAutoNewHandling(objImportedTrx As ImportedTrx, objReg As Register) As Boolean Implements IImportHandler.blnAlternateAutoNewHandling
         Dim objImportedSplit As TrxSplit
         Dim colPOMatches As ICollection(Of NormalTrx) = Nothing
-        Dim vlngMatchedTrxIndex As Integer
         Dim objMatchedTrx As NormalTrx
         Dim objMatchedSplit As TrxSplit
         Dim strPONumber As String
@@ -49,7 +48,7 @@ Public Class ImportHandlerInvoices
                             'Add the imported Trx as a new split in objMatchedTrx,
                             'and reduce the amount of objMatchedSplit by the same amount
                             'so the total amount of objMatchedTrx does not change.
-                            objReg.ImportUpdatePurchaseOrder(vlngMatchedTrxIndex, objMatchedSplit, objImportedSplit)
+                            objReg.ImportUpdatePurchaseOrder(objMatchedTrx.lngIndex, objMatchedSplit, objImportedSplit)
                             Return True
                         End If
                     Next objMatchedSplit

@@ -3,9 +3,442 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>Importing</title>
+    <title>Importing Transactions</title>
+    <link rel="stylesheet" type="text/css" href="Styles.css">
 </head>
 <body>
-    Hello.
+    <h1>Importing Transactions</h1>
+    <p>
+        Transaction information will frequently be present outside this
+        software in some form, and it would be very handy to read it
+        and create transactions from it automatically.
+        For example, download an OFX file from your bank and
+        add those transactions to one of your accounts.
+        This could be true when setting up a company initially, or
+        it could be part of the regular ongoing process of entering
+        new transactions into your company. This process can create
+        new transactions, or it can update existing transactions.
+    </p>
+    <p>
+        The reason the software can update existing transactions is that in many scenarios
+        the transactions being imported will already be present in the system
+        through a variety of mechanisms.
+        For example, the user may have manually entered some debit card transactions
+        into the software. Or imported checks from a ledger they maintain in a spreadsheet.
+        But those same transactions will later be downloaded from the bank, so the
+        download import needs to recognize when transactions are already present
+        in the software. Updating
+        existing transactions also allows estimated, guessed or omitted information to be
+        replaced with accurate information.
+    </p>
+    <p>
+        The software only imports "regular" transactions, which includes
+        bank transactions and accounts receivable or accounts payable transactions.
+        If does not import budget transactions. Any transactions it creates will always
+        have one split.
+    </p>
+    <h2>Multiple Step Process</h2>
+    <p>
+        The software can import transactions many different ways, each
+        tailored for a specific scenario. Despite this variety, all these
+        ways share a common method and user interface. There are always
+        six steps:
+    </p>
+    <p>
+        (1) Chose the account in the software to import transactions into.
+        The software will also search every register in this account when it
+        looks for matches to imported transactions.
+    </p>
+    <p>
+        (2) Read transaction information from some source. This could be a file,
+        usually downloaded from your bank,
+        or for many types of import it is tab delimited data copied from
+        a spreadsheet or other source via the Windows clipboard.
+    </p>
+    <p>
+        (3) Search your memorized transactions for matches to the imported information,
+        and if a match is found copy the description,
+        memo, category and budget from the memorized transaction to the imported data.
+        This is only done for bank imports and check imports.
+        The search compares the description field of the imported transaction against the "Name Used By Bank"
+        field of the memorized transactions, not the "Name" field of the memorized
+        transactions. This is because debit/credit card transactions in bank downloads
+        frequently use different business names than how you would want them to appear
+        in your records.
+    </p>
+    <p>
+        (4) Identify transactions that have already been imported by the same type
+        of import, and prevent them from being imported again.
+        This prevents duplicate transactions caused by importing the same
+        file or other information multiple times.
+    </p>
+    <p>
+        (5) Display the results of the preceding steps
+        before actually adding or updating any transactions in registers. Imported transactions are
+        displayed in a list, with a checkbox before each one. The checkbox is used
+        to select transactions for batch operations, such as creating new transactions
+        from all checked items. This allows the user
+        to inspect and verify the data before doing anything.
+    </p>
+    <p>
+        (6) Let the user create new transactions from the data displayed on the
+        form, or use the data to update existing transactions.
+        There are many buttons on the import form to facilitate this, doing
+        such things as finding and checking the selection box on
+        all imported transactions that have unambiguous
+        matches to exactly one existing transaction and therefore could be
+        used to update those existing transactions in a batch operation.
+        After using this button you can uncheck the lines you don't
+        want to use to automatically update, then click another button to
+        do the batch update for all checked items.
+    </p>
+    <h2>Import User Interface</h2>
+    <p>
+        Once the software has read in the import data, applied information
+        from your memorized transactions and otherwise pre-processed the data, it
+        will display a form showing the results and allowing you to do various
+        things with it. This is step (5) above.
+    </p>
+    <p>
+        The top half of the form shows all the imported transactions, with a
+        checkbox next to each one. The checkbox indicates if the transaction
+        should be included in a batch operation, which can be to create new
+        transactions from them or update existing transactions from them.
+        There are buttons on the form
+        to check these boxes for either type of batch
+        operation based on the kinds of similar transactions the software
+        finds in your registers. You can manually uncheck or check these
+        boxes yourself as well. Once you are satisfied that the correct
+        transactions are selected for a batch operation, you initiate the
+        operation by clicking a button.
+    </p>
+    <p>
+        You can also create or update transactions individually. When you
+        click on a transaction in the top area it will show potential matches
+        to that transaction in a list on the bottom half of the form.
+        Then you can click a button to create a new transaction
+        for the single highlighted transaction at the top, or click on
+        one of the similar transactions at the bottom and then click a
+        different button to update the transaction at the bottom with
+        information from the imported transaction you selected at the top.
+    </p>
+    <h2>Many Import Types</h2>
+    <p>
+        All the different kinds of imports are initiated by selecting "Import" on the
+        main menu, and then one of the sub-options. These options are described in detail below.
+    </p>
+    <h2>Import Bank Downloads</h2>
+    <p>
+        The software can import transaction information from files in two different file
+        formats commonly supported by banking websites: OFX files and QIF files.
+        OFX files are the preferred format, because the information in this format
+        allows reliable detection of trying to import the same transaction multiple times.
+    </p>
+    <p>
+        The software will use the "transaction import types" you have created
+        to remove certain text commonly added to transaction descriptions from the
+        beginning and end of those transaction descriptions. For example, your
+        bank may add "DBT PUR:" to the beginning of the description for all
+        debit card purchases. Every bank uses their own prefixes, so you'll have
+        to try an import to see what you get and then set up your transaction
+        import types accordingly.
+    </p>
+    <p>
+        Transactions imported from the bank will never have the "fake" box checked.
+        If they are matched to an existing "fake" transaction, the "fake" box will be
+        unchecked on that transaction.
+    </p>
+    <p>
+        Existing transactions that are updated by this import will only have their date,
+        check number and amount changed. Description / payee name, category, budget type,
+        etc. will not be changed.
+    </p>
+    <p>
+        Bank imports use very complicated algorithms to identify possible matches to imported transactions,
+        but you don't need to understand all the details to make sense of the results.
+    </p>
+    <p>
+        Here's a simplified(!) version of how it finds existing transactions to update.
+        It does this separately for each imported transaction.
+        (1) Check all regular (bank) transactions dated within 120 days of the date of the
+        imported transaction. (2) Determine which of the following is true for each
+        existing transaction in that range: (a) the transaction dates are within 2 days,
+        (b) the amounts are the same or within the amount range specified on the memorized transaction (if any)
+        used to translate the imported data, (c) the first 10 characters of the description or
+        payee name matches, and (d) the last 3 digits of the check number matches.
+    </p>
+    <p>
+        No single one of these tests is enough to be sure
+        an existing transaction "is" the imported transaction, but the more tests it passes
+        the more likely it is to be a match. We can't just say it must match on all data, because
+        the information the bank uses will not always be the same as what we use. For example,
+        banks frequently use weird payee names on debit card transactions, and a transaction
+        may clear the bank a day or two after we use a card. So the software looks for specific
+        combinations of matching data, and considers an existing transaction a match if the
+        combination is "good enough". Some data gets more weight than others - for example,
+        a matching payee name is considered more important than a transaction date. And check
+        number plus amount is better than payee name plus amount.
+    </p>
+    <p>
+        Out of all the possible matching transactions identified this way, the software will consider only the
+        best ones it finds for the next step. For example, if only one transaction matches on every piece of
+        data that will be the only one it considers a match, even if it partially matches four
+        other transactions. On the other hand, if the only matches it finds are those four
+        partial matches it will consider one or more of those four to be matches.
+        Once it decides on the set of "best matches",
+        if there is exactly one existing transaction in that set, and that match is "good enough",
+        then the software will select that transaction to include in a batch update operation. If there are multiple
+        "best matches" of equal quality, the software won't offer to update any of them because only one of
+        them can be the "real" match and it has no idea which one.
+    </p>
+    <p>
+        If all that seems ridiculously complicated, here's a VERY simplified version: The
+        software looks for the closest matches it can find to each of your imported transactions,
+        and if it finds exactly one that is good enough to be confident in it will offer to
+        update that one from your imported transaction. It does nothing if there is no
+        obvious single best choice, or that best match is not good enough to be sure of.
+    </p>
+    <p>
+        The search to find imported transactions that should be used to create new transactions
+        in your register is similar, but works in the opposite sense: It considers existing transactions
+        within 60 days (instead of 120 days), and selects the imported transaction to include in
+        the batch of new transactions if it finds no matches to it at all. It's very conservative about
+        this - even a partial match is enough to cause the software to not create a new transaction
+        from it.
+    </p>
+    <p>
+        You can always review what the software thinks about each imported transaction after
+        doing a batch search by hovering your mouse over the date column of an imported transaction.
+        It will show more information about what it decided in a tooltip.
+    </p>
+    <p>
+        In general you don't have to understand exactly how it performs these searches - the
+        software does a pretty good job, and you'll be allowed to review what it thinks before
+        performing a batch operation.
+    </p>
+    <p>
+        In addition to the batch operations described above you can also process transactions
+        manually one by one. Simply click on
+        an imported transaction to select it, and the software will display all the transactions
+        that may match it in a list below. The search for matches works the same as the batch operation
+        searches described above, with the additional capability to ask for "loose matches", which
+        lowers the threshold for what is considered a good enough match to show you.
+        Once you've clicked on an import and seen the matches, you can elect to create a new transaction
+        in your register for that imported transaction or select one of the matches and update
+        it. These manual operations on individual transactions are typically how you will handle
+        imported transactions that aren't selected for a batch operation because the software
+        wasn't sure what to do with them, or you decided to override what the software decided
+        to do.
+    </p>
+    <h2>Import Checks</h2>
+    <p>
+        The software can import checks by reading information in a tab delimited format from
+        your Windows clipboard. This is the format stored on your clipboard when you
+        select and copy a region of cells from a spreadsheet program. So you can keep
+        a simple check register in a spreadsheet, copy the part you want import to
+        your clipboard, and then use one of the check import options to create transactions
+        from this information. You can do the same thing from a table displayed on
+        a web page, if the table has the right columns.
+    </p>
+    <p>
+        The software will import three different variations of this format, reading
+        information from different columns.
+    </p>
+    <p>
+        The "Standard Clipboard" import expects your data to have 4 columns: Date, check number,
+        payee, and amount, in that order.
+        Here is a sample table in "Standard Clipboard" format you can copy to your clipboard and import:
+    </p>
+    <table class="std">
+        <tr class="std">
+            <td class="std">3/27/2019</td>
+            <td class="std">1205</td>
+            <td class="std">Pacific Power</td>
+            <td class="std">120.04</td>
+        </tr>
+        <tr class="std">
+            <td class="std">3/28/2019</td>
+            <td class="std">1210</td>
+            <td class="std">Fred Meyer</td>
+            <td class="std">27.99</td>
+        </tr>
+        <tr class="std">
+            <td class="std">3/28/2019</td>
+            <td class="std">1211</td>
+            <td class="std">Staples</td>
+            <td class="std">234.98</td>
+        </tr>
+    </table>
+    <p>
+        The "CompuPay Payroll Clipboard" import matches the format of paycheck information
+        generated by the CompuPay payroll service, which is 13 columns. The import only uses
+        4 of these: The check number is in column #1, the date is in column #6, the payee
+        is in column #10, and the amount is in column #13.
+        Here is a sample table in "CompuPay Payroll Clipboard" format you can copy to your clipboard and import:
+    </p>
+    <table class="std">
+        <tr class="std">
+            <td class="std">2001</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">1/25/2019</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">John Smith</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">1130.54</td>
+        </tr>
+        <tr class="std">
+            <td class="std">2002</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">1/25/2019</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">Pat Public</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">1705.92</td>
+        </tr>
+    </table>
+    <p>
+        The "Digital Insight Clipboard" import matches the export format of a popular
+        bill payment service used by many bank websites. This format has seven columns,
+        of which we use 4: The date is in column #1, the payee
+        is in column #2, the amount is in column #3, and the check number is in column #7.
+        Here is a sample table in "Digital Insight Clipboard" format you can copy to your clipboard and import:
+    </p>
+    <table class="std">
+        <tr class="std">
+            <td class="std">1/25/2019</td>
+            <td class="std">John Smith</td>
+            <td class="std">1130.54</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">2001</td>
+        </tr>
+        <tr class="std">
+            <td class="std">1/25/2019</td>
+            <td class="std">Pat Public</td>
+            <td class="std">1705.92</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">&nbsp;</td>
+            <td class="std">2002</td>
+        </tr>
+    </table>
+    <p>
+        Like bank imports, check imports will match the imported information against
+        your memorized transactions. This is how category information is normally added,
+        and a budget type if that is specified in the memorized transaction.
+        Unlike other imports, it will not use the check number
+        field from any matching memorized transaction. This is because it is reasonable
+        to assume that the correct check numbers are being imported, and because the
+        check number field on a memorized transaction isn't usually a check number at all,
+        but instead a word like "card".
+    </p>
+    <p>
+        The batch and individual searches for matches work pretty much the same way for check
+        imports as they do for bank imports.
+    </p>
+    <p>
+        The only fields updated on matched transactions are check number and amount.
+    </p>
+    <h2>Import Invoices</h2>
+    <p>
+        The software can import invoices by reading information in a tab delimited format from
+        your Windows clipboard. This is the format stored on your clipboard when you
+        select and copy a region of cells from a spreadsheet program. So you can keep
+        a simple invoice register in a spreadsheet, copy the part you want import to
+        your clipboard, and then use this import to create invoice transactions
+        from this information. You can do the same thing from a table displayed on
+        a web page, if the table has the right columns.
+    </p>
+    <p>
+        The import data has nine columns, in this order: Vendor name, purchase order number,
+        invoice date, invoice number, payment terms, due date, amount, document type, category.
+        Vendor name, invoice date, amount, document type, and category are required.
+    </p>
+    <table class="std">
+        <tr class="std">
+            <td class="std">National Distributor, Inc.</td>
+            <td class="std">4201</td>
+            <td class="std">3/27/19</td>
+            <td class="std">219206</td>
+            <td class="std">net 30</td>
+            <td class="std">4/27/2019</td>
+            <td class="std">2044.82</td>
+            <td class="std">inv</td>
+            <td class="std">E:Merchandise</td>
+        </tr>
+        <tr class="std">
+            <td class="std">National Distributor, Inc.</td>
+            <td class="std">4201</td>
+            <td class="std">3/30/19</td>
+            <td class="std">219217</td>
+            <td class="std"></td>
+            <td class="std"></td>
+            <td class="std">56.89</td>
+            <td class="std">crm</td>
+            <td class="std">E:Merchandise</td>
+        </tr>
+        <tr class="std">
+            <td class="std">John's Plumbing</td>
+            <td class="std"></td>
+            <td class="std">3/17/19</td>
+            <td class="std">9045</td>
+            <td class="std">net 10</td>
+            <td class="std">3/17/19</td>
+            <td class="std">275.00</td>
+            <td class="std">inv</td>
+            <td class="std">E:Repairs</td>
+        </tr>
+    </table>
+    <p>
+        The import will ignore the imported transaction if it finds an existing transaction
+        with the same vendor name, and a split with the same invoice number. 
+        Unlike bank and check imports, invoice imports never update an existing transaction.
+        Unlike other types of imports, invoice transactions must be imported one by one -
+        there are no batch operations.
+    </p>
+    <p>
+        Unmatched transactions will be handled one of two ways: (1) If a purchase
+        order number was specified, and there is an existing transaction for the same vendor with
+        a split on that transaction having the same purchase order number but no invoice number, 
+        add the invoice as a new split to that existing transaction and reduce the amount of the
+        split with no invoice number by the same amount.
+        Thus the total amount of the matched transaction stays the same, but the invoice
+        amount is "moved" from one split to another. This allows purchase orders to be
+        entered as "fake" transactions when the purchase order is placed, and then converted into 
+        invoices as invoices arrive from vendors. If the invoice wasn't matched to a
+        purchase order like this, (2) add the invoice as a new transaction.
+    </p>
+    <p>
+        The invoice date will always be used as the transaction date.
+        The document type must begin with "in" (an invoice) or "cr" (a credit memo).
+        The amount must always be a positive number, even though invoices will appear
+        in your register as negative amounts. The import adds the minus sign for invoices,
+        but not for credit memos.
+    </p>
+    <p>
+        The "fake" box will be
+        unchecked if the transaction is created in an accounts payable account
+        (because these are accrual basis transactions and thus the obligation
+        is "real" as soon as the invoice is received),
+        otherwise it will be checked (because invoices in "bank" or other asset
+        accounts are cash basis and don't appear on financial statements until the invoice is paid).
+    </p>
+    <h2>Import Deposits</h2>
+    <p>
+
+    </p>
 </body>
 </html>

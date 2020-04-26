@@ -114,6 +114,24 @@
     <p>
         Budgeting tools will be discussed in much greater detail elsewhere in this documentation.
     </p>
+    <p>
+        A regular transaction, i.e. "bank" transaction, has at a minimum a transaction date, transaction
+        number, description, category, and amount. The description is generally the
+        name of the payee or a phrase like "bank deposit". The category says what the transaction
+        is for - like "groceries" or "utilities". The transaction number is the check number if the
+        transaction represents a check, or one of the following codes: "dep" for deposit,
+        "card" for debit or credit card purchase, "inv" for invoice,
+        "crm" for credit memo, "eft" for electronic funds transfer, "ord" for an order, 
+        or "pmt" for some other kind of payment like an ACH payment through your bank.
+    </p>
+    <p>
+        A transaction can also optionally have a budget type, purchase order number,
+        invoice number, due date, and memo. If a transaction was used for multiple purposes, like
+        buying groceries and office supplies, you can "split" the amount into smaller amounts.
+        Each split has its own category, budget type, purchase order and invoice numbers, due date,
+        memo and amount. You can create as many splits for a transaction as you like. Only regular
+        transactions can have splits.
+    </p>
     <h2>Categories</h2>
     <p>
         Transactions that represent something happening in the real world (checks,
@@ -141,7 +159,7 @@
         there is one other transaction type that may be confusing when you first see it -
         a "replicated" transaction. These are created automatically in another register
         when you use a balance sheet account as the category in a split. For example,
-        you can enter a loan payment into the register for your checking account, 
+        you can enter a loan payment into the register for your checking account,
         using the loan account as the category.
         After doing this, if you open the register for your loan account you will see
         a replicated transaction representing the split. Though it might seem like the
@@ -249,6 +267,13 @@
         for each one. Notice how it is impossible to create a transaction
         that is out of balance, because one side of the transaction is
         always computed from the other!
+    </p>
+    <p>
+        The software supports both accrual basis accounting and cash basis
+        accounting. The difference is mostly the transaction dates you use,
+        and the fact that for accrual basis accounting you will create accounts
+        in the software for
+        accounts payable and accounts receivable.
     </p>
     <p>
         For purposes of double entry bookkeeping, "fake" and "budget" transactions

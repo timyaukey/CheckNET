@@ -913,21 +913,30 @@ Public Class BankImportForm
             maudtItem(0) = New ImportItem()
 
             Do
-                objImportedTrx = mobjTrxReader.objNextTrx()
-                If objImportedTrx Is Nothing Then
+                Try
+                    objImportedTrx = mobjTrxReader.objNextTrx()
+                    If objImportedTrx Is Nothing Then
+                        Exit Do
+                    End If
+                    mintItems = mintItems + 1
+                    ReDim Preserve maudtItem(mintItems)
+                    maudtItem(mintItems) = New ImportItem()
+                    With maudtItem(mintItems)
+                        .objReg = Nothing
+                        .objImportedTrx = objImportedTrx
+                        .lngStatus = ImportStatus.mlngIMPSTS_UNRESOLVED
+                    End With
+                Catch ex As ImportReadException
+                    mobjHostUI.ErrorMessageBox("Error reading import information for transaction #" +
+                                               (mintItems + 1).ToString() + ":" + Environment.NewLine + ex.Message)
+                    mobjHostUI.ErrorMessageBox("Will skip any remaining transactions in input.")
                     Exit Do
-                End If
-                mintItems = mintItems + 1
-                ReDim Preserve maudtItem(mintItems)
-                maudtItem(mintItems) = New ImportItem()
-                With maudtItem(mintItems)
-                    .objReg = Nothing
-                    .objImportedTrx = objImportedTrx
-                    .lngStatus = ImportStatus.mlngIMPSTS_UNRESOLVED
-                End With
+                End Try
             Loop
 
-            Array.Sort(Of ImportItem)(maudtItem, AddressOf ImportItemComparer)
+            If mintItems > 0 Then
+                Array.Sort(Of ImportItem)(maudtItem, AddressOf ImportItemComparer)
+            End If
 
             mobjTrxReader.CloseSource()
 
