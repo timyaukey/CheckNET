@@ -37,13 +37,14 @@ Public Class ReadDeposits
         Dim objTrx As ImportedTrx
         Dim strLine As String
         Dim astrParts() As String
+        Dim strDate As String
         Dim datDate As Date
         Dim strDescription As String
+        Dim strAmount As String
         Dim curAmount As Decimal
         Dim datNull As Date
 
         If mintNextIndex > UBound(mastrLines) Then
-            'UPGRADE_NOTE: Object ITrxImport_objNextTrx may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
             objNextTrx = Nothing
             Exit Function
         End If
@@ -51,19 +52,31 @@ Public Class ReadDeposits
         strLine = mastrLines(mintNextIndex)
         mintNextIndex = mintNextIndex + 1
 
-        astrParts = Utilities.Split(strLine, " ")
-        If UBound(astrParts) <> 2 Then
-            'UPGRADE_NOTE: Object ITrxImport_objNextTrx may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-            objNextTrx = Nothing
-            Exit Function
+        astrParts = Utilities.Split(strLine, vbTab)
+        If astrParts.Length < 3 Then
+            Throw New ImportReadException("Input line has less than three tab delimited fields: " + strLine)
         End If
 
-        datDate = CDate(astrParts(0))
-        strDescription = Replace(astrParts(1), "_", " ")
-        curAmount = CDec(astrParts(2))
+        strDate = Trim(astrParts(0))
+        If Not Utilities.blnIsValidDate(strDate) Then
+            Throw New ImportReadException("Invalid deposit date in column 1")
+        End If
+        datDate = CDate(strDate)
+
+        strDescription = Trim(astrParts(1))
+        If String.IsNullOrEmpty(strDescription) Then
+            Throw New ImportReadException("Description is required in column 2")
+        End If
+
+        strAmount = Trim(astrParts(2))
+        If Not Utilities.blnIsValidAmount(strAmount) Then
+            Throw New ImportReadException("Invalid deposit amount in column 3")
+        End If
+        curAmount = CDec(strAmount)
 
         objTrx = New ImportedTrx(Nothing)
 
+        datNull = System.DateTime.FromOADate(0)
         objTrx.NewStartNormal(False, "", datDate, strDescription, "", Trx.TrxStatus.Unreconciled, New TrxGenImportData())
         objTrx.AddSplit("", "", "", "", datNull, datNull, "", "", curAmount)
 

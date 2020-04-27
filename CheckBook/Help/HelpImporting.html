@@ -404,7 +404,7 @@
     </table>
     <p>
         The import will ignore the imported transaction if it finds an existing transaction
-        with the same vendor name, and a split with the same invoice number. 
+        with the same vendor name, and a split with the same invoice number.
         Unlike bank and check imports, invoice imports never update an existing transaction.
         Unlike other types of imports, invoice transactions must be imported one by one -
         there are no batch operations.
@@ -412,12 +412,12 @@
     <p>
         Unmatched transactions will be handled one of two ways: (1) If a purchase
         order number was specified, and there is an existing transaction for the same vendor with
-        a split on that transaction having the same purchase order number but no invoice number, 
+        a split on that transaction having the same purchase order number but no invoice number,
         add the invoice as a new split to that existing transaction and reduce the amount of the
         split with no invoice number by the same amount.
         Thus the total amount of the matched transaction stays the same, but the invoice
         amount is "moved" from one split to another. This allows purchase orders to be
-        entered as "fake" transactions when the purchase order is placed, and then converted into 
+        entered as "fake" transactions when the purchase order is placed, and then converted into
         invoices as invoices arrive from vendors. If the invoice wasn't matched to a
         purchase order like this, (2) add the invoice as a new transaction.
     </p>
@@ -438,7 +438,53 @@
     </p>
     <h2>Import Deposits</h2>
     <p>
-
+        The software can import deposits by reading information in a tab delimited format from
+        your Windows clipboard. This is the format stored on your clipboard when you
+        select and copy a region of cells from a spreadsheet program. So you can keep
+        a simple deposit register in a spreadsheet, copy the part you want import to
+        your clipboard, and then use this import to update deposit transactions
+        from this information. You can do the same thing from a table displayed on
+        a web page, if the table has the right columns.
+    </p>
+    <p>
+        Unlike other kinds of import, deposit imports will only
+        update existing deposit amounts and uncheck the "fake" box. It will not update any other transaction
+        fields, and it will not create new deposits.
+    </p>
+    <p>
+        The import will ignore the imported transaction if it finds an existing fake transaction
+        with the same description dated within 7 days. It will only match fake transactions.
+    </p>
+    <p>
+        The import data has three columns, in this order: Deposit date, deposit description,
+        and deposit amount. All are required.
+    </p>
+    <table class="std">
+        <tr class="std">
+            <td class="std">3/10/20</td>
+            <td class="std">Deposit Tuesday 10th</td>
+            <td class="std">1102.70</td>
+        </tr>
+        <tr class="std">
+            <td class="std">3/11/20</td>
+            <td class="std">Deposit Wednesday 11th</td>
+            <td class="std">1239.00</td>
+        </tr>
+        <tr class="std">
+            <td class="std">3/12/20</td>
+            <td class="std">Deposit Thursday 12th</td>
+            <td class="std">1298.35</td>
+        </tr>
+    </table>
+    <p>
+        This specialized import is really only useful if you have forecast anticipated future
+        deposits in some way, and entered those forecasts into your register as future
+        dated fake transactions. When actual deposits are made, you would need to adjust
+        those fake forecast deposits with the real amounts, which is what this import
+        does. This import depends on each deposit having a description that will not
+        occur on any other transaction within at least seven days. This allows the import
+        to update the correct deposit even if deposits don't always happen on the day
+        you planned.
     </p>
 </body>
 </html>
