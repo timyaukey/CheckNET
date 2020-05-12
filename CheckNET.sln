@@ -21,7 +21,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PersistTools", "PersistTool
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "CheckBookSetup", "CheckBookSetup\CheckBookSetup.vdproj", "{794386CF-6A22-45CA-867D-16660CAE285E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseGenerator", "LicenseGenerator\LicenseGenerator.csproj", "{6442BD1F-A48B-4F0B-AE9E-864C623A5AFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LicenseGenerator", "LicenseGenerator\LicenseGenerator.csproj", "{6442BD1F-A48B-4F0B-AE9E-864C623A5AFB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseConsole", "LicenseConsole\LicenseConsole.csproj", "{73146FD1-6D15-4416-9137-8164A2673611}"
 EndProject

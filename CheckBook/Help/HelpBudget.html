@@ -4,8 +4,142 @@
 <head>
     <meta charset="utf-8" />
     <title>Budgeting Tools</title>
+    <link rel="stylesheet" type="text/css" href="Styles.css">
 </head>
 <body>
-    Hello.
+    <h1>Budgeting Tools</h1>
+    <p>
+        There are several ways of creating and managing budgets in the software,
+        all of which work by adding an entry to a register that represents a
+        planned or anticipated income or expense, or creating an entire register
+        to track income and expenses dedicated to a particular purpose. 
+    </p>
+    <p>
+        For more details on different transaction types, please
+        see the <a href="HelpIntro.html#transactions">transactions</a> documentation.
+    </p>
+    <h2>
+        Fake Transactions
+    </h2>
+    <p>
+        The simplest form of budgeting is to enter a regular bank transaction
+        for something you expect to happen on a specific date in the future. 
+        This can be an income (deposit) transaction, like a regular paycheck,
+        or any kind of expenditure, like a monthly mortgage payment. The
+        key point is that this transaction represents a single event,
+        not an activity that might occur as several events over time
+        such as grocery purchases over a month.
+    </p>
+    <p>
+        While each fake transaction represents one event, you can generate
+        repeating transactions to represent the same event that happens
+        repeatedly on a schedule, like a monthly paycheck. Or if the transaction
+        is a one time event, like a planned home improvement purchase, you
+        just create a single fake transaction for it.
+    </p>
+    <p>
+        These fake
+        transactions are just like any other bank transactions, except that
+        their "fake" box is checked on the transaction edit form. They are added
+        or subtracted from the running register balance on the transaction date,
+        so the register balance reflects the balance you anticipate on that
+        future date if all the future dated transactions actually happen.
+    </p>
+    <p>
+        Fake transactions are automatically ignored in contexts where it makes
+        sense to do so, for example when reconciling a bank statement. They are
+        also ignored when preparing financial statements.
+    </p>
+    <p>
+        When the fake transaction actually happens, for example you actually
+        deposit your paycheck in your checking account, just uncheck the "fake" box
+        on the transaction form. The "fake" box will also be unchecked on any 
+        transaction matched during an import from a bank download.
+    </p>
+    <p>
+        Fake transactions don't actually have to happen the way you anticipated.
+        The amount might be different, in which case you would edit the amount
+        at the same time you unchecked the fake box. Or the transaction might happen
+        on a different date, in which case you'd change the date on the transaction
+        form. Or the transaction might not happen at all, in which case you would
+        simply delete it from your register.
+    </p>
+    <h2>
+        Budget Types and Budget Transactions
+    </h2>
+    <p>
+        Where a fake transaction is a placeholder for a single event you expect
+        the happen in the future, a budget transaction is a placeholder in your
+        register for any number of similar transactions that might occur during
+        some period of time. The classic example is a budget transaction
+        representing the total amount of money you are budgeting for entertainment
+        for a month.
+    </p>
+    <p>
+        The budget transaction has an end date, a budget period
+        measured in days before that end date, a budget type, and an amount.
+        The part of that amount that has not yet been used is subtracted 
+        from the running register balance on that end date.
+    </p>
+    <p>
+        The "amount that has not yet been used" is the key to understanding
+        budget transactions. Initially when you create a budget transaction
+        none of that budget amount has been used, so the entire budget
+        amount will be subtracted from your register at the end of the
+        budget period. Every time you enter a regular bank transaction
+        that is counted against that budget transaction, the amount of
+        that regular transaction is subtracted from the budget transaction.
+        In essence, the budget amount is broken up into however many
+        transactions actually occurred and those amounts transferred to
+        the regular transactions.
+    </p>
+    <p>
+        The link between a budget transaction and the regular transaction(s)
+        that use it is the "budget type". Both budget transactions and
+        regular transaction splits have a budget type, and any regular
+        transaction matching the budget period and budget type of a budget
+        transaction will be subtracted from the amount of that budget
+        transaction.
+    </p>
+    <h2>The "(placeholder)" Budget Type</h2>
+    <p>
+        There is one budget type with special properties: The "(placeholder)" budget type.
+        Unlike other budget types, "(placeholder)" is not used with budget transactions -
+        only on splits for regular transactions. A split with the "(placeholder)" budget type
+        is treated like a budget amount inside a regular
+        transaction: As other splits are added to (or changed or deleted on) a transaction with
+        a "(placeholder)" split, the amount of the "(placeholder)" split is adjusted so that the total
+        amount of the transaction stays the same.
+    </p>
+    <p>
+        The "(placeholder)" budget type is not automatically created for you
+        when you install the software. You must created it yourself, and the name
+        must be spelled exactly like that, including the parentheses.
+    </p>
+    <p>
+        The "(placeholder)" budget type is really only useful in a single specialized
+        scenario: You want to enter a single budget amount for a transaction you expect to later
+        divide up into multiple splits, probably all staying in the same transaction.
+        This could happen when a business sends a purchase order to a supplier, with
+        a known amount or a reasonable guess as to the amount, but they expect to receive
+        multiple invoices related to that purchase order. This happens quite a lot
+        when businesses send complicated purchase orders for many different items
+        to a distributor.
+    </p>
+    <h2>
+        Using Multiple Registers
+    </h2>
+    <p>
+        The last budgeting technique is simply to create a separate register where you
+        set aside money and spend money for some purpose. It's like having a separate
+        checking account at your bank where you save money for vacations and then
+        write checks and use a debit card on that account while you're on vacation,
+        but without actually needing to create an actual account at your bank.
+    </p>
+    <p>
+        Every account in this software automatically starts out with a single register,
+        but you can create additional register(s) for any account at any time on the
+        "Registers and Accounts" form.
+    </p>
 </body>
 </html>
