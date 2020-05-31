@@ -4,8 +4,268 @@
 <head>
     <meta charset="utf-8" />
     <title>Budget Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="Styles.css">
 </head>
 <body>
-    Hello.
+    <h1>Budget Dashboard</h1>
+    <p>
+        The budget dashboard shows an easy to review summary of how you budgeted and
+        have spent money. It shows the totals of your "budgeted" and "unbudgeted"
+        income and expenses, for a series of budget periods of uniform size
+        (such as a series of two week budget periods).
+        "Budgeted" amounts are splits applied to a budget transaction, and unused amounts
+        remaining on a budget transaction. "Unbudgeted" amounts are splits with no budget type,
+        or no matching budget transaction for that budget type.
+        For budgeted figures, it keeps track of the budget limits and the actual amounts used (so far). 
+        For cells representing a budget total for one period,
+        it can show a list of all the transactions that went into that period total.
+        The budgets are displayed in a table, with a different budget
+        in each row and a different period in each column.
+    </p>
+    <h2>Data Included In Dashboard</h2>
+    <p>
+        The budget dashboard includes data from budget and regular (bank) transactions
+        in specific accounts in your company,
+        starting on a date you specify and continuing for the number of budget periods you specify.
+        Regular (bank) transactions are included regardless of whether their "fake" box is checked.
+        Exactly which accounts and which transactions are included depends on the type
+        of budget figures you wish to calculate: "cash" and "income and expense".
+    </p>
+    <h2>Cash Budget Dashboard</h2>
+    <p>
+        For a cash budget, the software includes all budget and regular (bank) transactions,
+        but only from checking and savings accounts in your company. It shows real money
+        actually received and spent. This is typically
+        the type of budget you'll use for home finances, or if you're a business but
+        you do cash basis accounting or don't use separate accounts receivable and account payable accounts.
+    </p>
+    <p>
+        The key distinguishing fact about this kind of budget it that it is "cash basis",
+        using accounting terminology. This means that income and expenses are
+        allocated to the budget periods (columns) when the income actually arrives
+        or the expenses are actually paid, not when they are accrued. For example, when your
+        customer pays an invoice you sent them rather than you sent the invoice to them,
+        or when you paid a bill rather than when you received the invoice or statement.
+    </p>
+    <h2>Income and Expense Budget Dashboard</h2>
+    <p>
+        For an income and expense budget, the software includes all budget and regular (bank)
+        transactions in ALL the accounts in your company - including loan accounts,
+        credit cards, accounts payable, accounts receivable, and everything else.
+        This is typically the type of budget a business will use, particularly if
+        they use accounts receivable and accounts payable accounts.
+    </p>
+    <p>
+        The only exclusion from this type of budget is splits that transfer money to
+        a different balance sheet account. For example, payments made to reduce your
+        accounts receivable account. These are not counted because the expenses
+        are represented in the dashboard by the transactions that added the invoice
+        to your accounts payable, not by the transaction that paid it.
+    </p>
+    <p>
+        The key distinguishing fact about this kind of budget is that it is "accrual basis",
+        using accounting terminology. This means that income is allocated to the period when
+        it became owed to you, and expenses are allocated to the period when they became
+        owed by you.
+    </p>
+    <p>
+        A business that uses accrual basis accounting may choose to use both a cash basis
+        budget and an income and expense budget. The cash basis budget would be used to
+        track and forecast cashflow, and the income and expense budget would be used to
+        track how much of each income and expense budget has actually been accrued regardless
+        of whether the money has arrived or been paid yet. Using dual budgets like this
+        doesn't make any more work, because both types are computed from the same data.
+    </p>
+    <h2>Budgets and Categories Are Rows</h2>
+    <p>
+        As mentioned in the introduction, the dashboard includes both budgeted and unbudgeted
+        amounts. All splits that are not applied to a budget are totalled up under the
+        category of the split, and there will be a row in the dashboard for that category.
+        Essentially, categories are treated like budgets for splits that are not applied
+        to a budget.
+    </p>
+    <p>
+        Each budget will have its own row in the dashboard as well, totalling up
+        splits applied to that budget and unused amounts from budget transactions
+        for that budget type. There may actually be more than one row for a budget
+        type, depending on how the budget transaction was created: There is one row
+        for each sequence of generated budget transactions for each budget type,
+        and one row for uses of each
+        budget type outside any generated transaction sequence.
+    </p>
+    <p>
+        For example, a generated
+        sequence of weekly budget transactions of budget type "entertainment" for
+        ordinary weekly entertainment gets its
+        own row because it's a generated sequence, and a separate one time
+        budget transaction for your 50th wedding anniversary
+        for the same "entertainment" budget type will get its own row.
+        Each generated sequence of budget transactions is treated
+        as a separate budget in this dashboard. And budget transactions not
+        belonging to a generated sequence are lumped together with all other
+        budget transactions of the same type.
+    </p>
+    <p>
+        The reason each generated transaction sequence gets its own dashboard
+        row is that each generated sequence usually represents a distinct
+        use of a budget, and having a separate row for each one lets you
+        track that purpose separately. We could do the same thing for
+        category usage of splits not applied to budgets, but we've found
+        in practical terms that there tend to be many more generated
+        transaction sequences for regular (bank) transactions than
+        for budget transactions, and having a separate row for each one
+        makes the dashboard so long that it's cumbersome to use.
+    </p>
+    <p>
+        After everything is totalled up for each dashboard row, each row
+        is assigned to the credits section of the dashboard (the top part)
+        if the total amount is a positive number, or assigned to debits
+        section (the bottom part) if the total is a negative number.
+        There is an additional subtotal row at the bottom of each section,
+        adding up all credit and all debits.
+    </p>
+    <p>
+        Note that using the row total to determine if a row belongs in
+        the credit or debit section means that it is possible a category
+        row for an income category ("I:" prefix) will end up in the debit
+        section, and a row for an expense category ("E:" prefix) will end
+        up in the credit section. This is not necessarily an error, but
+        it probably merits a closer look at the transactions to see
+        if they are all entered correctly.
+    </p>
+    <h2>Budget Periods Are Columns</h2>
+    <p>
+        When you open the dashboard it asks the number of days in each budget period,
+        the starting date of the first budget period, and how many budget periods
+        to display. There will be one column in the dashboard display for
+        each budget period, labelled with the starting date of the period
+        at the top of each column.
+    </p>
+    <p>
+        There is one more column before the first budget period with the net sum of
+        all transactions across all columns in each row.
+    </p>
+    <h2>Which Budget Period Each Transaction Is Allocated To</h2>
+    <p>
+        Every dollar amount that is added to the dashboard is associated with a
+        date, and that date determines which budget period the amount is added
+        to. The rule for determining that date is simple, but not necessarily
+        obvious: Every split uses the date of the regular (bank) transaction
+        it belongs to, and the unused amount of each budget transaction uses
+        the budget transaction date.
+    </p>
+    <p>
+        The reasoning behind this is to allocate dollars received or spent
+        to the date that actually happened, rather than acting like everything
+        happened on the date of the budget it was applied to. Applying it to
+        the actual event date is more accurate, particularly if you happen
+        to use budget transactions whose length spans multiple budget
+        periods as specified to the dashboard.
+    </p>
+    <p>
+        While it may be more accurate, using dates this way can lead to confusing results
+        if you don't understand how the dates work. The problem is that
+        a split may be applied to a different dashboard column than the
+        budget it is applied to, because the split date (the regular transaction date)
+        is different than the budget date. This is most likely to happen
+        if the periods you display on the dashboard to not match the
+        periods used on your budget transactions.
+    </p>
+    <p>
+        For this reason, if it is at all possible we recommend using uniform
+        budget period lengths everywhere so the dashboard periods match up
+        to the budget transaction periods.
+    </p>
+    <h2>Budget Percent Used</h2>
+    <p>
+        For budget type rows, the dashboard uses a color coded bar of varying length
+        at the bottom of each cell to show how much of the budgeted amount has been used.
+        The length of the bar indicates how much
+        has been used. A green bar means there is money left in the budget,
+        and the length of the bar in relation to the width of the cell is the
+        percentage of the budget amount used. For example, a green bar 75%
+        of the width of the cell means 75% of the budget has been spent.
+        A yellow bar means you are over budget, but less than double the
+        amount. So a yellow bar 25% of the cell width means you've used
+        125% of the budget. A red bar means you've used more than double
+        the budget amount, up to three times. For example, a red bar 50%
+        of the width of the cell means you've used 250% of the budget amount.
+        Above 300% you just get a 300% bar. No bar at all means you haven't
+        used any of that budget.
+    </p>
+    <p>
+        The budget amount used is the amount of splits assigned to the budget
+        transaction, regardless of the date of the regular transaction those
+        splits belong to. So a split might be assigned to one column of the
+        dashboard, but affect the color bar of a different column. This is
+        another example of how the rules for determining budget period
+        can produce unexpected results, and another reason why the budget
+        dashboard will produce results that are more useful and easier to
+        understand if your budget transactions use budget periods that
+        match the dashboard periods.
+    </p>
+    <h2>Showing Budget Details</h2>
+    <p>
+        You can see all the details that went into any row for any budget
+        period by clicking the mouse on that cell. When you click that
+        cell it will display a list of all the related transactions on
+        the panel at the righthand side of the dashboard window. This list
+        will include all the splits whose transaction dates are in that
+        period, and all the budget transactions whose end dates are in
+        that period. For budget transactions, the amount will be the same
+        amount that shows in the transaction register - the amount remaining
+        for that budget.
+    </p>
+    <p>
+        It will also show some summary figures for that
+        budget period and budget type / category at the bottom of the panel.
+        These summary figures can be confusing if you have splits applied
+        to different columns than the budgets, as described above.
+        The first summary figure, "Total of Above Detail", is always the number
+        shown in the table cell. The other summary figures are different
+        depending on whether the row is for a category or a budget type.
+    </p>
+    <p>
+        For a category row the summary just shows the sum of all original amounts for
+        splits on transactions that are part of a generated transaction
+        sequence. This "generated total" is what you originally expected
+        the transaction amounts to be, so it's like a budget you set for
+        that category and it's helpful to compare it to the actual total
+        of real transactions.
+    </p>
+    <p>
+        For budget type rows the summary shows totals of the original (from generated transactions)
+        budget limits, and the current budget limits. As will be explained below,
+        it is easy to change budget limits from inside this dashboard, and
+        such changes will cause the current budget limit total to change
+        but not the original budget limit.
+    </p>
+    <h2>Totals and Running Balance</h2>
+    <p>
+        The dashboard has a column with the sums of all the row totals,
+        and several rows showing subtotals for credit rows, debit rows, and
+        grand totals for each column. The final row in the dashboard shows
+        a running end of period balance, which lets you see if you are
+        running cummulatively under or over budget as of the end of
+        each budget period. The beginning balance will be the sum of the balances
+        of all accounts included in the dashboard, as of the end of the
+        day before the dashboard starting date. The running balance
+        at the end of each period should be the sum of the balances
+        of all accounts included in the dashboard as of the end date
+        of that period.
+    </p>
+    <h2>Moving Money Between Budgets</h2>
+    <p>
+        The dashboard is not just for looking at your budgets - you can
+        change them here as well! After you click on any period cell
+        for a budget type row (not a category row), at the bottom of
+        the righthand panel you will see several controls for changing
+        the budget limit. You can set the amount of any budget in that
+        cell, but more useful is to subtract an amount. This places
+        the amount on a clipboard, so you can click in a different
+        cell and then add the same amount to a different budget.
+        In essence, when you subtract and add like this you are
+        moving that amount from one budget to another.
+    </p>
 </body>
 </html>

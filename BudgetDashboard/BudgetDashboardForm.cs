@@ -394,7 +394,8 @@ namespace Willowsoft.CheckBook.BudgetDashboard
 
         private void RefreshGridTotals()
         {
-            mData.ComputeTotals();
+            mData.ComputeDetailRowTotals();
+            mData.ComputeSectionTotals();
             grdMain.Refresh();
         }
 

@@ -10,7 +10,7 @@ Public Class FindLiveBudgetsPlugin
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.objToolMenu.Add(New MenuElementAction("Find Live Budgets", 4, AddressOf ClickHandler, GetPluginPath()))
+        setup.objReportMenu.Add(New MenuElementAction("Find Live Budgets", 110, AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
     Private Sub ClickHandler(sender As Object, e As EventArgs)

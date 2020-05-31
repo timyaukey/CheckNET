@@ -10,7 +10,7 @@ Public Class TrialBalancePlugIn
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.objReportMenu.Add(New MenuElementAction("Financial Statements", 2, AddressOf ClickHandler, GetPluginPath()))
+        setup.objReportMenu.Add(New MenuElementAction("Financial Statements", 200, AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
     Private Sub ClickHandler(sender As Object, e As EventArgs)

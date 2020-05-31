@@ -55,6 +55,11 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                 }
             }
 
+            // This must be done before adding each detail row 
+            // to the income or expense list, or it won't know
+            // which list the row belongs to.
+            ComputeDetailRowTotals();
+
             BudgetedIncome = new List<BudgetDetailRow>();
             BudgetedExpenses = new List<BudgetDetailRow>();
             foreach (var row in BudgetDetailRows.Values)
@@ -91,7 +96,10 @@ namespace Willowsoft.CheckBook.BudgetDashboard
             TotalExpense = new TotalRow(PeriodCount, "", "Total Debits", "");
             NetProfit = new TotalRow(PeriodCount, "", "Net Debits/Credits", "");
             RunningBalance = new TotalRow(PeriodCount, "", "Running Balance", "");
-            ComputeTotals();
+
+            // This has to wait until the very end, so everything is assigned
+            // to the correct section.
+            ComputeSectionTotals();
         }
 
         private int DataRowComparer<TCell>(DataRow<TCell> row1, DataRow<TCell> row2)
@@ -192,7 +200,19 @@ namespace Willowsoft.CheckBook.BudgetDashboard
             return row;
         }
 
-        public void ComputeTotals()
+        public void ComputeDetailRowTotals()
+        {
+            foreach (var row in BudgetDetailRows.Values)
+            {
+                row.ComputeTotals();
+            }
+            foreach (var row in SplitDetailRows.Values)
+            {
+                row.ComputeTotals();
+            }
+        }
+
+        public void ComputeSectionTotals()
         {
             TotalIncome.ClearAmounts();
             TotalExpense.ClearAmounts();
