@@ -4,8 +4,123 @@
 <head>
     <meta charset="utf-8" />
     <title>Technical Notes</title>
+    <link rel="stylesheet" type="text/css" href="Styles.css">
 </head>
 <body>
-    Hello.
+    <h1>Technical Notes</h1>
+    <p>
+        You don't need to know any of this information for normal use of the software,
+        except for making backups.
+        But sometimes it helps when strange situations come up or you are trying to
+        diagnose problems.
+    </p>
+    <h2>Company Data Files</h2>
+    <p>
+        Each company is stored in a separate folder, which can be anywhere on the computer
+        or in a shared network folder. Every company folder is entirely self-contained.
+        All the data needed to work with a company is in this folder, and there are no data
+        files shared between companies stored outside the company folder.
+    </p>
+    <p>
+        Every company folder has several standard subfolders. The most important is the "Accounts"
+        subfolder, which contains two files for each account in your company - "(accountname).act"
+        and "(accountname).rep". The ".act" file contains all the account settings, registers,
+        and transactions. The ".rep" file contains a small amount of information related to
+        generated transactions in that account. If the account has any generated transactions,
+        there will be a folder named "(accountname).act.gen" with the definitions for those
+        generated transactions.
+    </p>
+    <p>
+        All the data shared between accounts, like your category list, is in files in the
+        top level company folder. For example, your category list is in "shared.cat",
+        your budget types are in "shared.bud", and your memorized transactions are
+        in "PayeeList.xml".
+    </p>
+    <p>
+        If you want to move a company to a different place, for example a different
+        folder on your hard drive or even a different computer, all you have to do is
+        physically move the company folder. When you start the software you always have
+        the option to browse and find your company folder, and that's how you'll tell
+        the software the new location.
+    </p>
+    <h2>Backups</h2>
+    <p>
+        Because each company is entirely self-contained in its own folder, you can make
+        a complete backup of any company simply by making a copy of this folder. This
+        can be as simple as making a copy with Windows Explorer, or you can use any
+        backup utility. To restore a backup, just restore that folder and point the
+        software to it when you start the software.
+    </p>
+    <p>
+        In addition to backups you create outside the software by copying the company
+        folder, the software automatically makes a backup copy of the ".act" file of
+        any account that's been changed any time that account is saved. These individual
+        account backups are all stored in the "Backup" subfolder of the company folder,
+        under the original ".act" file name with a date appended to the name.
+    </p>
+    <p>
+        The software automatically deletes some of your older individual account backups
+        every time it creates a new one. It keeps the 100(!) most recent backups of each account
+        for the current day, the 10 most recent backups of each account for each day for days 2 through 5,
+        and the single most recent backup of each account for days 6 through 30. All backups older than
+        30 days are deleted.
+    </p>
+    <p>
+        You can restore these individual account backups by copying the backup file for
+        that account over the original account ".act" file and restarting the software.
+        This requires that the shared definition files contain all definitions used
+        in the backup account. For example, don't restore a backup of an account
+        if you've deleted a category that the old version of the account uses.
+    </p>
+    <h2>Event Logs</h2>
+    <p>
+        The software keeps a log of every transaction you create, edit or delete in every account.
+        This log contains ALL operations that affect a transaction, not just manual edits via
+        a register. Thus it also includes transactions created by an import, transactions
+        updated by marking them as "reconciled" during bank reconciliation, everything.
+        This log contains all the important details of these transactions like date, check number,
+        payee name, category, and amount. In the case of edited transactions it contains the 
+        "before" and "after" versions of the transaction.
+    </p>
+    <p>
+        Every time an account is saved, the software also writes a new log file for that account with all the
+        log entries accumulated since the last time a log file was written for that account. All these
+        log files are saved in the "EventLogs" subfolder of your company folder. There is a
+        separate subfolder of "EventLogs" for every month and year, and individual log files
+        are saved in those subfolders. The individual log files are in XML format, and can
+        be easily viewed in any text editor or even many web browsers. Since every account
+        gets its own log files, the log files are named the same as the ".act" file plus
+        a date and time. Unlike backup files created by the software, old event log files
+        are never purged by the software. This should not create a problem, because
+        the individual log files are very small. At any time you can manually delete
+        individual log files or the year & month folders they are stored in, if you 
+        want to get back the disk space.
+    </p>
+    <h2>Using With File Sharing</h2>
+    <p>
+        The software is designed to allow a company folder to be shared by file sharing
+        utilties such as Dropbox and OneDrive. The file sharing utility simply gives
+        every computer its own copy of the company folder, and as soon as any computer
+        saves the company the file sharing utility replicates all changes to the
+        other computers.
+    </p>
+    <p>
+        This capability does NOT mean multiple computers can have the company open
+        at one time. If you do, and multiple computers save the same account,
+        only the changes made by the last computer that saves the account will be remembered.
+        To avoid accidental overwriting, it is best for all users to agree that one
+        specific computer will be used to make all changes, and all the others
+        will only use the software to view information. Alternatively, you can
+        choose one person as the only one who makes changes, and unless you have
+        a way to be multiple places at once you should not have a problem with
+        multiple computers overwriting each other's work.
+    </p>
+    <p>
+        One huge advantage to putting your company folder(s) in a shared location
+        is this creates immediate backups on the other computers every time you
+        save your company. If you need to restore your company to any earlier
+        point in time, just use your file sharing utility to undo changes
+        to your company folder back to that date and time.
+    </p>
 </body>
 </html>

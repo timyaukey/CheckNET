@@ -94,6 +94,19 @@
         the regular transactions.
     </p>
     <p>
+        The amount remaining for a budget transaction will never be
+        reduced past zero. An income budget starts with a positive
+        budget amount, and that budget will never go below zero.
+        An expense budget starts with a negative balance, and
+        will never go above zero. While using <i>available</i> money
+        from a budget does not change the ending balance in the
+        register after the end date of the budget (it simply moves
+        the money from the budget transaction to the regular transaction),
+        using <i>more than is available</i> causes the excess to reduce
+        or increase the register balance after the end of the period
+        because it is not covered by the budget.
+    </p>
+    <p>
         The link between a budget transaction and the regular transaction(s)
         that use it is the "budget type". Both budget transactions and
         regular transaction splits have a budget type. Any split on a regular
