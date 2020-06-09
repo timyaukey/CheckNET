@@ -116,27 +116,22 @@ namespace Willowsoft.CheckBook.BudgetDashboard
             {
                 if (Handler.IncludeNormalTrx(normalTrx))
                 {
-                    SplitDetailRow row = null;
                     foreach (TrxSplit split in normalTrx.colSplits)
                     {
                         if (Handler.IncludeSplit(split))
                         {
                             if (split.objBudget == null)
                             {
-                                row = GetSplitDetailRow(split);
-                                row.Cells[period].CellAmount += split.curAmount;
+                                SplitDetailRow row = GetSplitDetailRow(split);
                                 row.Cells[period].Splits.Add(split);
                             }
                             else
                             {
                                 BudgetDetailRow budgetRow = GetBudgetDetailRow(split.objBudget);
-                                budgetRow.Cells[period].CellAmount += split.curAmount;
                                 budgetRow.Cells[period].Splits.Add(split);
                             }
                         }
                     }
-                    if (row != null)
-                        row.Cells[period].GeneratedAmount += normalTrx.curGeneratedAmount;
                 }
             }
             else
@@ -147,12 +142,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                     if (Handler.IncludeBudgetTrx(budgetTrx))
                     {
                         BudgetDetailRow row = GetBudgetDetailRow(budgetTrx);
-                        BudgetDetailCell cell = row.Cells[period];
-                        cell.CellAmount += budgetTrx.curAmount;
-                        cell.GeneratedAmount += budgetTrx.curGeneratedAmount;
-                        cell.BudgetLimit += budgetTrx.curBudgetLimit;
-                        cell.BudgetUsed += budgetTrx.curBudgetApplied;
-                        cell.Budgets.Add(budgetTrx);
+                        row.Cells[period].Budgets.Add(budgetTrx);
                     }
                 }
             }

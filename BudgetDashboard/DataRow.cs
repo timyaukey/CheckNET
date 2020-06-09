@@ -40,7 +40,9 @@ namespace Willowsoft.CheckBook.BudgetDashboard
             RowTotal.ClearAmounts();
             for (int i = 0; i < Cells.Length; i++)
             {
-                RowTotal.Add(this.Cells[i]);
+                TCell periodCell = this.Cells[i];
+                periodCell.SetAmountsFromDetail();
+                RowTotal.Add(periodCell);
             }
         }
 

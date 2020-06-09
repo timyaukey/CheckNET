@@ -11,10 +11,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
 
         public DataCell()
         {
-            CellAmount = 0M;
-            GeneratedAmount = 0M;
-            BudgetLimit = 0M;
-            BudgetUsed = 0M;
+            ClearAmounts();
         }
 
         public void ClearAmounts()
@@ -31,6 +28,10 @@ namespace Willowsoft.CheckBook.BudgetDashboard
             this.GeneratedAmount += cell.GeneratedAmount;
             this.BudgetLimit += cell.BudgetLimit;
             this.BudgetUsed += cell.BudgetUsed;
+        }
+
+        public virtual void SetAmountsFromDetail()
+        {
         }
 
         public override string ToString()

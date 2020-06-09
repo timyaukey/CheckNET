@@ -167,7 +167,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
             {
                 SplitDetailCell cell = row.Cells[columnIndex - NonPeriodColumns];
                 StartShowCell(row, columnIndex, "Category");
-                lblDashboardAmount.Text = "Total Of Above Detail: " + cell.CellAmount.ToString("F2");
+                lblDashboardAmount.Text = "Total of Above Detail: " + cell.CellAmount.ToString("F2");
                 lblGeneratedAmount.Text = "Original Generated Amounts For Above: " + cell.GeneratedAmount.ToString("F2");
                 lblBudgetLimit.Text = "";
                 lblBudgetApplied.Text = "";
@@ -193,9 +193,9 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                 mSelectedBudgetColumn = columnIndex;
                 mSelectedBudgetGridCell = (BudgetGridCell)gridCell;
                 StartShowCell(row, columnIndex, "Budget");
-                lblDashboardAmount.Text = "Total Of Above Detail: " + cell.CellAmount.ToString("F2");
-                lblGeneratedAmount.Text = "Original Combined Limit Of Above Budgets: " + cell.GeneratedAmount.ToString("F2");
-                lblBudgetLimit.Text = "Current Combined Limit Of Above Budgets: " + cell.BudgetLimit.ToString("F2");
+                lblDashboardAmount.Text = "Total of Above Detail: " + cell.CellAmount.ToString("F2");
+                lblGeneratedAmount.Text = "Original Combined Limit of Above Budgets: " + cell.GeneratedAmount.ToString("F2");
+                lblBudgetLimit.Text = "Current Combined Limit of Above Budgets: " + cell.BudgetLimit.ToString("F2");
                 lblBudgetApplied.Text = "Amount Used From Above Budgets: " + cell.BudgetUsed.ToString("F2");
                 SetBudgetDetailVisibility(true);
                 List<IDetailItemBuilder> builders = new List<IDetailItemBuilder>();
