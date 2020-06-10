@@ -312,7 +312,7 @@ Public Class Register
         If result <> 0 Then
             Return result
         End If
-        result = Decimal.Compare(If(objTrx1.curAmount > 0, 0D, 1D), If(objTrx2.curAmount > 0, 0D, 1D))
+        result = objTrx1.intAmountSortKey.CompareTo(objTrx2.intAmountSortKey)
         If result <> 0 Then
             Return result
         End If

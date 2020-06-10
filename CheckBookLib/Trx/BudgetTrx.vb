@@ -351,4 +351,20 @@ Public Class BudgetTrx
             Return ""
         End Get
     End Property
+
+    Public Overrides ReadOnly Property intAmountSortKey As Integer
+        Get
+            'Have to use mcurBudgetLimit instead of mcurAmount because the algorithms that
+            'insert, update and delete transactions in the register require that only
+            'the transaction being inserted, updated or deleted can have its register
+            'position changed by that operation. BudgetTrx.mcurAmount can change when
+            'a split is applied to it, which could cause this rule to be violated if
+            'mcurAmount is used by this property.
+            'So we use mcurBudgetLimit instead, which is never changes except when
+            'inserting, updating or deleting the budget.
+
+            Return If(mcurBudgetLimit > 0, 0, 1)
+            'Return MyBase.intAmountSortKey()
+        End Get
+    End Property
 End Class

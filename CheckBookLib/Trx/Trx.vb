@@ -315,6 +315,12 @@ Public MustInherit Class Trx
     Public MustOverride ReadOnly Property intTrxTypeSortKey() As Integer
     Public MustOverride ReadOnly Property strDocNumberSortKey() As String
 
+    Public Overridable ReadOnly Property intAmountSortKey() As Integer
+        Get
+            Return If(mcurAmount > 0, 0, 1)
+        End Get
+    End Property
+
     Public Sub Delete(ByVal objDeleteLogger As ILogDelete, ByVal strLogTitle As String,
                       Optional ByVal blnSetChanged As Boolean = True)
         mobjReg.Delete(mlngIndex, objDeleteLogger, strLogTitle, blnSetChanged)
