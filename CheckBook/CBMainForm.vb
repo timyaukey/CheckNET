@@ -26,9 +26,15 @@ Friend Class CBMainForm
             blnCancelStart = False
             mobjHostUI = Me
 
-            Dim strUserLicenseStatement As String = "Licensed for non-commercial use only"
-            If Not Company.objUserLicenseValues Is Nothing Then
-                strUserLicenseStatement = "Licensed to " + Company.objUserLicenseValues("UserName")
+            Dim strUserLicenseStatement As String = "License error"
+            If Company.objMainLicense.lngStatus = LicenseStatus.Active Then
+                strUserLicenseStatement = "Licensed to " + Company.objMainLicense.strLicensedTo
+            ElseIf Company.objMainLicense.lngStatus = LicenseStatus.Expired Then
+                strUserLicenseStatement = "License to " + Company.objMainLicense.strLicensedTo + " expired " + Company.objMainLicense.datExpiration.Value.ToShortDateString()
+            ElseIf Company.objMainLicense.lngStatus = LicenseStatus.Invalid Then
+                strUserLicenseStatement = "License file is invalid"
+            ElseIf Company.objMainLicense.lngStatus = LicenseStatus.Missing Then
+                strUserLicenseStatement = "License file is missing"
             End If
 
             Me.Text = strSoftwareTitle

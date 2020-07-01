@@ -89,10 +89,13 @@
     <Compile Include="AgingUtils.vb" />
     <Compile Include="CBListBoxItem.vb" />
     <Compile Include="CompanyInfo.vb" />
+    <Compile Include="MainLicense.vb" />
+    <Compile Include="TamperProofLicense.vb" />
     <Compile Include="ErrorHandling.vb" />
     <Compile Include="FilePersisterExceptions.vb" />
     <Compile Include="IFilePersister.vb" />
     <Compile Include="IFilePersistable.vb" />
+    <Compile Include="ILicense.vb" />
     <Compile Include="IStringTranslator.vb" />
     <Compile Include="LineStringTranslator.vb" />
     <Compile Include="ListViewSorter.vb" />

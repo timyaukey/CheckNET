@@ -6,10 +6,12 @@ namespace Willowsoft.CheckBook.LicenseGenerator
 {
     public static class UserLicenseBuilder
     {
-        public static void Build(string userName, string emailAddress, string serialNumber, System.IO.Stream output)
+        public static void Build(string licensedTo, DateTime? expirationDate, string emailAddress, string serialNumber, System.IO.Stream output)
         {
             Dictionary<string, string> values = new Dictionary<string, string>();
-            values.Add("UserName", userName);
+            values.Add("LicensedTo", licensedTo);
+            if (expirationDate.HasValue)
+                values.Add("ExpirationDate", expirationDate.Value.ToShortDateString());
             values.Add("EmailAddress", emailAddress);
             values.Add("SerialNumber", serialNumber);
             Willowsoft.TamperProofData.LicenseWriter.Write(values, new UserLicenseSigner(), output);

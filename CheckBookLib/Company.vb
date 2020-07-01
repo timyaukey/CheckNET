@@ -44,8 +44,7 @@ Public Class Company
     'Key of budget used as placeholder in fake trx.
     Public strPlaceholderBudgetKey As String
 
-    'Values loaded from user license file, or Nothing if there is no user license file.
-    Public Shared objUserLicenseValues As Dictionary(Of String, String) = objLoadUserLicenseFile()
+    Public Shared objMainLicense As ILicense = objLoadMainLicenseFile()
 
     Public Sub New(ByVal strDataPathValue As String)
         colAccounts = New List(Of Account)
@@ -450,19 +449,11 @@ Public Class Company
             Environment.SpecialFolder.CommonApplicationData), "WCCheckbookLicenses")
     End Function
 
-    Public Shared Function strUserLicenseFile() As String
-        Return System.IO.Path.Combine(Company.strLicenseFolder(), "user.lic")
-    End Function
-
-    Private Shared Function objLoadUserLicenseFile() As Dictionary(Of String, String)
-        Dim strLicenseFile As String = strUserLicenseFile()
-        If System.IO.File.Exists(strLicenseFile) Then
-            Using licenseStream As System.IO.Stream = New System.IO.FileStream(strLicenseFile, FileMode.Open)
-                Dim objValues As Dictionary(Of String, String) = Willowsoft.TamperProofData.LicenseReader.Read(licenseStream, New UserLicenseValidator())
-                Return objValues
-            End Using
-        End If
-        Return Nothing
+    Private Shared Function objLoadMainLicenseFile() As ILicense
+        Dim objLicense As ILicense
+        objLicense = New MainLicense()
+        objLicense.Load()
+        Return objLicense
     End Function
 
 End Class
