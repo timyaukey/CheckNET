@@ -7,7 +7,7 @@ namespace Willowsoft.CheckBook.LicenseGenerator
     // WARNING! This signer class contains your private key, and must NEVER be
     // distributed to end users in source or compiled form! It generally belongs
     // to a separate project/assembly used only for generating signatures.
-    public class UserLicenseSigner : Willowsoft.TamperProofData.Signer
+    public class MainLicenseSigner : Willowsoft.TamperProofData.Signer
     {
         protected override RSAParameters GetPrivateKey()
         {

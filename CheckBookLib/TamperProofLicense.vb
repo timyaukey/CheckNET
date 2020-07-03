@@ -9,6 +9,17 @@ Public MustInherit Class TamperProofLicense
     Private mcolValues As Dictionary(Of String, String) = Nothing
     Private mlngStatus As LicenseStatus = LicenseStatus.NotLoaded
 
+    Public ReadOnly Property intLicenseVersion() As Integer Implements ILicense.intLicenseVersion
+        Get
+            Dim strValue As String = Nothing
+            If mcolValues.TryGetValue("LicenseVersion", strValue) Then
+                Return Integer.Parse(strValue)
+            Else
+                Return 0
+            End If
+        End Get
+    End Property
+
     Public ReadOnly Property lngStatus As LicenseStatus Implements ILicense.lngStatus
         Get
             Return mlngStatus

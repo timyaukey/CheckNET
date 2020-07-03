@@ -14,7 +14,7 @@ namespace Willowsoft.CheckBook.LicenseGenerator
                 values.Add("ExpirationDate", expirationDate.Value.ToShortDateString());
             values.Add("EmailAddress", emailAddress);
             values.Add("SerialNumber", serialNumber);
-            Willowsoft.TamperProofData.LicenseWriter.Write(values, new UserLicenseSigner(), output);
+            Willowsoft.TamperProofData.LicenseWriter.Write(values, new MainLicenseSigner(), output);
         }
     }
 }

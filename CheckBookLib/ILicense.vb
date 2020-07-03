@@ -5,6 +5,7 @@ Imports System.Collections.Generic
 
 Public Interface ILicense
     Sub Load()
+    ReadOnly Property intLicenseVersion() As Integer
     ReadOnly Property strBaseFileName() As String
     ReadOnly Property lngStatus() As LicenseStatus
     ReadOnly Property strTitle() As String

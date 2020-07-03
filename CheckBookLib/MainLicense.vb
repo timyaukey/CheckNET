@@ -25,6 +25,6 @@ Public Class MainLicense
     End Property
 
     Protected Overrides Function objGetValidator() As Willowsoft.TamperProofData.Validator
-        Return New UserLicenseValidator()
+        Return New MainLicenseValidator()
     End Function
 End Class

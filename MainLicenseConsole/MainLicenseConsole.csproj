@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{73146FD1-6D15-4416-9137-8164A2673611}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>LicenseConsole</RootNamespace>
-    <AssemblyName>LicenseConsole</AssemblyName>
+    <RootNamespace>MainLicenseConsole</RootNamespace>
+    <AssemblyName>MainLicenseConsole</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -54,9 +54,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LicenseGenerator\LicenseGenerator.csproj">
+    <ProjectReference Include="..\MainLicenseGenerator\MainLicenseGenerator.csproj">
       <Project>{6442bd1f-a48b-4f0b-ae9e-864c623a5afb}</Project>
-      <Name>LicenseGenerator</Name>
+      <Name>MainLicenseGenerator</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
