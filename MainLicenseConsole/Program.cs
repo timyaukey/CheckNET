@@ -37,10 +37,11 @@ namespace LicenseConsole
                 Console.WriteLine("Missing data.");
                 return;
             }
+            Dictionary<string, string> values = Willowsoft.TamperProofData.StandardLicenseBuilder.Build(licensedTo, expirationDate, emailAddress, serialNumber, 1);
             const string userLicenseFileName = "User.lic";
             using (System.IO.Stream output = new System.IO.FileStream(userLicenseFileName, System.IO.FileMode.Create))
             {
-                Willowsoft.CheckBook.LicenseGenerator.UserLicenseBuilder.Build(licensedTo, expirationDate, emailAddress, serialNumber, output);
+                Willowsoft.TamperProofData.LicenseWriter.Write(values, new Willowsoft.CheckBook.LicenseGenerator.MainLicenseSigner(), output);
                 Console.Write("User license written to " + userLicenseFileName);
             }
         }

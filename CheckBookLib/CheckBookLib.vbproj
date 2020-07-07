@@ -68,8 +68,8 @@
     <Reference Include="System.XML">
       <Name>System.XML</Name>
     </Reference>
-    <Reference Include="Willowsoft.TamperProofData, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Willowsoft.TamperProofData.1.0.0\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
+    <Reference Include="Willowsoft.TamperProofData, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Willowsoft.TamperProofData.1.1.0\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -90,12 +90,10 @@
     <Compile Include="CBListBoxItem.vb" />
     <Compile Include="CompanyInfo.vb" />
     <Compile Include="MainLicense.vb" />
-    <Compile Include="TamperProofLicense.vb" />
     <Compile Include="ErrorHandling.vb" />
     <Compile Include="FilePersisterExceptions.vb" />
     <Compile Include="IFilePersister.vb" />
     <Compile Include="IFilePersistable.vb" />
-    <Compile Include="ILicense.vb" />
     <Compile Include="IStringTranslator.vb" />
     <Compile Include="LineStringTranslator.vb" />
     <Compile Include="ListViewSorter.vb" />

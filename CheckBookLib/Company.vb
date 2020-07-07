@@ -4,6 +4,8 @@ Option Explicit On
 Imports System.IO
 Imports System.Xml.Serialization
 
+Imports Willowsoft.TamperProofData
+
 <Assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Willowsoft.CheckBook.UnitTests")>
 
 ''' <summary>
@@ -44,7 +46,7 @@ Public Class Company
     'Key of budget used as placeholder in fake trx.
     Public strPlaceholderBudgetKey As String
 
-    Public Shared objMainLicense As ILicense = objLoadMainLicenseFile()
+    Public Shared objMainLicense As IStandardLicense = objLoadMainLicenseFile()
 
     Public Sub New(ByVal strDataPathValue As String)
         colAccounts = New List(Of Account)
@@ -449,10 +451,10 @@ Public Class Company
             Environment.SpecialFolder.CommonApplicationData), "WCCheckbookLicenses")
     End Function
 
-    Private Shared Function objLoadMainLicenseFile() As ILicense
-        Dim objLicense As ILicense
+    Private Shared Function objLoadMainLicenseFile() As IStandardLicense
+        Dim objLicense As IStandardLicense
         objLicense = New MainLicense()
-        objLicense.Load()
+        objLicense.Load(strLicenseFolder())
         Return objLicense
     End Function
 

@@ -5,6 +5,8 @@ Imports System.IO
 Imports System.Reflection
 Imports VB = Microsoft.VisualBasic
 
+Imports Willowsoft.TamperProofData
+
 Friend Class CBMainForm
     Inherits System.Windows.Forms.Form
     Implements IHostUI
@@ -27,13 +29,13 @@ Friend Class CBMainForm
             mobjHostUI = Me
 
             Dim strUserLicenseStatement As String = "License error"
-            If Company.objMainLicense.lngStatus = LicenseStatus.Active Then
-                strUserLicenseStatement = "Licensed to " + Company.objMainLicense.strLicensedTo
-            ElseIf Company.objMainLicense.lngStatus = LicenseStatus.Expired Then
-                strUserLicenseStatement = "License to " + Company.objMainLicense.strLicensedTo + " expired " + Company.objMainLicense.datExpiration.Value.ToShortDateString()
-            ElseIf Company.objMainLicense.lngStatus = LicenseStatus.Invalid Then
+            If Company.objMainLicense.Status = LicenseStatus.Active Then
+                strUserLicenseStatement = "Licensed to " + Company.objMainLicense.LicensedTo
+            ElseIf Company.objMainLicense.Status = LicenseStatus.Expired Then
+                strUserLicenseStatement = "License to " + Company.objMainLicense.LicensedTo + " expired " + Company.objMainLicense.ExpirationDate.Value.ToShortDateString()
+            ElseIf Company.objMainLicense.Status = LicenseStatus.Invalid Then
                 strUserLicenseStatement = "License file is invalid"
-            ElseIf Company.objMainLicense.lngStatus = LicenseStatus.Missing Then
+            ElseIf Company.objMainLicense.Status = LicenseStatus.Missing Then
                 strUserLicenseStatement = "License file is missing"
             End If
 
