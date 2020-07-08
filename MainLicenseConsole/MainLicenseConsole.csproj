@@ -41,8 +41,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="Willowsoft.TamperProofData, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Willowsoft.TamperProofData.1.1.0\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
+    <Reference Include="Willowsoft.TamperProofConsole, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Willowsoft.TamperProofConsole.1.0.0\lib\netstandard2.0\Willowsoft.TamperProofConsole.dll</HintPath>
+    </Reference>
+    <Reference Include="Willowsoft.TamperProofData, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Willowsoft.TamperProofData.1.1.1\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
