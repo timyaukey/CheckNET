@@ -162,6 +162,7 @@ Friend Class CBMainForm
         Yield New FilterGeneratedOnly()
         Yield New FilterNonReal()
         Yield New FilterNonRealBank()
+        Yield New FilterNonImportedBank()
     End Function
 
     Public Iterator Function objSearchTools() As IEnumerable(Of ISearchTool) Implements IHostUI.objSearchTools

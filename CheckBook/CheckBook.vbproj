@@ -219,6 +219,7 @@
     <Compile Include="Search\FilterAll.vb" />
     <Compile Include="Search\FilterFakeOnly.vb" />
     <Compile Include="Search\FilterGeneratedOnly.vb" />
+    <Compile Include="Search\FilterNonImportedBank.vb" />
     <Compile Include="Search\FilterNonReal.vb" />
     <Compile Include="Search\FilterNonGenerated.vb" />
     <Compile Include="Search\FilterNonRealBank.vb" />
