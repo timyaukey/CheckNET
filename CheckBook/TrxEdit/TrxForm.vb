@@ -1453,6 +1453,7 @@ Friend Class TrxForm
             AddSplits(objTrx)
             If gblnPrintCheck(mobjHostUI, domCheckFormat, objTrx) Then
                 SaveNormal()
+                mblnCancel = False
                 Me.Close()
             End If
 
