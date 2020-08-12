@@ -131,37 +131,4 @@ Public Module CBMain
         cbo.Items.Add(UITools.CreateListBoxItem("Earliest Date", ImportMatchNarrowMethod.EarliestDate))
     End Sub
 
-    Public Sub gGetSplitDates(ByVal objTrx As Trx, ByVal objSplit As TrxSplit, ByRef datInvoiceDate As Date, ByRef datDueDate As Date)
-
-        datDueDate = objSplit.datDueDate
-        If datDueDate = System.DateTime.FromOADate(0) Then
-            datDueDate = objTrx.datDate
-        End If
-        datInvoiceDate = objSplit.datInvoiceDate
-        Dim intDaysBack As Short
-        Dim strTerms As String
-        If datInvoiceDate = System.DateTime.FromOADate(0) Then
-            'Estimate invoice date from due date.
-            strTerms = LCase(objSplit.strTerms)
-            strTerms = Replace(strTerms, " ", "")
-            If InStr(strTerms, "net10") > 0 Then
-                intDaysBack = 10
-            ElseIf InStr(strTerms, "net15") > 0 Then
-                intDaysBack = 15
-            ElseIf InStr(strTerms, "net20") > 0 Then
-                intDaysBack = 20
-            ElseIf InStr(strTerms, "net25") > 0 Then
-                intDaysBack = 25
-            Else
-                'Is the category one we guessed to have short terms?
-                If InStr(objTrx.objReg.objAccount.objCompany.strShortTermsCatKeys, Company.strEncodeCatKey(objSplit.strCategoryKey)) > 0 Then
-                    intDaysBack = 14
-                Else
-                    intDaysBack = 30
-                End If
-            End If
-            datInvoiceDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDaysBack, datDueDate)
-        End If
-    End Sub
-
 End Module

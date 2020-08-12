@@ -99,6 +99,38 @@ Public Class TrxSplit
         End Set
     End Property
 
+    Public ReadOnly Property datInvoiceDateEffective() As Date
+        Get
+            Dim datEffective As Date = mdatInvoiceDate
+            Dim intDaysBack As Integer
+            Dim strTermsNormalized As String
+            If datEffective = System.DateTime.FromOADate(0) Then
+                'Estimate invoice date from due date.
+                strTermsNormalized = LCase(mstrTerms)
+                strTermsNormalized = Replace(strTermsNormalized, " ", "")
+                If InStr(strTermsNormalized, "net10") > 0 Then
+                    intDaysBack = 10
+                ElseIf InStr(strTermsNormalized, "net15") > 0 Then
+                    intDaysBack = 15
+                ElseIf InStr(strTermsNormalized, "net20") > 0 Then
+                    intDaysBack = 20
+                ElseIf InStr(strTermsNormalized, "net25") > 0 Then
+                    intDaysBack = 25
+                ElseIf InStr(strTermsNormalized, "net30") > 0 Then
+                    intDaysBack = 30
+                Else
+                    'Is the category one we guessed to have short terms?
+                    If InStr(objParent.objReg.objAccount.objCompany.strShortTermsCatKeys, Company.strEncodeCatKey(mstrCategoryKey)) > 0 Then
+                        intDaysBack = 14
+                    Else
+                        intDaysBack = 30
+                    End If
+                End If
+                datEffective = DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDaysBack, datDueDateEffective)
+            End If
+            Return datEffective
+        End Get
+    End Property
 
     Public Property datDueDate() As Date
         Get
@@ -109,6 +141,15 @@ Public Class TrxSplit
         End Set
     End Property
 
+    Public ReadOnly Property datDueDateEffective() As Date
+        Get
+            Dim datEffective = mdatDueDate
+            If datEffective = System.DateTime.FromOADate(0) Then
+                datEffective = mobjParent.datDate
+            End If
+            Return datEffective
+        End Get
+    End Property
 
     Public Property strTerms() As String
         Get

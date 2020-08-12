@@ -147,7 +147,8 @@ Friend Class ExportForm
 
         Try
 
-            gGetSplitDates(objTrx, objSplit, datInvToUse, datDueToUse)
+            datInvToUse = objSplit.datInvoiceDateEffective
+            datDueToUse = objSplit.datDueDateEffective
             If objSplit.datInvoiceDate > System.DateTime.FromOADate(0) Then
                 strInvDate = Utilities.strFormatDate(objSplit.datInvoiceDate)
             End If
