@@ -20,6 +20,14 @@ Public Class TrialBalanceForm
 
     Private Sub btnTrialBalance_Click(sender As Object, e As EventArgs) Handles btnTrialBalance.Click
         Try
+            If ctlEndDate.Value.Date < ctlStartDate.Value.Date Then
+                mobjHostUI.ErrorMessageBox("Ending date may not be before starting date")
+                Return
+            End If
+            If ctlAgingDate.Value.Date > ctlEndDate.Value.Date Then
+                mobjHostUI.ErrorMessageBox("Aging date may not be after ending date")
+                Return
+            End If
             Dim objBalSheet As AccountGroupManager = objGetBalanceSheetData()
             Dim objIncExp As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value.Date, True)
             ShowInListView(lvwBalanceSheetAccounts, objBalSheet, "Balance Sheet Through End Date")
@@ -321,7 +329,7 @@ Public Class TrialBalanceForm
 
     Private Sub btnAccountsPayable_Click(sender As Object, e As EventArgs) Handles btnAccountsPayable.Click
         Try
-            OutputAccountsPayableOrReceivable(Account.SubType.Liability_AccountsPayable,
+            OutputAccounts(Of VendorSummary)(Account.SubType.Liability_AccountsPayable,
                 "AccountsPayable", "Accounts Payable", "Total Accounts Payable")
         Catch ex As Exception
             gTopException(ex)
@@ -330,44 +338,82 @@ Public Class TrialBalanceForm
 
     Private Sub btnAccountsReceivable_Click(sender As Object, e As EventArgs) Handles btnAccountsReceivable.Click
         Try
-            OutputAccountsPayableOrReceivable(Account.SubType.Asset_AccountsReceivable,
+            OutputAccounts(Of CustomerSummary)(Account.SubType.Asset_AccountsReceivable,
                 "AccountsReceivable", "Accounts Receivable", "Total Accounts Receivable")
         Catch ex As Exception
             gTopException(ex)
         End Try
     End Sub
 
-    Private Sub OutputAccountsPayableOrReceivable(ByVal lngSubType As Account.SubType,
+    Private Sub OutputAccounts(Of TSummary As {TrxNameSummary, New})(ByVal lngSubType As Account.SubType,
                                             ByVal strReportFileName As String,
                                             ByVal strReportTitle As String,
                                             ByVal strReportTotalTag As String)
 
         Dim objWriter As HTMLWriter = New HTMLWriter(mobjHostUI, strReportFileName, False)
-        Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
-        Dim objAccumDummy As ReportAccumulator = New ReportAccumulator()
-        Dim strLineHeaderClass As String = "ReportHeader2"
-        Dim strLineTitleClass As String = "ReportLineTitle2"
-        Dim strLineAmountClass As String = "ReportLineAmount2"
-        Dim strLineFooterTitleClass As String = "ReportFooterTitle2"
-        Dim strLineFooterAmountClass As String = "ReportFooterAmount2"
+        'Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
+        'Dim objAccumDummy As ReportAccumulator = New ReportAccumulator()
+        'Dim strLineHeaderClass As String = "ReportHeader2"
+        Dim strLineTitleClass As String = "ReportTableDataTitle"
+        Dim strLineAmountClass As String = "ReportTableDataAmount"
+        'Dim strLineFooterTitleClass As String = "ReportFooterTitle2"
+        'Dim strLineFooterAmountClass As String = "ReportFooterAmount2"
         Dim strMinusClass As String = "Minus"
 
-        Dim colVendors As List(Of VendorSummary) =
-            VendorSummary.colScanVendors(mobjCompany, ctlEndDate.Value.Date, lngSubType)
+        Dim colSummary As List(Of TSummary) =
+            TrxNameSummary.colScanTrx(Of TSummary)(mobjCompany, ctlEndDate.Value.Date, ctlAgingDate.Value.Date, lngSubType)
+        Dim objTotals As TSummary = New TSummary()
+        objTotals.strName = "Total"
 
         objWriter.BeginReport()
         objWriter.OutputHeader(strReportTitle, "As Of " + ctlEndDate.Value.Date.ToShortDateString())
 
-        For Each objVendor As VendorSummary In colVendors
-            If objVendor.curBalance <> 0D Then
-                objWriter.OutputAmount(strLineTitleClass, objVendor.strVendorName, strLineAmountClass, strMinusClass, objVendor.curBalance, objAccumTotal)
-            End If
-        Next
+        objWriter.OutputTableStart()
+        objWriter.OutputTableHeaderStart()
+        objWriter.OutputTableHeaderTitle("Account")
+        objWriter.OutputTableHeaderAmount("Current")
+        objWriter.OutputTableHeaderAmount("1-30 days")
+        objWriter.OutputTableHeaderAmount("31-60 days")
+        objWriter.OutputTableHeaderAmount("61-90 days")
+        objWriter.OutputTableHeaderAmount("90+ days")
+        objWriter.OutputTableHeaderAmount("Future")
+        objWriter.OutputTableHeaderAmount("Credits")
+        objWriter.OutputTableHeaderAmount("Total")
+        objWriter.OutputTableHeaderEnd()
 
-        objWriter.OutputText(strLineHeaderClass, strReportTotalTag)
-        objWriter.OutputAmount(strLineFooterTitleClass, "", strLineFooterAmountClass, strMinusClass, objAccumTotal.curTotal, objAccumDummy)
+        For Each objSummary As TSummary In colSummary
+            If objSummary.curBalance <> 0D Then
+                OutputAccountRow(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass, objSummary)
+            End If
+            objTotals.objCurrentCharges.curDateTotal += objSummary.objCurrentCharges.curDateTotal
+            objTotals.obj1To30Charges.curDateTotal += objSummary.obj1To30Charges.curDateTotal
+            objTotals.obj31To60Charges.curDateTotal += objSummary.obj31To60Charges.curDateTotal
+            objTotals.obj61To90Charges.curDateTotal += objSummary.obj61To90Charges.curDateTotal
+            objTotals.objOver90Charges.curDateTotal += objSummary.objOver90Charges.curDateTotal
+            objTotals.objFutureCharges.curDateTotal += objSummary.objFutureCharges.curDateTotal
+            objTotals.objPayments.curDateTotal += objSummary.objPayments.curDateTotal
+            objTotals.curBalance += objSummary.curBalance
+        Next
+        OutputAccountRow(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass, objTotals)
+
+        objWriter.OutputTableEnd()
 
         objWriter.EndReport()
         objWriter.ShowReport()
+    End Sub
+
+    Private Shared Sub OutputAccountRow(Of TSummary As {TrxNameSummary, New})(objWriter As HTMLWriter,
+        strLineTitleClass As String, strLineAmountClass As String, strMinusClass As String, objSummary As TSummary)
+        objWriter.OutputTableRowStart()
+        objWriter.OutputTableDataTitle(strLineTitleClass, objSummary.strName)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.objCurrentCharges.curDateTotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.obj1To30Charges.curDateTotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.obj31To60Charges.curDateTotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.obj61To90Charges.curDateTotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.objOver90Charges.curDateTotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.objFutureCharges.curDateTotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.objPayments.curDateTotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.curBalance)
+        objWriter.OutputTableRowEnd()
     End Sub
 End Class

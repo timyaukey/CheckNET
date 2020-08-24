@@ -2,11 +2,11 @@
 Option Explicit On
 
 Public Class HTMLWriter
-    Private mobjHostUI As IHostUI
-    Private mobjCompany As Company
-    Private mstrFileNameRoot As String
-    Private mblnLocalStylesheet As Boolean
-    Private mobjBuilder As System.Text.StringBuilder
+    Private ReadOnly mobjHostUI As IHostUI
+    Private ReadOnly mobjCompany As Company
+    Private ReadOnly mstrFileNameRoot As String
+    Private ReadOnly mblnLocalStylesheet As Boolean
+    Private ReadOnly mobjBuilder As System.Text.StringBuilder
     Public blnUseMinusNumbers As Boolean
 
     Public Sub New(ByVal objHostUI As IHostUI, ByVal strFileNameRoot As String, ByVal blnLocalStylesheet As Boolean)
@@ -96,6 +96,50 @@ Public Class HTMLWriter
         OutputLine("<span class='" + strAmountClass + strExtraClass + "'>" + curOutputAmount.ToString("###,###,###,##0.00") + "</span>")
         OutputLine("</div>")
         objAccum.Add(curAmount)
+    End Sub
+
+    Public Sub OutputTableStart()
+        OutputLine("<table class='ReportTable'>")
+    End Sub
+
+    Public Sub OutputTableEnd()
+        OutputLine("</table>")
+    End Sub
+
+    Public Sub OutputTableHeaderStart()
+        OutputLine("<thead class='ReportTableHeaderRow'><tr>")
+    End Sub
+
+    Public Sub OutputTableHeaderEnd()
+        OutputLine("</tr></thead>")
+    End Sub
+
+    Public Sub OutputTableHeaderTitle(ByVal strLabel As String)
+        OutputLine("<th class='ReportTableHeaderTitle'>" + strLabel + "</td>")
+    End Sub
+
+    Public Sub OutputTableHeaderAmount(ByVal strLabel As String)
+        OutputLine("<th class='ReportTableHeaderAmount'>" + strLabel + "</td>")
+    End Sub
+
+    Public Sub OutputTableRowStart()
+        OutputLine("<tr class='ReportTableDataRow'>")
+    End Sub
+
+    Public Sub OutputTableRowEnd()
+        OutputLine("</tr>")
+    End Sub
+
+    Public Sub OutputTableDataTitle(ByVal strTitleClass As String, ByVal strTitle As String)
+        OutputLine("<td class='" + strTitleClass + "'>" + strTitle + "</td>")
+    End Sub
+
+    Public Sub OutputTableDataAmount(ByVal strAmountClass As String, ByVal strNegativeClass As String, ByVal curAmount As Decimal)
+        Dim strExtraClass As String = ""
+        If curAmount < 0 Then
+            strExtraClass = " " + strNegativeClass
+        End If
+        OutputLine("<td class='" + strAmountClass + strExtraClass + "'>" + curAmount.ToString("###,###,###,##0.00") + "</td>")
     End Sub
 
     Private Sub OutputLine(ByVal strLine As String)

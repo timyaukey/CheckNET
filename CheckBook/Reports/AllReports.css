@@ -49,12 +49,14 @@
 
 .ReportLineTitle2
 {
+	font-size: 18px;
 	display: inline-block;
 	width: 75%;
 }
 
 .ReportLineAmount2
 {
+	font-size: 18px;
 	display: inline-block;
 	text-align: right;
 	width: 20%;
@@ -62,16 +64,57 @@
 
 .ReportFooterTitle2
 {
+	font-size: 18px;
 	display: inline-block;
 	width: 75%;
 }
 
-.ReportFooterAmount2 {
-    display: inline-block;
-    text-align: right;
-    width: 20%;
-    border-top-style: solid;
-    border-top-color: black;
-    border-top-width: 1px;
+.ReportFooterAmount2
+{
+	font-size: 18px;
+	display: inline-block;
+	text-align: right;
+	width: 20%;
+	border-top-style: solid;
+	border-top-color: black;
+	border-top-width: 1px;
+}
+
+.ReportTable
+{
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+.ReportTableHeaderRow
+{
+
+}
+
+.ReportTableHeaderTitle, .ReportTableHeaderAmount, .ReportTableDataTitle, .ReportTableDataAmount {
+	border: 1px solid black;
+	font-size: 16px;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+.ReportTableHeaderTitle {
+	text-align: left;
+}
+
+.ReportTableHeaderAmount {
+	text-align: right;
+}
+
+.ReportTableDataRow
+{
+
+}
+
+.ReportTableDataTitle {
+}
+
+.ReportTableDataAmount {
+	text-align: right;
 }
 
