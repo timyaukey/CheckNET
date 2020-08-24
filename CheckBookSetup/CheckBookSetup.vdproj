@@ -365,7 +365,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.Lib, Version=2.8.2.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.Lib, Version=2.8.3.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_11FFE77AA87A54B31EC3778216A98D19"
@@ -778,15 +778,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Willow Creek Checkbook"
-        "ProductCode" = "8:{4266F110-937E-4CC3-A277-0786BCA1B280}"
-        "PackageCode" = "8:{1C63744E-0C1E-431C-81E2-938B077EB210}"
+        "ProductCode" = "8:{B9E51F74-FF66-4851-9C2C-D2274BDE7EC1}"
+        "PackageCode" = "8:{AC4FEB01-3B8D-487C-8C85-DC9350681BAD}"
         "UpgradeCode" = "8:{4B1A022A-7B68-44D6-AB9F-9EE0B336EEF0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.8.3"
+        "ProductVersion" = "8:2.9.0"
         "Manufacturer" = "8:Willow Creek Software"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
