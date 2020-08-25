@@ -93,6 +93,8 @@
     </Compile>
     <Compile Include="PluginAssemblyAttribute.vb" />
     <Compile Include="IPlugin.vb" />
+    <Compile Include="Reports\HTMLWriter.vb" />
+    <Compile Include="Reports\ReportAccumulator.vb" />
     <Compile Include="SearchComparers.vb" />
     <Compile Include="SplitSearchHandler.vb" />
     <Compile Include="PluginBase.vb" />
@@ -123,6 +125,11 @@
       <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
       <Name>CheckBookLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\AllReports.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
