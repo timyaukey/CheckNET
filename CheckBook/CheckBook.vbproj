@@ -183,7 +183,6 @@
     </Compile>
     <Compile Include="Plugins\ReconcilePlugin.vb" />
     <Compile Include="Plugins\ToolPlugins.vb" />
-    <Compile Include="Plugins\TrialBalancePlugIn.vb" />
     <Compile Include="Reports\CategorySummary\CatSumRptForm.Designer.vb">
       <SubType>Code</SubType>
       <DependentUpon>CatSumRptForm.vb</DependentUpon>
@@ -199,12 +198,6 @@
       <DependentUpon>CBMainForm.vb</DependentUpon>
     </Compile>
     <Compile Include="CBMainForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Reports\TrialBalanceForm.Designer.vb">
-      <DependentUpon>TrialBalanceForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Reports\TrialBalanceForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Search\ChangeCategoryForm.Designer.vb">
@@ -402,12 +395,6 @@
     <Content Include="Help\Styles.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Reports\BalanceSheet.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Reports\ProfitAndLoss.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <EmbeddedResource Include="AccountForm.resx">
       <DependentUpon>AccountForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -444,9 +431,6 @@
     <EmbeddedResource Include="CBMainForm.resX">
       <DependentUpon>CBMainForm.vb</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\TrialBalanceForm.resx">
-      <DependentUpon>TrialBalanceForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Search\ChangeCategoryForm.resX">
       <DependentUpon>ChangeCategoryForm.vb</DependentUpon>
@@ -549,6 +533,10 @@
     <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
       <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
       <Name>CheckBookLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FinancialReports\FinancialReports.vbproj">
+      <Project>{081cd8c1-9ebf-4b8b-8353-ef6b4bd5b293}</Project>
+      <Name>FinancialReports</Name>
     </ProjectReference>
     <ProjectReference Include="..\GeneralPlugins\GeneralPlugins.csproj">
       <Project>{02d39d1b-a3ee-4721-83bf-ca8812985006}</Project>

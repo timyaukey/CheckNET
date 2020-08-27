@@ -1,6 +1,7 @@
 ﻿Option Strict On
 Option Explicit On
 
+<Assembly: PluginAssembly()>
 
 Public Class TrialBalancePlugIn
     Inherits PluginBase

@@ -46,6 +46,12 @@
         "Entry"
         {
         "MsmKey" = "8:_11FFE77AA87A54B31EC3778216A98D19"
+        "OwnerKey" = "8:_5C6704F885F29CDB3149BCFFF3271A2D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_11FFE77AA87A54B31EC3778216A98D19"
         "OwnerKey" = "8:_DD4A3B78A54D408F94C62917BA2964A2"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -89,6 +95,12 @@
         {
         "MsmKey" = "8:_565174983C428715D4CF53A86B4BEC7A"
         "OwnerKey" = "8:_E28D83F55C2CA70CF7B72D1BE0266684"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5C6704F885F29CDB3149BCFFF3271A2D"
+        "OwnerKey" = "8:_DD4A3B78A54D408F94C62917BA2964A2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -159,6 +171,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_EB368C77F4405E92D39636B01A428B3A"
+        "OwnerKey" = "8:_5C6704F885F29CDB3149BCFFF3271A2D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_F469C603622E4362B227958CA972F18B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -185,6 +203,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D9510EAFDF0D9D311640A018A7F7B77F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_5C6704F885F29CDB3149BCFFF3271A2D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -243,7 +267,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\CheckBookSetup.msi"
+        "OutputFilename" = "8:Debug\\CheckBookSetup-$(VersionNumber).msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -499,6 +523,37 @@
                     }
                 }
             "SourcePath" = "8:netstandard.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_084CDAC094364EC9B729E88A9AD06B5B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5C6704F885F29CDB3149BCFFF3271A2D"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:FinancialReports, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_5C6704F885F29CDB3149BCFFF3271A2D"
+                    {
+                    "Name" = "8:FinancialReports.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:FinancialReports.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_084CDAC094364EC9B729E88A9AD06B5B"
@@ -778,15 +833,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Willow Creek Checkbook"
-        "ProductCode" = "8:{5F126220-E43B-46E2-B810-F0DCF61E54F5}"
-        "PackageCode" = "8:{0BBA7480-774E-46EB-9F21-354FF0C3EE56}"
+        "ProductCode" = "8:{EFA2AE12-5EDB-4B09-BD92-EB6A9DDBBAE7}"
+        "PackageCode" = "8:{7932FC9E-7AED-4411-AE05-634A3C9CCF4F}"
         "UpgradeCode" = "8:{4B1A022A-7B68-44D6-AB9F-9EE0B336EEF0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.9.1"
+        "ProductVersion" = "8:2.9.2"
         "Manufacturer" = "8:Willow Creek Software"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1078,7 +1133,7 @@
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
                             "Setting" = "3:2"
-                            "Value" = "8:The installer will install [ProductName] on your computer."
+                            "Value" = "8:The installer will install [ProductName] [ProductVersion] on your computer."
                             "DefaultValue" = "8:#1203"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -1223,7 +1278,7 @@
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
                             "Setting" = "3:2"
-                            "Value" = "8:The installer will install [ProductName] on your computer."
+                            "Value" = "8:The installer will install [ProductName] [ProductVersion] on your computer."
                             "DefaultValue" = "8:#1203"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -1434,6 +1489,34 @@
                 {
                 }
             }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4C121B8738204AF7BC3D4F68D0A22F19"
+            {
+            "SourcePath" = "8:"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_084CDAC094364EC9B729E88A9AD06B5B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:ContentFiles"
+            "OutputProjectGuid" = "8:{00F98CA0-114A-4A84-B093-D6B88D7DE686}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_626F6CCBCAD04CE58F433B3209D46655"
             {
             "SourcePath" = "8:"
@@ -1485,6 +1568,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:ContentFiles"
             "OutputProjectGuid" = "8:{4FD83DDC-A8F7-44E1-87B4-C12366D6468D}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A8612EB3AB774A248942317C34770DEB"
+            {
+            "SourcePath" = "8:"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_084CDAC094364EC9B729E88A9AD06B5B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:ContentFiles"
+            "OutputProjectGuid" = "8:{081CD8C1-9EBF-4B8B-8353-EF6B4BD5B293}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
