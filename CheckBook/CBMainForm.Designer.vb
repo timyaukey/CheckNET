@@ -67,6 +67,7 @@
         Me.mnuRepairUserAccounts = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuWindows = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuHelp = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuLicensing = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuMain.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -160,7 +161,7 @@
         '
         'mnuSetup
         '
-        Me.mnuSetup.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuListPayees, Me.mnuListCategories, Me.mnuListBudgets, Me.mnuListTrxTypes, Me.mnuCheckFormat, Me.mnuCompanyInformation, Me.mnuUserAccounts})
+        Me.mnuSetup.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuListPayees, Me.mnuListCategories, Me.mnuListBudgets, Me.mnuListTrxTypes, Me.mnuCheckFormat, Me.mnuCompanyInformation, Me.mnuLicensing, Me.mnuUserAccounts})
         Me.mnuSetup.MergeAction = System.Windows.Forms.MergeAction.Remove
         Me.mnuSetup.Name = "mnuSetup"
         Me.mnuSetup.Size = New System.Drawing.Size(49, 20)
@@ -258,6 +259,12 @@
         Me.mnuHelp.Size = New System.Drawing.Size(44, 20)
         Me.mnuHelp.Text = "Help"
         '
+        'mnuLicensing
+        '
+        Me.mnuLicensing.Name = "mnuLicensing"
+        Me.mnuLicensing.Size = New System.Drawing.Size(205, 22)
+        Me.mnuLicensing.Text = "Licensing"
+        '
         'CBMainForm
         '
         Me.BackColor = System.Drawing.SystemColors.AppWorkspace
@@ -293,5 +300,6 @@
     Friend WithEvents mnuCompanyInformation As ToolStripMenuItem
     Friend WithEvents mnuFilePlugins As ToolStripMenuItem
     Friend WithEvents mnuHelp As ToolStripMenuItem
+    Friend WithEvents mnuLicensing As ToolStripMenuItem
 #End Region
 End Class

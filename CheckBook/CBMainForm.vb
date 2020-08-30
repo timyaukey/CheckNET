@@ -717,4 +717,14 @@ Friend Class CBMainForm
             gTopException(ex)
         End Try
     End Sub
+
+    Private Sub mnuLicensing_Click(sender As Object, e As EventArgs) Handles mnuLicensing.Click
+        Try
+            Using frm As LicenseForm = New LicenseForm()
+                frm.ShowLicense(Company.objMainLicense)
+            End Using
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
+    End Sub
 End Class
