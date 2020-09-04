@@ -38,6 +38,9 @@ Partial Class LicenseForm
         Me.lblSerialNumber = New System.Windows.Forms.Label()
         Me.txtLicenseStatus = New System.Windows.Forms.TextBox()
         Me.lblLicenseStatus = New System.Windows.Forms.Label()
+        Me.btnInstall = New System.Windows.Forms.Button()
+        Me.btnRemove = New System.Windows.Forms.Button()
+        Me.dlgOpenLicenseFile = New System.Windows.Forms.OpenFileDialog()
         Me.SuspendLayout()
         '
         'lblLicenseTitle
@@ -200,11 +203,39 @@ Partial Class LicenseForm
         Me.lblLicenseStatus.TabIndex = 14
         Me.lblLicenseStatus.Text = "License Status:"
         '
+        'btnInstall
+        '
+        Me.btnInstall.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnInstall.Location = New System.Drawing.Point(268, 215)
+        Me.btnInstall.Name = "btnInstall"
+        Me.btnInstall.Size = New System.Drawing.Size(103, 23)
+        Me.btnInstall.TabIndex = 16
+        Me.btnInstall.Text = "Install License"
+        Me.btnInstall.UseVisualStyleBackColor = True
+        '
+        'btnRemove
+        '
+        Me.btnRemove.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnRemove.Location = New System.Drawing.Point(377, 215)
+        Me.btnRemove.Name = "btnRemove"
+        Me.btnRemove.Size = New System.Drawing.Size(103, 23)
+        Me.btnRemove.TabIndex = 17
+        Me.btnRemove.Text = "Remove License"
+        Me.btnRemove.UseVisualStyleBackColor = True
+        '
+        'dlgOpenLicenseFile
+        '
+        Me.dlgOpenLicenseFile.Filter = "License files|*.lic|All files|*.*"
+        Me.dlgOpenLicenseFile.ShowReadOnly = True
+        Me.dlgOpenLicenseFile.Title = "Select License File To Install"
+        '
         'LicenseForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(495, 235)
+        Me.ClientSize = New System.Drawing.Size(495, 250)
+        Me.Controls.Add(Me.btnRemove)
+        Me.Controls.Add(Me.btnInstall)
         Me.Controls.Add(Me.txtLicenseStatus)
         Me.Controls.Add(Me.lblLicenseStatus)
         Me.Controls.Add(Me.txtSerialNumber)
@@ -248,4 +279,7 @@ Partial Class LicenseForm
     Friend WithEvents lblSerialNumber As Label
     Friend WithEvents txtLicenseStatus As TextBox
     Friend WithEvents lblLicenseStatus As Label
+    Friend WithEvents btnInstall As Button
+    Friend WithEvents btnRemove As Button
+    Friend WithEvents dlgOpenLicenseFile As OpenFileDialog
 End Class

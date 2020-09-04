@@ -721,7 +721,7 @@ Friend Class CBMainForm
     Private Sub mnuLicensing_Click(sender As Object, e As EventArgs) Handles mnuLicensing.Click
         Try
             Using frm As LicenseForm = New LicenseForm()
-                frm.ShowLicense(Company.objMainLicense)
+                frm.ShowLicense(mobjHostUI, Company.objMainLicense)
             End Using
         Catch ex As Exception
             gTopException(ex)

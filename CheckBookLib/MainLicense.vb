@@ -9,7 +9,7 @@ Public Class MainLicense
 
     Public Overrides ReadOnly Property BaseFileName As String
         Get
-            Return "user.lic"
+            Return "Willowsoft.Checkbook.Main.lic"
         End Get
     End Property
 
