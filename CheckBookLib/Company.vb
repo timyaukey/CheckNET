@@ -47,6 +47,7 @@ Public Class Company
     Public strPlaceholderBudgetKey As String
 
     Public Shared objMainLicense As IStandardLicense = objLoadMainLicenseFile()
+    Public Shared colExtraLicenses As List(Of IStandardLicense) = New List(Of IStandardLicense)()
 
     Public Sub New(ByVal strDataPathValue As String)
         colAccounts = New List(Of Account)

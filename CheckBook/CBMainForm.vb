@@ -275,6 +275,10 @@ Friend Class CBMainForm
         End Get
     End Property
 
+    Public Sub AddExtraLicense(objLicense As IStandardLicense) Implements IHostSetup.AddExtraLicense
+        Company.colExtraLicenses.Add(objLicense)
+    End Sub
+
     Private Function blnAddNormalTrx(ByVal objTrx As NormalTrx,
                                     ByRef datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrx
@@ -720,8 +724,11 @@ Friend Class CBMainForm
 
     Private Sub mnuLicensing_Click(sender As Object, e As EventArgs) Handles mnuLicensing.Click
         Try
-            Using frm As LicenseForm = New LicenseForm()
-                frm.ShowLicense(mobjHostUI, Company.objMainLicense)
+            'Using frm As LicenseForm = New LicenseForm()
+            '    frm.ShowLicense(mobjHostUI, Company.objMainLicense)
+            'End Using
+            Using frm As LicenseListForm = New LicenseListForm()
+                frm.ShowMe(mobjHostUI)
             End Using
         Catch ex As Exception
             gTopException(ex)

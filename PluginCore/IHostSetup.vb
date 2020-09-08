@@ -17,4 +17,6 @@ Public Interface IHostSetup
     Property objToolMenu As MenuBuilder
     Property objHelpMenu As MenuBuilder
 
+    Sub AddExtraLicense(ByVal objLicense As Willowsoft.TamperProofData.IStandardLicense)
+
 End Interface

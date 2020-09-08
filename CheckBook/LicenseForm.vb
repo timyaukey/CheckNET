@@ -16,7 +16,7 @@ Public Class LicenseForm
         Try
             txtLicenseTitle.Text = mobjLicense.LicenseTitle
             If mobjLicense.Status = TamperProofData.LicenseStatus.Active Or
-           mobjLicense.Status = TamperProofData.LicenseStatus.Expired Then
+               mobjLicense.Status = TamperProofData.LicenseStatus.Expired Then
                 txtLicenseVersion.Text = mobjLicense.LicenseVersion.ToString()
                 txtLicensedTo.Text = If(String.IsNullOrEmpty(mobjLicense.LicensedTo), "(missing)", mobjLicense.LicensedTo)
                 If mobjLicense.ExpirationDate.HasValue Then
@@ -52,8 +52,6 @@ Public Class LicenseForm
                 strStatus = "Invalid"
             Case TamperProofData.LicenseStatus.Missing
                 strStatus = "Missing"
-            Case TamperProofData.LicenseStatus.NotLoaded
-                strStatus = "Not Loaded"
             Case Else
                 strStatus = "Unknown"
         End Select
