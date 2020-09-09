@@ -43,6 +43,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Willowsoft.TamperProofData, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Willowsoft.TamperProofData.1.1.1\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BudgetDashboardForm.cs">
@@ -51,6 +54,8 @@
     <Compile Include="BudgetDashboardForm.Designer.cs">
       <DependentUpon>BudgetDashboardForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="BudgetDashboardLicense.cs" />
+    <Compile Include="BudgetDashboardLicenseValidator.cs" />
     <Compile Include="BudgetDetailRow.cs" />
     <Compile Include="BudgetDetailCell.cs" />
     <Compile Include="BudgetGridCell.cs" />
@@ -84,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="BudgetDashboard.ruleset" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">

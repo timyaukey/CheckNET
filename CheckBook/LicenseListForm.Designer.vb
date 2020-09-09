@@ -23,11 +23,11 @@ Partial Class LicenseListForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.lvwLicenses = New System.Windows.Forms.ListView()
-        Me.btnManageLicense = New System.Windows.Forms.Button()
         Me.colLicenseTitle = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.colLicensedTo = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.colExpirationDate = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.colLicenseStatus = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.btnManageLicense = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'lvwLicenses
@@ -42,30 +42,20 @@ Partial Class LicenseListForm
         Me.lvwLicenses.Location = New System.Drawing.Point(12, 12)
         Me.lvwLicenses.MultiSelect = False
         Me.lvwLicenses.Name = "lvwLicenses"
-        Me.lvwLicenses.Size = New System.Drawing.Size(628, 289)
+        Me.lvwLicenses.Size = New System.Drawing.Size(774, 318)
         Me.lvwLicenses.TabIndex = 0
         Me.lvwLicenses.UseCompatibleStateImageBehavior = False
         Me.lvwLicenses.View = System.Windows.Forms.View.Details
         '
-        'btnManageLicense
-        '
-        Me.btnManageLicense.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnManageLicense.Location = New System.Drawing.Point(440, 312)
-        Me.btnManageLicense.Name = "btnManageLicense"
-        Me.btnManageLicense.Size = New System.Drawing.Size(200, 23)
-        Me.btnManageLicense.TabIndex = 1
-        Me.btnManageLicense.Text = "Manage Selected License"
-        Me.btnManageLicense.UseVisualStyleBackColor = True
-        '
         'colLicenseTitle
         '
         Me.colLicenseTitle.Text = "License Title"
-        Me.colLicenseTitle.Width = 200
+        Me.colLicenseTitle.Width = 315
         '
         'colLicensedTo
         '
         Me.colLicensedTo.Text = "Licensed To"
-        Me.colLicensedTo.Width = 200
+        Me.colLicensedTo.Width = 235
         '
         'colExpirationDate
         '
@@ -77,11 +67,21 @@ Partial Class LicenseListForm
         Me.colLicenseStatus.Text = "Status"
         Me.colLicenseStatus.Width = 100
         '
+        'btnManageLicense
+        '
+        Me.btnManageLicense.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnManageLicense.Location = New System.Drawing.Point(586, 341)
+        Me.btnManageLicense.Name = "btnManageLicense"
+        Me.btnManageLicense.Size = New System.Drawing.Size(200, 23)
+        Me.btnManageLicense.TabIndex = 1
+        Me.btnManageLicense.Text = "Manage Selected License"
+        Me.btnManageLicense.UseVisualStyleBackColor = True
+        '
         'LicenseListForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(652, 347)
+        Me.ClientSize = New System.Drawing.Size(798, 376)
         Me.Controls.Add(Me.btnManageLicense)
         Me.Controls.Add(Me.lvwLicenses)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog

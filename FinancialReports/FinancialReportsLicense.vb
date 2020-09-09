@@ -4,18 +4,18 @@ Option Explicit On
 Imports System.Collections.Generic
 Imports Willowsoft.TamperProofData
 
-Public Class MainLicense
-    Inherits StandardLicenseBase(Of MainLicenseValidator)
+Public Class FinancialReportsLicense
+    Inherits StandardLicenseBase(Of FinancialReportsLicenseValidator)
 
     Public Overrides ReadOnly Property BaseFileName As String
         Get
-            Return "Willowsoft.Checkbook.Main.lic"
+            Return "Willowsoft.Checkbook.FinancialReports.lic"
         End Get
     End Property
 
     Public Overrides ReadOnly Property LicenseTitle As String
         Get
-            Return "Willow Creek Checkbook License"
+            Return "Willow Creek Financial Reports License"
         End Get
     End Property
 
