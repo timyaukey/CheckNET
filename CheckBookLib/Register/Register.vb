@@ -694,7 +694,7 @@ Public Class Register
                          ByVal blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of NormalTrx),
                          ByRef colExactMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)
 
-        Dim lngIndex As Integer
+        Dim datStart As Date
         Dim datEnd As Date
         Dim strNumber As String
         Dim blnMatched As Boolean
@@ -704,69 +704,54 @@ Public Class Register
         Dim blnDateMatches As Boolean
         Dim blnAmountMatches As Boolean
         Dim intDescrMatchLen As Integer
-        Dim objTrx As Trx
-        Dim objNormalTrx As NormalTrx
 
         colMatches = New List(Of NormalTrx)
         blnExactMatch = False
         colExactMatches = New List(Of NormalTrx)
         intDescrMatchLen = 10
-        lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDaysBefore, datDate)) + 1
+        datStart = DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDaysBefore, datDate)
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDaysAfter, datDate)
         strNumber = strComparableCheckNumber(CStr(lngNumber))
         strDescrLC = Left(LCase(strDescription), intDescrMatchLen)
-        Do
-            If lngIndex > mlngTrxUsed Then
-                Exit Do
-            End If
-            objTrx = Me.objTrx(lngIndex)
-            With objTrx
-                If .datDate > datEnd Then
-                    Exit Do
+        For Each objNormalTrx As NormalTrx In Me.colDateRange(Of NormalTrx)(datStart, datEnd)
+            With objNormalTrx
+                blnMatched = False
+                If lngNumber <> 0 Then
+                    If (curAmount = .curAmount Or blnLooseMatch) And strComparableCheckNumber(.strNumber) = strNumber Then
+                        blnMatched = True
+                    End If
                 End If
-                If .GetType() Is GetType(NormalTrx) Then
-                    objNormalTrx = DirectCast(objTrx, NormalTrx)
-                    With objNormalTrx
-                        blnMatched = False
-                        If lngNumber <> 0 Then
-                            If (curAmount = .curAmount Or blnLooseMatch) And strComparableCheckNumber(.strNumber) = strNumber Then
-                                blnMatched = True
-                            End If
+                If blnLooseMatch Then
+                    curAmountRange = System.Math.Abs(curAmount * 0.2D)
+                    If .curNormalMatchRange > curAmountRange Then
+                        curAmountRange = .curNormalMatchRange
+                    End If
+                Else
+                    curAmountRange = .curNormalMatchRange
+                End If
+                blnDescrMatches = (Left(LCase(.strDescription), intDescrMatchLen) = strDescrLC)
+                blnDateMatches = (System.Math.Abs(DateDiff(Microsoft.VisualBasic.DateInterval.Day, .datDate, datDate)) < 6)
+                blnAmountMatches = (System.Math.Abs(.curAmount - curAmount) <= curAmountRange)
+                If (CInt(IIf(blnAmountMatches, 1, 0)) + CInt(IIf(blnDateMatches, 1, 0))) >= CInt(IIf(blnLooseMatch, 1, 2)) Then
+                    blnMatched = True
+                End If
+                If blnMatched Or blnDescrMatches Then
+                    'If min/max were specified this is a mandatory amount filter, separate from blnAmountMatches.
+                    If curMatchMin <> 0.0# And curMatchMax <> 0.0# Then
+                        If (.curAmount >= curMatchMin) And (.curAmount <= curMatchMax) Then
+                            colMatches.Add(objNormalTrx)
                         End If
-                        If blnLooseMatch Then
-                            curAmountRange = System.Math.Abs(curAmount * 0.2D)
-                            If .curNormalMatchRange > curAmountRange Then
-                                curAmountRange = .curNormalMatchRange
-                            End If
-                        Else
-                            curAmountRange = .curNormalMatchRange
-                        End If
-                        blnDescrMatches = (Left(LCase(.strDescription), intDescrMatchLen) = strDescrLC)
-                        blnDateMatches = (System.Math.Abs(DateDiff(Microsoft.VisualBasic.DateInterval.Day, .datDate, datDate)) < 6)
-                        blnAmountMatches = (System.Math.Abs(.curAmount - curAmount) <= curAmountRange)
-                        If (CInt(IIf(blnAmountMatches, 1, 0)) + CInt(IIf(blnDateMatches, 1, 0))) >= CInt(IIf(blnLooseMatch, 1, 2)) Then
-                            blnMatched = True
-                        End If
-                        If blnMatched Or blnDescrMatches Then
-                            'If min/max were specified this is a mandatory amount filter, separate from blnAmountMatches.
-                            If curMatchMin <> 0.0# And curMatchMax <> 0.0# Then
-                                If (.curAmount >= curMatchMin) And (.curAmount <= curMatchMax) Then
-                                    colMatches.Add(objNormalTrx)
-                                End If
-                            Else
-                                colMatches.Add(objNormalTrx)
-                            End If
-                        End If
-                        If .curAmount = curAmount Then
-                            If (blnDescrMatches And blnDateMatches) Or (strComparableCheckNumber(.strNumber) = strNumber) Then
-                                colExactMatches.Add(objNormalTrx)
-                            End If
-                        End If
-                    End With
+                    Else
+                        colMatches.Add(objNormalTrx)
+                    End If
+                End If
+                If .curAmount = curAmount Then
+                    If (blnDescrMatches And blnDateMatches) Or (strComparableCheckNumber(.strNumber) = strNumber) Then
+                        colExactMatches.Add(objNormalTrx)
+                    End If
                 End If
             End With
-            lngIndex = lngIndex + 1
-        Loop
+        Next
 
     End Sub
 
