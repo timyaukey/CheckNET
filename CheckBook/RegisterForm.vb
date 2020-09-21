@@ -522,7 +522,7 @@ Friend Class RegisterForm
         End Try
     End Sub
 
-    Private Sub mobjReg_TrxAdded(ByVal lngIndex As Integer, ByVal objTrx As Trx) Handles mobjReg.TrxAdded
+    Private Sub mobjReg_TrxAdded(ByVal objTrx As Trx) Handles mobjReg.TrxAdded
         Try
 
             grdReg.RowCount = grdReg.RowCount + 1

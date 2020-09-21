@@ -35,7 +35,6 @@ Public Class UTRegister
 
     'Set by Register event handlers from arguments passed to them
     'so other code can confirm events were fired as expected.
-    Private mlngTrxAddedIndex As Integer
     Private mlngTrxUpdatedOldIndex As Integer
     Private mlngTrxUpdatedNewIndex As Integer
     Private mlngTrxDeletedIndex As Integer
@@ -141,7 +140,6 @@ Public Class UTRegister
         objReg.NewAddEnd(objTrx, New LogAdd, "UTAddNormal")
         AddTrx(objTrx)
 
-        gUTAssert(lngExpectedIndex = mlngTrxAddedIndex, strFailMsg & ": wrong index in add normal report")
         gUTAssert(objTrx Is mobjTrxReported, strFailMsg & ": wrong Trx in add normal report")
         gUTAssert(mlngBalanceChangeFirstIndex = lngBalanceChangeFirst, strFailMsg & ": wrong bal chg first index in add normal report")
         gUTAssert(mlngBalanceChangeLastIndex = lngBalanceChangeLast, strFailMsg & ": wrong bal chg last index in add normal report")
@@ -201,7 +199,6 @@ Public Class UTRegister
         objReg.NewAddEnd(objTrx, New LogAdd, "UTAddBudget")
         AddTrx(objTrx)
 
-        gUTAssert(lngExpectedIndex = mlngTrxAddedIndex, strFailMsg & ": wrong index in add budget report")
         gUTAssert(objTrx Is mobjTrxReported, strFailMsg & ": wrong Trx in add budget report")
         gUTAssert(mlngBalanceChangeFirstIndex = lngBalanceChangeFirst, strFailMsg & ": wrong bal chg first index in add budget report")
         gUTAssert(mlngBalanceChangeLastIndex = lngBalanceChangeLast, strFailMsg & ": wrong bal chg last index in add budget report")
@@ -250,7 +247,6 @@ Public Class UTRegister
     Private Sub ClearEventReporting()
         'UPGRADE_NOTE: Object mobjTrxReported may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         mobjTrxReported = Nothing
-        mlngTrxAddedIndex = 0
         mlngTrxUpdatedOldIndex = 0
         mlngTrxUpdatedNewIndex = 0
         mlngTrxDeletedIndex = 0
@@ -352,9 +348,8 @@ Public Class UTRegister
         mstrBudgetsChanged = mstrBudgetsChanged & "," & lngIndex
     End Sub
 
-    Private Sub mobjReg_TrxAdded(ByVal lngIndex As Integer, ByVal objTrx As Trx) Handles mobjReg.TrxAdded
+    Private Sub mobjReg_TrxAdded(ByVal objTrx As Trx) Handles mobjReg.TrxAdded
         mobjTrxReported = objTrx
-        mlngTrxAddedIndex = lngIndex
     End Sub
 
     Private Sub mobjReg_TrxDeleted(ByVal lngIndex As Integer) Handles mobjReg.TrxDeleted

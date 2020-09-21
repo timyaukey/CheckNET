@@ -461,7 +461,7 @@ Friend Class SearchForm
         RedoSearch()
     End Sub
 
-    Private Sub mobjReg_TrxAdded(ByVal lngIndex As Integer, ByVal objTrx As Trx) Handles mobjReg.TrxAdded
+    Private Sub mobjReg_TrxAdded(ByVal objTrx As Trx) Handles mobjReg.TrxAdded
         RedoSearch()
     End Sub
 

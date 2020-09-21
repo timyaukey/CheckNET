@@ -44,7 +44,7 @@ Public Class Register
 
     'Fired by NewAddEnd() when it adds a Trx to the register.
     'Intended to allow the UI to update itself.
-    Public Event TrxAdded(ByVal lngIndex As Integer, ByVal objTrx As Trx)
+    Public Event TrxAdded(ByVal objTrx As Trx)
 
     'Fired by UpdateEnd() when it updates a Trx in the register.
     'Intended to allow the UI to update itself.
@@ -141,7 +141,7 @@ Public Class Register
         End If
         mlngTrxCurrent = lngNewInsert(objNew)
         objNew.Apply(False)
-        RaiseEvent TrxAdded(mlngTrxCurrent, objNew)
+        RaiseEvent TrxAdded(objNew)
         If blnSetChanged Then
             mobjAccount.SetChanged()
         End If
