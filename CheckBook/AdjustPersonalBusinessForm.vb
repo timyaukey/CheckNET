@@ -114,7 +114,7 @@ Public Class AdjustPersonalBusinessForm
         Dim intDeleteCount As Integer = 0
         For Each objReg As Register In objAccount.colRegisters
             ShowProgress("Scanning " + objReg.strTitle)
-            For Each objTrx In objReg.colDateRange(ctlStartDate.Value, ctlEndDate.Value)
+            For Each objTrx In objReg.colDateRange(Of Trx)(ctlStartDate.Value, ctlEndDate.Value)
                 If blnIsInvalid(objTrx) Then
                     mobjHostUI.InfoMessageBox("Invalid transaction found: " + objTrx.ToString())
                 End If
@@ -170,7 +170,7 @@ Public Class AdjustPersonalBusinessForm
         Dim colToDivide As List(Of Trx) = New List(Of Trx)
         Dim intAdjustCount As Integer = 0
         ShowProgress("Scanning " + objBusinessReg.strTitle)
-        For Each objBusinessTrx In objBusinessReg.colDateRange(ctlStartDate.Value, ctlEndDate.Value)
+        For Each objBusinessTrx In objBusinessReg.colDateRange(Of Trx)(ctlStartDate.Value, ctlEndDate.Value)
             If blnTrxNeedsDividing(objBusinessTrx) Then
                 colToDivide.Add(objBusinessTrx)
             End If
@@ -270,7 +270,7 @@ Public Class AdjustPersonalBusinessForm
         Dim curResult As Decimal = 0D
         Dim datEndDate As DateTime = ctlEndDate.Value
         For Each objReg As Register In objAccount.colRegisters
-            For Each objTrx As Trx In objReg.colAllTrx()
+            For Each objTrx As Trx In objReg.colAllTrx(Of Trx)()
                 If objTrx.datDate >= datAfterEndDate Then
                     Exit For
                 End If

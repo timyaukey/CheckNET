@@ -124,7 +124,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                     foreach (Register reg in acct.colRegisters)
                     {
                         bool fakeReportedInReg = false;
-                        foreach (Trx trx in reg.colAllTrx())
+                        foreach (Trx trx in reg.colAllTrx<Trx>())
                         {
                             if (trx.datDate > EndDate)
                                 break;
@@ -552,10 +552,9 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 {
                     foreach (Register reg in acct.colRegisters)
                     {
-                        foreach (Trx trx in reg.colDateRange(StartDate, EndDate))
+                        foreach (NormalTrx normalTrx in reg.colDateRange<NormalTrx>(StartDate, EndDate))
                         {
-                            NormalTrx normalTrx = trx as NormalTrx;
-                            if (normalTrx != null && !normalTrx.blnFake)
+                            if (!normalTrx.blnFake)
                                 OutputNormalTrx(normalTrx);
                         }
                     }

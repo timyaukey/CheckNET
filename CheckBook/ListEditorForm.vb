@@ -577,7 +577,7 @@ Friend Class ListEditorForm
 
         Try
 
-            For Each objTrx In objReg.colAllTrx()
+            For Each objTrx In objReg.colAllTrx(Of Trx)()
                 If objTrx.GetType() Is GetType(NormalTrx) Then
                     For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
                         If mlngListType = ListType.Category Then

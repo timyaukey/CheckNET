@@ -47,7 +47,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                     foreach (Register reg in account.colRegisters)
                     {
                         StartingBalance += reg.curEndingBalance(StartDate.AddDays(-1d));
-                        foreach (Trx trx in reg.colDateRange(StartDate, EndDate))
+                        foreach (Trx trx in reg.colDateRange<Trx>(StartDate, EndDate))
                         {
                             LoadTrx(trx);
                         }

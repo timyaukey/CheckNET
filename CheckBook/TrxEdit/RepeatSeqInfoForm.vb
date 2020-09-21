@@ -27,7 +27,7 @@ Friend Class RepeatSeqInfoForm
         Dim colRows As List(Of RptGridRow) = New List(Of RptGridRow)()
         Dim objRow As RptGridRow
 
-        For Each objTrx In mobjReg.colAllTrx()
+        For Each objTrx In mobjReg.colAllTrx(Of Trx)()
             If objTrx.strRepeatKey = mstrRepeatKey Then
                 objRow = New RptGridRow
                 objRow.TrxDate = objTrx.datDate.ToString(Utilities.strDateWithTwoDigitYear)

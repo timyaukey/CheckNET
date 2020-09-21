@@ -331,7 +331,7 @@ Public Class Account
     Public Sub SetLastReconciledDate()
         mdatLastReconciled = DateTime.MinValue
         For Each reg In mcolRegisters
-            For Each objTrx In reg.colAllTrx()
+            For Each objTrx As NormalTrx In reg.colAllTrx(Of NormalTrx)()
                 If objTrx.lngStatus = Trx.TrxStatus.Reconciled Then
                     If objTrx.datDate > mdatLastReconciled Then
                         mdatLastReconciled = objTrx.datDate

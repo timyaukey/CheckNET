@@ -9,7 +9,7 @@ Public NotInheritable Class BalanceSheetScanner
                 Dim objGroup As LineItemGroup = objManager.objGetGroup(objAccount.lngSubType.ToString())
                 Dim objLine As ReportLineItem = objGroup.objGetItem(objManager, objAccount.intKey.ToString())
                 For Each objReg As Register In objAccount.colRegisters
-                    For Each objTrx As Trx In objReg.colAllTrx()
+                    For Each objTrx As Trx In objReg.colAllTrx(Of Trx)()
                         If objTrx.datDate > datEndDate Then
                             Exit For
                         End If

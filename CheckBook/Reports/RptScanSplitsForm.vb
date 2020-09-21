@@ -222,7 +222,7 @@ Friend Class RptScanSplitsForm
         Try
 
             strRegTitle = objReg.strTitle
-            For Each objTrx In objReg.colDateRange(mdatStart, mdatEnd)
+            For Each objTrx In objReg.colDateRange(Of Trx)(mdatStart, mdatEnd)
                 With objTrx
                     datDate = .datDate
                     If datDate <> datLastProgress Then

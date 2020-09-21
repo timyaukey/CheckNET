@@ -1,14 +1,18 @@
 ﻿Option Strict On
 Option Explicit On
 
-Public Class RegIterator
+Imports System.Collections.Generic
+
+Public Class RegIterator(Of TTrx As Trx)
+    Implements IEnumerable(Of TTrx)
+
     Protected mobjReg As Register
 
     Public Sub New(ByVal objReg_ As Register)
         mobjReg = objReg_
     End Sub
 
-    Public Iterator Function colTrx() As IEnumerable(Of Trx)
+    Public Iterator Function GetEnumerator() As IEnumerator(Of TTrx) Implements IEnumerable(Of TTrx).GetEnumerator
         'Using a Trx as the cursor instead of a Register index means
         'we always return the Trx after the last one returned,
         'even if Trx are inserted or deleted earlier in the Register order.
@@ -20,10 +24,17 @@ Public Class RegIterator
             If blnAfterLast(objCurrentTrx) Then
                 Return
             End If
-            Yield objCurrentTrx
+            Dim objTypedTrx As TTrx = TryCast(objCurrentTrx, TTrx)
+            If Not objTypedTrx Is Nothing Then
+                Yield objTypedTrx
+            End If
             objCurrentTrx = objCurrentTrx.objNext
         Loop
 
+    End Function
+
+    Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+        Return GetEnumerator()
     End Function
 
     Protected Overridable Function objGetFirst() As Trx

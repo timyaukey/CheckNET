@@ -32,7 +32,7 @@ Public MustInherit Class TrxNameSummary
         For Each objAccount As Account In objCompany.colAccounts
             If objAccount.lngSubType = lngSubType Then
                 For Each objReg As Register In objAccount.colRegisters
-                    For Each objTrx As Trx In objReg.colDateRange(New DateTime(1900, 1, 1), datEnd)
+                    For Each objTrx As Trx In objReg.colDateRange(Of Trx)(New DateTime(1900, 1, 1), datEnd)
                         If Not objTrx.blnFake Then
                             Dim objNormalTrx As NormalTrx = TryCast(objTrx, NormalTrx)
                             If Not objNormalTrx Is Nothing Then

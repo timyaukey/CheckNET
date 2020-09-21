@@ -48,18 +48,14 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 return;
             }
             Register reg = HostUI.objGetCurrentRegister();
-            foreach (var objTrx in reg.colDateRange(ctlStartDate.Value, ctlEndDate.Value))
+            foreach (var objNormal in reg.colDateRange<NormalTrx>(ctlStartDate.Value, ctlEndDate.Value))
             {
-                NormalTrx objNormal = objTrx as NormalTrx;
-                if (objNormal != null)
+                if (Int32.TryParse(objNormal.strNumber, out int checkNumber))
                 {
-                    if (Int32.TryParse(objNormal.strNumber, out int checkNumber))
+                    if (checkNumber >= startNumber && checkNumber <= endNumber)
                     {
-                        if (checkNumber >= startNumber && checkNumber <= endNumber)
-                        {
-                            objToChange.Add(objNormal);
-                            //HostUI.InfoMessageBox("Renumbering " + objNormal.ToString());
-                        }
+                        objToChange.Add(objNormal);
+                        //HostUI.InfoMessageBox("Renumbering " + objNormal.ToString());
                     }
                 }
             }

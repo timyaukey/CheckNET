@@ -154,7 +154,7 @@ Friend Class SearchForm
         Try
             mblnSkipRemember = True
             If Not mobjLastSearchHandler Is Nothing Then
-                For Each objTrx As Trx In mobjReg.colDateRange(mdatLastStart, mdatLastEnd)
+                For Each objTrx As Trx In mobjReg.colDateRange(Of Trx)(mdatLastStart, mdatLastEnd)
                     If mobjLastSearchFilter.blnInclude(objTrx) Then
                         If chkShowAllSplits.Checked And objTrx.GetType() Is GetType(NormalTrx) Then
                             dlgTrx = AddressOf AddSearchMatchAllSplits

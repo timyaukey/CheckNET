@@ -1,8 +1,8 @@
 ﻿Option Strict On
 Option Explicit On
 
-Public Class RegDateRange
-    Inherits RegIterator
+Public Class RegDateRange(Of TTrx As Trx)
+    Inherits RegIterator(Of TTrx)
 
     Private mdatStart As DateTime
     Private mdatEnd As DateTime

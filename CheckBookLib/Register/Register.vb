@@ -482,7 +482,7 @@ Public Class Register
     Public Sub LoadFinish()
         Dim curBalance As Decimal = 0
         mdatOldestBudgetEndAllowed = mobjAccount.datLastReconciled.AddDays(1D)
-        For Each objTrx As Trx In colAllTrx()
+        For Each objTrx As Trx In colAllTrx(Of Trx)()
             If TypeOf (objTrx) Is BudgetTrx Then
                 DirectCast(objTrx, BudgetTrx).SetAmountForBudget()
             End If
@@ -1201,19 +1201,17 @@ Public Class Register
         lngCurrentTrxIndex = mlngTrxCurrent
     End Function
 
-    Public Function colDateRange(ByVal datStart As DateTime, ByVal datEnd As DateTime) As IEnumerable(Of Trx)
-        Dim objRange As RegDateRange = New RegDateRange(Me, datStart, datEnd)
-        Return objRange.colTrx()
+    Public Function colDateRange(Of TTrx As Trx)(ByVal datStart As DateTime, ByVal datEnd As DateTime) As IEnumerable(Of TTrx)
+        Return New RegDateRange(Of TTrx)(Me, datStart, datEnd)
     End Function
 
-    Public Function colAllTrx() As IEnumerable(Of Trx)
-        Dim objRange As RegIterator = New RegIterator(Me)
-        Return objRange.colTrx()
+    Public Function colAllTrx(Of TTrx As Trx)() As IEnumerable(Of TTrx)
+        Return New RegIterator(Of TTrx)(Me)
     End Function
 
     Public Function curEndingBalance(ByVal datEndDate As DateTime) As Decimal
         Dim curBalance As Decimal
-        For Each objTrx As Trx In colAllTrx()
+        For Each objTrx As Trx In colAllTrx(Of Trx)()
             If objTrx.datDate > datEndDate Then
                 Exit For
             End If
