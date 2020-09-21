@@ -789,33 +789,20 @@ Public Class Register
 
     Public Sub MatchPayee(ByVal datDate As Date, ByVal intDateRange As Short, ByVal strDescription As String, ByVal blnMatchImportedFromBank As Boolean, ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)
 
-        Dim lngIndex As Integer
+        Dim datStart As Date
         Dim datEnd As Date
         Dim blnImportOkay As Boolean
-        Dim objTrx As Trx
-        Dim objNormalTrx As NormalTrx
 
         colMatches = New List(Of NormalTrx)
         blnExactMatch = False
-        lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1
+        datStart = DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
-        Do
-            If lngIndex > mlngTrxUsed Then
-                Exit Do
+        For Each objNormalTrx As NormalTrx In Me.colDateRange(Of NormalTrx)(datStart, datEnd)
+            blnImportOkay = (objNormalTrx.strImportKey = "") Or (blnMatchImportedFromBank) 'Used to be (not blnMatchImportedFromBank)
+            If objNormalTrx.strDescription = strDescription And blnImportOkay Then
+                colMatches.Add(objNormalTrx)
             End If
-            objTrx = Me.objTrx(lngIndex)
-            If objTrx.datDate > datEnd Then
-                Exit Do
-            End If
-            If objTrx.GetType() Is GetType(NormalTrx) Then
-                objNormalTrx = DirectCast(objTrx, NormalTrx)
-                blnImportOkay = (objNormalTrx.strImportKey = "") Or (blnMatchImportedFromBank) 'Used to be (not blnMatchImportedFromBank)
-                If objNormalTrx.strDescription = strDescription And blnImportOkay Then
-                    colMatches.Add(objNormalTrx)
-                End If
-            End If
-            lngIndex = lngIndex + 1
-        Loop
+        Next
         If colMatches.Count() = 1 Then
             blnExactMatch = True
         End If
@@ -833,35 +820,22 @@ Public Class Register
 
     Public Sub MatchInvoice(ByVal datDate As Date, ByVal intDateRange As Short, ByVal strPayee As String, ByVal strInvoiceNum As String, ByRef colMatches As ICollection(Of NormalTrx))
 
-        Dim lngIndex As Integer
+        Dim datStart As Date
         Dim datEnd As Date
         Dim objSplit As TrxSplit
-        Dim objTrx As Trx
 
         colMatches = New List(Of NormalTrx)
-        lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1
+        datStart = DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
-        Do
-            If lngIndex > mlngTrxUsed Then
-                Exit Do
-            End If
-            objTrx = Me.objTrx(lngIndex)
-            With objTrx
-                If .datDate > datEnd Then
-                    Exit Do
-                End If
-                If .GetType() Is GetType(NormalTrx) Then
-                    If .strDescription = strPayee Then
-                        For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
-                            If objSplit.strInvoiceNum = strInvoiceNum Then
-                                colMatches.Add(DirectCast(objTrx, NormalTrx))
-                            End If
-                        Next objSplit
+        For Each objNormalTrx As NormalTrx In Me.colDateRange(Of NormalTrx)(datStart, datEnd)
+            If objNormalTrx.strDescription = strPayee Then
+                For Each objSplit In objNormalTrx.colSplits
+                    If objSplit.strInvoiceNum = strInvoiceNum Then
+                        colMatches.Add(objNormalTrx)
                     End If
-                End If
-            End With
-            lngIndex = lngIndex + 1
-        Loop
+                Next objSplit
+            End If
+        Next
 
     End Sub
 
@@ -876,59 +850,35 @@ Public Class Register
 
     Public Sub MatchPONumber(ByVal datDate As Date, ByVal intDateRange As Short, ByVal strPayee As String, ByVal strPONumber As String, ByRef colMatches As ICollection(Of NormalTrx))
 
-        Dim lngIndex As Integer
+        Dim datStart As Date
         Dim datEnd As Date
         Dim objSplit As TrxSplit
-        Dim objTrx As Trx
 
         colMatches = New List(Of NormalTrx)
-        lngIndex = lngFindBeforeDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)) + 1
+        datStart = DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
-        Do
-            If lngIndex > mlngTrxUsed Then
-                Exit Do
-            End If
-            objTrx = Me.objTrx(lngIndex)
-            With objTrx
-                If .datDate > datEnd Then
-                    Exit Do
-                End If
-                If .GetType() Is GetType(NormalTrx) Then
-                    If .strDescription = strPayee Then
-                        For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
-                            If objSplit.strPONumber = strPONumber Then
-                                colMatches.Add(DirectCast(objTrx, NormalTrx))
-                            End If
-                        Next objSplit
+        For Each objNormalTrx As NormalTrx In Me.colDateRange(Of NormalTrx)(datStart, datEnd)
+            If objNormalTrx.strDescription = strPayee Then
+                For Each objSplit In objNormalTrx.colSplits
+                    If objSplit.strPONumber = strPONumber Then
+                        colMatches.Add(objNormalTrx)
                     End If
-                End If
-            End With
-            lngIndex = lngIndex + 1
-        Loop
+                Next objSplit
+            End If
+        Next
 
     End Sub
 
-    '$Description Return the largest index whose Trx has a date less than
-    '   a specified date, i.e. finds the index before a specified date.
-    '   Optimized for dates near the end of the register.
-    '$Param datDate The date to search for.
-    '$Returns The index of the Trx located, or zero if there were no Trx with
-    '   date less than datDate.
-
-    Public Function lngFindBeforeDate(ByVal datDate As Date) As Integer
-        Dim lngIndex As Integer
+    Friend Function objFirstOnOrAfter(ByVal datDate As Date) As Trx
+        Dim lngIndexBeforeDate As Integer
         'lngIndex is initialized to mlngTrxUsed even if the body of the loop
         'is never executed, and will be left as zero if no matching Trx is found.
-        For lngIndex = mlngTrxUsed To 1 Step -1
-            If Me.objTrx(lngIndex).datDate < datDate Then
+        For lngIndexBeforeDate = mlngTrxUsed To 1 Step -1
+            If Me.objTrx(lngIndexBeforeDate).datDate < datDate Then
                 Exit For
             End If
         Next
-        lngFindBeforeDate = lngIndex
-    End Function
-
-    Friend Function objFirstOnOrAfter(ByVal datDate As Date) As Trx
-        Dim lngIndex As Integer = lngFindBeforeDate(datDate) + 1
+        Dim lngIndex As Integer = lngIndexBeforeDate + 1
         If lngIndex > mlngTrxUsed Then
             Return Nothing
         End If

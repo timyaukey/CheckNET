@@ -557,29 +557,16 @@ Public Class BankImportForm
     ''' <param name="datDate"></param>
     ''' <returns></returns>
     Private Function colFindAllCandidateMatches(ByVal strDescrStartsWith As String, ByVal datDate As DateTime) As List(Of NormalTrx)
-        Dim objReg As Register
-        Dim intRegIndex As Integer
-        Dim objTrx As Trx
-        Dim objNormalTrx As NormalTrx
         Dim colResult As List(Of NormalTrx) = New List(Of NormalTrx)()
-        Dim datStartDate As DateTime
-        Dim datEndDate As DateTime
-        datStartDate = datDate.AddDays(-6.0#)
-        datEndDate = datDate.AddDays(2.0#)
-        For Each objReg In mobjAccount.colRegisters
-            For intRegIndex = objReg.lngFindBeforeDate(datStartDate) + 1 To objReg.lngTrxCount
-                objTrx = objReg.objTrx(intRegIndex)
-                If objTrx.datDate > datEndDate Then
-                    Exit For
-                End If
-                objNormalTrx = TryCast(objTrx, NormalTrx)
-                If Not objNormalTrx Is Nothing Then
-                    If objNormalTrx.strDescription.StartsWith(strDescrStartsWith) Then
-                        If Not blnTrxIsMatched(objNormalTrx) Then
-                            colResult.Add(objNormalTrx)
-                            'Else  'uncomment to allow a breakpoint when debugging
-                            '    objNormalTrx = objNormalTrx
-                        End If
+        Dim datStartDate As DateTime = datDate.AddDays(-6.0#)
+        Dim datEndDate As DateTime = datDate.AddDays(2.0#)
+        For Each objReg As Register In mobjAccount.colRegisters
+            For Each objNormalTrx As NormalTrx In objReg.colDateRange(Of NormalTrx)(datStartDate, datEndDate)
+                If objNormalTrx.strDescription.StartsWith(strDescrStartsWith) Then
+                    If Not blnTrxIsMatched(objNormalTrx) Then
+                        colResult.Add(objNormalTrx)
+                        'Else  'uncomment to allow a breakpoint when debugging
+                        '    objNormalTrx = objNormalTrx
                     End If
                 End If
             Next
