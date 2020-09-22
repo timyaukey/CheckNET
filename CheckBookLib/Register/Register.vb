@@ -62,10 +62,6 @@ Public Class Register
     'Intended to allow the UI to update itself.
     Public Event BalancesChanged(ByVal lngFirstIndex As Integer, ByVal lngLastIndex As Integer)
 
-    'Fired by SetTrxStatus() method.
-    'Intended to allow the UI to update itself.
-    Public Event StatusChanged(ByVal lngIndex As Integer)
-
     'Fired by ShowCurrent() method.
     'Intended to allow the UI to update itself.
     Public Event ShowCurrent(ByVal lngIndex As Integer)
@@ -74,13 +70,23 @@ Public Class Register
     'e.g. the register title or some other property changed.
     Public Event MiscChange()
 
-    'Fired before operations which cause large numbers of Trx to be changed.
-    'Always followed by RedisplayTrx event when Trx modifications are done.
+    'Fired before operations which cause large numbers of Trx to be changed,
+    'to allow clients to temporarily hide their UI.
+    'Whoever fires HideTrx must also fire RedisplayTrx event when Trx modifications are done.
     'Allows clients to ignore Trx changes while they are happening, and simply
     'redisplay everything at once when RedisplayTrx is fired.
     Public Event HideTrx()
 
+    'Fired when all transactions in the register must be refreshed in the UI.
+    'Used when the pattern of which transactions have been changed is more
+    'complex to keep track of than is worth the effort of doing so, or when
+    'we don't care how long it takes clients to refresh themselves.
+    'Typically used after lengthy and complex changes to transactions.
+    Public Event RefreshTrx()
+
     'Fired when all Trx in the Register must be redisplayed.
+    'May only be used after a HideTrx event. Should "unhide" the UI for
+    'the register, if HideTrx actually hid it.
     Public Event RedisplayTrx()
 
     'Fired by Validate() or a method called from Validate() when a validation
@@ -364,10 +370,8 @@ Public Class Register
 
     Public Sub SetTrxStatus(ByVal lngIndex As Integer, ByVal lngStatus As Trx.TrxStatus, ByVal objAddLogger As ILogAdd, ByVal strTitle As String)
 
-        Dim objStatusTrx As Trx
-        objStatusTrx = Me.objTrx(lngIndex)
+        Dim objStatusTrx As Trx = Me.objTrx(lngIndex)
         objStatusTrx.lngStatus = lngStatus
-        RaiseEvent StatusChanged(lngIndex)
         mobjAccount.SetChanged()
         'Use an ILogAdd instead of a specialized logger because it's a cheap
         'hack to reuse an existing type with the correct signature rather than
@@ -539,6 +543,10 @@ Public Class Register
 
     Public Sub FireRedisplayTrx()
         RaiseEvent RedisplayTrx()
+    End Sub
+
+    Public Sub FireRefreshTrx()
+        RaiseEvent RefreshTrx()
     End Sub
 
     '$Description Find NormalTrx object already in register with the specified strImportKey.

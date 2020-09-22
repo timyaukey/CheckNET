@@ -282,6 +282,9 @@ Friend Class ReconcileForm
                 End If
             End With
         Next
+        For Each objReg As Register In mobjAccount.colRegisters
+            objReg.FireRefreshTrx()
+        Next
 
     End Sub
 

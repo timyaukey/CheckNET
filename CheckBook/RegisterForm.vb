@@ -384,13 +384,6 @@ Friend Class RegisterForm
         If lngGridRow < grdReg.Rows.Count Then
             grdReg.CurrentCell = grdReg.Rows(lngGridRow - 1).Cells(0)
         End If
-        HighlightCurrentRow()
-    End Sub
-
-    Private Sub HighlightCurrentRow()
-        With grdReg
-            'TODO
-        End With
     End Sub
 
     Private Function strRepeatUnit(ByVal lngRepeatUnit As Trx.RepeatUnit) As String
@@ -405,10 +398,6 @@ Friend Class RegisterForm
                 strRepeatUnit = ""
         End Select
     End Function
-
-    Private Sub DisplayTrxStatus(ByVal objTrx As Trx)
-        grdReg.InvalidateRow(grdReg.CurrentRow.Index)
-    End Sub
 
     Private Function lngIndexToGridRow(ByVal lngIndex As Integer) As Integer
         lngIndexToGridRow = lngIndex
@@ -453,9 +442,14 @@ Friend Class RegisterForm
         End Try
     End Sub
 
+    Private Sub mobjReg_RefreshTrx() Handles mobjReg.RefreshTrx
+        grdReg.Invalidate()
+    End Sub
+
     Private Sub mobjReg_RedisplayTrx() Handles mobjReg.RedisplayTrx
         Try
 
+            'Cannot just invalidate grid, because number of rows may have changed.
             LoadGrid()
             Me.Visible = mblnOldVisible
 
@@ -469,18 +463,6 @@ Friend Class RegisterForm
         Try
 
             SelectTrx(lngIndex)
-
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
-
-    Private Sub mobjReg_StatusChanged(ByVal lngIndex As Integer) Handles mobjReg.StatusChanged
-        Try
-
-            grdReg.CurrentCell = grdReg.CurrentRow.Cells(0)
-            DisplayTrxStatus(mobjReg.objTrx(lngIndex))
 
             Exit Sub
         Catch ex As Exception
@@ -518,13 +500,17 @@ Friend Class RegisterForm
             If blnPositionChanged Then
                 grdReg.Invalidate()
             Else
-                grdReg.InvalidateRow(grdReg.CurrentRow.Index)
+                InvalidateGridRow(objTrx)
             End If
 
             Exit Sub
         Catch ex As Exception
             gTopException(ex)
         End Try
+    End Sub
+
+    Private Sub InvalidateGridRow(ByVal objTrx As Trx)
+        grdReg.InvalidateRow(lngIndexToGridRow(objTrx.lngIndex))
     End Sub
 
     Private Sub mobjReg_ValidationError(ByVal lngIndex As Integer, ByVal strMsg As String) Handles mobjReg.ValidationError
