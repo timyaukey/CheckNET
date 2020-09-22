@@ -546,10 +546,10 @@ Friend Class RegisterForm
         End Try
     End Sub
 
-    Private Sub mobjReg_TrxUpdated(ByVal lngOldIndex As Integer, ByVal lngNewIndex As Integer, ByVal objTrx As Trx) Handles mobjReg.TrxUpdated
+    Private Sub mobjReg_TrxUpdated(ByVal blnPositionChanged As Boolean, ByVal objTrx As Trx) Handles mobjReg.TrxUpdated
         Try
 
-            If lngNewIndex <> lngOldIndex Then
+            If blnPositionChanged Then
                 grdReg.Invalidate()
             Else
                 grdReg.InvalidateRow(grdReg.CurrentRow.Index)

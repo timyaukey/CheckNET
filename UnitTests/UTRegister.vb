@@ -35,8 +35,7 @@ Public Class UTRegister
 
     'Set by Register event handlers from arguments passed to them
     'so other code can confirm events were fired as expected.
-    Private mlngTrxUpdatedOldIndex As Integer
-    Private mlngTrxUpdatedNewIndex As Integer
+    Private mblnPositionChanged As Boolean
     Private mlngTrxDeletedIndex As Integer
     Private mobjTrxReported As Trx
     Private mstrBudgetsChanged As String
@@ -177,8 +176,7 @@ Public Class UTRegister
         End If
         objTrxManager.UpdateEnd(New LogChange, "UTUpdateNormal")
 
-        gUTAssert(lngOldIndex = mlngTrxUpdatedOldIndex, strFailMsg & ": wrong old index in upd normal report")
-        gUTAssert(lngExpectedNewIndex = mlngTrxUpdatedNewIndex, strFailMsg & ": wrong new index in upd normal report")
+        gUTAssert(mblnPositionChanged = (lngExpectedNewIndex <> lngOldIndex), strFailMsg & ": wrong position changed flag")
         gUTAssert(objTrx Is mobjTrxReported, strFailMsg & ": wrong Trx in upd normal report")
         gUTAssert(mlngBalanceChangeFirstIndex = lngBalanceChangeFirst, strFailMsg & ": wrong bal chg first index in upd normal report")
         gUTAssert(mlngBalanceChangeLastIndex = lngBalanceChangeLast, strFailMsg & ": wrong bal chg last index in upd normal report")
@@ -221,8 +219,7 @@ Public Class UTRegister
                                  CDec(curBudgetLimit), CDate(datBudgetEnds), strBudgetKey)
         objTrxManager.UpdateEnd(New LogChange, "UTUpdateBudget")
 
-        gUTAssert(lngExpectedOldIndex = mlngTrxUpdatedOldIndex, strFailMsg & ": wrong old index in upd budget report")
-        gUTAssert(lngExpectedNewIndex = mlngTrxUpdatedNewIndex, strFailMsg & ": wrong new index in upd budget report")
+        gUTAssert(mblnPositionChanged = (lngExpectedNewIndex <> lngExpectedOldIndex), strFailMsg & ": wrong position changed flag")
         gUTAssert(objTrx Is mobjTrxReported, strFailMsg & ": wrong Trx in upd budget report")
         gUTAssert(mlngBalanceChangeFirstIndex = lngBalanceChangeFirst, strFailMsg & ": wrong bal chg first index in upd budget report")
         gUTAssert(mlngBalanceChangeLastIndex = lngBalanceChangeLast, strFailMsg & ": wrong bal chg last index in upd budget report")
@@ -247,8 +244,7 @@ Public Class UTRegister
     Private Sub ClearEventReporting()
         'UPGRADE_NOTE: Object mobjTrxReported may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         mobjTrxReported = Nothing
-        mlngTrxUpdatedOldIndex = 0
-        mlngTrxUpdatedNewIndex = 0
+        mblnPositionChanged = False
         mlngTrxDeletedIndex = 0
         mlngBalanceChangeFirstIndex = 0
         mlngBalanceChangeLastIndex = 0
@@ -356,10 +352,9 @@ Public Class UTRegister
         mlngTrxDeletedIndex = lngIndex
     End Sub
 
-    Private Sub mobjReg_TrxUpdated(ByVal lngOldIndex As Integer, ByVal lngNewIndex As Integer, ByVal objTrx As Trx) Handles mobjReg.TrxUpdated
+    Private Sub mobjReg_TrxUpdated(ByVal blnPositionChanged As Boolean, ByVal objTrx As Trx) Handles mobjReg.TrxUpdated
         mobjTrxReported = objTrx
-        mlngTrxUpdatedOldIndex = lngOldIndex
-        mlngTrxUpdatedNewIndex = lngNewIndex
+        mblnPositionChanged = blnPositionChanged
     End Sub
 
     Private Sub mobjReg_ValidationError(ByVal lngIndex As Integer, ByVal strMsg As String) Handles mobjReg.ValidationError

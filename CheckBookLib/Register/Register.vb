@@ -48,7 +48,7 @@ Public Class Register
 
     'Fired by UpdateEnd() when it updates a Trx in the register.
     'Intended to allow the UI to update itself.
-    Public Event TrxUpdated(ByVal lngOldIndex As Integer, ByVal lngNewIndex As Integer, ByVal objTrx As Trx)
+    Public Event TrxUpdated(ByVal blnPositionChanged As Boolean, ByVal objTrx As Trx)
 
     'Fired by Delete().
     'Intended to allow the UI to update itself.
@@ -259,7 +259,7 @@ Public Class Register
             End If
             objTrx.Apply(False)
             mlngTrxCurrent = lngUpdateMove(lngOldIndex)
-            RaiseEvent TrxUpdated(lngOldIndex, mlngTrxCurrent, objTrx)
+            RaiseEvent TrxUpdated(lngOldIndex <> mlngTrxCurrent, objTrx)
             mobjAccount.SetChanged()
             UpdateFirstAffected(lngOldIndex)
             UpdateFirstAffected(mlngTrxCurrent)
