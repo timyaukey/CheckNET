@@ -377,22 +377,6 @@ Friend Class RegisterForm
         End If
     End Sub
 
-    Private Sub DisplayTrx(ByVal lngIndex As Integer)
-        Dim objTrx As Trx
-
-        objTrx = mobjReg.objTrx(lngIndex)
-        DisplayTrxShared(objTrx)
-        If TypeOf objTrx Is NormalTrx Then
-            DisplayTrxNormal(objTrx)
-        ElseIf TypeOf objTrx Is BudgetTrx Then
-            DisplayTrxBudget(objTrx)
-        ElseIf TypeOf objTrx Is TransferTrx Then
-            DisplayTrxTransfer(objTrx)
-        Else
-            gRaiseError("Invalid Trx type in DisplayTrx")
-        End If
-    End Sub
-
     Private Sub SelectTrx(ByVal lngIndex As Integer)
         Dim lngGridRow As Integer
 
@@ -409,10 +393,6 @@ Friend Class RegisterForm
         End With
     End Sub
 
-    Private Sub DisplayTrxShared(ByVal objTrx As Trx)
-        grdReg.InvalidateRow(grdReg.CurrentRow.Index)
-    End Sub
-
     Private Function strRepeatUnit(ByVal lngRepeatUnit As Trx.RepeatUnit) As String
         Select Case lngRepeatUnit
             Case Trx.RepeatUnit.Day
@@ -427,18 +407,6 @@ Friend Class RegisterForm
     End Function
 
     Private Sub DisplayTrxStatus(ByVal objTrx As Trx)
-        grdReg.InvalidateRow(grdReg.CurrentRow.Index)
-    End Sub
-
-    Private Sub DisplayTrxNormal(ByVal objTrx As Trx)
-        grdReg.InvalidateRow(grdReg.CurrentRow.Index)
-    End Sub
-
-    Private Sub DisplayTrxBudget(ByVal objTrx As Trx)
-        grdReg.InvalidateRow(grdReg.CurrentRow.Index)
-    End Sub
-
-    Private Sub DisplayTrxTransfer(ByVal objTrx As Trx)
         grdReg.InvalidateRow(grdReg.CurrentRow.Index)
     End Sub
 
@@ -463,11 +431,9 @@ Friend Class RegisterForm
         End Try
     End Sub
 
-    Private Sub mobjReg_BudgetChanged(ByVal lngIndex As Integer, ByVal objBudget As Trx) Handles mobjReg.BudgetChanged
+    Private Sub mobjReg_BudgetChanged(ByVal objBudget As Trx) Handles mobjReg.BudgetChanged
         Try
-
-            DisplayTrx(lngIndexToGridRow(lngIndex))
-
+            grdReg.Invalidate()
             Exit Sub
         Catch ex As Exception
             gTopException(ex)

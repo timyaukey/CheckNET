@@ -56,7 +56,7 @@ Public Class Register
 
     'Fired when a Split is applied or un-applied to a budget Trx.
     'Intended to allow the UI to update itself.
-    Public Event BudgetChanged(ByVal lngIndex As Integer, ByVal objBudget As Trx)
+    Public Event BudgetChanged(ByVal objBudget As Trx)
 
     'Fired after register balances have been updated.
     'Intended to allow the UI to update itself.
@@ -956,7 +956,7 @@ Public Class Register
 
     Friend Sub RaiseBudgetChanged(ByVal objBudgetTrx As Trx)
         UpdateFirstAffected(objBudgetTrx.lngIndex)
-        RaiseEvent BudgetChanged(objBudgetTrx.lngIndex, objBudgetTrx)
+        RaiseEvent BudgetChanged(objBudgetTrx)
     End Sub
 
     Public Function objGetNormalTrxManager(ByVal lngIndex As Integer) As NormalTrxManager

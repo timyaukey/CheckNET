@@ -340,8 +340,8 @@ Public Class UTRegister
         mlngBalanceChangeLastIndex = lngLastIndex
     End Sub
 
-    Private Sub mobjReg_BudgetChanged(ByVal lngIndex As Integer, ByVal objBudget As Trx) Handles mobjReg.BudgetChanged
-        mstrBudgetsChanged = mstrBudgetsChanged & "," & lngIndex
+    Private Sub mobjReg_BudgetChanged(ByVal objBudget As Trx) Handles mobjReg.BudgetChanged
+        mstrBudgetsChanged = mstrBudgetsChanged & "," & objBudget.lngIndex
     End Sub
 
     Private Sub mobjReg_TrxAdded(ByVal objTrx As Trx) Handles mobjReg.TrxAdded
