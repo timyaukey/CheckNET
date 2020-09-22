@@ -465,7 +465,7 @@ Friend Class SearchForm
         RedoSearch()
     End Sub
 
-    Private Sub mobjReg_TrxDeleted(ByVal lngIndex As Integer) Handles mobjReg.TrxDeleted
+    Private Sub mobjReg_TrxDeleted() Handles mobjReg.TrxDeleted
         RedoSearch()
     End Sub
 

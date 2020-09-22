@@ -36,7 +36,7 @@ Public Class UTRegister
     'Set by Register event handlers from arguments passed to them
     'so other code can confirm events were fired as expected.
     Private mblnPositionChanged As Boolean
-    Private mlngTrxDeletedIndex As Integer
+    Private mblnTrxDeletedFired As Boolean
     Private mobjTrxReported As Trx
     Private mstrBudgetsChanged As String
     Private mlngBalanceChangeFirstIndex As Integer
@@ -233,7 +233,7 @@ Public Class UTRegister
 
         ClearEventReporting()
         objReg.Delete(lngIndex, New LogDelete, "UTDeleteEntry")
-        gUTAssert(mlngTrxDeletedIndex = lngIndex, strFailMsg & ": wrong deleted trx")
+        gUTAssert(mblnTrxDeletedFired, strFailMsg & ": did not fire event")
         gUTAssert(mlngBalanceChangeFirstIndex = lngBalanceChangeFirst, strFailMsg & ": wrong bal chg first index in del budget report")
         gUTAssert(mlngBalanceChangeLastIndex = lngBalanceChangeLast, strFailMsg & ": wrong bal chg last index in del budget report")
 
@@ -245,7 +245,7 @@ Public Class UTRegister
         'UPGRADE_NOTE: Object mobjTrxReported may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         mobjTrxReported = Nothing
         mblnPositionChanged = False
-        mlngTrxDeletedIndex = 0
+        mblnTrxDeletedFired = False
         mlngBalanceChangeFirstIndex = 0
         mlngBalanceChangeLastIndex = 0
         mstrBudgetsChanged = ""
@@ -348,8 +348,8 @@ Public Class UTRegister
         mobjTrxReported = objTrx
     End Sub
 
-    Private Sub mobjReg_TrxDeleted(ByVal lngIndex As Integer) Handles mobjReg.TrxDeleted
-        mlngTrxDeletedIndex = lngIndex
+    Private Sub mobjReg_TrxDeleted() Handles mobjReg.TrxDeleted
+        mblnTrxDeletedFired = True
     End Sub
 
     Private Sub mobjReg_TrxUpdated(ByVal blnPositionChanged As Boolean, ByVal objTrx As Trx) Handles mobjReg.TrxUpdated

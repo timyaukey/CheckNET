@@ -534,7 +534,7 @@ Friend Class RegisterForm
         End Try
     End Sub
 
-    Private Sub mobjReg_TrxDeleted(ByVal lngIndex As Integer) Handles mobjReg.TrxDeleted
+    Private Sub mobjReg_TrxDeleted() Handles mobjReg.TrxDeleted
         Try
 
             grdReg.RowCount = grdReg.RowCount - 1

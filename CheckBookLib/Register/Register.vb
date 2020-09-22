@@ -52,7 +52,7 @@ Public Class Register
 
     'Fired by Delete().
     'Intended to allow the UI to update itself.
-    Public Event TrxDeleted(ByVal lngIndex As Integer)
+    Public Event TrxDeleted()
 
     'Fired when a Split is applied or un-applied to a budget Trx.
     'Intended to allow the UI to update itself.
@@ -406,7 +406,7 @@ Public Class Register
             'because will call UnApply() on that Trx.
             mlngFirstAffected = mlngNO_TRX_AFFECTED
         End If
-        RaiseEvent TrxDeleted(lngIndex)
+        RaiseEvent TrxDeleted()
         If blnSetChanged Then
             mobjAccount.SetChanged()
         End If
