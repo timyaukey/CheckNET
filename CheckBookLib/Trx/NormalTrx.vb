@@ -598,43 +598,43 @@ Public Class NormalTrx
         Dim blnAccountIsPersonal As Boolean = (mobjReg.objAccount.lngType = Account.AccountType.Personal)
         MyBase.Validate()
         If mcolSplits Is Nothing Then
-            objReg.RaiseValidationError(lngIndex, "Missing split collection")
+            objReg.RaiseValidationError(Me, "Missing split collection")
         Else
             curTotal = 0
             For Each objSplit In mcolSplits
                 curTotal = curTotal + objSplit.curAmount
                 If Not objSplit.objBudget Is Nothing Then
                     If objSplit.objBudget.GetType() IsNot GetType(BudgetTrx) Then
-                        objReg.RaiseValidationError(lngIndex, "Split applied to non-budget trx")
+                        objReg.RaiseValidationError(Me, "Split applied to non-budget trx")
                     End If
                     If objSplit.strBudgetKey = "" Then
-                        objReg.RaiseValidationError(lngIndex, "Split applied to budget trx has no budget key")
+                        objReg.RaiseValidationError(Me, "Split applied to budget trx has no budget key")
                     End If
                     If objSplit.strBudgetKey <> objSplit.objBudget.strBudgetKey Then
-                        objReg.RaiseValidationError(lngIndex, "Split applied to budget trx has wrong budget key")
+                        objReg.RaiseValidationError(Me, "Split applied to budget trx has wrong budget key")
                     End If
                 End If
                 If blnAccountIsPersonal <> CategoryTranslator.blnIsPersonal(objCategories.strKeyToValue1(objSplit.strCategoryKey)) Then
-                    objReg.RaiseValidationError(lngIndex, "Split category mixes personal and business")
+                    objReg.RaiseValidationError(Me, "Split category mixes personal and business")
                 End If
                 Dim intDotOffset As Integer = objSplit.strCategoryKey.IndexOf("."c)
                 If intDotOffset > 0 Then
                     Dim intAccountKey As Integer = Integer.Parse(objSplit.strCategoryKey.Substring(0, intDotOffset))
                     If intAccountKey = objReg.objAccount.intKey Then
-                        objReg.RaiseValidationError(lngIndex, "Split category uses the same account")
+                        objReg.RaiseValidationError(Me, "Split category uses the same account")
                     End If
                 End If
             Next objSplit
             If curTotal <> mcurAmount Then
-                objReg.RaiseValidationError(lngIndex, "Normal trx splits add up wrong")
+                objReg.RaiseValidationError(Me, "Normal trx splits add up wrong")
             End If
         End If
         If mblnFake Then
             If mstrImportKey <> "" Then
-                objReg.RaiseValidationError(lngIndex, "Normal trx cannot have import key if it is fake")
+                objReg.RaiseValidationError(Me, "Normal trx cannot have import key if it is fake")
             End If
             If mlngStatus <> TrxStatus.Unreconciled Then
-                objReg.RaiseValidationError(lngIndex, "Normal trx must be unreconciled if it is fake")
+                objReg.RaiseValidationError(Me, "Normal trx must be unreconciled if it is fake")
             End If
         End If
     End Sub

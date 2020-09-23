@@ -487,18 +487,16 @@ Friend Class RegisterForm
         grdReg.InvalidateRow(lngIndexToGridRow(objTrx.lngIndex))
     End Sub
 
-    Private Sub mobjReg_ValidationError(ByVal lngIndex As Integer, ByVal strMsg As String) Handles mobjReg.ValidationError
-        Dim objTrx As Trx
-        Dim strTrxSummary As String = ""
+    Private Sub mobjReg_ValidationError(ByVal objTrx As Trx, ByVal strMsg As String) Handles mobjReg.ValidationError
+        Dim strTrxSummary As String = "(none)"
 
         Try
 
             If mblnShowValidationErrors Then
-                If lngIndex > 0 Then
-                    objTrx = mobjReg.objTrx(lngIndex)
-                    strTrxSummary = ", " & strTrxSummaryForMsg(objTrx)
+                If Not (objTrx Is Nothing) Then
+                    strTrxSummary = strTrxSummaryForMsg(objTrx)
                 End If
-                Dim result As MsgBoxResult = MsgBox("Validation error on register index " & lngIndex & strTrxSummary & ":" & vbCrLf & strMsg & vbCrLf & "Show more errors?", MsgBoxStyle.YesNo)
+                Dim result As MsgBoxResult = MsgBox("Validation error on register trx " & strTrxSummary & ":" & vbCrLf & strMsg & vbCrLf & "Show more errors?", MsgBoxStyle.YesNo)
                 If result = MsgBoxResult.No Then
                     mblnShowValidationErrors = False
                 End If

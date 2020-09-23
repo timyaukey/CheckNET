@@ -334,22 +334,22 @@ Public MustInherit Class Trx
     Public Overridable Sub Validate()
         Dim objRepeatTrx As Trx
         If Not mobjReg.objTrx(mlngIndex) Is Me Then
-            mobjReg.RaiseValidationError(mlngIndex, "lngIndex is wrong")
+            mobjReg.RaiseValidationError(Me, "lngIndex is wrong")
         End If
         If mdatDate = System.DateTime.FromOADate(0) Then
-            mobjReg.RaiseValidationError(mlngIndex, "Missing date")
+            mobjReg.RaiseValidationError(Me, "Missing date")
         End If
         If mstrRepeatKey <> "" Then
             If mintRepeatSeq = 0 Then
-                mobjReg.RaiseValidationError(mlngIndex, "Repeat key has no repeat seq")
+                mobjReg.RaiseValidationError(Me, "Repeat key has no repeat seq")
             End If
             objRepeatTrx = objReg.objRepeatTrx(mstrRepeatKey, mintRepeatSeq)
             If Not objRepeatTrx Is Me Then
-                mobjReg.RaiseValidationError(mlngIndex, "objRepeatTrx() returned wrong Trx")
+                mobjReg.RaiseValidationError(Me, "objRepeatTrx() returned wrong Trx")
             End If
         Else
             If mintRepeatSeq <> 0 Then
-                mobjReg.RaiseValidationError(mlngIndex, "Repeat seq should be zero")
+                mobjReg.RaiseValidationError(Me, "Repeat seq should be zero")
             End If
         End If
     End Sub

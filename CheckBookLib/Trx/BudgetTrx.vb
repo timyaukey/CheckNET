@@ -311,28 +311,28 @@ Public Class BudgetTrx
         Dim curTotal As Decimal
         MyBase.Validate()
         If mstrBudgetKey = "" Then
-            objReg.RaiseValidationError(lngIndex, "Budget trx requires budget key")
+            objReg.RaiseValidationError(Me, "Budget trx requires budget key")
             Exit Sub
         End If
         If mcolAppliedSplits Is Nothing Then
-            objReg.RaiseValidationError(lngIndex, "Missing applied split collection")
+            objReg.RaiseValidationError(Me, "Missing applied split collection")
         Else
             curTotal = 0
             For Each objSplit In mcolAppliedSplits
                 curTotal = curTotal + objSplit.curAmount
                 If Not objSplit.objBudget Is Me Then
-                    objReg.RaiseValidationError(lngIndex, "Split applied to budget trx has wrong objBudget")
+                    objReg.RaiseValidationError(Me, "Split applied to budget trx has wrong objBudget")
                 End If
                 If objSplit.strBudgetKey <> mstrBudgetKey Then
-                    objReg.RaiseValidationError(lngIndex, "Split applied to budget trx has wrong budget key")
+                    objReg.RaiseValidationError(Me, "Split applied to budget trx has wrong budget key")
                 End If
             Next objSplit
             If curTotal <> mcurBudgetApplied Then
-                objReg.RaiseValidationError(lngIndex, "Budget trx applied splits add up wrong")
+                objReg.RaiseValidationError(Me, "Budget trx applied splits add up wrong")
             End If
         End If
         If Not mblnFake Then
-            objReg.RaiseValidationError(lngIndex, "Budget trx must be fake")
+            objReg.RaiseValidationError(Me, "Budget trx must be fake")
         End If
     End Sub
 

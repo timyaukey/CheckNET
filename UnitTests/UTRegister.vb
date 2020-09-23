@@ -349,7 +349,13 @@ Public Class UTRegister
         mblnPositionChanged = blnPositionChanged
     End Sub
 
-    Private Sub mobjReg_ValidationError(ByVal lngIndex As Integer, ByVal strMsg As String) Handles mobjReg.ValidationError
+    Private Sub mobjReg_ValidationError(ByVal objTrx As Trx, ByVal strMsg As String) Handles mobjReg.ValidationError
+        Dim lngIndex As Integer
+        If objTrx Is Nothing Then
+            lngIndex = 0
+        Else
+            lngIndex = objTrx.lngIndex
+        End If
         mcolErrors.Add("Index=" & lngIndex & ": " & strMsg)
     End Sub
 End Class

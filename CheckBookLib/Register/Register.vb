@@ -91,7 +91,7 @@ Public Class Register
 
     'Fired by Validate() or a method called from Validate() when a validation
     'error is detected.
-    Public Event ValidationError(ByVal lngIndex As Integer, ByVal strMsg As String)
+    Public Event ValidationError(ByVal objTrx As Trx, ByVal strMsg As String)
 
     Friend Sub Init(ByVal objAccount_ As Account, ByVal strTitle_ As String, ByVal strRegisterKey_ As String, ByVal blnShowInitially_ As Boolean, ByVal lngAllocationUnit_ As Integer)
 
@@ -1168,7 +1168,6 @@ Public Class Register
     '   of data in individual Trx.
 
     Public Sub ValidateRegister()
-        Dim lngIndex As Integer
         Dim objTrx As Trx
         Dim objTrx2 As Trx
         Dim objPriorTrx As Trx
@@ -1178,16 +1177,15 @@ Public Class Register
         curPriorBalance = 0
         objPriorTrx = Nothing
 
-        For lngIndex = 1 To mlngTrxUsed
-            objTrx = Me.objTrx(lngIndex)
+        For Each objTrx In Me.colAllTrx(Of Trx)()
             With objTrx
                 If .curBalance <> (curPriorBalance + .curAmount) Then
-                    RaiseValidationError(lngIndex, "Incorrect balance")
+                    RaiseValidationError(objTrx, "Incorrect balance")
                 End If
                 curPriorBalance = .curBalance
                 If Not objPriorTrx Is Nothing Then
                     If Register.intSortComparison(objTrx, objPriorTrx) < 0 Then
-                        RaiseValidationError(lngIndex, "Not in correct sort order")
+                        RaiseValidationError(objTrx, "Not in correct sort order")
                     End If
                 End If
                 objPriorTrx = objTrx
@@ -1199,20 +1197,20 @@ Public Class Register
         Next
 
         If intRepeatTrxCount <> mcolRepeatTrx.Count() Then
-            RaiseValidationError(0, "Wrong number of repeat trx")
+            RaiseValidationError(Nothing, "Wrong number of repeat trx")
         End If
 
         For Each objTrx In mcolRepeatTrx.Values
             objTrx2 = objRepeatTrx(objTrx.strRepeatKey, objTrx.intRepeatSeq)
             If Not objTrx Is objTrx2 Then
-                RaiseValidationError(0, "Repeat collection element points to wrong trx")
+                RaiseValidationError(Nothing, "Repeat collection element points to wrong trx")
             End If
         Next objTrx
 
     End Sub
 
-    Friend Sub RaiseValidationError(ByVal lngIndex As Integer, ByVal strMsg As String)
-        RaiseEvent ValidationError(lngIndex, strMsg)
+    Friend Sub RaiseValidationError(ByVal objTrx As Trx, ByVal strMsg As String)
+        RaiseEvent ValidationError(objTrx, strMsg)
     End Sub
 
     '$Description Registry key name specific to a register.
