@@ -60,7 +60,7 @@ Public Class Register
 
     'Fired after register balances have been updated.
     'Intended to allow the UI to update itself.
-    Public Event BalancesChanged(ByVal lngFirstIndex As Integer, ByVal lngLastIndex As Integer)
+    Public Event BalancesChanged()
 
     'Fired by ShowCurrent() method.
     'Intended to allow the UI to update itself.
@@ -359,7 +359,7 @@ Public Class Register
         'applied to any budgets.
         If mlngFirstAffected <> mlngNO_TRX_AFFECTED Then
             lngLastAffectedIndex = lngFixBalances(mlngFirstAffected)
-            RaiseEvent BalancesChanged(mlngFirstAffected, lngLastAffectedIndex)
+            RaiseEvent BalancesChanged()
         End If
         RaiseShowCurrent()
     End Sub

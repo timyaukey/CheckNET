@@ -39,8 +39,7 @@ Public Class UTRegister
     Private mblnTrxDeletedFired As Boolean
     Private mobjTrxReported As Trx
     Private mstrBudgetsChanged As String
-    Private mlngBalanceChangeFirstIndex As Integer
-    Private mlngBalanceChangeLastIndex As Integer
+    Private mblnBalanceChangeFired As Boolean
 
     'Initialize a new UTRegister with an empty Register.
 
@@ -140,8 +139,7 @@ Public Class UTRegister
         AddTrx(objTrx)
 
         gUTAssert(objTrx Is mobjTrxReported, strFailMsg & ": wrong Trx in add normal report")
-        gUTAssert(mlngBalanceChangeFirstIndex = lngBalanceChangeFirst, strFailMsg & ": wrong bal chg first index in add normal report")
-        gUTAssert(mlngBalanceChangeLastIndex = lngBalanceChangeLast, strFailMsg & ": wrong bal chg last index in add normal report")
+        gUTAssert(mblnBalanceChangeFired, strFailMsg & ": BalanceChanged did not fire in add normal report")
 
     End Sub
 
@@ -178,8 +176,7 @@ Public Class UTRegister
 
         gUTAssert(mblnPositionChanged = (lngExpectedNewIndex <> lngOldIndex), strFailMsg & ": wrong position changed flag")
         gUTAssert(objTrx Is mobjTrxReported, strFailMsg & ": wrong Trx in upd normal report")
-        gUTAssert(mlngBalanceChangeFirstIndex = lngBalanceChangeFirst, strFailMsg & ": wrong bal chg first index in upd normal report")
-        gUTAssert(mlngBalanceChangeLastIndex = lngBalanceChangeLast, strFailMsg & ": wrong bal chg last index in upd normal report")
+        gUTAssert(mblnBalanceChangeFired, strFailMsg & ": BalanceChanged did not fire in upd normal report")
 
     End Sub
 
@@ -198,8 +195,7 @@ Public Class UTRegister
         AddTrx(objTrx)
 
         gUTAssert(objTrx Is mobjTrxReported, strFailMsg & ": wrong Trx in add budget report")
-        gUTAssert(mlngBalanceChangeFirstIndex = lngBalanceChangeFirst, strFailMsg & ": wrong bal chg first index in add budget report")
-        gUTAssert(mlngBalanceChangeLastIndex = lngBalanceChangeLast, strFailMsg & ": wrong bal chg last index in add budget report")
+        gUTAssert(mblnBalanceChangeFired, strFailMsg & ": BalanceChanged did not fire in add budget report")
 
     End Sub
 
@@ -221,21 +217,19 @@ Public Class UTRegister
 
         gUTAssert(mblnPositionChanged = (lngExpectedNewIndex <> lngExpectedOldIndex), strFailMsg & ": wrong position changed flag")
         gUTAssert(objTrx Is mobjTrxReported, strFailMsg & ": wrong Trx in upd budget report")
-        gUTAssert(mlngBalanceChangeFirstIndex = lngBalanceChangeFirst, strFailMsg & ": wrong bal chg first index in upd budget report")
-        gUTAssert(mlngBalanceChangeLastIndex = lngBalanceChangeLast, strFailMsg & ": wrong bal chg last index in upd budget report")
+        gUTAssert(mblnBalanceChangeFired, strFailMsg & ": BalanceChanged did not fire in upd budget report")
 
     End Sub
 
     'Delete a Trx, with unit testing assertions.
     'Fires Register events.
 
-    Public Sub DeleteEntry(ByVal lngIndex As Integer, ByVal lngBalanceChangeFirst As Integer, ByVal lngBalanceChangeLast As Integer, ByVal strFailMsg As String)
+    Public Sub DeleteEntry(ByVal lngIndex As Integer, ByVal blnExpectedBalanceChangedFired As Boolean, ByVal strFailMsg As String)
 
         ClearEventReporting()
         objReg.Delete(lngIndex, New LogDelete, "UTDeleteEntry")
         gUTAssert(mblnTrxDeletedFired, strFailMsg & ": did not fire event")
-        gUTAssert(mlngBalanceChangeFirstIndex = lngBalanceChangeFirst, strFailMsg & ": wrong bal chg first index in del budget report")
-        gUTAssert(mlngBalanceChangeLastIndex = lngBalanceChangeLast, strFailMsg & ": wrong bal chg last index in del budget report")
+        gUTAssert(mblnBalanceChangeFired = blnExpectedBalanceChangedFired, strFailMsg & ": BalanceChanged did not fire in del budget report")
 
     End Sub
 
@@ -246,8 +240,7 @@ Public Class UTRegister
         mobjTrxReported = Nothing
         mblnPositionChanged = False
         mblnTrxDeletedFired = False
-        mlngBalanceChangeFirstIndex = 0
-        mlngBalanceChangeLastIndex = 0
+        mblnBalanceChangeFired = False
         mstrBudgetsChanged = ""
     End Sub
 
@@ -335,9 +328,8 @@ Public Class UTRegister
 
     End Sub
 
-    Private Sub mobjReg_BalancesChanged(ByVal lngFirstIndex As Integer, ByVal lngLastIndex As Integer) Handles mobjReg.BalancesChanged
-        mlngBalanceChangeFirstIndex = lngFirstIndex
-        mlngBalanceChangeLastIndex = lngLastIndex
+    Private Sub mobjReg_BalancesChanged() Handles mobjReg.BalancesChanged
+        mblnBalanceChangeFired = True
     End Sub
 
     Private Sub mobjReg_BudgetChanged(ByVal objBudget As Trx) Handles mobjReg.BudgetChanged

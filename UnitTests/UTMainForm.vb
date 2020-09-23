@@ -387,20 +387,20 @@ Friend Class UTMainForm
             gUTSetSubTest("Test delete")
 
             'Delete from either end and the middle.
-            .DeleteEntry(1, 1, 7, "First delete")
+            .DeleteEntry(1, True, "First delete")
             .Validate("", 3, 5, 2, 8, 7, 6, 4)
 
-            .DeleteEntry(7, 0, 0, "Second delete")
+            .DeleteEntry(7, False, "Second delete")
             .Validate("", 3, 5, 2, 8, 7, 6)
 
-            .DeleteEntry(4, 4, 5, "Third delete")
+            .DeleteEntry(4, True, "Third delete")
             .Validate("", 3, 5, 2, 7, 6)
 
             'Delete one of the budgets, to show the applied splits are un-applied.
             objTrx = objUTReg.objReg.objTrx(4)
             gUTAssert(Not DirectCast(objTrx, NormalTrx).objFirstSplit.objBudget Is Nothing, "Expected first split to be applied")
             gUTAssert(DirectCast(objTrx, NormalTrx).objSecondSplit.objBudget Is Nothing, "Expected second split to not be applied")
-            .DeleteEntry(5, 0, 0, "Fourth delete")
+            .DeleteEntry(5, False, "Fourth delete")
             .Validate("", 3, 5, 2, 7)
             gUTAssert(DirectCast(objTrx, NormalTrx).objFirstSplit.objBudget Is Nothing, "Expected split to be un-applied")
 
@@ -410,20 +410,20 @@ Friend Class UTMainForm
 
             'Delete a normal trx applied to a budget, to show it un-applies.
             .SetTrxAmount(9, -32D)
-            .DeleteEntry(4, 4, 4, "Fifth delete")
+            .DeleteEntry(4, True, "Fifth delete")
             .Validate("", 3, 5, 2, 9)
 
             'Delete the remaining trx.
-            .DeleteEntry(4, 0, 0, "Sixth delete")
+            .DeleteEntry(4, False, "Sixth delete")
             .Validate("", 3, 5, 2)
 
-            .DeleteEntry(1, 1, 2, "Seventh delete")
+            .DeleteEntry(1, True, "Seventh delete")
             .Validate("", 5, 2)
 
-            .DeleteEntry(1, 1, 1, "Eighth delete")
+            .DeleteEntry(1, True, "Eighth delete")
             .Validate("", 2)
 
-            .DeleteEntry(1, 0, 0, "Ninth delete")
+            .DeleteEntry(1, False, "Ninth delete")
             .Validate("")
 
         End With
@@ -1221,7 +1221,7 @@ Friend Class UTMainForm
             .AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
             .AddNormal("1501", #6/2/2000#, -10D, "Second add", 2, 2, 2, strRepeatKey:="t2", intRepeatSeq:=1)
             'Delete the second trx.
-            .DeleteEntry(2, 0, 0, "delete")
+            .DeleteEntry(2, False, "delete")
             .Validate("", 1)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 1, "count")
         End With
@@ -1246,7 +1246,7 @@ Friend Class UTMainForm
             .UpdateNormal("1501", #6/14/2000#, -10D, "First upd", 2, 3, 2, 3, strRepeatKey:="r3", intRepeatSeq:=3)
             .Validate("", 1, 3, 2, 4, 5, 6)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
-            .DeleteEntry(4, 4, 5, "delete")
+            .DeleteEntry(4, True, "delete")
             .Validate("", 1, 3, 2, 5, 6)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
             .UpdateNormal("Pmt", #6/16/2000#, -11D, "update", 4, 4, 4, 5)
@@ -1276,7 +1276,7 @@ Friend Class UTMainForm
             .SetTrxDate(3, #7/10/2000#)
             .Validate("", 1, 2, 4, 5, 3)
             gUTAssert(.objReg.colDbgRepeatTrx.Count() = 3, "count")
-            .DeleteEntry(1, 1, 4, "")
+            .DeleteEntry(1, True, "")
             .Validate("", 2, 4, 5, 3)
         End With
     End Sub

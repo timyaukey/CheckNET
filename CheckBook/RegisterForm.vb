@@ -408,7 +408,7 @@ Friend Class RegisterForm
         mfrmSearch = Nothing
     End Sub
 
-    Private Sub mobjReg_BalancesChanged(ByVal lngFirstIndex As Integer, ByVal lngLastIndex As Integer) Handles mobjReg.BalancesChanged
+    Private Sub mobjReg_BalancesChanged() Handles mobjReg.BalancesChanged
         Try
             If mintColBalance > 0 Then
                 grdReg.Invalidate()
