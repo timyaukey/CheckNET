@@ -313,30 +313,10 @@ Friend Class RegisterForm
     End Sub
 
     Private Sub LoadGrid()
-        Dim lngIndex As Integer
-        'Select the first Trx on the latest date on or before this.
-        Dim datTargetDate As Date
-        'The index and date of the Trx currently chosen to be selected.
-        Dim lngSelectIndex As Integer
-        Dim datSelectDate As Date
-        'The date of the current Trx.
-        Dim datCurrentDate As Date
-
         grdReg.RowCount = mobjReg.lngTrxCount
-        lngSelectIndex = 0
-        datSelectDate = System.Date.FromOADate(0)
-        datTargetDate = Today
-        For lngIndex = 1 To mobjReg.lngTrxCount
-            datCurrentDate = mobjReg.objTrx(lngIndex).datDate
-            If datCurrentDate <= datTargetDate Then
-                If datCurrentDate > datSelectDate Then
-                    lngSelectIndex = lngIndex
-                    datSelectDate = datCurrentDate
-                End If
-            End If
-        Next
-        If lngSelectIndex > 0 Then
-            mobjReg.SetCurrent(lngSelectIndex)
+        Dim objSelectedTrx As Trx = mobjReg.objFirstOnOrAfter(Today)
+        If Not (objSelectedTrx Is Nothing) Then
+            mobjReg.SetCurrent(objSelectedTrx)
             mobjReg.RaiseShowCurrent()
         End If
         RefreshPage()
@@ -374,15 +354,6 @@ Friend Class RegisterForm
                     e.CellStyle.ForeColor = Color.Black
                 End If
             End If
-        End If
-    End Sub
-
-    Private Sub SelectTrx(ByVal lngIndex As Integer)
-        Dim lngGridRow As Integer
-
-        lngGridRow = lngIndexToGridRow(lngIndex)
-        If lngGridRow < grdReg.Rows.Count Then
-            grdReg.CurrentCell = grdReg.Rows(lngGridRow - 1).Cells(0)
         End If
     End Sub
 
@@ -459,10 +430,13 @@ Friend Class RegisterForm
         End Try
     End Sub
 
-    Private Sub mobjReg_ShowCurrent(ByVal lngIndex As Integer) Handles mobjReg.ShowCurrent
+    Private Sub mobjReg_ShowCurrent(ByVal objTrx As Trx) Handles mobjReg.ShowCurrent
         Try
 
-            SelectTrx(lngIndex)
+            Dim lngGridRow As Integer = lngIndexToGridRow(objTrx.lngIndex)
+            If lngGridRow < grdReg.Rows.Count Then
+                grdReg.CurrentCell = grdReg.Rows(lngGridRow - 1).Cells(0)
+            End If
 
             Exit Sub
         Catch ex As Exception

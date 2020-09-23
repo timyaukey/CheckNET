@@ -319,7 +319,7 @@ Friend Class SearchForm
                 Exit Sub
             End If
             Dim objMatch As SearchMatch = DirectCast(lvwMatches.FocusedItem.Tag, SearchMatch)
-            mobjReg.SetCurrent(objMatch.objTrx.lngIndex)
+            mobjReg.SetCurrent(objMatch.objTrx)
             mobjReg.RaiseShowCurrent()
             RememberSelectedTrx()
 

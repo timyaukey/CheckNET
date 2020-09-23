@@ -64,7 +64,7 @@ Public Class Register
 
     'Fired by ShowCurrent() method.
     'Intended to allow the UI to update itself.
-    Public Event ShowCurrent(ByVal lngIndex As Integer)
+    Public Event ShowCurrent(ByVal objTrx As Trx)
 
     'Fired to say that the Register has been changed but no Trx were changed,
     'e.g. the register title or some other property changed.
@@ -877,7 +877,7 @@ Public Class Register
 
     End Sub
 
-    Friend Function objFirstOnOrAfter(ByVal datDate As Date) As Trx
+    Public Function objFirstOnOrAfter(ByVal datDate As Date) As Trx
         Dim lngIndexBeforeDate As Integer
         'lngIndex is initialized to mlngTrxUsed even if the body of the loop
         'is never executed, and will be left as zero if no matching Trx is found.
@@ -1112,11 +1112,11 @@ Public Class Register
         ElseIf mlngTrxCurrent > mlngTrxUsed Then
             mlngTrxCurrent = mlngTrxUsed
         End If
-        RaiseEvent ShowCurrent(mlngTrxCurrent)
+        RaiseEvent ShowCurrent(Me.objTrx(mlngTrxCurrent))
     End Sub
 
-    Public Sub SetCurrent(ByVal lngTrxCurrent_ As Integer)
-        mlngTrxCurrent = lngTrxCurrent_
+    Public Sub SetCurrent(ByVal objNewCurrent As Trx)
+        mlngTrxCurrent = objNewCurrent.lngIndex
     End Sub
 
     Private Sub AddRepeatTrx(ByVal objTrx As Trx)

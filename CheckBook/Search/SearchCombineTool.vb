@@ -77,7 +77,7 @@ Public Class SearchCombineTool
         Next
         objHostSearchToolUI.objReg.LogGroupEnd(objStartLogger)
 
-        objHostSearchToolUI.objReg.SetCurrent(objNewTrx.lngIndex)
+        objHostSearchToolUI.objReg.SetCurrent(objNewTrx)
         objHostSearchToolUI.objReg.RaiseShowCurrent()
 
     End Sub
