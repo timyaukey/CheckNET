@@ -443,7 +443,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
 
         private void SetBudgetAmount(BudgetTrx budgetTrx, decimal newAmount)
         {
-            BudgetTrxManager mgr = budgetTrx.objGetTrxManager();
+            BudgetTrxManager mgr = new BudgetTrxManager(budgetTrx);
             mgr.UpdateStart();
             mgr.objTrx.UpdateStartBudget(budgetTrx.datDate, budgetTrx.strDescription, budgetTrx.strMemo,
                 budgetTrx.blnAwaitingReview, false, budgetTrx.intRepeatSeq, budgetTrx.strRepeatKey,

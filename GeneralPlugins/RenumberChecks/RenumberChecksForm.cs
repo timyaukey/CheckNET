@@ -64,7 +64,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             {
                 foreach (var objNormal in objToChange)
                 {
-                    NormalTrxManager objMgr = objNormal.objGetTrxManager();
+                    NormalTrxManager objMgr = new NormalTrxManager(objNormal);
                     int checkNumber = Int32.Parse(objNormal.strNumber);
                     objMgr.UpdateStart();
                     string newNumber = (checkNumber + addNumber).ToString();

@@ -472,7 +472,7 @@ Friend Class UTMainForm
 
         gUTSetSubTest("Update transfer")
 
-        objXfr.UpdateTransfer(objUTReg1.objReg, 3, objUTReg2.objReg, #4/6/2000#, "xfer1", "", False, 29.95D, "", False, False, 0)
+        objXfr.UpdateTransfer(objUTReg1.objReg, objUTReg1.objReg.objTransferTrx(3), objUTReg2.objReg, #4/6/2000#, "xfer1", "", False, 29.95D, "", False, False, 0)
 
         objUTReg1.SetTrxAmount(5, 29.95D)
         objUTReg1.SetTrxDate(5, #4/6/2000#)
@@ -484,7 +484,7 @@ Friend Class UTMainForm
 
         gUTSetSubTest("Delete transfer")
 
-        objXfr.DeleteTransfer(objUTReg1.objReg, 4, objUTReg2.objReg)
+        objXfr.DeleteTransfer(objUTReg1.objReg, objUTReg1.objReg.objTrx(4), objUTReg2.objReg)
         objUTReg1.Validate("Transfer deleted 1", 1, 2, 3, 4)
         objUTReg2.Validate("Transfer deleted 2", 1, 2, 3, 4)
 
@@ -525,7 +525,7 @@ Friend Class UTMainForm
 
         gUTSetSubTest("Update transfer (repeat)")
 
-        objXfr.UpdateTransfer(objUTReg1.objReg, 3, objUTReg2.objReg, #4/6/2000#, "xfer1", "", False, 29.95D, "r3", False, False, 3)
+        objXfr.UpdateTransfer(objUTReg1.objReg, objUTReg1.objReg.objTransferTrx(3), objUTReg2.objReg, #4/6/2000#, "xfer1", "", False, 29.95D, "r3", False, False, 3)
 
         objUTReg1.SetTrxAmount(5, 29.95D)
         objUTReg1.SetTrxDate(5, #4/6/2000#)
@@ -543,7 +543,7 @@ Friend Class UTMainForm
 
         gUTSetSubTest("Delete transfer (repeat)")
 
-        objXfr.DeleteTransfer(objUTReg1.objReg, 4, objUTReg2.objReg)
+        objXfr.DeleteTransfer(objUTReg1.objReg, objUTReg1.objReg.objTrx(4), objUTReg2.objReg)
         objUTReg1.Validate("Transfer deleted 1", 1, 2, 3, 4)
         objUTReg2.Validate("Transfer deleted 2", 1, 2, 3, 4)
         gUTAssert(objUTReg1.objReg.colDbgRepeatTrx.Count() = 1, "")

@@ -587,10 +587,6 @@ Public Class NormalTrx
         Return objNormalTrx
     End Function
 
-    Public Function objGetTrxManager() As NormalTrxManager
-        Return New NormalTrxManager(Me)
-    End Function
-
     Public Overrides Sub Validate()
         Dim objSplit As TrxSplit
         Dim curTotal As Decimal

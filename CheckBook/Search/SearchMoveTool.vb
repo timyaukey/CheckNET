@@ -73,7 +73,7 @@ Public Class SearchMoveTool
             With objTrxSrc
                 If objNewReg Is Nothing Then
                     'Changing date, not register.
-                    Dim objTrxManager As NormalTrxManager = objTrxSrc.objGetTrxManager()
+                    Dim objTrxManager As NormalTrxManager = New NormalTrxManager(objTrxSrc)
                     objTrxManager.UpdateStart()
                     objTrxManager.objTrx.datDate = datNewDate
                     objTrxManager.UpdateEnd(New LogMove, "SearchForm.MoveUpdate")

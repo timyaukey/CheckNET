@@ -67,7 +67,7 @@ Public Class SearchRecategorizeTool
 
         objStartLogger = objHostSearchToolUI.objReg.objLogGroupStart("SearchForm.Recategorize")
         For Each objNormalTrx In colTrx
-            objTrxManager = objNormalTrx.objGetTrxManager()
+            objTrxManager = New NormalTrxManager(objNormalTrx)
             colSplits = objNormalTrx.colSplits
             objTrxManager.UpdateStart()
             objNormalTrx.ClearSplits()

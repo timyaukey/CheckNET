@@ -118,7 +118,7 @@ Friend Class RegisterForm
             If objTrx.GetType() Is GetType(TransferTrx) Then
                 objXfer = New TransferManager
                 objOtherReg = mobjAccount.objFindReg(DirectCast(objTrx, TransferTrx).strTransferKey)
-                objXfer.DeleteTransfer(mobjReg, intIndex, objOtherReg)
+                objXfer.DeleteTransfer(mobjReg, objTrx, objOtherReg)
             Else
                 objTrx.Delete(New LogDelete, "RegisterForm.Delete")
             End If
@@ -371,7 +371,7 @@ Friend Class RegisterForm
     End Function
 
     Private Function lngIndexToGridRow(ByVal lngIndex As Integer) As Integer
-        lngIndexToGridRow = lngIndex
+        Return lngIndex - 1
     End Function
 
     Private Sub mfrmSearch_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles mfrmSearch.FormClosed
@@ -435,7 +435,7 @@ Friend Class RegisterForm
 
             Dim lngGridRow As Integer = lngIndexToGridRow(objTrx.lngIndex)
             If lngGridRow < grdReg.Rows.Count Then
-                grdReg.CurrentCell = grdReg.Rows(lngGridRow - 1).Cells(0)
+                grdReg.CurrentCell = grdReg.Rows(lngGridRow).Cells(0)
             End If
 
             Exit Sub

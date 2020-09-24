@@ -323,7 +323,7 @@ Public MustInherit Class Trx
 
     Public Sub Delete(ByVal objDeleteLogger As ILogDelete, ByVal strLogTitle As String,
                       Optional ByVal blnSetChanged As Boolean = True)
-        mobjReg.Delete(mlngIndex, objDeleteLogger, strLogTitle, blnSetChanged)
+        mobjReg.Delete(Me, objDeleteLogger, strLogTitle, blnSetChanged)
     End Sub
 
     Public MustOverride Sub UnApply()

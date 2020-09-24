@@ -93,7 +93,7 @@ Friend Class ShowRegisterForm
                         If objTrx.GetType() Is GetType(TransferTrx) Then
                             objXfer = New TransferManager
                             objOtherReg = .objAccount.objFindReg(DirectCast(objTrx, TransferTrx).strTransferKey)
-                            objXfer.DeleteTransfer(objReg, lngTrxIdx, objOtherReg)
+                            objXfer.DeleteTransfer(objReg, objTrx, objOtherReg)
                             'Step back, because the next iteration must try
                             'the same index or else we'll skip a trx.
                             lngTrxIdx = lngTrxIdx - 1

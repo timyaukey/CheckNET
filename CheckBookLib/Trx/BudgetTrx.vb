@@ -302,10 +302,6 @@ Public Class BudgetTrx
         Return objBudgetTrx
     End Function
 
-    Public Function objGetTrxManager() As BudgetTrxManager
-        Return New BudgetTrxManager(Me)
-    End Function
-
     Public Overrides Sub Validate()
         Dim objSplit As TrxSplit
         Dim curTotal As Decimal

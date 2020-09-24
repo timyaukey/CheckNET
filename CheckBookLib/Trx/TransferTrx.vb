@@ -112,10 +112,6 @@ Public Class TransferTrx
         Return objXferTrx
     End Function
 
-    Public Function objGetTrxManager() As TransferTrxManager
-        Return New TransferTrxManager(Me)
-    End Function
-
     Public Overrides Sub Validate()
         MyBase.Validate()
         If mstrTransferKey = "" Then

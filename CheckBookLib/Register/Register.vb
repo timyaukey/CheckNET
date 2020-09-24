@@ -382,23 +382,19 @@ Public Class Register
     '$Description Delete a transaction from the register.
     '$Param lngIndex The index of the Trx to delete.
 
-    Public Sub Delete(ByVal lngIndex As Integer, ByVal objDeleteLogger As ILogDelete, ByVal strTitle As String,
+    Public Sub Delete(ByVal objTrx As Trx, ByVal objDeleteLogger As ILogDelete, ByVal strTitle As String,
                       Optional ByVal blnSetChanged As Boolean = True)
         Dim lngMoveIndex As Integer
         Dim objTrxOld As Trx
-        Dim objTrx As Trx
-        If lngIndex < 1 Or lngIndex > mlngTrxUsed Then
-            gRaiseError("Register.Delete passed invalid index=" & lngIndex)
-        End If
         ClearFirstAffected()
-        objTrx = Me.objTrx(lngIndex)
         With objTrx
             objTrxOld = .objClone(False)
             objTrx.UnApply()
             If .strRepeatKey <> "" Then
-                RemoveRepeatTrx(maobjTrx(lngIndex))
+                RemoveRepeatTrx(objTrx)
             End If
         End With
+        Dim lngIndex As Integer = objTrx.lngIndex
         For lngMoveIndex = lngIndex + 1 To mlngTrxUsed
             SetTrx(lngMoveIndex - 1, maobjTrx(lngMoveIndex))
         Next
@@ -615,7 +611,7 @@ Public Class Register
     Public Sub ImportUpdateBank(ByVal lngOldIndex As Integer, ByVal datDate As Date, ByVal strNumber As String,
                                 ByVal curAmount As Decimal, ByVal strImportKey As String)
 
-        Dim objTrxManager As NormalTrxManager = Me.objGetNormalTrxManager(lngOldIndex)
+        Dim objTrxManager As NormalTrxManager = New NormalTrxManager(Me.objNormalTrx(lngOldIndex))
         objTrxManager.UpdateStart()
         objTrxManager.objTrx.ImportUpdateBank(datDate, strNumber, curAmount, strImportKey)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdateBank")
@@ -627,7 +623,7 @@ Public Class Register
 
     Public Sub ImportUpdateNumAmt(ByVal lngOldIndex As Integer, ByVal strNumber As String, ByVal curAmount As Decimal)
 
-        Dim objTrxManager As NormalTrxManager = Me.objGetNormalTrxManager(lngOldIndex)
+        Dim objTrxManager As NormalTrxManager = New NormalTrxManager(Me.objNormalTrx(lngOldIndex))
         objTrxManager.UpdateStart()
         objTrxManager.objTrx.ImportUpdateNumAmt(strNumber, curAmount)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdateNumAmt")
@@ -638,7 +634,7 @@ Public Class Register
 
     Public Sub ImportUpdateAmount(ByVal lngOldIndex As Integer, ByVal curAmount As Decimal)
 
-        Dim objTrxManager As NormalTrxManager = Me.objGetNormalTrxManager(lngOldIndex)
+        Dim objTrxManager As NormalTrxManager = New NormalTrxManager(Me.objNormalTrx(lngOldIndex))
         objTrxManager.UpdateStart()
         objTrxManager.objTrx.ImportUpdateAmount(curAmount)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdateAmount")
@@ -651,7 +647,7 @@ Public Class Register
 
     Public Sub ImportUpdatePurchaseOrder(ByVal lngOldIndex As Integer, ByVal objPOSplit As TrxSplit, ByVal objImportedSplit As TrxSplit)
 
-        Dim objTrxManager As NormalTrxManager = Me.objGetNormalTrxManager(lngOldIndex)
+        Dim objTrxManager As NormalTrxManager = New NormalTrxManager(Me.objNormalTrx(lngOldIndex))
         objTrxManager.UpdateStart()
         objTrxManager.objTrx.ImportUpdatePurchaseOrder(objPOSplit, objImportedSplit)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdatePurchaseOrder")
@@ -900,31 +896,30 @@ Public Class Register
     '   there is no such match. If there are multiple matches it will pick one,
     '   but it is undefined which it will pick.
 
-    Friend Function lngMatchTransfer(ByVal datDate As Date, ByVal strTransferKey_ As String, ByVal curAmount As Decimal) As Integer
+    Friend Function objMatchTransfer(ByVal datDate As Date, ByVal strTransferKey_ As String, ByVal curAmount As Decimal) As TransferTrx
 
         Dim lngIndex As Integer
         Dim objTrx As Trx
 
-        lngMatchTransfer = 0
-
         For lngIndex = mlngTrxUsed To 1 Step -1
             objTrx = Me.objTrx(lngIndex)
             If objTrx.datDate < datDate Then
-                Exit Function
+                Return Nothing
             End If
             If objTrx.GetType() Is GetType(TransferTrx) Then
                 If objTrx.datDate = datDate Then
-                    With DirectCast(objTrx, TransferTrx)
+                    Dim objXfr As TransferTrx = DirectCast(objTrx, TransferTrx)
+                    With objXfr
                         If .curAmount = curAmount Then
                             If .strTransferKey = strTransferKey_ Then
-                                lngMatchTransfer = lngIndex
-                                Exit Function
+                                Return objXfr
                             End If
                         End If
                     End With
                 End If
             End If
         Next
+        Return Nothing
 
     End Function
 
@@ -965,18 +960,6 @@ Public Class Register
         UpdateFirstAffected(objBudgetTrx.lngIndex)
         RaiseEvent BudgetChanged(objBudgetTrx)
     End Sub
-
-    Public Function objGetNormalTrxManager(ByVal lngIndex As Integer) As NormalTrxManager
-        Return Me.objNormalTrx(lngIndex).objGetTrxManager()
-    End Function
-
-    Public Function objGetBudgetTrxManager(ByVal lngIndex As Integer) As BudgetTrxManager
-        Return Me.objBudgetTrx(lngIndex).objGetTrxManager()
-    End Function
-
-    Public Function objGetTransferTrxManager(ByVal lngIndex As Integer) As TransferTrxManager
-        Return Me.objTransferTrx(lngIndex).objGetTrxManager()
-    End Function
 
     '$Description Return the Trx object at the specified row of the register.
     '$Param lngIndex 1 to lngTrxCount.
