@@ -11,13 +11,10 @@ Friend Class ReconcileForm
 
     'Describe one normal, non-fake Trx in mobjAccount which is not already reconciled.
     Private Structure ReconTrx
-        'Register containing the Trx.
-        Dim objReg As Register
-        'Index of Trx in objReg.
         'NOTE: There is no mechanism to keep this index accurate if any Register
         'in mobjAccount is modified during reconciliation, which means such
         'operations must not be allowed. We do this by making this form modal.
-        Dim lngIndex As Integer
+        Dim objNormalTrx As NormalTrx
         'True iff Trx is selected in this reconciliation.
         Dim blnSelected As Boolean
         Dim objLvwItem As ListViewItem
@@ -63,24 +60,18 @@ Friend Class ReconcileForm
     End Sub
 
     Private Sub LoadTrx()
-        Dim lngIndex As Integer
-        Dim objReg As Register
-        Dim lngMaxRegIndex As Integer
-        Dim objTrx As Trx
-        Dim curStartingBalance As Decimal
-        Dim curSelectedTotal As Decimal
+        Dim curStartingBalance As Decimal = 0
+        Dim curSelectedTotal As Decimal = 0
 
         lvwTrx.Items.Clear()
         mlngTrxAllocated = 10
         mlngTrxUsed = 0
         ReDim maudtTrx(mlngTrxAllocated)
 
-        For Each objReg In mobjAccount.colRegisters
-            lngMaxRegIndex = objReg.lngTrxCount
-            For lngIndex = 1 To lngMaxRegIndex
-                objTrx = objReg.objTrx(lngIndex)
-                With objTrx
-                    If .GetType() Is GetType(NormalTrx) And Not .blnFake Then
+        For Each objReg As Register In mobjAccount.colRegisters
+            For Each objNormalTrx As NormalTrx In New RegIterator(Of NormalTrx)(objReg)
+                With objNormalTrx
+                    If Not .blnFake Then
                         If .lngStatus = Trx.TrxStatus.Reconciled Then
                             curStartingBalance = curStartingBalance + .curAmount
                         Else
@@ -90,14 +81,13 @@ Friend Class ReconcileForm
                                 ReDim Preserve maudtTrx(mlngTrxAllocated)
                             End If
                             With maudtTrx(mlngTrxUsed)
-                                .objReg = objReg
-                                .lngIndex = lngIndex
-                                .blnSelected = (objTrx.lngStatus = Trx.TrxStatus.Selected)
+                                .objNormalTrx = objNormalTrx
+                                .blnSelected = (objNormalTrx.lngStatus = Trx.TrxStatus.Selected)
                                 If .blnSelected Then
-                                    curSelectedTotal = curSelectedTotal + objTrx.curAmount
+                                    curSelectedTotal = curSelectedTotal + objNormalTrx.curAmount
                                 End If
                             End With
-                            DisplayTrx(DirectCast(objTrx, NormalTrx), mlngTrxUsed)
+                            DisplayTrx(objNormalTrx, mlngTrxUsed)
                         End If
                     End If
                 End With
@@ -196,7 +186,7 @@ Friend Class ReconcileForm
         Try
             lngArrayIndex = CInt(Item.SubItems(mintCOL_ARRAY_INDEX).Text)
             With maudtTrx(lngArrayIndex)
-                objTrx = .objReg.objNormalTrx(.lngIndex)
+                objTrx = .objNormalTrx
                 'Item.Checked still has the OLD value, unlike in VB6.
                 If Not Item.Checked Then
                     mcurClearedBalance = mcurClearedBalance + objTrx.curAmount
@@ -277,8 +267,8 @@ Friend Class ReconcileForm
         For lngIndex = 1 To mlngTrxUsed
             With maudtTrx(lngIndex)
                 lngNewStatus = CType(IIf(.blnSelected, lngSelectedStatus, Trx.TrxStatus.Unreconciled), Trx.TrxStatus)
-                If .objReg.objTrx(.lngIndex).lngStatus <> lngNewStatus Then
-                    .objReg.SetTrxStatus(.lngIndex, lngNewStatus, New LogStatus, "ReconcileForm.SaveChanges")
+                If .objNormalTrx.lngStatus <> lngNewStatus Then
+                    .objNormalTrx.objReg.SetTrxStatus(.objNormalTrx, lngNewStatus, New LogStatus, "ReconcileForm.SaveChanges")
                 End If
             End With
         Next

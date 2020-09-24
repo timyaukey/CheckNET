@@ -368,9 +368,8 @@ Public Class Register
     '$Param lngIndex The index of the Trx to change.
     '$Param lngStatus The new status.
 
-    Public Sub SetTrxStatus(ByVal lngIndex As Integer, ByVal lngStatus As Trx.TrxStatus, ByVal objAddLogger As ILogAdd, ByVal strTitle As String)
+    Public Sub SetTrxStatus(ByVal objStatusTrx As NormalTrx, ByVal lngStatus As Trx.TrxStatus, ByVal objAddLogger As ILogAdd, ByVal strTitle As String)
 
-        Dim objStatusTrx As Trx = Me.objTrx(lngIndex)
         objStatusTrx.lngStatus = lngStatus
         mobjAccount.SetChanged()
         'Use an ILogAdd instead of a specialized logger because it's a cheap
