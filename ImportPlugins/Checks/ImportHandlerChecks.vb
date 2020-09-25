@@ -40,7 +40,7 @@ Public Class ImportHandlerChecks
         Else
             curAmount = 0D
         End If
-        objMatchedTrx.objReg.ImportUpdateNumAmt(objMatchedTrx.lngIndex, objImportedTrx.strNumber, curAmount)
+        objMatchedTrx.objReg.ImportUpdateNumAmt(objMatchedTrx, objImportedTrx.strNumber, curAmount)
     End Sub
 
     Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of NormalTrx), ByRef colUnusedMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
@@ -92,7 +92,7 @@ Public Class ImportHandlerChecks
     End Sub
 
     Public Function blnIndividualUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx) As Boolean Implements IImportHandler.blnIndividualUpdate
-        objMatchedTrx.objReg.ImportUpdateNumAmt(objMatchedTrx.lngIndex, objImportedTrx.strNumber, objImportedTrx.curAmount)
+        objMatchedTrx.objReg.ImportUpdateNumAmt(objMatchedTrx, objImportedTrx.strNumber, objImportedTrx.curAmount)
         Return True
     End Function
 End Class

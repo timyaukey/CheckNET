@@ -65,7 +65,7 @@ Public Class ImportHandlerBank
             strImportKey = objImportedTrx.strImportKey + "-" + intSeqNumber.ToString()
             curAmount = 0D
         End If
-        objMatchedTrx.objReg.ImportUpdateBank(objMatchedTrx.lngIndex, objImportedTrx.datDate, objMatchedTrx.strNumber, curAmount, strImportKey)
+        objMatchedTrx.objReg.ImportUpdateBank(objMatchedTrx, objImportedTrx.datDate, objMatchedTrx.strNumber, curAmount, strImportKey)
     End Sub
 
     Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of NormalTrx), ByRef colUnusedMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
@@ -135,7 +135,7 @@ Public Class ImportHandlerBank
             strNewNumber = objMatchedTrx.strNumber
             curNewAmount = objMatchedTrx.curAmount
         End If
-        objMatchedTrx.objReg.ImportUpdateBank(objMatchedTrx.lngIndex, objImportedTrx.datDate, strNewNumber, curNewAmount, objImportedTrx.strImportKey)
+        objMatchedTrx.objReg.ImportUpdateBank(objMatchedTrx, objImportedTrx.datDate, strNewNumber, curNewAmount, objImportedTrx.strImportKey)
         Return True
     End Function
 End Class

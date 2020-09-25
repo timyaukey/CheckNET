@@ -608,10 +608,10 @@ Public Class Register
     '   updating an existing Trx, and be sure to pass the appropriate import key
     '   and say it is not fake.
 
-    Public Sub ImportUpdateBank(ByVal lngOldIndex As Integer, ByVal datDate As Date, ByVal strNumber As String,
+    Public Sub ImportUpdateBank(ByVal objNormalTrx As NormalTrx, ByVal datDate As Date, ByVal strNumber As String,
                                 ByVal curAmount As Decimal, ByVal strImportKey As String)
 
-        Dim objTrxManager As NormalTrxManager = New NormalTrxManager(Me.objNormalTrx(lngOldIndex))
+        Dim objTrxManager As NormalTrxManager = New NormalTrxManager(objNormalTrx)
         objTrxManager.UpdateStart()
         objTrxManager.objTrx.ImportUpdateBank(datDate, strNumber, curAmount, strImportKey)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdateBank")
@@ -621,9 +621,9 @@ Public Class Register
     '   updating an existing Trx. Use the normal steps for adding a new Trx if not
     '   updating an existing Trx.
 
-    Public Sub ImportUpdateNumAmt(ByVal lngOldIndex As Integer, ByVal strNumber As String, ByVal curAmount As Decimal)
+    Public Sub ImportUpdateNumAmt(ByVal objNormalTrx As NormalTrx, ByVal strNumber As String, ByVal curAmount As Decimal)
 
-        Dim objTrxManager As NormalTrxManager = New NormalTrxManager(Me.objNormalTrx(lngOldIndex))
+        Dim objTrxManager As NormalTrxManager = New NormalTrxManager(objNormalTrx)
         objTrxManager.UpdateStart()
         objTrxManager.objTrx.ImportUpdateNumAmt(strNumber, curAmount)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdateNumAmt")
@@ -632,9 +632,9 @@ Public Class Register
     '$Description Update an existing fake Trx with new amount and make it non-generated.
     '   Intended to update a generated Trx when the actual amount is known.
 
-    Public Sub ImportUpdateAmount(ByVal lngOldIndex As Integer, ByVal curAmount As Decimal)
+    Public Sub ImportUpdateAmount(ByVal objNormalTrx As NormalTrx, ByVal curAmount As Decimal)
 
-        Dim objTrxManager As NormalTrxManager = New NormalTrxManager(Me.objNormalTrx(lngOldIndex))
+        Dim objTrxManager As NormalTrxManager = New NormalTrxManager(objNormalTrx)
         objTrxManager.UpdateStart()
         objTrxManager.objTrx.ImportUpdateAmount(curAmount)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdateAmount")
@@ -645,9 +645,9 @@ Public Class Register
     '   amount of the new invoice, and adds the new invoice as a new Split to the
     '   existing Trx. The Trx total amount does not change.
 
-    Public Sub ImportUpdatePurchaseOrder(ByVal lngOldIndex As Integer, ByVal objPOSplit As TrxSplit, ByVal objImportedSplit As TrxSplit)
+    Public Sub ImportUpdatePurchaseOrder(ByVal objNormalTrx As NormalTrx, ByVal objPOSplit As TrxSplit, ByVal objImportedSplit As TrxSplit)
 
-        Dim objTrxManager As NormalTrxManager = New NormalTrxManager(Me.objNormalTrx(lngOldIndex))
+        Dim objTrxManager As NormalTrxManager = New NormalTrxManager(objNormalTrx)
         objTrxManager.UpdateStart()
         objTrxManager.objTrx.ImportUpdatePurchaseOrder(objPOSplit, objImportedSplit)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdatePurchaseOrder")

@@ -48,7 +48,7 @@ Public Class ImportHandlerInvoices
                             'Add the imported Trx as a new split in objMatchedTrx,
                             'and reduce the amount of objMatchedSplit by the same amount
                             'so the total amount of objMatchedTrx does not change.
-                            objReg.ImportUpdatePurchaseOrder(objMatchedTrx.lngIndex, objMatchedSplit, objImportedSplit)
+                            objReg.ImportUpdatePurchaseOrder(objMatchedTrx, objMatchedSplit, objImportedSplit)
                             Return True
                         End If
                     Next objMatchedSplit
