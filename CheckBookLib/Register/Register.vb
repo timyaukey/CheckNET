@@ -576,21 +576,20 @@ Public Class Register
 
     Public Function objMatchPaymentDetails(ByVal strNumber As String, ByVal datDate As Date, ByVal intDateRange As Short,
                                            ByVal strDescription As String, ByVal curAmount As Decimal) As NormalTrx
-        Dim lngIndex As Integer
         Dim datEarliestMatch As Date
         Dim datLatestMatch As Date
         datEarliestMatch = DateAdd(DateInterval.Day, -(intDateRange - 1), datDate)
         datLatestMatch = DateAdd(DateInterval.Day, intDateRange - 1, datDate)
-        For lngIndex = mlngTrxUsed To 1 Step -1
-            With Me.objTrx(lngIndex)
+        For Each objTrx As NormalTrx In Me.colAllTrxReverse(Of NormalTrx)
+            With objTrx
                 If .datDate < datEarliestMatch Then
                     Exit For
                 End If
                 If .datDate <= datLatestMatch Then
-                    If .GetType() Is GetType(NormalTrx) And Not .blnFake Then
+                    If Not .blnFake Then
                         If .strNumber = strNumber And (.curAmount = curAmount Or curAmount = 0.0#) Then
                             If Left(.strDescription, 10).ToLower() = Left(strDescription, 10).ToLower() Then
-                                Return DirectCast(Me.objTrx(lngIndex), NormalTrx)
+                                Return objTrx
                             End If
                         End If
                     End If
