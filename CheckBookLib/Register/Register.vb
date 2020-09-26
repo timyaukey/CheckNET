@@ -894,24 +894,15 @@ Public Class Register
 
     Friend Function objMatchTransfer(ByVal datDate As Date, ByVal strTransferKey_ As String, ByVal curAmount As Decimal) As TransferTrx
 
-        Dim lngIndex As Integer
-        Dim objTrx As Trx
-
-        For lngIndex = mlngTrxUsed To 1 Step -1
-            objTrx = Me.objTrx(lngIndex)
+        For Each objTrx As TransferTrx In Me.colAllTrxReverse(Of TransferTrx)
             If objTrx.datDate < datDate Then
                 Return Nothing
             End If
-            If objTrx.GetType() Is GetType(TransferTrx) Then
-                If objTrx.datDate = datDate Then
-                    Dim objXfr As TransferTrx = DirectCast(objTrx, TransferTrx)
-                    With objXfr
-                        If .curAmount = curAmount Then
-                            If .strTransferKey = strTransferKey_ Then
-                                Return objXfr
-                            End If
-                        End If
-                    End With
+            If objTrx.datDate = datDate Then
+                If objTrx.curAmount = curAmount Then
+                    If objTrx.strTransferKey = strTransferKey_ Then
+                        Return objTrx
+                    End If
                 End If
             End If
         Next
