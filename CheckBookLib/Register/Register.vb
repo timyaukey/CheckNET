@@ -555,13 +555,10 @@ Public Class Register
     '$Returns The index of the matching Trx, or zero if there is no match.
 
     Public Function objMatchImportKey(ByVal strImportKey As String) As NormalTrx
-        Dim lngIndex As Integer
-        Dim objTrx As Trx
-        For lngIndex = mlngTrxUsed To 1 Step -1
-            objTrx = Me.objTrx(lngIndex)
-            If objTrx.GetType() Is GetType(NormalTrx) And Not objTrx.blnFake Then
-                If DirectCast(objTrx, NormalTrx).strImportKey = strImportKey Then
-                    Return DirectCast(objTrx, NormalTrx)
+        For Each objTrx As NormalTrx In Me.colAllTrxReverse(Of NormalTrx)
+            If Not objTrx.blnFake Then
+                If objTrx.strImportKey = strImportKey Then
+                    Return objTrx
                 End If
             End If
         Next
@@ -1132,6 +1129,10 @@ Public Class Register
 
     Public Function colAllTrx(Of TTrx As Trx)() As IEnumerable(Of TTrx)
         Return New RegIterator(Of TTrx)(Me)
+    End Function
+
+    Public Function colAllTrxReverse(Of TTrx As Trx)() As IEnumerable(Of TTrx)
+        Return New RegReverse(Of TTrx)(Me)
     End Function
 
     Public Function curEndingBalance(ByVal datEndDate As DateTime) As Decimal

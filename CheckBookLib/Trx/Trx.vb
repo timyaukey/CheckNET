@@ -130,7 +130,7 @@ Public MustInherit Class Trx
             If mlngIndex <= 1 Then
                 Return Nothing
             Else
-                Return mobjReg.objTrx(mlngIndex + 1)
+                Return mobjReg.objTrx(mlngIndex - 1)
             End If
         End Get
     End Property

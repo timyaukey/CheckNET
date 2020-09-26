@@ -69,7 +69,7 @@ Friend Class ReconcileForm
         ReDim maudtTrx(mlngTrxAllocated)
 
         For Each objReg As Register In mobjAccount.colRegisters
-            For Each objNormalTrx As NormalTrx In New RegIterator(Of NormalTrx)(objReg)
+            For Each objNormalTrx As NormalTrx In objReg.colAllTrx(Of NormalTrx)
                 With objNormalTrx
                     If Not .blnFake Then
                         If .lngStatus = Trx.TrxStatus.Reconciled Then

@@ -111,6 +111,7 @@
     <Compile Include="Logging\ILogGroupStart.vb" />
     <Compile Include="Register\RegDateRange.vb" />
     <Compile Include="Register\RegIterator.vb" />
+    <Compile Include="Register\RegReverse.vb" />
     <Compile Include="RepeatSummarizer.vb" />
     <Compile Include="RepeatUnitTypeConverter.vb" />
     <Compile Include="Reporting\AccountGroupManager.vb" />
