@@ -211,7 +211,7 @@ Public Class TrxSplit
         If mstrBudgetKey = "" Or mstrBudgetKey = objReg.objAccount.objCompany.strPlaceholderBudgetKey Then
             Exit Sub
         End If
-        objBudgetTrx = objReg.objMatchBudget(datDate, mstrBudgetKey, blnNoMatch)
+        objBudgetTrx = objReg.objMatchBudget(mobjParent, mstrBudgetKey, blnNoMatch)
         If Not objBudgetTrx Is Nothing Then
             objBudgetTrx.ApplyToThisBudget(Me)
         End If

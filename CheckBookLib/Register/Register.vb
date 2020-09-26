@@ -919,14 +919,25 @@ Public Class Register
     '   will be the latest dated budget Trx whose budget period includes datDate,
     '   and with the exact same strBudgetKey value.
 
-    Friend Function objMatchBudget(ByVal datDate As Date, ByVal strBudgetKey As String, ByRef blnNoMatch As Boolean) As BudgetTrx
+    Friend Function objMatchBudget(ByVal objNormalTrx As NormalTrx, ByVal strBudgetKey As String, ByRef blnNoMatch As Boolean) As BudgetTrx
 
-        Dim lngIndex As Integer
+        Dim datDate As DateTime = objNormalTrx.datDate
+        Dim objNextTrx As Trx
         Dim objBudgetTrx As BudgetTrx
 
         blnNoMatch = False
-        For lngIndex = mlngTrxUsed To 1 Step -1
-            objBudgetTrx = TryCast(Me.objTrx(lngIndex), BudgetTrx)
+        objNextTrx = objNormalTrx
+        Do
+            If objNextTrx.objPrevious Is Nothing Then
+                Exit Do
+            End If
+            If objNextTrx.objPrevious.datDate < datDate Then
+                Exit Do
+            End If
+            objNextTrx = objNextTrx.objPrevious
+        Loop
+        Do
+            objBudgetTrx = TryCast(objNextTrx, BudgetTrx)
             If Not objBudgetTrx Is Nothing Then
                 If objBudgetTrx.InBudgetPeriod(datDate) Then
                     If strBudgetKey = objBudgetTrx.strBudgetKey Then
@@ -934,7 +945,14 @@ Public Class Register
                     End If
                 End If
             End If
-        Next
+            objNextTrx = objNextTrx.objNext
+            If objNextTrx Is Nothing Then
+                Exit Do
+            End If
+            If objNextTrx.datDate.Subtract(datDate).TotalDays > 400 Then
+                Exit Do
+            End If
+        Loop
         blnNoMatch = True
         Return Nothing
 
