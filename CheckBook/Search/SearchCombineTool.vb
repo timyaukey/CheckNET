@@ -66,7 +66,7 @@ Public Class SearchCombineTool
             mobjHostUI.InfoMessageBox("Canceled.")
             Exit Sub
         End If
-        objNewTrx = objHostSearchToolUI.objReg.objNormalTrx(objHostSearchToolUI.objReg.lngCurrentTrxIndex())
+        objNewTrx = DirectCast(objHostSearchToolUI.objReg.objCurrentTrx, NormalTrx)
 
         'Now delete old trx.
         'Because we start from the Trx object instead of its index, we don't need
@@ -77,8 +77,9 @@ Public Class SearchCombineTool
         Next
         objHostSearchToolUI.objReg.LogGroupEnd(objStartLogger)
 
+        'Have to do this because deleting the original trx changes current.
         objHostSearchToolUI.objReg.SetCurrent(objNewTrx)
-        objHostSearchToolUI.objReg.RaiseShowCurrent()
+        objHostSearchToolUI.objReg.FireShowCurrent()
 
     End Sub
 End Class

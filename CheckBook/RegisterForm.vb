@@ -3,7 +3,7 @@ Option Explicit On
 
 
 Friend Class RegisterForm
-	Inherits System.Windows.Forms.Form
+    Inherits System.Windows.Forms.Form
 
     Private mobjHostUI As IHostUI
     Private mobjCompany As Company
@@ -261,9 +261,9 @@ Friend Class RegisterForm
 
         ConfigGridCol(intCol, mintColDate, "Date", 700,
             Function(objTrx As Trx) objTrx.datDate.ToString(Utilities.strDateWithTwoDigitYear))
-        ConfigGridCol(intCol, mintColNumber, "Number", 700, _
+        ConfigGridCol(intCol, mintColNumber, "Number", 700,
             Function(objTrx As Trx) objTrx.strNumber)
-        ConfigGridCol(intCol, mintColDescr, "Description", 3000, _
+        ConfigGridCol(intCol, mintColDescr, "Description", 3000,
             Function(objTrx As Trx) objTrx.strDescription)
         ConfigGridCol(intCol, mintColAmount, "Amount", 900,
             Function(objTrx As Trx) Utilities.strFormatCurrency(objTrx.curAmount), True)
@@ -317,13 +317,13 @@ Friend Class RegisterForm
         Dim objSelectedTrx As Trx = mobjReg.objFirstOnOrAfter(Today)
         If Not (objSelectedTrx Is Nothing) Then
             mobjReg.SetCurrent(objSelectedTrx)
-            mobjReg.RaiseShowCurrent()
+            mobjReg.FireShowCurrent()
         End If
         RefreshPage()
         DiagnosticValidate()
     End Sub
 
-    Private Sub grdReg_CellValueNeeded(ByVal sender As System.Object, _
+    Private Sub grdReg_CellValueNeeded(ByVal sender As System.Object,
         ByVal e As System.Windows.Forms.DataGridViewCellValueEventArgs) Handles grdReg.CellValueNeeded
         If Not mobjReg Is Nothing Then
             Dim objTrx As Trx
@@ -357,6 +357,13 @@ Friend Class RegisterForm
         End If
     End Sub
 
+    Private Sub grdReg_CurrentCellChanged(sender As Object, e As EventArgs) Handles grdReg.CurrentCellChanged
+        Dim lngIndex As Integer = lngRegisterIndex()
+        If lngIndex > 0 Then
+            mobjReg.SetCurrent(mobjReg.objTrx(lngIndex))
+        End If
+    End Sub
+
     Private Function strRepeatUnit(ByVal lngRepeatUnit As Trx.RepeatUnit) As String
         Select Case lngRepeatUnit
             Case Trx.RepeatUnit.Day
@@ -379,12 +386,9 @@ Friend Class RegisterForm
         mfrmSearch = Nothing
     End Sub
 
-    Private Sub mobjReg_BalancesChanged() Handles mobjReg.BalancesChanged
+    Private Sub mobjReg_ManyTrxChanged() Handles mobjReg.ManyTrxChanged
         Try
-            If mintColBalance > 0 Then
-                grdReg.Invalidate()
-            End If
-
+            grdReg.Invalidate()
             Exit Sub
         Catch ex As Exception
             gTopException(ex)
@@ -400,7 +404,7 @@ Friend Class RegisterForm
         End Try
     End Sub
 
-    Private Sub mobjReg_HideTrx() Handles mobjReg.HideTrx
+    Private Sub mobjReg_BeginRegenerating() Handles mobjReg.BeginRegenerating
         Try
 
             mblnOldVisible = Me.Visible
@@ -413,11 +417,7 @@ Friend Class RegisterForm
         End Try
     End Sub
 
-    Private Sub mobjReg_RefreshTrx() Handles mobjReg.RefreshTrx
-        grdReg.Invalidate()
-    End Sub
-
-    Private Sub mobjReg_RedisplayTrx() Handles mobjReg.RedisplayTrx
+    Private Sub mobjReg_EndRegenerating() Handles mobjReg.EndRegenerating
         Try
 
             'Cannot just invalidate grid, because number of rows may have changed.
@@ -456,7 +456,7 @@ Friend Class RegisterForm
         End Try
     End Sub
 
-    Private Sub mobjReg_TrxDeleted() Handles mobjReg.TrxDeleted
+    Private Sub mobjReg_TrxDeleted(ByVal objTrx As Trx) Handles mobjReg.TrxDeleted
         Try
 
             grdReg.RowCount = grdReg.RowCount - 1

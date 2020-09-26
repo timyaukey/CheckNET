@@ -232,7 +232,6 @@ Public Class AccountLoader
 
         'Purge generated Trx and clear all budget allocations for each register.
         For Each objReg In mobjAccount.colRegisters
-            objReg.FireHideTrx()
             objReg.PurgeGenerated()
         Next objReg
 

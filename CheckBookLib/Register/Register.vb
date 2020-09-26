@@ -30,8 +30,8 @@ Public Class Register
     Private mlngAllocationUnit As Integer
     'Show this register initially in the UI.
     Private mblnShowInitially As Boolean
-    'Index of current Trx. Used only by the UI.
-    Private mlngTrxCurrent As Integer
+    'The current Trx. Used only by the UI.
+    Private mobjTrxCurrent As Trx
     'Budget Trx with ending date older than this are always zero amount.
     Private mdatOldestBudgetEndAllowed As Date
     'Collection of all Trx that are part of a repeating sequence,
@@ -52,7 +52,9 @@ Public Class Register
 
     'Fired by Delete().
     'Intended to allow the UI to update itself.
-    Public Event TrxDeleted()
+    'Values returned by objTrx.objNext and objTrx.objPrevious are undefined.
+    'Value of objTrx.lngIndex is unchanged from before the delete.
+    Public Event TrxDeleted(ByVal objTrx As Trx)
 
     'Fired when a Split is applied or un-applied to a budget Trx.
     'Intended to allow the UI to update itself.
@@ -60,7 +62,7 @@ Public Class Register
 
     'Fired after register balances have been updated.
     'Intended to allow the UI to update itself.
-    Public Event BalancesChanged()
+    Public Event ManyTrxChanged()
 
     'Fired by ShowCurrent() method.
     'Intended to allow the UI to update itself.
@@ -70,24 +72,15 @@ Public Class Register
     'e.g. the register title or some other property changed.
     Public Event MiscChange()
 
-    'Fired before operations which cause large numbers of Trx to be changed,
+    'Fired before recreating generated transactions,
     'to allow clients to temporarily hide their UI.
-    'Whoever fires HideTrx must also fire RedisplayTrx event when Trx modifications are done.
-    'Allows clients to ignore Trx changes while they are happening, and simply
-    'redisplay everything at once when RedisplayTrx is fired.
-    Public Event HideTrx()
+    'Will be fired for all registers in all accounts before any
+    'changes are made in any registers.
+    Public Event BeginRegenerating()
 
-    'Fired when all transactions in the register must be refreshed in the UI.
-    'Used when the pattern of which transactions have been changed is more
-    'complex to keep track of than is worth the effort of doing so, or when
-    'we don't care how long it takes clients to refresh themselves.
-    'Typically used after lengthy and complex changes to transactions.
-    Public Event RefreshTrx()
-
-    'Fired when all Trx in the Register must be redisplayed.
-    'May only be used after a HideTrx event. Should "unhide" the UI for
-    'the register, if HideTrx actually hid it.
-    Public Event RedisplayTrx()
+    'Fired after recreating generated transactions.
+    'Will be fired after all changes are made in all registers in all accounts.
+    Public Event EndRegenerating()
 
     'Fired by Validate() or a method called from Validate() when a validation
     'error is detected.
@@ -108,7 +101,7 @@ Public Class Register
         Erase maobjTrx
         mlngTrxAllocated = 0
         mlngTrxUsed = 0
-        mlngTrxCurrent = 0
+        mobjTrxCurrent = Nothing
         ClearFirstAffected()
         mobjLog = New EventLog
         mobjLog.Init(Me, mobjAccount.objCompany.objSecurity.strLogin)
@@ -127,7 +120,7 @@ Public Class Register
         If objNew Is Nothing Then
             gRaiseError("objNew is Nothing in Register.NewLoadEnd")
         End If
-        lngNewInsert(objNew)
+        NewInsert(objNew)
         If objNew.intRepeatSeq > 0 Then
             AddRepeatTrx(objNew)
         End If
@@ -145,13 +138,13 @@ Public Class Register
         If objNew Is Nothing Then
             gRaiseError("objNew is Nothing in Register.NewAddEnd")
         End If
-        mlngTrxCurrent = lngNewInsert(objNew)
+        NewInsert(objNew)
         objNew.Apply(False)
         RaiseEvent TrxAdded(objNew)
         If blnSetChanged Then
             mobjAccount.SetChanged()
         End If
-        UpdateFirstAffected(mlngTrxCurrent)
+        UpdateFirstAffected(objNew.lngIndex)
         If objNew.intRepeatSeq > 0 Then
             SetRepeatTrx(objNew)
         End If
@@ -166,16 +159,15 @@ Public Class Register
     '   become the register entry, rather than making a copy of it.
     '$Returns The index of the new transaction in the register.
 
-    Private Function lngNewInsert(ByVal objNew As Trx) As Integer
-        Dim lngIndex As Integer
+    Private Sub NewInsert(ByVal objNew As Trx)
         If mlngTrxUsed = mlngTrxAllocated Then
             mlngTrxAllocated = mlngTrxAllocated + mlngAllocationUnit
             ReDim Preserve maobjTrx(mlngTrxAllocated)
         End If
         mlngTrxUsed = mlngTrxUsed + 1
-        lngIndex = lngMoveUp(mlngTrxUsed - 1, objNew)
-        lngNewInsert = lngIndex
-    End Function
+        MoveUp(mlngTrxUsed - 1, objNew)
+        mobjTrxCurrent = objNew
+    End Sub
 
     '$Description Move a Trx the shortest distance possible toward the beginning of the
     '   register which will leave it in the correct place in the sort order. Will not
@@ -187,10 +179,8 @@ Public Class Register
     '   lngEndIndex down one row in the register, thus overwriting the object currently
     '   in that position.
     '$Param objTrx The Trx object to move. Will insert this in maobjTrx().
-    '$Returns The index at which objTrx was inserted, or its original locaction if it
-    '   was already in the correct place.
 
-    Private Function lngMoveUp(ByVal lngEndIndex As Integer, ByVal objTrx As Trx) As Integer
+    Private Sub MoveUp(ByVal lngEndIndex As Integer, ByVal objTrx As Trx)
         Dim lngFirstLesser As Integer
         Dim lngMoveIndex As Integer
         If lngEndIndex < 0 Or lngEndIndex > (mlngTrxUsed - 1) Then
@@ -203,7 +193,6 @@ Public Class Register
                 Exit For
             End If
         Next
-        lngMoveUp = lngFirstLesser + 1
         If (lngFirstLesser + 1) < 1 Then
             gRaiseError("Register.lngMoveUp moved too far")
         End If
@@ -214,16 +203,15 @@ Public Class Register
             SetTrx(lngMoveIndex + 1, maobjTrx(lngMoveIndex))
         Next
         SetTrx(lngFirstLesser + 1, objTrx)
-    End Function
+    End Sub
 
-    '$Description Like lngMoveUp(), but moves a Trx the shortest distance possible
+    '$Description Like MoveUp(), but moves a Trx the shortest distance possible
     '   toward the end of the register.
     '$Param lngStartIndex The index immediately below the current location of the Trx
     '   being moved. See lngEndIndex argument to lngMoveUp().
     '$Param objTrx See lngMoveUp().
-    '$Returns See lngMoveUp().
 
-    Private Function lngMoveDown(ByVal lngStartIndex As Integer, ByVal objTrx As Trx) As Integer
+    Private Sub MoveDown(ByVal lngStartIndex As Integer, ByVal objTrx As Trx)
         Dim lngFirstGreater As Integer
         Dim lngMoveIndex As Integer
         If lngStartIndex < 2 Or lngStartIndex > mlngTrxUsed Then
@@ -246,8 +234,7 @@ Public Class Register
             SetTrx(lngMoveIndex - 1, maobjTrx(lngMoveIndex))
         Next
         SetTrx(lngFirstGreater - 1, objTrx)
-        lngMoveDown = lngFirstGreater - 1
-    End Function
+    End Sub
 
     '$Description Finish updating an existing transaction. Moves it to the correct
     '   position in the sort order.
@@ -264,11 +251,11 @@ Public Class Register
                 SetRepeatTrx(objTrx)
             End If
             objTrx.Apply(False)
-            mlngTrxCurrent = lngUpdateMove(lngOldIndex)
-            RaiseEvent TrxUpdated(lngOldIndex <> mlngTrxCurrent, objTrx)
+            UpdateMove(lngOldIndex)
+            RaiseEvent TrxUpdated(lngOldIndex <> objTrx.lngIndex, objTrx)
             mobjAccount.SetChanged()
             UpdateFirstAffected(lngOldIndex)
-            UpdateFirstAffected(mlngTrxCurrent)
+            UpdateFirstAffected(objTrx.lngIndex)
             FixBalancesAndRefreshUI()
             mobjLog.AddILogChange(objChangeLogger, strTitle, objTrx, objOldTrx)
 
@@ -290,28 +277,25 @@ Public Class Register
     '   deleting a row from the old position and then inserting a row at
     '   the new position.
 
-    Private Function lngUpdateMove(ByVal lngOldIndex As Integer) As Integer
-        Dim objTrx As Trx
+    Private Sub UpdateMove(ByVal lngOldIndex As Integer)
 
-        objTrx = Me.objTrx(lngOldIndex)
+        Dim objTrx As Trx = Me.objTrx(lngOldIndex)
 
         If lngOldIndex > 1 Then
             If Register.intSortComparison(objTrx, Me.objTrx(lngOldIndex - 1)) < 0 Then
-                lngUpdateMove = lngMoveUp(lngOldIndex - 1, objTrx)
-                Exit Function
+                MoveUp(lngOldIndex - 1, objTrx)
+                Exit Sub
             End If
         End If
 
         If lngOldIndex < mlngTrxUsed Then
             If Register.intSortComparison(objTrx, Me.objTrx(lngOldIndex + 1)) > 0 Then
-                lngUpdateMove = lngMoveDown(lngOldIndex + 1, objTrx)
-                Exit Function
+                MoveDown(lngOldIndex + 1, objTrx)
+                Exit Sub
             End If
         End If
 
-        lngUpdateMove = lngOldIndex
-
-    End Function
+    End Sub
 
     Public Shared Function intSortComparison(ByVal objTrx1 As Trx, ByVal objTrx2 As Trx) As Integer
         Dim result As Integer = objTrx1.datDate.CompareTo(objTrx2.datDate)
@@ -353,15 +337,14 @@ Public Class Register
     '   loaded register.
 
     Private Sub FixBalancesAndRefreshUI()
-        Dim lngLastAffectedIndex As Integer
         'This condition might actually not be true, for example if
         'the last Trx in the register is deleted and it was not
         'applied to any budgets.
         If mlngFirstAffected <> mlngNO_TRX_AFFECTED Then
-            lngLastAffectedIndex = lngFixBalances(mlngFirstAffected)
-            RaiseEvent BalancesChanged()
+            FixBalances(mlngFirstAffected)
+            FireManyTrxChanged()
         End If
-        RaiseShowCurrent()
+        FireShowCurrent()
     End Sub
 
     '$Description Set the status of a transaction, and fire a StatusChanged event for it.
@@ -405,18 +388,15 @@ Public Class Register
             'because will call UnApply() on that Trx.
             mlngFirstAffected = mlngNO_TRX_AFFECTED
         End If
-        RaiseEvent TrxDeleted()
         If blnSetChanged Then
             mobjAccount.SetChanged()
         End If
-        mlngTrxCurrent = lngIndex
+        mobjTrxCurrent = Nothing
         'Condition will be false if last trx deleted.
         If lngIndex <= mlngTrxUsed Then
             UpdateFirstAffected(lngIndex)
         End If
-        If mlngTrxCurrent > mlngTrxUsed Then
-            mlngTrxCurrent = mlngTrxUsed
-        End If
+        RaiseEvent TrxDeleted(objTrx)
         'Still have to "fix balances" even if deleting the last Trx,
         'because that Trx might be applied to budgets.
         FixBalancesAndRefreshUI()
@@ -436,7 +416,7 @@ Public Class Register
     '   The caller can use this to decide what part of register UI needs to be
     '   refreshed to show new running balance.
 
-    Private Function lngFixBalances(ByVal lngStartIndex As Integer) As Integer
+    Private Sub FixBalances(ByVal lngStartIndex As Integer)
         Dim curBalance As Decimal
         Dim lngIndex As Integer
         Dim lngLastChange As Integer
@@ -458,8 +438,7 @@ Public Class Register
                 End If
             End With
         Next
-        lngFixBalances = lngLastChange
-    End Function
+    End Sub
 
     '$Description Call Trx.Apply() on all Trx in this Register after this Register is
     '   loaded with Trx objects from an external database. This may create additional Trx.
@@ -522,26 +501,26 @@ Public Class Register
         End If
         mlngTrxUsed = lngOutIndex
         mlngTrxAllocated = mlngTrxUsed
-        mlngTrxCurrent = 0
+        mobjTrxCurrent = Nothing
+    End Sub
+
+    Public Sub FireManyTrxChanged()
+        RaiseEvent ManyTrxChanged()
     End Sub
 
     '$Description Called to tell everyone who cares that many Trx are about
     '   to change, and clients may not want to update their UI until all
     '   the changes are done which is signaled by the RedisplayTrx event.
 
-    Public Sub FireHideTrx()
-        RaiseEvent HideTrx()
+    Public Sub FireBeginRegenerating()
+        RaiseEvent BeginRegenerating()
     End Sub
 
     '$Description Called to tell everyone who cares that they must redisplay
     '   all Trx in this Register.
 
-    Public Sub FireRedisplayTrx()
-        RaiseEvent RedisplayTrx()
-    End Sub
-
-    Public Sub FireRefreshTrx()
-        RaiseEvent RefreshTrx()
+    Public Sub FireEndRegenerating()
+        RaiseEvent EndRegenerating()
     End Sub
 
     '$Description Find NormalTrx object already in register with the specified strImportKey.
@@ -961,7 +940,7 @@ Public Class Register
     '$Description Used to report to the UI that a budget Trx has changed, in
     '   case balances need to be updated.
 
-    Friend Sub RaiseBudgetChanged(ByVal objBudgetTrx As Trx)
+    Friend Sub FireBudgetChanged(ByVal objBudgetTrx As Trx)
         UpdateFirstAffected(objBudgetTrx.lngIndex)
         RaiseEvent BudgetChanged(objBudgetTrx)
     End Sub
@@ -1090,20 +1069,15 @@ Public Class Register
         End Get
     End Property
 
-    Public Sub RaiseShowCurrent()
-        If mlngTrxUsed = 0 Then
+    Public Sub FireShowCurrent()
+        If mlngTrxUsed = 0 Or mobjTrxCurrent Is Nothing Then
             Exit Sub
         End If
-        If mlngTrxCurrent < 1 Then
-            mlngTrxCurrent = 1
-        ElseIf mlngTrxCurrent > mlngTrxUsed Then
-            mlngTrxCurrent = mlngTrxUsed
-        End If
-        RaiseEvent ShowCurrent(Me.objTrx(mlngTrxCurrent))
+        RaiseEvent ShowCurrent(mobjTrxCurrent)
     End Sub
 
     Public Sub SetCurrent(ByVal objNewCurrent As Trx)
-        mlngTrxCurrent = objNewCurrent.lngIndex
+        mobjTrxCurrent = objNewCurrent
     End Sub
 
     Private Sub AddRepeatTrx(ByVal objTrx As Trx)
@@ -1127,9 +1101,11 @@ Public Class Register
         mcolRepeatTrx.Remove(objTrx.strRepeatId)
     End Sub
 
-    Public Function lngCurrentTrxIndex() As Integer
-        lngCurrentTrxIndex = mlngTrxCurrent
-    End Function
+    Public ReadOnly Property objCurrentTrx() As Trx
+        Get
+            Return mobjTrxCurrent
+        End Get
+    End Property
 
     Public Function colDateRange(Of TTrx As Trx)(ByVal datStart As DateTime, ByVal datEnd As DateTime) As IEnumerable(Of TTrx)
         Return New RegDateRange(Of TTrx)(Me, datStart, datEnd)
@@ -1171,12 +1147,12 @@ Public Class Register
         For Each objTrx In Me.colAllTrx(Of Trx)()
             With objTrx
                 If .curBalance <> (curPriorBalance + .curAmount) Then
-                    RaiseValidationError(objTrx, "Incorrect balance")
+                    FireValidationError(objTrx, "Incorrect balance")
                 End If
                 curPriorBalance = .curBalance
                 If Not objPriorTrx Is Nothing Then
                     If Register.intSortComparison(objTrx, objPriorTrx) < 0 Then
-                        RaiseValidationError(objTrx, "Not in correct sort order")
+                        FireValidationError(objTrx, "Not in correct sort order")
                     End If
                 End If
                 objPriorTrx = objTrx
@@ -1188,19 +1164,19 @@ Public Class Register
         Next
 
         If intRepeatTrxCount <> mcolRepeatTrx.Count() Then
-            RaiseValidationError(Nothing, "Wrong number of repeat trx")
+            FireValidationError(Nothing, "Wrong number of repeat trx")
         End If
 
         For Each objTrx In mcolRepeatTrx.Values
             objTrx2 = objRepeatTrx(objTrx.strRepeatKey, objTrx.intRepeatSeq)
             If Not objTrx Is objTrx2 Then
-                RaiseValidationError(Nothing, "Repeat collection element points to wrong trx")
+                FireValidationError(Nothing, "Repeat collection element points to wrong trx")
             End If
         Next objTrx
 
     End Sub
 
-    Friend Sub RaiseValidationError(ByVal objTrx As Trx, ByVal strMsg As String)
+    Friend Sub FireValidationError(ByVal objTrx As Trx, ByVal strMsg As String)
         RaiseEvent ValidationError(objTrx, strMsg)
     End Sub
 

@@ -115,10 +115,10 @@ Public Class TransferTrx
     Public Overrides Sub Validate()
         MyBase.Validate()
         If mstrTransferKey = "" Then
-            objReg.RaiseValidationError(Me, "Transfer trx requires transfer key")
+            objReg.FireValidationError(Me, "Transfer trx requires transfer key")
         End If
         If mstrTransferKey = objReg.strRegisterKey Then
-            objReg.RaiseValidationError(Me, "Transfer trx cannot transfer to same register")
+            objReg.FireValidationError(Me, "Transfer trx cannot transfer to same register")
         End If
     End Sub
 

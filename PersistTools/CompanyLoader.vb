@@ -184,6 +184,36 @@ Public Class CompanyLoader
         Return objAcct1.strTitle.CompareTo(objAcct2.strTitle)
     End Function
 
+    Public Shared Sub RecreateGeneratedTrx(ByVal objCompany As Company, ByVal datRegisterEndDate As Date, ByVal datCutoff As Date)
+        Dim objAccount As Account
+        Dim objReg As Register
+
+        For Each objAccount In objCompany.colAccounts
+            For Each objReg In objAccount.colRegisters
+                'Allow UI to hide all register windows for all accounts before
+                'we start any of them, because regenerating can cause ReplicaTrx
+                'to be recreated in any Register.
+                objReg.FireBeginRegenerating()
+            Next objReg
+        Next
+        'Need to do all accounts, not just the selected account, because there may be many, many
+        'accounts and even there are only a few each one can create trx in others through
+        'balance sheet categories in trx.
+        For Each objAccount In objCompany.colAccounts
+            Dim objLoader As AccountLoader = New AccountLoader(objAccount)
+            objLoader.RecreateGeneratedTrx(datRegisterEndDate, datCutoff)
+        Next
+        For Each objAccount In objCompany.colAccounts
+            'Tell all register windows to refresh themselves.
+            For Each objReg In objAccount.colRegisters
+                'Recompute the running balances, because replica trx can be added anywhere.
+                objReg.LoadFinish()
+                objReg.FireEndRegenerating()
+            Next objReg
+        Next
+
+    End Sub
+
 End Class
 
 Public MustInherit Class CompanyLoadError

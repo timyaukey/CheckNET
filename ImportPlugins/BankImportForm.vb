@@ -862,7 +862,7 @@ Public Class BankImportForm
 
     Private Sub UpdateProgress(ByVal objReg As Register)
         System.Windows.Forms.Application.DoEvents()
-        objReg.RaiseShowCurrent()
+        objReg.FireShowCurrent()
     End Sub
 
     Private Sub EndProgress()

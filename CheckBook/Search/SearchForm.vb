@@ -320,7 +320,7 @@ Friend Class SearchForm
             End If
             Dim objMatch As SearchMatch = DirectCast(lvwMatches.FocusedItem.Tag, SearchMatch)
             mobjReg.SetCurrent(objMatch.objTrx)
-            mobjReg.RaiseShowCurrent()
+            mobjReg.FireShowCurrent()
             RememberSelectedTrx()
 
             Exit Sub
@@ -457,7 +457,11 @@ Friend Class SearchForm
 
     End Function
 
-    Private Sub mobjReg_RedisplayTrx() Handles mobjReg.RedisplayTrx
+    Private Sub mobjReg_EndRegenerating() Handles mobjReg.EndRegenerating
+        RedoSearch()
+    End Sub
+
+    Private Sub mobjReg_ManyTrxChanged() Handles mobjReg.ManyTrxChanged
         RedoSearch()
     End Sub
 
@@ -465,7 +469,7 @@ Friend Class SearchForm
         RedoSearch()
     End Sub
 
-    Private Sub mobjReg_TrxDeleted() Handles mobjReg.TrxDeleted
+    Private Sub mobjReg_TrxDeleted(ByVal objTrx As Trx) Handles mobjReg.TrxDeleted
         RedoSearch()
     End Sub
 

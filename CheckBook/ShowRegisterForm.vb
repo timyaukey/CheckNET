@@ -309,24 +309,7 @@ Friend Class ShowRegisterForm
                     strCutoffDate = InputBox("Enter cutoff date for transaction generators that do not " +
                         "generate transactions older than some number of days relative to a cutoff date:", "Cutoff Date", strCutoffDate)
                     If Utilities.blnIsValidDate(strCutoffDate) Then
-                        Dim objAccount As Account
-                        System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor
-                        'Need to do all accounts, not just the selected account, because there may be many, many
-                        'accounts and even there are only a few each one can create trx in others through
-                        'balance sheet categories in trx.
-                        For Each objAccount In mobjCompany.colAccounts
-                            Dim objLoader As AccountLoader = New AccountLoader(objAccount)
-                            objLoader.RecreateGeneratedTrx(CDate(strRegisterEndDate), CDate(strCutoffDate))
-                        Next
-                        For Each objAccount In mobjCompany.colAccounts
-                            'Tell all register windows to refresh themselves.
-                            For Each objReg As Register In objAccount.colRegisters
-                                'Recompute the running balances, because replica trx can be added anywhere.
-                                objReg.LoadFinish()
-                                objReg.FireRedisplayTrx()
-                            Next objReg
-                        Next
-                        System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
+                        CompanyLoader.RecreateGeneratedTrx(mobjCompany, CDate(strRegisterEndDate), CDate(strCutoffDate))
                     Else
                         mobjHostUI.InfoMessageBox("Invalid cutoff date.")
                     End If
@@ -337,7 +320,6 @@ Friend Class ShowRegisterForm
 
             Exit Sub
         Catch ex As Exception
-            System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
             gTopException(ex)
         End Try
     End Sub

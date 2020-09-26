@@ -99,10 +99,10 @@ Public Class SearchMoveTool
         If Not objTrxFirst Is Nothing Then
             If objNewReg Is Nothing Then
                 objHostSearchToolUI.objReg.SetCurrent(objTrxFirst)
-                objHostSearchToolUI.objReg.RaiseShowCurrent()
+                objHostSearchToolUI.objReg.FireShowCurrent()
             Else
                 objNewReg.SetCurrent(objTrxFirst)
-                objNewReg.RaiseShowCurrent()
+                objNewReg.FireShowCurrent()
             End If
         End If
     End Sub

@@ -213,7 +213,7 @@ Public Class BudgetTrx
         mcolAppliedSplits = New List(Of TrxSplit)()
         mcurBudgetApplied = 0D
         SetAmountForBudget()
-        mobjReg.RaiseBudgetChanged(Me)
+        mobjReg.FireBudgetChanged(Me)
     End Sub
 
     Public Overrides Sub Apply(ByVal blnLoading As Boolean)
@@ -239,7 +239,7 @@ Public Class BudgetTrx
         Next
         If blnAnyApplied Then
             SetAmountForBudget()
-            mobjReg.RaiseBudgetChanged(Me)
+            mobjReg.FireBudgetChanged(Me)
         End If
     End Sub
 
@@ -274,7 +274,7 @@ Public Class BudgetTrx
         objSplit.objBudget = Me
         mcurBudgetApplied = mcurBudgetApplied + objSplit.curAmount
         SetAmountForBudget()
-        mobjReg.RaiseBudgetChanged(Me)
+        mobjReg.FireBudgetChanged(Me)
     End Sub
 
     '$Description Un-apply a Split from this BudgetTrx.
@@ -285,7 +285,7 @@ Public Class BudgetTrx
         End If
         mcurBudgetApplied = mcurBudgetApplied - objSplit.curAmount
         SetAmountForBudget()
-        mobjReg.RaiseBudgetChanged(Me)
+        mobjReg.FireBudgetChanged(Me)
     End Sub
 
     Public ReadOnly Property colAppliedSplits As List(Of TrxSplit)
@@ -307,28 +307,28 @@ Public Class BudgetTrx
         Dim curTotal As Decimal
         MyBase.Validate()
         If mstrBudgetKey = "" Then
-            objReg.RaiseValidationError(Me, "Budget trx requires budget key")
+            objReg.FireValidationError(Me, "Budget trx requires budget key")
             Exit Sub
         End If
         If mcolAppliedSplits Is Nothing Then
-            objReg.RaiseValidationError(Me, "Missing applied split collection")
+            objReg.FireValidationError(Me, "Missing applied split collection")
         Else
             curTotal = 0
             For Each objSplit In mcolAppliedSplits
                 curTotal = curTotal + objSplit.curAmount
                 If Not objSplit.objBudget Is Me Then
-                    objReg.RaiseValidationError(Me, "Split applied to budget trx has wrong objBudget")
+                    objReg.FireValidationError(Me, "Split applied to budget trx has wrong objBudget")
                 End If
                 If objSplit.strBudgetKey <> mstrBudgetKey Then
-                    objReg.RaiseValidationError(Me, "Split applied to budget trx has wrong budget key")
+                    objReg.FireValidationError(Me, "Split applied to budget trx has wrong budget key")
                 End If
             Next objSplit
             If curTotal <> mcurBudgetApplied Then
-                objReg.RaiseValidationError(Me, "Budget trx applied splits add up wrong")
+                objReg.FireValidationError(Me, "Budget trx applied splits add up wrong")
             End If
         End If
         If Not mblnFake Then
-            objReg.RaiseValidationError(Me, "Budget trx must be fake")
+            objReg.FireValidationError(Me, "Budget trx must be fake")
         End If
     End Sub
 

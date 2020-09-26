@@ -39,7 +39,7 @@ Public Class UTRegister
     Private mblnTrxDeletedFired As Boolean
     Private mobjTrxReported As Trx
     Private mstrBudgetsChanged As String
-    Private mblnBalanceChangeFired As Boolean
+    Private mblnManyTrxChangedFired As Boolean
 
     'Initialize a new UTRegister with an empty Register.
 
@@ -139,7 +139,7 @@ Public Class UTRegister
         AddTrx(objTrx)
 
         gUTAssert(objTrx Is mobjTrxReported, strFailMsg & ": wrong Trx in add normal report")
-        gUTAssert(mblnBalanceChangeFired, strFailMsg & ": BalanceChanged did not fire in add normal report")
+        gUTAssert(mblnManyTrxChangedFired, strFailMsg & ": ManyTrxChanged did not fire in add normal report")
 
     End Sub
 
@@ -176,7 +176,7 @@ Public Class UTRegister
 
         gUTAssert(mblnPositionChanged = (lngExpectedNewIndex <> lngOldIndex), strFailMsg & ": wrong position changed flag")
         gUTAssert(objTrx Is mobjTrxReported, strFailMsg & ": wrong Trx in upd normal report")
-        gUTAssert(mblnBalanceChangeFired, strFailMsg & ": BalanceChanged did not fire in upd normal report")
+        gUTAssert(mblnManyTrxChangedFired, strFailMsg & ": ManyTrxChanged did not fire in upd normal report")
 
     End Sub
 
@@ -195,7 +195,7 @@ Public Class UTRegister
         AddTrx(objTrx)
 
         gUTAssert(objTrx Is mobjTrxReported, strFailMsg & ": wrong Trx in add budget report")
-        gUTAssert(mblnBalanceChangeFired, strFailMsg & ": BalanceChanged did not fire in add budget report")
+        gUTAssert(mblnManyTrxChangedFired, strFailMsg & ": ManyTrxChanged did not fire in add budget report")
 
     End Sub
 
@@ -217,7 +217,7 @@ Public Class UTRegister
 
         gUTAssert(mblnPositionChanged = (lngExpectedNewIndex <> lngExpectedOldIndex), strFailMsg & ": wrong position changed flag")
         gUTAssert(objTrx Is mobjTrxReported, strFailMsg & ": wrong Trx in upd budget report")
-        gUTAssert(mblnBalanceChangeFired, strFailMsg & ": BalanceChanged did not fire in upd budget report")
+        gUTAssert(mblnManyTrxChangedFired, strFailMsg & ": ManyTrxChanged did not fire in upd budget report")
 
     End Sub
 
@@ -229,7 +229,7 @@ Public Class UTRegister
         ClearEventReporting()
         objReg.Delete(mobjReg.objTrx(lngIndex), New LogDelete, "UTDeleteEntry")
         gUTAssert(mblnTrxDeletedFired, strFailMsg & ": did not fire event")
-        gUTAssert(mblnBalanceChangeFired = blnExpectedBalanceChangedFired, strFailMsg & ": BalanceChanged did not fire in del budget report")
+        gUTAssert(mblnManyTrxChangedFired = blnExpectedBalanceChangedFired, strFailMsg & ": ManyTrxChanged did not fire in del budget report")
 
     End Sub
 
@@ -240,7 +240,7 @@ Public Class UTRegister
         mobjTrxReported = Nothing
         mblnPositionChanged = False
         mblnTrxDeletedFired = False
-        mblnBalanceChangeFired = False
+        mblnManyTrxChangedFired = False
         mstrBudgetsChanged = ""
     End Sub
 
@@ -328,8 +328,8 @@ Public Class UTRegister
 
     End Sub
 
-    Private Sub mobjReg_BalancesChanged() Handles mobjReg.BalancesChanged
-        mblnBalanceChangeFired = True
+    Private Sub mobjReg_ManyTrxChanged() Handles mobjReg.ManyTrxChanged
+        mblnManyTrxChangedFired = True
     End Sub
 
     Private Sub mobjReg_BudgetChanged(ByVal objBudget As Trx) Handles mobjReg.BudgetChanged
@@ -340,7 +340,7 @@ Public Class UTRegister
         mobjTrxReported = objTrx
     End Sub
 
-    Private Sub mobjReg_TrxDeleted() Handles mobjReg.TrxDeleted
+    Private Sub mobjReg_TrxDeleted(ByVal objTrx As Trx) Handles mobjReg.TrxDeleted
         mblnTrxDeletedFired = True
     End Sub
 
