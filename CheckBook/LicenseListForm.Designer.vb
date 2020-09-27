@@ -28,6 +28,8 @@ Partial Class LicenseListForm
         Me.colExpirationDate = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.colLicenseStatus = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.btnManageLicense = New System.Windows.Forms.Button()
+        Me.btnClose = New System.Windows.Forms.Button()
+        Me.lblLicenseStatus = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'lvwLicenses
@@ -38,11 +40,12 @@ Partial Class LicenseListForm
         Me.lvwLicenses.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colLicenseTitle, Me.colLicensedTo, Me.colExpirationDate, Me.colLicenseStatus})
         Me.lvwLicenses.FullRowSelect = True
         Me.lvwLicenses.GridLines = True
+        Me.lvwLicenses.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
         Me.lvwLicenses.HideSelection = False
         Me.lvwLicenses.Location = New System.Drawing.Point(12, 12)
         Me.lvwLicenses.MultiSelect = False
         Me.lvwLicenses.Name = "lvwLicenses"
-        Me.lvwLicenses.Size = New System.Drawing.Size(774, 318)
+        Me.lvwLicenses.Size = New System.Drawing.Size(774, 335)
         Me.lvwLicenses.TabIndex = 0
         Me.lvwLicenses.UseCompatibleStateImageBehavior = False
         Me.lvwLicenses.View = System.Windows.Forms.View.Details
@@ -70,18 +73,42 @@ Partial Class LicenseListForm
         'btnManageLicense
         '
         Me.btnManageLicense.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnManageLicense.Location = New System.Drawing.Point(586, 341)
+        Me.btnManageLicense.Location = New System.Drawing.Point(492, 391)
         Me.btnManageLicense.Name = "btnManageLicense"
         Me.btnManageLicense.Size = New System.Drawing.Size(200, 23)
         Me.btnManageLicense.TabIndex = 1
         Me.btnManageLicense.Text = "Manage Selected License"
         Me.btnManageLicense.UseVisualStyleBackColor = True
         '
+        'btnClose
+        '
+        Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnClose.Location = New System.Drawing.Point(698, 391)
+        Me.btnClose.Name = "btnClose"
+        Me.btnClose.Size = New System.Drawing.Size(88, 23)
+        Me.btnClose.TabIndex = 2
+        Me.btnClose.Text = "Close"
+        Me.btnClose.UseVisualStyleBackColor = True
+        '
+        'lblLicenseStatus
+        '
+        Me.lblLicenseStatus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lblLicenseStatus.AutoSize = True
+        Me.lblLicenseStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblLicenseStatus.ForeColor = System.Drawing.Color.Red
+        Me.lblLicenseStatus.Location = New System.Drawing.Point(12, 350)
+        Me.lblLicenseStatus.Name = "lblLicenseStatus"
+        Me.lblLicenseStatus.Size = New System.Drawing.Size(120, 17)
+        Me.lblLicenseStatus.TabIndex = 3
+        Me.lblLicenseStatus.Text = "(license status)"
+        '
         'LicenseListForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(798, 376)
+        Me.ClientSize = New System.Drawing.Size(798, 426)
+        Me.Controls.Add(Me.lblLicenseStatus)
+        Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.btnManageLicense)
         Me.Controls.Add(Me.lvwLicenses)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -91,6 +118,7 @@ Partial Class LicenseListForm
         Me.ShowInTaskbar = False
         Me.Text = "Software Licenses"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -100,4 +128,6 @@ Partial Class LicenseListForm
     Friend WithEvents colLicensedTo As ColumnHeader
     Friend WithEvents colExpirationDate As ColumnHeader
     Friend WithEvents colLicenseStatus As ColumnHeader
+    Friend WithEvents btnClose As Button
+    Friend WithEvents lblLicenseStatus As Label
 End Class

@@ -27,6 +27,7 @@ Public Class LicenseForm
                 txtEmailAddress.Text = If(String.IsNullOrEmpty(mobjLicense.EmailAddress), "", mobjLicense.EmailAddress)
                 txtDetails.Text = If(String.IsNullOrEmpty(mobjLicense.AttributeSummary), "", mobjLicense.AttributeSummary)
                 txtSerialNumber.Text = If(String.IsNullOrEmpty(mobjLicense.SerialNumber), "", mobjLicense.SerialNumber)
+                txtLicenseStatement.Text = If(String.IsNullOrEmpty(mobjLicense.LicenseStatement), "", mobjLicense.LicenseStatement)
                 btnInstall.Enabled = False
                 btnRemove.Enabled = True
             Else
@@ -36,8 +37,23 @@ Public Class LicenseForm
                 txtEmailAddress.Text = ""
                 txtDetails.Text = ""
                 txtSerialNumber.Text = ""
+                txtLicenseStatement.Text = ""
                 btnInstall.Enabled = True
                 btnRemove.Enabled = False
+            End If
+            If mobjLicense.LicenseUrl Is Nothing Then
+                lnkLicenseUrl.Text = ""
+                lnkLicenseUrl.Enabled = False
+            Else
+                lnkLicenseUrl.Text = mobjLicense.LicenseUrl.ToString()
+                lnkLicenseUrl.Enabled = True
+            End If
+            If mobjLicense.ProductUrl Is Nothing Then
+                lnkProductUrl.Text = ""
+                lnkProductUrl.Enabled = False
+            Else
+                lnkProductUrl.Text = mobjLicense.ProductUrl.ToString()
+                lnkProductUrl.Enabled = True
             End If
         Catch
 
@@ -57,6 +73,8 @@ Public Class LicenseForm
         End Select
         txtLicenseStatus.Text = strStatus
     End Sub
+
+
 
     Private Sub btnInstall_Click(sender As Object, e As EventArgs) Handles btnInstall.Click
         Try
@@ -99,4 +117,28 @@ Public Class LicenseForm
     Private Function strLicenseFilePath() As String
         Return System.IO.Path.Combine(Company.strLicenseFolder(), mobjLicense.BaseFileName)
     End Function
+
+    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        Me.Close()
+    End Sub
+
+    Private Sub lnkLicenseUrl_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnkLicenseUrl.LinkClicked
+        ActivateLink(mobjLicense.LicenseUrl)
+    End Sub
+
+    Private Sub lnkProductUrl_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnkProductUrl.LinkClicked
+        ActivateLink(mobjLicense.ProductUrl)
+    End Sub
+
+    Private Sub ActivateLink(ByVal linkUri As Uri)
+        Try
+            Dim objStartInfo As System.Diagnostics.ProcessStartInfo = New ProcessStartInfo()
+            objStartInfo.FileName = linkUri.AbsoluteUri
+            objStartInfo.UseShellExecute = True
+            System.Diagnostics.Process.Start(objStartInfo)
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
+    End Sub
+
 End Class

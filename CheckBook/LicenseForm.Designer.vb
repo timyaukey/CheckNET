@@ -41,6 +41,13 @@ Partial Class LicenseForm
         Me.btnInstall = New System.Windows.Forms.Button()
         Me.btnRemove = New System.Windows.Forms.Button()
         Me.dlgOpenLicenseFile = New System.Windows.Forms.OpenFileDialog()
+        Me.txtLicenseStatement = New System.Windows.Forms.TextBox()
+        Me.lblLicenseStatement = New System.Windows.Forms.Label()
+        Me.lnkLicenseUrl = New System.Windows.Forms.LinkLabel()
+        Me.lnkProductUrl = New System.Windows.Forms.LinkLabel()
+        Me.lblLicenseUrl = New System.Windows.Forms.Label()
+        Me.lblProductUrl = New System.Windows.Forms.Label()
+        Me.btnClose = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'lblLicenseTitle
@@ -56,11 +63,11 @@ Partial Class LicenseForm
         '
         Me.txtLicenseTitle.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtLicenseTitle.Enabled = False
-        Me.txtLicenseTitle.Location = New System.Drawing.Point(114, 6)
+        Me.txtLicenseTitle.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.txtLicenseTitle.Location = New System.Drawing.Point(116, 6)
         Me.txtLicenseTitle.Name = "txtLicenseTitle"
         Me.txtLicenseTitle.ReadOnly = True
-        Me.txtLicenseTitle.Size = New System.Drawing.Size(366, 20)
+        Me.txtLicenseTitle.Size = New System.Drawing.Size(401, 20)
         Me.txtLicenseTitle.TabIndex = 1
         '
         'lblLicensedTo
@@ -76,22 +83,22 @@ Partial Class LicenseForm
         '
         Me.txtLicensedTo.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtLicensedTo.Enabled = False
-        Me.txtLicensedTo.Location = New System.Drawing.Point(114, 33)
+        Me.txtLicensedTo.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.txtLicensedTo.Location = New System.Drawing.Point(116, 33)
         Me.txtLicensedTo.Name = "txtLicensedTo"
         Me.txtLicensedTo.ReadOnly = True
-        Me.txtLicensedTo.Size = New System.Drawing.Size(366, 20)
+        Me.txtLicensedTo.Size = New System.Drawing.Size(401, 20)
         Me.txtLicensedTo.TabIndex = 3
         '
         'txtLicenseVersion
         '
         Me.txtLicenseVersion.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtLicenseVersion.Enabled = False
-        Me.txtLicenseVersion.Location = New System.Drawing.Point(114, 163)
+        Me.txtLicenseVersion.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.txtLicenseVersion.Location = New System.Drawing.Point(116, 163)
         Me.txtLicenseVersion.Name = "txtLicenseVersion"
         Me.txtLicenseVersion.ReadOnly = True
-        Me.txtLicenseVersion.Size = New System.Drawing.Size(366, 20)
+        Me.txtLicenseVersion.Size = New System.Drawing.Size(401, 20)
         Me.txtLicenseVersion.TabIndex = 13
         '
         'lblLicenseVersion
@@ -107,11 +114,11 @@ Partial Class LicenseForm
         '
         Me.txtExpirationDate.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtExpirationDate.Enabled = False
-        Me.txtExpirationDate.Location = New System.Drawing.Point(114, 85)
+        Me.txtExpirationDate.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.txtExpirationDate.Location = New System.Drawing.Point(116, 85)
         Me.txtExpirationDate.Name = "txtExpirationDate"
         Me.txtExpirationDate.ReadOnly = True
-        Me.txtExpirationDate.Size = New System.Drawing.Size(366, 20)
+        Me.txtExpirationDate.Size = New System.Drawing.Size(401, 20)
         Me.txtExpirationDate.TabIndex = 7
         '
         'lblExpirationDate
@@ -127,11 +134,11 @@ Partial Class LicenseForm
         '
         Me.txtEmailAddress.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtEmailAddress.Enabled = False
-        Me.txtEmailAddress.Location = New System.Drawing.Point(114, 59)
+        Me.txtEmailAddress.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.txtEmailAddress.Location = New System.Drawing.Point(116, 59)
         Me.txtEmailAddress.Name = "txtEmailAddress"
         Me.txtEmailAddress.ReadOnly = True
-        Me.txtEmailAddress.Size = New System.Drawing.Size(366, 20)
+        Me.txtEmailAddress.Size = New System.Drawing.Size(401, 20)
         Me.txtEmailAddress.TabIndex = 5
         '
         'lblEmailAddress
@@ -147,11 +154,11 @@ Partial Class LicenseForm
         '
         Me.txtDetails.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtDetails.Enabled = False
-        Me.txtDetails.Location = New System.Drawing.Point(114, 111)
+        Me.txtDetails.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.txtDetails.Location = New System.Drawing.Point(116, 111)
         Me.txtDetails.Name = "txtDetails"
         Me.txtDetails.ReadOnly = True
-        Me.txtDetails.Size = New System.Drawing.Size(366, 20)
+        Me.txtDetails.Size = New System.Drawing.Size(401, 20)
         Me.txtDetails.TabIndex = 9
         '
         'lblDetails
@@ -167,11 +174,11 @@ Partial Class LicenseForm
         '
         Me.txtSerialNumber.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtSerialNumber.Enabled = False
-        Me.txtSerialNumber.Location = New System.Drawing.Point(114, 137)
+        Me.txtSerialNumber.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.txtSerialNumber.Location = New System.Drawing.Point(116, 137)
         Me.txtSerialNumber.Name = "txtSerialNumber"
         Me.txtSerialNumber.ReadOnly = True
-        Me.txtSerialNumber.Size = New System.Drawing.Size(366, 20)
+        Me.txtSerialNumber.Size = New System.Drawing.Size(401, 20)
         Me.txtSerialNumber.TabIndex = 11
         '
         'lblSerialNumber
@@ -187,11 +194,11 @@ Partial Class LicenseForm
         '
         Me.txtLicenseStatus.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtLicenseStatus.Enabled = False
-        Me.txtLicenseStatus.Location = New System.Drawing.Point(114, 189)
+        Me.txtLicenseStatus.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.txtLicenseStatus.Location = New System.Drawing.Point(116, 189)
         Me.txtLicenseStatus.Name = "txtLicenseStatus"
         Me.txtLicenseStatus.ReadOnly = True
-        Me.txtLicenseStatus.Size = New System.Drawing.Size(366, 20)
+        Me.txtLicenseStatus.Size = New System.Drawing.Size(401, 20)
         Me.txtLicenseStatus.TabIndex = 15
         '
         'lblLicenseStatus
@@ -205,21 +212,21 @@ Partial Class LicenseForm
         '
         'btnInstall
         '
-        Me.btnInstall.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnInstall.Location = New System.Drawing.Point(268, 215)
+        Me.btnInstall.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnInstall.Location = New System.Drawing.Point(196, 363)
         Me.btnInstall.Name = "btnInstall"
         Me.btnInstall.Size = New System.Drawing.Size(103, 23)
-        Me.btnInstall.TabIndex = 16
+        Me.btnInstall.TabIndex = 22
         Me.btnInstall.Text = "Install License"
         Me.btnInstall.UseVisualStyleBackColor = True
         '
         'btnRemove
         '
-        Me.btnRemove.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnRemove.Location = New System.Drawing.Point(377, 215)
+        Me.btnRemove.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnRemove.Location = New System.Drawing.Point(305, 363)
         Me.btnRemove.Name = "btnRemove"
         Me.btnRemove.Size = New System.Drawing.Size(103, 23)
-        Me.btnRemove.TabIndex = 17
+        Me.btnRemove.TabIndex = 23
         Me.btnRemove.Text = "Remove License"
         Me.btnRemove.UseVisualStyleBackColor = True
         '
@@ -229,11 +236,88 @@ Partial Class LicenseForm
         Me.dlgOpenLicenseFile.ShowReadOnly = True
         Me.dlgOpenLicenseFile.Title = "Select License File To Install"
         '
+        'txtLicenseStatement
+        '
+        Me.txtLicenseStatement.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtLicenseStatement.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.txtLicenseStatement.Location = New System.Drawing.Point(116, 215)
+        Me.txtLicenseStatement.Multiline = True
+        Me.txtLicenseStatement.Name = "txtLicenseStatement"
+        Me.txtLicenseStatement.ReadOnly = True
+        Me.txtLicenseStatement.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtLicenseStatement.Size = New System.Drawing.Size(401, 81)
+        Me.txtLicenseStatement.TabIndex = 17
+        '
+        'lblLicenseStatement
+        '
+        Me.lblLicenseStatement.AutoSize = True
+        Me.lblLicenseStatement.Location = New System.Drawing.Point(12, 218)
+        Me.lblLicenseStatement.Name = "lblLicenseStatement"
+        Me.lblLicenseStatement.Size = New System.Drawing.Size(98, 13)
+        Me.lblLicenseStatement.TabIndex = 16
+        Me.lblLicenseStatement.Text = "License Statement:"
+        '
+        'lnkLicenseUrl
+        '
+        Me.lnkLicenseUrl.AutoSize = True
+        Me.lnkLicenseUrl.Location = New System.Drawing.Point(113, 303)
+        Me.lnkLicenseUrl.Name = "lnkLicenseUrl"
+        Me.lnkLicenseUrl.Size = New System.Drawing.Size(59, 13)
+        Me.lnkLicenseUrl.TabIndex = 19
+        Me.lnkLicenseUrl.TabStop = True
+        Me.lnkLicenseUrl.Text = "LinkLabel1"
+        '
+        'lnkProductUrl
+        '
+        Me.lnkProductUrl.AutoSize = True
+        Me.lnkProductUrl.Location = New System.Drawing.Point(113, 328)
+        Me.lnkProductUrl.Name = "lnkProductUrl"
+        Me.lnkProductUrl.Size = New System.Drawing.Size(59, 13)
+        Me.lnkProductUrl.TabIndex = 21
+        Me.lnkProductUrl.TabStop = True
+        Me.lnkProductUrl.Text = "LinkLabel2"
+        '
+        'lblLicenseUrl
+        '
+        Me.lblLicenseUrl.AutoSize = True
+        Me.lblLicenseUrl.Location = New System.Drawing.Point(12, 303)
+        Me.lblLicenseUrl.Name = "lblLicenseUrl"
+        Me.lblLicenseUrl.Size = New System.Drawing.Size(72, 13)
+        Me.lblLicenseUrl.TabIndex = 18
+        Me.lblLicenseUrl.Text = "License URL:"
+        '
+        'lblProductUrl
+        '
+        Me.lblProductUrl.AutoSize = True
+        Me.lblProductUrl.Location = New System.Drawing.Point(12, 328)
+        Me.lblProductUrl.Name = "lblProductUrl"
+        Me.lblProductUrl.Size = New System.Drawing.Size(72, 13)
+        Me.lblProductUrl.TabIndex = 20
+        Me.lblProductUrl.Text = "Product URL:"
+        '
+        'btnClose
+        '
+        Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnClose.Location = New System.Drawing.Point(414, 363)
+        Me.btnClose.Name = "btnClose"
+        Me.btnClose.Size = New System.Drawing.Size(103, 23)
+        Me.btnClose.TabIndex = 24
+        Me.btnClose.Text = "Close"
+        Me.btnClose.UseVisualStyleBackColor = True
+        '
         'LicenseForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(495, 250)
+        Me.ClientSize = New System.Drawing.Size(529, 398)
+        Me.Controls.Add(Me.btnClose)
+        Me.Controls.Add(Me.lblProductUrl)
+        Me.Controls.Add(Me.lblLicenseUrl)
+        Me.Controls.Add(Me.lnkProductUrl)
+        Me.Controls.Add(Me.lnkLicenseUrl)
+        Me.Controls.Add(Me.txtLicenseStatement)
+        Me.Controls.Add(Me.lblLicenseStatement)
         Me.Controls.Add(Me.btnRemove)
         Me.Controls.Add(Me.btnInstall)
         Me.Controls.Add(Me.txtLicenseStatus)
@@ -282,4 +366,11 @@ Partial Class LicenseForm
     Friend WithEvents btnInstall As Button
     Friend WithEvents btnRemove As Button
     Friend WithEvents dlgOpenLicenseFile As OpenFileDialog
+    Friend WithEvents txtLicenseStatement As TextBox
+    Friend WithEvents lblLicenseStatement As Label
+    Friend WithEvents lnkLicenseUrl As LinkLabel
+    Friend WithEvents lnkProductUrl As LinkLabel
+    Friend WithEvents lblLicenseUrl As Label
+    Friend WithEvents lblProductUrl As Label
+    Friend WithEvents btnClose As Button
 End Class

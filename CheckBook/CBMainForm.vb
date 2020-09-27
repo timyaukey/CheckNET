@@ -93,6 +93,12 @@ Friend Class CBMainForm
                 mnuRepairUserAccounts.Enabled = mobjSecurity.blnIsAdministrator
             End If
 
+            If Company.blnAnyNonActiveLicenses Then
+                Using frm As LicenseListForm = New LicenseListForm()
+                    frm.ShowMe(Me)
+                End Using
+            End If
+
             For Each objAccount In mobjCompany.colAccounts
                 For Each objReg In objAccount.colRegisters
                     If objReg.blnShowInitially Then
@@ -276,7 +282,7 @@ Friend Class CBMainForm
     End Property
 
     Public Sub AddExtraLicense(objLicense As IStandardLicense) Implements IHostSetup.AddExtraLicense
-        Company.colExtraLicenses.Add(objLicense)
+        Company.AddExtraLicense(objLicense)
     End Sub
 
     Private Function blnAddNormalTrx(ByVal objTrx As NormalTrx,

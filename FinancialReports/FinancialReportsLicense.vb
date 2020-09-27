@@ -24,4 +24,22 @@ Public Class FinancialReportsLicense
             Return Nothing
         End Get
     End Property
+
+    Public Overrides ReadOnly Property LicenseStatement As String
+        Get
+            Return "Permission is granted to " + Me.LicensedTo + " to use this software for non-commercial purposes."
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property LicenseUrl As Uri
+        Get
+            Return Nothing
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property ProductUrl As Uri
+        Get
+            Return Nothing
+        End Get
+    End Property
 End Class

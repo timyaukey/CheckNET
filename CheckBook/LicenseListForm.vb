@@ -16,6 +16,12 @@ Public Class LicenseListForm
         For Each objLicense As Willowsoft.TamperProofData.IStandardLicense In Company.colExtraLicenses
             ShowLicense(objLicense)
         Next
+        If Company.blnAnyNonActiveLicenses Then
+            lblLicenseStatus.Text = "WARNING: One or more licenses are missing, expired, or invalid for some other reason."
+            lblLicenseStatus.Visible = True
+        Else
+            lblLicenseStatus.Visible = False
+        End If
     End Sub
 
     Private Sub ShowLicense(ByVal objLicense As Willowsoft.TamperProofData.IStandardLicense)
@@ -67,5 +73,9 @@ Public Class LicenseListForm
         Catch ex As Exception
             gTopException(ex)
         End Try
+    End Sub
+
+    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        Me.Close()
     End Sub
 End Class

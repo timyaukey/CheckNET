@@ -24,4 +24,30 @@ Public Class MainLicense
             Return Nothing
         End Get
     End Property
+
+    Public Overrides ReadOnly Property LicenseStatement As String
+        Get
+            Return "Permission is granted to " + Me.LicensedTo + " for unrestricted non-commercial use of the Willow Creek Checkbook software." +
+                Environment.NewLine + "asdf" +
+                Environment.NewLine + "asdf" +
+                Environment.NewLine + "asdf" +
+                Environment.NewLine + "asdf" +
+                Environment.NewLine + "asdf" +
+                Environment.NewLine + "asdf" +
+                Environment.NewLine + "asdf" +
+                Environment.NewLine + "asdfz."
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property LicenseUrl As Uri
+        Get
+            Return New Uri("http://willowcreekcheckbook.azureweb.com/license")
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property ProductUrl As Uri
+        Get
+            Return New Uri("http://susansgardenandcoffee.com")
+        End Get
+    End Property
 End Class

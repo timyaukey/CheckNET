@@ -47,7 +47,7 @@ Public Class Company
     Public strPlaceholderBudgetKey As String
 
     Public Shared objMainLicense As IStandardLicense = objLoadMainLicenseFile()
-    Public Shared colExtraLicenses As List(Of IStandardLicense) = New List(Of IStandardLicense)()
+    Private Shared mcolExtraLicenses As List(Of IStandardLicense) = New List(Of IStandardLicense)()
 
     Public Sub New(ByVal strDataPathValue As String)
         colAccounts = New List(Of Account)
@@ -458,5 +458,31 @@ Public Class Company
         objLicense.Load(strLicenseFolder())
         Return objLicense
     End Function
+
+    Public Shared Sub AddExtraLicense(ByVal objLicense As IStandardLicense)
+        mcolExtraLicenses.Add(objLicense)
+    End Sub
+
+    Public Shared ReadOnly Iterator Property colExtraLicenses() As IEnumerable(Of IStandardLicense)
+        Get
+            For Each objLicense As IStandardLicense In mcolExtraLicenses
+                Yield objLicense
+            Next
+        End Get
+    End Property
+
+    Public Shared ReadOnly Property blnAnyNonActiveLicenses() As Boolean
+        Get
+            If objMainLicense.Status <> LicenseStatus.Active Then
+                Return True
+            End If
+            For Each objLicense As IStandardLicense In mcolExtraLicenses
+                If objLicense.Status <> LicenseStatus.Active Then
+                    Return True
+                End If
+            Next
+            Return False
+        End Get
+    End Property
 
 End Class
