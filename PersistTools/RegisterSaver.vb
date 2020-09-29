@@ -15,14 +15,11 @@ Public Class RegisterSaver
     Private mobjSaveFile As StreamWriter
 
     Public Sub Save(ByVal objSaveFile_ As StreamWriter, ByVal objReg_ As Register, ByVal colFakeLines_ As ICollection(Of String))
-
-        Dim lngIndex As Integer
-
         mobjSaveFile = objSaveFile_
         mobjReg = objReg_
         mcolFakeLines = colFakeLines_
-        For lngIndex = 1 To objReg_.lngTrxCount
-            SaveTrx(objReg_.objTrx(lngIndex))
+        For Each objTrx As Trx In objReg_.colAllTrx(Of Trx)()
+            SaveTrx(objTrx)
         Next
     End Sub
 
