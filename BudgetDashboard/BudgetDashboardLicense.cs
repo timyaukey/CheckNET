@@ -10,7 +10,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
     {
         public override string BaseFileName => "Willowsoft.Checkbook.BudgetDashboard.lic";
 
-        public override string LicenseTitle => "Willow Creek Budget Dashboard License";
+        public override string LicenseTitle => "Willow Creek Budget Dashboard";
 
         public override string AttributeSummary => "Unrestricted";
 

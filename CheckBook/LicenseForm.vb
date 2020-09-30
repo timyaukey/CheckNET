@@ -17,7 +17,14 @@ Public Class LicenseForm
             txtLicenseTitle.Text = mobjLicense.LicenseTitle
             If mobjLicense.Status = TamperProofData.LicenseStatus.Active Or
                mobjLicense.Status = TamperProofData.LicenseStatus.Expired Then
-                txtLicenseVersion.Text = mobjLicense.LicenseVersion.ToString()
+                If mobjLicense.LicenseVersion <> 0 Then
+                    txtLicenseVersion.Text = mobjLicense.LicenseVersion.ToString()
+                    lblLicenseVersion.Visible = True
+                    txtLicenseVersion.Visible = True
+                Else
+                    lblLicenseVersion.Visible = False
+                    txtLicenseVersion.Visible = False
+                End If
                 txtLicensedTo.Text = If(String.IsNullOrEmpty(mobjLicense.LicensedTo), "(missing)", mobjLicense.LicensedTo)
                 If mobjLicense.ExpirationDate.HasValue Then
                     txtExpirationDate.Text = mobjLicense.ExpirationDate.Value.ToShortDateString()
@@ -31,7 +38,8 @@ Public Class LicenseForm
                 btnInstall.Enabled = False
                 btnRemove.Enabled = True
             Else
-                txtLicenseVersion.Text = ""
+                lblLicenseVersion.Visible = False
+                txtLicenseVersion.Visible = False
                 txtLicensedTo.Text = ""
                 txtExpirationDate.Text = ""
                 txtEmailAddress.Text = ""

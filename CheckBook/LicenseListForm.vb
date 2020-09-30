@@ -17,7 +17,7 @@ Public Class LicenseListForm
             ShowLicense(objLicense)
         Next
         If Company.blnAnyNonActiveLicenses Then
-            lblLicenseStatus.Text = "WARNING: One or more licenses are missing, expired, or invalid for some other reason."
+            lblLicenseStatus.Text = "WARNING: One or more licenses / registrations are missing, expired, or invalid for some other reason."
             lblLicenseStatus.Visible = True
         Else
             lblLicenseStatus.Visible = False

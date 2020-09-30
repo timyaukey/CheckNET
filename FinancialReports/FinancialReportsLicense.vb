@@ -15,7 +15,7 @@ Public Class FinancialReportsLicense
 
     Public Overrides ReadOnly Property LicenseTitle As String
         Get
-            Return "Willow Creek Financial Reports License"
+            Return "Willow Creek Financial Reports"
         End Get
     End Property
 

@@ -15,7 +15,7 @@ Public Class MainLicense
 
     Public Overrides ReadOnly Property LicenseTitle As String
         Get
-            Return "Willow Creek Checkbook License"
+            Return "Willow Creek Checkbook"
         End Get
     End Property
 

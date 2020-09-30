@@ -58,6 +58,7 @@
         Me.mnuListTrxTypes = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuCheckFormat = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuCompanyInformation = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuLicensing = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuUserAccounts = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuEnableUserAccounts = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuAddUserAccount = New System.Windows.Forms.ToolStripMenuItem()
@@ -67,7 +68,6 @@
         Me.mnuRepairUserAccounts = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuWindows = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuHelp = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuLicensing = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuMain.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -170,44 +170,50 @@
         'mnuListPayees
         '
         Me.mnuListPayees.Name = "mnuListPayees"
-        Me.mnuListPayees.Size = New System.Drawing.Size(205, 22)
+        Me.mnuListPayees.Size = New System.Drawing.Size(213, 22)
         Me.mnuListPayees.Text = "Memorized Transactions"
         '
         'mnuListCategories
         '
         Me.mnuListCategories.Name = "mnuListCategories"
-        Me.mnuListCategories.Size = New System.Drawing.Size(205, 22)
+        Me.mnuListCategories.Size = New System.Drawing.Size(213, 22)
         Me.mnuListCategories.Text = "Categories"
         '
         'mnuListBudgets
         '
         Me.mnuListBudgets.Name = "mnuListBudgets"
-        Me.mnuListBudgets.Size = New System.Drawing.Size(205, 22)
+        Me.mnuListBudgets.Size = New System.Drawing.Size(213, 22)
         Me.mnuListBudgets.Text = "Budgets"
         '
         'mnuListTrxTypes
         '
         Me.mnuListTrxTypes.Name = "mnuListTrxTypes"
-        Me.mnuListTrxTypes.Size = New System.Drawing.Size(205, 22)
+        Me.mnuListTrxTypes.Size = New System.Drawing.Size(213, 22)
         Me.mnuListTrxTypes.Text = "Transaction Import Types"
         '
         'mnuCheckFormat
         '
         Me.mnuCheckFormat.Name = "mnuCheckFormat"
-        Me.mnuCheckFormat.Size = New System.Drawing.Size(205, 22)
+        Me.mnuCheckFormat.Size = New System.Drawing.Size(213, 22)
         Me.mnuCheckFormat.Text = "Check Format"
         '
         'mnuCompanyInformation
         '
         Me.mnuCompanyInformation.Name = "mnuCompanyInformation"
-        Me.mnuCompanyInformation.Size = New System.Drawing.Size(205, 22)
+        Me.mnuCompanyInformation.Size = New System.Drawing.Size(213, 22)
         Me.mnuCompanyInformation.Text = "Company Information"
+        '
+        'mnuLicensing
+        '
+        Me.mnuLicensing.Name = "mnuLicensing"
+        Me.mnuLicensing.Size = New System.Drawing.Size(213, 22)
+        Me.mnuLicensing.Text = "Licensing and Registration"
         '
         'mnuUserAccounts
         '
         Me.mnuUserAccounts.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuEnableUserAccounts, Me.mnuAddUserAccount, Me.mnuChangeCurrentPassword, Me.mnuChangeOtherPassword, Me.mnuDeleteUserAccount, Me.mnuRepairUserAccounts})
         Me.mnuUserAccounts.Name = "mnuUserAccounts"
-        Me.mnuUserAccounts.Size = New System.Drawing.Size(205, 22)
+        Me.mnuUserAccounts.Size = New System.Drawing.Size(213, 22)
         Me.mnuUserAccounts.Text = "User Logins"
         '
         'mnuEnableUserAccounts
@@ -258,12 +264,6 @@
         Me.mnuHelp.Name = "mnuHelp"
         Me.mnuHelp.Size = New System.Drawing.Size(44, 20)
         Me.mnuHelp.Text = "Help"
-        '
-        'mnuLicensing
-        '
-        Me.mnuLicensing.Name = "mnuLicensing"
-        Me.mnuLicensing.Size = New System.Drawing.Size(205, 22)
-        Me.mnuLicensing.Text = "Licensing"
         '
         'CBMainForm
         '

@@ -23,7 +23,7 @@ Partial Class LicenseListForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.lvwLicenses = New System.Windows.Forms.ListView()
-        Me.colLicenseTitle = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.colSoftwareTitle = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.colLicensedTo = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.colExpirationDate = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.colLicenseStatus = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -37,7 +37,7 @@ Partial Class LicenseListForm
         Me.lvwLicenses.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lvwLicenses.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colLicenseTitle, Me.colLicensedTo, Me.colExpirationDate, Me.colLicenseStatus})
+        Me.lvwLicenses.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colSoftwareTitle, Me.colLicensedTo, Me.colExpirationDate, Me.colLicenseStatus})
         Me.lvwLicenses.FullRowSelect = True
         Me.lvwLicenses.GridLines = True
         Me.lvwLicenses.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
@@ -50,10 +50,10 @@ Partial Class LicenseListForm
         Me.lvwLicenses.UseCompatibleStateImageBehavior = False
         Me.lvwLicenses.View = System.Windows.Forms.View.Details
         '
-        'colLicenseTitle
+        'colSoftwareTitle
         '
-        Me.colLicenseTitle.Text = "License Title"
-        Me.colLicenseTitle.Width = 315
+        Me.colSoftwareTitle.Text = "Software Title"
+        Me.colSoftwareTitle.Width = 315
         '
         'colLicensedTo
         '
@@ -116,7 +116,7 @@ Partial Class LicenseListForm
         Me.MinimizeBox = False
         Me.Name = "LicenseListForm"
         Me.ShowInTaskbar = False
-        Me.Text = "Software Licenses"
+        Me.Text = "Software Licensing and Registration"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -124,7 +124,7 @@ Partial Class LicenseListForm
 
     Friend WithEvents lvwLicenses As ListView
     Friend WithEvents btnManageLicense As Button
-    Friend WithEvents colLicenseTitle As ColumnHeader
+    Friend WithEvents colSoftwareTitle As ColumnHeader
     Friend WithEvents colLicensedTo As ColumnHeader
     Friend WithEvents colExpirationDate As ColumnHeader
     Friend WithEvents colLicenseStatus As ColumnHeader
