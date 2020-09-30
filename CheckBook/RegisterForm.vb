@@ -63,14 +63,12 @@ Friend Class RegisterForm
         End Get
     End Property
 
-    '$Description The register index of the current grid row.
-
-    Private ReadOnly Property lngRegisterIndex() As Integer
+    Private ReadOnly Property objCurrentTrx() As Trx
         Get
             If grdReg.CurrentRow Is Nothing Then
-                Return -1
+                Return Nothing
             End If
-            Return grdReg.CurrentRow.Index + 1
+            Return mobjReg.objTrx(grdReg.CurrentRow.Index + 1)
         End Get
     End Property
 
@@ -78,15 +76,13 @@ Friend Class RegisterForm
         Dim objTrx As Trx
         Dim objXfer As TransferManager
         Dim objOtherReg As Register
-        Dim intIndex As Integer
 
         Try
-            intIndex = lngRegisterIndex()
-            If (intIndex < 0) Then
+            objTrx = objCurrentTrx()
+            If objTrx Is Nothing Then
                 mobjHostUI.ErrorMessageBox("You must first select a transaction.")
                 Return
             End If
-            objTrx = mobjReg.objTrx(intIndex)
             With objTrx
                 If .GetType() Is GetType(ReplicaTrx) Then
                     mobjHostUI.ErrorMessageBox("You may not delete a replica transaction. Instead delete the split it was created from in another transaction.")
@@ -140,12 +136,11 @@ Friend Class RegisterForm
     End Sub
 
     Private Sub EditTrx()
-        Dim lngIndex As Integer = lngRegisterIndex()
-        If lngIndex < 0 Then
+        Dim objTrx As Trx = objCurrentTrx()
+        If objTrx Is Nothing Then
             mobjHostUI.ErrorMessageBox("You must first select a register row.")
             Exit Sub
         End If
-        Dim objTrx As Trx = mobjReg.objTrx(lngIndex)
         If TypeOf objTrx Is ReplicaTrx Then
             mobjHostUI.ErrorMessageBox("You may not edit a replica transaction directly. Instead edit the split it was created from in another transaction.")
             Exit Sub
@@ -358,9 +353,9 @@ Friend Class RegisterForm
     End Sub
 
     Private Sub grdReg_CurrentCellChanged(sender As Object, e As EventArgs) Handles grdReg.CurrentCellChanged
-        Dim lngIndex As Integer = lngRegisterIndex()
-        If lngIndex > 0 Then
-            mobjReg.SetCurrent(mobjReg.objTrx(lngIndex))
+        Dim objTrx As Trx = objCurrentTrx()
+        If Not (objTrx Is Nothing) Then
+            mobjReg.SetCurrent(objTrx)
         End If
     End Sub
 
