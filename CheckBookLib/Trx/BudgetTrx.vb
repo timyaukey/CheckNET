@@ -218,13 +218,12 @@ Public Class BudgetTrx
 
     Public Overrides Sub Apply(ByVal blnLoading As Boolean)
         Dim blnAnyApplied As Boolean = False
-        For lngScanIndex As Integer = Me.lngEarliestPossibleAppliedIndex() To mobjReg.lngTrxCount
-            Dim objScanTrx As Trx = mobjReg.objTrx(lngScanIndex)
+        For Each objScanTrx As Trx In New RegForwardFrom(Of Trx)(mobjReg, objEarliestPossibleApplied())
             If objScanTrx.datDate > mdatBudgetEnds Then
                 Exit For
             End If
-            If objScanTrx.GetType() = GetType(NormalTrx) Then
-                Dim objNormalTrx As NormalTrx = DirectCast(objScanTrx, NormalTrx)
+            Dim objNormalTrx As NormalTrx = TryCast(objScanTrx, NormalTrx)
+            If Not objNormalTrx Is Nothing Then
                 For Each objSplit As TrxSplit In objNormalTrx.colSplits
                     If objSplit.objBudget Is Nothing Then
                         If objSplit.strBudgetKey = Me.strBudgetKey Then
@@ -244,27 +243,21 @@ Public Class BudgetTrx
     End Sub
 
     ''' <summary>
-    ''' Return the index of the earliest Trx in this register that could possibly
-    ''' be applied to this BudgetTrx. The returned index will always be valid,
+    ''' Return the earliest Trx in this register that could possibly
+    ''' be applied to this BudgetTrx. The returned object will always be non-nothing,
     ''' but it may not be a NormalTrx and it may not be applied to the Budget.
     ''' It is merely the earliest that COULD be applied, based on the dates.
     ''' The caller normally scans forward from here until they find a Trx
     ''' dated after mdatBudgetEnds.
     ''' </summary>
     ''' <returns></returns>
-    Public Function lngEarliestPossibleAppliedIndex() As Integer
-        Dim lngEarliest As Integer = Me.lngIndex
-        Dim objCurrent As Trx
-        Do
-            If lngEarliest = 1 Then
-                Return lngEarliest
+    Public Function objEarliestPossibleApplied() As Trx
+        For Each objOtherTrx As Trx In New RegBackwardFrom(Of Trx)(mobjReg, Me)
+            If objOtherTrx.datDate < mdatBudgetStarts Then
+                Return objOtherTrx.objNext
             End If
-            objCurrent = mobjReg.objTrx(lngEarliest)
-            If objCurrent.datDate < mdatBudgetStarts Then
-                Return lngEarliest + 1
-            End If
-            lngEarliest = lngEarliest - 1
-        Loop
+        Next
+        Return mobjReg.objFirstTrx
     End Function
 
     '$Description Apply a Split to this BudgetTrx.

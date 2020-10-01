@@ -38,11 +38,7 @@ Public Class RegIterator(Of TTrx As Trx)
     End Function
 
     Protected Overridable Function objGetFirst() As Trx
-        If mobjReg.lngTrxCount = 0 Then
-            Return Nothing
-        Else
-            Return mobjReg.objTrx(1)
-        End If
+        Return mobjReg.objFirstTrx
     End Function
 
     Protected Overridable Function blnAfterLast(ByVal objTrx As Trx) As Boolean

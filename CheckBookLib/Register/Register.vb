@@ -965,7 +965,27 @@ Public Class Register
             If lngIndex < 1 Or lngIndex > mlngTrxUsed Then
                 gRaiseError("Invalid index " & lngIndex & " in Register.objTrx")
             End If
-            objTrx = maobjTrx(lngIndex)
+            Return maobjTrx(lngIndex)
+        End Get
+    End Property
+
+    Public ReadOnly Property objFirstTrx() As Trx
+        Get
+            If mlngTrxUsed = 0 Then
+                Return Nothing
+            Else
+                Return maobjTrx(1)
+            End If
+        End Get
+    End Property
+
+    Public ReadOnly Property objLastTrx() As Trx
+        Get
+            If mlngTrxUsed = 0 Then
+                Return Nothing
+            Else
+                Return maobjTrx(mlngTrxUsed)
+            End If
         End Get
     End Property
 

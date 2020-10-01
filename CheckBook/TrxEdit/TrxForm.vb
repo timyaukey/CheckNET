@@ -364,8 +364,6 @@ Friend Class TrxForm
     End Sub
 
     Private Sub ShowBudgetApplied(ByVal objBudget As BudgetTrx)
-        Dim lngCurrent As Integer
-        Dim objCurrent As Trx
         Dim objSplit As TrxSplit
         Dim objItem As System.Windows.Forms.ListViewItem
         Dim curTotalApplied As Decimal
@@ -373,17 +371,10 @@ Friend Class TrxForm
         lvwAppliedTo.Visible = True
         mblnBudgetAppliedVisible = True
 
-        'Set lngCurrent to the index of the earliest Trx to check.
-        lngCurrent = objBudget.lngEarliestPossibleAppliedIndex()
-
         'Check all Trx until we find one dated after the budget end date.
-        Do
-            If lngCurrent > mobjReg.lngTrxCount Then
-                Exit Do
-            End If
-            objCurrent = mobjReg.objTrx(lngCurrent)
+        For Each objCurrent As Trx In New RegForwardFrom(Of Trx)(mobjReg, objBudget.objEarliestPossibleApplied)
             If objCurrent.datDate > objBudget.datBudgetEnds Then
-                Exit Do
+                Exit For
             End If
             If objCurrent.GetType() Is GetType(NormalTrx) Then
                 For Each objSplit In DirectCast(objCurrent, NormalTrx).colSplits
@@ -404,8 +395,7 @@ Friend Class TrxForm
                     End If
                 Next objSplit
             End If
-            lngCurrent = lngCurrent + 1
-        Loop
+        Next
 
         If curTotalApplied <> objBudget.curBudgetApplied Then
             mobjHostUI.ErrorMessageBox("ERROR: Amount applied in budget trx does not equal sum " & "of matched splits (" & curTotalApplied & " vs " & objBudget.curBudgetApplied & ").")

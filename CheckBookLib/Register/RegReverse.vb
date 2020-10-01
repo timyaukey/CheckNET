@@ -35,11 +35,7 @@ Public Class RegReverse(Of TTrx As Trx)
     End Function
 
     Protected Overridable Function objGetLast() As Trx
-        If mobjReg.lngTrxCount = 0 Then
-            Return Nothing
-        Else
-            Return mobjReg.objTrx(mobjReg.lngTrxCount)
-        End If
+        Return mobjReg.objLastTrx
     End Function
 
 End Class

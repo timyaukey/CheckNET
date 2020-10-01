@@ -109,7 +109,9 @@
     <Compile Include="Logging\ILogger.vb" />
     <Compile Include="Logging\ILogGroupEnd.vb" />
     <Compile Include="Logging\ILogGroupStart.vb" />
+    <Compile Include="Register\RegBackwardFrom.vb" />
     <Compile Include="Register\RegDateRange.vb" />
+    <Compile Include="Register\RegForwardFrom.vb" />
     <Compile Include="Register\RegIterator.vb" />
     <Compile Include="Register\RegReverse.vb" />
     <Compile Include="RepeatSummarizer.vb" />
