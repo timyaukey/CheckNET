@@ -188,11 +188,30 @@ Friend Class CBMainForm
         objHelpMenu = New MenuBuilder(mnuHelp)
 
         Dim strPlugInPath As String = System.IO.Path.GetFileName(Me.GetType().Assembly.Location)
-        objHelpMenu.Add(New MenuElementAction("Introduction", 1, AddressOf HelpIntro, strPlugInPath))
-        objHelpMenu.Add(New MenuElementAction("Setup and Configuration", 2, AddressOf HelpSetup, strPlugInPath))
-        objHelpMenu.Add(New MenuElementAction("Importing Transactions", 3, AddressOf HelpImporting, strPlugInPath))
-        objHelpMenu.Add(New MenuElementAction("Budgeting Tools", 4, AddressOf HelpBudget, strPlugInPath))
-        objHelpMenu.Add(New MenuElementAction("Technical Notes", 10000, AddressOf HelpTechnical, strPlugInPath))
+        objHelpMenu.Add(New MenuElementAction("Introduction", 1,
+                        Sub(sender As Object, e As EventArgs)
+                            HelpShowFile("Intro.html")
+                        End Sub, strPlugInPath))
+        objHelpMenu.Add(New MenuElementAction("Setup and Configuration", 2,
+                        Sub(sender As Object, e As EventArgs)
+                            HelpShowFile("Setup.html")
+                        End Sub, strPlugInPath))
+        objHelpMenu.Add(New MenuElementAction("Importing Transactions", 100,
+                        Sub(sender As Object, e As EventArgs)
+                            HelpShowFile("Importing.html")
+                        End Sub, strPlugInPath))
+        objHelpMenu.Add(New MenuElementAction("Budgeting Tools", 200,
+                        Sub(sender As Object, e As EventArgs)
+                            HelpShowFile("Budget.html")
+                        End Sub, strPlugInPath))
+        objHelpMenu.Add(New MenuElementAction("Reporting and Searching", 300,
+                        Sub(sender As Object, e As EventArgs)
+                            HelpShowFile("Reporting.html")
+                        End Sub, strPlugInPath))
+        objHelpMenu.Add(New MenuElementAction("Technical Notes", 10000,
+                        Sub(sender As Object, e As EventArgs)
+                            HelpShowFile("Technical.html")
+                        End Sub, strPlugInPath))
 
         LoadPluginsFromAssembly(Assembly.GetEntryAssembly())
         Dim strEntryAssembly As String = Assembly.GetEntryAssembly().Location
@@ -383,26 +402,6 @@ Friend Class CBMainForm
             Return Path.Combine(strFolder, "AltSplash.jpg")
         End Get
     End Property
-
-    Private Sub HelpIntro(ByVal sender As Object, ByVal e As EventArgs)
-        HelpShowFile("HelpIntro.html")
-    End Sub
-
-    Private Sub HelpSetup(ByVal sender As Object, ByVal e As EventArgs)
-        HelpShowFile("HelpSetup.html")
-    End Sub
-
-    Private Sub HelpImporting(ByVal sender As Object, ByVal e As EventArgs)
-        HelpShowFile("HelpImporting.html")
-    End Sub
-
-    Private Sub HelpBudget(ByVal sender As Object, ByVal e As EventArgs)
-        HelpShowFile("HelpBudget.html")
-    End Sub
-
-    Private Sub HelpTechnical(ByVal sender As Object, ByVal e As EventArgs)
-        HelpShowFile("HelpTechnical.html")
-    End Sub
 
     Private Sub HelpShowFile(ByVal strHtmlFile As String) Implements IHostUI.ShowHelp
         Try

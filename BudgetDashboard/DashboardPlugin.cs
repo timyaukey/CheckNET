@@ -20,7 +20,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
         public override void Register(IHostSetup setup)
         {
             setup.objReportMenu.Add(new MenuElementAction("Budget Dashboard", 100, ClickHandler, GetPluginPath()));
-            setup.objHelpMenu.Add(new MenuElementAction("Budget Dashboard", 100, HelpHandler, GetPluginPath()));
+            setup.objHelpMenu.Add(new MenuElementAction("Budget Dashboard", 220, HelpHandler, GetPluginPath()));
             Willowsoft.TamperProofData.IStandardLicense license = new BudgetDashboardLicense();
             license.Load(Company.strLicenseFolder());
             setup.AddExtraLicense(license);
