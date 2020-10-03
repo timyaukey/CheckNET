@@ -161,6 +161,11 @@ Public Class TrialBalanceForm
                 objBalSheet, Account.SubType.Equity_Stock.ToString(), objAccumEquity)
             objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
                 objBalSheet, Account.SubType.Equity_Capital.ToString(), objAccumEquity)
+            Dim objNetIncome As CategoryGroupManager = objComputeRetainedEarningsTrxAmt()
+            If objNetIncome.curGrandTotal <> 0 Then
+                objWriter.OutputAmount(strLineTitleClass, "Net Income", strLineAmountClass, strMinusClass,
+                    -objNetIncome.curGrandTotal, objAccumEquity)
+            End If
             objWriter.OutputAmount(strLineFooterTitleClass, "Total Equity", strLineFooterAmountClass, strMinusClass, objAccumEquity.curTotal, objAccumTotal)
 
             objWriter.OutputText(strLineHeaderClass, " ")
@@ -258,7 +263,7 @@ Public Class TrialBalanceForm
                 mobjHostUI.InfoMessageBox("Unable to find Retained Earnings register")
                 Exit Sub
             End If
-            Dim objIncExpTotal As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value.Date, True)
+            Dim objIncExpTotal As CategoryGroupManager = objComputeRetainedEarningsTrxAmt()
             Dim objTrx As NormalTrx = New NormalTrx(objRegister)
             objTrx.NewStartNormal(True, "Pmt", ctlEndDate.Value.Date, "Post to retained earnings", "", Trx.TrxStatus.Unreconciled,
                                   False, 0D, False, False, 0, "", "")
@@ -275,6 +280,11 @@ Public Class TrialBalanceForm
             gTopException(ex)
         End Try
     End Sub
+
+    Private Function objComputeRetainedEarningsTrxAmt() As CategoryGroupManager
+        Return IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value.Date, True)
+    End Function
+
 
     Private Sub btnLoansPayable_Click(sender As Object, e As EventArgs) Handles btnLoansPayable.Click
         Try

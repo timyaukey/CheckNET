@@ -11,7 +11,7 @@ Public Class TrialBalancePlugIn
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.objReportMenu.Add(New MenuElementAction("Financial Statements", 200, AddressOf ClickHandler, GetPluginPath()))
+        setup.objReportMenu.Add(New MenuElementAction("Financial Statements", 400, AddressOf ClickHandler, GetPluginPath()))
         setup.objHelpMenu.Add(New MenuElementAction("Financial Statements", 350, AddressOf HelpHandler, GetPluginPath()))
         Dim objLicense As Willowsoft.TamperProofData.IStandardLicense = New FinancialReportsLicense()
         objLicense.Load(Company.strLicenseFolder)
