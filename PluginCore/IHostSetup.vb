@@ -9,6 +9,7 @@ Option Explicit On
 Public Interface IHostSetup
     ReadOnly Property objCompany() As Company
 
+    Property objFileMenu As MenuBuilder
     Property objBankImportMenu As MenuBuilder
     Property objCheckImportMenu As MenuBuilder
     Property objDepositImportMenu As MenuBuilder

@@ -17,10 +17,7 @@
 	'Required by the Windows Form Designer
 	Private components As System.ComponentModel.IContainer
 	Public ToolTip1 As System.Windows.Forms.ToolTip
-	Public WithEvents mnuFileShowReg As System.Windows.Forms.ToolStripMenuItem
-	Public WithEvents mnuFileSave As System.Windows.Forms.ToolStripMenuItem
-	Public WithEvents mnuFileExit As System.Windows.Forms.ToolStripMenuItem
-	Public WithEvents mnuFile As System.Windows.Forms.ToolStripMenuItem
+    Public WithEvents mnuFile As System.Windows.Forms.ToolStripMenuItem
     Public WithEvents mnuImport As System.Windows.Forms.ToolStripMenuItem
     Public WithEvents mnuTools As System.Windows.Forms.ToolStripMenuItem
     Public WithEvents mnuListPayees As System.Windows.Forms.ToolStripMenuItem
@@ -40,10 +37,6 @@
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.mnuMain = New System.Windows.Forms.MenuStrip()
         Me.mnuFile = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuFileShowReg = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuFileSave = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuFilePlugins = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuFileExit = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuImport = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuImportBank = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuImportChecks = New System.Windows.Forms.ToolStripMenuItem()
@@ -82,36 +75,10 @@
         '
         'mnuFile
         '
-        Me.mnuFile.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuFileShowReg, Me.mnuFileSave, Me.mnuFilePlugins, Me.mnuFileExit})
         Me.mnuFile.MergeAction = System.Windows.Forms.MergeAction.Remove
         Me.mnuFile.Name = "mnuFile"
         Me.mnuFile.Size = New System.Drawing.Size(37, 20)
         Me.mnuFile.Text = "File"
-        '
-        'mnuFileShowReg
-        '
-        Me.mnuFileShowReg.Name = "mnuFileShowReg"
-        Me.mnuFileShowReg.Size = New System.Drawing.Size(197, 22)
-        Me.mnuFileShowReg.Text = "Registers and Accounts"
-        '
-        'mnuFileSave
-        '
-        Me.mnuFileSave.Enabled = False
-        Me.mnuFileSave.Name = "mnuFileSave"
-        Me.mnuFileSave.Size = New System.Drawing.Size(197, 22)
-        Me.mnuFileSave.Text = "Save"
-        '
-        'mnuFilePlugins
-        '
-        Me.mnuFilePlugins.Name = "mnuFilePlugins"
-        Me.mnuFilePlugins.Size = New System.Drawing.Size(197, 22)
-        Me.mnuFilePlugins.Text = "Plugin List"
-        '
-        'mnuFileExit
-        '
-        Me.mnuFileExit.Name = "mnuFileExit"
-        Me.mnuFileExit.Size = New System.Drawing.Size(197, 22)
-        Me.mnuFileExit.Text = "Exit"
         '
         'mnuImport
         '
@@ -298,7 +265,6 @@
     Friend WithEvents mnuRepairUserAccounts As ToolStripMenuItem
     Friend WithEvents mnuCheckFormat As ToolStripMenuItem
     Friend WithEvents mnuCompanyInformation As ToolStripMenuItem
-    Friend WithEvents mnuFilePlugins As ToolStripMenuItem
     Friend WithEvents mnuHelp As ToolStripMenuItem
     Friend WithEvents mnuLicensing As ToolStripMenuItem
 #End Region

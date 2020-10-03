@@ -7,6 +7,7 @@ Public Class MenuElementAction
     Inherits MenuElementBase
 
     Private ReadOnly ClickHandler As EventHandler
+    Public MenuItemControl As ToolStripMenuItem
 
     Public Sub New(ByVal title_ As String, ByVal sortCode_ As Integer, ByVal clickHandler_ As EventHandler, ByVal pluginPath_ As String)
         MyBase.New(title_, sortCode_, pluginPath_)
@@ -18,5 +19,6 @@ Public Class MenuElementAction
         mnuNewItem.Text = Me.Title
         AddHandler mnuNewItem.Click, Me.ClickHandler
         mnuParent.DropDownItems.Add(mnuNewItem)
+        MenuItemControl = mnuNewItem
     End Sub
 End Class

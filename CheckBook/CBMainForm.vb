@@ -16,6 +16,7 @@ Friend Class CBMainForm
     Private mobjSecurity As Security
     Private WithEvents mobjCompany As Company
     Private mobjHostUI As IHostUI
+    Private mnuFileSave As ToolStripMenuItem
 
     Public Shared blnCancelStart As Boolean
 
@@ -143,6 +144,7 @@ Friend Class CBMainForm
         mobjHostUI.InfoMessageBox(strMessage)
     End Sub
 
+    Private Property objFileMenu As MenuBuilder Implements IHostSetup.objFileMenu
     Private Property objBankImportMenu As MenuBuilder Implements IHostSetup.objBankImportMenu
     Private Property objCheckImportMenu As MenuBuilder Implements IHostSetup.objCheckImportMenu
     Private Property objDepositImportMenu As MenuBuilder Implements IHostSetup.objDepositImportMenu
@@ -179,6 +181,7 @@ Friend Class CBMainForm
     End Function
 
     Private Sub LoadPlugins()
+        objFileMenu = New MenuBuilder(mnuFile)
         objBankImportMenu = New MenuBuilder(mnuImportBank)
         objCheckImportMenu = New MenuBuilder(mnuImportChecks)
         objDepositImportMenu = New MenuBuilder(mnuImportDeposits)
@@ -188,6 +191,13 @@ Friend Class CBMainForm
         objHelpMenu = New MenuBuilder(mnuHelp)
 
         Dim strPlugInPath As String = System.IO.Path.GetFileName(Me.GetType().Assembly.Location)
+
+        objFileMenu.Add(New MenuElementAction("Registers and Accounts", 100, AddressOf mnuFileShowReg_Click, strPlugInPath))
+        Dim saveAction As MenuElementAction = New MenuElementAction("Save", 200, AddressOf mnuFileSave_Click, strPlugInPath)
+        objFileMenu.Add(saveAction)
+        objFileMenu.Add(New MenuElementAction("Plugin List", 300, AddressOf mnuFilePlugins_Click, strPlugInPath))
+        objFileMenu.Add(New MenuElementAction("Exit", 400, AddressOf mnuFileExit_Click, strPlugInPath))
+
         objHelpMenu.Add(New MenuElementAction("Introduction", 1,
                         Sub(sender As Object, e As EventArgs)
                             HelpShowFile("Intro.html")
@@ -220,6 +230,9 @@ Friend Class CBMainForm
             Dim assembly As Assembly = Assembly.LoadFrom(strFile)
             LoadPluginsFromAssembly(assembly)
         Next
+        objFileMenu.AddElementsToMenu()
+        mnuFileSave = saveAction.MenuItemControl
+        mnuFileSave.Enabled = False
         objBankImportMenu.AddElementsToMenu()
         objCheckImportMenu.AddElementsToMenu()
         objDepositImportMenu.AddElementsToMenu()
@@ -491,11 +504,11 @@ Friend Class CBMainForm
         End Try
     End Sub
 
-    Public Sub mnuFileExit_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileExit.Click
+    Public Sub mnuFileExit_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs)
         Me.Close()
     End Sub
 
-    Public Sub mnuFileSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileSave.Click
+    Public Sub mnuFileSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs)
         Try
 
             CompanySaver.SaveChangedAccounts(mobjCompany)
@@ -507,7 +520,7 @@ Friend Class CBMainForm
         End Try
     End Sub
 
-    Public Sub mnuFileShowReg_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileShowReg.Click
+    Public Sub mnuFileShowReg_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs)
         Dim frm As ShowRegisterForm
         Dim frm2 As System.Windows.Forms.Form
 
@@ -530,7 +543,9 @@ Friend Class CBMainForm
     End Sub
 
     Private Sub mobjCompany_SomethingModified() Handles mobjCompany.SomethingModified
-        mnuFileSave.Enabled = True
+        If Not mnuFileSave Is Nothing Then
+            mnuFileSave.Enabled = True
+        End If
     End Sub
 
     Private Sub mnuEnableUserAccounts_Click(sender As Object, e As EventArgs) Handles mnuEnableUserAccounts.Click
@@ -717,7 +732,7 @@ Friend Class CBMainForm
         End Try
     End Sub
 
-    Private Sub mnuFilePlugins_Click(sender As Object, e As EventArgs) Handles mnuFilePlugins.Click
+    Private Sub mnuFilePlugins_Click(sender As Object, e As EventArgs)
         Try
             Using frm As PluginList = New PluginList()
                 frm.ShowMe(Me)
