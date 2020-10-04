@@ -79,6 +79,7 @@ Public Class TrialBalanceForm
         btnLoansReceivable.Enabled = blnEnabled
         btnAccountsPayable.Enabled = blnEnabled
         btnAccountsReceivable.Enabled = blnEnabled
+        btnPostRetainedEarnings.Enabled = blnEnabled
     End Sub
 
     Private Sub btnBalanceSheet_Click(sender As Object, e As EventArgs) Handles btnBalanceSheet.Click
@@ -377,6 +378,8 @@ Public Class TrialBalanceForm
 
         objWriter.BeginReport()
         objWriter.OutputHeader(strReportTitle, "As Of " + ctlEndDate.Value.Date.ToShortDateString())
+        objWriter.OutputText("ReportSubTitle", "Aging Date " + ctlAgingDate.Value.Date.ToShortDateString())
+        objWriter.OutputText("ReportSubTitle", "&nbsp;")
 
         objWriter.OutputTableStart()
         objWriter.OutputTableHeaderStart()

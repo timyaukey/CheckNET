@@ -102,7 +102,7 @@ Public Class Account
         New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_LiabilityLoan, .strName = "Personal - Liability Loan", .strSaveCode = "PLL"},
         New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_AssetLoan, .strName = "Personal - Asset Loan", .strSaveCode = "PAL"},
         New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_BankAccount, .strName = "Personal - Bank Account", .strSaveCode = "PBA"},
-        New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_Other, .strName = "Pesonal - Other", .strSaveCode = "POT"}
+        New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_Other, .strName = "Personal - Other", .strSaveCode = "POT"}
     }
 
     'Fired when ChangeMade() is called. Used by clients

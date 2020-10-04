@@ -9,39 +9,188 @@
 <body>
     <h1>Financial Statements</h1>
     <p>
-        blah blah blah.
+        Willow Creek Checkbook is a full <a href="intro.html#double-entry-bookkeeping">double entry bookkeeping system</a>, 
+        so it can be used to prepare familiar accounting statments like
+        a Balance Sheet and a Profit and Loss statement.
+    </p>
+    <p>
+        All the options to do this are available
+        by clicking "Financial Statements" on the "Reports" menu. 
+        This will display the "Trial Balance and Statements" form.
+        This form lets you enter the dates you wish to prepare statements
+        for at the top, compute a trial balance of all your accounts
+        for those dates, and then produce a variety of standard
+        accounting statements with that information.
+    </p>
+    <p>
+        All these activities only include "real" transactions, i.e.
+        they ignore things that don't represent "real" money or "accrued"
+        value like accounts payable or accounts receivable. Examples of things
+        that will be ignored include "bank" transactions with the "fake" box checked,
+        and budget transactions. It will also exclude balance sheets accounts of type
+        "personal", and categories of type "personal".
     </p>
     <h2>Trial Balance</h2>
     <p>
-        blah blah blah.
+        Regardless of which accounting statement(s) you need, the first step in producing them
+        is to enter the dates you want to create statements for and compute the trial balance.
+        Enter the dates at the top of the form, and click "Trial Balance."
+    </p>
+    <p>
+        The software will then total up, by account, all amounts from "real" transactions dated 
+        on or before the "End Date" at the top of the form. It will display these totals in
+        two lists in the middle of the form. The first list shows transaction totals for
+        balance sheet accounts, and the second shows transaction totals for income / expense
+        accounts (categories). Each list groups accounts by account type, so all your
+        checking accounts appear together under account type "Asset - Checking Account" in
+        the first list, all your "cost of goods sold" accounts (categories) appear together
+        under that heading in the second list, etc.
+    </p>
+    <p>
+        The totals in the trial balance lists are the same as the corresponding figures
+        in the balance sheet and profit and loss statements for the same dates, but the
+        balance sheet and profit and loss statements combine many accounts together for brevity.
+        For example, the balance sheet shows only one line with the combined total
+        balances of all checking accounts, but the trial balance will show each
+        checking account separately. And the profit and loss has only one line for
+        total cost of goods sold, but the trial balance will break that total down
+        into subtotals for each category classified as a cost of goods sold category.
+    </p>
+    <p>
+        When you first open the form the only button that will be enabled is the
+        "Trial Balance" button. This is consistent with accounting best practices,
+        where you prepare a trial balance to double check your account balances
+        before preparing final accounting statements. After you click "Trial Balance",
+        all the other buttons on the form will be enabled.
     </p>
     <h2>Retained Earnings</h2>
     <p>
-        blah blah blah.
+        A standard accounting practice, followed at the end of each accounting period,
+        is to transfer your net profit, i.e. the balances of all your income and expense accounts (categories),
+        to a "retained earnings" account on your balance sheet. Thus "retained earnings"
+        is the running sum of all the net profits from your business, and the balances
+        of your income and expense accounts only show your income and expenses
+        for the current accounting period.
+    </p>
+    <p>
+        The next step after running the trial balance, and looking at the account
+        totals to confirm they make sense, is generally to post your profits (or losses) 
+        to retained earnings by clicking
+        "Post Retained Earnings". This will create a single transaction in your
+        "Retained Earnings" account, with one split for each income / expense
+        account having a non-zero balance as of the end date at the top of the
+        form. If you find a mistake in your income or expense transactions for
+        the period after doing this, you can easily correct this by deleting
+        this "transfer" transaction from your "Retained Earnings" account and
+        clicking the "Post Retained Earnings" button again after fixing the transaction problem(s).
+    </p>
+    <p>
+        The "Retained Earnings" account is a balance sheet
+        account in Willow Creek Checkbook just like any other, with the account type
+        "Equity - Retained Earnings". You'll have to create this account in your
+        company if you want to create financial statements.
+    </p>
+    <p>
+        This activity of transferring to retained earnings will be unfamiliar
+        to users of some other accounting packages, particularly Quickbooks,
+        because those systems create this transaction for you automatically
+        when needed, without being asked, instead of expecting you to click a 
+        button to do so.
+    </p>
+    <p>
+        Your accounting periods can be whatever you want them to be, but should
+        probably correspond to when you reconcile and double check your
+        accounting records for other purposes, such as preparing tax returns.
+        You could only do this once a year, but realistically most businesses
+        have reasons to produce accounting statements quarterly, or even monthly,
+        so they'll post to retained earnings then as well.
+    </p>
+    <p>
+        Always create your "Post Retained Earnings" transaction before creating
+        any accounting statements. You only have to do this once for each
+        accounting period, not each time you run the statements.
     </p>
     <h2>Balance Sheet</h2>
     <p>
-        blah blah blah.
+        The "Balance Sheet" button will produce a balance sheet statement, with account
+        balances as of "End Date" from the top of the form. The company name at the
+        top of the report is the name entered on the "Company Information" form, 
+        which is listed on the "Setup" menu.
+    </p>
+    <p>
+        Accounts are grouped on the balance sheet by the class of the account types.
+        For example, all the loans payable to your business will be listed together
+        in the "Assets" section of your balance sheet and all the loans owed by you to someone 
+        else will be listed together in the "Liabilities" section of your balance sheet.
+        These groupings are the same ones used in the trial balance lists.
+    </p>
+    <p>
+        The balance sheet statement may combine the balances of some accounts into a single
+        line, and may omit that combined summary line entirely if that combined total is zero.
+        This behavior is also controlled on the "Company Information" form, where there
+        are two settings each for loans receivable, loans payable, and real property.
+        The first option controls whether accounts of that type are combined into a single
+        line, and the second controls whether that line will be omitted if the total is zero.
+        These settings are hardcoded for other account types - for example, checking accounts
+        are always combined into one line on the balance sheet.
+    </p>
+    <p>
+        If you do not post net income to retained earnings before producing the balance
+        sheet, the net income will appear as a line labeled "Net Income" in the "Equity"
+        section of your balance sheet. This means you can produce a balance sheet in the
+        middle of an accounting period, and it will show your account balances as of
+        that arbitrary date and your net income as of the same date.
     </p>
     <h2>Profit and Loss</h2>
     <p>
-        blah blah blah.
+        The "Profit and Loss" button will produce a standard profit and loss statement
+        from the income and expense categories you used in your transactions.
+        The income and expense accounts will be organized by the category type of the
+        categories, like "Cost of Goods Sold" and "Operating Expenses".
+        These groupings are the same ones used in the trial balance lists.
     </p>
     <h2>Loans Receivable</h2>
     <p>
-        blah blah blah.
+        The "Loans Receivable" button will produce a statement of the balances of your
+        loans receivable accounts as of the end date at the top of the form.
+        These same lines will appear on your balance sheet, or as a single summary
+        line with the combined total if you have configured your balance sheet that way.
     </p>
     <h2>Loans Payable</h2>
     <p>
-        blah blah blah.
+        The "Loans Payable" button is the same as "Loans Receivable", but for loans
+        payable accounts.
     </p>
     <h2>Accounts Receivable</h2>
     <p>
-        blah blah blah.
+        The "Accounts Receivable" button will produce an accounts receivable statement
+        as of the end date at the top of the form, with aging, using the aging date from the
+        top of the form to compute the age of each amount.
+    </p>
+    <p>
+        This report will include a separate line for each distinct value found in the
+        "Description" field of transactions in your "Accounts Receivable" account.
+        Since the "Description" will generally be the name of the customer
+        who owes you money, this results in one line on the report for each customer.
+        To compensate for meaningless spelling differences, only the first 16 characters
+        of each name are used to find transactions for a customer, and upper and lower
+        case letters are considered equivalent. Thus "J. Finch and Company" and "J. Finch And Company, Inc."
+        are the same.
+    </p>
+    <p>
+        Willow Creek Checkbook does not create an "Accounts Receivable" balance
+        sheet account automatically for a new company, so you'll have to create one if
+        you want to track receivables for your business. This is just a regular
+        asset account, with the appropriate account type chosen by you on the "Account Properties" form.
+    </p>
+    <p>
+        This report uses a "balance forward" style of aging, meaning each payment is applied to the
+        oldest unpaid invoice. There is no matching of payments to invoices on invoice number.
     </p>
     <h2>Accounts Payable</h2>
     <p>
-        blah blah blah.
+        The "Accounts Payable" button produces a statement equivalent to the "Accounts Receivable"
+        statement, but for transactions in your "Accounts Payable" account.
     </p>
 </body>
 </html>
