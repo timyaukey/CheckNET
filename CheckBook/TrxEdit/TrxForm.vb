@@ -54,6 +54,8 @@ Friend Class TrxForm
     Private mblnSilentMode As Boolean
     Private mblnLoadingControls As Boolean
     Private mblnFormConfigDone As Boolean
+    Private mintPanelTop As Integer
+    Private mintPanelLeft As Integer
 
     'Definitions: "Shared" controls are those used exactly the same for all Trx types.
     '             "Normal" controls are those used for normal Trx type, unless they
@@ -467,12 +469,45 @@ Friend Class TrxForm
         mcurTotalAmount = 0
         mstrLogTitle = strLogTitle
 
+        'Move the panels so they are outside the window border and hidden.
+        'Only one will be moved to the original location of frmNormal, and made visible.
+        'All the suspend/resume/perform layout is probably unnecessary, but I'm trying
+        'to find an optimization that makes frmNormal display quicker.
+        mintPanelTop = frmNormal.Top
+        mintPanelLeft = frmNormal.Left
+        Me.SuspendLayout()
+        frmNormal.SuspendLayout()
+        frmBudget.SuspendLayout()
+        frmTransfer.SuspendLayout()
+        frmNormal.Top = 5000
+        frmNormal.Visible = False
+        frmBudget.Top = 6000
+        frmBudget.Visible = False
+        frmTransfer.Top = 7000
+        frmTransfer.Visible = False
+        frmTransfer.ResumeLayout(False)
+        frmTransfer.PerformLayout()
+        frmBudget.ResumeLayout(False)
+        frmBudget.PerformLayout()
+        frmNormal.ResumeLayout(False)
+        frmNormal.PerformLayout()
+        Me.ResumeLayout(False)
+        Me.PerformLayout()
+
     End Sub
 
     Private Sub ShowFrame(ByVal ctlFrame As System.Windows.Forms.GroupBox)
-        ctlFrame.Left = frmNormal.Left
-        ctlFrame.Top = frmNormal.Top
+        'All the layout stuff is probably pointless, but I'm trying to speed
+        'up display of frmNormal which has a ton of child controls.
+        Me.SuspendLayout()
+        ctlFrame.SuspendLayout()
+        ctlFrame.Left = mintPanelLeft
+        ctlFrame.Top = mintPanelTop
         ctlFrame.Visible = True
+        ctlFrame.ResumeLayout(False)
+        ctlFrame.PerformLayout()
+        Me.ResumeLayout(False)
+        Me.PerformLayout()
     End Sub
 
     Private Sub EnableStatus()
@@ -1280,7 +1315,7 @@ Friend Class TrxForm
         mobjHostUI.ErrorMessageBox(strMsg)
     End Sub
 
-    Public Sub SaveNormal()
+    Private Sub SaveNormal()
         Dim objTrxManager As NormalTrxManager
         Dim objTrx As NormalTrx
         If mblnEditMode Then
@@ -2312,9 +2347,5 @@ Friend Class TrxForm
             End Try
         End If
     End Sub
-
-    Private Function gPrintCheck(domCheckFormat As VB6XmlDocument, objTrx As Trx) As Boolean
-        Throw New NotImplementedException
-    End Function
 
 End Class
