@@ -192,79 +192,81 @@ Friend Class UTMainForm
         Dim objUTReg As UTRegister
         objUTReg = gobjUTNewReg()
         If intTrxCount >= 1 Then
-            objUTReg.LoadNormal("1000", #4/1/2000#, 100D)
+            objUTReg.LoadNormal("1000", #4/1/2000#, 100D, strDescr:="A")
         End If
         If intTrxCount >= 2 Then
-            objUTReg.LoadNormal("1001", #3/1/2000#, 200D)
+            objUTReg.LoadNormal("1001", #3/1/2000#, 200D, strDescr:="A")
         End If
         If intTrxCount >= 3 Then
-            objUTReg.LoadNormal("1002", #5/1/2000#, -50.99D)
+            objUTReg.LoadNormal("1002", #5/1/2000#, -50.99D, strDescr:="A")
         End If
         If intTrxCount >= 4 Then
-            objUTReg.LoadBudget(#4/20/2000#, -200D, #4/10/2000#, "bud1")
+            objUTReg.LoadBudget(#4/20/2000#, -200D, #4/10/2000#, "bud1", strDescr:="B")
         End If
         If intTrxCount >= 5 Then
             'One day before start of budget range, so won't apply to #4.
-            objUTReg.LoadNormal("Card", #4/9/2000#, -10D, strBudgetKey:="bud1")
+            objUTReg.LoadNormal("Card", #4/9/2000#, -10D, strBudgetKey:="bud1", strDescr:="B")
         End If
         If intTrxCount >= 6 Then
             'One day after end of budget range, so won't apply to #4.
-            objUTReg.LoadNormal("Card", #4/21/2000#, -10D, strBudgetKey:="bud1")
+            objUTReg.LoadNormal("Card", #4/21/2000#, -10D, strBudgetKey:="bud1", strDescr:="A")
         End If
         If intTrxCount >= 7 Then
             '#5 will be applied to this. Is a one day budget date range, so
             'now we've tested before and after the beginning and ending dates.
-            objUTReg.LoadBudget(#4/9/2000#, -15D, #4/9/2000#, "bud1")
+            objUTReg.LoadBudget(#4/9/2000#, -15D, #4/9/2000#, "bud1", strDescr:="A")
             objUTReg.SetTrxAmount(7, -5D)
         End If
         If intTrxCount >= 8 Then
             'Won't apply this until #10 is loaded.
-            objUTReg.LoadNormal("1500", #4/11/2000#, -20D, strBudgetKey:="bud2")
+            objUTReg.LoadNormal("1500", #4/11/2000#, -20D, strBudgetKey:="bud2", strDescr:="B")
         End If
         If intTrxCount >= 9 Then
             'Will apply this to the budget in #4.
-            objUTReg.LoadNormal("1499", #4/11/2000#, -21D, strBudgetKey:="bud1")
+            objUTReg.LoadNormal("1499", #4/11/2000#, -21D, strBudgetKey:="bud1", strDescr:="A")
             objUTReg.SetTrxAmount(4, -179D)
         End If
         If intTrxCount >= 10 Then
             '#8 will be applied to this.
-            objUTReg.LoadBudget(#4/20/2000#, -100D, #4/10/2000#, "bud2")
+            objUTReg.LoadBudget(#4/20/2000#, -100D, #4/10/2000#, "bud2", strDescr:="C")
             objUTReg.SetTrxAmount(10, -80D)
         End If
         If intTrxCount >= 11 Then
             'Cause budget in #10 to be used up exactly.
             'This also tests multiple splits applied to a single budget.
-            objUTReg.LoadNormal("1501", #4/13/2000#, -80D, strBudgetKey:="bud2")
+            objUTReg.LoadNormal("1501", #4/13/2000#, -80D, strBudgetKey:="bud2", strDescr:="A")
             objUTReg.SetTrxAmount(10, 0.0D)
         End If
         If intTrxCount >= 12 Then
             'Cause budget in #10 to be exceeded.
-            objUTReg.LoadNormal("1502", #4/13/2000#, -2D, strBudgetKey:="bud2")
+            objUTReg.LoadNormal("1502", #4/13/2000#, -2D, strBudgetKey:="bud2", strDescr:="B")
         End If
         If intTrxCount >= 13 Then
-            objUTReg.LoadBudget(#4/17/2000#, -50D, #4/14/2000#, "bud3")
+            objUTReg.LoadBudget(#4/17/2000#, -50D, #4/14/2000#, "bud3", strDescr:="A")
         End If
         If intTrxCount >= 14 Then
             'Splits applied to different budgets.
-            objUTReg.LoadNormal("1503", #4/15/2000#, -10D, strBudgetKey:="bud1", vcurAmount2:=-7.3, strBudgetKey2:="bud3")
+            objUTReg.LoadNormal("1503", #4/15/2000#, -10D, strBudgetKey:="bud1", vcurAmount2:=-7.3, strBudgetKey2:="bud3", strDescr:="A")
             objUTReg.SetTrxAmount(4, -169D)
             objUTReg.SetTrxAmount(13, -42.7D)
         End If
         If intTrxCount >= 15 Then
             'Credit budget.
-            objUTReg.LoadBudget(#4/20/2000#, 100D, #4/10/2000#, "bud4")
+            objUTReg.LoadBudget(#4/20/2000#, 100D, #4/10/2000#, "bud4", strDescr:="A")
         End If
         If intTrxCount >= 16 Then
             'Apply to credit budget.
-            objUTReg.LoadNormal("DEP", #4/19/2000#, 0.21D, strBudgetKey:="bud4")
+            objUTReg.LoadNormal("DEP", #4/19/2000#, 0.21D, strBudgetKey:="bud4", strDescr:="A")
             objUTReg.SetTrxAmount(15, 99.79D)
         End If
         If intTrxCount >= 17 Then
             'Exceed credit budget.
-            objUTReg.LoadNormal("DEP", #4/19/2000#, 120D, strBudgetKey:="bud4")
+            objUTReg.LoadNormal("DEP", #4/19/2000#, 120D, strBudgetKey:="bud4", strDescr:="B")
             objUTReg.SetTrxAmount(15, 0.0D)
         End If
+        objUTReg.objReg.Sort()
         objUTReg.objReg.LoadApply()
+        objUTReg.objReg.Sort()
         objUTReg.objReg.LoadFinish()
         objLoadBuild = objUTReg
 

@@ -117,10 +117,8 @@ Public Class Register
     '   become the register entry, rather than making a copy of it.
 
     Public Sub NewLoadEnd(ByVal objNew As Trx)
-        If objNew Is Nothing Then
-            gRaiseError("objNew is Nothing in Register.NewLoadEnd")
-        End If
-        NewInsert(objNew)
+        ExpandTrxArray()
+        SetTrx(mlngTrxUsed, objNew)
         If objNew.intRepeatSeq > 0 Then
             AddRepeatTrx(objNew)
         End If
@@ -160,13 +158,17 @@ Public Class Register
     '$Returns The index of the new transaction in the register.
 
     Private Sub NewInsert(ByVal objNew As Trx)
+        ExpandTrxArray()
+        MoveUp(mlngTrxUsed - 1, objNew)
+        mobjTrxCurrent = objNew
+    End Sub
+
+    Private Sub ExpandTrxArray()
         If mlngTrxUsed = mlngTrxAllocated Then
             mlngTrxAllocated = mlngTrxAllocated + mlngAllocationUnit
             ReDim Preserve maobjTrx(mlngTrxAllocated)
         End If
         mlngTrxUsed = mlngTrxUsed + 1
-        MoveUp(mlngTrxUsed - 1, objNew)
-        mobjTrxCurrent = objNew
     End Sub
 
     '$Description Move a Trx the shortest distance possible toward the beginning of the
@@ -320,6 +322,23 @@ Public Class Register
         End If
         Return String.CompareOrdinal(objTrx1.strDocNumberSortKey, objTrx2.strDocNumberSortKey)
     End Function
+
+    Public Sub Sort()
+        If (Not maobjTrx Is Nothing) And (mlngTrxUsed > 0) Then
+            Array.Sort(Of Trx)(maobjTrx, 1, mlngTrxUsed, New SortComparer())
+            For lngIndex As Integer = 1 To mlngTrxUsed
+                maobjTrx(lngIndex).lngIndex = lngIndex
+            Next
+        End If
+    End Sub
+
+    Private Class SortComparer
+        Implements IComparer(Of Trx)
+
+        Public Function Compare(objTrx1 As Trx, objTrx2 As Trx) As Integer Implements IComparer(Of Trx).Compare
+            Return intSortComparison(objTrx1, objTrx2)
+        End Function
+    End Class
 
     Friend Sub ClearFirstAffected()
         mlngFirstAffected = mlngNO_TRX_AFFECTED

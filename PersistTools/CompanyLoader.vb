@@ -117,14 +117,14 @@ Public Class CompanyLoader
     End Sub
 
     Public Shared Sub LoadAccountFiles(ByVal objCompany As Company, ByVal showAccount As Action(Of Account))
+        Dim objLoader As AccountLoader
+        Dim colLoaders As List(Of AccountLoader) = New List(Of AccountLoader)
         Try
             'Find all ".act" files.
             Dim strFile As String = Dir(objCompany.strAccountPath() & "\*.act")
             Dim intFiles As Integer = 0
             Dim datCutoff As Date
             Dim astrFiles() As String = Nothing
-            Dim objLoader As AccountLoader
-            Dim colLoaders As List(Of AccountLoader) = New List(Of AccountLoader)
 
             While strFile <> ""
                 intFiles = intFiles + 1
@@ -158,6 +158,12 @@ Public Class CompanyLoader
                 showAccount(Nothing)
             Next
 
+            'This will merge the generated trx into the sort order.
+            'The individual trx should already be sorted, but this will ensure it.
+            'This has to happen before objLoader.LoadApply(), or budgets won't be
+            'applied properly.
+            SortAllRegisters(colLoaders)
+
             'Call Trx.Apply() for all Trx loaded above.
             'This will create ReplicaTrx.
             For Each objLoader In colLoaders
@@ -166,6 +172,9 @@ Public Class CompanyLoader
                 showAccount(Nothing)
             Next
 
+            'This will merge the ReplicaTrx created by objLoader.LoadApply() into the sort order.
+            SortAllRegisters(colLoaders)
+
             'Perform final steps after all Trx exist, including computing running balances.
             For Each objLoader In colLoaders
                 showAccount(objLoader.objAccount)
@@ -173,6 +182,9 @@ Public Class CompanyLoader
                 showAccount(Nothing)
             Next
         Catch ex As Exception
+            For Each objLoader In colLoaders
+                objLoader.objAccount.blnUnsavedChanges = False
+            Next
             gNestedException(ex)
         End Try
     End Sub
@@ -212,6 +224,14 @@ Public Class CompanyLoader
             Next objReg
         Next
 
+    End Sub
+
+    Private Shared Sub SortAllRegisters(ByVal colLoaders As List(Of AccountLoader))
+        For Each objLoader In colLoaders
+            For Each objReg In objLoader.objAccount.colRegisters
+                objReg.Sort()
+            Next
+        Next
     End Sub
 
 End Class
