@@ -82,6 +82,13 @@ Public Class Company
         End Try
     End Function
 
+    Public Sub UnlockData()
+        If Not mobjLockFile Is Nothing Then
+            mobjLockFile.Close()
+        End If
+    End Sub
+
+
     Public Function blnAccountKeyUsed(ByVal intKey As Integer) As Boolean
         For Each act As Account In colAccounts
             If act.intKey = intKey Then
