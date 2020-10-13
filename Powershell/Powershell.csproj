@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetAccount.cs" />
+    <Compile Include="GetRegister.cs" />
     <Compile Include="OpenCompany.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

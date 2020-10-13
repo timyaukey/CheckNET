@@ -11,6 +11,7 @@ using Willowsoft.CheckBook.PersistTools;
 namespace Willowsoft.CheckBook.Powershell
 {
     [Cmdlet(VerbsCommon.Open, "CheckbookCompany")]
+    [OutputType(typeof(Company))]
     public class OpenCompany : Cmdlet
     {
         [Parameter(Mandatory = true)]
