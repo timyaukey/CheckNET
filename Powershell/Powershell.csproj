@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="GetAccount.cs" />
     <Compile Include="GetRegister.cs" />
+    <Compile Include="GetTransactions.cs" />
     <Compile Include="OpenCompany.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
