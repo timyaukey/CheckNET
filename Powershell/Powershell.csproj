@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CloseCompany.cs" />
+    <Compile Include="NewNormalTrx.cs" />
     <Compile Include="GetAccount.cs" />
     <Compile Include="GetRegister.cs" />
     <Compile Include="GetTransactions.cs" />
@@ -62,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Test1.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
