@@ -75,7 +75,7 @@ Public Class ImportHandlerInvoices
         Return Nothing
     End Function
 
-    Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx, ByVal intSeqNumber As Integer) Implements IImportHandler.BatchUpdate
+    Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx, ByVal intMultiPartSeqNumber As Integer) Implements IImportHandler.BatchUpdate
         'Do nothing for invoices.
     End Sub
 

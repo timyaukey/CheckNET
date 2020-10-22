@@ -55,17 +55,17 @@ Public Class ImportHandlerBank
         Return Nothing
     End Function
 
-    Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx, ByVal intSeqNumber As Integer) Implements IImportHandler.BatchUpdate
+    Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx, ByVal intMultiPartSeqNumber As Integer) Implements IImportHandler.BatchUpdate
         Dim strImportKey As String
         Dim curAmount As Decimal
-        If intSeqNumber = 0 Then
+        If intMultiPartSeqNumber = 0 Then
             strImportKey = objImportedTrx.strImportKey
             curAmount = objImportedTrx.curAmount
         Else
-            strImportKey = objImportedTrx.strImportKey + "-" + intSeqNumber.ToString()
+            strImportKey = objImportedTrx.strImportKey + "-" + intMultiPartSeqNumber.ToString()
             curAmount = 0D
         End If
-        objMatchedTrx.objReg.ImportUpdateBank(objMatchedTrx, objImportedTrx.datDate, objMatchedTrx.strNumber, curAmount, strImportKey)
+        objMatchedTrx.objReg.ImportUpdateBank(objMatchedTrx, datNewTrxDate(objImportedTrx, objMatchedTrx), objMatchedTrx.strNumber, curAmount, strImportKey)
     End Sub
 
     Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of NormalTrx), ByRef colUnusedMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
@@ -135,7 +135,16 @@ Public Class ImportHandlerBank
             strNewNumber = objMatchedTrx.strNumber
             curNewAmount = objMatchedTrx.curAmount
         End If
-        objMatchedTrx.objReg.ImportUpdateBank(objMatchedTrx, objImportedTrx.datDate, strNewNumber, curNewAmount, objImportedTrx.strImportKey)
+        objMatchedTrx.objReg.ImportUpdateBank(objMatchedTrx, datNewTrxDate(objImportedTrx, objMatchedTrx), strNewNumber, curNewAmount, objImportedTrx.strImportKey)
         Return True
+    End Function
+
+    Private Function datNewTrxDate(ByVal objImportedTrx As ImportedTrx, ByVal objMatchedTrx As NormalTrx) As DateTime
+        Dim intTrxNum As Integer
+        If Int32.TryParse(objMatchedTrx.strNumber, intTrxNum) Then
+            Return objMatchedTrx.datDate
+        Else
+            Return objImportedTrx.datDate
+        End If
     End Function
 End Class

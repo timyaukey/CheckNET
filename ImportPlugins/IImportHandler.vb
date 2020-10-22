@@ -18,10 +18,10 @@ Public Interface IImportHandler
     ReadOnly Property blnAllowMultiPartMatches() As Boolean
 
     'Copy objMatchedTrx from objImportedTrx with fields appropriate to the implementation.
-    'If intSeqNumber=0 then follow the normal update logic on trx amount, but if intSeqNumber>0 then
-    'objMatchTrx is an extra trx in a multi-part match and its amount must be set to zero. intSeqNumber will never
+    'If intMultiPartSeqNumber=0 then follow the normal update logic on trx amount, but if intMultiPartSeqNumber>0 then
+    'objMatchTrx is an extra trx in a multi-part match and its amount must be set to zero. intMultiPartSeqNumber will never
     'be >0 unless blnAllowMultiPartMatches is true.
-    Sub BatchUpdate(ByVal objImportedTrx As ImportedTrx, ByVal objMatchedTrx As NormalTrx, ByVal intSeqNumber As Integer)
+    Sub BatchUpdate(ByVal objImportedTrx As ImportedTrx, ByVal objMatchedTrx As NormalTrx, ByVal intMultiPartSeqNumber As Integer)
 
     Sub BatchUpdateSearch(ByVal objReg As Register, ByVal objImportedTrx As ImportedTrx,
         ByVal colAllMatchedTrx As IEnumerable(Of NormalTrx), ByRef colUnusedMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean)

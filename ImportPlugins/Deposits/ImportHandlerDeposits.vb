@@ -43,9 +43,9 @@ Public Class ImportHandlerDeposits
         Return Nothing
     End Function
 
-    Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx, ByVal intSeqNumber As Integer) Implements IImportHandler.BatchUpdate
+    Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx, ByVal intMultiPartSeqNumber As Integer) Implements IImportHandler.BatchUpdate
         Dim curAmount As Decimal
-        If intSeqNumber = 0 Then
+        If intMultiPartSeqNumber = 0 Then
             curAmount = objImportedTrx.curAmount
         Else
             curAmount = 0D
