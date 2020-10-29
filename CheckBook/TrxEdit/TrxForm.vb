@@ -264,12 +264,15 @@ Friend Class TrxForm
 
     Private Sub ConfigNormalControls()
         Dim intIndex As Short
-        cmdPrintCheck.Visible = True
-        cmdMailingAddress.Visible = True
         txtNumber.Visible = True
-        cmdCopyInvoiceNumbers.Visible = True
         EnableStatus()
         chkFake.Visible = True
+        cmdRunTool.Visible = True
+        cboToolList.Visible = True
+        cboToolList.Items.Clear()
+        For Each objTool As ITrxTool In mobjHostUI.objTrxTools()
+            cboToolList.Items.Add(objTool)
+        Next
         For intIndex = 0 To mintSPLIT_CTRL_ARRAY_SIZE - 1
             UITools.LoadComboFromStringTranslator(cboSplitCategory(intIndex), mobjCompany.objCategories, True)
             UITools.LoadComboFromStringTranslator(cboSplitBudget(intIndex), mobjCompany.objBudgets, True)
@@ -336,8 +339,6 @@ Friend Class TrxForm
     End Sub
 
     Private Sub ConfigBudgetControls()
-        cmdPrintCheck.Visible = False
-        cmdMailingAddress.Visible = False
         txtNumber.Visible = False
         lblNumber.Visible = False
         cboStatus.Visible = False
@@ -345,7 +346,8 @@ Friend Class TrxForm
         lblBudgetStarts.Visible = True
         txtBudgetStarts.Visible = True
         chkFake.Visible = False
-        cmdCopyInvoiceNumbers.Visible = False
+        cmdRunTool.Visible = False
+        cboToolList.Visible = False
         UITools.LoadComboFromStringTranslator(cboBudgetName, mobjCompany.objBudgets, True)
         ShowFrame(frmBudget)
     End Sub
@@ -414,14 +416,13 @@ Friend Class TrxForm
     End Sub
 
     Private Sub ConfigTransferControls()
-        cmdPrintCheck.Visible = False
-        cmdMailingAddress.Visible = False
         txtNumber.Visible = False
         lblNumber.Visible = False
         cboStatus.Visible = False
         lblStatus.Visible = False
         chkFake.Visible = True
-        cmdCopyInvoiceNumbers.Visible = False
+        cmdRunTool.Visible = False
+        cboToolList.Visible = False
         UITools.LoadComboFromStringTranslator(cboTransferTo, mobjAccount.objRegisterList(), True)
         cboTransferTo.Enabled = Not mblnEditMode
         ShowFrame(frmTransfer)
@@ -818,26 +819,6 @@ Friend Class TrxForm
 
     Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCancel.Click
         Me.Close()
-    End Sub
-
-    Private Sub cmdCopyInvoiceNumbers_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCopyInvoiceNumbers.Click
-        Dim objTool As ITrxTool = New TrxCopyInvoiceNumbersTool(mobjHostUI)
-        objTool.Run(Me)
-    End Sub
-
-    Private Sub cmdCopyAmount_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCopyAmount.Click
-        Dim objTool As ITrxTool = New TrxCopyAmountTool(mobjHostUI)
-        objTool.Run(Me)
-    End Sub
-
-    Private Sub cmdCopyDate_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCopyDate.Click
-        Dim objTool As ITrxTool = New TrxCopyDateTool(mobjHostUI)
-        objTool.Run(Me)
-    End Sub
-
-    Private Sub cmdMailingAddress_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdMailingAddress.Click
-        Dim objTool As ITrxTool = New TrxMailingAddressTool(mobjHostUI)
-        objTool.Run(Me)
     End Sub
 
     Private Sub cmdOkay_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdOkay.Click
@@ -1266,6 +1247,19 @@ Friend Class TrxForm
 
     End Function
 
+    Private Sub cmdRunTool_Click(sender As Object, e As EventArgs) Handles cmdRunTool.Click
+        Try
+            Dim objTrxTool As ITrxTool = DirectCast(cboToolList.SelectedItem, ITrxTool)
+            If objTrxTool Is Nothing Then
+                mobjHostUI.ErrorMessageBox("Select a tool from the drop down list first")
+                Return
+            End If
+            objTrxTool.Run(Me)
+        Catch ex As Exception
+            gTopException(ex)
+        End Try
+    End Sub
+
     Private Sub ValidationError(ByVal strMsg As String)
         mobjHostUI.ErrorMessageBox(strMsg)
     End Sub
@@ -1384,16 +1378,6 @@ Friend Class TrxForm
     Private Function strRepeatKey() As String
         strRepeatKey = strGetStringTranslatorKeyFromCombo(cboRepeatKey, mobjAccount.objRepeats)
     End Function
-
-    Private Sub cmdPrintCheck_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdPrintCheck.Click
-        Try
-            Dim objTrxPrint As ITrxTool = New TrxPrintCheckTool(mobjHostUI)
-            objTrxPrint.Run(Me)
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
 
     Private Sub cmdDelSplits_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdDelSplits.Click
         Dim intMoveIndex As Integer
@@ -2295,4 +2279,5 @@ Friend Class TrxForm
         mblnCancel = False
         Me.Close()
     End Sub
+
 End Class

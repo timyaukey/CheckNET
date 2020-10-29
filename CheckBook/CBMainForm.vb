@@ -180,6 +180,14 @@ Friend Class CBMainForm
         Yield New SearchRecategorizeTool(Me)
     End Function
 
+    Public Iterator Function objTrxTools() As IEnumerable(Of ITrxTool) Implements IHostUI.objTrxTools
+        Yield New TrxPrintCheckTool(Me)
+        Yield New TrxMailingAddressTool(Me)
+        Yield New TrxCopyAmountTool(Me)
+        Yield New TrxCopyDateTool(Me)
+        Yield New TrxCopyInvoiceNumbersTool(Me)
+    End Function
+
     Private Sub LoadPlugins()
         objFileMenu = New MenuBuilder(mnuFile)
         objBankImportMenu = New MenuBuilder(mnuImportBank)

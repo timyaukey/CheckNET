@@ -12,9 +12,13 @@ Public Class TrxCopyAmountTool
 
     Public ReadOnly Property strTitle As String Implements ITrxTool.strTitle
         Get
-            Return "Copy Transaction Amount"
+            Return "Copy Transaction Amount To Clipboard"
         End Get
     End Property
+
+    Public Overrides Function ToString() As String
+        Return strTitle
+    End Function
 
     Public Sub Run(objHostTrxToolUI As IHostTrxToolUI) Implements ITrxTool.Run
         Dim objNormalTrx As NormalTrx = objHostTrxToolUI.objGetTrxCopy()

@@ -171,14 +171,9 @@
 	Public WithEvents lblBudgetStarts As System.Windows.Forms.Label
 	Public WithEvents lblBudgetLimit As System.Windows.Forms.Label
 	Public WithEvents frmBudget As System.Windows.Forms.GroupBox
-	Public WithEvents cmdCopyInvoiceNumbers As System.Windows.Forms.Button
-	Public WithEvents cmdPrintCheck As System.Windows.Forms.Button
-	Public WithEvents cmdRptInfo As System.Windows.Forms.Button
-	Public WithEvents cmdMailingAddress As System.Windows.Forms.Button
-	Public WithEvents cmdCopyDate As System.Windows.Forms.Button
-	Public WithEvents cmdCopyAmount As System.Windows.Forms.Button
-	Public WithEvents txtRepeatSeq As System.Windows.Forms.TextBox
-	Public WithEvents cmdCancel As System.Windows.Forms.Button
+    Public WithEvents cmdRptInfo As System.Windows.Forms.Button
+    Public WithEvents txtRepeatSeq As System.Windows.Forms.TextBox
+    Public WithEvents cmdCancel As System.Windows.Forms.Button
 	Public WithEvents cmdOkay As System.Windows.Forms.Button
 	Public WithEvents cboRepeatKey As System.Windows.Forms.ComboBox
 	Public WithEvents cboStatus As System.Windows.Forms.ComboBox
@@ -358,12 +353,7 @@
         Me.lblBudgetName = New System.Windows.Forms.Label()
         Me.lblBudgetStarts = New System.Windows.Forms.Label()
         Me.lblBudgetLimit = New System.Windows.Forms.Label()
-        Me.cmdCopyInvoiceNumbers = New System.Windows.Forms.Button()
-        Me.cmdPrintCheck = New System.Windows.Forms.Button()
         Me.cmdRptInfo = New System.Windows.Forms.Button()
-        Me.cmdMailingAddress = New System.Windows.Forms.Button()
-        Me.cmdCopyDate = New System.Windows.Forms.Button()
-        Me.cmdCopyAmount = New System.Windows.Forms.Button()
         Me.txtRepeatSeq = New System.Windows.Forms.TextBox()
         Me.cmdCancel = New System.Windows.Forms.Button()
         Me.cmdOkay = New System.Windows.Forms.Button()
@@ -385,6 +375,8 @@
         Me.lblNumber = New System.Windows.Forms.Label()
         Me.lblDate = New System.Windows.Forms.Label()
         Me.lblGeneratedAmount = New System.Windows.Forms.Label()
+        Me.cboToolList = New System.Windows.Forms.ComboBox()
+        Me.cmdRunTool = New System.Windows.Forms.Button()
         Me.frmNormal.SuspendLayout()
         Me.frmTransfer.SuspendLayout()
         Me.frmBudget.SuspendLayout()
@@ -2705,35 +2697,6 @@
         Me.lblBudgetLimit.TabIndex = 151
         Me.lblBudgetLimit.Text = "Budget Limit:"
         '
-        'cmdCopyInvoiceNumbers
-        '
-        Me.cmdCopyInvoiceNumbers.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdCopyInvoiceNumbers.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdCopyInvoiceNumbers.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdCopyInvoiceNumbers.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdCopyInvoiceNumbers.Location = New System.Drawing.Point(354, 412)
-        Me.cmdCopyInvoiceNumbers.Name = "cmdCopyInvoiceNumbers"
-        Me.cmdCopyInvoiceNumbers.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdCopyInvoiceNumbers.Size = New System.Drawing.Size(135, 23)
-        Me.cmdCopyInvoiceNumbers.TabIndex = 164
-        Me.cmdCopyInvoiceNumbers.Text = "Copy Invoice Numbers"
-        Me.cmdCopyInvoiceNumbers.UseVisualStyleBackColor = False
-        '
-        'cmdPrintCheck
-        '
-        Me.cmdPrintCheck.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdPrintCheck.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdPrintCheck.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdPrintCheck.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdPrintCheck.Location = New System.Drawing.Point(900, 60)
-        Me.cmdPrintCheck.Name = "cmdPrintCheck"
-        Me.cmdPrintCheck.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdPrintCheck.Size = New System.Drawing.Size(91, 23)
-        Me.cmdPrintCheck.TabIndex = 19
-        Me.cmdPrintCheck.TabStop = False
-        Me.cmdPrintCheck.Text = "Print Check"
-        Me.cmdPrintCheck.UseVisualStyleBackColor = False
-        '
         'cmdRptInfo
         '
         Me.cmdRptInfo.BackColor = System.Drawing.SystemColors.Control
@@ -2748,49 +2711,6 @@
         Me.cmdRptInfo.TabStop = False
         Me.cmdRptInfo.Text = "Info"
         Me.cmdRptInfo.UseVisualStyleBackColor = False
-        '
-        'cmdMailingAddress
-        '
-        Me.cmdMailingAddress.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdMailingAddress.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdMailingAddress.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdMailingAddress.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdMailingAddress.Location = New System.Drawing.Point(803, 60)
-        Me.cmdMailingAddress.Name = "cmdMailingAddress"
-        Me.cmdMailingAddress.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdMailingAddress.Size = New System.Drawing.Size(91, 23)
-        Me.cmdMailingAddress.TabIndex = 18
-        Me.cmdMailingAddress.TabStop = False
-        Me.cmdMailingAddress.Text = "Mailing Address"
-        Me.cmdMailingAddress.UseVisualStyleBackColor = False
-        '
-        'cmdCopyDate
-        '
-        Me.cmdCopyDate.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdCopyDate.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdCopyDate.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdCopyDate.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdCopyDate.Location = New System.Drawing.Point(492, 412)
-        Me.cmdCopyDate.Name = "cmdCopyDate"
-        Me.cmdCopyDate.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdCopyDate.Size = New System.Drawing.Size(73, 23)
-        Me.cmdCopyDate.TabIndex = 165
-        Me.cmdCopyDate.Text = "Copy Date"
-        Me.cmdCopyDate.UseVisualStyleBackColor = False
-        '
-        'cmdCopyAmount
-        '
-        Me.cmdCopyAmount.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdCopyAmount.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdCopyAmount.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdCopyAmount.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdCopyAmount.Location = New System.Drawing.Point(568, 412)
-        Me.cmdCopyAmount.Name = "cmdCopyAmount"
-        Me.cmdCopyAmount.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdCopyAmount.Size = New System.Drawing.Size(88, 23)
-        Me.cmdCopyAmount.TabIndex = 166
-        Me.cmdCopyAmount.Text = "Copy Amount"
-        Me.cmdCopyAmount.UseVisualStyleBackColor = False
         '
         'txtRepeatSeq
         '
@@ -2817,7 +2737,7 @@
         Me.cmdCancel.Name = "cmdCancel"
         Me.cmdCancel.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdCancel.Size = New System.Drawing.Size(88, 23)
-        Me.cmdCancel.TabIndex = 168
+        Me.cmdCancel.TabIndex = 170
         Me.cmdCancel.Text = "Cancel"
         Me.cmdCancel.UseVisualStyleBackColor = False
         '
@@ -2831,7 +2751,7 @@
         Me.cmdOkay.Name = "cmdOkay"
         Me.cmdOkay.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdOkay.Size = New System.Drawing.Size(88, 23)
-        Me.cmdOkay.TabIndex = 167
+        Me.cmdOkay.TabIndex = 169
         Me.cmdOkay.Text = "Okay"
         Me.cmdOkay.UseVisualStyleBackColor = False
         '
@@ -3077,6 +2997,28 @@
         Me.lblGeneratedAmount.Text = "(gen amount)"
         Me.lblGeneratedAmount.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
+        'cboToolList
+        '
+        Me.cboToolList.FormattingEnabled = True
+        Me.cboToolList.Location = New System.Drawing.Point(388, 415)
+        Me.cboToolList.Name = "cboToolList"
+        Me.cboToolList.Size = New System.Drawing.Size(279, 22)
+        Me.cboToolList.TabIndex = 167
+        '
+        'cmdRunTool
+        '
+        Me.cmdRunTool.BackColor = System.Drawing.SystemColors.Control
+        Me.cmdRunTool.Cursor = System.Windows.Forms.Cursors.Default
+        Me.cmdRunTool.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdRunTool.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.cmdRunTool.Location = New System.Drawing.Point(673, 414)
+        Me.cmdRunTool.Name = "cmdRunTool"
+        Me.cmdRunTool.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cmdRunTool.Size = New System.Drawing.Size(65, 23)
+        Me.cmdRunTool.TabIndex = 168
+        Me.cmdRunTool.Text = "Run Tool"
+        Me.cmdRunTool.UseVisualStyleBackColor = False
+        '
         'TrxForm
         '
         Me.AcceptButton = Me.cmdOkay
@@ -3085,13 +3027,10 @@
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.CancelButton = Me.cmdCancel
         Me.ClientSize = New System.Drawing.Size(999, 445)
+        Me.Controls.Add(Me.cmdRunTool)
+        Me.Controls.Add(Me.cboToolList)
         Me.Controls.Add(Me.lblGeneratedAmount)
-        Me.Controls.Add(Me.cmdCopyInvoiceNumbers)
-        Me.Controls.Add(Me.cmdPrintCheck)
         Me.Controls.Add(Me.cmdRptInfo)
-        Me.Controls.Add(Me.cmdMailingAddress)
-        Me.Controls.Add(Me.cmdCopyDate)
-        Me.Controls.Add(Me.cmdCopyAmount)
         Me.Controls.Add(Me.txtRepeatSeq)
         Me.Controls.Add(Me.cmdCancel)
         Me.Controls.Add(Me.cmdOkay)
@@ -3139,5 +3078,7 @@
     End Sub
 
     Friend WithEvents lblGeneratedAmount As Label
+    Friend WithEvents cboToolList As ComboBox
+    Public WithEvents cmdRunTool As Button
 #End Region
 End Class

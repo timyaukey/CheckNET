@@ -12,6 +12,8 @@ Public Interface IHostUI
 
     Function objSearchTools() As IEnumerable(Of ISearchTool)
 
+    Function objTrxTools() As IEnumerable(Of ITrxTool)
+
     Function objSearchHandlers() As IEnumerable(Of ISearchHandler)
 
     Function objSearchFilters() As IEnumerable(Of ISearchFilter)
