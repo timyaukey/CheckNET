@@ -1,12 +1,11 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 
 Imports System.Drawing.Printing
 
-Module CheckPrinting
-    '23456678901234567890123456789012345678901234567890123456789012345678901234567890123456
+Public Class CheckPrinting
 
-    Public gstrNextCheckNumToPrint As String
+    Public Shared strNextCheckNumToPrint As String
 
     Private mobjHostUI As IHostUI
     Private mobjCompany As Company
@@ -15,37 +14,77 @@ Module CheckPrinting
     Private mdblCurrentX As Double
     Private mdblCurrentY As Double
     Private mdomCheckFormat As VB6XmlDocument
-    Private mobjTrx As Trx
+    Private mobjTrx As NormalTrx
     Private mobjFont As Font
 
-    Public Function gdomGetCheckFormat(ByVal objHostUI As IHostUI) As VB6XmlDocument
-        Dim domCheckFormat As VB6XmlDocument
-        Dim strCheckFormatFile As String
-        Dim objParseError As VB6XmlParseError
-
+    Public Sub New(ByVal objHostUI As IHostUI)
         mobjHostUI = objHostUI
-        gdomGetCheckFormat = Nothing
-        domCheckFormat = New VB6XmlDocument
-        strCheckFormatFile = mobjHostUI.objCompany.strCheckFormatPath()
-        domCheckFormat.Load(strCheckFormatFile)
-        objParseError = domCheckFormat.ParseError
-        If Not objParseError Is Nothing Then
-            mobjHostUI.InfoMessageBox("Error loading check format file: " & gstrXMLParseErrorText(objParseError))
-            Exit Function
+    End Sub
+
+    Public Function blnAllowedToPrintCheck(ByVal objTestTrx As NormalTrx) As Boolean
+
+        If objTestTrx.curAmount >= 0 Then
+            mobjHostUI.ErrorMessageBox("You may only print a check for a debit transaction.")
+            Return False
         End If
 
-        domCheckFormat.SetProperty("SelectionLanguage", "XPath")
-        gdomGetCheckFormat = domCheckFormat
+        Dim intCheckNum As Integer
+        If Int32.TryParse(objTestTrx.strNumber, intCheckNum) Then
+            mobjHostUI.ErrorMessageBox("You may not print a check for a transaction that already has a check number.")
+            Return False
+        End If
+
+        Return True
 
     End Function
 
-    Public Function gblnPrintCheck(ByVal objHostUI As IHostUI, ByVal domCheckFormat_ As VB6XmlDocument, ByVal objTrx_ As Trx) As Boolean
+    Public Function blnPrepareForFirstCheck() As Boolean
+
+        If Not System.IO.File.Exists(mobjHostUI.objCompany.strCheckFormatPath()) Then
+            mobjHostUI.InfoMessageBox("You must set up your check format first, using the option on the ""Setup"" menu.")
+            Return False
+        End If
+
+        CheckPrinting.strNextCheckNumToPrint = InputBox("Please enter the check number to use:", "Check Number", CheckPrinting.strNextCheckNumToPrint)
+        If CheckPrinting.strNextCheckNumToPrint = "" Then
+            Return False
+        End If
+
+        Return True
+
+    End Function
+
+    Private Sub IncrementCheckNumber()
+        CheckPrinting.strNextCheckNumToPrint = CStr(Val(CheckPrinting.strNextCheckNumToPrint) + 1)
+    End Sub
+
+    Private Function blnGetCheckFormat() As Boolean
+
+        Dim strCheckFormatFile As String
+        Dim objParseError As VB6XmlParseError
+
+        mdomCheckFormat = New VB6XmlDocument
+        strCheckFormatFile = mobjHostUI.objCompany.strCheckFormatPath()
+        mdomCheckFormat.Load(strCheckFormatFile)
+        objParseError = mdomCheckFormat.ParseError
+        If Not objParseError Is Nothing Then
+            mobjHostUI.InfoMessageBox("Error loading check format file: " & gstrXMLParseErrorText(objParseError))
+            Return False
+        End If
+
+        mdomCheckFormat.SetProperty("SelectionLanguage", "XPath")
+        Return True
+
+    End Function
+
+    Public Function blnPrintCheck(ByVal objTrx_ As NormalTrx) As Boolean
         Dim objPrintDoc As PrintDocument
         Dim blnPreview As Boolean = False
 
-        mobjHostUI = objHostUI
         mobjCompany = mobjHostUI.objCompany
-        mdomCheckFormat = domCheckFormat_
+        If Not blnGetCheckFormat() Then
+            Return False
+        End If
         mobjTrx = objTrx_
         objPrintDoc = New PrintDocument
         AddHandler objPrintDoc.PrintPage, AddressOf pd_PrintPage
@@ -64,6 +103,7 @@ Module CheckPrinting
             dlg.Document = objPrintDoc
             If dlg.ShowDialog() = DialogResult.OK Then
                 objPrintDoc.Print()
+                IncrementCheckNumber()
                 Return True
             End If
         End If
@@ -80,8 +120,8 @@ Module CheckPrinting
         Dim strMailAddrLine As String = ""
         Dim strMailCityStateZip As String = ""
         Dim strAccountNumber As String = ""
-        Dim intPayeeIndex As Short
-        Dim intSemiPos As Short
+        Dim intPayeeIndex As Integer
+        Dim intSemiPos As Integer
         Dim elmItem As VB6XmlElement = Nothing
         Dim dblX As Double
         Dim dblY As Double
@@ -89,7 +129,7 @@ Module CheckPrinting
         Dim curAmount As Decimal
 
         mobjFont = New Font("Arial", 10)
-        GetCheckPrintPos(mdomCheckFormat, "Margins", elmItem, mdblMarginLeft, mdblMarginTop)
+        GetCheckPrintPos("Margins", elmItem, mdblMarginLeft, mdblMarginTop)
         ev.Graphics.PageUnit = GraphicsUnit.Inch
         dblLineHeight = mobjFont.GetHeight(ev.Graphics)
 
@@ -103,7 +143,7 @@ Module CheckPrinting
             If intPayeeIndex >= colPayees.Length Then
                 Exit Do
             End If
-            objPayee = colPayees(intPayeeIndex)
+            objPayee = DirectCast(colPayees(intPayeeIndex), VB6XmlElement)
             strMailAddr = gstrGetXMLChildText(objPayee, "Address1")
             strMailAddr2 = gstrGetXMLChildText(objPayee, "Address2")
             strMailCityStateZip = gstrGetXMLChildText(objPayee, "City") & ", " & gstrGetXMLChildText(objPayee, "State") & " " & gstrGetXMLChildText(objPayee, "Zip")
@@ -125,21 +165,21 @@ Module CheckPrinting
             intPayeeIndex = intPayeeIndex + 1
         Loop
 
-        PrintCheckText(mdomCheckFormat, "Date", Utilities.strFormatDate(mobjTrx.datDate), ev)
-        PrintCheckText(mdomCheckFormat, "ShortAmount", Utilities.strFormatCurrency(curAmount), ev)
-        PrintCheckText(mdomCheckFormat, "Payee", mobjTrx.strDescription, ev)
-        Dim intPennies As Short
-        intPennies = Fix(curAmount * 100.0#) - Fix(curAmount) * 100.0#
+        PrintCheckText("Date", Utilities.strFormatDate(mobjTrx.datDate), ev)
+        PrintCheckText("ShortAmount", Utilities.strFormatCurrency(curAmount), ev)
+        PrintCheckText("Payee", mobjTrx.strDescription, ev)
+        Dim intPennies As Integer
+        intPennies = CInt(Fix(curAmount * 100.0#) - Fix(curAmount) * 100.0#)
         Dim strDollars As String
         strDollars = MoneyFormat.strAmountToWords(curAmount)
         strDollars = UCase(Left(strDollars, 1)) & Mid(strDollars, 2)
-        PrintCheckText(mdomCheckFormat, "LongAmount", strDollars & " and " & Utilities.strFormatInteger(intPennies, "00") & "/100", ev)
+        PrintCheckText("LongAmount", strDollars & " and " & Utilities.strFormatInteger(intPennies, "00") & "/100", ev)
         If strAccountNumber <> "" Then
-            PrintCheckText(mdomCheckFormat, "AccountNumber", "Account #: " & strAccountNumber, ev)
+            PrintCheckText("AccountNumber", "Account #: " & strAccountNumber, ev)
         End If
 
         If strMailAddr <> "" Then
-            GetCheckPrintPos(mdomCheckFormat, "MailingAddress", elmItem, dblX, dblY)
+            GetCheckPrintPos("MailingAddress", elmItem, dblX, dblY)
             PrintCheckLine(dblX, dblY, dblLineHeight, strMailName, ev)
             PrintCheckLine(dblX, dblY, dblLineHeight, strMailAddrLine, ev)
             PrintCheckLine(dblX, dblY, dblLineHeight, strMailCityStateZip, ev)
@@ -150,29 +190,29 @@ Module CheckPrinting
         'Everything the payee needs to see (account numbers, invoice numbers)
         'is printed elsewhere.
 
-        PrintOptionalCheckText(mdomCheckFormat, "Payee2", strMailName, ev)
-        PrintOptionalCheckText(mdomCheckFormat, "Amount2", "$" & Utilities.strFormatCurrency(curAmount), ev)
-        PrintOptionalCheckText(mdomCheckFormat, "Date2", Utilities.strFormatDate(mobjTrx.datDate), ev)
-        PrintOptionalCheckText(mdomCheckFormat, "Number2", "#" & mobjTrx.strNumber, ev)
+        PrintOptionalCheckText("Payee2", strMailName, ev)
+        PrintOptionalCheckText("Amount2", "$" & Utilities.strFormatCurrency(curAmount), ev)
+        PrintOptionalCheckText("Date2", Utilities.strFormatDate(mobjTrx.datDate), ev)
+        PrintOptionalCheckText("Number2", "#" & mobjTrx.strNumber, ev)
 
-        PrintInvoiceNumbers(mdomCheckFormat, "InvoiceList1", mobjTrx, dblLineHeight, ev)
-        PrintInvoiceNumbers(mdomCheckFormat, "InvoiceList2", mobjTrx, dblLineHeight, ev)
+        PrintInvoiceNumbers("InvoiceList1", mobjTrx, dblLineHeight, ev)
+        PrintInvoiceNumbers("InvoiceList2", mobjTrx, dblLineHeight, ev)
 
         ev.HasMorePages = False
 
     End Sub
 
-    Private Sub PrintInvoiceNumbers(ByVal domCheckFormat As VB6XmlDocument, ByVal strItemName As String, ByVal objTrx As NormalTrx, ByVal dblLineHeight As Double, ByVal ev As PrintPageEventArgs)
+    Private Sub PrintInvoiceNumbers(ByVal strItemName As String, ByVal objTrx As NormalTrx, ByVal dblLineHeight As Double, ByVal ev As PrintPageEventArgs)
 
         Dim elmInvoiceList As VB6XmlElement
         Dim dblX As Double
         Dim dblY As Double
         Dim dblStartY As Double
-        Dim intMaxRows As Short
-        Dim intMaxCols As Short
+        Dim intMaxRows As Integer
+        Dim intMaxCols As Integer
         Dim dblColWidth As Double
-        Dim intRowNum As Short
-        Dim intColNum As Short
+        Dim intRowNum As Integer
+        Dim intColNum As Integer
         Dim vntAttrib As Object
         Dim objSplit As TrxSplit
         Dim strInvoiceNum As String
@@ -180,7 +220,7 @@ Module CheckPrinting
         '<InvoiceList1 x="2.0" y="4.0" rows="3" cols="2" colwidth="1.5" />
 
         'Does the check format include a place to print invoice numbers?
-        elmInvoiceList = objGetCheckPrintPos(domCheckFormat, strItemName, dblX, dblY)
+        elmInvoiceList = objGetCheckPrintPos(strItemName, dblX, dblY)
         If elmInvoiceList Is Nothing Then
             Exit Sub
         End If
@@ -193,14 +233,14 @@ Module CheckPrinting
             mobjHostUI.InfoMessageBox("Could not find ""rows"" attribute of <" & strItemName & "> in check format file")
             Exit Sub
         End If
-        intMaxRows = Val(vntAttrib)
+        intMaxRows = CInt(Val(vntAttrib))
 
         vntAttrib = elmInvoiceList.GetAttribute("cols")
         If gblnXmlAttributeMissing(vntAttrib) Then
             mobjHostUI.InfoMessageBox("Could not find ""cols"" attribute of <" & strItemName & "> in check format file")
             Exit Sub
         End If
-        intMaxCols = Val(vntAttrib)
+        intMaxCols = CInt(Val(vntAttrib))
 
         vntAttrib = elmInvoiceList.GetAttribute("colwidth")
         If gblnXmlAttributeMissing(vntAttrib) Then
@@ -237,13 +277,13 @@ Module CheckPrinting
 
     End Sub
 
-    Private Sub PrintCheckText(ByVal domCheckFormat As VB6XmlDocument, ByVal strItemName As String, ByVal strValue As String, ByVal ev As PrintPageEventArgs)
+    Private Sub PrintCheckText(ByVal strItemName As String, ByVal strValue As String, ByVal ev As PrintPageEventArgs)
 
         Dim elmItem As VB6XmlElement = Nothing
         Dim dblX As Double
         Dim dblY As Double
 
-        GetCheckPrintPos(domCheckFormat, strItemName, elmItem, dblX, dblY)
+        GetCheckPrintPos(strItemName, elmItem, dblX, dblY)
         If elmItem Is Nothing Then
             Exit Sub
         End If
@@ -258,13 +298,13 @@ Module CheckPrinting
 
     End Sub
 
-    Private Sub PrintOptionalCheckText(ByVal domCheckFormat As VB6XmlDocument, ByVal strItemName As String, ByVal strValue As String, ByVal ev As PrintPageEventArgs)
+    Private Sub PrintOptionalCheckText(ByVal strItemName As String, ByVal strValue As String, ByVal ev As PrintPageEventArgs)
 
         Dim elmItem As VB6XmlElement
         Dim dblX As Double
         Dim dblY As Double
 
-        elmItem = objGetCheckPrintPos(domCheckFormat, strItemName, dblX, dblY)
+        elmItem = objGetCheckPrintPos(strItemName, dblX, dblY)
         If elmItem Is Nothing Then
             Exit Sub
         End If
@@ -291,7 +331,7 @@ Module CheckPrinting
     End Sub
 
     Private Sub PrintString(ByVal strValue As String, ByVal ev As PrintPageEventArgs)
-        ev.Graphics.DrawString(strValue, mobjFont, Brushes.Black, mdblCurrentX, mdblCurrentY, New StringFormat())
+        ev.Graphics.DrawString(strValue, mobjFont, Brushes.Black, CSng(mdblCurrentX), CSng(mdblCurrentY), New StringFormat())
     End Sub
 
     Private Sub SetLocation(ByVal dblX As Double, ByVal dblY As Double, ByVal ev As PrintPageEventArgs)
@@ -299,23 +339,23 @@ Module CheckPrinting
         mdblCurrentY = dblY - mdblMarginTop
     End Sub
 
-    Private Sub GetCheckPrintPos(ByVal domCheckFormat As VB6XmlDocument, ByVal strItemName As String, ByRef elmItem As VB6XmlElement, ByRef dblX As Double, ByRef dblY As Double)
+    Private Sub GetCheckPrintPos(ByVal strItemName As String, ByRef elmItem As VB6XmlElement, ByRef dblX As Double, ByRef dblY As Double)
 
-        elmItem = objGetCheckPrintPos(domCheckFormat, strItemName, dblX, dblY)
+        elmItem = objGetCheckPrintPos(strItemName, dblX, dblY)
         If elmItem Is Nothing Then
             mobjHostUI.InfoMessageBox("Could not find <" & strItemName & "> in check format file")
             Exit Sub
         End If
     End Sub
 
-    Private Function objGetCheckPrintPos(ByVal domCheckFormat As VB6XmlDocument, ByVal strItemName As String, ByRef dblX As Double, ByRef dblY As Double) As VB6XmlElement
+    Private Function objGetCheckPrintPos(ByVal strItemName As String, ByRef dblX As Double, ByRef dblY As Double) As VB6XmlElement
 
         Dim elmItem As VB6XmlElement
         Dim vntAttrib As Object
 
         objGetCheckPrintPos = Nothing
 
-        elmItem = domCheckFormat.DocumentElement.SelectSingleNode(strItemName)
+        elmItem = DirectCast(mdomCheckFormat.DocumentElement.SelectSingleNode(strItemName), VB6XmlElement)
         If elmItem Is Nothing Then
             Exit Function
         End If
@@ -336,4 +376,4 @@ Module CheckPrinting
 
         objGetCheckPrintPos = elmItem
     End Function
-End Module
+End Class
