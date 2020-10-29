@@ -368,6 +368,9 @@
     <Compile Include="StartupForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="TrxEdit\TrxCopyAmountTool.vb" />
+    <Compile Include="TrxEdit\TrxCopyDateTool.vb" />
+    <Compile Include="TrxEdit\TrxCopyInvoiceNumbersTool.vb" />
     <Compile Include="TrxEdit\TrxForm.Designer.vb">
       <SubType>Code</SubType>
       <DependentUpon>TrxForm.vb</DependentUpon>
@@ -375,6 +378,7 @@
     <Compile Include="TrxEdit\TrxForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="TrxEdit\TrxMailingAddressTool.vb" />
     <Compile Include="TrxEdit\TrxPrintCheckTool.vb" />
     <Compile Include="TrxTypeListForm.Designer.vb">
       <SubType>Code</SubType>
