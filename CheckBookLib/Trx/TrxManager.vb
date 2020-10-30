@@ -2,13 +2,17 @@
 Option Explicit On
 
 ''' <summary>
-''' A helper class to update or delete a Trx that is already in a Register.
-''' Get an instance, then call TrxManager.UpdateStart(),
-''' then modify any properties you want of that Trx, then call TrxManager.UpdateEnd().
+''' A helper class to update a Trx that is already in a Register.
+''' Create an instance of the TrxManager subclass appropriate to the Trx subclass,
+''' passing to the constructor a Trx that is already in the Register.
+''' Then call TrxManager.UpdateStart(), then modify any properties you want of that Trx,
+''' then call TrxManager.UpdateEnd().
 ''' This handles all the details of managing the Register, budget tracking for normal Trx,
 ''' logging, firing events, etc.
 ''' NOTE: Once you call UpdateStart() you MUST call UpdateEnd() or the Register object
 ''' will only be partly updated.
+''' NOTE: You CANNOT construct a new Trx to use with this. It must be the existing
+''' Trx in the Register you wish to update.
 ''' </summary>
 
 Public MustInherit Class TrxManager(Of TTrx As Trx)
@@ -22,7 +26,7 @@ Public MustInherit Class TrxManager(Of TTrx As Trx)
             Throw New Exception("Trx passed to TrxManager must be at the specified index of the Register passed")
         End If
         objTrx = objTrx_
-        mobjOriginalLogTrx = DirectCast(objTrx_.objClone(Nothing), TTrx)
+        mobjOriginalLogTrx = DirectCast(objTrx_.objClone(blnWillAddToRegister:=False), TTrx)
         mblnUpdateStarted = False
     End Sub
 
@@ -30,6 +34,8 @@ Public MustInherit Class TrxManager(Of TTrx As Trx)
         objTrx.objReg.ClearFirstAffected()
         'These next two lines are why if you call UpdateStart(),
         'you must finish by calling UpdateEnd() to keep the Register in good condition.
+        'I wish we could delay these steps until UpdateEnd(), but ClearRepeatTrx() requires
+        'the original Trx object whose contents may have been changed by then.
         objTrx.UnApply()
         objTrx.ClearRepeatTrx()
         mblnUpdateStarted = True

@@ -6,19 +6,20 @@ Option Explicit On
 '''
 ''' To create a transaction and add it to a Register, instantiate a NormalTrx, BudgetTrx
 ''' or TransferTrx and call NewStartNormal(), NewStartBudget() or NewStartTransfer() on
-''' that instance. For a NormalTrx add at least one split with AddSplit(). Then call 
-''' Register.NewLoadEnd() if you are in the process of loading a Register from some external
-''' source, and will note the end of the load by calling Register.LoadPostProcessing(). 
+''' that instance. For a NormalTrx add at least one split with AddSplit(). Then call either
+''' Register.NewLoadEnd() or Register.NewAddEnd(): Call Register.NewLoadEnd() if you are in 
+''' the process of loading multiple Trx into a Register from some external source, and will 
+''' finish that process by calling Register.LoadPostProcessing(). 
 ''' Otherwise call Register.NewAddEnd(), which is what will typically happen if you are 
 ''' adding to a Register which is already visible in the UI.
 ''' 
-''' To update an existing transaction, use Register.objGetNormalTrxManager(),
-''' Register.objGetBudgetTrxManager() or Register.objGetTransferTrxManager() to
-''' get a TrxManager subclass for the desired Trx, and call UpdateStart() on that
-''' TrxManager. Then call NormalTrxManager.objTrx.UpdateStartNormal(), 
-''' BudgetTrxManager.objTrx.UpdateStartBudget(), or TransferTrxManager.objTrx.UpdateStartTransfer().
-''' Then call NormalTrx.AddSplit() at least once if you are working with a NormalTrx. 
-''' Then call TrxManager.UpdateEnd().
+''' To update an existing transaction, create a NormalTrxManager, BudgetTrxManager, 
+''' TransferTrxManager or ReplicaTrxManager and call UpdateStart() on that instance.
+''' Then make changes to members of .objTrx of that instance. You can make changes to individual
+''' members directly, or remake the entire Trx from scratch by calling something like 
+''' .objTrx.UpdateStartNormal(). If you do call UpdateStartNormal(), always call
+''' .objTrx.AddSplit() at least once. When you are done making changes to .objTrx,
+''' finish by calling TrxManager.UpdateEnd().
 ''' 
 ''' To delete a transaction, call either Register.Delete() or Trx.Delete().
 '''
