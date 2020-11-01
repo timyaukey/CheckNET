@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{081CD8C1-9EBF-4B8B-8353-EF6B4BD5B293}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>FinancialReports</RootNamespace>
-    <AssemblyName>FinancialReports</AssemblyName>
+    <RootNamespace>Willowsoft.CheckBook.FinancialReports</RootNamespace>
+    <AssemblyName>Willowsoft.CheckBook.FinancialReports</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -19,7 +19,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>FinancialReports.xml</DocumentationFile>
+    <DocumentationFile>Willowsoft.CheckBook.FinancialReports.xml</DocumentationFile>
     <DefineConstants>_MYFORMS=True</DefineConstants>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -30,7 +30,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>FinancialReports.xml</DocumentationFile>
+    <DocumentationFile>Willowsoft.CheckBook.FinancialReports.xml</DocumentationFile>
     <DefineConstants>_MYFORMS=True</DefineConstants>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
