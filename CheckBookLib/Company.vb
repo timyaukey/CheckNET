@@ -492,4 +492,18 @@ Public Class Company
         End Get
     End Property
 
+    Public ReadOnly Property blnCriticalOperationFailed() As Boolean
+        Get
+            For Each objAcct As Account In colAccounts
+                For Each objReg In objAcct.colRegisters
+                    objReg.CheckIfInCriticalOperation()
+                    If objReg.blnCriticalOperationFailed Then
+                        Return True
+                    End If
+                Next
+            Next
+            Return False
+        End Get
+    End Property
+
 End Class

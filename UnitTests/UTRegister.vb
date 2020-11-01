@@ -47,9 +47,12 @@ Public Class UTRegister
         mobjCompany = New Company(My.Application.Info.DirectoryPath & "\Data")
         mobjAccount = New Account()
         mobjAccount.Init(mobjCompany)
+        mobjAccount.InitForLoad()
+        mobjCompany.colAccounts.Add(mobjAccount)
         mobjReg = New Register
         mobjReg.Init(mobjAccount, "title", strRegisterKey, False, 3)
         mobjReg.datOldestBudgetEndAllowed = DateTime.Parse("1/1/1980")
+        mobjAccount.colRegisters.Add(mobjReg)
     End Sub
 
     'The Register managed by this UTRegister.

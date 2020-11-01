@@ -6,6 +6,9 @@ Public Class CompanySaver
     Public Shared Sub SaveChangedAccounts(ByVal objCompany As Company)
         Dim objAccount As Account
         Dim strBackupFile As String
+        If objCompany.blnCriticalOperationFailed Then
+            Throw New Register.CriticalOperationException("Unable to save company because a critical operation failed earlier")
+        End If
         For Each objAccount In objCompany.colAccounts
             If objAccount.blnUnsavedChanges Then
                 strBackupFile = objCompany.strBackupPath() & "\" & objAccount.strFileNameRoot & "." & Now.ToString("MM$dd$yy$hh$mm")

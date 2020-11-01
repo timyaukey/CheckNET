@@ -41,6 +41,10 @@ Public Class Register
     Private mobjLog As EventLog
     'True iff operator deleted register.
     Private mblnDeleted As Boolean
+    'True iff in a critical operation.
+    Private mblnInCriticalOperation As Boolean
+    'True iff a critical operation failed.
+    Private mblnCriticalOperationFailed As Boolean
 
     'Fired by NewAddEnd() when it adds a Trx to the register.
     'Intended to allow the UI to update itself.
@@ -103,6 +107,8 @@ Public Class Register
         mlngTrxUsed = 0
         mobjTrxCurrent = Nothing
         ClearFirstAffected()
+        mblnInCriticalOperation = False
+        mblnCriticalOperationFailed = False
         mobjLog = New EventLog
         mobjLog.Init(Me, mobjAccount.objCompany.objSecurity.strLogin)
 
@@ -117,11 +123,13 @@ Public Class Register
     '   become the register entry, rather than making a copy of it.
 
     Public Sub NewLoadEnd(ByVal objNew As Trx)
+        BeginCriticalOperation()
         ExpandTrxArray()
         SetTrx(mlngTrxUsed, objNew)
         If objNew.intRepeatSeq > 0 Then
             AddRepeatTrx(objNew)
         End If
+        EndCriticalOperation()
     End Sub
 
     '$Description Add a Trx object to the register at the correct place in the sort order,
@@ -133,6 +141,7 @@ Public Class Register
     Public Sub NewAddEnd(ByVal objNew As Trx, ByVal objAddLogger As ILogAdd, ByVal strTitle As String,
                          Optional ByVal blnSetChanged As Boolean = True)
 
+        BeginCriticalOperation()
         If objNew Is Nothing Then
             gRaiseError("objNew is Nothing in Register.NewAddEnd")
         End If
@@ -148,6 +157,7 @@ Public Class Register
         End If
         FixBalancesAndRefreshUI()
         mobjLog.AddILogAdd(objAddLogger, strTitle, objNew)
+        EndCriticalOperation()
 
     End Sub
 
@@ -340,6 +350,41 @@ Public Class Register
         End Function
     End Class
 
+    Public Sub BeginCriticalOperation()
+        If mblnInCriticalOperation Then
+            mblnCriticalOperationFailed = True
+            Throw New CriticalOperationException("Attempted to begin a critical operation while already in one")
+        End If
+        mblnInCriticalOperation = True
+    End Sub
+
+    Public Class CriticalOperationException
+        Inherits InvalidOperationException
+        Public Sub New(ByVal strMsg As String)
+            MyBase.New(strMsg)
+        End Sub
+    End Class
+
+    Public Sub EndCriticalOperation()
+        If Not mblnInCriticalOperation Then
+            mblnCriticalOperationFailed = True
+            Throw New Exception("Attempted to end a critical operation when not in one")
+        End If
+        mblnInCriticalOperation = False
+    End Sub
+
+    Public Sub CheckIfInCriticalOperation()
+        If mblnInCriticalOperation Then
+            mblnCriticalOperationFailed = True
+        End If
+    End Sub
+
+    Public ReadOnly Property blnCriticalOperationFailed() As Boolean
+        Get
+            Return mblnCriticalOperationFailed
+        End Get
+    End Property
+
     Friend Sub ClearFirstAffected()
         mlngFirstAffected = mlngNO_TRX_AFFECTED
     End Sub
@@ -388,6 +433,7 @@ Public Class Register
                       Optional ByVal blnSetChanged As Boolean = True)
         Dim lngMoveIndex As Integer
         Dim objTrxOld As Trx
+        BeginCriticalOperation()
         ClearFirstAffected()
         With objTrx
             objTrxOld = .objClone(False)
@@ -420,6 +466,7 @@ Public Class Register
         'because that Trx might be applied to budgets.
         FixBalancesAndRefreshUI()
         mobjLog.AddILogDelete(objDeleteLogger, strTitle, objTrxOld)
+        EndCriticalOperation()
     End Sub
 
     '$Description Compute curBalance properties of all Trx objects starting at a
@@ -465,11 +512,11 @@ Public Class Register
     '   LoadFinish() for any Registers in any Accounts.
 
     Public Sub LoadApply()
-
+        BeginCriticalOperation()
         For lngIndex As Integer = 1 To mlngTrxUsed
             Me.objTrx(lngIndex).Apply(True)
         Next
-
+        EndCriticalOperation()
     End Sub
 
     '$Description Perform final post processing steps after this Register is
@@ -478,6 +525,7 @@ Public Class Register
 
     Public Sub LoadFinish()
         Dim curBalance As Decimal = 0
+        BeginCriticalOperation()
         mdatOldestBudgetEndAllowed = mobjAccount.datLastReconciled.AddDays(1D)
         For Each objTrx As Trx In colAllTrx(Of Trx)()
             If TypeOf (objTrx) Is BudgetTrx Then
@@ -486,6 +534,7 @@ Public Class Register
             curBalance = curBalance + objTrx.curBalanceChange
             objTrx.curBalance = curBalance
         Next
+        EndCriticalOperation()
     End Sub
 
     '$Description Remove all generated Trx from the Register, and clear
@@ -500,6 +549,7 @@ Public Class Register
         If mlngTrxUsed = 0 Then
             Exit Sub
         End If
+        BeginCriticalOperation()
         lngOutIndex = 0
         For lngInIndex = 1 To mlngTrxUsed
             objTrx = maobjTrx(lngInIndex)
@@ -521,6 +571,7 @@ Public Class Register
         mlngTrxUsed = lngOutIndex
         mlngTrxAllocated = mlngTrxUsed
         mobjTrxCurrent = Nothing
+        EndCriticalOperation()
     End Sub
 
     Public Sub FireManyTrxChanged()

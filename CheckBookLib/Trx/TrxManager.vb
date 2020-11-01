@@ -31,6 +31,7 @@ Public MustInherit Class TrxManager(Of TTrx As Trx)
     End Sub
 
     Public Sub UpdateStart()
+        objTrx.objReg.BeginCriticalOperation()
         objTrx.objReg.ClearFirstAffected()
         'These next two lines are why if you call UpdateStart(),
         'you must finish by calling UpdateEnd() to keep the Register in good condition.
@@ -46,6 +47,7 @@ Public MustInherit Class TrxManager(Of TTrx As Trx)
             Throw New Exception("TrxManager.UpdateStart() not called before UpdateEnd()")
         End If
         objTrx.objReg.UpdateEnd(objTrx, objLogger, strTitle, mobjOriginalLogTrx)
+        objTrx.objReg.EndCriticalOperation()
     End Sub
 End Class
 

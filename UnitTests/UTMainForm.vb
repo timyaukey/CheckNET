@@ -25,6 +25,7 @@ Friend Class UTMainForm
             TestRepeat()
             TestAmountsToWords()
             TestSecurity()
+            TestCriticalOperation()
 
             MsgBox("Basic tests complete.")
 
@@ -1458,6 +1459,63 @@ Friend Class UTMainForm
         gUTAssert(objSec.blnUserSignatureIsValid, "Bad john sig 2")
         objSec.elmDbgUser.SetAttribute("name", "new name")
         gUTAssert(Not objSec.blnUserSignatureIsValid, "Changing name did not change signature")
+
+    End Sub
+
+    Private Sub TestCriticalOperation()
+
+        gUTSetTestTitle("Test Critical Operation")
+
+        gUTSetSubTest("Main")
+
+        Dim objUTReg As UTRegister = gobjUTNewReg()
+
+        objUTReg.AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1)
+        objUTReg.Validate("", 1)
+
+        objUTReg.AddNormal("1501", #6/1/2000#, -24.95D, "Second add", 2, 2, 2)
+        objUTReg.Validate("", 1, 2)
+
+        objUTReg.SetTrxAmount(1, 399D)
+        objUTReg.SetTrxNumber(1, "DP2")
+        objUTReg.SetTrxDate(1, #5/1/2000#)
+        objUTReg.UpdateNormal("DP2", #5/1/2000#, 399D, "First upd", 1, 1, 1, 5)
+        objUTReg.Validate("", 1, 2)
+
+        Dim objTrxManager As NormalTrxManager = New NormalTrxManager(objUTReg.objReg.objNormalTrx(1))
+        objTrxManager.UpdateStart()
+
+        objTrxManager = New NormalTrxManager(objUTReg.objReg.objNormalTrx(2))
+        Try
+            objTrxManager.UpdateStart()
+            gUTFailure("Did not fail critical operation check")
+        Catch ex As Register.CriticalOperationException
+            'Expected
+        End Try
+
+        '=======================================
+
+        objUTReg = gobjUTNewReg()
+
+        objUTReg.AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1)
+        objUTReg.Validate("", 1)
+
+        gUTAssert(Not objUTReg.objReg.objAccount.objCompany.blnCriticalOperationFailed, "Unexpectedly said critical operation failed")
+
+        objUTReg.AddNormal("1501", #6/1/2000#, -24.95D, "Second add", 2, 2, 2)
+        objUTReg.Validate("", 1, 2)
+
+        objUTReg.SetTrxAmount(1, 399D)
+        objUTReg.SetTrxNumber(1, "DP2")
+        objUTReg.SetTrxDate(1, #5/1/2000#)
+        objUTReg.UpdateNormal("DP2", #5/1/2000#, 399D, "First upd", 1, 1, 1, 5)
+        objUTReg.Validate("", 1, 2)
+
+        objTrxManager = New NormalTrxManager(objUTReg.objReg.objNormalTrx(1))
+        objTrxManager.UpdateStart()
+
+        gUTAssert(objUTReg.objReg.objAccount.objCompany.blnCriticalOperationFailed, "Did not detect interrupted critical operation 2")
+
 
     End Sub
 
