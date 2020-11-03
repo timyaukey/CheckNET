@@ -44,7 +44,7 @@ Public Class CompanyLoader
         If Not objAuthenticatorError Is Nothing Then
             Return objAuthenticatorError
         End If
-        If objCompany.blnDataIsLocked() Then
+        If Not objCompany.blnTryLockCompany() Then
             Return New CompanyLoadInUse()
         End If
         LoadGlobalLists(objCompany)

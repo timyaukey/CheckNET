@@ -20,7 +20,8 @@ namespace Willowsoft.CheckBook.Powershell
         protected override void BeginProcessing()
         {
             CompanySaver.SaveChangedAccounts(Company);
-            Company.UnlockData();
+            Company.Teardown();
+            Company.UnlockCompany();
         }
     }
 }

@@ -35,8 +35,8 @@ Public Class Company
     Public domTransTableUCS As VB6XmlDocument
 
     Private ReadOnly mstrDataPathValue As String
-    Private mobjLockFile As System.IO.Stream
     Private mintMaxAccountKey As Integer
+    Private mobjLockRefreshThread As Threading.Thread
 
     'Category keys of categories which typically have due dates
     '14 days or less after invoice or billing dates. Category
@@ -71,20 +71,80 @@ Public Class Company
         Return My.Application.Info.DirectoryPath
     End Function
 
-    Public Function blnDataIsLocked() As Boolean
-        Try
-            mobjLockFile = New IO.FileStream(strAddPath("LockFile.dat"), IO.FileMode.Append, IO.FileAccess.Write, IO.FileShare.None)
-            Return False
-        Catch ex As System.IO.IOException
+    Public Function blnTryLockCompany() As Boolean
+        Dim objLockInfo As FileInfo = New FileInfo(strCompanyLockFile())
+        If Not objLockInfo.Exists Then
+            LockCompany()
             Return True
-        Catch ex As Exception
-            gNestedException(ex)
-        End Try
+        End If
+        'A lock file that has not been modified in this many seconds is assumed to be abandoned,
+        'and is treated as if it does not exist. The extra time beyond the refresh interval is
+        'to allow for delays in propagating the lock file through Dropbox or other file sharing service.
+        'This is vulnerable to delays in file synchronization, especially those caused by mass file
+        'updates causing a long backlog of files to sync up, so even 30 minutes may not be long enough.
+        Dim dblLockExpirationSeconds As Double = CDbl(intLockRefreshSeconds) + (30D * 60D)
+        If DateTime.UtcNow.Subtract(objLockInfo.LastWriteTimeUtc).TotalSeconds > dblLockExpirationSeconds Then
+            LockCompany()
+            Return True
+        End If
+        Return False
     End Function
 
-    Public Sub UnlockData()
-        If Not mobjLockFile Is Nothing Then
-            mobjLockFile.Close()
+    'Recreate the lock file this often, which keeps the last modified timestamp current.
+    Private intLockRefreshSeconds As Integer = 5 * 60
+
+    Private Sub LockCompany()
+        WriteCompanyLockFile()
+        mobjLockRefreshThread = New Threading.Thread(AddressOf RefreshLockLoop)
+        mobjLockRefreshThread.IsBackground = True
+        mobjLockRefreshThread.Start()
+    End Sub
+
+    Private Sub RefreshLockLoop()
+        Try
+            Do
+                Threading.Thread.Sleep(intLockRefreshSeconds * 1000)
+                WriteCompanyLockFile()
+            Loop
+        Catch ex As Threading.ThreadInterruptedException
+
+        End Try
+    End Sub
+
+    Private Sub WriteCompanyLockFile()
+        Using objLockWriter As TextWriter = New StreamWriter(strCompanyLockFile())
+            'Nothing actually checks this in this version of the software,
+            'but we might check to see if the computer name changes as an indication
+            'that another process somewhere else wrote its own lock file because
+            'of a race condition.
+            objLockWriter.WriteLine(strComputerName())
+        End Using
+    End Sub
+
+    Private ReadOnly Property strCompanyLockFile() As String
+        Get
+            Return strAddPath("LockFile.dat")
+        End Get
+    End Property
+
+    Private ReadOnly Property strComputerName() As String
+        Get
+            Return Environment.MachineName
+        End Get
+    End Property
+
+    Public Sub UnlockCompany()
+        If mobjLockRefreshThread IsNot Nothing Then
+            'Only delete the lock file if we created one.
+            'This method may be called in various shutdown scenarios,
+            'including when the software was not able to lock the company.
+            mobjLockRefreshThread.Interrupt()
+            mobjLockRefreshThread.Join()
+            mobjLockRefreshThread = Nothing
+            Dim objLockInfo = New FileInfo(strCompanyLockFile())
+            If objLockInfo.Exists Then
+                objLockInfo.Delete()
+            End If
         End If
     End Sub
 

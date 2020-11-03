@@ -285,6 +285,7 @@ Friend Class CBMainForm
                     CompanySaver.SaveChangedAccounts(mobjCompany)
                 End If
                 mobjCompany.Teardown()
+                mobjCompany.UnlockCompany()
             End If
 
             Exit Sub
