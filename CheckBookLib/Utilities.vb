@@ -24,6 +24,79 @@ Public Class Utilities
         blnIsValidDate = False
     End Function
 
+    Public Shared Function blnTryParseUniversalDate(ByVal strInput As String, ByRef datOutput As DateTime) As Boolean
+        Dim intMonth As Integer
+        Dim intDay As Integer
+        Dim intYear As Integer
+        Dim intIndex As Integer
+        Dim intInputLength As Integer = strInput.Length
+        Dim chr As Char
+
+        Do
+            If intIndex >= intInputLength Then
+                Return False
+            End If
+            chr = strInput(intIndex)
+            intIndex += 1
+            If chr = "/"c Then
+                If intMonth < 1 Or intMonth > 12 Then
+                    Return False
+                End If
+                Exit Do
+            ElseIf chr >= "0"c And chr <= "9"c Then
+                intMonth = intMonth * 10 + (Strings.Asc(chr) - 48)
+            Else
+                Return False
+            End If
+        Loop
+
+        Do
+            If intIndex >= intInputLength Then
+                Return False
+            End If
+            chr = strInput(intIndex)
+            intIndex += 1
+            If chr = "/"c Then
+                If intDay < 1 Or intDay > 31 Then
+                    Return False
+                End If
+                Exit Do
+            ElseIf chr >= "0"c And chr <= "9"c Then
+                intDay = intDay * 10 + (Strings.Asc(chr) - 48)
+            Else
+                Return False
+            End If
+        Loop
+
+        Do
+            If intIndex >= intInputLength Then
+                If intYear > 2999 Then
+                    Return False
+                End If
+                Exit Do
+            End If
+            chr = strInput(intIndex)
+            intIndex += 1
+            If chr >= "0"c And chr <= "9"c Then
+                intYear = intYear * 10 + (Strings.Asc(chr) - 48)
+            Else
+                Return False
+            End If
+        Loop
+        If intYear < 70 Then
+            intYear += 2000
+        ElseIf intYear < 100 Then
+            intYear += 1900
+        End If
+
+        If intDay > DateTime.DaysInMonth(intYear, intMonth) Then
+            Return False
+        End If
+
+        datOutput = New DateTime(intYear, intMonth, intDay)
+        Return True
+    End Function
+
     Public Shared Function blnIsValidAmount(ByVal strAmount As String) As Boolean
         Dim intDotPos As Integer
         blnIsValidAmount = False

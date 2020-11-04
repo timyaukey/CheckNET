@@ -6,7 +6,7 @@ Public Class MiscFunctionsFixture
     Private mobjCompany As Company
 
     <Test>
-    Public Sub TestFunctions()
+    Public Sub Split()
         gUTSetSubTest("Utilities.Split")
 
         Dim astrParts() As String
@@ -92,7 +92,7 @@ Public Class MiscFunctionsFixture
     End Sub
 
     <Test>
-    Public Sub TestAgingBrackets()
+    Public Sub AgingBrackets()
         gUTSetSubTest("Current")
 
         gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #6/10/2009#, #5/10/2009#, #6/20/2009#) = AgingUtils.strCurrentLabel(), "not paid, invoiced, due in 20 days")
@@ -119,7 +119,7 @@ Public Class MiscFunctionsFixture
     End Sub
 
     <Test>
-    Public Sub TestDateBrackets()
+    Public Sub DateBrackets()
         gUTSetSubTest("Day count")
 
         gUTAssert(AgingUtils.strMakeDateBracket(#6/1/2009#, 10, #6/1/2009#) = "2009/06/01", "equal to base date")
@@ -165,7 +165,7 @@ Public Class MiscFunctionsFixture
     End Sub
 
     <Test>
-    Public Sub TestAmountsToWords()
+    Public Sub AmountsToWords()
         gUTSetSubTest("Main")
 
         TestOneAmountToWords(0, "zero")
@@ -283,6 +283,70 @@ Public Class MiscFunctionsFixture
         TestOneAmountToWords(1200000, "one million two hundred thousand")
         TestOneAmountToWords(1200471, "one million two hundred thousand four hundred seventy one")
 
+    End Sub
+
+    <Test>
+    Public Sub TryParseUniversalDate()
+
+        gUTSetSubTest("Bad format")
+        AssertParseUniversalDate("", 0, 0, 0)
+        AssertParseUniversalDate("1", 0, 0, 0)
+        AssertParseUniversalDate("A", 0, 0, 0)
+        AssertParseUniversalDate("1/3", 0, 0, 0)
+        AssertParseUniversalDate("1/A/2000", 0, 0, 0)
+        AssertParseUniversalDate("A/1/2000", 0, 0, 0)
+        AssertParseUniversalDate("1/4/200A", 0, 0, 0)
+
+        gUTSetSubTest("Valid dates 4 digit years")
+        AssertParseUniversalDate("1/3/2000", 1, 3, 2000)
+        AssertParseUniversalDate("6/13/2000", 6, 13, 2000)
+        AssertParseUniversalDate("1/30/2000", 1, 30, 2000)
+        AssertParseUniversalDate("12/31/2000", 12, 31, 2000)
+        AssertParseUniversalDate("12/31/2001", 12, 31, 2001)
+        AssertParseUniversalDate("2/28/2000", 2, 28, 2000)
+        AssertParseUniversalDate("2/25/1999", 2, 25, 1999)
+        AssertParseUniversalDate("2/28/2000", 2, 28, 2000)
+        AssertParseUniversalDate("02/28/2000", 2, 28, 2000)
+        AssertParseUniversalDate("4/29/1970", 4, 29, 1970)
+        AssertParseUniversalDate("4/29/1920", 4, 29, 1920)
+        AssertParseUniversalDate("4/29/1720", 4, 29, 1720)
+
+        gUTSetSubTest("Valid dates 2 digit years")
+        AssertParseUniversalDate("1/3/00", 1, 3, 2000)
+        AssertParseUniversalDate("1/03/00", 1, 3, 2000)
+        AssertParseUniversalDate("01/03/00", 1, 3, 2000)
+        AssertParseUniversalDate("12/31/01", 12, 31, 2001)
+        AssertParseUniversalDate("7/31/20", 7, 31, 2020)
+        AssertParseUniversalDate("7/10/20", 7, 10, 2020)
+        AssertParseUniversalDate("5/31/69", 5, 31, 2069)
+        AssertParseUniversalDate("05/31/69", 5, 31, 2069)
+        AssertParseUniversalDate("12/31/70", 12, 31, 1970)
+        AssertParseUniversalDate("12/31/99", 12, 31, 1999)
+
+        gUTSetSubTest("Bad month")
+        AssertParseUniversalDate("0/3/2000", 0, 0, 0)
+        AssertParseUniversalDate("00/3/2000", 0, 0, 0)
+        AssertParseUniversalDate("13/3/2000", 0, 0, 0)
+
+        gUTSetSubTest("Bad day")
+        AssertParseUniversalDate("2/29/1999", 0, 0, 0)
+        AssertParseUniversalDate("1/32/2000", 0, 0, 0)
+        AssertParseUniversalDate("9/31/2000", 0, 0, 0)
+        AssertParseUniversalDate("9/0/2000", 0, 0, 0)
+
+        gUTSetSubTest("Bad year")
+        AssertParseUniversalDate("2/1/3000", 0, 0, 0)
+
+    End Sub
+
+    Private Sub AssertParseUniversalDate(ByVal strInput As String, ByVal intMonth As Integer, ByVal intDay As Integer, ByVal intYear As Integer)
+        Dim datOutput As DateTime
+        If intMonth = 0 Then
+            gUTAssert(Not Utilities.blnTryParseUniversalDate(strInput, datOutput), "Unexpectedly was able to parse date [" + strInput + "]")
+        Else
+            gUTAssert(Utilities.blnTryParseUniversalDate(strInput, datOutput), "Unable to parse date [" + strInput + "]")
+            gUTAssert(datOutput = New DateTime(intYear, intMonth, intDay), "Wrong parsed values for [" + strInput + "]")
+        End If
     End Sub
 
     Private Sub TestOneAmountToWords(ByVal curInput As Decimal, ByVal strExpectedOutput As String)

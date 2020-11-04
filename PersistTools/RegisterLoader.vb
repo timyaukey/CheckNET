@@ -285,10 +285,14 @@ Public Class RegisterLoader
 
     Private Function datConvertInput(ByVal strInput As String, ByVal strContext As String) As Date
 
-        If Utilities.blnIsValidDate(strInput) Then
-            datConvertInput = CDate(strInput)
-            Exit Function
+        Dim datOutput As Date
+        If Utilities.blnTryParseUniversalDate(strInput, datOutput) Then
+            Return datOutput
         End If
+        'If Utilities.blnIsValidDate(strInput) Then
+        '    datConvertInput = CDate(strInput)
+        '    Exit Function
+        'End If
         RaiseError("datConvertInput", "Invalid " & strContext & " date")
 
     End Function
