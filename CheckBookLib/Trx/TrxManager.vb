@@ -30,6 +30,12 @@ Public MustInherit Class TrxManager(Of TTrx As Trx)
         mblnUpdateStarted = False
     End Sub
 
+    Public Sub Update(ByVal objBuilder As Action(Of TTrx), ByVal objLogger As ILogChange, ByVal strTitle As String)
+        UpdateStart()
+        objBuilder(objTrx)
+        UpdateEnd(objLogger, strTitle)
+    End Sub
+
     Public Sub UpdateStart()
         objTrx.objReg.BeginCriticalOperation()
         objTrx.objReg.ClearFirstAffected()
