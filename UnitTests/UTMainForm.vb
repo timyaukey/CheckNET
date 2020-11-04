@@ -1,6 +1,7 @@
 Option Strict On
 Option Explicit On
 
+<TestFixture>
 Friend Class UTMainForm
     Inherits System.Windows.Forms.Form
 
@@ -35,7 +36,8 @@ Friend Class UTMainForm
         End Try
     End Sub
 
-    Private Sub TestFunctions()
+    <Test>
+    Public Sub TestFunctions()
         gUTSetTestTitle("Test Functions")
 
         gUTSetSubTest("Utilities.Split")
@@ -122,7 +124,8 @@ Friend Class UTMainForm
         gUTAssert(astrParts(2) = "green", "12 double string content green")
     End Sub
 
-    Private Sub TestLoad()
+    <Test>
+    Public Sub TestLoad()
         Dim objUTReg As UTRegister
 
         gUTSetTestTitle("Loading register")
@@ -273,7 +276,8 @@ Friend Class UTMainForm
 
     End Function
 
-    Private Sub TestAddUpdDel()
+    <Test>
+    Public Sub TestAddUpdDel()
         Dim objUTReg As UTRegister
         Dim objTrx As Trx
 
@@ -432,7 +436,8 @@ Friend Class UTMainForm
         End With
     End Sub
 
-    Private Sub TestTransfer()
+    <Test>
+    Public Sub TestTransfer()
         Dim objUTReg1 As UTRegister
         Dim objUTReg2 As UTRegister
         Dim objXfr As TransferManager
@@ -553,7 +558,8 @@ Friend Class UTMainForm
 
     End Sub
 
-    Private Sub TestMatchNormal()
+    <Test>
+    Public Sub TestMatchNormal()
         Dim objUTReg As UTRegister
         Dim colMatches As ICollection(Of NormalTrx) = Nothing
         Dim blnExactMatch As Boolean
@@ -656,7 +662,8 @@ Friend Class UTMainForm
         strConcatMatchResults = strResult
     End Function
 
-    Private Sub TestImportUpdateBank()
+    <Test>
+    Public Sub TestImportUpdateBank()
         Dim objTrx As Trx
         Dim objUTReg As UTRegister
 
@@ -708,7 +715,8 @@ Friend Class UTMainForm
 
     End Sub
 
-    Private Sub TestMatchImportKey()
+    <Test>
+    Public Sub TestMatchImportKey()
         Dim objUTReg As UTRegister
         Dim objMatch As NormalTrx
 
@@ -732,7 +740,8 @@ Friend Class UTMainForm
 
     End Sub
 
-    Private Sub TestMatchPayee()
+    <Test>
+    Public Sub TestMatchPayee()
         Dim objUTReg As UTRegister
         Dim colMatches As ICollection(Of NormalTrx) = Nothing
         Dim blnExactMatch As Boolean
@@ -767,7 +776,8 @@ Friend Class UTMainForm
 
     End Sub
 
-    Private Sub TestMatchInvoice()
+    <Test>
+    Public Sub TestMatchInvoice()
         Dim objUTReg As UTRegister
         Dim colMatches As ICollection(Of NormalTrx) = Nothing
 
@@ -802,7 +812,8 @@ Friend Class UTMainForm
 
     End Sub
 
-    Private Sub TestMatchPONumber()
+    <Test>
+    Public Sub TestMatchPONumber()
         Dim objUTReg As UTRegister
         Dim colMatches As ICollection(Of NormalTrx) = Nothing
 
@@ -850,7 +861,8 @@ Friend Class UTMainForm
         End Try
     End Sub
 
-    Private Sub TestFileLoad1()
+    <Test>
+    Public Sub TestFileLoad1()
         Dim objCompany As Company
         Dim objAccount As Account
         Dim objReg As Register
@@ -951,7 +963,8 @@ Friend Class UTMainForm
         objLoadFile = objReg
     End Function
 
-    Private Sub TestStringTranslator()
+    <Test>
+    Public Sub TestStringTranslator()
         Dim objString As SimpleStringTranslator
 
         gUTSetTestTitle("TestStringTranslator")
@@ -977,7 +990,8 @@ Friend Class UTMainForm
 
     End Sub
 
-    Private Sub TestAgingBrackets()
+    <Test>
+    Public Sub TestAgingBrackets()
         gUTSetTestTitle("TestAgingBrackets")
 
         gUTSetSubTest("Current")
@@ -1009,7 +1023,8 @@ Friend Class UTMainForm
         gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #10/30/2009#, #5/10/2009#, #8/10/2009#) = AgingUtils.strFutureLabel(-89, -60), "due ~70 days after aging date")
     End Sub
 
-    Private Sub TestDateBrackets()
+    <Test>
+    Public Sub TestDateBrackets()
         gUTSetTestTitle("TestDateBrackets")
 
         gUTSetSubTest("Day count")
@@ -1082,7 +1097,8 @@ Friend Class UTMainForm
 
     End Sub
 
-    Private Sub TestRepeat()
+    <Test>
+    Public Sub TestRepeat()
 
         gUTSetTestTitle("Test repeat sequences")
         Dim objUTReg As UTRegister
@@ -1284,7 +1300,8 @@ Friend Class UTMainForm
         End With
     End Sub
 
-    Private Sub TestAmountsToWords()
+    <Test>
+    Public Sub TestAmountsToWords()
 
         gUTSetTestTitle("Test gstrAmountToWords()")
 
@@ -1414,7 +1431,8 @@ Friend Class UTMainForm
         gUTAssert(strExpectedOutput = strActualOutput, curInput & " yields <" & strActualOutput & "> instead of <" & strExpectedOutput & ">")
     End Sub
 
-    Private Sub TestSecurity()
+    <Test>
+    Public Sub TestSecurity()
 
         gUTSetTestTitle("Test Security")
 
@@ -1462,7 +1480,8 @@ Friend Class UTMainForm
 
     End Sub
 
-    Private Sub TestCriticalOperation()
+    <Test>
+    Public Sub TestCriticalOperation()
 
         gUTSetTestTitle("Test Critical Operation")
 
@@ -1519,14 +1538,24 @@ Friend Class UTMainForm
 
     End Sub
 
-    Private Sub UTMainForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
+    <OneTimeSetUp>
+    Public Sub OneTimeSetup()
         Dim strDataPathValue As String = My.Application.Info.DirectoryPath & "\..\..\Data"
         mobjCompany = New Company(strDataPathValue)
         CompanyLoader.LoadGlobalLists(mobjCompany)
         mobjCompany.objSecurity.CreateEmpty()
     End Sub
 
-    Private Sub UTMainForm_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
+    Public Sub UTMainForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
+        OneTimeSetup()
+    End Sub
+
+    <OneTimeTearDown>
+    Public Sub OneTimeTearDown()
         mobjCompany.Teardown()
+    End Sub
+
+    Public Sub UTMainForm_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
+        OneTimeTearDown()
     End Sub
 End Class
