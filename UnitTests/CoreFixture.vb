@@ -2,133 +2,13 @@ Option Strict On
 Option Explicit On
 
 <TestFixture>
-Friend Class UTMainForm
-    Inherits System.Windows.Forms.Form
+Public Class CoreFixture
 
     Private mobjCompany As Company
-
-    Private Sub cmdRunBasic_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRunBasic.Click
-        Try
-
-            TestFunctions()
-            TestLoad()
-            TestAddUpdDel()
-            TestTransfer()
-            TestMatchNormal()
-            TestImportUpdateBank()
-            TestMatchImportKey()
-            TestMatchPayee()
-            TestMatchInvoice()
-            TestMatchPONumber()
-            TestStringTranslator()
-            TestAgingBrackets()
-            TestDateBrackets()
-            TestRepeat()
-            TestAmountsToWords()
-            TestSecurity()
-            TestCriticalOperation()
-
-            MsgBox("Basic tests complete.")
-
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
-
-    <Test>
-    Public Sub TestFunctions()
-        gUTSetTestTitle("Test Functions")
-
-        gUTSetSubTest("Utilities.Split")
-
-        Dim astrParts() As String
-
-        astrParts = Utilities.Split("", " ")
-        gUTAssert(LBound(astrParts) = 0, "Empty string lbound")
-        gUTAssert(UBound(astrParts) = 0, "Empty string ubound")
-        gUTAssert(astrParts(0) = "", "Empty string content")
-
-        astrParts = Utilities.Split("red", " ")
-        gUTAssert(LBound(astrParts) = 0, "One string lbound")
-        gUTAssert(UBound(astrParts) = 0, "One string ubound")
-        gUTAssert(astrParts(0) = "red", "One string content")
-
-        astrParts = Utilities.Split("red green", " ")
-        gUTAssert(LBound(astrParts) = 0, "Two string lbound")
-        gUTAssert(UBound(astrParts) = 1, "Two string ubound")
-        gUTAssert(astrParts(0) = "red", "Two string content red")
-        gUTAssert(astrParts(1) = "green", "Two string content green")
-
-        astrParts = Utilities.Split("red green blue", " ")
-        gUTAssert(LBound(astrParts) = 0, "Three string lbound")
-        gUTAssert(UBound(astrParts) = 2, "Three string ubound")
-        gUTAssert(astrParts(0) = "red", "Three string content red")
-        gUTAssert(astrParts(1) = "green", "Three string content green")
-        gUTAssert(astrParts(2) = "blue", "Three string content blue")
-
-        astrParts = Utilities.Split(" ", " ")
-        gUTAssert(LBound(astrParts) = 0, "Blank string lbound")
-        gUTAssert(UBound(astrParts) = 1, "Blank string ubound")
-        gUTAssert(astrParts(0) = "", "Blank string content 1")
-        gUTAssert(astrParts(1) = "", "Blank string content 2")
-
-        astrParts = Utilities.Split("red  green", " ")
-        gUTAssert(LBound(astrParts) = 0, "Double blank string lbound")
-        gUTAssert(UBound(astrParts) = 2, "Double blank string ubound")
-        gUTAssert(astrParts(0) = "red", "Double blank string content 1")
-        gUTAssert(astrParts(1) = "", "Double blank string content 2")
-        gUTAssert(astrParts(2) = "green", "Double blank string content 3")
-
-        astrParts = Utilities.Split(" red  green", " ")
-        gUTAssert(LBound(astrParts) = 0, "Triple blank string lbound")
-        gUTAssert(UBound(astrParts) = 3, "Triple blank string ubound")
-        gUTAssert(astrParts(0) = "", "Triple blank string content 1")
-        gUTAssert(astrParts(1) = "red", "Triple blank string content 2")
-        gUTAssert(astrParts(2) = "", "Triple blank string content 3")
-        gUTAssert(astrParts(3) = "green", "Triple blank string content 4")
-
-        astrParts = Utilities.Split("red ", " ")
-        gUTAssert(LBound(astrParts) = 0, "Trail lbound")
-        gUTAssert(UBound(astrParts) = 1, "Trail ubound")
-        gUTAssert(astrParts(0) = "red", "Trail content red")
-        gUTAssert(astrParts(1) = "", "Trail content blank")
-
-        astrParts = Utilities.Split("", "12")
-        gUTAssert(LBound(astrParts) = 0, "12 Empty string lbound")
-        gUTAssert(UBound(astrParts) = 0, "12 Empty string ubound")
-        gUTAssert(astrParts(0) = "", "12 Empty string content")
-
-        astrParts = Utilities.Split("red", "12")
-        gUTAssert(LBound(astrParts) = 0, "12 string lbound")
-        gUTAssert(UBound(astrParts) = 0, "12 string ubound")
-        gUTAssert(astrParts(0) = "red", "12 string content")
-
-        astrParts = Utilities.Split("12", "12")
-        gUTAssert(LBound(astrParts) = 0, "12 sep lbound")
-        gUTAssert(UBound(astrParts) = 1, "12 sep ubound")
-        gUTAssert(astrParts(0) = "", "12 sep content 1")
-        gUTAssert(astrParts(1) = "", "12 sep content 2")
-
-        astrParts = Utilities.Split("red12green", "12")
-        gUTAssert(LBound(astrParts) = 0, "12 Two string lbound")
-        gUTAssert(UBound(astrParts) = 1, "12 Two string ubound")
-        gUTAssert(astrParts(0) = "red", "12 Two string content red")
-        gUTAssert(astrParts(1) = "green", "12 Two string content green")
-
-        astrParts = Utilities.Split("red1212green", "12")
-        gUTAssert(LBound(astrParts) = 0, "12 double string lbound")
-        gUTAssert(UBound(astrParts) = 2, "12 double string ubound")
-        gUTAssert(astrParts(0) = "red", "12 double string content red")
-        gUTAssert(astrParts(1) = "", "12 double string content empty")
-        gUTAssert(astrParts(2) = "green", "12 double string content green")
-    End Sub
 
     <Test>
     Public Sub TestLoad()
         Dim objUTReg As UTRegister
-
-        gUTSetTestTitle("Loading register")
 
         objUTReg = objLoadBuild(0)
         objUTReg.Validate("Check empty register")
@@ -182,7 +62,7 @@ Friend Class UTMainForm
         objUTReg.Validate("Check 17 trx", 2, 1, 7, 5, 9, 8, 11, 12, 14, 13, 16, 17, 15, 4, 10, 6, 3)
     End Sub
 
-    Private Function objLoadBuild(ByVal intTrxCount As Short) As UTRegister
+    Private Function objLoadBuild(ByVal intTrxCount As Integer) As UTRegister
 
         'This Trx sequence tests Register.lngNewInsert() and Register.lngMoveUp()
         'exhaustively.
@@ -192,6 +72,8 @@ Friend Class UTMainForm
         'multiple normal trx applied to the same budget, budget limits, and
         'debit and credit budgets. Does NOT test un-applying from budget, changing
         'budget, or deleting budget.
+
+        gUTSetSubTest("objLoadBuild(" + intTrxCount.ToString() + ")")
 
         Dim objUTReg As UTRegister
         objUTReg = gobjUTNewReg()
@@ -280,8 +162,6 @@ Friend Class UTMainForm
     Public Sub TestAddUpdDel()
         Dim objUTReg As UTRegister
         Dim objTrx As Trx
-
-        gUTSetTestTitle("Adding to and updating register")
 
         objUTReg = gobjUTNewReg()
         With objUTReg
@@ -442,8 +322,6 @@ Friend Class UTMainForm
         Dim objUTReg2 As UTRegister
         Dim objXfr As TransferManager
 
-        gUTSetTestTitle("Test transfers")
-
         objXfr = New TransferManager
 
         gUTSetSubTest("Init register 1")
@@ -559,317 +437,12 @@ Friend Class UTMainForm
     End Sub
 
     <Test>
-    Public Sub TestMatchNormal()
-        Dim objUTReg As UTRegister
-        Dim colMatches As ICollection(Of NormalTrx) = Nothing
-        Dim blnExactMatch As Boolean
-
-        gUTSetTestTitle("Test MatchNormal")
-
-        gUTSetSubTest("Init register")
-
-        objUTReg = gobjUTNewReg()
-        With objUTReg
-            .AddNormal("DEP", #4/1/2000#, 2000D, "Add1", 1, 1, 1, strDescription:="Descr1")
-            .AddNormal("100", #4/3/2000#, -25D, "Add2", 2, 2, 2, strDescription:="Descr2")
-            .AddNormal("101", #4/5/2000#, -37D, "Add3", 3, 3, 3, strDescription:="Descr3", curNormalMatchRange:=1D)
-            .AddNormal("Pmt", #4/5/2000#, -37D, "Add4", 4, 4, 4, strDescription:="Descr4")
-            .AddNormal("102", #4/12/2000#, -45.3D, "Add4", 5, 5, 5, strDescription:="Descr5")
-            .AddNormal("Pmt", #4/18/2000#, -100D, "Add5", 6, 6, 6, strDescription:="Descr6")
-        End With
-
-        gUTSetSubTest("Search register")
-
-        With objUTReg.objReg
-            .MatchNormal(101, #4/1/2000#, 20, "", 555D, False, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = "", "Should not find 101 (number only match)")
-            'Verify date range filtering. Number, amount and descr always match,
-            'so date filter is the only way to fail.
-            'Date out of range before.
-            .MatchNormal(100, #4/2/2000#, 0, "Descr2", -25D, False, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = "", "Found 100 when out of date range before")
-            'Date in range before.
-            .MatchNormal(100, #4/2/2000#, 1, "Descr2", -25D, False, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = ";2", "Expected to find 100-A")
-            'Date out of range after.
-            .MatchNormal(100, #4/4/2000#, 0, "Descr2", -25D, False, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = "", "Found 100 when out of date range-B")
-            'Date in range after.
-            .MatchNormal(100, #4/4/2000#, 1, "Descr2", -25D, False, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = ";2", "Expected to find 100-B")
-            'End of date range filter checking.
-            'Look for 101 without using trx number.
-            'Two trx match that date and amount, because one of them
-            'has an amount match range=1, but one is an exact match so only that is returned.
-            .MatchNormal(0, #4/5/2000#, 10, "Descr3", -37D, False, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = ";3", "Expected to find 101-A")
-            'Match all 3 properties.
-            .MatchNormal(0, #4/5/2000#, 10, "Descr3", -38D, False, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = ";3", "Expected to find 101-B")
-            'All the ways of matching 2 of 3 properties.
-            'Descr+amount
-            .MatchNormal(0, #4/4/2000#, 10, "Descr3", -38D, False, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = ";3", "Expected to find 101-D")
-            'Date+amount, date+descr
-            .MatchNormal(0, #4/5/2000#, 10, "Descr2", -38D, False, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = ";2;3", "Expected to find 100,101-E")
-            'Date+descr
-            .MatchNormal(0, #4/5/2000#, 10, "Descr3", -40D, False, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = ";3", "Expected to find 101-F")
-            'Date only, so fail.
-            .MatchNormal(0, #4/5/2000#, 0, "Descr2", -40D, False, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = "", "Did not expect to find 101-G")
-            'Date only, so succeed in loose search.
-            .MatchNormal(0, #4/5/2000#, 10, "Descr2", -40D, True, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = ";1;2;3;4;5", "Did not expect to find 101-H")
-            'Close date only, so succeed in loose search.
-            .MatchNormal(0, #4/16/2000#, 10, "zzzz", -40000D, True, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = ";5;6", "Expected to find Pmt-I")
-            'Close date only, so succeed in loose search.
-            .MatchNormal(0, #4/20/2000#, 10, "zzzz", -40000D, True, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = ";6", "Expected to find Pmt-J1")
-            'Close date only, so fail in strict search.
-            .MatchNormal(0, #4/20/2000#, 10, "zzzz", -40000D, False, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = "", "Did not expect to find anything-J2")
-            'Just outside date, so fail in loose search.
-            .MatchNormal(0, #4/28/2000#, 10, "zzzz", -40000D, True, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = "", "Did not expect to find anything-K")
-            'Just outside date, so fail in loose search.
-            .MatchNormal(0, #3/20/2000#, 10, "zzzz", -40000D, True, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = "", "Did not expect to find anything-L")
-            'Amount within 20%.
-            .MatchNormal(0, #4/24/2000#, 10, "zzzz", -125D, True, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = ";6", "Expected to find Pmt-M1")
-            'Amount within 20%.
-            .MatchNormal(0, #4/24/2000#, 10, "zzzz", -84D, True, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = ";6", "Expected to find Pmt-M2")
-            'Amount not within 20%.
-            .MatchNormal(0, #4/24/2000#, 10, "zzzz", -126D, True, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = "", "Did not expect to find anything-O1")
-            'Amount not within 20%.
-            .MatchNormal(0, #4/24/2000#, 10, "zzzz", -82D, True, colMatches, blnExactMatch)
-            gUTAssert(strConcatMatchResults(colMatches) = "", "Did not expect to find anything-O2")
-        End With
-
-    End Sub
-
-    Private Function strConcatMatchResults(ByVal colMatches As ICollection(Of NormalTrx)) As String
-        Dim objElement As NormalTrx
-        Dim strResult As String = ""
-        For Each objElement In colMatches
-            strResult = strResult & ";" & objElement.lngIndex
-        Next
-        strConcatMatchResults = strResult
-    End Function
-
-    <Test>
-    Public Sub TestImportUpdateBank()
-        Dim objTrx As Trx
-        Dim objUTReg As UTRegister
-
-        gUTSetTestTitle("Test ImportUpdateBank")
-
-        gUTSetSubTest("Init register")
-
-        objUTReg = gobjUTNewReg()
-        With objUTReg
-            .AddNormal("100", #4/3/2000#, -25D, "Add1", 1, 1, 1, strDescription:="Descr1", blnFake:=True, blnAutoGenerated:=True)
-            .AddNormal("101", #4/4/2000#, -30.2D, "Add2", 2, 2, 2, strDescription:="Descr2", vcurAmount2:=-10D)
-            .AddNormal("Pmt", #4/5/2000#, -20.99D, "Add3", 3, 3, 3, strDescription:="Descr3")
-        End With
-
-        gUTSetSubTest("Test first import")
-
-        objUTReg.objReg.ImportUpdateBank(objUTReg.objReg.objNormalTrx(1), #4/3/2001#, "200", -25D, "importkey-1")
-        objTrx = objUTReg.objReg.objTrx(1)
-        With DirectCast(objTrx, NormalTrx)
-            gUTAssert(.datDate = #4/3/2000#, "Bad date")
-            gUTAssert(.strNumber = "200", "Bad number")
-            gUTAssert(.curAmount = -25D, "Bad amount")
-            gUTAssert(.strImportKey = "importkey-1", "Bad import key")
-            gUTAssert(.blnFake = False, "Bad blnFake")
-            gUTAssert(.blnAutoGenerated = False, "Bad auto generated")
-        End With
-
-        gUTSetSubTest("Test second import")
-
-        objUTReg.objReg.ImportUpdateBank(objUTReg.objReg.objNormalTrx(2), #4/4/2000#, "201", -50D, "importkey-2")
-        objTrx = objUTReg.objReg.objTrx(2)
-        With objTrx
-            gUTAssert(.datDate = #4/4/2000#, "Bad date")
-            gUTAssert(.strNumber = "201", "Bad number")
-            gUTAssert(.curAmount = -50D, "Bad amount " & .curAmount)
-            gUTAssert(.blnFake = False, "Bad blnFake")
-            gUTAssert(.blnAutoGenerated = False, "Bad auto generated")
-        End With
-
-        gUTSetSubTest("Test third import")
-
-        objUTReg.objReg.ImportUpdateBank(objUTReg.objReg.objNormalTrx(3), #4/15/2002#, "Pmt", -40.01D, "importkey-3")
-        objTrx = objUTReg.objReg.objTrx(3)
-        With objTrx
-            gUTAssert(.datDate = #4/15/2002#, "Bad date")
-            gUTAssert(.strNumber = "Pmt", "Bad number")
-            gUTAssert(.curAmount = -40.01, "Bad amount " & .curAmount)
-        End With
-
-    End Sub
-
-    <Test>
-    Public Sub TestMatchImportKey()
-        Dim objUTReg As UTRegister
-        Dim objMatch As NormalTrx
-
-        gUTSetTestTitle("Test MatchImportKey")
-
-        gUTSetSubTest("Init register")
-
-        objUTReg = gobjUTNewReg()
-        With objUTReg
-            .AddNormal("100", #4/1/2000#, -2000D, "Add1", 1, 1, 1, strImportKey:="imp1")
-            .AddNormal("101", #4/3/2000#, -25D, "Add2", 2, 2, 2, strImportKey:="imp2", blnFake:=True)
-            .AddNormal("102", #4/3/2000#, -26D, "Add2", 3, 3, 3)
-            .AddNormal("103", #4/3/2000#, -27D, "Add2", 4, 4, 4, strImportKey:="imp4")
-            objMatch = .objReg.objMatchImportKey("imp1")
-            gUTAssert(objMatch.lngIndex = 1, "Did not find 100")
-            objMatch = .objReg.objMatchImportKey("imp2")
-            gUTAssert(objMatch Is Nothing, "Did not expect to find 101")
-            objMatch = .objReg.objMatchImportKey("imp4")
-            gUTAssert(objMatch.lngIndex = 4, "Did not find 103")
-        End With
-
-    End Sub
-
-    <Test>
-    Public Sub TestMatchPayee()
-        Dim objUTReg As UTRegister
-        Dim colMatches As ICollection(Of NormalTrx) = Nothing
-        Dim blnExactMatch As Boolean
-        Dim objTrx As NormalTrx
-
-        gUTSetTestTitle("Test MatchPayee")
-
-        gUTSetSubTest("Init register")
-
-        objUTReg = gobjUTNewReg()
-        With objUTReg
-            .AddNormal("100", #4/1/2000#, -2000D, "Add1", 1, 1, 1, strDescription:="payee1")
-            .AddNormal("101", #4/3/2000#, -25D, "Add2", 2, 2, 2, strDescription:="company2")
-            .AddNormal("102", #4/5/2000#, -26D, "Add2", 3, 3, 3, strDescription:="payee1")
-            .AddNormal("103", #4/7/2000#, -27D, "Add2", 4, 4, 4, strDescription:="payee1")
-
-            .objReg.MatchPayee(#4/3/2000#, 1, "company2", True, colMatches, blnExactMatch)
-            gUTAssert(colMatches.Count() = 1, "company2 fail")
-            objTrx = Utilities.objFirstElement(colMatches)
-            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 2, "company2 index fail")
-            gUTAssert(objTrx.strDescription = "company2", "company2 name fail")
-            gUTAssert(objTrx.datDate = #4/3/2000#, "company2 date fail")
-            gUTAssert(blnExactMatch = True, "company2 exact fail")
-
-            .objReg.MatchPayee(#4/6/2000#, 1, "payee1", True, colMatches, blnExactMatch)
-            gUTAssert(colMatches.Count() = 2, "payee1 fail")
-            objTrx = Utilities.objFirstElement(colMatches)
-            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 3, "payee1#1 index fail")
-            gUTAssert(Utilities.objSecondElement(colMatches).lngIndex = 4, "payee1#2 index fail")
-            gUTAssert(blnExactMatch = False, "payee#1 exact fail")
-        End With
-
-    End Sub
-
-    <Test>
-    Public Sub TestMatchInvoice()
-        Dim objUTReg As UTRegister
-        Dim colMatches As ICollection(Of NormalTrx) = Nothing
-
-        gUTSetTestTitle("Test MatchInvoice")
-
-        gUTSetSubTest("Init register")
-
-        objUTReg = gobjUTNewReg()
-        With objUTReg
-            .AddNormal("100", #4/1/2000#, -2000D, "Add1", 1, 1, 1, strDescription:="payee1", strInvoiceNum:="I1000")
-            .AddNormal("101", #4/3/2000#, -25D, "Add2", 2, 2, 2, strDescription:="company2", strInvoiceNum:="I1000", vcurAmount2:=-10D, strInvoiceNum2:="I1001")
-            .AddNormal("102", #4/5/2000#, -26D, "Add2", 3, 3, 3, strDescription:="payee1", strInvoiceNum:="I1001")
-            .AddNormal("103", #4/7/2000#, -27D, "Add2", 4, 4, 4, strDescription:="payee1", strInvoiceNum:="I1002")
-
-            .objReg.MatchInvoice(#4/3/2000#, 10, "company2", "I1000", colMatches)
-            gUTAssert(colMatches.Count() = 1, "company2 I1000 fail")
-            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 2, "company2 I1000 index fail")
-
-            .objReg.MatchInvoice(#4/3/2000#, 10, "company2", "I1001", colMatches)
-            gUTAssert(colMatches.Count() = 1, "company2 I1001 fail")
-            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 2, "company2 I1001 index fail")
-
-            .objReg.MatchInvoice(#4/5/2000#, 1, "company2", "I1000", colMatches)
-            gUTAssert(colMatches.Count() = 0, "company2 I1000 -2 fail")
-
-            .objReg.MatchInvoice(#4/5/2000#, 3, "company3", "I1000", colMatches)
-            gUTAssert(colMatches.Count() = 0, "company3 I1000 fail")
-
-            .objReg.MatchInvoice(#4/5/2000#, 3, "company2", "I1000", colMatches)
-            gUTAssert(colMatches.Count() = 1, "company2 I1000 -3 fail")
-        End With
-
-    End Sub
-
-    <Test>
-    Public Sub TestMatchPONumber()
-        Dim objUTReg As UTRegister
-        Dim colMatches As ICollection(Of NormalTrx) = Nothing
-
-        gUTSetTestTitle("Test MatchPONumber")
-
-        gUTSetSubTest("Init register")
-
-        objUTReg = gobjUTNewReg()
-        With objUTReg
-            .AddNormal("100", #4/1/2000#, -2000D, "Add1", 1, 1, 1, strDescription:="payee1", strPONumber:="P1")
-            .AddNormal("101", #4/3/2000#, -25D, "Add2", 2, 2, 2, strDescription:="company2", strPONumber:="P1", vcurAmount2:=-10D, strPONumber2:="P2")
-            .AddNormal("102", #4/5/2000#, -26D, "Add2", 3, 3, 3, strDescription:="payee1", strPONumber:="P2")
-            .AddNormal("103", #4/7/2000#, -27D, "Add2", 4, 4, 4, strDescription:="payee1", strPONumber:="P3")
-
-            .objReg.MatchPONumber(#4/3/2000#, 10, "company2", "P1", colMatches)
-            gUTAssert(colMatches.Count() = 1, "company2 P1 fail")
-            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 2, "company2 P1 index fail")
-
-            .objReg.MatchPONumber(#4/3/2000#, 10, "company2", "P2", colMatches)
-            gUTAssert(colMatches.Count() = 1, "company2 P2 fail")
-            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 2, "company2 I1001 index fail")
-
-            .objReg.MatchPONumber(#4/5/2000#, 1, "company2", "P1", colMatches)
-            gUTAssert(colMatches.Count() = 0, "company2 P1 -2 fail")
-
-            .objReg.MatchPONumber(#4/5/2000#, 3, "company3", "P1", colMatches)
-            gUTAssert(colMatches.Count() = 0, "company3 P1 fail")
-
-            .objReg.MatchPONumber(#4/5/2000#, 3, "company2", "P1", colMatches)
-            gUTAssert(colMatches.Count() = 1, "company2 P1 -3 fail")
-        End With
-
-    End Sub
-
-    Private Sub cmdRunFileLoad_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRunFileLoad.Click
-        Try
-
-            TestFileLoad1()
-
-            MsgBox("File loading tests complete.")
-
-            Exit Sub
-        Catch ex As Exception
-            gTopException(ex)
-        End Try
-    End Sub
-
-    <Test>
-    Public Sub TestFileLoad1()
+    Public Sub TestFileLoad()
         Dim objCompany As Company
         Dim objAccount As Account
         Dim objReg As Register
         Dim objTrx As Trx
         Dim objSplit As TrxSplit
-
-        gUTSetTestTitle("TestFileLoad1")
 
         gUTSetSubTest("Load")
         objCompany = New Company(My.Application.Info.DirectoryPath & "\Data")
@@ -967,8 +540,6 @@ Friend Class UTMainForm
     Public Sub TestStringTranslator()
         Dim objString As SimpleStringTranslator
 
-        gUTSetTestTitle("TestStringTranslator")
-
         gUTSetSubTest("Load")
 
         objString = New SimpleStringTranslator()
@@ -991,116 +562,8 @@ Friend Class UTMainForm
     End Sub
 
     <Test>
-    Public Sub TestAgingBrackets()
-        gUTSetTestTitle("TestAgingBrackets")
-
-        gUTSetSubTest("Current")
-
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #6/10/2009#, #5/10/2009#, #6/20/2009#) = AgingUtils.strCurrentLabel(), "not paid, invoiced, due in 20 days")
-
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, True, #6/10/2009#, #5/10/2009#, #6/20/2009#) = AgingUtils.strCurrentLabel(), "not paid, fake, invoiced, due in 20 days")
-
-        gUTSetSubTest("Not invoiced")
-
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #7/5/2009#, #6/10/2009#, #7/10/2009#) = AgingUtils.strNotInvoicedLabel(), "future invoice date")
-
-        gUTSetSubTest("Paid")
-
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #5/30/2009#, #5/10/2009#, #5/20/2009#) = AgingUtils.strPaidLabel(), "paid before aging date")
-
-        gUTAssert(AgingUtils.strMakeAgeBracket(#9/1/2009#, 30, False, #5/30/2009#, #5/10/2009#, #5/20/2009#) = AgingUtils.strPaidLabel(), "paid WAY before aging date")
-
-        gUTSetSubTest("Past Due")
-
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #8/30/2009#, #5/10/2009#, #5/20/2009#) = AgingUtils.strPastDueLabel(1, 30), "unpaid 11 days after due date")
-
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #8/30/2009#, #4/10/2009#, #4/20/2009#) = AgingUtils.strPastDueLabel(31, 60), "unpaid ~40 days after due date")
-
-        gUTSetSubTest("Future")
-
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #10/30/2009#, #5/10/2009#, #7/10/2009#) = AgingUtils.strFutureLabel(-59, -30), "due ~40 days after aging date")
-
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #10/30/2009#, #5/10/2009#, #8/10/2009#) = AgingUtils.strFutureLabel(-89, -60), "due ~70 days after aging date")
-    End Sub
-
-    <Test>
-    Public Sub TestDateBrackets()
-        gUTSetTestTitle("TestDateBrackets")
-
-        gUTSetSubTest("Day count")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/1/2009#, 10, #6/1/2009#) = "2009/06/01", "equal to base date")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/2/2009#, 10, #6/1/2009#) = "2009/06/01", "day after base date")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/10/2009#, 10, #6/1/2009#) = "2009/06/01", "end of base bracket")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/11/2009#, 10, #6/1/2009#) = "2009/06/11", "start of next bracket")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/14/2009#, 10, #6/1/2009#) = "2009/06/11", "middle of next bracket")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/20/2009#, 10, #6/1/2009#) = "2009/06/11", "end of next bracket")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/21/2009#, 10, #6/1/2009#) = "2009/06/21", "start of next bracket")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#5/31/2009#, 10, #6/1/2009#) = "2009/05/22", "end of previous bracket")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#5/24/2009#, 10, #6/1/2009#) = "2009/05/22", "middle of previous bracket")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#5/22/2009#, 10, #6/1/2009#) = "2009/05/22", "start of previous bracket")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#5/21/2009#, 10, #6/1/2009#) = "2009/05/12", "start of second previous bracket")
-
-        gUTSetSubTest("Whole month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/1/2009#, -1, #1/1/2001#) = "2009/06/01", "first day of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/2/2009#, -1, #1/1/2001#) = "2009/06/01", "second day of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/31/2009#, -1, #1/1/2001#) = "2009/07/01", "last day of month")
-
-        gUTSetSubTest("Half month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/1/2009#, -2, #1/1/2001#) = "2009/07/01", "first day of first half of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/5/2009#, -2, #1/1/2001#) = "2009/07/01", "middle of first half of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/15/2009#, -2, #1/1/2001#) = "2009/07/01", "end of first half of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/16/2009#, -2, #1/1/2001#) = "2009/07/16", "first day of second half of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/21/2009#, -2, #1/1/2001#) = "2009/07/16", "middle of second half of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/31/2009#, -2, #1/1/2001#) = "2009/07/16", "last day of second half of month")
-
-        gUTSetSubTest("Quarter month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/1/2009#, -4, #1/1/2001#) = "2009/07/01", "first day of first quarter of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/5/2009#, -4, #1/1/2001#) = "2009/07/01", "middle of first quarter of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/8/2009#, -4, #1/1/2001#) = "2009/07/01", "end of first quarter of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/9/2009#, -4, #1/1/2001#) = "2009/07/09", "first day of second quarter of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/12/2009#, -4, #1/1/2001#) = "2009/07/09", "middle of second quarter of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/16/2009#, -4, #1/1/2001#) = "2009/07/09", "last day of second quarter of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/17/2009#, -4, #1/1/2001#) = "2009/07/17", "first day of third quarter of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/24/2009#, -4, #1/1/2001#) = "2009/07/17", "last day of third quarter of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/25/2009#, -4, #1/1/2001#) = "2009/07/25", "first day of last quarter of month")
-
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/31/2009#, -4, #1/1/2001#) = "2009/07/25", "last day of last quarter of month")
-
-    End Sub
-
-    <Test>
     Public Sub TestRepeat()
 
-        gUTSetTestTitle("Test repeat sequences")
         Dim objUTReg As UTRegister
 
         gUTSetSubTest("Test register loading")
@@ -1301,140 +764,7 @@ Friend Class UTMainForm
     End Sub
 
     <Test>
-    Public Sub TestAmountsToWords()
-
-        gUTSetTestTitle("Test gstrAmountToWords()")
-
-        gUTSetSubTest("Main")
-
-        TestOneAmountToWords(0, "zero")
-        TestOneAmountToWords(1, "one")
-        TestOneAmountToWords(1.1D, "one")
-        TestOneAmountToWords(1.9D, "one")
-        TestOneAmountToWords(2, "two")
-        TestOneAmountToWords(3, "three")
-        TestOneAmountToWords(3.01D, "three")
-        TestOneAmountToWords(3.99D, "three")
-        TestOneAmountToWords(4, "four")
-        TestOneAmountToWords(5, "five")
-        TestOneAmountToWords(6, "six")
-        TestOneAmountToWords(7, "seven")
-        TestOneAmountToWords(8, "eight")
-        TestOneAmountToWords(9, "nine")
-        TestOneAmountToWords(10, "ten")
-        TestOneAmountToWords(11, "eleven")
-        TestOneAmountToWords(12, "twelve")
-        TestOneAmountToWords(13, "thirteen")
-        TestOneAmountToWords(14, "fourteen")
-        TestOneAmountToWords(15, "fifteen")
-        TestOneAmountToWords(16, "sixteen")
-        TestOneAmountToWords(17, "seventeen")
-        TestOneAmountToWords(18, "eighteen")
-        TestOneAmountToWords(19, "nineteen")
-        TestOneAmountToWords(20, "twenty")
-        TestOneAmountToWords(21, "twenty one")
-        TestOneAmountToWords(22, "twenty two")
-        TestOneAmountToWords(29, "twenty nine")
-        TestOneAmountToWords(30, "thirty")
-        TestOneAmountToWords(31, "thirty one")
-        TestOneAmountToWords(39, "thirty nine")
-        TestOneAmountToWords(40, "forty")
-        TestOneAmountToWords(50, "fifty")
-        TestOneAmountToWords(60, "sixty")
-        TestOneAmountToWords(70, "seventy")
-        TestOneAmountToWords(80, "eighty")
-        TestOneAmountToWords(90, "ninety")
-        TestOneAmountToWords(91, "ninety one")
-        TestOneAmountToWords(99, "ninety nine")
-        TestOneAmountToWords(100, "one hundred")
-        TestOneAmountToWords(101, "one hundred one")
-        TestOneAmountToWords(102, "one hundred two")
-        TestOneAmountToWords(110, "one hundred ten")
-        TestOneAmountToWords(111, "one hundred eleven")
-        TestOneAmountToWords(112, "one hundred twelve")
-        TestOneAmountToWords(119, "one hundred nineteen")
-        TestOneAmountToWords(120, "one hundred twenty")
-        TestOneAmountToWords(121, "one hundred twenty one")
-        TestOneAmountToWords(129, "one hundred twenty nine")
-        TestOneAmountToWords(130, "one hundred thirty")
-        TestOneAmountToWords(190, "one hundred ninety")
-        TestOneAmountToWords(199, "one hundred ninety nine")
-        TestOneAmountToWords(200, "two hundred")
-        TestOneAmountToWords(201, "two hundred one")
-        TestOneAmountToWords(210, "two hundred ten")
-        TestOneAmountToWords(211, "two hundred eleven")
-        TestOneAmountToWords(900, "nine hundred")
-        TestOneAmountToWords(990, "nine hundred ninety")
-        TestOneAmountToWords(999, "nine hundred ninety nine")
-        TestOneAmountToWords(1000, "one thousand")
-        TestOneAmountToWords(1001, "one thousand one")
-        TestOneAmountToWords(1002, "one thousand two")
-        TestOneAmountToWords(1010, "one thousand ten")
-        TestOneAmountToWords(1011, "one thousand eleven")
-        TestOneAmountToWords(1019, "one thousand nineteen")
-        TestOneAmountToWords(1020, "one thousand twenty")
-        TestOneAmountToWords(1021, "one thousand twenty one")
-        TestOneAmountToWords(1099, "one thousand ninety nine")
-        TestOneAmountToWords(1100, "one thousand one hundred")
-        TestOneAmountToWords(1101, "one thousand one hundred one")
-        TestOneAmountToWords(1102, "one thousand one hundred two")
-        TestOneAmountToWords(1119, "one thousand one hundred nineteen")
-        TestOneAmountToWords(1130, "one thousand one hundred thirty")
-        TestOneAmountToWords(1131, "one thousand one hundred thirty one")
-        TestOneAmountToWords(1200, "one thousand two hundred")
-        TestOneAmountToWords(1280, "one thousand two hundred eighty")
-        TestOneAmountToWords(1289, "one thousand two hundred eighty nine")
-        TestOneAmountToWords(1999, "one thousand nine hundred ninety nine")
-        TestOneAmountToWords(2000, "two thousand")
-        TestOneAmountToWords(2001, "two thousand one")
-        TestOneAmountToWords(2015, "two thousand fifteen")
-        TestOneAmountToWords(2050, "two thousand fifty")
-        TestOneAmountToWords(2059, "two thousand fifty nine")
-        TestOneAmountToWords(2150, "two thousand one hundred fifty")
-        TestOneAmountToWords(2159, "two thousand one hundred fifty nine")
-        TestOneAmountToWords(9999, "nine thousand nine hundred ninety nine")
-        TestOneAmountToWords(10000, "ten thousand")
-        TestOneAmountToWords(10001, "ten thousand one")
-        TestOneAmountToWords(10019, "ten thousand nineteen")
-        TestOneAmountToWords(10021, "ten thousand twenty one")
-        TestOneAmountToWords(10200, "ten thousand two hundred")
-        TestOneAmountToWords(10209, "ten thousand two hundred nine")
-        TestOneAmountToWords(11000, "eleven thousand")
-        TestOneAmountToWords(12500, "twelve thousand five hundred")
-        TestOneAmountToWords(12502, "twelve thousand five hundred two")
-        TestOneAmountToWords(12150, "twelve thousand one hundred fifty")
-        TestOneAmountToWords(12152, "twelve thousand one hundred fifty two")
-        TestOneAmountToWords(19000, "nineteen thousand")
-        TestOneAmountToWords(19999, "nineteen thousand nine hundred ninety nine")
-        TestOneAmountToWords(20000, "twenty thousand")
-        TestOneAmountToWords(20001, "twenty thousand one")
-        TestOneAmountToWords(20200, "twenty thousand two hundred")
-        TestOneAmountToWords(20901, "twenty thousand nine hundred one")
-        TestOneAmountToWords(32949, "thirty two thousand nine hundred forty nine")
-        TestOneAmountToWords(100000, "one hundred thousand")
-        TestOneAmountToWords(100500, "one hundred thousand five hundred")
-        TestOneAmountToWords(100522, "one hundred thousand five hundred twenty two")
-        TestOneAmountToWords(150000, "one hundred fifty thousand")
-        TestOneAmountToWords(150001, "one hundred fifty thousand one")
-        TestOneAmountToWords(152401, "one hundred fifty two thousand four hundred one")
-        TestOneAmountToWords(152471, "one hundred fifty two thousand four hundred seventy one")
-        TestOneAmountToWords(1000000, "one million")
-        TestOneAmountToWords(1200000, "one million two hundred thousand")
-        TestOneAmountToWords(1200471, "one million two hundred thousand four hundred seventy one")
-
-    End Sub
-
-    Private Sub TestOneAmountToWords(ByVal curInput As Decimal, ByVal strExpectedOutput As String)
-
-        Dim strActualOutput As String
-        strActualOutput = MoneyFormat.strAmountToWords(curInput)
-        gUTAssert(strExpectedOutput = strActualOutput, curInput & " yields <" & strActualOutput & "> instead of <" & strExpectedOutput & ">")
-    End Sub
-
-    <Test>
     Public Sub TestSecurity()
-
-        gUTSetTestTitle("Test Security")
 
         gUTSetSubTest("Main")
 
@@ -1482,8 +812,6 @@ Friend Class UTMainForm
 
     <Test>
     Public Sub TestCriticalOperation()
-
-        gUTSetTestTitle("Test Critical Operation")
 
         gUTSetSubTest("Main")
 
@@ -1546,16 +874,8 @@ Friend Class UTMainForm
         mobjCompany.objSecurity.CreateEmpty()
     End Sub
 
-    Public Sub UTMainForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        OneTimeSetup()
-    End Sub
-
     <OneTimeTearDown>
     Public Sub OneTimeTearDown()
         mobjCompany.Teardown()
-    End Sub
-
-    Public Sub UTMainForm_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
-        OneTimeTearDown()
     End Sub
 End Class

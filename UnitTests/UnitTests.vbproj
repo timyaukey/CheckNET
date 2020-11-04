@@ -8,12 +8,13 @@
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{95760BD6-36BF-4F48-99AB-0AADEF68FD91}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <StartupObject>Willowsoft.CheckBook.UnitTests.My.MyApplication</StartupObject>
+    <OutputType>Library</OutputType>
+    <StartupObject>
+    </StartupObject>
     <RootNamespace>Willowsoft.CheckBook.UnitTests</RootNamespace>
     <AssemblyName>Willowsoft.CheckBook.UnitTests</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>WindowsForms</MyType>
+    <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <OptionExplicit>On</OptionExplicit>
     <OptionCompare>Binary</OptionCompare>
@@ -84,6 +85,8 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImportFixture.vb" />
+    <Compile Include="MiscFunctionsFixture.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -99,12 +102,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="UTMainForm.Designer.vb">
-      <DependentUpon>UTMainForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="UTMainForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="CoreFixture.vb" />
+    <Compile Include="RegisterSearchFixture.vb" />
     <Compile Include="UTMisc.vb" />
     <Compile Include="UTRegister.vb" />
   </ItemGroup>
@@ -113,10 +112,6 @@
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UTMainForm.resX">
-      <DependentUpon>UTMainForm.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
