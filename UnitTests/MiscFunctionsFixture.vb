@@ -3,6 +3,7 @@ Option Explicit On
 
 <TestFixture>
 Public Class MiscFunctionsFixture
+    Private mobjCompany As Company
 
     <Test>
     Public Sub TestFunctions()
@@ -289,6 +290,16 @@ Public Class MiscFunctionsFixture
         Dim strActualOutput As String
         strActualOutput = MoneyFormat.strAmountToWords(curInput)
         gUTAssert(strExpectedOutput = strActualOutput, curInput & " yields <" & strActualOutput & "> instead of <" & strExpectedOutput & ">")
+    End Sub
+
+    <OneTimeSetUp>
+    Public Sub OneTimeSetup()
+        mobjCompany = gobjUTStandardSetup()
+    End Sub
+
+    <OneTimeTearDown>
+    Public Sub OneTimeTearDown()
+        gUTStandardTearDown(mobjCompany)
     End Sub
 
 End Class

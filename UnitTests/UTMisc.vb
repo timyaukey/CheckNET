@@ -17,6 +17,18 @@ Module UTMisc
 		Assert.Fail(gstrUTSubTest + ":: " + strFailMsg)
 	End Sub
 
+	Public Function gobjUTStandardSetup() As Company
+		Dim strDataPathValue As String = My.Application.Info.DirectoryPath & "\..\..\Data"
+		Dim objCompany As Company = New Company(strDataPathValue)
+		CompanyLoader.LoadGlobalLists(objCompany)
+		objCompany.objSecurity.CreateEmpty()
+		Return objCompany
+	End Function
+
+	Public Sub gUTStandardTearDown(ByVal objCompany As Company)
+		objCompany.Teardown()
+	End Sub
+
 	Public Function gobjUTNewReg(Optional ByVal strRegisterKey As String = "1") As UTRegister
 		Dim objUTReg As UTRegister
 		objUTReg = New UTRegister

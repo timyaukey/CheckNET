@@ -235,15 +235,12 @@ Public Class RegisterSearchFixture
 
     <OneTimeSetUp>
     Public Sub OneTimeSetup()
-        Dim strDataPathValue As String = My.Application.Info.DirectoryPath & "\..\..\Data"
-        mobjCompany = New Company(strDataPathValue)
-        CompanyLoader.LoadGlobalLists(mobjCompany)
-        mobjCompany.objSecurity.CreateEmpty()
+        mobjCompany = gobjUTStandardSetup()
     End Sub
 
     <OneTimeTearDown>
     Public Sub OneTimeTearDown()
-        mobjCompany.Teardown()
+        gUTStandardTearDown(mobjCompany)
     End Sub
 
 End Class
