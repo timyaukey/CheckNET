@@ -238,8 +238,8 @@ Friend Class SearchForm
         Else
             UITools.AddListSubItem(objItem, 4, "")
             UITools.AddListSubItem(objItem, 5, "")
-            UITools.AddListSubItem(objItem, 6, "")
-            UITools.AddListSubItem(objItem, 7, "")
+            UITools.AddListSubItem(objItem, 6, objTrx.strPONumber)
+            UITools.AddListSubItem(objItem, 7, objTrx.strInvoiceNum)
             UITools.AddListSubItem(objItem, 8, "")
             UITools.AddListSubItem(objItem, 9, "")
             UITools.AddListSubItem(objItem, 10, "")

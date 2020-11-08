@@ -250,21 +250,21 @@ Public Class NormalTrx
 
     End Function
 
-    Public Function strSummarizePONumber() As String
+    Public Overrides ReadOnly Property strPONumber() As String
+        Get
+            Dim objSplit As TrxSplit
+            Dim strPONumberSummary As String = ""
 
-        Dim objSplit As TrxSplit
-        Dim strPONumber As String = ""
-
-        For Each objSplit In Me.colSplits
-            If strPONumber = "" Then
-                strPONumber = objSplit.strPONumber
-            ElseIf strPONumber <> objSplit.strPONumber And objSplit.strPONumber <> "" Then
-                Return "(mixed)"
-            End If
-        Next objSplit
-        Return strPONumber
-
-    End Function
+            For Each objSplit In Me.colSplits
+                If strPONumberSummary = "" Then
+                    strPONumberSummary = objSplit.strPONumber
+                ElseIf strPONumberSummary <> objSplit.strPONumber And objSplit.strPONumber <> "" Then
+                    Return "(mixed)"
+                End If
+            Next objSplit
+            Return strPONumberSummary
+        End Get
+    End Property
 
     Public Function strSummarizeTerms() As String
 
@@ -282,21 +282,21 @@ Public Class NormalTrx
 
     End Function
 
-    Public Function strSummarizeInvoiceNum() As String
+    Public Overrides ReadOnly Property strInvoiceNum() As String
+        Get
+            Dim objSplit As TrxSplit
+            Dim strInvNumber As String = ""
 
-        Dim objSplit As TrxSplit
-        Dim strInvNumber As String = ""
-
-        For Each objSplit In Me.colSplits
-            If strInvNumber = "" Then
-                strInvNumber = objSplit.strInvoiceNum
-            ElseIf strInvNumber <> objSplit.strInvoiceNum And objSplit.strInvoiceNum <> "" Then
-                Return "(mixed)"
-            End If
-        Next objSplit
-        Return strInvNumber
-
-    End Function
+            For Each objSplit In Me.colSplits
+                If strInvNumber = "" Then
+                    strInvNumber = objSplit.strInvoiceNum
+                ElseIf strInvNumber <> objSplit.strInvoiceNum And objSplit.strInvoiceNum <> "" Then
+                    Return "(mixed)"
+                End If
+            Next objSplit
+            Return strInvNumber
+        End Get
+    End Property
 
     Public Sub SummarizeSplits(ByVal objCompany As Company, ByRef strCategory As String, ByRef strPONumber As String,
                                 ByRef strInvoiceNum As String, ByRef strInvoiceDate As String, ByRef strDueDate As String,

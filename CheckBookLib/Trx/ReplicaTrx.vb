@@ -5,6 +5,8 @@ Public Class ReplicaTrx
     Inherits Trx
 
     Private mstrCatKey As String
+    Private mstrPONumber As String
+    Private mstrInvoiceNum As String
 
     Public Sub New(ByVal objReg_ As Register)
         MyBase.New(objReg_)
@@ -16,8 +18,21 @@ Public Class ReplicaTrx
         End Get
     End Property
 
+    Public Overrides ReadOnly Property strPONumber As String
+        Get
+            Return mstrPONumber
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property strInvoiceNum As String
+        Get
+            Return mstrInvoiceNum
+        End Get
+    End Property
+
     Public Sub NewStartReplica(ByVal blnWillAddToRegister As Boolean, ByVal datDate_ As Date, ByVal strDescription_ As String,
-                              ByVal strCatKey_ As String, ByVal curAmount_ As Decimal, ByVal blnFake_ As Boolean)
+                              ByVal strCatKey_ As String, ByVal strPONumber_ As String, ByVal strInvoiceNum_ As String,
+                               ByVal curAmount_ As Decimal, ByVal blnFake_ As Boolean)
 
         If blnWillAddToRegister Then
             mobjReg.ClearFirstAffected()
@@ -27,6 +42,8 @@ Public Class ReplicaTrx
         mdatDate = datDate_
         mstrDescription = strDescription_
         mstrCatKey = strCatKey_
+        mstrPONumber = strPONumber_
+        mstrInvoiceNum = strInvoiceNum_
         mstrMemo = ""
         mlngStatus = TrxStatus.NonBank
         mblnFake = blnFake_
@@ -48,7 +65,7 @@ Public Class ReplicaTrx
 
     Public Overrides Function objClone(ByVal blnWillAddToRegister As Boolean) As Trx
         Dim objReplicaTrx As ReplicaTrx = New ReplicaTrx(mobjReg)
-        objReplicaTrx.NewStartReplica(blnWillAddToRegister, mdatDate, mstrDescription, mstrCatKey, mcurAmount, mblnFake)
+        objReplicaTrx.NewStartReplica(blnWillAddToRegister, mdatDate, mstrDescription, mstrCatKey, mstrPONumber, mstrInvoiceNum, mcurAmount, mblnFake)
         Return objReplicaTrx
     End Function
 
@@ -63,8 +80,4 @@ Public Class ReplicaTrx
             Return ""
         End Get
     End Property
-
-    Public Function objGetTrxManager() As ReplicaTrxManager
-        Return New ReplicaTrxManager(Me)
-    End Function
 End Class

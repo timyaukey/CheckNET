@@ -267,9 +267,9 @@ Friend Class RegisterForm
         ConfigGridCol(intCol, mintColCategory, "Category", 1800,
             Function(objTrx As Trx) objTrx.strCategory)
         ConfigGridCol(intCol, mintColPONumber, "PO#", 900,
-            Function(objTrx As Trx) If(objTrx.GetType() Is GetType(NormalTrx), DirectCast(objTrx, NormalTrx).strSummarizePONumber(), ""))
+            Function(objTrx As Trx) objTrx.strPONumber)
         ConfigGridCol(intCol, mintColInvoiceNum, "Invoice#", 900,
-            Function(objTrx As Trx) If(objTrx.GetType() Is GetType(NormalTrx), DirectCast(objTrx, NormalTrx).strSummarizeInvoiceNum(), ""))
+            Function(objTrx As Trx) objTrx.strInvoiceNum)
         ConfigGridCol(intCol, mintColInvoiceDate, "Inv. Date", 700,
             Function(objTrx As Trx) If(objTrx.GetType() Is GetType(NormalTrx), DirectCast(objTrx, NormalTrx).strSummarizeInvoiceDate(), ""))
         ConfigGridCol(intCol, mintColDueDate, "Due Date", 700,

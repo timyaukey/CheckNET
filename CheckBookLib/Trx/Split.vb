@@ -247,13 +247,13 @@ Public Class TrxSplit
                                 strReplDescr = objNormalTrx.strDescription
                             End If
                             objReplicaTrx.NewStartReplica(True, objNormalTrx.datDate, strReplDescr,
-                                                          strCatKey, -mcurAmount, objNormalTrx.blnFake)
+                                strCatKey, mstrPONumber, mstrInvoiceNum, -mcurAmount, objNormalTrx.blnFake)
                             If blnLoading Then
                                 objReg.NewLoadEnd(objReplicaTrx)
                             Else
                                 objReg.NewAddEnd(objReplicaTrx, New LogAddNull(), "", blnSetChanged:=False)
                             End If
-                            mobjReplicaManager = objReplicaTrx.objGetTrxManager()
+                            mobjReplicaManager = New ReplicaTrxManager(objReplicaTrx)
                         End If
                     Next
                 End If

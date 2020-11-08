@@ -322,6 +322,18 @@ Public MustInherit Class Trx
         End Get
     End Property
 
+    Public Overridable ReadOnly Property strInvoiceNum() As String
+        Get
+            Return ""
+        End Get
+    End Property
+
+    Public Overridable ReadOnly Property strPONumber() As String
+        Get
+            Return ""
+        End Get
+    End Property
+
     Public Sub Delete(ByVal objDeleteLogger As ILogDelete, ByVal strLogTitle As String,
                       Optional ByVal blnSetChanged As Boolean = True)
         mobjReg.Delete(Me, objDeleteLogger, strLogTitle, blnSetChanged)
