@@ -152,8 +152,8 @@ Public Class ImportUtilities
             strDescription = mstrTrxPayee
             curAmount = CDec(mstrTrxAmount)
             strMemo = Trim(mstrTrxMemo)
-            datSplitInvoiceDate = System.DateTime.FromOADate(0)
-            datSplitDueDate = System.DateTime.FromOADate(0)
+            datSplitInvoiceDate = Utilities.datEmpty
+            datSplitDueDate = Utilities.datEmpty
             With mobjCompany.objCategories
                 intCatIndex = .intLookupValue1(mstrTrxCategory)
                 If intCatIndex > 0 Then

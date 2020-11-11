@@ -271,7 +271,7 @@ Public Class TrialBalanceForm
             For Each objGroup As LineItemGroup In objIncExpTotal.colGroups
                 For Each objItem As ReportLineItem In objGroup.colItems
                     If objItem.curTotal <> 0 Then
-                        objTrx.AddSplit("", objItem.strItemKey, "", "", System.DateTime.FromOADate(0), System.DateTime.FromOADate(0), "", "", -objItem.curTotal)
+                        objTrx.AddSplit("", objItem.strItemKey, "", "", Utilities.datEmpty, Utilities.datEmpty, "", "", -objItem.curTotal)
                     End If
                 Next
             Next

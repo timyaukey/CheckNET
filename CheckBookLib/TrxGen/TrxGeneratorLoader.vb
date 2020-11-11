@@ -670,8 +670,8 @@ Public Module TrxGeneratorLoader
         'Amount.
         datSplit.curAmount = curAmount
         'No dates.
-        datSplit.datInvoiceDate = System.DateTime.FromOADate(0)
-        datSplit.datDueDate = System.DateTime.FromOADate(0)
+        datSplit.datInvoiceDate = Utilities.datEmpty
+        datSplit.datDueDate = Utilities.datEmpty
         'Add to splits collection.
         datTrxTemplate.intSplits = 1
         ReDim datTrxTemplate.adatSplits(1)

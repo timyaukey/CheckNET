@@ -116,7 +116,7 @@ Public Module TrxGenerator
                     End If
                     c.datBudgetStarts = DateAdd(Microsoft.VisualBasic.DateInterval.Day, 1, gdatIncrementDate(c.datDate, c.lngBudgetUnit, -c.intBudgetNumber))
                 End If
-                If c.datBudgetStarts = System.DateTime.FromOADate(0) Then
+                If c.datBudgetStarts = Utilities.datEmpty Then
                     gstrCreateOneTrx = "No budget ending date"
                     Exit Function
                 End If
@@ -242,7 +242,7 @@ Public Module TrxGenerator
             'Find the sample pair to interpolate between.
             'Assumes the samples are in ascending date order.
             blnAmountSet = False
-            datSampleDate = System.DateTime.FromOADate(0)
+            datSampleDate = Utilities.datEmpty
             For intSampleIndex = 1 To UBound(datSamples)
                 datPrevSampleDate = datSampleDate
                 datSampleDate = datSamples(intSampleIndex).datDate

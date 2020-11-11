@@ -7,7 +7,7 @@ namespace Willowsoft.CheckBook.Powershell
 {
 
     [Cmdlet(VerbsCommon.New, "CheckbookNormalTrx")]
-    [OutputType(typeof(NormalTrx))]
+    [OutputType(typeof(NormalTrx))]  // TO DO: Don't need this if do not call WriteObject()
     public class NewNormalTrx : Cmdlet
     {
         [Parameter(Mandatory = true)]
@@ -24,6 +24,12 @@ namespace Willowsoft.CheckBook.Powershell
 
         [Parameter]
         public Trx.TrxStatus Status { get; set; }
+
+        [Parameter]
+        public SplitContent OneSplit { get; set; }
+
+        [Parameter]
+        public SplitContent[] Splits { get; set; }
 
         public NewNormalTrx()
         {
@@ -46,6 +52,17 @@ namespace Willowsoft.CheckBook.Powershell
                 intRepeatSeq_: 0,
                 strImportKey_: "",
                 strRepeatKey_: "");
+            // TO DO: Enforce OneSplit or Splits
+            if (OneSplit != null)
+                OneSplit.AddToNormalTrx(normalTrx);
+            else
+            {
+                foreach(SplitContent split in Splits)
+                {
+                    split.AddToNormalTrx(normalTrx);
+                }
+            }
+            // TO DO: Make it add to register with NormalTrxManager instead of returning object.
             WriteObject(normalTrx);
         }
     }

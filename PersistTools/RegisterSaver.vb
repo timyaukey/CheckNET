@@ -68,10 +68,10 @@ Public Class RegisterSaver
                     If Len(.strInvoiceNum) > 0 Then
                         SaveLine("SN" & .strInvoiceNum)
                     End If
-                    If .datInvoiceDate <> System.DateTime.FromOADate(0) Then
+                    If .datInvoiceDate <> Utilities.datEmpty Then
                         SaveLine("SI" & Utilities.strFormatDate(.datInvoiceDate))
                     End If
-                    If .datDueDate <> System.DateTime.FromOADate(0) Then
+                    If .datDueDate <> Utilities.datEmpty Then
                         SaveLine("SD" & Utilities.strFormatDate(.datDueDate))
                     End If
                     If Len(.strTerms) > 0 Then

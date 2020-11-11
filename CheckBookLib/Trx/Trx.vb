@@ -302,7 +302,7 @@ Public MustInherit Class Trx
     End Property
 
     Protected Sub RaiseErrorOnBadData(ByVal strRoutine As String)
-        If mdatDate = System.DateTime.FromOADate(0) Then
+        If mdatDate = Utilities.datEmpty Then
             gRaiseError("Missing date in " & strRoutine)
         End If
         If mstrDescription = "" Then
@@ -349,7 +349,7 @@ Public MustInherit Class Trx
         If Not mobjReg.objTrx(mlngIndex) Is Me Then
             mobjReg.FireValidationError(Me, "lngIndex is wrong")
         End If
-        If mdatDate = System.DateTime.FromOADate(0) Then
+        If mdatDate = Utilities.datEmpty Then
             mobjReg.FireValidationError(Me, "Missing date")
         End If
         If mstrRepeatKey <> "" Then

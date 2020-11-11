@@ -568,12 +568,12 @@ Friend Class TrxForm
                 .strCategoryKey = objSplit.strCategoryKey
                 .strPONumber = objSplit.strPONumber
                 .strInvoiceNum = objSplit.strInvoiceNum
-                If objSplit.datInvoiceDate = System.DateTime.FromOADate(0) Then
+                If objSplit.datInvoiceDate = Utilities.datEmpty Then
                     .strInvoiceDate = ""
                 Else
                     .strInvoiceDate = Utilities.strFormatDate(objSplit.datInvoiceDate)
                 End If
-                If objSplit.datDueDate = System.DateTime.FromOADate(0) Then
+                If objSplit.datDueDate = Utilities.datEmpty Then
                     .strDueDate = ""
                 Else
                     .strDueDate = Utilities.strFormatDate(objSplit.datDueDate)
@@ -1321,12 +1321,12 @@ Friend Class TrxForm
         If blnSplitUsed(intSplit) Then
             With maudtSplits(intSplit)
                 If .strInvoiceDate = "" Then
-                    datInvoiceDate = System.DateTime.FromOADate(0)
+                    datInvoiceDate = Utilities.datEmpty
                 Else
                     datInvoiceDate = CDate(.strInvoiceDate)
                 End If
                 If .strDueDate = "" Then
-                    datDueDate = System.DateTime.FromOADate(0)
+                    datDueDate = Utilities.datEmpty
                 Else
                     datDueDate = CDate(.strDueDate)
                 End If

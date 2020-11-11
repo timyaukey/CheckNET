@@ -271,12 +271,12 @@ Friend Class SearchForm
         Else
             curAvailable = 0
         End If
-        If objSplit.datInvoiceDate = System.DateTime.FromOADate(0) Then
+        If objSplit.datInvoiceDate = Utilities.datEmpty Then
             strInvoiceDate = ""
         Else
             strInvoiceDate = Utilities.strFormatDate(objSplit.datInvoiceDate)
         End If
-        If objSplit.datDueDate = System.DateTime.FromOADate(0) Then
+        If objSplit.datDueDate = Utilities.datEmpty Then
             strDueDate = ""
         Else
             strDueDate = Utilities.strFormatDate(objSplit.datDueDate)

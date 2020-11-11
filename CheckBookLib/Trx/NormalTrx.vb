@@ -213,16 +213,16 @@ Public Class NormalTrx
     Public Function strSummarizeDueDate() As String
 
         Dim objSplit As TrxSplit
-        Dim datDueDate As Date = System.DateTime.FromOADate(0)
+        Dim datDueDate As Date = Utilities.datEmpty
 
         For Each objSplit In Me.colSplits
-            If datDueDate = System.DateTime.FromOADate(0) Then
+            If datDueDate = Utilities.datEmpty Then
                 datDueDate = objSplit.datDueDate
-            ElseIf datDueDate <> objSplit.datDueDate And objSplit.datDueDate <> System.DateTime.FromOADate(0) Then
+            ElseIf datDueDate <> objSplit.datDueDate And objSplit.datDueDate <> Utilities.datEmpty Then
                 Return "(mixed)"
             End If
         Next objSplit
-        If datDueDate = System.DateTime.FromOADate(0) Then
+        If datDueDate = Utilities.datEmpty Then
             Return ""
         Else
             Return datDueDate.ToString(Utilities.strDateWithTwoDigitYear)
@@ -233,16 +233,16 @@ Public Class NormalTrx
     Public Function strSummarizeInvoiceDate() As String
 
         Dim objSplit As TrxSplit
-        Dim datInvoiceDate As Date = System.DateTime.FromOADate(0)
+        Dim datInvoiceDate As Date = Utilities.datEmpty
 
         For Each objSplit In Me.colSplits
-            If datInvoiceDate = System.DateTime.FromOADate(0) Then
+            If datInvoiceDate = Utilities.datEmpty Then
                 datInvoiceDate = objSplit.datInvoiceDate
-            ElseIf datInvoiceDate <> objSplit.datInvoiceDate And objSplit.datInvoiceDate <> System.DateTime.FromOADate(0) Then
+            ElseIf datInvoiceDate <> objSplit.datInvoiceDate And objSplit.datInvoiceDate <> Utilities.datEmpty Then
                 Return "(mixed)"
             End If
         Next objSplit
-        If datInvoiceDate = System.DateTime.FromOADate(0) Then
+        If datInvoiceDate = Utilities.datEmpty Then
             Return ""
         Else
             Return datInvoiceDate.ToString(Utilities.strDateWithTwoDigitYear)
@@ -331,12 +331,12 @@ Public Class NormalTrx
                 strCategory = objCompany.objCategories.strTranslateKey(strCatKey)
                 strInvoiceNum = strInvoiceNum2
                 strPONumber = strPONumber2
-                If datInvoiceDate = System.DateTime.FromOADate(0) Then
+                If datInvoiceDate = Utilities.datEmpty Then
                     strInvoiceDate = ""
                 Else
                     strInvoiceDate = Utilities.strFormatDate(datInvoiceDate)
                 End If
-                If datDueDate = System.DateTime.FromOADate(0) Then
+                If datDueDate = Utilities.datEmpty Then
                     strDueDate = ""
                 Else
                     strDueDate = Utilities.strFormatDate(datDueDate)

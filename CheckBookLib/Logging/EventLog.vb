@@ -183,10 +183,10 @@ Public Class EventLog
                         If objSplit.strInvoiceNum <> "" Then
                             .SetAttribute("InvNum", objSplit.strInvoiceNum)
                         End If
-                        If objSplit.datInvoiceDate <> System.DateTime.FromOADate(0) Then
+                        If objSplit.datInvoiceDate <> Utilities.datEmpty Then
                             .SetAttribute("InvDate", Utilities.strFormatDate(objSplit.datInvoiceDate))
                         End If
-                        If objSplit.datDueDate <> System.DateTime.FromOADate(0) Then
+                        If objSplit.datDueDate <> Utilities.datEmpty Then
                             .SetAttribute("DueDate", Utilities.strFormatDate(objSplit.datDueDate))
                         End If
                         If objSplit.strTerms <> "" Then

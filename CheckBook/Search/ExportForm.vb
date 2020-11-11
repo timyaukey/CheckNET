@@ -149,10 +149,10 @@ Friend Class ExportForm
 
             datInvToUse = objSplit.datInvoiceDateEffective
             datDueToUse = objSplit.datDueDateEffective
-            If objSplit.datInvoiceDate > System.DateTime.FromOADate(0) Then
+            If objSplit.datInvoiceDate > Utilities.datEmpty Then
                 strInvDate = Utilities.strFormatDate(objSplit.datInvoiceDate)
             End If
-            If objSplit.datDueDate > System.DateTime.FromOADate(0) Then
+            If objSplit.datDueDate > Utilities.datEmpty Then
                 strDueDate = Utilities.strFormatDate(objSplit.datDueDate)
             End If
 

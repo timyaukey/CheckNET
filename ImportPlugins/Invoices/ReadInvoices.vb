@@ -90,7 +90,7 @@ Public Class ReadInvoices
         strTerms = Trim(astrParts(4))
         strDueDate = Trim(astrParts(5))
         If String.IsNullOrEmpty(strDueDate) Then
-            datDueDate = System.DateTime.FromOADate(0)
+            datDueDate = Utilities.datEmpty
         Else
             If Not Utilities.blnIsValidDate(strDueDate) Then
                 Throw New ImportReadException("Invalid due date in column 6")

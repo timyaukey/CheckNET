@@ -247,12 +247,12 @@ Public Class RegisterLoader
         mlngStatus = Trx.TrxStatus.Missing
         mobjTrxType = Nothing
         mstrNumber = ""
-        mdatDate = System.DateTime.FromOADate(0)
+        mdatDate = Utilities.datEmpty
         mstrMemo = ""
         mcurAmount = 0
         mcurNormalMatchRange = 0
         mblnAwaitingReview = False
-        mdatBudgetStarts = System.DateTime.FromOADate(0)
+        mdatBudgetStarts = Utilities.datEmpty
         mstrImportKey = ""
         mstrTransferKey = ""
         mstrBudgetKey = ""
@@ -268,8 +268,8 @@ Public Class RegisterLoader
         mstrSCategoryKey = ""
         mstrSPONumber = ""
         mstrSInvoiceNum = ""
-        mdatSInvoiceDate = System.DateTime.FromOADate(0)
-        mdatSDueDate = System.DateTime.FromOADate(0)
+        mdatSInvoiceDate = Utilities.datEmpty
+        mdatSDueDate = Utilities.datEmpty
         mstrSTerms = ""
         mstrSBudgetKey = ""
         mcurSAmount = 0
@@ -322,7 +322,7 @@ Public Class RegisterLoader
         If mobjTrxType Is Nothing Then
             RaiseError("CreateTrx", "No TN, TB or TT line before TZ")
         End If
-        If mdatDate = System.DateTime.FromOADate(0) Then
+        If mdatDate = Utilities.datEmpty Then
             RaiseError("CreateTrx", "No DT line for Trx")
         End If
         CreateOneTrx(mobjReg, mblnFake)
@@ -364,7 +364,7 @@ Public Class RegisterLoader
                     If mstrBudgetKey = "" Then
                         RaiseError("CreateTrx", "No KB line for budget Trx")
                     End If
-                    If mdatBudgetStarts = System.DateTime.FromOADate(0) Then
+                    If mdatBudgetStarts = Utilities.datEmpty Then
                         RaiseError("CreateTrx", "No budget starting date")
                     End If
                     Dim objBudgetTrx As BudgetTrx = New BudgetTrx(objTargetReg)

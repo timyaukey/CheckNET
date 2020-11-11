@@ -76,7 +76,7 @@ Public Class ReadDeposits
 
         objTrx = New ImportedTrx(Nothing)
 
-        datNull = System.DateTime.FromOADate(0)
+        datNull = Utilities.datEmpty
         objTrx.NewStartNormal(False, "", datDate, strDescription, "", Trx.TrxStatus.Unreconciled, New TrxGenImportData())
         objTrx.AddSplit("", "", "", "", datNull, datNull, "", "", curAmount)
 
