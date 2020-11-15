@@ -17,6 +17,7 @@ namespace Willowsoft.CheckBook.Powershell
 
         protected override void BeginProcessing()
         {
+            const string errorId = "AccountSearchFailure";
             Account acctMatch = null;
             foreach(Account acctTest in Company.colAccounts)
             {
@@ -25,29 +26,11 @@ namespace Willowsoft.CheckBook.Powershell
                     if (acctMatch == null)
                         acctMatch = acctTest;
                     else
-                    {
-                        WriteError(
-                            new ErrorRecord(
-                                new InvalidOperationException("Multiple accounts match account name"),
-                                "AccountSearchFailure",
-                                ErrorCategory.InvalidOperation,
-                                null)
-                            );
-                        return;
-                    }
+                        ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation("Multiple accounts match account name", errorId));
                 }
             }
             if (acctMatch == null)
-            {
-                WriteError(
-                    new ErrorRecord(
-                        new InvalidOperationException("Account name not found in company"),
-                        "AccountSearchFailure",
-                        ErrorCategory.InvalidOperation,
-                        null)
-                    );
-                return;
-            }
+                ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation("Account name not found in company", errorId));
             WriteObject(acctMatch);
         }
     }

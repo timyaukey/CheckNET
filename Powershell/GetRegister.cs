@@ -17,6 +17,7 @@ namespace Willowsoft.CheckBook.Powershell
 
         protected override void BeginProcessing()
         {
+            const string errorId = "RegisterSearchFailure";
             Register regMatch = null;
             foreach (Register regTest in Account.colRegisters)
             {
@@ -25,29 +26,11 @@ namespace Willowsoft.CheckBook.Powershell
                     if (regMatch == null)
                         regMatch = regTest;
                     else
-                    {
-                        WriteError(
-                            new ErrorRecord(
-                                new InvalidOperationException("Multiple registers match register name"),
-                                "RegisterSearchFailure",
-                                ErrorCategory.InvalidOperation,
-                                null)
-                            );
-                        return;
-                    }
+                        ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation("Multiple registers match register name", errorId));
                 }
             }
             if (regMatch == null)
-            {
-                WriteError(
-                    new ErrorRecord(
-                        new InvalidOperationException("Register name not found in account"),
-                        "RegisterSearchFailure",
-                        ErrorCategory.InvalidOperation,
-                        null)
-                    );
-                return;
-            }
+                ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation("Register name not found in account", errorId));
             WriteObject(regMatch);
         }
     }

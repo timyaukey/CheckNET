@@ -15,25 +15,25 @@ namespace Willowsoft.CheckBook.Powershell
         [Parameter(Mandatory = true)]
         public string Category { get; set; }
 
-        [Parameter()]
+        [Parameter]
         public string InvoiceNum { get; set; }
 
-        [Parameter()]
+        [Parameter]
         public string PONumber { get; set; }
 
-        [Parameter()]
+        [Parameter]
         public DateTime InvoiceDate { get; set; }
 
-        [Parameter()]
+        [Parameter]
         public DateTime DueDate { get; set; }
 
-        [Parameter()]
-        public string BudgetName { get; set; }
+        [Parameter]
+        public string Budget { get; set; }
 
-        [Parameter()]
+        [Parameter]
         public string Memo { get; set; }
 
-        [Parameter()]
+        [Parameter]
         public string Terms { get; set; }
 
         [Parameter(Mandatory = true)]
@@ -42,40 +42,32 @@ namespace Willowsoft.CheckBook.Powershell
         protected override void BeginProcessing()
         {
             // TO DO: Handle missing args and default values correctly
+            int catIndex = Company.objCategories.intLookupValue1(Category);
+            if (catIndex == 0)
+                ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation("Invalid category name [" + Category + "]", "CategoryNameFailure"));
+            string catKey = Company.objCategories.get_strKey(catIndex);
+            string budgetKey;
+            if (!string.IsNullOrEmpty(Budget))
+            {
+                int budIndex = Company.objBudgets.intLookupValue1(Budget);
+                if (budIndex == 0)
+                    ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation("Invalid budget name [" + Budget + "]", "BudgetNameFailure"));
+                budgetKey = Company.objBudgets.get_strKey(budIndex);
+            }
+            else
+                budgetKey = "";
             SplitContent split = new SplitContent
             {
-                strCatKey = Company.objCategories.strKeyToValue1(Category),
+                strCatKey = catKey,
                 strPONumber = PONumber,
                 strInvoiceNum = InvoiceNum,
                 datInvoice = InvoiceDate,
                 datDue = DueDate,
                 curAmount = Amount,
-                strBudgetKey=Company.objBudgets.strKeyToValue1(BudgetName), 
-                strMemo=Memo, 
-                strTerms=Terms
+                strBudgetKey = budgetKey,
+                strMemo = Memo,
+                strTerms = Terms
             };
-            if (string.IsNullOrEmpty(split.strCatKey))
-            {
-                WriteError(
-                    new ErrorRecord(
-                        new InvalidOperationException("Invalid category name"),
-                        "CategoryNameFailure",
-                        ErrorCategory.InvalidOperation,
-                        null)
-                    );
-                return;
-            }
-            if (!string.IsNullOrEmpty(BudgetName) & string.IsNullOrEmpty(split.strBudgetKey))
-            {
-                WriteError(
-                    new ErrorRecord(
-                        new InvalidOperationException("Invalid budget name"),
-                        "BudgetNameFailure",
-                        ErrorCategory.InvalidOperation,
-                        null)
-                    );
-                return;
-            }
             WriteObject(split);
         }
     }

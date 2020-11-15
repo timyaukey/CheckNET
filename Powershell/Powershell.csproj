@@ -45,13 +45,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloseCompany.cs" />
-    <Compile Include="NewNormalTrx.cs" />
+    <Compile Include="RemoveTrx.cs" />
+    <Compile Include="ErrorUtilities.cs" />
+    <Compile Include="AddNormalTrx.cs" />
     <Compile Include="GetAccount.cs" />
     <Compile Include="GetRegister.cs" />
-    <Compile Include="GetTransactions.cs" />
+    <Compile Include="GetTrx.cs" />
     <Compile Include="NewSplit.cs" />
     <Compile Include="OpenCompany.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShowTrx.cs" />
     <Compile Include="SplitContent.cs" />
   </ItemGroup>
   <ItemGroup>

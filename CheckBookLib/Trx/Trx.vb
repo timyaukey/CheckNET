@@ -346,8 +346,10 @@ Public MustInherit Class Trx
 
     Public Overridable Sub Validate()
         Dim objRepeatTrx As Trx
-        If Not mobjReg.objTrx(mlngIndex) Is Me Then
-            mobjReg.FireValidationError(Me, "lngIndex is wrong")
+        If mlngIndex > 0 Then
+            If Not mobjReg.objTrx(mlngIndex) Is Me Then
+                mobjReg.FireValidationError(Me, "lngIndex is wrong")
+            End If
         End If
         If mdatDate = Utilities.datEmpty Then
             mobjReg.FireValidationError(Me, "Missing date")

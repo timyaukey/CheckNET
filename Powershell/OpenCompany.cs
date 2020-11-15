@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Management.Automation;
 
 using Willowsoft.CheckBook.Lib;
@@ -28,16 +24,7 @@ namespace Willowsoft.CheckBook.Powershell
             Company company = new Company(Path);
             var error = CompanyLoader.objLoad(company, (account) => { }, authenticate);
             if (error != null)
-            {
-                WriteError(
-                    new ErrorRecord(
-                        new InvalidOperationException(error.strMessage),
-                        "CompanyLoadFailure", 
-                        ErrorCategory.InvalidOperation, 
-                        null)
-                    );
-                return;
-            }
+                ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation(error.strMessage, "CompanyLoadFailure"));
             WriteObject(company);
         }
 

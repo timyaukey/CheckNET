@@ -5,9 +5,9 @@ using Willowsoft.CheckBook.Lib;
 
 namespace Willowsoft.CheckBook.Powershell
 {
-    [Cmdlet(VerbsCommon.Get, "CheckbookTransactions")]
+    [Cmdlet(VerbsCommon.Get, "CheckbookTrx")]
     [OutputType(typeof(NormalTrx), typeof(BudgetTrx), typeof(TransferTrx), typeof(ReplicaTrx))]
-    public class GetTransactions : Cmdlet
+    public class GetTrx : Cmdlet
     {
         [Parameter(Mandatory = true)]
         public Register Register { get; set; }

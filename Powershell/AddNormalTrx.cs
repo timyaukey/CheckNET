@@ -6,9 +6,8 @@ using Willowsoft.CheckBook.Lib;
 namespace Willowsoft.CheckBook.Powershell
 {
 
-    [Cmdlet(VerbsCommon.New, "CheckbookNormalTrx")]
-    [OutputType(typeof(NormalTrx))]  // TO DO: Don't need this if do not call WriteObject()
-    public class NewNormalTrx : Cmdlet
+    [Cmdlet(VerbsCommon.Add, "CheckbookNormalTrx")]
+    public class AddNormalTrx : Cmdlet
     {
         [Parameter(Mandatory = true)]
         public Register Register { get; set; }
@@ -31,7 +30,7 @@ namespace Willowsoft.CheckBook.Powershell
         [Parameter]
         public SplitContent[] Splits { get; set; }
 
-        public NewNormalTrx()
+        public AddNormalTrx()
         {
             Status = Trx.TrxStatus.Unreconciled;
         }
@@ -52,18 +51,36 @@ namespace Willowsoft.CheckBook.Powershell
                 intRepeatSeq_: 0,
                 strImportKey_: "",
                 strRepeatKey_: "");
-            // TO DO: Enforce OneSplit or Splits
             if (OneSplit != null)
                 OneSplit.AddToNormalTrx(normalTrx);
-            else
+            else if (Splits != null)
             {
-                foreach(SplitContent split in Splits)
+                foreach (SplitContent split in Splits)
                 {
                     split.AddToNormalTrx(normalTrx);
                 }
             }
-            // TO DO: Make it add to register with NormalTrxManager instead of returning object.
-            WriteObject(normalTrx);
+            else
+                ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation("Either -OneSplit or -Splits must be specified", "NoSplits"));
+            try
+            {
+                Register.ValidationError += Register_ValidationError;
+                normalTrx.Validate();
+                if (TrxValidationError != null)
+                    ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation(TrxValidationError, "InvalidTrx"));
+                Register.NewAddEnd(normalTrx, new LogAdd(), "PowershellAddNormalTrx");
+            }
+            finally
+            {
+                Register.ValidationError -= Register_ValidationError;
+            }
+        }
+
+        private string TrxValidationError = null;
+
+        private void Register_ValidationError(Trx objTrx, string strMsg)
+        {
+            TrxValidationError = strMsg;
         }
     }
 }

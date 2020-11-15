@@ -18,9 +18,16 @@ namespace Willowsoft.CheckBook.Powershell
 
         public void AddToNormalTrx(NormalTrx trx)
         {
-            trx.AddSplit(strCategoryKey_: strCatKey, strPONumber_: strPONumber, strInvoiceNum_: strInvoiceNum, 
-                datInvoiceDate_: datInvoice, datDueDate_: datDue,
-                strTerms_: strTerms, strBudgetKey_: strBudgetKey, strMemo_: strMemo, curAmount_: curAmount);
+            trx.AddSplit(
+                strCategoryKey_: strCatKey, 
+                strPONumber_: strPONumber ?? "", 
+                strInvoiceNum_: strInvoiceNum ?? "",
+                datInvoiceDate_: (datInvoice <= Utilities.datEmpty) ? Utilities.datEmpty : datInvoice,
+                datDueDate_: (datDue <= Utilities.datEmpty) ? Utilities.datEmpty : datDue,
+                strTerms_: strTerms ?? "", 
+                strBudgetKey_: strBudgetKey ?? "", 
+                strMemo_: strMemo ?? "",
+                curAmount_: curAmount);
         }
     }
 }
