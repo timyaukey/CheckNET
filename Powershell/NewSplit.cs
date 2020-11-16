@@ -41,7 +41,6 @@ namespace Willowsoft.CheckBook.Powershell
             
         protected override void BeginProcessing()
         {
-            // TO DO: Handle missing args and default values correctly
             int catIndex = Company.objCategories.intLookupValue1(Category);
             if (catIndex == 0)
                 ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation("Invalid category name [" + Category + "]", "CategoryNameFailure"));

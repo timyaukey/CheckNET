@@ -5,8 +5,8 @@ using Willowsoft.CheckBook.Lib;
 
 namespace Willowsoft.CheckBook.Powershell
 {
-    [Cmdlet(VerbsCommon.Show, "CheckbookTrx")]
-    public class ShowTrx : Cmdlet
+    [Cmdlet(VerbsCommon.Get, "CheckbookSimpleTrx")]
+    public class SimplifyTrx : Cmdlet
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true)]
         public Trx Input { get; set; }
@@ -16,7 +16,7 @@ namespace Willowsoft.CheckBook.Powershell
             ShortTrx shortTrx = new ShortTrx
             {
                 Type = Input.GetType().Name,
-                Date = Input.datDate.ToShortDateString(),
+                Date = Input.datDate,
                 Description = Input.strDescription,
                 Category = Input.strCategory,
                 Amount = Input.curAmount
@@ -27,7 +27,7 @@ namespace Willowsoft.CheckBook.Powershell
         private class ShortTrx
         {
             public string Type;
-            public string Date;
+            public DateTime Date;
             public string Description;
             public string Category;
             public decimal Amount;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Management.Automation;
 
 using Willowsoft.CheckBook.Lib;
@@ -46,7 +47,15 @@ namespace Willowsoft.CheckBook.Powershell
         private void Execute<TTrx>()
             where TTrx : Trx
         {
+            // Copy the results to a temp list, because downstream pipeline
+            // consumers may alter trx in such as way that interferes with
+            // the iteration. Deleting a trx or changing its date are two examples.
+            List<TTrx> results = new List<TTrx>();
             foreach(TTrx trx in new RegDateRange<TTrx>(Register, StartDate, EndDate))
+            {
+                results.Add(trx);
+            }
+            foreach(TTrx trx in results)
             {
                 WriteObject(trx);
             }
