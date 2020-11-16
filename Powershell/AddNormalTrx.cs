@@ -24,7 +24,7 @@ namespace Willowsoft.CheckBook.Powershell
         [Parameter]
         public string Memo { get; set; }
 
-        [Parameter]
+        [Parameter(Mandatory = true)]
         public Trx.TrxStatus Status { get; set; }
 
         [Parameter]
