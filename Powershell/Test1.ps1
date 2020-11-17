@@ -21,6 +21,8 @@ $split2 = new-checkbooksplit -company $cmp -category E:Clothing -amount -194.500
 add-checkbooknormaltrx -register $reg -date 2/11/2019 -number 20004 -description "Fred Meyer" -status Reconciled -Splits ($split, $split2)
 
 get-checkbooktrx -register $reg -startdate 2/1/2019 -enddate 2/28/2019|get-checkbooksimpletrx|format-table
+
+save-checkbookcompany -company $cmp
 }
 finally
 {
