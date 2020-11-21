@@ -16,7 +16,8 @@ namespace Willowsoft.CheckBook.Powershell
             ShortTrx shortTrx = new ShortTrx
             {
                 Type = Input.GetType().Name,
-                Date = Input.datDate,
+                Date = Utilities.strFormatDate(Input.datDate),
+                Number = Input.strNumber,
                 Description = Input.strDescription,
                 Category = Input.strCategory,
                 Amount = Input.curAmount
@@ -27,7 +28,8 @@ namespace Willowsoft.CheckBook.Powershell
         private class ShortTrx
         {
             public string Type;
-            public DateTime Date;
+            public string Date;
+            public string Number;
             public string Description;
             public string Category;
             public decimal Amount;

@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloseCompany.cs" />
+    <Compile Include="FindNormalTrx.cs" />
     <Compile Include="RemoveTrx.cs" />
     <Compile Include="ErrorUtilities.cs" />
     <Compile Include="AddNormalTrx.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="SaveCompany.cs" />
     <Compile Include="SimplifyTrx.cs" />
     <Compile Include="SplitContent.cs" />
+    <Compile Include="UpdateNormalTrx.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
@@ -71,6 +73,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Test1.ps1" />
+    <None Include="Test2.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
