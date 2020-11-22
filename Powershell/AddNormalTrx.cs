@@ -66,7 +66,9 @@ namespace Willowsoft.CheckBook.Powershell
                 intRepeatSeq_: 0,
                 strImportKey_: ImportKey == null ? "" : ImportKey,
                 strRepeatKey_: "");
-            if (OneSplit != null)
+            if (OneSplit != null && Splits != null)
+                ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation("-OneSplit and -Splits may not both be specified", "DupeSplits"));
+            else if (OneSplit != null)
                 OneSplit.AddToNormalTrx(normalTrx);
             else if (Splits != null)
             {
@@ -77,9 +79,9 @@ namespace Willowsoft.CheckBook.Powershell
             }
             else
                 ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation("Either -OneSplit or -Splits must be specified", "NoSplits"));
+            Register.ValidationError += Register_ValidationError;
             try
             {
-                Register.ValidationError += Register_ValidationError;
                 normalTrx.Validate();
                 if (TrxValidationError != null)
                     ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation(TrxValidationError, "InvalidTrx"));

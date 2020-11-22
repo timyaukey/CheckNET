@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Management.Automation;
 
 using Willowsoft.CheckBook.Lib;
@@ -52,7 +53,29 @@ namespace Willowsoft.CheckBook.Powershell
         protected override void BeginProcessing()
         {
             if (OneSplit == null && Splits == null)
-                ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation("Either -OneSplit or -Splits must be specified", "NoSplits"));
+            {
+                List<SplitContent> newSplits = new List<SplitContent>();
+                foreach(TrxSplit oldSplit in NormalTrx.colSplits)
+                {
+                    newSplits.Add(new SplitContent
+                    {
+                        strCatKey = oldSplit.strCategoryKey,
+                        strPONumber = oldSplit.strPONumber,
+                        strInvoiceNum = oldSplit.strInvoiceNum,
+                        datInvoice = oldSplit.datInvoiceDate,
+                        datDue = oldSplit.datDueDate,
+                        curAmount = oldSplit.curAmount,
+                        strBudgetKey = oldSplit.strBudgetKey,
+                        strMemo = oldSplit.strMemo,
+                        strTerms = oldSplit.strTerms
+                    });
+                }
+                Splits = newSplits.ToArray();
+            }
+            else if (OneSplit != null && Splits != null)
+            {
+                ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation("-OneSplit and -Splits may not both be specified", "SplitError"));
+            }
             NormalTrxManager mgr = new NormalTrxManager(NormalTrx);
             mgr.Update(delegate (NormalTrx objTrx)
             {

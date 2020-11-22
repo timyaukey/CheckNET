@@ -75,5 +75,8 @@
     <None Include="Test1.ps1" />
     <None Include="Test2.ps1" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="TestLoadCompany.ps1" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
