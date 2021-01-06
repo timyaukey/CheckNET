@@ -1,22 +1,19 @@
 ﻿Option Strict On
 Option Explicit On
 
-Public Class SplitSearchHandler
+Public MustInherit Class CustomSearchHandler
     Implements ISearchHandler
 
-    Private mobjHostUI As IHostUI
-    Private dlgGetSplitData As GetSplitSearchDataDelegate
-    Private objComparer As SearchComparer
-    Private strParameter As String
+    Protected mobjHostUI As IHostUI
+    Protected objComparer As SearchComparer
+    Protected strParameter As String
 
     Public Sub New(
         ByVal objHostUI_ As IHostUI,
-        ByVal strName_ As String,
-        ByVal dlgGetSplitData_ As GetSplitSearchDataDelegate)
+        ByVal strName_ As String)
 
         mobjHostUI = objHostUI_
         strName = strName_
-        dlgGetSplitData = dlgGetSplitData_
     End Sub
 
     Public ReadOnly Property strName As String _
@@ -38,18 +35,10 @@ Public Class SplitSearchHandler
         Return True
     End Function
 
-    Public Sub ProcessTrx(
+    Public MustOverride Sub ProcessTrx(
         ByVal objTrx As Trx,
         ByVal dlgAddTrxResult As AddSearchMatchTrxDelegate,
         ByVal dlgAddSplitResult As AddSearchMatchSplitDelegate) _
         Implements ISearchHandler.ProcessTrx
 
-        If TypeOf (objTrx) Is NormalTrx Then
-            For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
-                If objComparer.blnCompare(dlgGetSplitData(objSplit), strParameter) Then
-                    dlgAddSplitResult(DirectCast(objTrx, NormalTrx), objSplit)
-                End If
-            Next
-        End If
-    End Sub
 End Class

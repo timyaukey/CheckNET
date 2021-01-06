@@ -70,14 +70,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CategorySearchHandler.vb" />
+    <Compile Include="CustomSearchHandler.vb" />
     <Compile Include="IHostSearchToolUI.vb" />
     <Compile Include="IHostSearchUI.vb" />
     <Compile Include="IHostSetup.vb" />
     <Compile Include="IHostTrxToolUI.vb" />
     <Compile Include="IHostUI.vb" />
+    <Compile Include="InvoiceSearchHandler.vb" />
     <Compile Include="ISearchFilter.vb" />
     <Compile Include="ISearchTool.vb" />
     <Compile Include="ITrxTool.vb" />
+    <Compile Include="MemoSearchHandler.vb" />
     <Compile Include="MenuBuilder.vb" />
     <Compile Include="MenuElementAction.vb" />
     <Compile Include="MenuElementBase.vb" />
@@ -98,6 +101,7 @@
     </Compile>
     <Compile Include="PluginAssemblyAttribute.vb" />
     <Compile Include="IPlugin.vb" />
+    <Compile Include="PurOrdSearchHandler.vb" />
     <Compile Include="Reports\HTMLWriter.vb" />
     <Compile Include="Reports\ReportAccumulator.vb" />
     <Compile Include="SearchComparers.vb" />
