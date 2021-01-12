@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<helpItems xmlns="http://msh" schema="maml">
+  <!-- Adapted from example in C:\Program Files\WindowsPowerShell\Modules\AzureRM.UsageAggregates\4.0.2 -->
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Open-CheckbookCompany</command:name>
+      <command:verb>Open</command:verb>
+      <command:noun>CheckbookCompany</command:noun>
+      <maml:description>
+        <maml:para>
+          Open the checkbook company and returns a Company object.
+        </maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>
+        The Get-UsageAggregates cmdlet gets aggregated Azure subscription usage data by the following properties:
+      </maml:para>
+      <maml:para>
+        - Start and end times of when the usage was reported.
+      </maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Open-CheckbookCompany</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AggregationGranularity</maml:name>
+          <maml:Description>
+            <maml:para>
+              Specifies the aggregation precision of the data. Valid values are: Daily and Hourly.
+            </maml:para>
+            <maml:para>
+              The default value is Daily.
+            </maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" variableLength="false">Daily</command:parameterValue>
+            <command:parameterValue required="false" variableLength="false">Hourly</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">AggregationGranularity</command:parameterValue>
+          <dev:type>
+            <maml:name>AggregationGranularity</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ContinuationToken</maml:name>
+          <maml:Description>
+            <maml:para>
+              Specifies the continuation token that was retrieved from the response body in the previous call. For a large result set, responses are paged by using continuation tokens. The continuation token serves as a bookmark for progress. If you do not specify this parameter, the data is retrieved from the beginning of the day or hour specified in ReportedStartTime . We recommend that you follow the next link in the response to page though the data.
+            </maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Open-CheckbookCompany</maml:name>
+        <maml:Description>
+          <maml:para>
+            Specifies the aggregation precision of the data. Valid values are: Daily and Hourly.
+          </maml:para>
+          <maml:para>
+            The default value is Daily.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValueGroup>
+          <command:parameterValue required="false" variableLength="false">Daily</command:parameterValue>
+          <command:parameterValue required="false" variableLength="false">Hourly</command:parameterValue>
+        </command:parameterValueGroup>
+        <command:parameterValue required="true" variableLength="false">AggregationGranularity</command:parameterValue>
+        <dev:type>
+          <maml:name>AggregationGranularity</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ContinuationToken</maml:name>
+        <maml:Description>
+          <maml:para>
+            Specifies the continuation token that was retrieved from the response body in the previous call. For a large result set, responses are paged by using continuation tokens. The continuation token serves as a bookmark for progress. If you do not specify this parameter, the data is retrieved from the beginning of the day or hour specified in ReportedStartTime . We recommend that you follow the next link in the response to page though the data.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            This cmdlet does not accept any input.
+          </maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>lsdjflksjdflkjsdf</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+          </maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <command:examples>
+      <command:example>
+        <maml:title>Example 1: Retrieve subscription data</maml:title>
+        <dev:code>PS C:\&gt;Get-UsageAggregates -ReportedStartTime "5/2/2015" -ReportedEndTime "5/5/2015"</dev:code>
+        <dev:remarks>
+          <maml:para>
+            This command retrieves the reported usage data for the subscription between 5/2/2015 and 5/5/2015.
+          </maml:para>
+          <maml:para></maml:para>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+  </command:command>
+</helpItems>

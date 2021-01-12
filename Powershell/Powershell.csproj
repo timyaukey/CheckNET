@@ -78,5 +78,10 @@
   <ItemGroup>
     <None Include="TestLoadCompany.ps1" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Willowsoft.CheckBook.Powershell.dll-Help.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
