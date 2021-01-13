@@ -8,47 +8,54 @@
       <command:noun>CheckbookCompany</command:noun>
       <maml:description>
         <maml:para>
-          Open the checkbook company and returns a Company object.
+          Open a Willow Creek Checkbook company and return a Company object.
         </maml:para>
       </maml:description>
     </command:details>
     <maml:description>
       <maml:para>
-        The Get-UsageAggregates cmdlet gets aggregated Azure subscription usage data by the following properties:
+        Open the Willow Creek Checkbook company in the specified folder, and return a Company object representing it. This Company object can be used with other commands to work with the company.
       </maml:para>
       <maml:para>
-        - Start and end times of when the usage was reported.
+        This command should be immediately followed by a "try { }" block with the commands that work with the company inside it, and with a "Close-CheckbookCompany" command in a matching "finally { }" block. This will guarantee that the company is closed even if an error occurs while working with the company. Otherwise you risk leaving the company locked until the lock timeout expires.
       </maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Open-CheckbookCompany</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>AggregationGranularity</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Path</maml:name>
           <maml:Description>
             <maml:para>
-              Specifies the aggregation precision of the data. Valid values are: Daily and Hourly.
-            </maml:para>
-            <maml:para>
-              The default value is Daily.
+              The folder containing the company data files.
             </maml:para>
           </maml:Description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" variableLength="false">Daily</command:parameterValue>
-            <command:parameterValue required="false" variableLength="false">Hourly</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">AggregationGranularity</command:parameterValue>
+          <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
           <dev:type>
-            <maml:name>AggregationGranularity</maml:name>
+            <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>ContinuationToken</maml:name>
+          <maml:name>UserName</maml:name>
           <maml:Description>
             <maml:para>
-              Specifies the continuation token that was retrieved from the response body in the previous call. For a large result set, responses are paged by using continuation tokens. The continuation token serves as a bookmark for progress. If you do not specify this parameter, the data is retrieved from the beginning of the day or hour specified in ReportedStartTime . We recommend that you follow the next link in the response to page though the data.
+              Specifies the user name to open the company with. Only used if the company requires a user name and password.
+            </maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Password</maml:name>
+          <maml:Description>
+            <maml:para>
+              Specifies the password to open the company with. Only used if the company requires a user name and password.
             </maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
@@ -61,32 +68,39 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Open-CheckbookCompany</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Path</maml:name>
         <maml:Description>
           <maml:para>
-            Specifies the aggregation precision of the data. Valid values are: Daily and Hourly.
-          </maml:para>
-          <maml:para>
-            The default value is Daily.
+            The folder containing the company data files.
           </maml:para>
         </maml:Description>
-        <command:parameterValueGroup>
-          <command:parameterValue required="false" variableLength="false">Daily</command:parameterValue>
-          <command:parameterValue required="false" variableLength="false">Hourly</command:parameterValue>
-        </command:parameterValueGroup>
-        <command:parameterValue required="true" variableLength="false">AggregationGranularity</command:parameterValue>
+        <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
         <dev:type>
-          <maml:name>AggregationGranularity</maml:name>
+          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>ContinuationToken</maml:name>
+        <maml:name>UserName</maml:name>
         <maml:Description>
           <maml:para>
-            Specifies the continuation token that was retrieved from the response body in the previous call. For a large result set, responses are paged by using continuation tokens. The continuation token serves as a bookmark for progress. If you do not specify this parameter, the data is retrieved from the beginning of the day or hour specified in ReportedStartTime . We recommend that you follow the next link in the response to page though the data.
+            Specifies the user name to open the company with. Only used if the company requires a user name and password.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Password</maml:name>
+        <maml:Description>
+          <maml:para>
+            Specifies the password to open the company with. Only used if the company requires a user name and password.
           </maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
@@ -112,7 +126,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>lsdjflksjdflkjsdf</maml:name>
+          <maml:name>Company</maml:name>
         </dev:type>
         <maml:description>
           <maml:para>
@@ -122,14 +136,47 @@
     </command:returnValues>
     <command:examples>
       <command:example>
-        <maml:title>Example 1: Retrieve subscription data</maml:title>
-        <dev:code>PS C:\&gt;Get-UsageAggregates -ReportedStartTime "5/2/2015" -ReportedEndTime "5/5/2015"</dev:code>
+        <maml:title>Example 1: Open a company that does not require a user name and password</maml:title>
+        <dev:code>PS C:\&gt;$cmp = Open-CheckbookCompany -Path "c:\mycompanyfolder"</dev:code>
         <dev:remarks>
           <maml:para>
-            This command retrieves the reported usage data for the subscription between 5/2/2015 and 5/5/2015.
+            This command returns a Company object that can be used to work with the company in "c:\mycompanyfolder".
           </maml:para>
-          <maml:para></maml:para>
-          <maml:para></maml:para>
+          <maml:para />
+          <maml:para />
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 2: Open a company that requires a user name and password</maml:title>
+        <dev:code>PS C:\&gt;$cmp = Open-CheckbookCompany -Path "c:\mycompanyfolder" -UserName Admin -Password Secretpassword</dev:code>
+        <dev:remarks>
+          <maml:para>
+            This command returns a Company object that can be used to work with the company in "c:\mycompanyfolder".
+          </maml:para>
+          <maml:para />
+          <maml:para />
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 3: Open a company with "try { } finally { }"</maml:title>
+        <dev:code>
+$cmp = Open-CheckbookCompany -path "c:\mycompanyfolder"
+try
+{
+  $acct = Get-CheckbookAccount -Company $cmp -AccountName "Checking Account"
+  $reg = Get-CheckbookRegister -Account $acct -RegisterName "Checking Account"
+}
+finally
+{
+  Close-CheckbookCompany -Company $cmp
+}
+        </dev:code>
+        <dev:remarks>
+          <maml:para>
+            This script creates a Company object that can be used to work with the company in "c:\mycompanyfolder", in a way that guarantees it will be closed.
+          </maml:para>
+          <maml:para />
+          <maml:para />
         </dev:remarks>
       </command:example>
     </command:examples>
