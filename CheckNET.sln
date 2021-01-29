@@ -25,6 +25,10 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FinancialReports", "Financi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Powershell", "Powershell\Powershell.csproj", "{D26F18FB-FC5D-460D-800F-1E2A173E8BF0}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "TrxFormLib", "TrxFormLib\TrxFormLib.vbproj", "{C395C6D2-D853-45B2-BBAB-104C4AD4576F}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MainUILib", "MainUILib\MainUILib.vbproj", "{442DF4FB-F71A-4C03-95DD-3224EE310375}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +77,14 @@ Global
 		{D26F18FB-FC5D-460D-800F-1E2A173E8BF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D26F18FB-FC5D-460D-800F-1E2A173E8BF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D26F18FB-FC5D-460D-800F-1E2A173E8BF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C395C6D2-D853-45B2-BBAB-104C4AD4576F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C395C6D2-D853-45B2-BBAB-104C4AD4576F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C395C6D2-D853-45B2-BBAB-104C4AD4576F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C395C6D2-D853-45B2-BBAB-104C4AD4576F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{442DF4FB-F71A-4C03-95DD-3224EE310375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{442DF4FB-F71A-4C03-95DD-3224EE310375}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{442DF4FB-F71A-4C03-95DD-3224EE310375}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{442DF4FB-F71A-4C03-95DD-3224EE310375}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

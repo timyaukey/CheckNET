@@ -3,7 +3,7 @@ Option Explicit On
 
 Imports VB = Microsoft.VisualBasic
 
-Friend Class TrxForm
+Public Class TrxForm
     Inherits System.Windows.Forms.Form
     Implements IHostTrxToolUI
 

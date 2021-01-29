@@ -109,8 +109,10 @@
     <Import Include="System.Linq" />
     <Import Include="System.Windows.Forms" />
     <Import Include="Willowsoft.CheckBook.Lib" />
+    <Import Include="Willowsoft.CheckBook.MainUILib" />
     <Import Include="Willowsoft.CheckBook.PersistTools" />
     <Import Include="Willowsoft.CheckBook.PluginCore" />
+    <Import Include="Willowsoft.CheckBook.TrxFormLib" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountForm.Designer.vb">
@@ -236,16 +238,6 @@
     <Compile Include="SelectCompanyForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TrxEdit\CheckFormat.vb" />
-    <Compile Include="TrxEdit\CheckFormatEditor.Designer.vb">
-      <DependentUpon>CheckFormatEditor.vb</DependentUpon>
-    </Compile>
-    <Compile Include="TrxEdit\CheckFormatEditor.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TrxEdit\CheckPrinting.vb">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CommonDialogControlForm.Designer.vb">
       <SubType>Code</SubType>
       <DependentUpon>CommonDialogControlForm.vb</DependentUpon>
@@ -295,13 +287,6 @@
     <Compile Include="PayeeListForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TrxEdit\PayeeMatchForm.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>PayeeMatchForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="TrxEdit\PayeeMatchForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="PublicTypes.vb">
       <SubType>Code</SubType>
     </Compile>
@@ -331,13 +316,6 @@
       <DependentUpon>RegPropertiesForm.vb</DependentUpon>
     </Compile>
     <Compile Include="RegPropertiesForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TrxEdit\RepeatSeqInfoForm.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>RepeatSeqInfoForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="TrxEdit\RepeatSeqInfoForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Reports\RptScanSplitsForm.Designer.vb">
@@ -371,13 +349,6 @@
     <Compile Include="TrxEdit\TrxCopyAmountTool.vb" />
     <Compile Include="TrxEdit\TrxCopyDateTool.vb" />
     <Compile Include="TrxEdit\TrxCopyInvoiceNumbersTool.vb" />
-    <Compile Include="TrxEdit\TrxForm.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>TrxForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="TrxEdit\TrxForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="TrxEdit\TrxMailingAddressTool.vb" />
     <Compile Include="TrxEdit\TrxPrintCheckTool.vb" />
     <Compile Include="TrxTypeListForm.Designer.vb">
@@ -469,9 +440,6 @@
     <EmbeddedResource Include="SelectCompanyForm.resx">
       <DependentUpon>SelectCompanyForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TrxEdit\CheckFormatEditor.resx">
-      <DependentUpon>CheckFormatEditor.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Search\ExportForm.resX">
       <DependentUpon>ExportForm.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -496,10 +464,6 @@
       <DependentUpon>PayeeListForm.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TrxEdit\PayeeMatchForm.resX">
-      <DependentUpon>PayeeMatchForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="ReconAcctSelectForm.resX">
       <DependentUpon>ReconAcctSelectForm.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -516,10 +480,6 @@
       <DependentUpon>RegPropertiesForm.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TrxEdit\RepeatSeqInfoForm.resX">
-      <DependentUpon>RepeatSeqInfoForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Reports\RptScanSplitsForm.resX">
       <DependentUpon>RptScanSplitsForm.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -534,10 +494,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StartupForm.resX">
       <DependentUpon>StartupForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TrxEdit\TrxForm.resX">
-      <DependentUpon>TrxForm.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="TrxTypeListForm.resX">
@@ -572,6 +528,10 @@
       <Project>{67bc9967-b09a-4a5a-9bf5-40c9c9af79ef}</Project>
       <Name>ImportPlugins</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MainUILib\MainUILib.vbproj">
+      <Project>{442df4fb-f71a-4c03-95dd-3224ee310375}</Project>
+      <Name>MainUILib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PersistTools\PersistTools.vbproj">
       <Project>{00f98ca0-114a-4a84-b093-d6b88d7de686}</Project>
       <Name>PersistTools</Name>
@@ -579,6 +539,10 @@
     <ProjectReference Include="..\PluginCore\PluginCore.vbproj">
       <Project>{df8c4177-36c2-414d-a363-09c33cb56fd4}</Project>
       <Name>PluginCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TrxFormLib\TrxFormLib.vbproj">
+      <Project>{c395c6d2-d853-45b2-bbab-104c4ad4576f}</Project>
+      <Name>TrxFormLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
