@@ -40,6 +40,8 @@ Friend Class CBMainForm
                 strUserLicenseStatement = "License file is missing"
             End If
 
+            LoadPlugins()
+
             Me.Text = strSoftwareTitle
             frmStartup = New StartupForm
             frmStartup.Init(Me, strUserLicenseStatement)
@@ -71,8 +73,6 @@ Friend Class CBMainForm
             End If
 
             frmStartup.ShowStatus("Loading main window")
-
-            LoadPlugins()
 
             Me.Text = strSoftwareTitle & " " & My.Application.Info.Version.Major & "." &
                         My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build &
@@ -311,12 +311,6 @@ Friend Class CBMainForm
     End Function
 
     Private ReadOnly Property objCompany() As Company Implements IHostUI.objCompany
-        Get
-            Return mobjCompany
-        End Get
-    End Property
-
-    Private ReadOnly Property objCompany2() As Company Implements IHostSetup.objCompany
         Get
             Return mobjCompany
         End Get

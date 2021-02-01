@@ -7,8 +7,6 @@ Option Explicit On
 ''' </summary>
 
 Public Interface IHostSetup
-    ReadOnly Property objCompany() As Company
-
     Property objFileMenu As MenuBuilder
     Property objBankImportMenu As MenuBuilder
     Property objCheckImportMenu As MenuBuilder
