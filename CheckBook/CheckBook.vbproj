@@ -112,6 +112,8 @@
     <Import Include="Willowsoft.CheckBook.MainUILib" />
     <Import Include="Willowsoft.CheckBook.PersistTools" />
     <Import Include="Willowsoft.CheckBook.PluginCore" />
+    <Import Include="Willowsoft.CheckBook.RegFormLib" />
+    <Import Include="Willowsoft.CheckBook.SearchFormLib" />
     <Import Include="Willowsoft.CheckBook.TrxFormLib" />
   </ItemGroup>
   <ItemGroup>
@@ -304,13 +306,6 @@
     <Compile Include="ReconcileForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RegisterForm.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>RegisterForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="RegisterForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="RegPropertiesForm.Designer.vb">
       <SubType>Code</SubType>
       <DependentUpon>RegPropertiesForm.vb</DependentUpon>
@@ -323,13 +318,6 @@
       <DependentUpon>RptScanSplitsForm.vb</DependentUpon>
     </Compile>
     <Compile Include="Reports\RptScanSplitsForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Search\SearchForm.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>SearchForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Search\SearchForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ShowRegisterForm.Designer.vb">
@@ -472,20 +460,12 @@
       <DependentUpon>ReconcileForm.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RegisterForm.resX">
-      <DependentUpon>RegisterForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="RegPropertiesForm.resX">
       <DependentUpon>RegPropertiesForm.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\RptScanSplitsForm.resX">
       <DependentUpon>RptScanSplitsForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Search\SearchForm.resX">
-      <DependentUpon>SearchForm.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ShowRegisterForm.resX">
@@ -539,6 +519,14 @@
     <ProjectReference Include="..\PluginCore\PluginCore.vbproj">
       <Project>{df8c4177-36c2-414d-a363-09c33cb56fd4}</Project>
       <Name>PluginCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RegFormLib\RegFormLib.vbproj">
+      <Project>{74d15cdf-5d3c-4037-8f87-559535f3a406}</Project>
+      <Name>RegFormLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SearchFormLib\SearchFormLib.vbproj">
+      <Project>{2e7c2fcf-f198-4e2c-b18e-500de881f519}</Project>
+      <Name>SearchFormLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\TrxFormLib\TrxFormLib.vbproj">
       <Project>{c395c6d2-d853-45b2-bbab-104c4ad4576f}</Project>

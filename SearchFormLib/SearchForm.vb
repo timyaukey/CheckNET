@@ -2,7 +2,7 @@ Option Strict On
 Option Explicit On
 
 
-Friend Class SearchForm
+Public Class SearchForm
     Inherits System.Windows.Forms.Form
     Implements IHostSearchUI
     Implements IHostSearchToolUI
@@ -38,6 +38,7 @@ Friend Class SearchForm
         mobjReg = objReg_
         mobjAccount = mobjReg.objAccount
         mobjCompany = mobjHostUI.objCompany
+        Me.MdiParent = mobjHostUI.objGetMainForm()
         colCheckedTrx = New List(Of Trx)
         mcurAmountMatched = 0
         mcurAmountTotal = 0

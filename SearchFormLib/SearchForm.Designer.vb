@@ -1,19 +1,12 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> Partial Class SearchForm
 #Region "Windows Form Designer generated code "
-	<System.Diagnostics.DebuggerNonUserCode()> Public Sub New()
-		MyBase.New()
-		'This call is required by the Windows Form Designer.
-		InitializeComponent()
-        'This form is an MDI child.
-        'This code simulates the VB6 
-        ' functionality of automatically
-        ' loading and showing an MDI
-        ' child's parent.
-        Me.MdiParent = CBMainForm
-        CBMainForm.Show()
+    <System.Diagnostics.DebuggerNonUserCode()> Public Sub New()
+        MyBase.New()
+        'This call is required by the Windows Form Designer.
+        InitializeComponent()
     End Sub
-	'Form overrides dispose to clean up the component list.
-	<System.Diagnostics.DebuggerNonUserCode()> Protected Overloads Overrides Sub Dispose(ByVal Disposing As Boolean)
+    'Form overrides dispose to clean up the component list.
+    <System.Diagnostics.DebuggerNonUserCode()> Protected Overloads Overrides Sub Dispose(ByVal Disposing As Boolean)
 		If Disposing Then
 			If Not components Is Nothing Then
 				components.Dispose()

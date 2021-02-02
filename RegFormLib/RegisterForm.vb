@@ -2,7 +2,7 @@ Option Strict On
 Option Explicit On
 
 
-Friend Class RegisterForm
+Public Class RegisterForm
     Inherits System.Windows.Forms.Form
 
     Private mobjHostUI As IHostUI
@@ -47,6 +47,7 @@ Friend Class RegisterForm
         mobjReg = objReg_
         mobjCompany = mobjHostUI.objCompany
         mdatDefaultNewDate = Today
+        Me.MdiParent = mobjHostUI.objGetMainForm()
         Me.Show()
 
     End Sub
