@@ -65,10 +65,6 @@
       <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
       <Name>CheckBookLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PersistTools\PersistTools.vbproj">
-      <Project>{00f98ca0-114a-4a84-b093-d6b88d7de686}</Project>
-      <Name>PersistTools</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

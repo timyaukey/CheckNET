@@ -109,6 +109,12 @@
     <Compile Include="Logging\ILogger.vb" />
     <Compile Include="Logging\ILogGroupEnd.vb" />
     <Compile Include="Logging\ILogGroupStart.vb" />
+    <Compile Include="PersistTools\AccountLoader.vb" />
+    <Compile Include="PersistTools\AccountSaver.vb" />
+    <Compile Include="PersistTools\CompanyLoader.vb" />
+    <Compile Include="PersistTools\CompanySaver.vb" />
+    <Compile Include="PersistTools\RegisterLoader.vb" />
+    <Compile Include="PersistTools\RegisterSaver.vb" />
     <Compile Include="Register\RegBackwardFrom.vb" />
     <Compile Include="Register\RegDateRange.vb" />
     <Compile Include="Register\RegForwardFrom.vb" />
