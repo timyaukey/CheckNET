@@ -72,8 +72,6 @@
     <Import Include="Willowsoft.CheckBook.Lib" />
     <Import Include="Willowsoft.CheckBook.MainUILib" />
     <Import Include="Willowsoft.CheckBook.PluginCore" />
-    <Import Include="Willowsoft.CheckBook.SearchFormLib" />
-    <Import Include="Willowsoft.CheckBook.TrxFormLib" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="My Project\Application.Designer.vb">
@@ -91,6 +89,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="PluginMarker.vb" />
     <Compile Include="RegisterForm.Designer.vb">
       <DependentUpon>RegisterForm.vb</DependentUpon>
     </Compile>

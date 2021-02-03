@@ -161,7 +161,7 @@ Public Class RegisterForm
     Private Sub cmdSearch_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSearch.Click
         Try
             If mfrmSearch Is Nothing Then
-                mfrmSearch = New SearchForm
+                mfrmSearch = mobjHostUI.objMakeSearchForm()
                 mfrmSearch.ShowMe(mobjHostUI, mobjReg)
             Else
                 mfrmSearch.ShowMeAgain()

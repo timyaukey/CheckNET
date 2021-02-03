@@ -99,6 +99,7 @@
     <Compile Include="PayeeMatchForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="PluginMarker.vb" />
     <Compile Include="RepeatSeqInfoForm.Designer.vb">
       <DependentUpon>RepeatSeqInfoForm.vb</DependentUpon>
     </Compile>

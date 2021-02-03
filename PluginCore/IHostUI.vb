@@ -27,6 +27,12 @@ Public Interface IHostUI
 
     Function objGetMainForm() As System.Windows.Forms.Form
 
+    Function objMakeRegisterForm() As IRegisterForm
+
+    Function objMakeSearchForm() As ISearchForm
+
+    Function objMakeTrxForm() As ITrxForm
+
     Function blnAddNormalTrx(ByVal objTrx As NormalTrx,
                              ByRef datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                              ByVal strLogTitle As String) As Boolean

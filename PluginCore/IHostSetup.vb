@@ -16,6 +16,10 @@ Public Interface IHostSetup
     Property objToolMenu As MenuBuilder
     Property objHelpMenu As MenuBuilder
 
+    Sub SetTrxFormFactory(ByVal objFactory As Func(Of ITrxForm))
+    Sub SetRegisterFormFactory(ByVal objFactory As Func(Of IRegisterForm))
+    Sub SetSearchFormFactory(ByVal objFactory As Func(Of ISearchForm))
+
     Sub AddExtraLicense(ByVal objLicense As Willowsoft.TamperProofData.IStandardLicense)
 
 End Interface
