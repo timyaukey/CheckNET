@@ -300,10 +300,10 @@ Friend Class CBMainForm
     End Function
 
     Private Function objGetCurrentRegister() As Register Implements IHostUI.objGetCurrentRegister
-        If Not TypeOf Me.ActiveMdiChild Is RegisterForm Then
+        If Not TypeOf Me.ActiveMdiChild Is IRegisterForm Then
             Return Nothing
         End If
-        Return CType(Me.ActiveMdiChild, RegisterForm).objReg
+        Return CType(Me.ActiveMdiChild, IRegisterForm).objReg
     End Function
 
     Private Function objGetMainForm() As Form Implements IHostUI.objGetMainForm
@@ -323,7 +323,7 @@ Friend Class CBMainForm
     Private Function blnAddNormalTrx(ByVal objTrx As NormalTrx,
                                     ByRef datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrx
-        Using frm As TrxForm = New TrxForm()
+        Using frm As ITrxForm = New TrxForm()
             If frm.blnAddNormal(Me, objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
                 Return True
             End If
@@ -334,7 +334,7 @@ Friend Class CBMainForm
     Private Function blnAddNormalTrxSilent(ByVal objTrx As NormalTrx,
                                     ByRef datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrxSilent
-        Using frm As TrxForm = New TrxForm()
+        Using frm As ITrxForm = New TrxForm()
             If frm.blnAddNormalSilent(Me, objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
                 Return True
             End If
@@ -344,7 +344,7 @@ Friend Class CBMainForm
 
     Private Function blnAddBudgetTrx(ByVal objReg As Register, ByRef datDefaultDate As DateTime,
                                      ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddBudgetTrx
-        Using frm As TrxForm = New TrxForm()
+        Using frm As ITrxForm = New TrxForm()
             If frm.blnAddBudget(Me, objReg, datDefaultDate, strLogTitle) Then
                 Return True
             End If
@@ -354,7 +354,7 @@ Friend Class CBMainForm
 
     Private Function blnAddTransferTrx(ByVal objReg As Register, ByRef datDefaultDate As DateTime,
                                      ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddTransferTrx
-        Using frm As TrxForm = New TrxForm()
+        Using frm As ITrxForm = New TrxForm()
             If frm.blnAddTransfer(Me, objReg, datDefaultDate, strLogTitle) Then
                 Return True
             End If
@@ -364,7 +364,7 @@ Friend Class CBMainForm
 
     Private Function blnUpdateTrx(ByVal objTrx As Trx, ByRef datDefaultDate As Date,
                                   ByVal strLogTitle As String) As Boolean Implements IHostUI.blnUpdateTrx
-        Using frmEdit As TrxForm = New TrxForm()
+        Using frmEdit As ITrxForm = New TrxForm()
             If frmEdit.blnUpdate(Me, objTrx, datDefaultDate, strLogTitle) Then
                 Return True
             End If
@@ -375,14 +375,13 @@ Friend Class CBMainForm
     Private Sub ShowRegister(ByVal objReg As Register) Implements IHostUI.ShowRegister
 
         Dim frm As System.Windows.Forms.Form
-        Dim frmReg As RegisterForm
+        Dim frmReg As IRegisterForm
 
         For Each frm In gcolForms()
-            If TypeOf frm Is RegisterForm Then
-                frmReg = DirectCast(frm, RegisterForm)
+            If TypeOf frm Is IRegisterForm Then
+                frmReg = DirectCast(frm, IRegisterForm)
                 If frmReg.objReg Is objReg Then
-                    frmReg.Show()
-                    frmReg.Activate()
+                    frmReg.ShowMeAgain()
                     Exit Sub
                 End If
             End If

@@ -32,7 +32,7 @@ Friend Class ListEditorForm
 
         Try
             For Each frm In gcolForms()
-                If TypeOf frm Is RegisterForm Then
+                If TypeOf frm Is IRegisterForm Then
                     '
                 ElseIf TypeOf frm Is CBMainForm Then
                     '

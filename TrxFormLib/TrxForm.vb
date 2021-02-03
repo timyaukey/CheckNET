@@ -5,6 +5,7 @@ Imports VB = Microsoft.VisualBasic
 
 Public Class TrxForm
     Inherits System.Windows.Forms.Form
+    Implements ITrxForm
     Implements IHostTrxToolUI
 
     Private mobjHostUI As IHostUI
@@ -72,7 +73,9 @@ Public Class TrxForm
     '$Description Enter a new normal Trx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddNormal(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As NormalTrx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
+    Public Function blnAddNormal(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As NormalTrx,
+        ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean,
+        ByVal strLogTitle As String) As Boolean Implements ITrxForm.blnAddNormal
 
         Try
 
@@ -99,7 +102,9 @@ Public Class TrxForm
     '   has validation errors.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddNormalSilent(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As NormalTrx, ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean, ByVal strLogTitle As String) As Boolean
+    Public Function blnAddNormalSilent(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As NormalTrx,
+        ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean,
+        ByVal strLogTitle As String) As Boolean Implements ITrxForm.blnAddNormalSilent
 
         Try
 
@@ -130,7 +135,8 @@ Public Class TrxForm
     '$Description Enter a new budget Trx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddBudget(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
+    Public Function blnAddBudget(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date,
+        ByVal strLogTitle As String) As Boolean Implements ITrxForm.blnAddBudget
 
         Try
 
@@ -157,7 +163,8 @@ Public Class TrxForm
     '$Description Enter a new transfer Trx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddTransfer(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
+    Public Function blnAddTransfer(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date,
+        ByVal strLogTitle As String) As Boolean Implements ITrxForm.blnAddTransfer
 
         Try
 
@@ -183,7 +190,8 @@ Public Class TrxForm
     '$Description Edit and existing Trx in the Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnUpdate(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As Trx, ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
+    Public Function blnUpdate(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As Trx, ByRef datDefaultDate_ As Date,
+        ByVal strLogTitle As String) As Boolean Implements ITrxForm.blnUpdate
 
         Try
 

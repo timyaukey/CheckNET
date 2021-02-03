@@ -4,6 +4,7 @@ Option Explicit On
 
 Public Class RegisterForm
     Inherits System.Windows.Forms.Form
+    Implements IRegisterForm
 
     Private mobjHostUI As IHostUI
     Private mobjCompany As Company
@@ -11,7 +12,7 @@ Public Class RegisterForm
     Private WithEvents mobjReg As Register
     Private mblnLoadComplete As Boolean
     Private mdatDefaultNewDate As Date
-    Private WithEvents mfrmSearch As SearchForm
+    Private WithEvents mfrmSearch As ISearchForm
     Private mblnOldVisible As Boolean
     Private mblnShowValidationErrors As Boolean
 
@@ -40,7 +41,7 @@ Public Class RegisterForm
     Private mlngCOLOR_REAL As System.Drawing.Color = System.Drawing.Color.FromArgb(255, 255, 250) '&H80000005
     Private mlngCOLOR_REPLICA As System.Drawing.Color = System.Drawing.Color.FromArgb(&H80, &H40, &H0)
 
-    Public Sub ShowMe(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register)
+    Public Sub ShowMe(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register) Implements IRegisterForm.ShowMe
 
         mobjHostUI = objHostUI_
         mobjAccount = objReg_.objAccount
@@ -52,7 +53,12 @@ Public Class RegisterForm
 
     End Sub
 
-    Public ReadOnly Property objReg() As Register
+    Public Sub ShowMeAgain() Implements IRegisterForm.ShowMeAgain
+        Me.Show()
+        Me.Activate()
+    End Sub
+
+    Public ReadOnly Property objReg() As Register Implements IRegisterForm.objReg
         Get
             objReg = mobjReg
         End Get
@@ -158,8 +164,7 @@ Public Class RegisterForm
                 mfrmSearch = New SearchForm
                 mfrmSearch.ShowMe(mobjHostUI, mobjReg)
             Else
-                mfrmSearch.Show()
-                mfrmSearch.Activate()
+                mfrmSearch.ShowMeAgain()
             End If
 
             Exit Sub
@@ -377,8 +382,9 @@ Public Class RegisterForm
         Return lngIndex - 1
     End Function
 
-    Private Sub mfrmSearch_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles mfrmSearch.FormClosed
-        'UPGRADE_NOTE: Object mfrmSearch may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+    Private Sub mfrmSearch_FormClosed(ByVal eventSender As System.Object,
+        ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles mfrmSearch.SearchFormClosed
+
         mfrmSearch = Nothing
     End Sub
 

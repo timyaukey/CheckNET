@@ -4,6 +4,7 @@ Option Explicit On
 
 Public Class SearchForm
     Inherits System.Windows.Forms.Form
+    Implements ISearchForm
     Implements IHostSearchUI
     Implements IHostSearchToolUI
 
@@ -32,7 +33,7 @@ Public Class SearchForm
     Private mobjLastSearchFilter As ISearchFilter
     Private mobjLastSearchHandler As ISearchHandler
 
-    Public Sub ShowMe(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register)
+    Public Sub ShowMe(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register) Implements ISearchForm.ShowMe
 
         mobjHostUI = objHostUI_
         mobjReg = objReg_
@@ -59,6 +60,11 @@ Public Class SearchForm
 
     End Sub
 
+    Public Sub ShowMeAgain() Implements ISearchForm.ShowMeAgain
+        Me.Show()
+        Me.Activate()
+    End Sub
+
     Private Sub SearchForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Me.Width = 1011
         Me.Height = 547
@@ -66,7 +72,10 @@ Public Class SearchForm
 
     Private Sub SearchForm_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
         mobjReg = Nothing
+        RaiseEvent SearchFormClosed(eventSender, eventArgs)
     End Sub
+
+    Public Event SearchFormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Implements ISearchForm.SearchFormClosed
 
     Private Sub LoadSearchIn()
         cboSearchIn.Items.Clear()
