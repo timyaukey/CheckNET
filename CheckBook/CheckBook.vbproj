@@ -216,24 +216,6 @@
     <Compile Include="CBMainForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Search\ChangeCategoryForm.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>ChangeCategoryForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Search\ChangeCategoryForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Search\FilterAll.vb" />
-    <Compile Include="Search\FilterFakeOnly.vb" />
-    <Compile Include="Search\FilterGeneratedOnly.vb" />
-    <Compile Include="Search\FilterNonImportedBank.vb" />
-    <Compile Include="Search\FilterNonReal.vb" />
-    <Compile Include="Search\FilterNonGenerated.vb" />
-    <Compile Include="Search\FilterNonRealBank.vb" />
-    <Compile Include="Search\SearchCombineTool.vb" />
-    <Compile Include="Search\SearchExportTool.vb" />
-    <Compile Include="Search\SearchMoveTool.vb" />
-    <Compile Include="Search\SearchRecategorizeTool.vb" />
     <Compile Include="SelectCompanyForm.Designer.vb">
       <DependentUpon>SelectCompanyForm.vb</DependentUpon>
     </Compile>
@@ -245,13 +227,6 @@
       <DependentUpon>CommonDialogControlForm.vb</DependentUpon>
     </Compile>
     <Compile Include="CommonDialogControlForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Search\ExportForm.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>ExportForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Search\ExportForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ListEditorForm.Designer.vb">
@@ -273,13 +248,6 @@
       <DependentUpon>LoginForm.vb</DependentUpon>
     </Compile>
     <Compile Include="LoginForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Search\MoveDstForm.Designer.vb">
-      <SubType>Code</SubType>
-      <DependentUpon>MoveDstForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Search\MoveDstForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PayeeListForm.Designer.vb">
@@ -334,11 +302,6 @@
     <Compile Include="StartupForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TrxEdit\TrxCopyAmountTool.vb" />
-    <Compile Include="TrxEdit\TrxCopyDateTool.vb" />
-    <Compile Include="TrxEdit\TrxCopyInvoiceNumbersTool.vb" />
-    <Compile Include="TrxEdit\TrxMailingAddressTool.vb" />
-    <Compile Include="TrxEdit\TrxPrintCheckTool.vb" />
     <Compile Include="TrxTypeListForm.Designer.vb">
       <SubType>Code</SubType>
       <DependentUpon>TrxTypeListForm.vb</DependentUpon>
@@ -417,20 +380,12 @@
       <DependentUpon>CBMainForm.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Search\ChangeCategoryForm.resX">
-      <DependentUpon>ChangeCategoryForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="CommonDialogControlForm.resX">
       <DependentUpon>CommonDialogControlForm.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SelectCompanyForm.resx">
       <DependentUpon>SelectCompanyForm.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Search\ExportForm.resX">
-      <DependentUpon>ExportForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ListEditorForm.resX">
       <DependentUpon>ListEditorForm.vb</DependentUpon>
@@ -442,10 +397,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resX">
       <DependentUpon>LoginForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Search\MoveDstForm.resX">
-      <DependentUpon>MoveDstForm.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PayeeListForm.resX">

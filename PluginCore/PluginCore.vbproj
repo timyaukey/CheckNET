@@ -66,21 +66,32 @@
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Data" />
     <Import Include="System.Diagnostics" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Xml" />
     <Import Include="Willowsoft.CheckBook.Lib" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CategorySearchHandler.vb" />
-    <Compile Include="CustomSearchHandler.vb" />
+    <Compile Include="CheckPrinting\CheckFormat.vb" />
+    <Compile Include="CheckPrinting\CheckFormatEditor.Designer.vb">
+      <DependentUpon>CheckFormatEditor.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CheckPrinting\CheckFormatEditor.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CheckPrinting\CheckPrinting.vb" />
+    <Compile Include="SearchTypes\CategorySearchHandler.vb" />
+    <Compile Include="SearchTypes\CustomSearchHandler.vb" />
     <Compile Include="IHostSearchToolUI.vb" />
     <Compile Include="IHostSearchUI.vb" />
     <Compile Include="IHostSetup.vb" />
     <Compile Include="IHostTrxToolUI.vb" />
     <Compile Include="IHostUI.vb" />
-    <Compile Include="InvoiceSearchHandler.vb" />
+    <Compile Include="SearchTypes\InvoiceSearchHandler.vb" />
     <Compile Include="ISearchFilter.vb" />
     <Compile Include="ISearchTool.vb" />
     <Compile Include="ITrxTool.vb" />
-    <Compile Include="MemoSearchHandler.vb" />
+    <Compile Include="SearchTypes\MemoSearchHandler.vb" />
     <Compile Include="MenuBuilder.vb" />
     <Compile Include="MenuElementAction.vb" />
     <Compile Include="MenuElementBase.vb" />
@@ -101,20 +112,69 @@
     </Compile>
     <Compile Include="PluginAssemblyAttribute.vb" />
     <Compile Include="IPlugin.vb" />
-    <Compile Include="PurOrdSearchHandler.vb" />
+    <Compile Include="SearchTypes\PurOrdSearchHandler.vb" />
     <Compile Include="Reports\HTMLWriter.vb" />
     <Compile Include="Reports\ReportAccumulator.vb" />
-    <Compile Include="SearchComparers.vb" />
-    <Compile Include="SplitSearchHandler.vb" />
+    <Compile Include="SearchTypes\SearchComparers.vb" />
+    <Compile Include="SearchFilters\FilterAll.vb" />
+    <Compile Include="SearchFilters\FilterFakeOnly.vb" />
+    <Compile Include="SearchFilters\FilterGeneratedOnly.vb" />
+    <Compile Include="SearchFilters\FilterNonGenerated.vb" />
+    <Compile Include="SearchFilters\FilterNonImportedBank.vb" />
+    <Compile Include="SearchFilters\FilterNonReal.vb" />
+    <Compile Include="SearchFilters\FilterNonRealBank.vb" />
+    <Compile Include="SearchTools\ChangeCategoryForm.Designer.vb">
+      <DependentUpon>ChangeCategoryForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SearchTools\ChangeCategoryForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SearchTools\ExportForm.Designer.vb">
+      <DependentUpon>ExportForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SearchTools\ExportForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SearchTools\MoveDstForm.Designer.vb">
+      <DependentUpon>MoveDstForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SearchTools\MoveDstForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SearchTools\SearchCombineTool.vb" />
+    <Compile Include="SearchTools\SearchExportTool.vb" />
+    <Compile Include="SearchTools\SearchMoveTool.vb" />
+    <Compile Include="SearchTools\SearchRecategorizeTool.vb" />
+    <Compile Include="SearchTypes\SplitSearchHandler.vb" />
     <Compile Include="PluginBase.vb" />
     <Compile Include="ISearchHandler.vb" />
-    <Compile Include="TrxSearchHandler.vb" />
+    <Compile Include="SearchTypes\TrxSearchHandler.vb" />
+    <Compile Include="TrxTools\TrxCopyAmountTool.vb" />
+    <Compile Include="TrxTools\TrxCopyDateTool.vb" />
+    <Compile Include="TrxTools\TrxCopyInvoiceNumbersTool.vb" />
+    <Compile Include="TrxTools\TrxMailingAddressTool.vb" />
+    <Compile Include="TrxTools\TrxPrintCheckTool.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CheckPrinting\CheckFormatEditor.resx">
+      <DependentUpon>CheckFormatEditor.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SearchTools\ChangeCategoryForm.resX">
+      <DependentUpon>ChangeCategoryForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SearchTools\ExportForm.resX">
+      <DependentUpon>ExportForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SearchTools\MoveDstForm.resx">
+      <DependentUpon>MoveDstForm.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -141,5 +201,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
