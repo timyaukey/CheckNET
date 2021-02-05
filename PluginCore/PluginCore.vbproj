@@ -83,6 +83,7 @@
     <Compile Include="IRegisterForm.vb" />
     <Compile Include="ISearchForm.vb" />
     <Compile Include="ITrxForm.vb" />
+    <Compile Include="MenuElementRegister.vb" />
     <Compile Include="SearchTypes\CategorySearchHandler.vb" />
     <Compile Include="SearchTypes\CustomSearchHandler.vb" />
     <Compile Include="IHostSearchToolUI.vb" />

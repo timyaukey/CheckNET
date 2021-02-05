@@ -10,17 +10,12 @@ Public Class CombinedBalancePlugin
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.objToolMenu.Add(New MenuElementAction("Combined Personal and Business Balance", 120, AddressOf ClickHandler, GetPluginPath()))
+        setup.objToolMenu.Add(New MenuElementRegister(HostUI, "Combined Personal and Business Balance", 120, AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
-    Private Sub ClickHandler(sender As Object, e As EventArgs)
+    Private Sub ClickHandler(sender As Object, e As RegisterEventArgs)
         Try
-            Dim objReg As Register = HostUI.objGetCurrentRegister()
-            If objReg Is Nothing Then
-                HostUI.ErrorMessageBox("Please click on the register window you wish to calculate combined personal and business balance for.")
-                Exit Sub
-            End If
-            Dim objLiabilityAcct As Account = objReg.objAccount
+            Dim objLiabilityAcct As Account = e.objReg.objAccount
             If objLiabilityAcct.lngType <> Account.AccountType.Liability Then
                 HostUI.ErrorMessageBox("Combined personal and business balance may only be computed for liability accounts.")
                 Exit Sub
