@@ -6,7 +6,7 @@
       <command:name>Open-CheckbookCompany</command:name>
       <command:verb>Open</command:verb>
       <command:noun>CheckbookCompany</command:noun>
-      <maml:description>
+      <maml:description><!--This is the SYNOPSIS section of get-help output-->
         <maml:para>
           Open a Willow Creek Checkbook company and return a Company object.
         </maml:para>
@@ -31,11 +31,11 @@
             </maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
-          <dev:type>
+          <!--<dev:type>
             <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>-->
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>UserName</maml:name>
@@ -45,11 +45,11 @@
             </maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
+          <!--<dev:type>
             <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>-->
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Password</maml:name>
@@ -59,11 +59,11 @@
             </maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
+          <!--<dev:type>
             <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>-->
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -76,11 +76,11 @@
           </maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
-        <dev:type>
+        <!--<dev:type>
           <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>-->
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>UserName</maml:name>
@@ -90,11 +90,11 @@
           </maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
+        <!--<dev:type>
           <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>-->
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Password</maml:name>
@@ -104,11 +104,11 @@
           </maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
+        <!--<dev:type>
           <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>-->
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -126,7 +126,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>Company</maml:name>
+          <maml:name>Willowsoft.Checkbook.Lib.Company</maml:name>
         </dev:type>
         <maml:description>
           <maml:para>
@@ -179,6 +179,88 @@ finally
           <maml:para />
         </dev:remarks>
       </command:example>
+    </command:examples>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Save-CheckbookCompany</command:name>
+      <command:verb>Save</command:verb>
+      <command:noun>CheckbookCompany</command:noun>
+      <maml:description><!--This is the SYNOPSIS section of get-help output-->
+        <maml:para>
+          Save all changes made to a Willow Creek Checkbook company.
+        </maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>
+        Save all changes made to accounts in a Willow Creek Checkbook company. The Company object is obtained by calling Open-CheckbookCompany. Only saves those accounts that have been updated. Does nothing if there are no accounts with unsaved changes.
+      </maml:para>
+      <maml:para>
+        This command is generally the last command in a "try { }" block for the company, followed by a "Close-CheckbookCompany" command in a matching "finally { }" block. This will guarantee that the company is closed even if an error occurs while working with the company. Otherwise you risk leaving the company locked until the lock timeout expires.
+      </maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Save-CheckbookCompany</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Company</maml:name>
+          <maml:Description>
+            <maml:para>
+              The Company object returned by the Open-CheckbookCompany cmdlet.
+            </maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="true"><!--This is what appears in the SYNTAX section-->Company</command:parameterValue>
+          <!--<dev:type>
+            <maml:name>Willowsoft.Checkbook.Lib.Company</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>-->
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <!--These appear in the PARAMETERS section of get-help output-->
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Company</maml:name>
+        <maml:Description>
+          <maml:para>
+            The Company object returned by the Open-CheckbookCompany cmdlet.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Company</command:parameterValue>
+        <!--<dev:type>
+          <maml:name>Willowsoft.Checkbook.Lib.Company</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>-->
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            This cmdlet does not accept any input.
+          </maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            This cmdlet does not create any output.
+          </maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <command:examples>
     </command:examples>
   </command:command>
 </helpItems>
