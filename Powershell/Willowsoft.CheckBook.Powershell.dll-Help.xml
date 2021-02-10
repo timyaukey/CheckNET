@@ -263,4 +263,76 @@ finally
     <command:examples>
     </command:examples>
   </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Close-CheckbookCompany</command:name>
+      <command:verb>Close</command:verb>
+      <command:noun>CheckbookCompany</command:noun>
+      <maml:description><!--This is the SYNOPSIS section of get-help output-->
+        <maml:para>
+          Close the checkbook company opened by the Open-CheckbookCompany cmdlet.
+        </maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>
+        Close the checkbook company opened by the Open-CheckbookCompany cmdlet. Does not save any changes to the company. The Company object is obtained by calling Open-CheckbookCompany.
+      </maml:para>
+      <maml:para>
+        This command is generally used in the "finally { }" block of a "try { } finally { }", where the "try { }" immediately follows a call to the Open-CheckbookCompany cmdlet. This will guarantee that the company is closed even if an error occurs while working with the company. Otherwise you risk leaving the company locked until the lock timeout expires.
+      </maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Close-CheckbookCompany</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Company</maml:name>
+          <maml:Description>
+            <maml:para>
+              The Company object returned by the Open-CheckbookCompany cmdlet.
+            </maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="true"><!--This is what appears in the SYNTAX section-->Company</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <!--These appear in the PARAMETERS section of get-help output-->
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Company</maml:name>
+        <maml:Description>
+          <maml:para>
+            The Company object returned by the Open-CheckbookCompany cmdlet.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Company</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            This cmdlet does not accept any input.
+          </maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            This cmdlet does not create any output.
+          </maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <command:examples>
+    </command:examples>
+  </command:command>
 </helpItems>
