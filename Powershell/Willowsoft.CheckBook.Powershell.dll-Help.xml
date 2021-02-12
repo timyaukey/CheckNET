@@ -6,7 +6,8 @@
       <command:name>Open-CheckbookCompany</command:name>
       <command:verb>Open</command:verb>
       <command:noun>CheckbookCompany</command:noun>
-      <maml:description><!--This is the SYNOPSIS section of get-help output-->
+      <!--This is the SYNOPSIS section of get-help output-->
+      <maml:description>
         <maml:para>
           Open a Willow Creek Checkbook company and return a Company object.
         </maml:para>
@@ -21,53 +22,30 @@
       </maml:para>
     </maml:description>
     <command:syntax>
+      <!--There can be multiple <command:syntaxItem> elements, for different usages of the cmdlet.-->
       <command:syntaxItem>
         <maml:name>Open-CheckbookCompany</maml:name>
+        <!--These are the parameters that appear in this SYNTAX item.-->
+        <!--These parameters can be a subset of what appears in the <command:parameters> element.-->
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Path</maml:name>
-          <maml:Description>
-            <maml:para>
-              The folder containing the company data files.
-            </maml:para>
-          </maml:Description>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
           <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
-          <!--<dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>-->
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>UserName</maml:name>
-          <maml:Description>
-            <maml:para>
-              Specifies the user name to open the company with. Only used if the company requires a user name and password.
-            </maml:para>
-          </maml:Description>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <!--<dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>-->
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Password</maml:name>
-          <maml:Description>
-            <maml:para>
-              Specifies the password to open the company with. Only used if the company requires a user name and password.
-            </maml:para>
-          </maml:Description>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <!--<dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>-->
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
+      <!--These appear in the PARAMETERS section of get-help output.-->
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Path</maml:name>
         <maml:Description>
@@ -186,7 +164,8 @@ finally
       <command:name>Save-CheckbookCompany</command:name>
       <command:verb>Save</command:verb>
       <command:noun>CheckbookCompany</command:noun>
-      <maml:description><!--This is the SYNOPSIS section of get-help output-->
+      <!--This is the SYNOPSIS section of get-help output-->
+      <maml:description>
         <maml:para>
           Save all changes made to a Willow Creek Checkbook company.
         </maml:para>
@@ -201,21 +180,15 @@ finally
       </maml:para>
     </maml:description>
     <command:syntax>
+      <!--There can be multiple <command:syntaxItem> elements, for different usages of the cmdlet.-->
       <command:syntaxItem>
         <maml:name>Save-CheckbookCompany</maml:name>
+        <!--These are the parameters that appear in this SYNTAX item.-->
+        <!--These parameters can be a subset of what appears in the <command:parameters> element.-->
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Company</maml:name>
-          <maml:Description>
-            <maml:para>
-              The Company object returned by the Open-CheckbookCompany cmdlet.
-            </maml:para>
-          </maml:Description>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
           <command:parameterValue required="true" variableLength="true"><!--This is what appears in the SYNTAX section-->Company</command:parameterValue>
-          <!--<dev:type>
-            <maml:name>Willowsoft.Checkbook.Lib.Company</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>-->
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -268,7 +241,8 @@ finally
       <command:name>Close-CheckbookCompany</command:name>
       <command:verb>Close</command:verb>
       <command:noun>CheckbookCompany</command:noun>
-      <maml:description><!--This is the SYNOPSIS section of get-help output-->
+      <!--This is the SYNOPSIS section of get-help output-->
+      <maml:description>
         <maml:para>
           Close the checkbook company opened by the Open-CheckbookCompany cmdlet.
         </maml:para>
@@ -285,6 +259,8 @@ finally
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Close-CheckbookCompany</maml:name>
+        <!--These are the parameters that appear in this SYNTAX item.-->
+        <!--These parameters can be a subset of what appears in the <command:parameters> element.-->
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Company</maml:name>
           <maml:Description>
@@ -292,7 +268,9 @@ finally
               The Company object returned by the Open-CheckbookCompany cmdlet.
             </maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="true"><!--This is what appears in the SYNTAX section-->Company</command:parameterValue>
+          <command:parameterValue required="true" variableLength="true">
+            <!--This is what appears in the SYNTAX section-->Company
+          </command:parameterValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -328,6 +306,172 @@ finally
         <maml:description>
           <maml:para>
             This cmdlet does not create any output.
+          </maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <command:examples>
+    </command:examples>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-CheckbookAccount</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>CheckbookAccount</command:noun>
+      <!--This is the SYNOPSIS section of get-help output-->
+      <maml:description>
+        <maml:para>
+          Get an account object from an open company.
+        </maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>
+        Gets the Account object for the named account in the specified company. The next step is typically to use Get-CheckbookRegister on this Account object to get one of the registers in this account.
+      </maml:para>
+    </maml:description>
+    <command:syntax>
+      <!--There can be multiple <command:syntaxItem> elements, for different usages of the cmdlet.-->
+      <command:syntaxItem>
+        <maml:name>Get-CheckbookAccount</maml:name>
+        <!--These are the parameters that appear in this SYNTAX item.-->
+        <!--These parameters can be a subset of what appears in the <command:parameters> element.-->
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Company</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">Company</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AccountName</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <!--These appear in the PARAMETERS section of get-help output.-->
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Company</maml:name>
+        <maml:Description>
+          <maml:para>
+            The Company object returned by the Open-CheckbookCompany cmdlet.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Company</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AccountName</maml:name>
+        <maml:Description>
+          <maml:para>
+            The name of the account to get. This is the account name as it appears inside the Willow Creek Checkbook software, not the name of the associated *.ACT file.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            This cmdlet does not accept any input.
+          </maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Willowsoft.Checkbook.Lib.Account</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            The Account object with the specified account name.
+          </maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <command:examples>
+    </command:examples>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-CheckbookRegister</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>CheckbookRegister</command:noun>
+      <!--This is the SYNOPSIS section of get-help output-->
+      <maml:description>
+        <maml:para>
+          Get a register belonging to an account.
+        </maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>
+        Gets the Register object for the named register in the specified account. This Register object can be used with many other cmdlets to get lists of transactions from that register, or perform operations on transactions in that register.
+      </maml:para>
+    </maml:description>
+    <command:syntax>
+      <!--There can be multiple <command:syntaxItem> elements, for different usages of the cmdlet.-->
+      <command:syntaxItem>
+        <maml:name>Get-CheckbookRegister</maml:name>
+        <!--These are the parameters that appear in this SYNTAX item.-->
+        <!--These parameters can be a subset of what appears in the <command:parameters> element.-->
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Account</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">Account</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>RegisterName</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <!--These appear in the PARAMETERS section of get-help output.-->
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Account</maml:name>
+        <maml:Description>
+          <maml:para>
+            An Account object returned by the Get-CheckbookAccount cmdlet, or otherwise obtained from the Company object.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Account</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>RegisterName</maml:name>
+        <maml:Description>
+          <maml:para>
+            The name of the register to get. This is the register name as it appears inside the Willow Creek Checkbook software.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            This cmdlet does not accept any input.
+          </maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Willowsoft.Checkbook.Lib.Register</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            The Register object with the specified register name.
           </maml:para>
         </maml:description>
       </command:returnValue>
