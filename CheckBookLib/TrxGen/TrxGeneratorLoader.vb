@@ -58,7 +58,6 @@ Public Module TrxGeneratorLoader
     Public Function gcolCreateTrxGenerators(ByVal objAccount As Account, ByVal objReg As Register) As ICollection(Of ITrxGenerator)
 
         Dim strPath As String
-        Dim strXMLFile As String
         Dim strFullXMLFile As String
         Dim domDoc As VB6XmlDocument
         Dim objParseError As VB6XmlParseError
@@ -69,35 +68,33 @@ Public Module TrxGeneratorLoader
 
         colResults = New List(Of ITrxGenerator)
         strPath = gstrGeneratorPath(objAccount, objReg)
-        strXMLFile = Dir(strPath & "\*.gen")
-        While strXMLFile <> ""
-            domDoc = New VB6XmlDocument
-            strFullXMLFile = strPath & "\" & strXMLFile
-            Try
-
-                domDoc.Load(strFullXMLFile)
-                objParseError = domDoc.ParseError
-                If Not objParseError Is Nothing Then
-                    ShowTrxGenLoadError(strFullXMLFile, gstrXMLParseErrorText(objParseError))
-                Else
-                    domDoc.SetProperty("SelectionLanguage", "XPath")
-                    objGenerator = objCreateTrxGenerator(domDoc, objAccount)
-                    If Not objGenerator Is Nothing Then
-                        strThisRepeatKey = "|" & objGenerator.strRepeatKey & "|"
-                        If InStr(strRepeatKeysUsed, strThisRepeatKey) = 0 Then
-                            colResults.Add(objGenerator)
-                            strRepeatKeysUsed = strRepeatKeysUsed & strThisRepeatKey
-                        Else
-                            gShowTrxGenLoadError(domDoc, "Repeat key used by another generator")
+        If IO.Directory.Exists(strPath) Then
+            For Each strFullXMLFile In IO.Directory.EnumerateFiles(strPath, "*.gen")
+                Try
+                    domDoc = New VB6XmlDocument
+                    domDoc.Load(strFullXMLFile)
+                    objParseError = domDoc.ParseError
+                    If Not objParseError Is Nothing Then
+                        ShowTrxGenLoadError(strFullXMLFile, gstrXMLParseErrorText(objParseError))
+                    Else
+                        domDoc.SetProperty("SelectionLanguage", "XPath")
+                        objGenerator = objCreateTrxGenerator(domDoc, objAccount)
+                        If Not objGenerator Is Nothing Then
+                            strThisRepeatKey = "|" & objGenerator.strRepeatKey & "|"
+                            If InStr(strRepeatKeysUsed, strThisRepeatKey) = 0 Then
+                                colResults.Add(objGenerator)
+                                strRepeatKeysUsed = strRepeatKeysUsed & strThisRepeatKey
+                            Else
+                                gShowTrxGenLoadError(domDoc, "Repeat key used by another generator")
+                            End If
                         End If
                     End If
-                End If
-            Catch ex As Exception
-                Throw New Exception("Error loading trx generator [" + strFullXMLFile + "]", ex)
-            End Try
-            strXMLFile = Dir()
-        End While
-        gcolCreateTrxGenerators = colResults
+                Catch ex As Exception
+                    Throw New Exception("Error loading trx generator [" + strFullXMLFile + "]", ex)
+                End Try
+            Next
+        End If
+        Return colResults
 
     End Function
 
