@@ -33,6 +33,9 @@ Public Class Company
     Public domTransTable As VB6XmlDocument
     'Above with Output attributes of Payee elements converted to upper case.
     Public domTransTableUCS As VB6XmlDocument
+    'Same as domTransTableUCS, but strongly typed.
+    Public objTransTable As PayeeList
+
 
     Private ReadOnly mstrDataPathValue As String
     Private mintMaxAccountKey As Integer
@@ -235,11 +238,31 @@ Public Class Company
             strTableFile = strPayeeFilePath()
             domTransTable = domLoadFile(strTableFile)
             CreateTransTableUCS()
+            LoadTransTableNew()
 
             Exit Sub
         Catch ex As Exception
             gNestedException(ex)
         End Try
+    End Sub
+
+    Public Sub LoadTransTableNew()
+        Dim strTableFile As String
+        Dim objPayeeSerializer As XmlSerializer
+
+        strTableFile = strPayeeFilePath()
+        objPayeeSerializer = New XmlSerializer(GetType(PayeeList))
+        Using objReader As TextReader = New StreamReader(strTableFile)
+            objTransTable = DirectCast(objPayeeSerializer.Deserialize(objReader), PayeeList)
+        End Using
+
+        'Used only for testing, to validate I can generate XML from it.
+        Using objStringWriter As StringWriter = New StringWriter()
+            Dim objSer2 As XmlSerializer = New XmlSerializer(GetType(PayeeList))
+            Dim objNames As XmlSerializerNamespaces = New XmlSerializerNamespaces()
+            objNames.Add("", "")
+            objSer2.Serialize(objStringWriter, objTransTable, objNames)
+        End Using
     End Sub
 
     '$Description Deep clone gdomTransTable into gdomTransTableUCS, adding

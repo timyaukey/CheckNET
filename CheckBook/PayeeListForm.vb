@@ -72,6 +72,7 @@ Friend Class PayeeListForm
             LoadSharedDocument()
             mobjCompany.domTransTable.Save(mobjCompany.strPayeeFilePath())
             mobjCompany.CreateTransTableUCS()
+            mobjCompany.LoadTransTableNew()
             Me.Close()
 
             Exit Sub

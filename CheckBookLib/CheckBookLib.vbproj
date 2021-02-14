@@ -109,6 +109,8 @@
     <Compile Include="Logging\ILogger.vb" />
     <Compile Include="Logging\ILogGroupEnd.vb" />
     <Compile Include="Logging\ILogGroupStart.vb" />
+    <Compile Include="PayeeItem.vb" />
+    <Compile Include="PayeeList.vb" />
     <Compile Include="PersistTools\AccountLoader.vb" />
     <Compile Include="PersistTools\AccountSaver.vb" />
     <Compile Include="PersistTools\CompanyLoader.vb" />
