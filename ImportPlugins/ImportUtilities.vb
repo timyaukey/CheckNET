@@ -349,26 +349,22 @@ Public Class ImportUtilities
     Private Sub LookupPayee(ByVal strTrimmedPayee As String)
         Try
             Dim strOutputPayee As String
-            Dim objPayees As VB6XmlNodeList
-            Dim elmCategory As VB6XmlElement
-            Dim elmBudget As VB6XmlElement
-            Dim elmNarrowMethod As VB6XmlElement
-            Dim elmPayee As VB6XmlElement
-            Dim elmTrxNum As VB6XmlElement
+            Dim objPayees As List(Of PayeeItem)
+            Dim objPayee As PayeeItem
             Dim blnMatch As Boolean
             Dim curAmount As Decimal
             Dim strInput As String
             Dim curMatchTmp As Decimal
 
             strOutputPayee = strTrimmedPayee
-            objPayees = mobjCompany.domTransTable.DocumentElement.SelectNodes("Payee")
-            For Each elmPayee In objPayees
-                strInput = UCase(Trim(CType(elmPayee.GetAttribute("Input"), String)))
+            objPayees = mobjCompany.objTransTable.Payees
+            For Each objPayee In objPayees
+                strInput = UCase(Trim(objPayee.Input))
                 If (strInput <> "") And (InStr(UCase(strTrimmedPayee), strInput) > 0) Then
-                    If Not gblnXmlAttributeMissing(elmPayee.GetAttribute("Min")) Then
+                    If Not String.IsNullOrEmpty(objPayee.Min) Then
                         curAmount = CDec(mstrTrxAmount)
-                        mcurMatchMin = CDec(elmPayee.GetAttribute("Min"))
-                        mcurMatchMax = CDec(elmPayee.GetAttribute("Max"))
+                        mcurMatchMin = CDec(objPayee.Min)
+                        mcurMatchMax = CDec(objPayee.Max)
                         If mcurMatchMin > mcurMatchMax Then
                             curMatchTmp = mcurMatchMax
                             mcurMatchMax = mcurMatchMin
@@ -379,18 +375,15 @@ Public Class ImportUtilities
                         blnMatch = True
                     End If
                     If blnMatch Then
-                        strOutputPayee = CType(elmPayee.GetAttribute("Output"), String)
-                        elmCategory = CType(elmPayee.SelectSingleNode("Cat"), VB6XmlElement)
-                        If Not elmCategory Is Nothing Then
-                            mstrTrxCategory = elmCategory.Text
+                        strOutputPayee = objPayee.Output
+                        If Not String.IsNullOrEmpty(objPayee.Cat) Then
+                            mstrTrxCategory = objPayee.Cat
                         End If
-                        elmBudget = CType(elmPayee.SelectSingleNode("Budget"), VB6XmlElement)
-                        If Not elmBudget Is Nothing Then
-                            mstrTrxBudget = elmBudget.Text
+                        If Not String.IsNullOrEmpty(objPayee.Budget) Then
+                            mstrTrxBudget = objPayee.Budget
                         End If
-                        elmNarrowMethod = CType(elmPayee.SelectSingleNode("NarrowMethod"), VB6XmlElement)
-                        If Not elmNarrowMethod Is Nothing Then
-                            Select Case elmNarrowMethod.Text.ToLower()
+                        If Not String.IsNullOrEmpty(objPayee.NarrowMethod) Then
+                            Select Case objPayee.NarrowMethod.ToLower()
                                 Case "none", ""
                                     mlngNarrowMethod = ImportMatchNarrowMethod.None
                                 Case "earliest date"
@@ -402,17 +395,14 @@ Public Class ImportUtilities
                             End Select
                         End If
                         If mstrTrxNumber = "" Then
-                            elmTrxNum = CType(elmPayee.SelectSingleNode("Num"), VB6XmlElement)
-                            If Not elmTrxNum Is Nothing Then
-                                If elmTrxNum.Text <> "" Then
-                                    mstrTrxNumber = elmTrxNum.Text
-                                End If
+                            If Not String.IsNullOrEmpty(objPayee.Num) Then
+                                mstrTrxNumber = objPayee.Num
                             End If
                         End If
                         Exit For
                     End If
                 End If
-            Next elmPayee
+            Next objPayee
             mstrTrxPayee = strOutputPayee
             Exit Sub
         Catch ex As Exception

@@ -9,6 +9,8 @@ Public Class PayeeItem
         'as empty strings if no other value is set for them.
         mOutput = ""
         Input = ""
+        'Min = ""     Not serialized if empty
+        'Max = ""     Not serialized if empty
         Address1 = ""
         Address2 = ""
         City = ""
@@ -38,6 +40,10 @@ Public Class PayeeItem
     Public Property OutputUCS As String
     <XmlAttribute>
     Public Property Input As String
+    <XmlAttribute>
+    Public Property Min As String
+    <XmlAttribute>
+    Public Property Max As String
     Public Property Address1 As String
     Public Property Address2 As String
     Public Property City As String
