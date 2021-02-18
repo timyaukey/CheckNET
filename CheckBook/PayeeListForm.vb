@@ -203,6 +203,8 @@ Friend Class PayeeListForm
                 cboCategory.SelectedIndex = -1
                 cboBudget.SelectedIndex = -1
                 cboNarrowMethod.SelectedIndex = -1
+                chkAllowAutoBatchNew.Checked = False
+                chkAllowAutoBatchUpdate.Checked = False
             End If
 
             Exit Sub
@@ -247,6 +249,8 @@ Friend Class PayeeListForm
             SetComboBox(cboCategory, strPayeeChild("Cat"))
             SetComboBox(cboBudget, strPayeeChild("Budget"))
             SetComboBox(cboNarrowMethod, strPayeeChild("NarrowMethod"))
+            chkAllowAutoBatchNew.Checked = (strPayeeChild("AllowAutoBatchNew").ToLower() = PayeeItem.Yes)
+            chkAllowAutoBatchUpdate.Checked = (strPayeeChild("AllowAutoBatchUpdate").ToLower() = PayeeItem.Yes)
 
             Exit Sub
         Catch ex As Exception
@@ -420,6 +424,8 @@ Friend Class PayeeListForm
             End If
             SaveChildElement(cboBudget.Text, "Budget")
             SaveChildElement(cboNarrowMethod.Text, "NarrowMethod")
+            SaveChildElement(If(chkAllowAutoBatchNew.Checked, PayeeItem.Yes, ""), "AllowAutoBatchNew")
+            SaveChildElement(If(chkAllowAutoBatchUpdate.Checked, PayeeItem.Yes, ""), "AllowAutoBatchUpdate")
 
             gSortPayeeListByName(lvwPayees)
 

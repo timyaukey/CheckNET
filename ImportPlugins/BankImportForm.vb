@@ -357,6 +357,10 @@ Public Class BankImportForm
             End If
 
             objImportedTrx = .objImportedTrx
+            If Not objImportedTrx.blnAllowAutoBatchUpdate Then
+                strFailReason = """Allow Auto Batch Update"" not checked in memorized transaction"
+                Return False
+            End If
             'Verify that all the checked ImportItems really do have a
             'single exact match, because the user may have checked additional items.
             intExactCount = 0
@@ -813,6 +817,10 @@ Public Class BankImportForm
         End If
 
         objImportedTrx = maudtItem(intItemIndex).objImportedTrx
+        If Not objImportedTrx.blnAllowAutoBatchNew Then
+            strFailReason = """Allow Auto Batch New"" not checked in memorized transaction"
+            Return False
+        End If
         If objImportedTrx.lngSplits = 0 Then
             strFailReason = "Transaction has no splits"
             Return False

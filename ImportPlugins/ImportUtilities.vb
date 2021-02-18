@@ -32,6 +32,8 @@ Public Class ImportUtilities
     'Amount range for matching.
     Private mcurMatchMin As Decimal
     Private mcurMatchMax As Decimal
+    Private mblnAllowAutoBatchNew As Boolean
+    Private mblnAllowAutoBatchUpdate As Boolean
 
     'Table with trx type translation information.
     Private mdomTrxTypes As VB6XmlDocument
@@ -117,6 +119,8 @@ Public Class ImportUtilities
         mlngNarrowMethod = ImportMatchNarrowMethod.None
         mcurMatchMin = 0
         mcurMatchMax = 0
+        mblnAllowAutoBatchNew = False
+        mblnAllowAutoBatchUpdate = False
     End Sub
 
     ''' <summary>
@@ -194,6 +198,8 @@ Public Class ImportUtilities
             objTrx.lngNarrowMethod = mlngNarrowMethod
             objTrx.curMatchMin = mcurMatchMin
             objTrx.curMatchMax = mcurMatchMax
+            objTrx.blnAllowAutoBatchNew = mblnAllowAutoBatchNew
+            objTrx.blnAllowAutoBatchUpdate = mblnAllowAutoBatchUpdate
             objTrx.AddSplit("", strCatKey, strSplitPONumber, strSplitInvoiceNum, datSplitInvoiceDate, datSplitDueDate, strSplitTerms, strBudKey, curAmount)
             objMakeTrx = objTrx
 
@@ -394,6 +400,8 @@ Public Class ImportUtilities
                                     gRaiseError("Unrecognized narrow method")
                             End Select
                         End If
+                        mblnAllowAutoBatchNew = objPayee.blnIsAllowAutoBatchNew
+                        mblnAllowAutoBatchUpdate = objPayee.blnIsAllowAutoBatchUpdate
                         If mstrTrxNumber = "" Then
                             If Not String.IsNullOrEmpty(objPayee.Num) Then
                                 mstrTrxNumber = objPayee.Num

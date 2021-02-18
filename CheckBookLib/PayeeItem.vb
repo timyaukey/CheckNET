@@ -56,6 +56,32 @@ Public Class PayeeItem
     Public Property Cat As String
     Public Property Budget As String
     Public Property NarrowMethod As String
+    Public Property AllowAutoBatchNew As String
+    Public Property AllowAutoBatchUpdate As String
+
+    Public ReadOnly Property blnIsAllowAutoBatchNew() As Boolean
+        Get
+            If Not String.IsNullOrEmpty(AllowAutoBatchNew) Then
+                If AllowAutoBatchNew.ToLower() = PayeeItem.Yes Then
+                    Return True
+                End If
+            End If
+            Return False
+        End Get
+    End Property
+
+    Public ReadOnly Property blnIsAllowAutoBatchUpdate() As Boolean
+        Get
+            If Not String.IsNullOrEmpty(AllowAutoBatchUpdate) Then
+                If AllowAutoBatchUpdate.ToLower() = PayeeItem.Yes Then
+                    Return True
+                End If
+            End If
+            Return False
+        End Get
+    End Property
+
+    Public Const Yes As String = "yes"
 
     Public Overrides Function ToString() As String
         Return mOutput
