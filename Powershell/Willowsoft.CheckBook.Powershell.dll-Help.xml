@@ -479,4 +479,145 @@ finally
     <command:examples>
     </command:examples>
   </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-CheckbookTrx</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>CheckbookTrx</command:noun>
+      <!--This is the SYNOPSIS section of get-help output-->
+      <maml:description>
+        <maml:para>
+          Get transactions within a date range from a register.
+        </maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>
+        Get all transactions of the desired type with transaction dates between the start and end dates inclusive. This may be all transactions between those dates, or only of a single type such as bank transactions or budget transactions.
+      </maml:para>
+      <maml:para>
+        Which transactions will be returned is fixed before the first one is returned, and will not be affected by any operation while iterating through the results - such as deleting a transaction in the list during the iteration, or creating a new transaction of the desired type inside the date range.
+      </maml:para>
+    </maml:description>
+    <command:syntax>
+      <!--There can be multiple <command:syntaxItem> elements, for different usages of the cmdlet.-->
+      <command:syntaxItem>
+        <maml:name>Get-CheckbookTrx</maml:name>
+        <!--These are the parameters that appear in this SYNTAX item.-->
+        <!--These parameters can be a subset of what appears in the <command:parameters> element.-->
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Register</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">Register</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>StartDate</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">DateTime</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>EndDate</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">DateTime</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TransType</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">{All|Normal|Budget|Transfer}</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <!--These appear in the PARAMETERS section of get-help output.-->
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Register</maml:name>
+        <maml:Description>
+          <maml:para>
+            A Register object returned by the Get-CheckbookRegister cmdlet, or otherwise obtained from the Company object.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Register</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>StartDate</maml:name>
+        <maml:Description>
+          <maml:para>
+            The earliest transaction date to return.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">DateTime</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>EndDate</maml:name>
+        <maml:Description>
+          <maml:para>
+            The latest transaction date to return.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">DateTime</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>TransType</maml:name>
+        <maml:Description>
+          <maml:para>
+            The type of transaction to return. The default is to return all types of transaction.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
+        <dev:defaultValue>All</dev:defaultValue>
+        <dev:possibleValues>
+          <dev:possibleValue>
+            <dev:value>All</dev:value>
+            <maml:description>
+              <maml:para>Return all types of transactions.</maml:para>
+            </maml:description>
+          </dev:possibleValue>
+          <dev:possibleValue>
+            <dev:value>Normal</dev:value>
+            <maml:description>
+              <maml:para>Return only regular (bank) transactions.</maml:para>
+            </maml:description>
+          </dev:possibleValue>
+          <dev:possibleValue>
+            <dev:value>Budget</dev:value>
+            <maml:description>
+              <maml:para>Return only budget transactions.</maml:para>
+            </maml:description>
+          </dev:possibleValue>
+          <dev:possibleValue>
+            <dev:value>Transfer</dev:value>
+            <maml:description>
+              <maml:para>Return only transfer transactions.</maml:para>
+            </maml:description>
+          </dev:possibleValue>
+        </dev:possibleValues>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            This cmdlet does not accept any input.
+          </maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Willowsoft.Checkbook.Lib.NormalTrx, Willowsoft.Checkbook.Lib.BudgetTrx, Willowsoft.Checkbook.Lib.TransferTrx</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            The transaction objects between the specified dates.
+          </maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <command:examples>
+    </command:examples>
+  </command:command>
 </helpItems>
