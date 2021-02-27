@@ -620,4 +620,421 @@ finally
     <command:examples>
     </command:examples>
   </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Find-CheckbookNormalTrx</command:name>
+      <command:verb>Find</command:verb>
+      <command:noun>CheckbookNormalTrx</command:noun>
+      <!--This is the SYNOPSIS section of get-help output-->
+      <maml:description>
+        <maml:para>
+          zzz1
+        </maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>
+      </maml:para>
+      <maml:para>
+      </maml:para>
+    </maml:description>
+    <command:syntax>
+      <!--There can be multiple <command:syntaxItem> elements, for different usages of the cmdlet.-->
+      <command:syntaxItem>
+        <maml:name>Find-CheckbookNormalTrx</maml:name>
+        <!--These are the parameters that appear in this SYNTAX item.-->
+        <!--These parameters can be a subset of what appears in the <command:parameters> element.-->
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Register</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">Register</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <!--These appear in the PARAMETERS section of get-help output.-->
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Register</maml:name>
+        <maml:Description>
+          <maml:para>
+            A Register object returned by the Get-CheckbookRegister cmdlet, or otherwise obtained from the Company object.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Register</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            This cmdlet does not accept any input.
+          </maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Willowsoft.Checkbook.Lib.NormalTrx</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+          </maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <command:examples>
+    </command:examples>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Add-CheckbookNormalTrx</command:name>
+      <command:verb>Add</command:verb>
+      <command:noun>CheckbookNormalTrx</command:noun>
+      <!--This is the SYNOPSIS section of get-help output-->
+      <maml:description>
+        <maml:para>
+          zzz2
+        </maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>
+      </maml:para>
+      <maml:para>
+      </maml:para>
+    </maml:description>
+    <command:syntax>
+      <!--There can be multiple <command:syntaxItem> elements, for different usages of the cmdlet.-->
+      <command:syntaxItem>
+        <maml:name>Add-CheckbookNormalTrx</maml:name>
+        <!--These are the parameters that appear in this SYNTAX item.-->
+        <!--These parameters can be a subset of what appears in the <command:parameters> element.-->
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Register</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">Register</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <!--These appear in the PARAMETERS section of get-help output.-->
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Register</maml:name>
+        <maml:Description>
+          <maml:para>
+            A Register object returned by the Get-CheckbookRegister cmdlet, or otherwise obtained from the Company object.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Register</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            This cmdlet does not accept any input.
+          </maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Willowsoft.Checkbook.Lib.NormalTrx</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+          </maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <command:examples>
+    </command:examples>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Update-CheckbookNormalTrx</command:name>
+      <command:verb>Update</command:verb>
+      <command:noun>CheckbookNormalTrx</command:noun>
+      <!--This is the SYNOPSIS section of get-help output-->
+      <maml:description>
+        <maml:para>
+          zzz3
+        </maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>
+      </maml:para>
+      <maml:para>
+      </maml:para>
+    </maml:description>
+    <command:syntax>
+      <!--There can be multiple <command:syntaxItem> elements, for different usages of the cmdlet.-->
+      <command:syntaxItem>
+        <maml:name>Update-CheckbookNormalTrx</maml:name>
+        <!--These are the parameters that appear in this SYNTAX item.-->
+        <!--These parameters can be a subset of what appears in the <command:parameters> element.-->
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Register</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">Register</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <!--These appear in the PARAMETERS section of get-help output.-->
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Register</maml:name>
+        <maml:Description>
+          <maml:para>
+            A Register object returned by the Get-CheckbookRegister cmdlet, or otherwise obtained from the Company object.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Register</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            This cmdlet does not accept any input.
+          </maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Willowsoft.Checkbook.Lib.NormalTrx</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+          </maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <command:examples>
+    </command:examples>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Remove-CheckbookTrx</command:name>
+      <command:verb>Remove</command:verb>
+      <command:noun>CheckbookTrx</command:noun>
+      <!--This is the SYNOPSIS section of get-help output-->
+      <maml:description>
+        <maml:para>
+          zzz4
+        </maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>
+      </maml:para>
+      <maml:para>
+      </maml:para>
+    </maml:description>
+    <command:syntax>
+      <!--There can be multiple <command:syntaxItem> elements, for different usages of the cmdlet.-->
+      <command:syntaxItem>
+        <maml:name>Remove-CheckbookTrx</maml:name>
+        <!--These are the parameters that appear in this SYNTAX item.-->
+        <!--These parameters can be a subset of what appears in the <command:parameters> element.-->
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Register</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">Register</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <!--These appear in the PARAMETERS section of get-help output.-->
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Register</maml:name>
+        <maml:Description>
+          <maml:para>
+            A Register object returned by the Get-CheckbookRegister cmdlet, or otherwise obtained from the Company object.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Register</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            This cmdlet does not accept any input.
+          </maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Willowsoft.Checkbook.Lib.NormalTrx, Willowsoft.Checkbook.Lib.BudgetTrx, Willowsoft.Checkbook.Lib.TransferTrx</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            The transaction objects between the specified dates.
+          </maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <command:examples>
+    </command:examples>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>New-CheckbookSplit</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>CheckbookSplit</command:noun>
+      <!--This is the SYNOPSIS section of get-help output-->
+      <maml:description>
+        <maml:para>
+          zzz5
+        </maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>
+      </maml:para>
+      <maml:para>
+      </maml:para>
+    </maml:description>
+    <command:syntax>
+      <!--There can be multiple <command:syntaxItem> elements, for different usages of the cmdlet.-->
+      <command:syntaxItem>
+        <maml:name>New-CheckbookSplit</maml:name>
+        <!--These are the parameters that appear in this SYNTAX item.-->
+        <!--These parameters can be a subset of what appears in the <command:parameters> element.-->
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Register</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">Register</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <!--These appear in the PARAMETERS section of get-help output.-->
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Register</maml:name>
+        <maml:Description>
+          <maml:para>
+            A Register object returned by the Get-CheckbookRegister cmdlet, or otherwise obtained from the Company object.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Register</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            This cmdlet does not accept any input.
+          </maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Willowsoft.Checkbook.Lib.NormalTrx</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            The transaction objects between the specified dates.
+          </maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <command:examples>
+    </command:examples>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-CheckbookSimpleTrx</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>CheckbookSimpleTrx</command:noun>
+      <!--This is the SYNOPSIS section of get-help output-->
+      <maml:description>
+        <maml:para>
+          zzz6
+        </maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>
+      </maml:para>
+      <maml:para>
+      </maml:para>
+    </maml:description>
+    <command:syntax>
+      <!--There can be multiple <command:syntaxItem> elements, for different usages of the cmdlet.-->
+      <command:syntaxItem>
+        <maml:name>Get-CheckbookSimpleTrx</maml:name>
+        <!--These are the parameters that appear in this SYNTAX item.-->
+        <!--These parameters can be a subset of what appears in the <command:parameters> element.-->
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Register</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">Register</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <!--These appear in the PARAMETERS section of get-help output.-->
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Register</maml:name>
+        <maml:Description>
+          <maml:para>
+            A Register object returned by the Get-CheckbookRegister cmdlet, or otherwise obtained from the Company object.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Register</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            This cmdlet does not accept any input.
+          </maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Willowsoft.Checkbook.Lib.NormalTrx</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>
+            The transaction objects between the specified dates.
+          </maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <command:examples>
+    </command:examples>
+  </command:command>
 </helpItems>
