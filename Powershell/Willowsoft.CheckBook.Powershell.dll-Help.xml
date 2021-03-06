@@ -628,14 +628,19 @@ finally
       <!--This is the SYNOPSIS section of get-help output-->
       <maml:description>
         <maml:para>
-          zzz1
+          Find the normal transactions that best match the specified transaction field values.
         </maml:para>
       </maml:description>
     </command:details>
     <maml:description>
       <maml:para>
+        Searches the specified register for the normal transactions that best match the specified transaction date and payee/description, plus other optional matching criteria such as transaction amount and transaction number. Most of the match fields do not require an exact match. For example, the description/payee is case insensitive and only checks the first 10 characters.
       </maml:para>
       <maml:para>
+        This is the same transaction search used by bank imports, to find manually entered or generated normal transactions representing the transactions imported from the bank. This algorithm is very complex, but generally yields intuitive results. See the documentation on bank imports for details on how this works.
+      </maml:para>
+      <maml:para>
+        This search normally returns a small number of matches, or none at all. It is not a way to return large numbers of transactions, for example all transactions in a date range.
       </maml:para>
     </maml:description>
     <command:syntax>
@@ -649,6 +654,51 @@ finally
           <!--<maml:Description> element not needed in <command:syntaxItem> element-->
           <command:parameterValue required="true" variableLength="true">Register</command:parameterValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Number</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">Int</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Date</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">DateTime</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Description</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Amount</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">Decimal</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>MatchMin</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">Decimal</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>MatchMax</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">Decimal</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DaysBefore</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">Int</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DaysAfter</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">Int</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>LooseMatch</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">Boolean</command:parameterValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -657,10 +707,91 @@ finally
         <maml:name>Register</maml:name>
         <maml:Description>
           <maml:para>
-            A Register object returned by the Get-CheckbookRegister cmdlet, or otherwise obtained from the Company object.
+            The Register object to search, returned by the Get-CheckbookRegister cmdlet or otherwise obtained from the Company object.
           </maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Register</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Number</maml:name>
+        <maml:Description>
+          <maml:para>
+            The transaction number to match.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">Int</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Date</maml:name>
+        <maml:Description>
+          <maml:para>
+            The transaction date to match.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">DateTime</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Description</maml:name>
+        <maml:Description>
+          <maml:para>
+            The transaction payee/description to match.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Amount</maml:name>
+        <maml:Description>
+          <maml:para>
+            The transaction amount to match. If not specified then will match a zero amount.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">Decimal</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>MatchMin</maml:name>
+        <maml:Description>
+          <maml:para>
+            The minimum amount to consider a match to the "Amount" parameter. In bank imports this amount comes from the memorized transaction used to fill in missing transaction information.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">Decimal</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>MatchMax</maml:name>
+        <maml:Description>
+          <maml:para>
+            The maximum amount to consider a match to the "Amount" parameter. In bank imports this amount comes from the memorized transaction used to fill in missing transaction information.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">Decimal</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>DaysBefore</maml:name>
+        <maml:Description>
+          <maml:para>
+            Only consider transactions dated from this number of days before the "Date" parameter to "DaysAfter" days after. All transactions in this date range are checked for satisfying enough of the other match conditions.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">Int</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>DaysAfter</maml:name>
+        <maml:Description>
+          <maml:para>
+            Only consider transactions dated from this number of days after the "Date" parameter to "DaysBefore" days before. All transactions in this date range are checked for satisfying enough of the other match conditions.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">Int</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>LooseMatch</maml:name>
+        <maml:Description>
+          <maml:para>
+            If specified as true, find transactions matching as few as one field instead of requiring multiple matching fields. The caller may decide to use this when a regular match ("non-loose") does not find what you are looking for.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">Boolean</command:parameterValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -682,6 +813,7 @@ finally
         </dev:type>
         <maml:description>
           <maml:para>
+            Returns all normal transactions meeting the match criteria. Returns only normal transactions, not other types such as budget transactions.
           </maml:para>
         </maml:description>
       </command:returnValue>
