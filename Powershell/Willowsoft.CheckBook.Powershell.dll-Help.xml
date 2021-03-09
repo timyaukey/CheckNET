@@ -829,14 +829,16 @@ finally
       <!--This is the SYNOPSIS section of get-help output-->
       <maml:description>
         <maml:para>
-          zzz2
+          Create a new normal / bank transaction and add it to a register.
         </maml:para>
       </maml:description>
     </command:details>
     <maml:description>
       <maml:para>
+        Create a new normal / bank transaction with the specified properties and split(s), and add it to a register. Cannot be used to create other types of transactions, for example budget transactions.
       </maml:para>
       <maml:para>
+        The split(s) to include in this transaction are usually created by the "New-CheckbookSplit" cmdlet. These splits must be passed using one or the other of the "OneSplit" or "Splits" parameters, but not both.
       </maml:para>
     </maml:description>
     <command:syntax>
@@ -849,6 +851,59 @@ finally
           <maml:name>Register</maml:name>
           <!--<maml:Description> element not needed in <command:syntaxItem> element-->
           <command:parameterValue required="true" variableLength="true">Register</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Date</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">DateTime</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Number</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Description</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Memo</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Status</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">{Unreconciled|Reconciled}</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Fake</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AwaitingReview</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>MatchNormalRange</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">Decimal</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ImportKey</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>OneSplit</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">SplitContent</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Splits</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">SplitContent[]</command:parameterValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -863,7 +918,122 @@ finally
         </maml:Description>
         <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Register</command:parameterValue>
       </command:parameter>
-    </command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Date</maml:name>
+        <maml:Description>
+          <maml:para>
+            The transaction date to use. Any time of day specified is ignored.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">DateTime</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Number</maml:name>
+        <maml:Description>
+          <maml:para>
+            The check number to use, or one of the valid strings allowed in this field such as "Card" or "Dep".
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Description</maml:name>
+        <maml:Description>
+          <maml:para>
+            The transaction payee name or description.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Memo</maml:name>
+        <maml:Description>
+          <maml:para>
+            The transaction memo, if any. An empty string is equivalent to omitting this parameter.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Status</maml:name>
+        <maml:Description>
+          <maml:para>
+            The transaction bank reconciliation status.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">{Unreconciled|Reconciled}</command:parameterValue>
+        <dev:defaultValue>Unreconciled</dev:defaultValue>
+        <dev:possibleValues>
+          <dev:possibleValue>
+            <dev:value>Unreconciled</dev:value>
+            <maml:description>
+              <maml:para>The transaction has not been reconciled to bank records.</maml:para>
+            </maml:description>
+          </dev:possibleValue>
+          <dev:possibleValue>
+            <dev:value>Reconciled</dev:value>
+            <maml:description>
+              <maml:para>The transaction has been reconciled to bank records.</maml:para>
+            </maml:description>
+          </dev:possibleValue>
+        </dev:possibleValues>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Fake</maml:name>
+        <maml:Description>
+          <maml:para>
+            If specified, this transaction has its "Fake" box checked.
+          </maml:para>
+        </maml:Description>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AwaitingReview</maml:name>
+        <maml:Description>
+          <maml:para>
+            If specified, this transaction has its "Awaiting Review" box checked. This parameter is very seldom used.
+          </maml:para>
+        </maml:Description>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>MatchNormalRange</maml:name>
+        <maml:Description>
+          <maml:para>
+            The maximum difference between the amount of this transaction and the amount of any transaction it is matched with during bank imports. This parameter is very seldom used.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">Decimal</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ImportKey</maml:name>
+        <maml:Description>
+          <maml:para>
+            The import key, if any. Not used unless you are creating a transaction from information downloaded from the bank. Inspect real life transactions after importing them from the bank to determine what this value should be.
+          </maml:para>
+          <maml:para>
+            If specified as non-blank, the transaction will be considered already imported from the bank. Future bank import operations will only treated it as a previously imported transaction.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>OneSplit</maml:name>
+        <maml:Description>
+          <maml:para>
+            A single split to add to the transaction. The object passed is generally created by the "New-CheckbookSplit" cmdlet. Either the "OneSplit" or "Splits" parameter must be specified.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">SplitContent</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Splits</maml:name>
+        <maml:Description>
+          <maml:para>
+            An array of splits to add to the transaction. The objects passed are generally created by the "New-CheckbookSplit" cmdlet. Either the "OneSplit" or "Splits" parameter must be specified.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">SplitContent[]</command:parameterValue>
+      </command:parameter>
+      </command:parameters>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
