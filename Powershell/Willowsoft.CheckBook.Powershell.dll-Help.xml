@@ -1322,14 +1322,16 @@ finally
       <!--This is the SYNOPSIS section of get-help output-->
       <maml:description>
         <maml:para>
-          zzz4
+          Delete transactions from the checkbook.
         </maml:para>
       </maml:description>
     </command:details>
     <maml:description>
       <maml:para>
+        Delete the specified transactions from the checkbook. Exactly the same operation as deleting a transaction in the regular user interface.
       </maml:para>
       <maml:para>
+        The transactions to delete may be specified via the "Input" parameter, or pipeline input. Multiple transactions may be deleted in a single pipelined operation, for example by piping the output from one of the transaction search cmdlets directly into Remove-CheckbookTrx.
       </maml:para>
     </maml:description>
     <command:syntax>
@@ -1338,33 +1340,33 @@ finally
         <maml:name>Remove-CheckbookTrx</maml:name>
         <!--These are the parameters that appear in this SYNTAX item.-->
         <!--These parameters can be a subset of what appears in the <command:parameters> element.-->
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Register</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True" position="named" aliases="none">
+          <maml:name>Input</maml:name>
           <!--<maml:Description> element not needed in <command:syntaxItem> element-->
-          <command:parameterValue required="true" variableLength="true">Register</command:parameterValue>
+          <command:parameterValue required="false" variableLength="true">Trx</command:parameterValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
       <!--These appear in the PARAMETERS section of get-help output.-->
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Register</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True" position="named" aliases="none">
+        <maml:name>Input</maml:name>
         <maml:Description>
           <maml:para>
-            A Register object returned by the Get-CheckbookRegister cmdlet, or otherwise obtained from the Company object.
+            The transaction to delete. All types of transactions may be deleted, including normal / bank, budgets, etc.
           </maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Register</command:parameterValue>
+        <command:parameterValue required="false" variableLength="true">Willowsoft.Checkbook.Lib.Trx</command:parameterValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None</maml:name>
+          <maml:name>Willowsoft.Checkbook.Lib.Trx</maml:name>
         </dev:type>
         <maml:description>
           <maml:para>
-            This cmdlet does not accept any input.
+            The transactions to delete. The output from Find-CheckbookNormalTrx and Get-CheckbookTrx can be piped directly into this cmdlet.
           </maml:para>
         </maml:description>
       </command:inputType>
@@ -1372,11 +1374,11 @@ finally
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>Willowsoft.Checkbook.Lib.NormalTrx, Willowsoft.Checkbook.Lib.BudgetTrx, Willowsoft.Checkbook.Lib.TransferTrx</maml:name>
+          <maml:name>None</maml:name>
         </dev:type>
         <maml:description>
           <maml:para>
-            The transaction objects between the specified dates.
+            This cmdlet does not create any output.
           </maml:para>
         </maml:description>
       </command:returnValue>
