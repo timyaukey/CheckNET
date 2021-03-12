@@ -841,7 +841,7 @@ finally
         Cannot be used to create other types of transactions, for example budget transactions. Can be used to create fake transactions, but not generated transactions.
       </maml:para>
       <maml:para>
-        The split(s) to include in this transaction are usually created by the "New-CheckbookSplit" cmdlet. These splits must be passed using one or the other of the "OneSplit" or "Splits" parameters, but not both.
+        The split(s) to include in this transaction are created by the "New-CheckbookSplit" cmdlet. These splits must be passed using either the "OneSplit" or "Splits" parameter, but not both.
       </maml:para>
       <maml:para>
         The new transaction will not be saved to disk until Save-CheckbookCompany is called.
@@ -1025,7 +1025,7 @@ finally
         <maml:name>OneSplit</maml:name>
         <maml:Description>
           <maml:para>
-            A single split to add to the transaction. The object passed is generally created by the "New-CheckbookSplit" cmdlet. Either the "OneSplit" or "Splits" parameter must be specified.
+            A single split to add to the transaction. The object passed is created by the "New-CheckbookSplit" cmdlet. Either the "OneSplit" or "Splits" parameter must be specified.
           </maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="true">SplitContent</command:parameterValue>
@@ -1034,7 +1034,7 @@ finally
         <maml:name>Splits</maml:name>
         <maml:Description>
           <maml:para>
-            An array of splits to add to the transaction. The objects passed are generally created by the "New-CheckbookSplit" cmdlet. Either the "OneSplit" or "Splits" parameter must be specified.
+            An array of splits to add to the transaction. The objects passed are created by the "New-CheckbookSplit" cmdlet. Either the "OneSplit" or "Splits" parameter must be specified.
           </maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="true">SplitContent[]</command:parameterValue>
@@ -1272,7 +1272,7 @@ finally
         <maml:name>OneSplit</maml:name>
         <maml:Description>
           <maml:para>
-            A single split to add to the transaction. The object passed is generally created by the "New-CheckbookSplit" cmdlet. Either the "OneSplit" or "Splits" parameter may be specified, but not both. If neither is specified, then all existing splits for the transactions are retained.
+            A single split to add to the transaction. The object passed is created by the "New-CheckbookSplit" cmdlet. Either the "OneSplit" or "Splits" parameter may be specified, but not both. If neither is specified, then all existing splits for the transaction are retained.
           </maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="true">SplitContent</command:parameterValue>
@@ -1281,7 +1281,7 @@ finally
         <maml:name>Splits</maml:name>
         <maml:Description>
           <maml:para>
-            An array of splits to add to the transaction. The objects passed are generally created by the "New-CheckbookSplit" cmdlet. Either the "OneSplit" or "Splits" parameter may be specified, but not both. If neither is specified, then all existing splits for the transactions are retained.
+            An array of splits to add to the transaction. The objects passed are created by the "New-CheckbookSplit" cmdlet. Either the "OneSplit" or "Splits" parameter may be specified, but not both. If neither is specified, then all existing splits for the transaction are retained.
           </maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="true">SplitContent[]</command:parameterValue>
@@ -1394,14 +1394,16 @@ finally
       <!--This is the SYNOPSIS section of get-help output-->
       <maml:description>
         <maml:para>
-          zzz5
+          Create a split to use when creating or updating a normal / bank transaction.
         </maml:para>
       </maml:description>
     </command:details>
     <maml:description>
       <maml:para>
+        Create a split to pass to the Add-CheckbookNormalTrx or Update-CheckbookNormalTrx cmdlets. A single split object of this type may be passed to the "OneSplit" parameter, or an array of them to the "Splits" parameter.
       </maml:para>
       <maml:para>
+        The type of the returned object is different than the splits accessible as a property of an existing normal / bank transaction object. This is intentional, to prevent the caller from trying to pass a split from an existing transaction to Add-CheckbookNormalTrx or Update-CheckbookNormalTrx.
       </maml:para>
     </maml:description>
     <command:syntax>
@@ -1411,22 +1413,148 @@ finally
         <!--These are the parameters that appear in this SYNTAX item.-->
         <!--These parameters can be a subset of what appears in the <command:parameters> element.-->
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Register</maml:name>
+          <maml:name>Company</maml:name>
           <!--<maml:Description> element not needed in <command:syntaxItem> element-->
-          <command:parameterValue required="true" variableLength="true">Register</command:parameterValue>
+          <command:parameterValue required="true" variableLength="true">Company</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Category</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>InvoiceNum</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PONumber</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>InvoiceDate</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">Date</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>InvoiceDate</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">Date</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Budget</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Memo</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Terms</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="false" variableLength="true">String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Amount</maml:name>
+          <!--<maml:Description> element not needed in <command:syntaxItem> element-->
+          <command:parameterValue required="true" variableLength="true">Decimal</command:parameterValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
       <!--These appear in the PARAMETERS section of get-help output.-->
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Register</maml:name>
+        <maml:name>Company</maml:name>
         <maml:Description>
           <maml:para>
-            A Register object returned by the Get-CheckbookRegister cmdlet, or otherwise obtained from the Company object.
+            The Company object to which the split will eventually belong, indirectly through its association with a transaction and a register.
           </maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Register</command:parameterValue>
+        <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Company</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Category</maml:name>
+        <maml:Description>
+          <maml:para>
+            The category name, like "E:Utilities" or "A:Checking".
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>InvoiceNum</maml:name>
+        <maml:Description>
+          <maml:para>
+            The invoice number, if any.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>PONumber</maml:name>
+        <maml:Description>
+          <maml:para>
+            The purchase order number, if any.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>InvoiceDate</maml:name>
+        <maml:Description>
+          <maml:para>
+            The invoice date, if any.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">Date</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>InvoiceDate</maml:name>
+        <maml:Description>
+          <maml:para>
+            The due date, if any.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">Date</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Budget</maml:name>
+        <maml:Description>
+          <maml:para>
+            The budget name, if any.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Memo</maml:name>
+        <maml:Description>
+          <maml:para>
+            The split memo, if any.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Terms</maml:name>
+        <maml:Description>
+          <maml:para>
+            The payment terms, if any.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="true">String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Amount</maml:name>
+        <maml:Description>
+          <maml:para>
+            The split amount.
+          </maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="true">Decimal</command:parameterValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -1444,11 +1572,11 @@ finally
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>Willowsoft.Checkbook.Lib.NormalTrx</maml:name>
+          <maml:name>Willowsoft.CheckBook.Powershell.SplitContent</maml:name>
         </dev:type>
         <maml:description>
           <maml:para>
-            The transaction objects between the specified dates.
+            The new split object.
           </maml:para>
         </maml:description>
       </command:returnValue>
@@ -1464,14 +1592,19 @@ finally
       <!--This is the SYNOPSIS section of get-help output-->
       <maml:description>
         <maml:para>
-          zzz6
+          Create a simplified representation of a transaction, exposing only a few properties.
         </maml:para>
       </maml:description>
     </command:details>
     <maml:description>
       <maml:para>
+        Create a new object which is a simplified representation of a transaction, exposing only the date, check number, payee / description, category, and amount.
       </maml:para>
       <maml:para>
+        This may be more convenient than using the full transaction object in some contexts, because of the complexity of the real transaction object and the fact that there are multiple transaction types with different properties.
+      </maml:para>
+      <maml:para>
+        Returns a new object with copies of the data, not the original transaction object. Includes one additional property indicating the type of the original transaction. The "Category" property will be the value that appears for this transaction in the regular user interface, which is blank for a budget or other non-bank transaction.
       </maml:para>
     </maml:description>
     <command:syntax>
@@ -1480,33 +1613,36 @@ finally
         <maml:name>Get-CheckbookSimpleTrx</maml:name>
         <!--These are the parameters that appear in this SYNTAX item.-->
         <!--These parameters can be a subset of what appears in the <command:parameters> element.-->
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Register</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True" position="named" aliases="none">
+          <maml:name>Input</maml:name>
           <!--<maml:Description> element not needed in <command:syntaxItem> element-->
-          <command:parameterValue required="true" variableLength="true">Register</command:parameterValue>
+          <command:parameterValue required="false" variableLength="true">Trx</command:parameterValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
       <!--These appear in the PARAMETERS section of get-help output.-->
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Register</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True" position="named" aliases="none">
+        <maml:name>Input</maml:name>
         <maml:Description>
           <maml:para>
-            A Register object returned by the Get-CheckbookRegister cmdlet, or otherwise obtained from the Company object.
+            The transaction to copy information from. All types of transactions may be passed, including normal / bank, budgets, etc.
+          </maml:para>
+          <maml:para>
+            Input transactions may be passed with this parameter, or via pipelined input.
           </maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="true">Willowsoft.Checkbook.Lib.Register</command:parameterValue>
+        <command:parameterValue required="false" variableLength="true">Willowsoft.Checkbook.Lib.Trx</command:parameterValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None</maml:name>
+          <maml:name>Willowsoft.Checkbook.Lib.Trx</maml:name>
         </dev:type>
         <maml:description>
           <maml:para>
-            This cmdlet does not accept any input.
+            The transactions to create simplified representations of.
           </maml:para>
         </maml:description>
       </command:inputType>
@@ -1514,11 +1650,11 @@ finally
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>Willowsoft.Checkbook.Lib.NormalTrx</maml:name>
+          <maml:name>Willowsoft.Checkbook.Lib.ShortTrx</maml:name>
         </dev:type>
         <maml:description>
           <maml:para>
-            The transaction objects between the specified dates.
+            The new simplified transaction objects.
           </maml:para>
         </maml:description>
       </command:returnValue>
