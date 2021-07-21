@@ -17,15 +17,15 @@ Public Class SearchForm
     Private mobjSelectedSearchFilter As ISearchFilter
 
     Private Class SearchMatch
-        Public objTrx As Trx
+        Public objTrx As BaseTrx
     End Class
 
     Private mintMatchCount As Integer
     Private mcurAmountMatched As Decimal
     Private mcurAmountTotal As Decimal
     Private mblnSkipRemember As Boolean
-    Private colCheckedTrx As ICollection(Of Trx)
-    Private objSelectedTrx As Trx
+    Private colCheckedTrx As ICollection(Of BaseTrx)
+    Private objSelectedTrx As BaseTrx
 
     'Parameters of most recent successful search
     Private mdatLastStart As Date
@@ -40,7 +40,7 @@ Public Class SearchForm
         mobjAccount = mobjReg.objAccount
         mobjCompany = mobjHostUI.objCompany
         Me.MdiParent = mobjHostUI.objGetMainForm()
-        colCheckedTrx = New List(Of Trx)
+        colCheckedTrx = New List(Of BaseTrx)
         mcurAmountMatched = 0
         mcurAmountTotal = 0
         mdatDefaultDate = Today
@@ -164,9 +164,9 @@ Public Class SearchForm
         Try
             mblnSkipRemember = True
             If Not mobjLastSearchHandler Is Nothing Then
-                For Each objTrx As Trx In mobjReg.colDateRange(Of Trx)(mdatLastStart, mdatLastEnd)
+                For Each objTrx As BaseTrx In mobjReg.colDateRange(Of BaseTrx)(mdatLastStart, mdatLastEnd)
                     If mobjLastSearchFilter.blnInclude(objTrx) Then
-                        If chkShowAllSplits.Checked And objTrx.GetType() Is GetType(NormalTrx) Then
+                        If chkShowAllSplits.Checked And objTrx.GetType() Is GetType(BankTrx) Then
                             dlgTrx = AddressOf AddSearchMatchAllSplits
                         Else
                             dlgTrx = AddressOf AddSearchMatchTrx
@@ -223,7 +223,7 @@ Public Class SearchForm
         lblTotalDollars.Text = "Matched $" & Utilities.strFormatCurrency(mcurAmountMatched) & "    Total $" & Utilities.strFormatCurrency(mcurAmountTotal)
     End Sub
 
-    Private Sub AddSearchMatchTrx(ByVal objTrx As Trx)
+    Private Sub AddSearchMatchTrx(ByVal objTrx As BaseTrx)
 
         Dim objItem As ListViewItem
         Dim strCategory As String = ""
@@ -236,8 +236,8 @@ Public Class SearchForm
         Dim curAvailable As Decimal
 
         objItem = objAddNewMatch(objTrx, objTrx.curAmount)
-        If objTrx.GetType() Is GetType(NormalTrx) Then
-            DirectCast(objTrx, NormalTrx).SummarizeSplits(mobjCompany, strCategory, strPONumber, strInvoiceNum, strInvoiceDate, strDueDate, strTerms, strBudget, curAvailable)
+        If objTrx.GetType() Is GetType(BankTrx) Then
+            DirectCast(objTrx, BankTrx).SummarizeSplits(mobjCompany, strCategory, strPONumber, strInvoiceNum, strInvoiceDate, strDueDate, strTerms, strBudget, curAvailable)
             UITools.AddListSubItem(objItem, 4, Utilities.strFormatCurrency(curAvailable))
             UITools.AddListSubItem(objItem, 5, strCategory)
             UITools.AddListSubItem(objItem, 6, strPONumber)
@@ -259,16 +259,16 @@ Public Class SearchForm
 
     End Sub
 
-    Private Sub AddSearchMatchAllSplits(ByVal objTrx As Trx)
+    Private Sub AddSearchMatchAllSplits(ByVal objTrx As BaseTrx)
 
         Dim objSplit As TrxSplit
-        For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
+        For Each objSplit In DirectCast(objTrx, BankTrx).colSplits
             AddSearchMatchSplit(objTrx, objSplit)
         Next
 
     End Sub
 
-    Private Sub AddSearchMatchSplit(ByVal objTrx As Trx, ByVal objSplit As TrxSplit)
+    Private Sub AddSearchMatchSplit(ByVal objTrx As BaseTrx, ByVal objSplit As TrxSplit)
 
         Dim objItem As ListViewItem
         Dim strInvoiceDate As String
@@ -303,7 +303,7 @@ Public Class SearchForm
 
     End Sub
 
-    Private Function objAddNewMatch(ByVal objTrx As Trx, ByVal curMatchAmount As Decimal) As ListViewItem
+    Private Function objAddNewMatch(ByVal objTrx As BaseTrx, ByVal curMatchAmount As Decimal) As ListViewItem
         Dim objItem As ListViewItem = UITools.ListViewAdd(lvwMatches)
         objItem.Text = Utilities.strFormatDate(objTrx.datDate)
         UITools.AddListSubItem(objItem, 1, objTrx.strNumber)
@@ -370,7 +370,7 @@ Public Class SearchForm
 
     Private Sub cmdEditTrx_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdEditTrx.Click
         Try
-            Dim objTrx As Trx
+            Dim objTrx As BaseTrx
             Dim objMatch As SearchMatch
             If lvwMatches.FocusedItem Is Nothing Then
                 Exit Sub
@@ -394,7 +394,7 @@ Public Class SearchForm
 
     Private Sub cmdNewNormal_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewNormal.Click
         Try
-            Dim objTrx As NormalTrx = New NormalTrx(mobjReg)
+            Dim objTrx As BankTrx = New BankTrx(mobjReg)
             objTrx.NewEmptyNormal(mdatDefaultDate)
             If mobjHostUI.blnAddNormalTrx(objTrx, mdatDefaultDate, True, "SearchForm.NewNormal") Then
                 mobjHostUI.InfoMessageBox("Canceled.")
@@ -407,16 +407,16 @@ Public Class SearchForm
     End Sub
 
     ''' <summary>
-    ''' Enumerate all Trx objects for selected list items in the search results.
-    ''' If multiple splits for the same Trx are included in the search results
-    ''' will only return that Trx once. Assumes all splits for the same Trx
+    ''' Enumerate all BaseTrx objects for selected list items in the search results.
+    ''' If multiple splits for the same BaseTrx are included in the search results
+    ''' will only return that BaseTrx once. Assumes all splits for the same BaseTrx
     ''' are adjacent in the search results.
     ''' </summary>
     ''' <returns></returns>
-    Private Iterator Function colGetCheckedTrx() As IEnumerable(Of Trx)
+    Private Iterator Function colGetCheckedTrx() As IEnumerable(Of BaseTrx)
         Dim objItem As ListViewItem
-        Dim objTrx As Trx
-        Dim objLastTrx As Trx = Nothing
+        Dim objTrx As BaseTrx
+        Dim objLastTrx As BaseTrx = Nothing
         For Each objItem In lvwMatches.Items
             If objItem.Checked Then
                 objTrx = DirectCast(objItem.Tag, SearchMatch).objTrx
@@ -443,11 +443,11 @@ Public Class SearchForm
 
     End Sub
 
-    Private Function blnValidTrxForBulkOperation(ByVal objTrx As Trx, ByVal strOperation As String) As Boolean _
+    Private Function blnValidTrxForBulkOperation(ByVal objTrx As BaseTrx, ByVal strOperation As String) As Boolean _
         Implements IHostSearchToolUI.blnValidTrxForBulkOperation
 
         blnValidTrxForBulkOperation = False
-        If objTrx.GetType() IsNot GetType(NormalTrx) Then
+        If objTrx.GetType() IsNot GetType(BankTrx) Then
             mobjHostUI.ErrorMessageBox("Budgets and transfers may not be " & strOperation & ".")
             Exit Function
         End If
@@ -475,15 +475,15 @@ Public Class SearchForm
         RedoSearch()
     End Sub
 
-    Private Sub mobjReg_TrxAdded(ByVal objTrx As Trx) Handles mobjReg.TrxAdded
+    Private Sub mobjReg_TrxAdded(ByVal objTrx As BaseTrx) Handles mobjReg.TrxAdded
         RedoSearch()
     End Sub
 
-    Private Sub mobjReg_TrxDeleted(ByVal objTrx As Trx) Handles mobjReg.TrxDeleted
+    Private Sub mobjReg_TrxDeleted(ByVal objTrx As BaseTrx) Handles mobjReg.TrxDeleted
         RedoSearch()
     End Sub
 
-    Private Sub mobjReg_TrxUpdated(ByVal blnPositionChanged As Boolean, ByVal objTrx As Trx) Handles mobjReg.TrxUpdated
+    Private Sub mobjReg_TrxUpdated(ByVal blnPositionChanged As Boolean, ByVal objTrx As BaseTrx) Handles mobjReg.TrxUpdated
         RedoSearch()
     End Sub
 
@@ -494,10 +494,10 @@ Public Class SearchForm
     End Sub
 
     Private Sub RememberCheckedTrx()
-        Dim objCheckedTrx As Trx
+        Dim objCheckedTrx As BaseTrx
         If Not mblnSkipRemember Then
             'Remember the results that are checked.
-            colCheckedTrx = New List(Of Trx)
+            colCheckedTrx = New List(Of BaseTrx)
             For Each objCheckedTrx In colGetCheckedTrx()
                 colCheckedTrx.Add(objCheckedTrx)
             Next
@@ -516,8 +516,8 @@ Public Class SearchForm
     Private Sub RestoreCheckedAndSelected()
 
         Dim objItem As System.Windows.Forms.ListViewItem
-        Dim objTrx As Trx
-        Dim objCheckedTrx As Trx
+        Dim objTrx As BaseTrx
+        Dim objCheckedTrx As BaseTrx
 
         Try
             mblnSkipRemember = True
@@ -572,10 +572,10 @@ Public Class SearchForm
         Return cboSearchType.SelectedItem
     End Function
 
-    Public Iterator Function objAllSelectedTrx() As IEnumerable(Of Trx) Implements IHostSearchToolUI.objAllSelectedTrx
+    Public Iterator Function objAllSelectedTrx() As IEnumerable(Of BaseTrx) Implements IHostSearchToolUI.objAllSelectedTrx
         'Make a copy to iterate, in case the caller modifies a trx which causes the search to refresh.
-        Dim objSelected As List(Of Trx) = New List(Of Trx)(colGetCheckedTrx())
-        For Each objTrx As Trx In objSelected
+        Dim objSelected As List(Of BaseTrx) = New List(Of BaseTrx)(colGetCheckedTrx())
+        For Each objTrx As BaseTrx In objSelected
             Yield objTrx
         Next
     End Function

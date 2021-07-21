@@ -23,19 +23,19 @@ Friend Class RepeatSeqInfoForm
     End Sub
 
     Private Sub RepeatSeqInfoForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        Dim objTrx As Trx
+        Dim objTrx As BaseTrx
         Dim colRows As List(Of RptGridRow) = New List(Of RptGridRow)()
         Dim objRow As RptGridRow
 
-        For Each objTrx In mobjReg.colAllTrx(Of Trx)()
+        For Each objTrx In mobjReg.colAllTrx(Of BaseTrx)()
             If objTrx.strRepeatKey = mstrRepeatKey Then
                 objRow = New RptGridRow
                 objRow.TrxDate = objTrx.datDate.ToString(Utilities.strDateWithTwoDigitYear)
                 objRow.Descr = objTrx.strDescription
                 objRow.Amount = Utilities.strFormatCurrency(objTrx.curAmount)
                 objRow.SeqNum = objTrx.intRepeatSeq.ToString()
-                If TypeOf objTrx Is NormalTrx Then
-                    objRow.DueDate = DirectCast(objTrx, NormalTrx).strSummarizeDueDate()
+                If TypeOf objTrx Is BankTrx Then
+                    objRow.DueDate = DirectCast(objTrx, BankTrx).strSummarizeDueDate()
                 Else
                     objRow.DueDate = ""
                 End If

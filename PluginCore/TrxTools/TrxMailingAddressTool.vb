@@ -27,7 +27,7 @@ Public Class TrxMailingAddressTool
         Dim strMsg As String
         Dim strPayee As String
         Dim strAddress2 As String
-        Dim objNormalTrx As NormalTrx
+        Dim objNormalTrx As BankTrx
 
         objNormalTrx = objHostTrxToolUI.objGetTrxCopy()
         If objNormalTrx Is Nothing Then

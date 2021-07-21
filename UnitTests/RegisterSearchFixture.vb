@@ -9,7 +9,7 @@ Public Class RegisterSearchFixture
     <Test>
     Public Sub TestMatchNormal()
         Dim objUTReg As UTRegister
-        Dim colMatches As ICollection(Of NormalTrx) = Nothing
+        Dim colMatches As ICollection(Of BankTrx) = Nothing
         Dim blnExactMatch As Boolean
 
         gUTSetSubTest("Init register")
@@ -99,8 +99,8 @@ Public Class RegisterSearchFixture
 
     End Sub
 
-    Private Function strConcatMatchResults(ByVal colMatches As ICollection(Of NormalTrx)) As String
-        Dim objElement As NormalTrx
+    Private Function strConcatMatchResults(ByVal colMatches As ICollection(Of BankTrx)) As String
+        Dim objElement As BankTrx
         Dim strResult As String = ""
         For Each objElement In colMatches
             strResult = strResult & ";" & objElement.lngIndex
@@ -111,7 +111,7 @@ Public Class RegisterSearchFixture
     <Test>
     Public Sub TestMatchImportKey()
         Dim objUTReg As UTRegister
-        Dim objMatch As NormalTrx
+        Dim objMatch As BankTrx
 
         gUTSetSubTest("Init register")
 
@@ -134,9 +134,9 @@ Public Class RegisterSearchFixture
     <Test>
     Public Sub TestMatchPayee()
         Dim objUTReg As UTRegister
-        Dim colMatches As ICollection(Of NormalTrx) = Nothing
+        Dim colMatches As ICollection(Of BankTrx) = Nothing
         Dim blnExactMatch As Boolean
-        Dim objTrx As NormalTrx
+        Dim objTrx As BankTrx
 
         gUTSetSubTest("Init register")
 
@@ -168,7 +168,7 @@ Public Class RegisterSearchFixture
     <Test>
     Public Sub TestMatchInvoice()
         Dim objUTReg As UTRegister
-        Dim colMatches As ICollection(Of NormalTrx) = Nothing
+        Dim colMatches As ICollection(Of BankTrx) = Nothing
 
         gUTSetSubTest("Init register")
 
@@ -202,7 +202,7 @@ Public Class RegisterSearchFixture
     <Test>
     Public Sub TestMatchPONumber()
         Dim objUTReg As UTRegister
-        Dim colMatches As ICollection(Of NormalTrx) = Nothing
+        Dim colMatches As ICollection(Of BankTrx) = Nothing
 
         gUTSetSubTest("Init register")
 

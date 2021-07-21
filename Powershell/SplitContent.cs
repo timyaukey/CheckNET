@@ -16,7 +16,7 @@ namespace Willowsoft.CheckBook.Powershell
         public string strBudgetKey;
         public decimal curAmount;
 
-        public void AddToNormalTrx(NormalTrx trx)
+        public void AddToNormalTrx(BankTrx trx)
         {
             trx.AddSplit(
                 strCategoryKey_: strCatKey, 

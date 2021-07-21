@@ -25,7 +25,7 @@ namespace Willowsoft.CheckBook.Powershell
         public string Memo { get; set; }
 
         [Parameter(Mandatory = true)]
-        public Trx.TrxStatus Status { get; set; }
+        public BaseTrx.TrxStatus Status { get; set; }
 
         [Parameter]
         public SwitchParameter Fake { get; set; }
@@ -47,12 +47,12 @@ namespace Willowsoft.CheckBook.Powershell
 
         public AddNormalTrx()
         {
-            Status = Trx.TrxStatus.Unreconciled;
+            Status = BaseTrx.TrxStatus.Unreconciled;
         }
 
         protected override void BeginProcessing()
         {
-            NormalTrx normalTrx = new NormalTrx(Register);
+            BankTrx normalTrx = new BankTrx(Register);
             normalTrx.NewStartNormal(blnWillAddToRegister: true,
                 strNumber_: Number,
                 datDate_: Date,
@@ -95,7 +95,7 @@ namespace Willowsoft.CheckBook.Powershell
 
         private string TrxValidationError = null;
 
-        private void Register_ValidationError(Trx objTrx, string strMsg)
+        private void Register_ValidationError(BaseTrx objTrx, string strMsg)
         {
             TrxValidationError = strMsg;
         }

@@ -92,7 +92,7 @@ Public Class AccountSaver
     End Sub
 
     '$Description Save one Register for Save(). Writes real, fake non-generated
-    '   and fake generated Trx for LoadedRegister.
+    '   and fake generated BaseTrx for LoadedRegister.
 
     Private Sub SaveLoadedRegister(ByVal objReg As Register)
         Dim objSaver As RegisterSaver
@@ -101,13 +101,13 @@ Public Class AccountSaver
 
         objSaver = New RegisterSaver
 
-        'Output the non-fake Trx, and remember the non-generated fake.
+        'Output the non-fake BaseTrx, and remember the non-generated fake.
         colFakeLines = New List(Of String)
         SaveLine("RL" & objReg.strRegisterKey)
         objSaver.Save(mobjSaveFile, objReg, colFakeLines)
         SaveLine(".R")
 
-        'Save non-generated fake Trx we saved above.
+        'Save non-generated fake BaseTrx we saved above.
         SaveLine("RF" & objReg.strRegisterKey)
         For Each strLine In colFakeLines
             SaveLine(strLine)

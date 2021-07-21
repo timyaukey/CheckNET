@@ -4,7 +4,7 @@ Option Explicit On
 Public Class LogDeleteNull
     Implements ILogDelete
 
-    Private Sub ILogDelete_Init(ByVal strTitle As String, ByVal objOldTrx As Trx) Implements ILogDelete.Init
+    Private Sub ILogDelete_Init(ByVal strTitle As String, ByVal objOldTrx As BaseTrx) Implements ILogDelete.Init
 
     End Sub
 

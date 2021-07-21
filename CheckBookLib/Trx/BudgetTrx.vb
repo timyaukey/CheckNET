@@ -2,14 +2,14 @@
 Option Explicit On
 
 ''' <summary>
-''' A Trx subclass representing an amount of money set aside for some use.
+''' A BaseTrx subclass representing an amount of money set aside for some use.
 ''' TrxSplit objects can reference a BudgetTrx, which causes the effective
 ''' amount of the budget item used in running balance computations to be
 ''' different than the nominal budget amount.
 ''' </summary>
 
 Public Class BudgetTrx
-    Inherits Trx
+    Inherits BaseTrx
 
     'Original budget amount.
     'Is NOT changed as other TrxSplit are applied and unapplied to this one.
@@ -21,22 +21,22 @@ Public Class BudgetTrx
     Private mdatBudgetEnds As Date
     'For budget Trx, a unique ID for that budget. All budget Trx in a repeating
     'budget will have the same mstrBudgetKey, and the appropriate one for applying
-    'Trx will be chosen by the budget period. Is a foreign key into some external
-    'database defining how to create budget Trx.
+    'BaseTrx will be chosen by the budget period. Is a foreign key into some external
+    'database defining how to create budget BaseTrx.
     Private mstrBudgetKey As String
     'Amount applied toward budget. Magnitude may be greater than mcurBudgetLimit,
     'in which case mcurAmount will equal zero instead of a credit.
     Private mcurBudgetApplied As Decimal
     'Budget is expired (amount will be zero).
     Private mblnIsExpired As Boolean
-    'Collection of TrxSplit objects belonging to other NormalTrx and applied to this BudgetTrx.
+    'Collection of TrxSplit objects belonging to other BankTrx and applied to this BudgetTrx.
     Private mcolAppliedSplits As List(Of TrxSplit)
 
     Public Sub New(ByVal objReg_ As Register)
         MyBase.New(objReg_)
     End Sub
 
-    '$Description Initialize a new budget Trx object. Normally followed by
+    '$Description Initialize a new budget BaseTrx object. Normally followed by
     '   Register.NewLoadEnd() or Register.NewAddEnd().
 
     Public Sub NewStartBudget(ByVal blnWillAddToRegister As Boolean, ByVal datDate_ As Date, ByVal strDescription_ As String,
@@ -79,7 +79,7 @@ Public Class BudgetTrx
 
     End Sub
 
-    '$Description Update all updatable properties of this budget Trx object.
+    '$Description Update all updatable properties of this budget BaseTrx object.
     '   Normally followed Register.UpdateEnd().
 
     Public Sub UpdateStartBudget(ByVal datDate_ As Date, ByVal strDescription_ As String, ByVal strMemo_ As String,
@@ -193,7 +193,7 @@ Public Class BudgetTrx
         End If
     End Sub
 
-    '$Description Set mcurAmount for a budget Trx. Called whenever
+    '$Description Set mcurAmount for a budget BaseTrx. Called whenever
     '   mcurBudgetApplied or mcurBudgetLimit changes.
 
     Public Sub SetAmountForBudget()
@@ -218,11 +218,11 @@ Public Class BudgetTrx
 
     Public Overrides Sub Apply(ByVal blnLoading As Boolean)
         Dim blnAnyApplied As Boolean = False
-        For Each objScanTrx As Trx In New RegForwardFrom(Of Trx)(mobjReg, objEarliestPossibleApplied())
+        For Each objScanTrx As BaseTrx In New RegForwardFrom(Of BaseTrx)(mobjReg, objEarliestPossibleApplied())
             If objScanTrx.datDate > mdatBudgetEnds Then
                 Exit For
             End If
-            Dim objNormalTrx As NormalTrx = TryCast(objScanTrx, NormalTrx)
+            Dim objNormalTrx As BankTrx = TryCast(objScanTrx, BankTrx)
             If Not objNormalTrx Is Nothing Then
                 For Each objSplit As TrxSplit In objNormalTrx.colSplits
                     If objSplit.objBudget Is Nothing Then
@@ -243,16 +243,16 @@ Public Class BudgetTrx
     End Sub
 
     ''' <summary>
-    ''' Return the earliest Trx in this register that could possibly
+    ''' Return the earliest BaseTrx in this register that could possibly
     ''' be applied to this BudgetTrx. The returned object will always be non-nothing,
-    ''' but it may not be a NormalTrx and it may not be applied to the Budget.
+    ''' but it may not be a BankTrx and it may not be applied to the Budget.
     ''' It is merely the earliest that COULD be applied, based on the dates.
-    ''' The caller normally scans forward from here until they find a Trx
+    ''' The caller normally scans forward from here until they find a BaseTrx
     ''' dated after mdatBudgetEnds.
     ''' </summary>
     ''' <returns></returns>
-    Public Function objEarliestPossibleApplied() As Trx
-        For Each objOtherTrx As Trx In New RegBackwardFrom(Of Trx)(mobjReg, Me)
+    Public Function objEarliestPossibleApplied() As BaseTrx
+        For Each objOtherTrx As BaseTrx In New RegBackwardFrom(Of BaseTrx)(mobjReg, Me)
             If objOtherTrx.datDate < mdatBudgetStarts Then
                 Return objOtherTrx.objNext
             End If
@@ -287,7 +287,7 @@ Public Class BudgetTrx
         End Get
     End Property
 
-    Public Overrides Function objClone(ByVal blnWillAddToRegister As Boolean) As Trx
+    Public Overrides Function objClone(ByVal blnWillAddToRegister As Boolean) As BaseTrx
         Dim objBudgetTrx As BudgetTrx = New BudgetTrx(mobjReg)
         objBudgetTrx.NewStartBudget(blnWillAddToRegister, mdatDate, mstrDescription, mstrMemo, mblnAwaitingReview, mblnAutoGenerated,
                                     mintRepeatSeq, mstrRepeatKey, mcurBudgetLimit, mdatBudgetStarts, mstrBudgetKey)

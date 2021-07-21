@@ -9,13 +9,13 @@ Friend Class ReconcileForm
     Private mobjHostUI As IHostUI
     Private mobjAccount As Account
 
-    'Describe one normal, non-fake Trx in mobjAccount which is not already reconciled.
+    'Describe one normal, non-fake BaseTrx in mobjAccount which is not already reconciled.
     Private Structure ReconTrx
         'NOTE: There is no mechanism to keep this index accurate if any Register
         'in mobjAccount is modified during reconciliation, which means such
         'operations must not be allowed. We do this by making this form modal.
-        Dim objNormalTrx As NormalTrx
-        'True iff Trx is selected in this reconciliation.
+        Dim objNormalTrx As BankTrx
+        'True iff BaseTrx is selected in this reconciliation.
         Dim blnSelected As Boolean
         Dim objLvwItem As ListViewItem
         Dim datBankDate As DateTime?
@@ -69,10 +69,10 @@ Friend Class ReconcileForm
         ReDim maudtTrx(mlngTrxAllocated)
 
         For Each objReg As Register In mobjAccount.colRegisters
-            For Each objNormalTrx As NormalTrx In objReg.colAllTrx(Of NormalTrx)
+            For Each objNormalTrx As BankTrx In objReg.colAllTrx(Of BankTrx)
                 With objNormalTrx
                     If Not .blnFake Then
-                        If .lngStatus = Trx.TrxStatus.Reconciled Then
+                        If .lngStatus = BaseTrx.TrxStatus.Reconciled Then
                             curStartingBalance = curStartingBalance + .curAmount
                         Else
                             mlngTrxUsed = mlngTrxUsed + 1
@@ -82,7 +82,7 @@ Friend Class ReconcileForm
                             End If
                             With maudtTrx(mlngTrxUsed)
                                 .objNormalTrx = objNormalTrx
-                                .blnSelected = (objNormalTrx.lngStatus = Trx.TrxStatus.Selected)
+                                .blnSelected = (objNormalTrx.lngStatus = BaseTrx.TrxStatus.Selected)
                                 If .blnSelected Then
                                     curSelectedTotal = curSelectedTotal + objNormalTrx.curAmount
                                 End If
@@ -101,7 +101,7 @@ Friend Class ReconcileForm
 
     End Sub
 
-    Private Sub DisplayTrx(ByVal objTrx As NormalTrx, ByVal lngTrxIndex As Integer)
+    Private Sub DisplayTrx(ByVal objTrx As BankTrx, ByVal lngTrxIndex As Integer)
         Dim objItem As System.Windows.Forms.ListViewItem
         Dim intPipe2 As Integer
         Dim datBankDate As DateTime
@@ -139,7 +139,7 @@ Friend Class ReconcileForm
             AddSubItem(objItem, mintCOL_SORTABLE_NUMBER, strSortableNumber)
             AddSubItem(objItem, mintCOL_SORTABLE_BANK_DATE, strSortableBankDate)
             AddSubItem(objItem, mintCOL_ARRAY_INDEX, CStr(mlngTrxUsed))
-            .Checked = (objTrx.lngStatus = Trx.TrxStatus.Selected)
+            .Checked = (objTrx.lngStatus = BaseTrx.TrxStatus.Selected)
         End With
     End Sub
 
@@ -181,7 +181,7 @@ Friend Class ReconcileForm
     Private Sub lvwTrx_ItemCheck(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.ItemCheckEventArgs) Handles lvwTrx.ItemCheck
         Dim Item As System.Windows.Forms.ListViewItem = lvwTrx.Items(eventArgs.Index)
         Dim lngArrayIndex As Integer
-        Dim objTrx As NormalTrx
+        Dim objTrx As BankTrx
 
         Try
             lngArrayIndex = CInt(Item.SubItems(mintCOL_ARRAY_INDEX).Text)
@@ -232,7 +232,7 @@ Friend Class ReconcileForm
                 Exit Sub
             End If
 
-            SaveChanges(Trx.TrxStatus.Reconciled)
+            SaveChanges(BaseTrx.TrxStatus.Reconciled)
             SaveSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.strTitle, "")
 
             mobjHostUI.InfoMessageBox("Congratulations!" & vbCrLf & vbCrLf & "You have reconciled your account to the ending balance " & "on your bank statement. This means that the total of transactions marked as " & "reconciled in the software equals the bank statement ending balance.")
@@ -247,7 +247,7 @@ Friend Class ReconcileForm
     Private Sub cmdLater_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdLater.Click
         Try
 
-            SaveChanges(Trx.TrxStatus.Selected)
+            SaveChanges(BaseTrx.TrxStatus.Selected)
             SaveSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.strTitle, txtEndingBalance.Text)
 
             mobjHostUI.InfoMessageBox("Your work has been saved. To resume this reconciliation, just " & "reconcile normally. The software will remember what you have already done.")
@@ -260,13 +260,13 @@ Friend Class ReconcileForm
         End Try
     End Sub
 
-    Private Sub SaveChanges(ByVal lngSelectedStatus As Trx.TrxStatus)
+    Private Sub SaveChanges(ByVal lngSelectedStatus As BaseTrx.TrxStatus)
         Dim lngIndex As Integer
-        Dim lngNewStatus As Trx.TrxStatus
+        Dim lngNewStatus As BaseTrx.TrxStatus
 
         For lngIndex = 1 To mlngTrxUsed
             With maudtTrx(lngIndex)
-                lngNewStatus = CType(IIf(.blnSelected, lngSelectedStatus, Trx.TrxStatus.Unreconciled), Trx.TrxStatus)
+                lngNewStatus = CType(IIf(.blnSelected, lngSelectedStatus, BaseTrx.TrxStatus.Unreconciled), BaseTrx.TrxStatus)
                 If .objNormalTrx.lngStatus <> lngNewStatus Then
                     .objNormalTrx.objReg.SetTrxStatus(.objNormalTrx, lngNewStatus, New LogStatus, "ReconcileForm.SaveChanges")
                 End If

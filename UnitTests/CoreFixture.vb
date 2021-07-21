@@ -64,7 +64,7 @@ Public Class CoreFixture
 
     Private Function objLoadBuild(ByVal intTrxCount As Integer) As UTRegister
 
-        'This Trx sequence tests Register.lngNewInsert() and Register.lngMoveUp()
+        'This BaseTrx sequence tests Register.lngNewInsert() and Register.lngMoveUp()
         'exhaustively.
 
         'It also tests budget matching and application exhaustively. Tests
@@ -161,7 +161,7 @@ Public Class CoreFixture
     <Test>
     Public Sub TestAddUpdDel()
         Dim objUTReg As UTRegister
-        Dim objTrx As Trx
+        Dim objTrx As BaseTrx
 
         objUTReg = gobjUTNewReg()
         With objUTReg
@@ -285,11 +285,11 @@ Public Class CoreFixture
 
             'Delete one of the budgets, to show the applied splits are un-applied.
             objTrx = objUTReg.objReg.objTrx(4)
-            gUTAssert(Not DirectCast(objTrx, NormalTrx).objFirstSplit.objBudget Is Nothing, "Expected first split to be applied")
-            gUTAssert(DirectCast(objTrx, NormalTrx).objSecondSplit.objBudget Is Nothing, "Expected second split to not be applied")
+            gUTAssert(Not DirectCast(objTrx, BankTrx).objFirstSplit.objBudget Is Nothing, "Expected first split to be applied")
+            gUTAssert(DirectCast(objTrx, BankTrx).objSecondSplit.objBudget Is Nothing, "Expected second split to not be applied")
             .DeleteEntry(5, False, "Fourth delete")
             .Validate("", 3, 5, 2, 7)
-            gUTAssert(DirectCast(objTrx, NormalTrx).objFirstSplit.objBudget Is Nothing, "Expected split to be un-applied")
+            gUTAssert(DirectCast(objTrx, BankTrx).objFirstSplit.objBudget Is Nothing, "Expected split to be un-applied")
 
             .AddBudget(#6/20/2000#, -32D, #6/17/2000#, "bud1", "re-add", 5, 5, 5)
             .SetTrxAmount(9, -10D)
@@ -441,7 +441,7 @@ Public Class CoreFixture
         Dim objCompany As Company
         Dim objAccount As Account
         Dim objReg As Register
-        Dim objTrx As Trx
+        Dim objTrx As BaseTrx
         Dim objSplit As TrxSplit
 
         gUTSetSubTest("Load")
@@ -456,8 +456,8 @@ Public Class CoreFixture
         gUTSetSubTest("Verify 1")
 
         objTrx = objReg.objTrx(1)
-        With DirectCast(objTrx, NormalTrx)
-            gUTAssert(.GetType() Is GetType(NormalTrx), "Wrong type")
+        With DirectCast(objTrx, BankTrx)
+            gUTAssert(.GetType() Is GetType(BankTrx), "Wrong type")
             gUTAssert(.datDate = #4/13/2000#, "Wrong date")
             gUTAssert(.strDescription = "Hadley Garden Center", "Wrong description")
             gUTAssert(.strMemo = "Bird seed", "Wrong memo")
@@ -476,8 +476,8 @@ Public Class CoreFixture
         gUTSetSubTest("Verify 2")
 
         objTrx = objReg.objTrx(2)
-        With DirectCast(objTrx, NormalTrx)
-            gUTAssert(.GetType() Is GetType(NormalTrx), "Wrong type")
+        With DirectCast(objTrx, BankTrx)
+            gUTAssert(.GetType() Is GetType(BankTrx), "Wrong type")
             gUTAssert(.datDate = #4/15/2000#, "Wrong date")
             gUTAssert(.strNumber = "1001", "Wrong number")
             gUTAssert(.strImportKey = "imp1", "Wrong import key")

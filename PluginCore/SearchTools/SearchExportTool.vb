@@ -23,7 +23,7 @@ Public Class SearchExportTool
 
     Public Sub Run(objHostSearchToolUI As IHostSearchToolUI) Implements ISearchTool.Run
         Using frmExport As ExportForm = New ExportForm
-            Dim objTrx As Trx
+            Dim objTrx As BaseTrx
             Dim colSplits As IEnumerable(Of TrxSplit)
             Dim objSplit As TrxSplit
             Dim lngExportCount As Integer
@@ -39,8 +39,8 @@ Public Class SearchExportTool
             For Each objTrx In objHostSearchToolUI.objAllSelectedTrx()
                 'Ignore budgets and transfers instead of showing an error, because
                 'it is common to export all trx in a date range except these.
-                If TypeOf objTrx Is NormalTrx Then
-                    colSplits = DirectCast(objTrx, NormalTrx).colSplits
+                If TypeOf objTrx Is BankTrx Then
+                    colSplits = DirectCast(objTrx, BankTrx).colSplits
                     For Each objSplit In colSplits
                         frmExport.WriteSplit(objTrx, objSplit)
                         lngExportCount = lngExportCount + 1

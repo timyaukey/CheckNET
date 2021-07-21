@@ -4,13 +4,13 @@ Option Explicit On
 Public Module TrxGenerator
     '2345667890123456789012345678901234567890123456789012345678901234567890123456789012345
 
-    'Routines related to creating Trx with ITrxGenerator objects.
+    'Routines related to creating BaseTrx with ITrxGenerator objects.
     'Routines to create ITrxGenerator objects are in TrxGeneratorLoader.bas.
 
-    '$Description Create all generated Trx for a Register.
+    '$Description Create all generated BaseTrx for a Register.
     '$Param objAccount The Account to which objReg belongs.
-    '$Param objReg The Register to generate Trx in.
-    '$Param datRptEndMax Latest date to create Trx for.
+    '$Param objReg The Register to generate BaseTrx in.
+    '$Param datRptEndMax Latest date to create BaseTrx for.
 
     Public Sub gCreateGeneratedTrx(ByVal objAccount As Account, ByVal objReg As Register, ByVal datRptEndMax As Date, ByVal datCutoff As Date)
 
@@ -22,7 +22,7 @@ Public Module TrxGenerator
         Dim objReg2 As Register
         Dim colReg As ICollection(Of Register)
         Dim datOldestTrxDate As DateTime
-        Dim objRepeatTrx As Trx
+        Dim objRepeatTrx As BaseTrx
 
         colReg = New List(Of Register)
         For Each objReg2 In objAccount.colRegisters
@@ -45,9 +45,9 @@ Public Module TrxGenerator
 
                         objRepeatTrx = objReg.objRepeatTrx(datTrxToCreate.strRepeatKey, datTrxToCreate.intRepeatSeq)
                         If datTrxToCreate.datDate >= datOldestTrxDate Then
-                            'Only create Trx for seq numbers we don't already have in reg.
+                            'Only create BaseTrx for seq numbers we don't already have in reg.
                             If objRepeatTrx Is Nothing Then
-                                'Create the Trx.
+                                'Create the BaseTrx.
                                 strError = gstrCreateOneTrx(datTrxToCreate, objReg, colReg)
                                 If strError <> "" Then
                                     MsgBox("Error using transaction generator [" & objGenerator.strDescription & "]:" & vbCrLf & strError, MsgBoxStyle.OkOnly Or MsgBoxStyle.Critical, "Checkbook")
@@ -56,7 +56,7 @@ Public Module TrxGenerator
                             End If
                         End If
                         If Not objRepeatTrx Is Nothing Then
-                            If datTrxToCreate.GetType() Is GetType(NormalTrx) Then
+                            If datTrxToCreate.GetType() Is GetType(BankTrx) Then
                                 objRepeatTrx.curGeneratedAmount = datTrxToCreate.adatSplits(1).curAmount
                             Else
                                 objRepeatTrx.curGeneratedAmount = datTrxToCreate.curAmount
@@ -71,9 +71,9 @@ Public Module TrxGenerator
 
     End Sub
 
-    '$Description Create one Trx in the specified Register, from a TrxToCreate.
+    '$Description Create one BaseTrx in the specified Register, from a TrxToCreate.
     '$Param c The TrxToCreate.
-    '$Param objTargetReg The Register to create the Trx in.
+    '$Param objTargetReg The Register to create the BaseTrx in.
     '$Param colRegisters All Registers in the same Account as objTargetReg.
     '$Returns A string with a diagnostic message if there was a problem,
     '   else an empty string.
@@ -88,8 +88,8 @@ Public Module TrxGenerator
         gstrCreateOneTrx = ""
 
         Select Case c.objTrxType
-            Case GetType(NormalTrx)
-                Dim objNormalTrx As NormalTrx = New NormalTrx(objTargetReg)
+            Case GetType(BankTrx)
+                Dim objNormalTrx As BankTrx = New BankTrx(objTargetReg)
                 If c.intSplits = 0 Then
                     gstrCreateOneTrx = "No splits for normal Trx"
                     Exit Function
@@ -109,7 +109,7 @@ Public Module TrxGenerator
                     gstrCreateOneTrx = "No budget key for budget Trx"
                     Exit Function
                 End If
-                If c.lngBudgetUnit <> Trx.RepeatUnit.Missing Then
+                If c.lngBudgetUnit <> BaseTrx.RepeatUnit.Missing Then
                     If c.intBudgetNumber = 0 Then
                         gstrCreateOneTrx = "Missing budget number"
                         Exit Function
@@ -167,8 +167,8 @@ Public Module TrxGenerator
     '   the appropriate interval.
     '$Param vntNominalEndDate If not null, no SequencedTrx with dates later than
     '   this will be generated. This date is a characteristic of the sequence,
-    '   not the register to which Trx will ultimately be added.
-    '$Param datRegisterEndDate The end date out to which generated Trx
+    '   not the register to which BaseTrx will ultimately be added.
+    '$Param datRegisterEndDate The end date out to which generated BaseTrx
     '   are being created in the target Register. The same date is generally
     '   used for all generated sequences in that Register.
     '$Param lngRptUnit The repeat unit used to generate dates.
@@ -179,7 +179,7 @@ Public Module TrxGenerator
     '   unused. This allows "for" loops from index 1 to UBound(array)
     '   even if no SequencedTrx created.
 
-    Public Function gdatGenerateSeqTrxForDates(ByVal datNominalStartDate As Date, ByVal vntNominalEndDate As Object, ByVal datRegisterEndDate As Date, ByVal lngRptUnit As Trx.RepeatUnit, ByVal intRptNumber As Integer, ByVal curAmount As Decimal, ByVal intStartRepeatSeq As Integer) As SequencedTrx()
+    Public Function gdatGenerateSeqTrxForDates(ByVal datNominalStartDate As Date, ByVal vntNominalEndDate As Object, ByVal datRegisterEndDate As Date, ByVal lngRptUnit As BaseTrx.RepeatUnit, ByVal intRptNumber As Integer, ByVal curAmount As Decimal, ByVal intStartRepeatSeq As Integer) As SequencedTrx()
 
         Dim datTrxDate As Date
         Dim colResults As ICollection(Of SequencedTrx)
@@ -297,7 +297,7 @@ Public Module TrxGenerator
                 'LSet datTrxTmp = datTrxTemplate
                 datTrxTmp = gdatCopyTrxToCreate(datTrxTemplate)
                 datTrxTmp.datDate = datSeqTrx(intIndex).datDate
-                If datTrxTemplate.objTrxType = GetType(NormalTrx) Then
+                If datTrxTemplate.objTrxType = GetType(BankTrx) Then
                     datTrxTmp.adatSplits(1).curAmount = datSeqTrx(intIndex).curAmount
                     'If the memo says "due [on |by ][the ]nn???" then use "nn" as the day of the month in split due date.
                     If datTrxTemplate.strMemo <> Nothing Then

@@ -126,10 +126,10 @@ Public Class AccountLoader
                         strRegTitle = ""
                         blnRegShow = False
                     Case "RL"
-                        'Load individual non-fake Trx into Register.
+                        'Load individual non-fake BaseTrx into Register.
                         LoadRegister(strLine, False, lngLinesRead)
                     Case "RF"
-                        'Load individual fake Trx into Register.
+                        'Load individual fake BaseTrx into Register.
                         LoadRegister(strLine, True, lngLinesRead)
                     Case "RR"
                         'Was the repeating register
@@ -161,10 +161,10 @@ Public Class AccountLoader
 
         Try
             Dim datRegisterEndDate As Date = DateAdd(Microsoft.VisualBasic.DateInterval.Day, 45, Today)
-            'Create generated Trx.
+            'Create generated BaseTrx.
             'Have to generate for all registers before computing
             'balances or doing any post processing for any of them,
-            'because generating a transfer adds Trx to two registers.
+            'because generating a transfer adds BaseTrx to two registers.
             mobjAccount.RaiseLoadStatus("Generate for " + mobjAccount.strTitle)
             For Each objReg In mobjAccount.colRegisters
                 gCreateGeneratedTrx(mobjAccount, objReg, datRegisterEndDate, datCutoff)
@@ -224,21 +224,21 @@ Public Class AccountLoader
         Throw New Exception("Related account key " + intRelatedKey.ToString() + " not found")
     End Function
 
-    '$Description Remove all generated Trx from Registers for this account,
-    '   then recreate generated Trx through the specified end date.
+    '$Description Remove all generated BaseTrx from Registers for this account,
+    '   then recreate generated BaseTrx through the specified end date.
 
     Public Sub RecreateGeneratedTrx(ByVal datRegisterEndDate As Date, ByVal datCutoff As Date)
         Dim objReg As Register
 
-        'Purge generated Trx and clear all budget allocations for each register.
+        'Purge generated BaseTrx and clear all budget allocations for each register.
         For Each objReg In mobjAccount.colRegisters
             objReg.PurgeGenerated()
         Next objReg
 
-        'Generate all Trx.
+        'Generate all BaseTrx.
         'Have to generate for all registers before computing
         'balances or doing any post processing for any of them,
-        'because generating a transfer adds Trx to two registers.
+        'because generating a transfer adds BaseTrx to two registers.
         'This only takes 5 to 10 percent of the total time spent
         'in this routine. The rest is divided fairly evenly between
         'LoadPostProcessing() and FireRedisplayTrx().

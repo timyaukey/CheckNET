@@ -7,7 +7,7 @@ Public Class ImportFixture
 
     <Test>
     Public Sub TestImportUpdateBank()
-        Dim objTrx As Trx
+        Dim objTrx As BaseTrx
         Dim objUTReg As UTRegister
 
         gUTSetSubTest("Init register")
@@ -23,7 +23,7 @@ Public Class ImportFixture
 
         objUTReg.objReg.ImportUpdateBank(objUTReg.objReg.objNormalTrx(1), #4/3/2001#, "200", -25D, "importkey-1")
         objTrx = objUTReg.objReg.objTrx(1)
-        With DirectCast(objTrx, NormalTrx)
+        With DirectCast(objTrx, BankTrx)
             gUTAssert(.datDate = #4/3/2000#, "Bad date")
             gUTAssert(.strNumber = "200", "Bad number")
             gUTAssert(.curAmount = -25D, "Bad amount")

@@ -39,15 +39,15 @@ Public Class SplitSearchHandler
     End Function
 
     Public Sub ProcessTrx(
-        ByVal objTrx As Trx,
+        ByVal objTrx As BaseTrx,
         ByVal dlgAddTrxResult As AddSearchMatchTrxDelegate,
         ByVal dlgAddSplitResult As AddSearchMatchSplitDelegate) _
         Implements ISearchHandler.ProcessTrx
 
-        If TypeOf (objTrx) Is NormalTrx Then
-            For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
+        If TypeOf (objTrx) Is BankTrx Then
+            For Each objSplit In DirectCast(objTrx, BankTrx).colSplits
                 If objComparer.blnCompare(dlgGetSplitData(objSplit), strParameter) Then
-                    dlgAddSplitResult(DirectCast(objTrx, NormalTrx), objSplit)
+                    dlgAddSplitResult(DirectCast(objTrx, BankTrx), objSplit)
                 End If
             Next
         End If

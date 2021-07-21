@@ -3,7 +3,7 @@ Option Explicit On
 
 Imports System.Collections.Generic
 
-Public Class RegIterator(Of TTrx As Trx)
+Public Class RegIterator(Of TTrx As BaseTrx)
     Implements IEnumerable(Of TTrx)
 
     Protected mobjReg As Register
@@ -13,10 +13,10 @@ Public Class RegIterator(Of TTrx As Trx)
     End Sub
 
     Public Iterator Function GetEnumerator() As IEnumerator(Of TTrx) Implements IEnumerable(Of TTrx).GetEnumerator
-        'Using a Trx as the cursor instead of a Register index means
-        'we always return the Trx after the last one returned,
-        'even if Trx are inserted or deleted earlier in the Register order.
-        Dim objCurrentTrx As Trx = objGetFirst()
+        'Using a BaseTrx as the cursor instead of a Register index means
+        'we always return the BaseTrx after the last one returned,
+        'even if BaseTrx are inserted or deleted earlier in the Register order.
+        Dim objCurrentTrx As BaseTrx = objGetFirst()
         Do
             If objCurrentTrx Is Nothing Then
                 Return
@@ -37,11 +37,11 @@ Public Class RegIterator(Of TTrx As Trx)
         Return GetEnumerator()
     End Function
 
-    Protected Overridable Function objGetFirst() As Trx
+    Protected Overridable Function objGetFirst() As BaseTrx
         Return mobjReg.objFirstTrx
     End Function
 
-    Protected Overridable Function blnAfterLast(ByVal objTrx As Trx) As Boolean
+    Protected Overridable Function blnAfterLast(ByVal objTrx As BaseTrx) As Boolean
         Return False
     End Function
 End Class

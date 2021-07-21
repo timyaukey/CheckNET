@@ -6,7 +6,7 @@ Public Class ImportUtilities
 
     'Helper class for importing transaction information from a bank download file.
     'The caller must parse the information, this class only receives the information
-    'and makes Trx objects from it.
+    'and makes BaseTrx objects from it.
 
     Private mobjCompany As Company
     Private mobjAccount As Account
@@ -124,7 +124,7 @@ Public Class ImportUtilities
     End Sub
 
     ''' <summary>
-    ''' Create a new Trx object.
+    ''' Create a new BaseTrx object.
     ''' This is where the payee name is translated using the memorized transaction list.
     ''' </summary>
     ''' <returns></returns>
@@ -193,7 +193,7 @@ Public Class ImportUtilities
             End If
 
             objTrx = New ImportedTrx(Nothing)
-            objTrx.NewStartNormal(False, strNumber, datDate, strDescription, strMemo, Trx.TrxStatus.Unreconciled,
+            objTrx.NewStartNormal(False, strNumber, datDate, strDescription, strMemo, BaseTrx.TrxStatus.Unreconciled,
                                   mblnMakeFakeTrx, 0.0D, False, False, 0, strImportKey, "")
             objTrx.lngNarrowMethod = mlngNarrowMethod
             objTrx.curMatchMin = mcurMatchMin
@@ -420,15 +420,15 @@ Public Class ImportUtilities
 
     'Filter out trx that are already matched to something in maudtItem().
     Public Shared Function colRemoveAlreadyMatched(ByVal objReg As Register,
-                                                   ByVal colInputMatches As ICollection(Of NormalTrx),
-                                                   ByVal colAllMatchedTrx As IEnumerable(Of NormalTrx)) _
-                                                   As ICollection(Of NormalTrx)
-        Dim colUnusedMatches As ICollection(Of NormalTrx)
+                                                   ByVal colInputMatches As ICollection(Of BankTrx),
+                                                   ByVal colAllMatchedTrx As IEnumerable(Of BankTrx)) _
+                                                   As ICollection(Of BankTrx)
+        Dim colUnusedMatches As ICollection(Of BankTrx)
         Dim blnAlreadyMatched As Boolean
-        Dim objPossibleMatchTrx As NormalTrx
-        Dim objMatchedTrx As Trx
+        Dim objPossibleMatchTrx As BankTrx
+        Dim objMatchedTrx As BaseTrx
 
-        colUnusedMatches = New List(Of NormalTrx)
+        colUnusedMatches = New List(Of BankTrx)
         For Each objPossibleMatchTrx In colInputMatches
             blnAlreadyMatched = False
             For Each objMatchedTrx In colAllMatchedTrx
@@ -446,15 +446,15 @@ Public Class ImportUtilities
 
     Public Shared Function colApplyNarrowMethod(ByVal objReg As Register,
                                                 ByVal objTrx As ImportedTrx,
-                                                ByVal colInputMatches As ICollection(Of NormalTrx),
+                                                ByVal colInputMatches As ICollection(Of BankTrx),
                                                 ByRef blnExactMatch As Boolean) _
-                                                As ICollection(Of NormalTrx)
-        Dim colResult As ICollection(Of NormalTrx)
-        Dim objPossibleMatchTrx As NormalTrx
+                                                As ICollection(Of BankTrx)
+        Dim colResult As ICollection(Of BankTrx)
+        Dim objPossibleMatchTrx As BankTrx
         Dim datTargetDate As Date
         Dim dblBestDistance As Double
         Dim dblCurrentDistance As Double
-        Dim objBestMatch As NormalTrx = Nothing
+        Dim objBestMatch As BankTrx = Nothing
         Dim blnHaveFirstMatch As Boolean
 
         If colInputMatches.Count = 0 Then
@@ -474,7 +474,7 @@ Public Class ImportUtilities
 
         blnHaveFirstMatch = False
         For Each objPossibleMatchTrx In colInputMatches
-            If String.IsNullOrEmpty(objPossibleMatchTrx.strImportKey) And (objPossibleMatchTrx.lngStatus <> Trx.TrxStatus.Reconciled) Then
+            If String.IsNullOrEmpty(objPossibleMatchTrx.strImportKey) And (objPossibleMatchTrx.lngStatus <> BaseTrx.TrxStatus.Reconciled) Then
                 dblCurrentDistance = Math.Abs(objPossibleMatchTrx.datDate.Subtract(datTargetDate).TotalDays)
                 If (Not blnHaveFirstMatch) Or (dblCurrentDistance < dblBestDistance) Then
                     dblBestDistance = dblCurrentDistance
@@ -484,7 +484,7 @@ Public Class ImportUtilities
             End If
         Next
         blnExactMatch = True
-        colResult = New List(Of NormalTrx)
+        colResult = New List(Of BankTrx)
         If Not objBestMatch Is Nothing Then
             colResult.Add(objBestMatch)
         End If

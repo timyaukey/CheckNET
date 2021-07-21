@@ -4,7 +4,7 @@ Option Explicit On
 Public Class LogAddNull
     Implements ILogAdd
 
-    Private Sub ILogAdd_Init(ByVal strTitle As String, ByVal objAddTrx As Trx) Implements ILogAdd.Init
+    Private Sub ILogAdd_Init(ByVal strTitle As String, ByVal objAddTrx As BaseTrx) Implements ILogAdd.Init
 
     End Sub
 

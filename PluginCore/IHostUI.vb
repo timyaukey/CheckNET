@@ -33,11 +33,11 @@ Public Interface IHostUI
 
     Function objMakeTrxForm() As ITrxForm
 
-    Function blnAddNormalTrx(ByVal objTrx As NormalTrx,
+    Function blnAddNormalTrx(ByVal objTrx As BankTrx,
                              ByRef datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                              ByVal strLogTitle As String) As Boolean
 
-    Function blnAddNormalTrxSilent(ByVal objTrx As NormalTrx,
+    Function blnAddNormalTrxSilent(ByVal objTrx As BankTrx,
                              ByRef datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                              ByVal strLogTitle As String) As Boolean
 
@@ -47,7 +47,7 @@ Public Interface IHostUI
     Function blnAddTransferTrx(ByVal objReg As Register, ByRef datDefaultDate As DateTime,
                                ByVal strLogTitle As String) As Boolean
 
-    Function blnUpdateTrx(ByVal objTrx As Trx, ByRef datDefaultDate As Date,
+    Function blnUpdateTrx(ByVal objTrx As BaseTrx, ByRef datDefaultDate As Date,
                           ByVal strLogTitle As String) As Boolean
 
     Sub InfoMessageBox(ByVal strMessage As String)

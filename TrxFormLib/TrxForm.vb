@@ -28,9 +28,9 @@ Public Class TrxForm
     Private mblnSuppressPlaceholderAdjustment As Boolean
     Private mcurTotalAmount As Decimal
     Private mstrLogTitle As String
-    'Values of existing Trx, if editing a Trx.
+    'Values of existing BaseTrx, if editing a BaseTrx.
     Private mcurOldAmount As Decimal
-    Private mlngOldStatus As Trx.TrxStatus
+    Private mlngOldStatus As BaseTrx.TrxStatus
     Private mstrOldRepeatKey As String
     Private mintOldRepeatSeq As Integer
 
@@ -59,10 +59,10 @@ Public Class TrxForm
     Private mintPanelTop As Integer
     Private mintPanelLeft As Integer
 
-    'Definitions: "Shared" controls are those used exactly the same for all Trx types.
-    '             "Normal" controls are those used for normal Trx type, unless they
+    'Definitions: "Shared" controls are those used exactly the same for all BaseTrx types.
+    '             "Normal" controls are those used for normal BaseTrx type, unless they
     '             are "Shared". "Budget" and "Transfer" controls are the same for
-    '             those Trx types. A control can have multiple types, so long as
+    '             those BaseTrx types. A control can have multiple types, so long as
     '             none of them is "Shared". A name in () means that control is hidden.
     '"Shared": date, description, memo, repeat key, awaiting review,
     '          auto generated
@@ -70,16 +70,16 @@ Public Class TrxForm
     '"Budget": (number), status, (fake), budget limit, budget ends, budget key
     '"Transfer": (number), status, fake, transfer to, transfer amount
 
-    '$Description Enter a new normal Trx and add it to a Register.
+    '$Description Enter a new normal BaseTrx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddNormal(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As NormalTrx,
+    Public Function blnAddNormal(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As BankTrx,
         ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean,
         ByVal strLogTitle As String) As Boolean Implements ITrxForm.blnAddNormal
 
         Try
 
-            Init(objHostUI_, objTrx_.objReg, False, 0, GetType(NormalTrx), blnCheckInvoiceNum_, strLogTitle)
+            Init(objHostUI_, objTrx_.objReg, False, 0, GetType(BankTrx), blnCheckInvoiceNum_, strLogTitle)
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
             SetSharedControls(objTrx_)
@@ -102,13 +102,13 @@ Public Class TrxForm
     '   has validation errors.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddNormalSilent(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As NormalTrx,
+    Public Function blnAddNormalSilent(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As BankTrx,
         ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean,
         ByVal strLogTitle As String) As Boolean Implements ITrxForm.blnAddNormalSilent
 
         Try
 
-            Init(objHostUI_, objTrx_.objReg, False, 0, GetType(NormalTrx), blnCheckInvoiceNum_, strLogTitle)
+            Init(objHostUI_, objTrx_.objReg, False, 0, GetType(BankTrx), blnCheckInvoiceNum_, strLogTitle)
             mblnSilentMode = True
             mdatDefaultDate = datDefaultDate_
             ConfigSharedControls()
@@ -132,7 +132,7 @@ Public Class TrxForm
         End Try
     End Function
 
-    '$Description Enter a new budget Trx and add it to a Register.
+    '$Description Enter a new budget BaseTrx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
     Public Function blnAddBudget(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date,
@@ -160,7 +160,7 @@ Public Class TrxForm
         End Try
     End Function
 
-    '$Description Enter a new transfer Trx and add it to a Register.
+    '$Description Enter a new transfer BaseTrx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
     Public Function blnAddTransfer(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date,
@@ -187,10 +187,10 @@ Public Class TrxForm
         End Try
     End Function
 
-    '$Description Edit and existing Trx in the Register.
+    '$Description Edit and existing BaseTrx in the Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnUpdate(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As Trx, ByRef datDefaultDate_ As Date,
+    Public Function blnUpdate(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As BaseTrx, ByRef datDefaultDate_ As Date,
         ByVal strLogTitle As String) As Boolean Implements ITrxForm.blnUpdate
 
         Try
@@ -200,9 +200,9 @@ Public Class TrxForm
             SetSharedControls(objTrx_)
             mstrOldRepeatKey = objTrx_.strRepeatKey
             mintOldRepeatSeq = objTrx_.intRepeatSeq
-            If TypeOf objTrx_ Is NormalTrx Then
+            If TypeOf objTrx_ Is BankTrx Then
                 ConfigNormalControls()
-                SetNormalControls(DirectCast(objTrx_, NormalTrx))
+                SetNormalControls(DirectCast(objTrx_, BankTrx))
                 CheckForPlaceholderBudget()
                 mcurOldAmount = objTrx_.curAmount
                 mlngOldStatus = objTrx_.lngStatus
@@ -246,7 +246,7 @@ Public Class TrxForm
         End Try
     End Sub
 
-    Private Sub SetSharedControls(ByVal objTrx As Trx)
+    Private Sub SetSharedControls(ByVal objTrx As BaseTrx)
         Try
             mblnLoadingControls = True
             With objTrx
@@ -298,13 +298,13 @@ Public Class TrxForm
     '    DisplaySplits 0
     'End Sub
 
-    Private Sub SetNormalControls(ByVal objTrx As NormalTrx)
+    Private Sub SetNormalControls(ByVal objTrx As BankTrx)
         Try
             mblnLoadingControls = True
             mblnInSetNormalControls = True
             With objTrx
                 txtNumber.Text = .strNumber
-                cboStatus.SelectedIndex = CInt(IIf(.lngStatus = Trx.TrxStatus.Unreconciled, 0, IIf(.lngStatus = Trx.TrxStatus.Selected, 1, 2)))
+                cboStatus.SelectedIndex = CInt(IIf(.lngStatus = BaseTrx.TrxStatus.Unreconciled, 0, IIf(.lngStatus = BaseTrx.TrxStatus.Selected, 1, 2)))
                 chkFake.CheckState = CType(IIf(.blnFake, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked), CheckState)
                 txtMatchRange.Text = Utilities.strFormatCurrency(.curNormalMatchRange)
                 mstrImportKey = .strImportKey
@@ -384,13 +384,13 @@ Public Class TrxForm
         lvwAppliedTo.Visible = True
         mblnBudgetAppliedVisible = True
 
-        'Check all Trx until we find one dated after the budget end date.
-        For Each objCurrent As Trx In New RegForwardFrom(Of Trx)(mobjReg, objBudget.objEarliestPossibleApplied)
+        'Check all BaseTrx until we find one dated after the budget end date.
+        For Each objCurrent As BaseTrx In New RegForwardFrom(Of BaseTrx)(mobjReg, objBudget.objEarliestPossibleApplied)
             If objCurrent.datDate > objBudget.datBudgetEnds Then
                 Exit For
             End If
-            If objCurrent.GetType() Is GetType(NormalTrx) Then
-                For Each objSplit In DirectCast(objCurrent, NormalTrx).colSplits
+            If objCurrent.GetType() Is GetType(BankTrx) Then
+                For Each objSplit In DirectCast(objCurrent, BankTrx).colSplits
                     If objSplit.objBudget Is objBudget Then
                         'Show it.
                         With objCurrent
@@ -842,9 +842,9 @@ Public Class TrxForm
         End Try
     End Sub
 
-    '$Description Validate the data on the form, and add or update the Trx
+    '$Description Validate the data on the form, and add or update the BaseTrx
     '   as appropriate if no errors were found.
-    '$Returns True iff there were no errors and the Trx was saved.
+    '$Returns True iff there were no errors and the BaseTrx was saved.
 
     Private Function blnValidateAndSave() As Boolean
         Dim strOtherRegisterKey As String = ""
@@ -852,7 +852,7 @@ Public Class TrxForm
             Exit Function
         End If
         Select Case mobjTrxType
-            Case GetType(NormalTrx)
+            Case GetType(BankTrx)
                 If blnValidateNormal() Then
                     Exit Function
                 End If
@@ -877,7 +877,7 @@ Public Class TrxForm
     '$Returns True iff any errors detected.
 
     Private Function blnValidateShared() As Boolean
-        Dim objMatchingTrx As Trx
+        Dim objMatchingTrx As BaseTrx
         Dim intRepeatSeq As Integer
 
         blnValidateShared = True
@@ -1010,7 +1010,7 @@ Public Class TrxForm
             End If
         End If
         If chkFake.CheckState = System.Windows.Forms.CheckState.Checked Then
-            If lngTrxStatus() <> Trx.TrxStatus.Unreconciled Then
+            If lngTrxStatus() <> BaseTrx.TrxStatus.Unreconciled Then
                 ValidationError("Fake transactions must be unreconciled.")
                 Exit Function
             End If
@@ -1102,7 +1102,7 @@ Public Class TrxForm
             ValidationError("At least one split must be entered.")
             Exit Function
         End If
-        If mblnEditMode And (mlngOldStatus = Trx.TrxStatus.Reconciled) Then
+        If mblnEditMode And (mlngOldStatus = BaseTrx.TrxStatus.Reconciled) Then
             If curNewTotal <> mcurOldAmount Then
                 If MsgBox("Saving this will change the amount of a transaction " &
                           "which has already been reconciled to a bank statement. " &
@@ -1144,7 +1144,7 @@ Public Class TrxForm
     Private Function blnExistsInRegister(ByVal objReg As Register, ByVal objOldReg As Register, ByVal strCheckNumber As String, ByVal blnNumericCheckNumber As Boolean, ByVal strDescriptionKey As String) As Boolean
 
         Dim lngIndex As Integer
-        Dim objTrx As Trx
+        Dim objTrx As BaseTrx
         Dim intSplit As Integer
         Dim objSplit As TrxSplit
 
@@ -1159,7 +1159,7 @@ Public Class TrxForm
                 Exit Do
             End If
             objTrx = objReg.objTrx(lngIndex)
-            If objTrx.GetType() Is GetType(NormalTrx) Then
+            If objTrx.GetType() Is GetType(BankTrx) Then
                 'If objTrx.datDate < datEarliestToCheck Then
                 '    Exit Do
                 'End If
@@ -1178,7 +1178,7 @@ Public Class TrxForm
                             If maudtSplits(intSplit).strInvoiceNum <> "" And mblnCheckInvoiceNum Then
                                 'We now know this is a split we should check, because it is for
                                 'the same (or a very similar) payee and there is an invoice number.
-                                For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
+                                For Each objSplit In DirectCast(objTrx, BankTrx).colSplits
                                     If maudtSplits(intSplit).strInvoiceNum = objSplit.strInvoiceNum Then
                                         ValidationError("Invoice number is already in use for this payee.")
                                         blnExistsInRegister = True
@@ -1273,12 +1273,12 @@ Public Class TrxForm
     End Sub
 
     Private Sub SaveNormal()
-        Dim objTrx As NormalTrx
+        Dim objTrx As BankTrx
         If mblnEditMode Then
             objTrx = mobjReg.objNormalTrx(mlngIndex)
             Dim objTrxManager As NormalTrxManager = New NormalTrxManager(objTrx)
             objTrxManager.Update(
-                Sub(ByVal objNormalTrx As NormalTrx)
+                Sub(ByVal objNormalTrx As BankTrx)
                     UpdateNormal(objNormalTrx)
                     AddSplits(objNormalTrx)
                 End Sub,
@@ -1293,36 +1293,36 @@ Public Class TrxForm
         End If
     End Sub
 
-    Private Sub UpdateNormal(ByVal objNormalTrx As NormalTrx)
+    Private Sub UpdateNormal(ByVal objNormalTrx As BankTrx)
         objNormalTrx.UpdateStartNormal(txtNumber.Text, CDate(txtDate.Text), txtDescription.Text, txtMemo.Text, lngTrxStatus(),
                                  blnTrxFake(), CDec(txtMatchRange.Text), blnAwaitingReview(), blnAutoGenerated(),
                                  intRepeatSeq(), strImportKey(), strRepeatKey())
     End Sub
 
-    Private Function objCreateTrx(ByVal objCreateReg As Register) As NormalTrx
-        Dim objTrx As NormalTrx = New NormalTrx(objCreateReg)
+    Private Function objCreateTrx(ByVal objCreateReg As Register) As BankTrx
+        Dim objTrx As BankTrx = New BankTrx(objCreateReg)
         objTrx.NewStartNormal(True, txtNumber.Text, CDate(txtDate.Text), txtDescription.Text, txtMemo.Text,
                               lngTrxStatus(), blnTrxFake(), CDec(txtMatchRange.Text), blnAwaitingReview(), blnAutoGenerated(),
                               intRepeatSeq(), strImportKey(), strRepeatKey())
         objCreateTrx = objTrx
     End Function
 
-    Private Function objCreateThrowawayTrx() As NormalTrx
-        Dim objTrx As NormalTrx = New NormalTrx(Nothing)
+    Private Function objCreateThrowawayTrx() As BankTrx
+        Dim objTrx As BankTrx = New BankTrx(Nothing)
         objTrx.NewStartNormal(False, txtNumber.Text, CDate(txtDate.Text), txtDescription.Text, txtMemo.Text,
                               lngTrxStatus(), blnTrxFake(), CDec(txtMatchRange.Text), blnAwaitingReview(), blnAutoGenerated(),
                               intRepeatSeq(), strImportKey(), strRepeatKey())
         objCreateThrowawayTrx = objTrx
     End Function
 
-    Private Sub AddSplits(ByVal objTrx As NormalTrx)
+    Private Sub AddSplits(ByVal objTrx As BankTrx)
         Dim intSplit As Integer
         For intSplit = 1 To mintSplits
             AddSplitIfUsed(objTrx, intSplit)
         Next
     End Sub
 
-    Private Sub AddSplitIfUsed(ByVal objTrx As NormalTrx, ByVal intSplit As Integer)
+    Private Sub AddSplitIfUsed(ByVal objTrx As BankTrx, ByVal intSplit As Integer)
         Dim datInvoiceDate As Date
         Dim datDueDate As Date
 
@@ -1343,14 +1343,14 @@ Public Class TrxForm
         End If
     End Sub
 
-    Private Function lngTrxStatus() As Trx.TrxStatus
+    Private Function lngTrxStatus() As BaseTrx.TrxStatus
         Select Case VB.Left(cboStatus.Text, 1)
             Case "R"
-                lngTrxStatus = Trx.TrxStatus.Reconciled
+                lngTrxStatus = BaseTrx.TrxStatus.Reconciled
             Case "S"
-                lngTrxStatus = Trx.TrxStatus.Selected
+                lngTrxStatus = BaseTrx.TrxStatus.Selected
             Case Else
-                lngTrxStatus = Trx.TrxStatus.Unreconciled
+                lngTrxStatus = BaseTrx.TrxStatus.Unreconciled
         End Select
     End Function
 
@@ -1523,7 +1523,7 @@ Public Class TrxForm
             'Update the existing trx, without the checked splits.
             Dim objTrxManager As NormalTrxManager = New NormalTrxManager(mobjReg.objNormalTrx(mlngIndex))
             objTrxManager.Update(
-                Sub(ByVal objOriginalTrx As NormalTrx)
+                Sub(ByVal objOriginalTrx As BankTrx)
                     UpdateNormal(objOriginalTrx)
                     For intSplit = 1 To mintSplits
                         If Not maudtSplits(intSplit).blnChoose Then
@@ -1534,7 +1534,7 @@ Public Class TrxForm
                 New LogChange, mstrLogTitle & ".DivideOld")
 
             'Create the new trx, with the checked splits.
-            Dim objTrx As NormalTrx = objCreateTrx(mobjReg)
+            Dim objTrx As BankTrx = objCreateTrx(mobjReg)
             objTrx.ClearRepeat()
             For intSplit = 1 To mintSplits
                 If maudtSplits(intSplit).blnChoose Then
@@ -1599,7 +1599,7 @@ Public Class TrxForm
                     If strNumber <> "" Then
                         txtNumber.Text = strNumber
                     End If
-                    If mobjTrxType Is GetType(NormalTrx) Then
+                    If mobjTrxType Is GetType(BankTrx) Then
                         cboSplitCategory(0).Text = strCategory
                         If strBudget <> "" Then
                             cboSplitBudget(0).Text = strBudget
@@ -2268,14 +2268,14 @@ Public Class TrxForm
         chkAutoGenerated.CheckState = CheckState.Unchecked
     End Sub
 
-    Public Function objGetTrxCopy() As NormalTrx Implements IHostTrxToolUI.objGetTrxCopy
+    Public Function objGetTrxCopy() As BankTrx Implements IHostTrxToolUI.objGetTrxCopy
         If blnValidateShared() Then
             Return Nothing
         End If
         If blnValidateNormal() Then
             Return Nothing
         End If
-        Dim objTrx As NormalTrx = objCreateThrowawayTrx()
+        Dim objTrx As BankTrx = objCreateThrowawayTrx()
         AddSplits(objTrx)
         Return objTrx
     End Function

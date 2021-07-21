@@ -164,7 +164,7 @@ Public Class CompanyLoader
             'applied properly.
             SortAllRegisters(colLoaders)
 
-            'Call Trx.Apply() for all Trx loaded above.
+            'Call BaseTrx.Apply() for all BaseTrx loaded above.
             'This will create ReplicaTrx.
             For Each objLoader In colLoaders
                 showAccount(objLoader.objAccount)
@@ -175,7 +175,7 @@ Public Class CompanyLoader
             'This will merge the ReplicaTrx created by objLoader.LoadApply() into the sort order.
             SortAllRegisters(colLoaders)
 
-            'Perform final steps after all Trx exist, including computing running balances.
+            'Perform final steps after all BaseTrx exist, including computing running balances.
             For Each objLoader In colLoaders
                 showAccount(objLoader.objAccount)
                 objLoader.LoadFinish()

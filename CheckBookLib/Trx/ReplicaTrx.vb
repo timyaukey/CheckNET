@@ -2,7 +2,7 @@
 Option Explicit On
 
 Public Class ReplicaTrx
-    Inherits Trx
+    Inherits BaseTrx
 
     Private mstrCatKey As String
     Private mstrPONumber As String
@@ -63,7 +63,7 @@ Public Class ReplicaTrx
         'Do nothing for ReplicaTrx
     End Sub
 
-    Public Overrides Function objClone(ByVal blnWillAddToRegister As Boolean) As Trx
+    Public Overrides Function objClone(ByVal blnWillAddToRegister As Boolean) As BaseTrx
         Dim objReplicaTrx As ReplicaTrx = New ReplicaTrx(mobjReg)
         objReplicaTrx.NewStartReplica(blnWillAddToRegister, mdatDate, mstrDescription, mstrCatKey, mstrPONumber, mstrInvoiceNum, mcurAmount, mblnFake)
         Return objReplicaTrx

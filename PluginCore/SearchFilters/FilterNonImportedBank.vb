@@ -4,10 +4,10 @@ Option Explicit On
 Public Class FilterNonImportedBank
     Implements ISearchFilter
 
-    Public Function blnInclude(objTrx As Trx) As Boolean Implements ISearchFilter.blnInclude
-        If objTrx.GetType() Is GetType(NormalTrx) Then
-            Dim objBankTrx As NormalTrx = (DirectCast(objTrx, NormalTrx))
-            Return String.IsNullOrEmpty(objBankTrx.strImportKey) And (objBankTrx.lngStatus <> Trx.TrxStatus.Reconciled)
+    Public Function blnInclude(objTrx As BaseTrx) As Boolean Implements ISearchFilter.blnInclude
+        If objTrx.GetType() Is GetType(BankTrx) Then
+            Dim objBankTrx As BankTrx = (DirectCast(objTrx, BankTrx))
+            Return String.IsNullOrEmpty(objBankTrx.strImportKey) And (objBankTrx.lngStatus <> BaseTrx.TrxStatus.Reconciled)
         End If
         Return False
     End Function

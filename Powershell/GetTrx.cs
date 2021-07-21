@@ -7,7 +7,7 @@ using Willowsoft.CheckBook.Lib;
 namespace Willowsoft.CheckBook.Powershell
 {
     [Cmdlet(VerbsCommon.Get, "CheckbookTrx")]
-    [OutputType(typeof(NormalTrx), typeof(BudgetTrx), typeof(TransferTrx), typeof(ReplicaTrx))]
+    [OutputType(typeof(BankTrx), typeof(BudgetTrx), typeof(TransferTrx), typeof(ReplicaTrx))]
     public class GetTrx : Cmdlet
     {
         [Parameter(Mandatory = true)]
@@ -30,10 +30,10 @@ namespace Willowsoft.CheckBook.Powershell
             switch(TransType.ToLower())
             {
                 case "all":
-                    Execute<Trx>();
+                    Execute<BaseTrx>();
                     return;
                 case "normal":
-                    Execute<NormalTrx>();
+                    Execute<BankTrx>();
                     return;
                 case "budget":
                     Execute<BudgetTrx>();
@@ -45,7 +45,7 @@ namespace Willowsoft.CheckBook.Powershell
         }
 
         private void Execute<TTrx>()
-            where TTrx : Trx
+            where TTrx : BaseTrx
         {
             // Copy the results to a temp list, because downstream pipeline
             // consumers may alter trx in such as way that interferes with

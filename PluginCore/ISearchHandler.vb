@@ -2,11 +2,11 @@
 Option Explicit On
 
 
-Public Delegate Function GetTrxSearchDataDelegate(ByVal objTrx As Trx) As String
+Public Delegate Function GetTrxSearchDataDelegate(ByVal objTrx As BaseTrx) As String
 Public Delegate Function GetSplitSearchDataDelegate(ByVal objSplit As TrxSplit) As String
 
-Public Delegate Sub AddSearchMatchTrxDelegate(ByVal objTrx As Trx)
-Public Delegate Sub AddSearchMatchSplitDelegate(ByVal objTrx As Trx, ByVal objSplit As TrxSplit)
+Public Delegate Sub AddSearchMatchTrxDelegate(ByVal objTrx As BaseTrx)
+Public Delegate Sub AddSearchMatchSplitDelegate(ByVal objTrx As BaseTrx, ByVal objSplit As TrxSplit)
 
 Public Interface ISearchHandler
     ''' <summary>
@@ -34,16 +34,16 @@ Public Interface ISearchHandler
     Function blnPrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean
 
     ''' <summary>
-    ''' Evaluate one Trx for the search, and if the Trx meets the conditions
+    ''' Evaluate one BaseTrx for the search, and if the BaseTrx meets the conditions
     ''' for being included in the search results then call one of the two
-    ''' delegates to include it. One delegate is used to report the Trx as
-    ''' a whole, the other to report a single split in the Trx.
+    ''' delegates to include it. One delegate is used to report the BaseTrx as
+    ''' a whole, the other to report a single split in the BaseTrx.
     ''' </summary>
     ''' <param name="objTrx"></param>
     ''' <param name="dlgAddTrxResult"></param>
     ''' <param name="dlgAddSplitResult"></param>
     Sub ProcessTrx(
-        ByVal objTrx As Trx,
+        ByVal objTrx As BaseTrx,
         ByVal dlgAddTrxResult As AddSearchMatchTrxDelegate,
         ByVal dlgAddSplitResult As AddSearchMatchSplitDelegate)
 End Interface

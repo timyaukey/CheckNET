@@ -6,9 +6,9 @@ Imports System.IO
 <Assembly: PluginAssembly()>
 
 ''' <summary>
-''' All plugins that import Trx using ITrxReader and IImportHandler
+''' All plugins that import BaseTrx using ITrxReader and IImportHandler
 ''' inherit from this. This class is subclassed several different
-''' ways for different types of Trx importers. The user interface checks
+''' ways for different types of BaseTrx importers. The user interface checks
 ''' the subclass to determine which menu to add the plugin to.
 ''' </summary>
 

@@ -5,10 +5,10 @@ Public Class LogAdd
     Implements ILogAdd
 
     Private mstrTitle As String
-    Private mobjAddTrx As Trx
+    Private mobjAddTrx As BaseTrx
     Private mdatTimestamp As Date
 
-    Private Sub ILogAdd_Init(ByVal strTitle As String, ByVal objAddTrx As Trx) Implements ILogAdd.Init
+    Private Sub ILogAdd_Init(ByVal strTitle As String, ByVal objAddTrx As BaseTrx) Implements ILogAdd.Init
         mstrTitle = strTitle
         'objNewTrx is a clone created by EventLog.AddILogAdd().
         mobjAddTrx = objAddTrx

@@ -229,7 +229,7 @@ Public Class TrxGenPeriod
             intStartIndex = intStartIndex + 7
         Loop
 
-        'Only make Trx after the starting date and on or before the ending date.
+        'Only make BaseTrx after the starting date and on or before the ending date.
         For intIndex = 1 To UBound(datNewTrx)
             If (datNewTrx(intIndex).datDate < mdatFirstPeriodStarts) Or (datNewTrx(intIndex).datDate > datRegisterEndDate) Then
                 'Don't set to "false" in "else", because may have been

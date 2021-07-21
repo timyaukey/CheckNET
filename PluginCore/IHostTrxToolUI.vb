@@ -6,6 +6,6 @@ Public Interface IHostTrxToolUI
     Sub SetNumber(ByVal strNumber As String)
     Sub SetDate(ByVal datDate As DateTime)
     Sub SetFake(ByVal blnFake As Boolean)
-    Function objGetTrxCopy() As NormalTrx
+    Function objGetTrxCopy() As BankTrx
     Sub SaveAndClose()
 End Interface

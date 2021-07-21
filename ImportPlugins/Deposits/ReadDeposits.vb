@@ -7,7 +7,7 @@ Public Class ReadDeposits
     Implements ITrxReader
 
     'An ITrxReader that reads from the clipboard.
-    'Each line of text is one Trx.
+    'Each line of text is one BaseTrx.
     'Each line contains three parts separated by a single blank: Date, description, amount.
 
     Private mobjInput As TextReader
@@ -77,7 +77,7 @@ Public Class ReadDeposits
         objTrx = New ImportedTrx(Nothing)
 
         datNull = Utilities.datEmpty
-        objTrx.NewStartNormal(False, "", datDate, strDescription, "", Trx.TrxStatus.Unreconciled, New TrxGenImportData())
+        objTrx.NewStartNormal(False, "", datDate, strDescription, "", BaseTrx.TrxStatus.Unreconciled, New TrxGenImportData())
         objTrx.AddSplit("", "", "", "", datNull, datNull, "", "", curAmount)
 
         objNextTrx = objTrx

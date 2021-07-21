@@ -22,9 +22,9 @@ Public Class SearchMoveTool
     End Function
 
     Public Sub Run(objHostSearchToolUI As IHostSearchToolUI) Implements ISearchTool.Run
-        Dim objTrxSrc As NormalTrx
-        Dim objTrxFirst As NormalTrx = Nothing
-        Dim colTrx As ICollection(Of NormalTrx)
+        Dim objTrxSrc As BankTrx
+        Dim objTrxFirst As BankTrx = Nothing
+        Dim colTrx As ICollection(Of BankTrx)
         Dim strNewDate As String = ""
         Dim objNewReg As Register = Nothing
         Dim datExplicitDate As Date
@@ -33,7 +33,7 @@ Public Class SearchMoveTool
         Dim datNewDate As Date
         Dim frmMoveTo As MoveDstForm
 
-        colTrx = New List(Of NormalTrx)
+        colTrx = New List(Of BankTrx)
         For Each objTrxSrc In objHostSearchToolUI.objAllSelectedTrx()
             If Not objHostSearchToolUI.blnValidTrxForBulkOperation(objTrxSrc, "moved") Then
                 Exit Sub
@@ -82,7 +82,7 @@ Public Class SearchMoveTool
                     End If
                 Else
                     'Changing register, and possibly date.
-                    Dim objTrxNew As NormalTrx = New NormalTrx(objNewReg)
+                    Dim objTrxNew As BankTrx = New BankTrx(objNewReg)
                     objTrxNew.NewStartNormal(True, objTrxSrc)
                     objTrxNew.datDate = datNewDate
                     .CopySplits(objTrxNew)

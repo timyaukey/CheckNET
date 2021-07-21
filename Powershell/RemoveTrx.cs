@@ -9,7 +9,7 @@ namespace Willowsoft.CheckBook.Powershell
     public class RemoveTrx : Cmdlet
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true)]
-        public Trx Input { get; set; }
+        public BaseTrx Input { get; set; }
 
         protected override void ProcessRecord()
         {

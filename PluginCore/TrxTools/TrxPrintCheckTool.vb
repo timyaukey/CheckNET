@@ -24,7 +24,7 @@ Public Class TrxPrintCheckTool
 
         Dim objCheckPrinting As CheckPrinting = New CheckPrinting(mobjHostUI)
 
-        Dim objTestTrx As NormalTrx = objHostTrxToolUI.objGetTrxCopy()
+        Dim objTestTrx As BankTrx = objHostTrxToolUI.objGetTrxCopy()
         If objTestTrx Is Nothing Then
             Exit Sub
         End If
@@ -39,7 +39,7 @@ Public Class TrxPrintCheckTool
         objHostTrxToolUI.SetDate(Today)
         objHostTrxToolUI.SetFake(False)
 
-        Dim objTrx As NormalTrx = objHostTrxToolUI.objGetTrxCopy()
+        Dim objTrx As BankTrx = objHostTrxToolUI.objGetTrxCopy()
         If objTrx Is Nothing Then
             Exit Sub
         End If

@@ -4,11 +4,11 @@ Option Explicit On
 Public Interface ITrxForm
     Inherits IDisposable
 
-    Function blnAddNormal(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As NormalTrx,
+    Function blnAddNormal(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As BankTrx,
         ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean,
         ByVal strLogTitle As String) As Boolean
 
-    Function blnAddNormalSilent(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As NormalTrx,
+    Function blnAddNormalSilent(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As BankTrx,
         ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean,
         ByVal strLogTitle As String) As Boolean
 
@@ -18,6 +18,6 @@ Public Interface ITrxForm
     Function blnAddTransfer(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register,
         ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
 
-    Function blnUpdate(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As Trx,
+    Function blnUpdate(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As BaseTrx,
         ByRef datDefaultDate_ As Date, ByVal strLogTitle As String) As Boolean
 End Interface

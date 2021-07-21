@@ -9,7 +9,7 @@ Option Explicit On
 ''' </summary>
 
 Public Class ImportedTrx
-    Inherits NormalTrx
+    Inherits BankTrx
 
     'Import match narrowing method
     Public Property lngNarrowMethod As ImportMatchNarrowMethod

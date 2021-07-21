@@ -11,7 +11,7 @@ Public Interface ITrxReader
     '   obtain data from it. Must be called before other members.
     '   If appropriate, may display a modal window asking the
     '   operator to identify the source to use, e.g. a file.
-    '$Param objAccount_ The Account object these Trx may be added to.
+    '$Param objAccount_ The Account object these BaseTrx may be added to.
     '$Returns True iff successful.
 
     Function blnOpenSource(ByVal objAccount_ As Account) As Boolean
@@ -22,11 +22,11 @@ Public Interface ITrxReader
 
     ReadOnly Property strSource() As String
 
-    '$Description Create and return a Trx whose data are read from the
+    '$Description Create and return a BaseTrx whose data are read from the
     '   source opened by blnOpenSource(). Successive calls to ojbNextTrx()
     '   will return successive transactions from the source.
-    '$Returns The new Trx, or Nothing if there were no more transactions.
-    '   The Trx will have at least one Split, but the category for any
+    '$Returns The new BaseTrx, or Nothing if there were no more transactions.
+    '   The BaseTrx will have at least one Split, but the category for any
     '   Split may be a zero length string.
 
     Function objNextTrx() As ImportedTrx

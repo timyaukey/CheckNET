@@ -24,9 +24,9 @@ Public Class SearchRecategorizeTool
     Public Sub Run(objHostSearchToolUI As IHostSearchToolUI) Implements ISearchTool.Run
         Dim strOldCatKey As String = ""
         Dim strNewCatKey As String = ""
-        Dim colTrx As ICollection(Of NormalTrx)
-        Dim objCheckedTrx As Trx
-        Dim objNormalTrx As NormalTrx
+        Dim colTrx As ICollection(Of BankTrx)
+        Dim objCheckedTrx As BaseTrx
+        Dim objNormalTrx As BankTrx
         Dim objTrxManager As NormalTrxManager
         Dim colSplits As IEnumerable(Of TrxSplit)
         Dim objSplit As TrxSplit
@@ -40,9 +40,9 @@ Public Class SearchRecategorizeTool
             End If
         End Using
 
-        colTrx = New List(Of NormalTrx)
+        colTrx = New List(Of BankTrx)
         For Each objCheckedTrx In objHostSearchToolUI.objAllSelectedTrx()
-            If objCheckedTrx.GetType() IsNot GetType(NormalTrx) Then
+            If objCheckedTrx.GetType() IsNot GetType(BankTrx) Then
                 mobjHostUI.ErrorMessageBox("Budgets and transfers may not be recategorized.")
                 Exit Sub
             End If
@@ -50,11 +50,11 @@ Public Class SearchRecategorizeTool
                 mobjHostUI.ErrorMessageBox("Generated transactions may not be recategorized.")
                 Exit Sub
             End If
-            colSplits = DirectCast(objCheckedTrx, NormalTrx).colSplits
+            colSplits = DirectCast(objCheckedTrx, BankTrx).colSplits
             For Each objSplit In colSplits
                 With objSplit
                     If objSplit.strCategoryKey = strOldCatKey Then
-                        colTrx.Add(DirectCast(objCheckedTrx, NormalTrx))
+                        colTrx.Add(DirectCast(objCheckedTrx, BankTrx))
                         Exit For
                     End If
                 End With

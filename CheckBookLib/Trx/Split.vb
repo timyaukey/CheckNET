@@ -2,7 +2,7 @@ Option Strict On
 Option Explicit On
 
 ''' <summary>
-''' Represents an amount of money associated with a NormalTrx, plus
+''' Represents an amount of money associated with a BankTrx, plus
 ''' attributes such as due date, category, invoice number, memo, etc.
 ''' </summary>
 
@@ -23,13 +23,13 @@ Public Class TrxSplit
     Private mdatDueDate As Date
     'Payment terms of this split.
     Private mstrTerms As String
-    'Trx.strBudgetKey of budget Trx to apply this split toward.
+    'BaseTrx.strBudgetKey of budget BaseTrx to apply this split toward.
     Private mstrBudgetKey As String
     'Amount of this Split.
     Private mcurAmount As Decimal
 
-    'Parent NormalTrx for this TrxSplit.
-    Private mobjParent As NormalTrx
+    'Parent BankTrx for this TrxSplit.
+    Private mobjParent As BankTrx
     'Possible reference to BudgetTrx for this TrxSplit.
     Private mobjBudget As BudgetTrx
     'Possible reference to ReplicaTrxManager for this TrxSplit.
@@ -175,11 +175,11 @@ Public Class TrxSplit
         End Set
     End Property
 
-    Public Property objParent() As NormalTrx
+    Public Property objParent() As BankTrx
         Get
             Return mobjParent
         End Get
-        Set(value As NormalTrx)
+        Set(value As BankTrx)
             mobjParent = value
         End Set
     End Property
@@ -196,10 +196,10 @@ Public Class TrxSplit
         mcurAmount = curNewAmount
     End Sub
 
-    '$Description Search for matching budget Trx for mstrBudgetKey and datDate,
-    '   and apply this Trx to that budget if one is found.
-    '$Param objReg The Register to search for a budget Trx in.
-    '$Param datDate The datDate property of the parent Trx.
+    '$Description Search for matching budget BaseTrx for mstrBudgetKey and datDate,
+    '   and apply this BaseTrx to that budget if one is found.
+    '$Param objReg The Register to search for a budget BaseTrx in.
+    '$Param datDate The datDate property of the parent BaseTrx.
     '$Param blnNoMatch See Register.lngMatchBudget().
 
     Public Sub ApplyToBudget(ByVal objReg As Register, ByVal datDate As Date, ByRef blnNoMatch As Boolean)
@@ -219,7 +219,7 @@ Public Class TrxSplit
     End Sub
 
     '$Description If mobjBudget is nothing Nothing, un-apply this split from
-    '   that budget Trx and set mobjBudget to nothing. Used as part of destroying
+    '   that budget BaseTrx and set mobjBudget to nothing. Used as part of destroying
     '   this Split object.
 
     Friend Sub UnApplyFromBudget(ByVal objReg As Register)
@@ -229,7 +229,7 @@ Public Class TrxSplit
         End If
     End Sub
 
-    Friend Sub CreateReplicaTrx(ByVal objCompany_ As Company, ByVal objNormalTrx As NormalTrx, ByVal blnLoading As Boolean)
+    Friend Sub CreateReplicaTrx(ByVal objCompany_ As Company, ByVal objNormalTrx As BankTrx, ByVal blnLoading As Boolean)
         Dim intDotOffset As Integer = mstrCategoryKey.IndexOf("."c)
         If intDotOffset > 0 Then
             Dim intAccountKey As Integer = Integer.Parse(mstrCategoryKey.Substring(0, intDotOffset))

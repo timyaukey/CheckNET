@@ -126,28 +126,28 @@ Public Module TrxGeneratorLoader
         MsgBox("Error loading transaction generator [" & strDescription & "]:" & vbCrLf & strError, MsgBoxStyle.OkOnly Or MsgBoxStyle.Critical, "Checkbook")
     End Sub
 
-    Public Function gdatIncrementDate(ByVal datStart As Date, ByVal lngUnit As Trx.RepeatUnit, ByVal intNumber As Integer) As Date
+    Public Function gdatIncrementDate(ByVal datStart As Date, ByVal lngUnit As BaseTrx.RepeatUnit, ByVal intNumber As Integer) As Date
 
         Select Case lngUnit
-            Case Trx.RepeatUnit.Day
+            Case BaseTrx.RepeatUnit.Day
                 gdatIncrementDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intNumber, datStart)
-            Case Trx.RepeatUnit.Week
+            Case BaseTrx.RepeatUnit.Week
                 gdatIncrementDate = DateAdd(Microsoft.VisualBasic.DateInterval.WeekOfYear, intNumber, datStart)
-            Case Trx.RepeatUnit.Month
+            Case BaseTrx.RepeatUnit.Month
                 gdatIncrementDate = DateAdd(Microsoft.VisualBasic.DateInterval.Month, intNumber, datStart)
         End Select
     End Function
 
-    Public Function glngConvertRepeatUnit(ByVal strInput As String) As Trx.RepeatUnit
+    Public Function glngConvertRepeatUnit(ByVal strInput As String) As BaseTrx.RepeatUnit
         Select Case strInput
             Case "DAY"
-                glngConvertRepeatUnit = Trx.RepeatUnit.Day
+                glngConvertRepeatUnit = BaseTrx.RepeatUnit.Day
             Case "WEEK"
-                glngConvertRepeatUnit = Trx.RepeatUnit.Week
+                glngConvertRepeatUnit = BaseTrx.RepeatUnit.Week
             Case "MONTH"
-                glngConvertRepeatUnit = Trx.RepeatUnit.Month
+                glngConvertRepeatUnit = BaseTrx.RepeatUnit.Month
             Case Else
-                glngConvertRepeatUnit = Trx.RepeatUnit.Missing
+                glngConvertRepeatUnit = BaseTrx.RepeatUnit.Missing
         End Select
     End Function
 
@@ -248,7 +248,7 @@ Public Module TrxGeneratorLoader
             Exit Function
         End If
         datParams.lngRptUnit = glngConvertRepeatUnit(UCase(CStr(vntAttrib)))
-        If datParams.lngRptUnit = Trx.RepeatUnit.Missing Then
+        If datParams.lngRptUnit = BaseTrx.RepeatUnit.Missing Then
             gstrGetDateSequenceParams = "Invalid [unit] attribute"
             Exit Function
         End If
@@ -542,7 +542,7 @@ Public Module TrxGeneratorLoader
 
     End Function
 
-    '$Description Set fields of a TrxToCreate structure that are used by a transfer Trx,
+    '$Description Set fields of a TrxToCreate structure that are used by a transfer BaseTrx,
     '   from the arguments passed in.
 
     Public Function gstrGetTrxGenTemplateTransfer(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
@@ -550,7 +550,7 @@ Public Module TrxGeneratorLoader
         Dim vntAttrib As Object
 
         datTrxTemplate.objTrxType = GetType(TransferTrx)
-        datTrxTemplate.lngStatus = Trx.TrxStatus.NonBank
+        datTrxTemplate.lngStatus = BaseTrx.TrxStatus.NonBank
         'Amount.
         datTrxTemplate.curAmount = curAmount
         'Key of other register.
@@ -566,7 +566,7 @@ Public Module TrxGeneratorLoader
 
     End Function
 
-    '$Description Set fields of a TrxToCreate structure that are used by a budget Trx,
+    '$Description Set fields of a TrxToCreate structure that are used by a budget BaseTrx,
     '   from the arguments passed in.
 
     Public Function gstrGetTrxGenTemplateBudget(ByVal objCompany As Company, ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
@@ -574,7 +574,7 @@ Public Module TrxGeneratorLoader
         Dim vntAttrib As Object
 
         datTrxTemplate.objTrxType = GetType(BudgetTrx)
-        datTrxTemplate.lngStatus = Trx.TrxStatus.NonBank
+        datTrxTemplate.lngStatus = BaseTrx.TrxStatus.NonBank
         'Budget key.
         vntAttrib = elmTrxTpt.GetAttribute("budgetkey")
         If gblnXmlAttributeMissing(vntAttrib) Then
@@ -593,7 +593,7 @@ Public Module TrxGeneratorLoader
             Exit Function
         End If
         datTrxTemplate.lngBudgetUnit = glngConvertRepeatUnit(UCase(CStr(vntAttrib)))
-        If datTrxTemplate.lngBudgetUnit = Trx.RepeatUnit.Missing Then
+        If datTrxTemplate.lngBudgetUnit = BaseTrx.RepeatUnit.Missing Then
             gstrGetTrxGenTemplateBudget = "Invalid [budgetunit] attribute"
             Exit Function
         End If
@@ -616,7 +616,7 @@ Public Module TrxGeneratorLoader
 
     End Function
 
-    '$Description Set fields of a TrxToCreate structure that are used by a normal Trx,
+    '$Description Set fields of a TrxToCreate structure that are used by a normal BaseTrx,
     '   from the arguments passed in.
 
     Public Function gstrGetTrxGenTemplateNormal(ByVal objCompany As Company, ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
@@ -631,8 +631,8 @@ Public Module TrxGeneratorLoader
             Return strError
         End If
 
-        datTrxTemplate.objTrxType = GetType(NormalTrx)
-        datTrxTemplate.lngStatus = Trx.TrxStatus.Unreconciled
+        datTrxTemplate.objTrxType = GetType(BankTrx)
+        datTrxTemplate.lngStatus = BaseTrx.TrxStatus.Unreconciled
         'Transaction number.
         vntAttrib = elmTrxTpt.GetAttribute("number")
         If gblnXmlAttributeMissing(vntAttrib) Then
@@ -678,7 +678,7 @@ Public Module TrxGeneratorLoader
 
     End Function
 
-    '$Description Set fields of a TrxToCreate structure that are common to all Trx
+    '$Description Set fields of a TrxToCreate structure that are common to all BaseTrx
     '   types, from the arguments passed in.
 
     Public Function gstrGetTrxGenTemplateShared(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByRef datTrxTemplate As TrxToCreate) As String

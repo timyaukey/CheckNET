@@ -137,7 +137,7 @@ Friend Class ExportForm
         mobjOutputFile.WriteLine("TransDate,Number,Payee,Amount,Category," & "DueDate,DueDateToUse,InvoiceDate,InvoiceDateToUse,PONumber,InvoiceNumber,Terms" & strExtraFields)
     End Sub
 
-    Public Sub WriteSplit(ByVal objTrx As Trx, ByVal objSplit As TrxSplit)
+    Public Sub WriteSplit(ByVal objTrx As BaseTrx, ByVal objSplit As TrxSplit)
         Dim strLine As String
         Dim datInvToUse As Date
         Dim datDueToUse As Date

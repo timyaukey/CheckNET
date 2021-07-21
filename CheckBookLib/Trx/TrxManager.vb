@@ -2,20 +2,20 @@
 Option Explicit On
 
 ''' <summary>
-''' A helper class to update a Trx that is already in a Register.
-''' Create an instance of the TrxManager subclass appropriate to the Trx subclass,
-''' passing to the constructor a Trx that is already in the Register.
-''' Then call TrxManager.UpdateStart(), then modify any properties you want of that Trx,
+''' A helper class to update a BaseTrx that is already in a Register.
+''' Create an instance of the TrxManager subclass appropriate to the BaseTrx subclass,
+''' passing to the constructor a BaseTrx that is already in the Register.
+''' Then call TrxManager.UpdateStart(), then modify any properties you want of that BaseTrx,
 ''' then call TrxManager.UpdateEnd().
-''' This handles all the details of managing the Register, budget tracking for normal Trx,
+''' This handles all the details of managing the Register, budget tracking for normal BaseTrx,
 ''' logging, firing events, etc.
 ''' NOTE: Once you call UpdateStart() you MUST call UpdateEnd() or the Register object
 ''' will only be partly updated.
-''' NOTE: You CANNOT construct a new Trx to use with this. It must be the existing
-''' Trx in the Register you wish to update.
+''' NOTE: You CANNOT construct a new BaseTrx to use with this. It must be the existing
+''' BaseTrx in the Register you wish to update.
 ''' </summary>
 
-Public MustInherit Class TrxManager(Of TTrx As Trx)
+Public MustInherit Class TrxManager(Of TTrx As BaseTrx)
 
     Public ReadOnly objTrx As TTrx
     Protected ReadOnly mobjOriginalLogTrx As TTrx
@@ -42,7 +42,7 @@ Public MustInherit Class TrxManager(Of TTrx As Trx)
         'These next two lines are why if you call UpdateStart(),
         'you must finish by calling UpdateEnd() to keep the Register in good condition.
         'I wish we could delay these steps until UpdateEnd(), but ClearRepeatTrx() requires
-        'the original Trx object whose contents may have been changed by then.
+        'the original BaseTrx object whose contents may have been changed by then.
         objTrx.UnApply()
         objTrx.ClearRepeatTrx()
         mblnUpdateStarted = True
@@ -58,9 +58,9 @@ Public MustInherit Class TrxManager(Of TTrx As Trx)
 End Class
 
 Public Class NormalTrxManager
-    Inherits TrxManager(Of NormalTrx)
+    Inherits TrxManager(Of BankTrx)
 
-    Public Sub New(ByVal objTrx As NormalTrx)
+    Public Sub New(ByVal objTrx As BankTrx)
         MyBase.New(objTrx)
     End Sub
 End Class

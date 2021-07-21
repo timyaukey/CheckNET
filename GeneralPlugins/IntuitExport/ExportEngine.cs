@@ -116,7 +116,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             // the first time that name is encountered in date order, and will
             // not be different for different runs of the software unless old
             // transactions are changed (which should never happen).
-            List<NormalTrx> normalTrxToAnalyze = new List<NormalTrx>();
+            List<BankTrx> normalTrxToAnalyze = new List<BankTrx>();
             foreach (Account acct in Company.colAccounts)
             {
                 if (!SkipAccount(acct))
@@ -124,11 +124,11 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                     foreach (Register reg in acct.colRegisters)
                     {
                         bool fakeReportedInReg = false;
-                        foreach (Trx trx in reg.colAllTrx<Trx>())
+                        foreach (BaseTrx trx in reg.colAllTrx<BaseTrx>())
                         {
                             if (trx.datDate > EndDate)
                                 break;
-                            NormalTrx normalTrx = trx as NormalTrx;
+                            BankTrx normalTrx = trx as BankTrx;
                             if (normalTrx != null)
                             {
                                 if (normalTrx.blnFake)
@@ -157,7 +157,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             // The important part of this sort order is the date - it must be increasing.
             // The only purpose of the rest is to make the order consistent from run to run.
             normalTrxToAnalyze.Sort(
-                delegate (NormalTrx trx1, NormalTrx trx2)
+                delegate (BankTrx trx1, BankTrx trx2)
                 {
                     int result = trx1.datDate.CompareTo(trx2.datDate);
                     if (result != 0)
@@ -171,7 +171,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                     return trx1.curAmount.CompareTo(trx2.curAmount);
                 }
                 );
-            foreach(NormalTrx trx in normalTrxToAnalyze)
+            foreach(BankTrx trx in normalTrxToAnalyze)
             {
                 AnalyzeNormalTrx(trx);
             }
@@ -196,7 +196,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         /// Does not actually output anything to the IIF file here.
         /// </summary>
         /// <param name="trx"></param>
-        private void AnalyzeNormalTrx(NormalTrx trx)
+        private void AnalyzeNormalTrx(BankTrx trx)
         {
             PayeeDef payee;
             string trimmedPayee = TrimPayeeName(trx.strDescription);
@@ -552,7 +552,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 {
                     foreach (Register reg in acct.colRegisters)
                     {
-                        foreach (NormalTrx normalTrx in reg.colDateRange<NormalTrx>(StartDate, EndDate))
+                        foreach (BankTrx normalTrx in reg.colDateRange<BankTrx>(StartDate, EndDate))
                         {
                             if (!normalTrx.blnFake)
                                 OutputNormalTrx(normalTrx);
@@ -562,7 +562,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             }
         }
 
-        private void OutputNormalTrx(NormalTrx trx)
+        private void OutputNormalTrx(BankTrx trx)
         {
             PayeeDef payee = Payees[TrimPayeeName(trx.strDescription).ToLower()];
             TrxOutputType usage = GetPayeeUsage(trx);
@@ -593,7 +593,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             }
         }
 
-        private void OutputOneTransaction(NormalTrx trx, string exportAccountName, PayeeDef payee, string intuitTrxType, bool usePayeeOnTrx)
+        private void OutputOneTransaction(BankTrx trx, string exportAccountName, PayeeDef payee, string intuitTrxType, bool usePayeeOnTrx)
         {
             OutputNormalTrx(trx, intuitTrxType, exportAccountName, usePayeeOnTrx ? payee.ExportName : "", trx.curAmount);
             foreach (TrxSplit split in trx.colSplits)
@@ -603,7 +603,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             OutputLine("ENDTRNS");
         }
 
-        private void OutputTransactionPerSplit(NormalTrx trx, string exportAccountName, PayeeDef payee, 
+        private void OutputTransactionPerSplit(BankTrx trx, string exportAccountName, PayeeDef payee, 
             string intuitTrxType, Func<TrxSplit, bool> usePayeeOnSplit)
         {
             foreach (TrxSplit split in trx.colSplits)
@@ -630,7 +630,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             return Company.colAccounts.First(acct => acct.intKey == acctKey).lngSubType == Account.SubType.Liability_AccountsPayable;
         }
 
-        private void OutputNormalTrx(NormalTrx trx, string transType, string exportAccountName, string payeeName, decimal amount)
+        private void OutputNormalTrx(BankTrx trx, string transType, string exportAccountName, string payeeName, decimal amount)
         {
             OutputLine("TRNS\t\t" + transType + "\t" + trx.datDate.ToString("MM/dd/yyyy") + "\t" + exportAccountName +
                 "\t" + payeeName + "\t" + amount.ToString("##############0.00") +
@@ -645,7 +645,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 "\t\t" + split.strMemo + "\tY");
         }
 
-        private TrxOutputType GetPayeeUsage(NormalTrx trx)
+        private TrxOutputType GetPayeeUsage(BankTrx trx)
         {
             Account.SubType subType = trx.objReg.objAccount.lngSubType;
             if (subType == Account.SubType.Asset_CheckingAccount ||

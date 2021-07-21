@@ -107,7 +107,7 @@ Public Class Account
 
     'Fired when ChangeMade() is called. Used by clients
     'sensitive to changes in the Account as a whole,
-    'for example anything that remembers the index of a Trx
+    'for example anything that remembers the index of a BaseTrx
     'in its Register.
     Public Event ChangeMade()
 
@@ -331,8 +331,8 @@ Public Class Account
     Public Sub SetLastReconciledDate()
         mdatLastReconciled = DateTime.MinValue
         For Each reg In mcolRegisters
-            For Each objTrx As NormalTrx In reg.colAllTrx(Of NormalTrx)()
-                If objTrx.lngStatus = Trx.TrxStatus.Reconciled Then
+            For Each objTrx As BankTrx In reg.colAllTrx(Of BankTrx)()
+                If objTrx.lngStatus = BaseTrx.TrxStatus.Reconciled Then
                     If objTrx.datDate > mdatLastReconciled Then
                         mdatLastReconciled = objTrx.datDate
                     End If

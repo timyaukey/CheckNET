@@ -31,7 +31,7 @@ Public Class TrxGenImportData
 
 End Class
 
-'Ways to narrow down Trx search results during import.
+'Ways to narrow down BaseTrx search results during import.
 Public Enum ImportMatchNarrowMethod
     None = 1
     ClosestDate = 2

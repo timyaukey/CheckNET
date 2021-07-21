@@ -5,10 +5,10 @@ Public Class LogDelete
     Implements ILogDelete
 
     Private mstrTitle As String
-    Private mobjOldTrx As Trx
+    Private mobjOldTrx As BaseTrx
     Private mdatTimestamp As Date
 
-    Private Sub ILogDelete_Init(ByVal strTitle As String, ByVal objOldTrx As Trx) Implements ILogDelete.Init
+    Private Sub ILogDelete_Init(ByVal strTitle As String, ByVal objOldTrx As BaseTrx) Implements ILogDelete.Init
         mstrTitle = strTitle
         'This trx is a clone created by EventLog.AddILogDelete().
         mobjOldTrx = objOldTrx

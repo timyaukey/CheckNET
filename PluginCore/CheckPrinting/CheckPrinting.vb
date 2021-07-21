@@ -14,14 +14,14 @@ Public Class CheckPrinting
     Private mdblCurrentX As Double
     Private mdblCurrentY As Double
     Private mdomCheckFormat As VB6XmlDocument
-    Private mobjTrx As NormalTrx
+    Private mobjTrx As BankTrx
     Private mobjFont As Font
 
     Public Sub New(ByVal objHostUI As IHostUI)
         mobjHostUI = objHostUI
     End Sub
 
-    Public Function blnAllowedToPrintCheck(ByVal objTestTrx As NormalTrx) As Boolean
+    Public Function blnAllowedToPrintCheck(ByVal objTestTrx As BankTrx) As Boolean
 
         If objTestTrx.curAmount >= 0 Then
             mobjHostUI.ErrorMessageBox("You may only print a check for a debit transaction.")
@@ -77,7 +77,7 @@ Public Class CheckPrinting
 
     End Function
 
-    Public Function blnPrintCheck(ByVal objTrx_ As NormalTrx) As Boolean
+    Public Function blnPrintCheck(ByVal objTrx_ As BankTrx) As Boolean
         Dim objPrintDoc As PrintDocument
         Dim blnPreview As Boolean = False
 
@@ -202,7 +202,7 @@ Public Class CheckPrinting
 
     End Sub
 
-    Private Sub PrintInvoiceNumbers(ByVal strItemName As String, ByVal objTrx As NormalTrx, ByVal dblLineHeight As Double, ByVal ev As PrintPageEventArgs)
+    Private Sub PrintInvoiceNumbers(ByVal strItemName As String, ByVal objTrx As BankTrx, ByVal dblLineHeight As Double, ByVal ev As PrintPageEventArgs)
 
         Dim elmInvoiceList As VB6XmlElement
         Dim dblX As Double

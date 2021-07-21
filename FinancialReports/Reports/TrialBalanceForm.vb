@@ -253,7 +253,7 @@ Public Class TrialBalanceForm
                       ". Are you sure you want to do this?", MsgBoxStyle.OkCancel) <> MsgBoxResult.Ok Then
                 Exit Sub
             End If
-            'Find a Retained Earnings register to add NormalTrx to.
+            'Find a Retained Earnings register to add BankTrx to.
             For Each objAccount As Account In mobjCompany.colAccounts
                 If objAccount.lngSubType = Account.SubType.Equity_RetainedEarnings Then
                     objRegister = objAccount.colRegisters(0)
@@ -265,8 +265,8 @@ Public Class TrialBalanceForm
                 Exit Sub
             End If
             Dim objIncExpTotal As CategoryGroupManager = objComputeRetainedEarningsTrxAmt()
-            Dim objTrx As NormalTrx = New NormalTrx(objRegister)
-            objTrx.NewStartNormal(True, "Pmt", ctlEndDate.Value.Date, "Post to retained earnings", "", Trx.TrxStatus.Unreconciled,
+            Dim objTrx As BankTrx = New BankTrx(objRegister)
+            objTrx.NewStartNormal(True, "Pmt", ctlEndDate.Value.Date, "Post to retained earnings", "", BaseTrx.TrxStatus.Unreconciled,
                                   False, 0D, False, False, 0, "", "")
             For Each objGroup As LineItemGroup In objIncExpTotal.colGroups
                 For Each objItem As ReportLineItem In objGroup.colItems

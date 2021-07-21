@@ -63,7 +63,7 @@ Public Class TrxGenInterpolate
 
         Dim datNewTrx() As SequencedTrx
 
-        'Get SequencedTrx to create Trx for.
+        'Get SequencedTrx to create BaseTrx for.
         'Their .curAmount values will be initialized to zero.
         datNewTrx = gdatGenerateSeqTrxForDates(mdatSequence.datNominalStartDate, mdatSequence.vntNominalEndDate, datRegisterEndDate, mdatSequence.lngRptUnit, mdatSequence.intRptNumber, 0, mintStartRepeatSeq)
 

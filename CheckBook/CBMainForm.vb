@@ -182,11 +182,11 @@ Friend Class CBMainForm
     End Function
 
     Public Iterator Function objSearchHandlers() As IEnumerable(Of ISearchHandler) Implements IHostUI.objSearchHandlers
-        Yield New TrxSearchHandler(Me, "Description", Function(ByVal objTrx As Trx) objTrx.strDescription)
+        Yield New TrxSearchHandler(Me, "Description", Function(ByVal objTrx As BaseTrx) objTrx.strDescription)
         Yield New MemoSearchHandler(Me, "Memo")
         Yield New CategorySearchHandler(Me, "Category")
-        Yield New TrxSearchHandler(Me, "Number", Function(ByVal objTrx As Trx) objTrx.strNumber)
-        Yield New TrxSearchHandler(Me, "Amount", Function(ByVal objTrx As Trx) Utilities.strFormatCurrency(objTrx.curAmount))
+        Yield New TrxSearchHandler(Me, "Number", Function(ByVal objTrx As BaseTrx) objTrx.strNumber)
+        Yield New TrxSearchHandler(Me, "Amount", Function(ByVal objTrx As BaseTrx) Utilities.strFormatCurrency(objTrx.curAmount))
         Yield New InvoiceSearchHandler(Me, "Invoice #")
         Yield New PurOrdSearchHandler(Me, "PO #")
     End Function
@@ -348,7 +348,7 @@ Friend Class CBMainForm
         Company.AddExtraLicense(objLicense)
     End Sub
 
-    Private Function blnAddNormalTrx(ByVal objTrx As NormalTrx,
+    Private Function blnAddNormalTrx(ByVal objTrx As BankTrx,
                                     ByRef datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrx
         Using frm As ITrxForm = mobjHostUI.objMakeTrxForm()
@@ -359,7 +359,7 @@ Friend Class CBMainForm
         End Using
     End Function
 
-    Private Function blnAddNormalTrxSilent(ByVal objTrx As NormalTrx,
+    Private Function blnAddNormalTrxSilent(ByVal objTrx As BankTrx,
                                     ByRef datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrxSilent
         Using frm As ITrxForm = mobjHostUI.objMakeTrxForm()
@@ -390,7 +390,7 @@ Friend Class CBMainForm
         Return False
     End Function
 
-    Private Function blnUpdateTrx(ByVal objTrx As Trx, ByRef datDefaultDate As Date,
+    Private Function blnUpdateTrx(ByVal objTrx As BaseTrx, ByRef datDefaultDate As Date,
                                   ByVal strLogTitle As String) As Boolean Implements IHostUI.blnUpdateTrx
         Using frmEdit As ITrxForm = mobjHostUI.objMakeTrxForm()
             If frmEdit.blnUpdate(Me, objTrx, datDefaultDate, strLogTitle) Then

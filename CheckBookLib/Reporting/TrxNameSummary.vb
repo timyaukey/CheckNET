@@ -32,9 +32,9 @@ Public MustInherit Class TrxNameSummary
         For Each objAccount As Account In objCompany.colAccounts
             If objAccount.lngSubType = lngSubType Then
                 For Each objReg As Register In objAccount.colRegisters
-                    For Each objTrx As Trx In objReg.colDateRange(Of Trx)(New DateTime(1900, 1, 1), datEnd)
+                    For Each objTrx As BaseTrx In objReg.colDateRange(Of BaseTrx)(New DateTime(1900, 1, 1), datEnd)
                         If Not objTrx.blnFake Then
-                            Dim objNormalTrx As NormalTrx = TryCast(objTrx, NormalTrx)
+                            Dim objNormalTrx As BankTrx = TryCast(objTrx, BankTrx)
                             If Not objNormalTrx Is Nothing Then
                                 Dim objSummary As TSummary = objGetSummary(colSummary, objDict, objTrx)
                                 For Each objSplit As TrxSplit In objNormalTrx.colSplits
@@ -62,7 +62,7 @@ Public MustInherit Class TrxNameSummary
 
     Private Shared Function objGetSummary(Of TSummary As {TrxNameSummary, New})(ByVal colSummary As List(Of TSummary),
                                          ByVal objDict As Dictionary(Of String, TSummary),
-                                         ByVal objTrx As Trx) As TSummary
+                                         ByVal objTrx As BaseTrx) As TSummary
         Dim objSummary As TSummary = Nothing
         Dim strNameKey As String = objTrx.strDescription.ToUpper()
         If strNameKey.Length > 16 Then

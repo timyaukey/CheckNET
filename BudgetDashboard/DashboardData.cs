@@ -47,7 +47,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                     foreach (Register reg in account.colRegisters)
                     {
                         StartingBalance += reg.curEndingBalance(StartDate.AddDays(-1d));
-                        foreach (Trx trx in reg.colDateRange<Trx>(StartDate, EndDate))
+                        foreach (BaseTrx trx in reg.colDateRange<BaseTrx>(StartDate, EndDate))
                         {
                             LoadTrx(trx);
                         }
@@ -108,10 +108,10 @@ namespace Willowsoft.CheckBook.BudgetDashboard
             return row1.Label.CompareTo(row2.Label);
         }
 
-        private void LoadTrx(Trx trx)
+        private void LoadTrx(BaseTrx trx)
         {
             int period = GetPeriod(trx.datDate);
-            NormalTrx normalTrx = trx as NormalTrx;
+            BankTrx normalTrx = trx as BankTrx;
             if (normalTrx != null)
             {
                 if (Handler.IncludeNormalTrx(normalTrx))
@@ -156,7 +156,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
         private SplitDetailRow GetSplitDetailRow(TrxSplit split)
         {
             // Unlike for BudgetTrx we do not incorporate repeat key in the row key,
-            // because there are so many different generated NormalTrx sequences it
+            // because there are so many different generated BankTrx sequences it
             // would make the resulting grid unwieldy.
             string rowKey = split.strCategoryKey;
             if (!SplitDetailRows.TryGetValue(rowKey, out SplitDetailRow row))

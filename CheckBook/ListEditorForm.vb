@@ -572,14 +572,14 @@ Friend Class ListEditorForm
 
     Private Function blnElementIsUsedInRegister(ByVal objReg As Register, ByVal strKey As String) As Boolean
 
-        Dim objTrx As Trx
+        Dim objTrx As BaseTrx
         Dim objSplit As TrxSplit
 
         Try
 
-            For Each objTrx In objReg.colAllTrx(Of Trx)()
-                If objTrx.GetType() Is GetType(NormalTrx) Then
-                    For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
+            For Each objTrx In objReg.colAllTrx(Of BaseTrx)()
+                If objTrx.GetType() Is GetType(BankTrx) Then
+                    For Each objSplit In DirectCast(objTrx, BankTrx).colSplits
                         If mlngListType = ListType.Category Then
                             If objSplit.strCategoryKey = strKey Then
                                 blnElementIsUsedInRegister = True

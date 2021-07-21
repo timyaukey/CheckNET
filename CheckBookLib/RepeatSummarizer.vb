@@ -17,8 +17,8 @@ Public Class RepeatSummarizer
     End Sub
 
     ''' <summary>
-    ''' Must be called for every Trx that is part of a repeat sequence,
-    ''' and for each Trx generator. Must be called for the generator last,
+    ''' Must be called for every BaseTrx that is part of a repeat sequence,
+    ''' and for each BaseTrx generator. Must be called for the generator last,
     ''' so the name in the generator is the one used.
     ''' </summary>
     ''' <param name="key"></param>

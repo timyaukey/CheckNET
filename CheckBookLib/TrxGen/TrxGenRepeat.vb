@@ -68,7 +68,7 @@ Public Class TrxGenRepeat
 
         Dim datSeqTrx() As SequencedTrx
 
-        'Get SequencedTrx to create Trx for.
+        'Get SequencedTrx to create BaseTrx for.
         datSeqTrx = gdatGenerateSeqTrxForDates(mdatSequence.datNominalStartDate, mdatSequence.vntNominalEndDate, datRegisterEndDate, mdatSequence.lngRptUnit, mdatSequence.intRptNumber, mcurAmount, mintStartRepeatSeq)
 
         'Combine datNewTrx with mdatTrxTemplate to create TrxToCreate

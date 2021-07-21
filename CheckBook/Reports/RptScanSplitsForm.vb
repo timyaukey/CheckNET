@@ -213,7 +213,7 @@ Friend Class RptScanSplitsForm
 
     Private Sub ScanRegister(ByVal objReg As Register)
         Dim datLastProgress As Date
-        Dim objTrx As Trx
+        Dim objTrx As BaseTrx
         Dim datDate As Date
         Dim blnInclude As Boolean
         Dim objSplit As TrxSplit
@@ -222,7 +222,7 @@ Friend Class RptScanSplitsForm
         Try
 
             strRegTitle = objReg.strTitle
-            For Each objTrx In objReg.colDateRange(Of Trx)(mdatStart, mdatEnd)
+            For Each objTrx In objReg.colDateRange(Of BaseTrx)(mdatStart, mdatEnd)
                 With objTrx
                     datDate = .datDate
                     If datDate <> datLastProgress Then
@@ -230,7 +230,7 @@ Friend Class RptScanSplitsForm
                         System.Windows.Forms.Application.DoEvents()
                         datLastProgress = datDate
                     End If
-                    If .GetType() Is GetType(NormalTrx) Then
+                    If .GetType() Is GetType(BankTrx) Then
                         blnInclude = True
                         If .blnFake Then
                             If Not mblnIncludeFake Then
@@ -243,7 +243,7 @@ Friend Class RptScanSplitsForm
                             End If
                         End If
                         If blnInclude Then
-                            For Each objSplit In DirectCast(objTrx, NormalTrx).colSplits
+                            For Each objSplit In DirectCast(objTrx, BankTrx).colSplits
                                 mlngSplitCount = mlngSplitCount + 1
                                 ProcessSplit(objReg, objTrx, objSplit)
                             Next objSplit
@@ -258,7 +258,7 @@ Friend Class RptScanSplitsForm
         End Try
     End Sub
 
-    Private Sub ProcessSplit(ByVal objReg As Register, ByRef objTrx As Trx, ByVal objSplit As TrxSplit)
+    Private Sub ProcessSplit(ByVal objReg As Register, ByRef objTrx As BaseTrx, ByVal objSplit As TrxSplit)
         Dim intCatIndex As Integer
 
         Try

@@ -12,7 +12,7 @@ Public Class BankImportForm
     Private mobjImportHandler As IImportHandler
     Private mobjTrxReader As ITrxReader
     Private mblnIgnoreItemCheckedEvents As Boolean
-    Private mobjHashedMatches As HashSet(Of NormalTrx)
+    Private mobjHashedMatches As HashSet(Of BankTrx)
     Private mblnTrapKeyPress As Boolean
     Public Shared intOpenCount As Integer
 
@@ -21,7 +21,7 @@ Public Class BankImportForm
         mlngIMPSTS_UNRESOLVED = 0
         'Item was matched to a prior import.
         mlngIMPSTS_PRIOR = 1
-        'Item was used to create a new Trx.
+        'Item was used to create a new BaseTrx.
         mlngIMPSTS_NEW = 2
         'Item was used to update an existing trx.
         mlngIMPSTS_UPDATE = 3
@@ -39,11 +39,11 @@ Public Class BankImportForm
         Public objMatchedReg As Register
         'If set, identifies an exact match to be updated in objMatchedReg.
         'If not set, but objMatchedReg is set, then objImportedTrx will be inserted in objMatchedReg.
-        Public objMatchedTrx As NormalTrx
-        'Additional NormalTrx objImportedTrx is matched to as part of
+        Public objMatchedTrx As BankTrx
+        'Additional BankTrx objImportedTrx is matched to as part of
         'a multi-part import match. These will get their amounts set to zero,
         'and modified versions of objImportedTrx.strImportKey.
-        Public colExtraMatchedTrx As List(Of NormalTrx) = New List(Of NormalTrx)()
+        Public colExtraMatchedTrx As List(Of BankTrx) = New List(Of BankTrx)()
         'If not Nothing, this ImportItem is part of the indicated MultiPartMatch.
         'Multiple ImportItems may share the same MultiPartMatch object.
         Public objMultiPart As MultiPartMatch
@@ -68,7 +68,7 @@ Public Class BankImportForm
     End Class
 
     Private Class MatchSubset
-        Inherits ListWithTotal(Of NormalTrx)
+        Inherits ListWithTotal(Of BankTrx)
     End Class
 
     Private Class MultiPartMatch
@@ -92,14 +92,14 @@ Public Class BankImportForm
     Private maudtItem() As ImportItem '1 to mintItems
     Private mintItems As Integer
 
-    Private ReadOnly Iterator Property colAllMatchedTrx() As IEnumerable(Of NormalTrx)
+    Private ReadOnly Iterator Property colAllMatchedTrx() As IEnumerable(Of BankTrx)
         Get
             Dim item As ImportItem
             For Each item In maudtItem
                 If Not item.objMatchedTrx Is Nothing Then
                     Yield item.objMatchedTrx
                 End If
-                For Each objExtraMatch As NormalTrx In item.colExtraMatchedTrx
+                For Each objExtraMatch As BankTrx In item.colExtraMatchedTrx
                     Yield objExtraMatch
                 Next
             Next
@@ -107,7 +107,7 @@ Public Class BankImportForm
     End Property
 
     'Matches to currently selected ImportItem.
-    Private maudtMatch() As NormalTrx '1 to mintMatches
+    Private maudtMatch() As BankTrx '1 to mintMatches
     Private mintMatches As Integer
 
     'Register selected in cboRegister.
@@ -225,7 +225,7 @@ Public Class BankImportForm
                             objExplain.AppendLine()
                             objExplain.AppendLine("Matched Transactions:")
                             Dim curMatchTotal As Decimal = 0D
-                            For Each objNormalTrx As NormalTrx In .objMultiPart.colMatches
+                            For Each objNormalTrx As BankTrx In .objMultiPart.colMatches
                                 objExplain.AppendLine(" " + Utilities.strFormatDate(objNormalTrx.datDate) + " " +
                                                           objNormalTrx.strDescription + " " +
                                                           Utilities.strFormatCurrency(objNormalTrx.curAmount))
@@ -295,7 +295,7 @@ Public Class BankImportForm
                             .objReg = .objMatchedReg
                         End If
                         intMultiPartSeqNumber = 0
-                        For Each objExtraMatch As NormalTrx In .colExtraMatchedTrx
+                        For Each objExtraMatch As BankTrx In .colExtraMatchedTrx
                             intMultiPartSeqNumber = intMultiPartSeqNumber + 1
                             mobjImportHandler.BatchUpdate(.objImportedTrx, objExtraMatch, intMultiPartSeqNumber)
                         Next
@@ -321,7 +321,7 @@ Public Class BankImportForm
             With maudtItem(intIndex)
                 .objMatchedReg = Nothing
                 .objMatchedTrx = Nothing
-                .colExtraMatchedTrx = New List(Of NormalTrx)()
+                .colExtraMatchedTrx = New List(Of BankTrx)()
                 mobjHashedMatches = Nothing
                 .objMultiPart = Nothing
                 .blnMultiPartPrimary = False
@@ -333,10 +333,10 @@ Public Class BankImportForm
 
         Dim objImportedTrx As ImportedTrx
         Dim objReg As Register
-        Dim colUnusedMatches As ICollection(Of NormalTrx) = Nothing
+        Dim colUnusedMatches As ICollection(Of BankTrx) = Nothing
         Dim blnExactMatch As Boolean
         Dim intExactCount As Integer
-        Dim objPossibleMatchTrx As NormalTrx
+        Dim objPossibleMatchTrx As BankTrx
         Dim blnNonExactConfirmed As Boolean
         Dim blnCheckWithoutAmount As Boolean
 
@@ -427,7 +427,7 @@ Public Class BankImportForm
         Dim colMultiPartMatches As List(Of MultiPartMatch)
         Dim strDescrStartsWith As String
         Dim colAllCandidateImports As List(Of ImportItem)
-        Dim colAllCandidateMatches As List(Of NormalTrx)
+        Dim colAllCandidateMatches As List(Of BankTrx)
         Dim objRootImportItem As ImportItem
         Dim objRootImportedTrx As ImportedTrx
 
@@ -468,8 +468,8 @@ Public Class BankImportForm
         'Limit size of subsets to keep the number of subsets down,
         'and thereby the number of subset combinations.
         colMatchSubsets = New List(Of MatchSubset)()
-        For Each colMatchSubset In colGetSubsets(Of NormalTrx, MatchSubset)(colAllCandidateMatches, 9,
-            Function(ByVal objItem As NormalTrx) As Decimal
+        For Each colMatchSubset In colGetSubsets(Of BankTrx, MatchSubset)(colAllCandidateMatches, 9,
+            Function(ByVal objItem As BankTrx) As Decimal
                 Return objItem.curAmount
             End Function)
             colMatchSubsets.Add(colMatchSubset)
@@ -495,7 +495,7 @@ Public Class BankImportForm
         'The order in which we try MultiPartMatch objects is an art, not a science,
         'and reflects the general notion we want to try "simpler" matches first.
         'So I use the total number of match parts as a "score", with a credit 
-        'for a better priority if there are the same number of ImportItems and matched NormalTrx.
+        'for a better priority if there are the same number of ImportItems and matched BankTrx.
         'Then sort in order of priority (lower numbers first, i.e. higher priority) and
         'use the first multi-part match in this order (the highest priority).
 
@@ -520,7 +520,7 @@ Public Class BankImportForm
     ''' Find all ImportItems that may be used in multi-part matches involving the ImportItem
     ''' at the index passed (the root ImportItem), except for the root ImportItem itself.
     ''' This includes all ImportItems with matching description and amount that have not
-    ''' already been matched to a NormalTrx.
+    ''' already been matched to a BankTrx.
     ''' </summary>
     ''' <param name="strDescrStartsWith"></param>
     ''' <param name="intRootItemIndex"></param>
@@ -553,19 +553,19 @@ Public Class BankImportForm
     End Function
 
     ''' <summary>
-    ''' Find all NormalTrx that may be used in multi-part matches for the given
-    ''' transaction description and date. This includes all NormalTrx that have
+    ''' Find all BankTrx that may be used in multi-part matches for the given
+    ''' transaction description and date. This includes all BankTrx that have
     ''' not already been assigned to an ImportItem, that match the description and date.
     ''' </summary>
     ''' <param name="strDescrStartsWith"></param>
     ''' <param name="datDate"></param>
     ''' <returns></returns>
-    Private Function colFindAllCandidateMatches(ByVal strDescrStartsWith As String, ByVal datDate As DateTime) As List(Of NormalTrx)
-        Dim colResult As List(Of NormalTrx) = New List(Of NormalTrx)()
+    Private Function colFindAllCandidateMatches(ByVal strDescrStartsWith As String, ByVal datDate As DateTime) As List(Of BankTrx)
+        Dim colResult As List(Of BankTrx) = New List(Of BankTrx)()
         Dim datStartDate As DateTime = datDate.AddDays(-6.0#)
         Dim datEndDate As DateTime = datDate.AddDays(2.0#)
         For Each objReg As Register In mobjAccount.colRegisters
-            For Each objNormalTrx As NormalTrx In objReg.colDateRange(Of NormalTrx)(datStartDate, datEndDate)
+            For Each objNormalTrx As BankTrx In objReg.colDateRange(Of BankTrx)(datStartDate, datEndDate)
                 If objNormalTrx.strDescription.StartsWith(strDescrStartsWith) Then
                     If Not blnTrxIsMatched(objNormalTrx) Then
                         colResult.Add(objNormalTrx)
@@ -578,10 +578,10 @@ Public Class BankImportForm
         Return colResult
     End Function
 
-    Private Function blnTrxIsMatched(ByVal objNormalTrx As NormalTrx) As Boolean
+    Private Function blnTrxIsMatched(ByVal objNormalTrx As BankTrx) As Boolean
         If mobjHashedMatches Is Nothing Then
-            mobjHashedMatches = New HashSet(Of NormalTrx)()
-            For Each objAdd As NormalTrx In colAllMatchedTrx
+            mobjHashedMatches = New HashSet(Of BankTrx)()
+            For Each objAdd As BankTrx In colAllMatchedTrx
                 mobjHashedMatches.Add(objAdd)
             Next
         End If
@@ -628,30 +628,30 @@ Public Class BankImportForm
     End Function
 
     ''' <summary>
-    ''' Decide what to do with each ImportItem and NormalTrx in a multi-part match.
+    ''' Decide what to do with each ImportItem and BankTrx in a multi-part match.
     ''' Make each element of colImportSubset point to one element of colMatchSubset,
     ''' for the first "n" elements in each list where "n" is the lesser of colImportSubset.Count 
-    ''' and colMatchSubset.Count. Those NormalTrx will have their amounts set to the amounts
+    ''' and colMatchSubset.Count. Those BankTrx will have their amounts set to the amounts
     ''' of their paired ImportItems. Extra elements of colImportSubset will be inserted in the last
     ''' register updated by the preceding step. Extra elements of colMatchSubset have their
-    ''' amounts set to zero. The net result is to make the matched NormalTrx look like the
-    ''' ImportItems, inserting, adjusting or zeroing out NormalTrx as needed. The actual inserts and
+    ''' amounts set to zero. The net result is to make the matched BankTrx look like the
+    ''' ImportItems, inserting, adjusting or zeroing out BankTrx as needed. The actual inserts and
     ''' updates are done later, not here, but WHAT WILL happen is decided here and reflected in how
     ''' .objMatchedReg, .objMatchedTrx and .colExtraMatchedTrx are set.
     ''' </summary>
     Private Sub UseMultiPartMatch(ByVal intRootItemIndex As Integer, ByVal objMultiPart As MultiPartMatch)
 
         Dim objImportEnum As IEnumerator(Of ImportItem) = objMultiPart.colImports.GetEnumerator()
-        Dim objMatchEnum As IEnumerator(Of NormalTrx) = objMultiPart.colMatches.GetEnumerator()
+        Dim objMatchEnum As IEnumerator(Of BankTrx) = objMultiPart.colMatches.GetEnumerator()
         Dim objLastImportItem As ImportItem = Nothing
-        Dim objLastMatchedTrx As NormalTrx = Nothing
+        Dim objLastMatchedTrx As BankTrx = Nothing
 
         maudtItem(intRootItemIndex).blnMultiPartPrimary = True
         'Walk through both enumerators in parallel, until one reaches the end.
         'Then do the appropriate thing to the remaining elements in the other enumerator.
         Do
             If Not objImportEnum.MoveNext() Then
-                'We ran out of ImportItem objects, so have to put the remaining matched NormalTrx
+                'We ran out of ImportItem objects, so have to put the remaining matched BankTrx
                 'in the list to be zeroed out later.
                 Do
                     '.MoveNext() BEFORE using .Current, because we haven't
@@ -659,7 +659,7 @@ Public Class BankImportForm
                     If Not objMatchEnum.MoveNext() Then
                         Exit Do
                     End If
-                    'Add to the list of matched NormalTrx to zero out.
+                    'Add to the list of matched BankTrx to zero out.
                     objLastImportItem.colExtraMatchedTrx.Add(objMatchEnum.Current)
                     mobjHashedMatches = Nothing
                 Loop
@@ -667,7 +667,7 @@ Public Class BankImportForm
             End If
             objLastImportItem = objImportEnum.Current
             If Not objMatchEnum.MoveNext() Then
-                'We ran out of matched NormalTrx, so create new NormalTrx for each remaining ImportItem.
+                'We ran out of matched BankTrx, so create new BankTrx for each remaining ImportItem.
                 Do
                     objImportEnum.Current.objMultiPart = objMultiPart
                     objImportEnum.Current.objMatchedReg = objLastMatchedTrx.objReg
@@ -803,7 +803,7 @@ Public Class BankImportForm
         Dim objReg As Register
         Dim objImportedTrx As ImportedTrx
         Dim objSplit As TrxSplit
-        Dim colMatches As ICollection(Of NormalTrx) = Nothing
+        Dim colMatches As ICollection(Of BankTrx) = Nothing
         Dim blnExactMatch As Boolean
         Dim lngCatIdx As Integer
         Dim strDefaultCatKey As String
@@ -851,7 +851,7 @@ Public Class BankImportForm
         End If
 
         For Each objReg In mobjAccount.colRegisters
-            colMatches = New List(Of NormalTrx)
+            colMatches = New List(Of BankTrx)
             blnExactMatch = False
             mobjImportHandler.AutoNewSearch(objImportedTrx, objReg, colMatches, blnExactMatch)
             If colMatches.Count() > 0 And blnExactMatch Then
@@ -1203,9 +1203,9 @@ Public Class BankImportForm
         Dim objImportedTrx As ImportedTrx
         Dim objReg As Register
         Dim intItemIndex As Integer
-        Dim colMatches As ICollection(Of NormalTrx) = Nothing
+        Dim colMatches As ICollection(Of BankTrx) = Nothing
         Dim blnExactMatch As Boolean
-        Dim objMatchedTrx As NormalTrx
+        Dim objMatchedTrx As BankTrx
 
         Try
             ClearCurrentItemMatches()
@@ -1247,7 +1247,7 @@ Public Class BankImportForm
             'then make a trx a few rows below visible to scroll the first
             'non-imported to the middle of the list control.
             Dim objMatchItem As ListViewItem
-            Dim objMatchTrx As NormalTrx
+            Dim objMatchTrx As BankTrx
             Dim blnFoundNonImported As Boolean = False
             Dim intNumberVisible As Integer = 0
             For Each objMatchItem In lvwMatches.Items
@@ -1279,7 +1279,7 @@ Public Class BankImportForm
     Private Function blnMatchImport(ByVal intItemIndex As Integer) As Boolean
         Dim objImportedTrx As ImportedTrx
         Dim objReg As Register
-        Dim objImportMatch As NormalTrx
+        Dim objImportMatch As BankTrx
         Dim lngNumber As Integer
 
         Try
@@ -1328,7 +1328,7 @@ Public Class BankImportForm
         Erase maudtMatch
     End Sub
 
-    Private Sub DisplayMatch(ByVal objTrx As NormalTrx, ByVal intIndex As Integer)
+    Private Sub DisplayMatch(ByVal objTrx As BankTrx, ByVal intIndex As Integer)
 
         Dim objItem As ListViewItem = UITools.ListViewAdd(lvwMatches)
         Dim strFake As String = ""
@@ -1359,7 +1359,7 @@ Public Class BankImportForm
 
     End Sub
 
-    Private Function strSummarizeTrxCat(ByVal objTrx As NormalTrx) As String
+    Private Function strSummarizeTrxCat(ByVal objTrx As BankTrx) As String
 
         If objTrx.lngSplits = 1 Then
             strSummarizeTrxCat = mobjCompany.objCategories.strKeyToValue1(objTrx.objFirstSplit.strCategoryKey)
@@ -1431,7 +1431,7 @@ Public Class BankImportForm
     End Sub
 
     Private Sub cmdUpdateExisting_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdUpdateExisting.Click
-        Dim objMatchedTrx As NormalTrx
+        Dim objMatchedTrx As BankTrx
 
         Try
             If Not blnValidImportItemSelected() Then

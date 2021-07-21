@@ -39,7 +39,7 @@ Public Class TrxSearchHandler
     End Function
 
     Public Sub ProcessTrx(
-        ByVal objTrx As Trx,
+        ByVal objTrx As BaseTrx,
         ByVal dlgAddTrxResult As AddSearchMatchTrxDelegate,
         ByVal dlgAddSplitResult As AddSearchMatchSplitDelegate) _
         Implements ISearchHandler.ProcessTrx

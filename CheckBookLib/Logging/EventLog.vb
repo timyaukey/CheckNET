@@ -92,17 +92,17 @@ Public Class EventLog
         mcolLoggers.Add(objActionLogger)
     End Sub
 
-    Public Sub AddILogAdd(ByVal objAddLogger As ILogAdd, ByVal strTitle As String, ByVal objNewTrx As Trx)
+    Public Sub AddILogAdd(ByVal objAddLogger As ILogAdd, ByVal strTitle As String, ByVal objNewTrx As BaseTrx)
         objAddLogger.Init(strTitle, objNewTrx.objClone(False))
         mcolLoggers.Add(objAddLogger)
     End Sub
 
-    Public Sub AddILogChange(ByVal objChangeLogger As ILogChange, ByVal strTitle As String, ByVal objNewTrx As Trx, ByVal objOldTrx As Trx)
+    Public Sub AddILogChange(ByVal objChangeLogger As ILogChange, ByVal strTitle As String, ByVal objNewTrx As BaseTrx, ByVal objOldTrx As BaseTrx)
         objChangeLogger.Init(strTitle, objNewTrx.objClone(False), objOldTrx.objClone(False))
         mcolLoggers.Add(objChangeLogger)
     End Sub
 
-    Public Sub AddILogDelete(ByVal objDeleteLogger As ILogDelete, ByVal strTitle As String, ByVal objOldTrx As Trx)
+    Public Sub AddILogDelete(ByVal objDeleteLogger As ILogDelete, ByVal strTitle As String, ByVal objOldTrx As BaseTrx)
         objDeleteLogger.Init(strTitle, objOldTrx.objClone(False))
         mcolLoggers.Add(objDeleteLogger)
     End Sub
@@ -143,11 +143,11 @@ Public Class EventLog
     End Sub
 
     'Called by ILogger objects.
-    Public Sub WriteTrx(ByVal strName As String, ByVal objTrx As Trx)
+    Public Sub WriteTrx(ByVal strName As String, ByVal objTrx As BaseTrx)
         Dim elmTrx As VB6XmlElement
         Dim objSplit As TrxSplit
         Dim elmSplitParent As VB6XmlElement
-        Dim objNormalTrx As NormalTrx
+        Dim objNormalTrx As BankTrx
         elmTrx = mdomOutput.CreateElement(strName)
         melmEvent.AppendChild(elmTrx)
         With elmTrx
@@ -163,10 +163,10 @@ Public Class EventLog
                 .SetAttribute("RptName", mobjRepeats.strKeyToValue1(objTrx.strRepeatKey))
                 .SetAttribute("RptSeq", CStr(objTrx.intRepeatSeq))
             End If
-            If TypeOf objTrx Is NormalTrx Then
+            If TypeOf objTrx Is BankTrx Then
                 .SetAttribute("Type", "Normal")
                 elmSplitParent = elmTrx
-                objNormalTrx = DirectCast(objTrx, NormalTrx)
+                objNormalTrx = DirectCast(objTrx, BankTrx)
                 For Each objSplit In objNormalTrx.colSplits
                     If objNormalTrx.lngSplits > 1 Then
                         elmSplitParent = mdomOutput.CreateElement("Split")

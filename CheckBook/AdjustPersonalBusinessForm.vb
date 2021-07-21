@@ -109,12 +109,12 @@ Public Class AdjustPersonalBusinessForm
     End Function
 
     Private Function intDeleteAdjustments(ByVal objAccount As Account) As Integer
-        Dim colToDelete As List(Of Trx) = New List(Of Trx)
-        Dim objTrx As Trx
+        Dim colToDelete As List(Of BaseTrx) = New List(Of BaseTrx)
+        Dim objTrx As BaseTrx
         Dim intDeleteCount As Integer = 0
         For Each objReg As Register In objAccount.colRegisters
             ShowProgress("Scanning " + objReg.strTitle)
-            For Each objTrx In objReg.colDateRange(Of Trx)(ctlStartDate.Value, ctlEndDate.Value)
+            For Each objTrx In objReg.colDateRange(Of BaseTrx)(ctlStartDate.Value, ctlEndDate.Value)
                 If blnIsInvalid(objTrx) Then
                     mobjHostUI.InfoMessageBox("Invalid transaction found: " + objTrx.ToString())
                 End If
@@ -131,12 +131,12 @@ Public Class AdjustPersonalBusinessForm
         Return intDeleteCount
     End Function
 
-    Private Function blnIsAdjustment(ByVal objTrx As Trx) As Boolean
+    Private Function blnIsAdjustment(ByVal objTrx As BaseTrx) As Boolean
         Return objTrx.strDescription.EndsWith(mstrExpenseMarker) Or
             objTrx.strDescription.EndsWith(mstrPaymentMarker)
     End Function
 
-    Private Function blnIsInvalid(ByVal objTrx As Trx) As Boolean
+    Private Function blnIsInvalid(ByVal objTrx As BaseTrx) As Boolean
         If objTrx.strDescription.Contains(":") Then
             If objTrx.strDescription.EndsWith(mstrDivideMarker) Then
                 Return False
@@ -166,11 +166,11 @@ Public Class AdjustPersonalBusinessForm
     End Function
 
     Private Function intCreateAdjustments(ByVal objBusinessReg As Register, ByVal objPersonalReg As Register) As Integer
-        Dim objBusinessTrx As Trx
-        Dim colToDivide As List(Of Trx) = New List(Of Trx)
+        Dim objBusinessTrx As BaseTrx
+        Dim colToDivide As List(Of BaseTrx) = New List(Of BaseTrx)
         Dim intAdjustCount As Integer = 0
         ShowProgress("Scanning " + objBusinessReg.strTitle)
-        For Each objBusinessTrx In objBusinessReg.colDateRange(Of Trx)(ctlStartDate.Value, ctlEndDate.Value)
+        For Each objBusinessTrx In objBusinessReg.colDateRange(Of BaseTrx)(ctlStartDate.Value, ctlEndDate.Value)
             If blnTrxNeedsDividing(objBusinessTrx) Then
                 colToDivide.Add(objBusinessTrx)
             End If
@@ -182,30 +182,30 @@ Public Class AdjustPersonalBusinessForm
         Return intAdjustCount
     End Function
 
-    Private Function blnTrxNeedsDividing(ByVal objBusinessTrx As Trx) As Boolean
+    Private Function blnTrxNeedsDividing(ByVal objBusinessTrx As BaseTrx) As Boolean
         Return (blnIsMarkedToDivide(objBusinessTrx) Or blnIsPayment(objBusinessTrx))
     End Function
 
-    Private Function blnIsMarkedToDivide(ByVal objBusinessTrx As Trx) As Boolean
-        'Has to be a NormalTrx because the adjustment in the business register
-        'is a NormalTrx and it has to use the same category as the first split
+    Private Function blnIsMarkedToDivide(ByVal objBusinessTrx As BaseTrx) As Boolean
+        'Has to be a BankTrx because the adjustment in the business register
+        'is a BankTrx and it has to use the same category as the first split
         'of objBusinessTrx.
-        If TypeOf objBusinessTrx Is NormalTrx Then
+        If TypeOf objBusinessTrx Is BankTrx Then
             Return objBusinessTrx.strDescription.EndsWith(mstrDivideMarker)
         End If
         Return False
     End Function
 
-    Private Function blnIsPayment(ByVal objBusinessTrx As Trx) As Boolean
+    Private Function blnIsPayment(ByVal objBusinessTrx As BaseTrx) As Boolean
         '"Is a payment" means "is a transfer from another balance sheet account".
-        'We don't need any categories from this one so it doesn't have to be a NormalTrx,
+        'We don't need any categories from this one so it doesn't have to be a BankTrx,
         'because the adjustment is a transfer to the "loan to person" account.
-        Dim objNormalTrx As NormalTrx
+        Dim objNormalTrx As BankTrx
         If objBusinessTrx.curAmount > 0 Then
             If TypeOf objBusinessTrx Is ReplicaTrx Then
                 Return True
             End If
-            objNormalTrx = TryCast(objBusinessTrx, NormalTrx)
+            objNormalTrx = TryCast(objBusinessTrx, BankTrx)
             If Not objNormalTrx Is Nothing Then
                 Return objNormalTrx.colSplits(0).blnHasReplicaTrx
             End If
@@ -213,7 +213,7 @@ Public Class AdjustPersonalBusinessForm
         Return False
     End Function
 
-    Private Function intDivideTrx(ByVal objBusinessTrx As Trx, ByVal objPersonalReg As Register) As Integer
+    Private Function intDivideTrx(ByVal objBusinessTrx As BaseTrx, ByVal objPersonalReg As Register) As Integer
         Dim curBusinessBalance As Decimal = curGetAccountBalance(mobjBusinessAccount, objBusinessTrx.datDate)
         Dim curPersonalBalance As Decimal = curGetAccountBalance(mobjPersonalAccount, objBusinessTrx.datDate)
         Dim curBusinessPart As Decimal
@@ -247,7 +247,7 @@ Public Class AdjustPersonalBusinessForm
                 Throw New Exception("Dividable expense trx has no divide marker")
             End If
             strNewDescription = objBusinessTrx.strDescription.Substring(0, intMarkerOffset) + mstrExpenseMarker
-            strOrigCatKey = DirectCast(objBusinessTrx, NormalTrx).colSplits(0).strCategoryKey
+            strOrigCatKey = DirectCast(objBusinessTrx, BankTrx).colSplits(0).strCategoryKey
             CreateAdjustmentTrx(objBusinessTrx.objReg, datAdjustmentDate, strNewDescription, strOrigCatKey, -curPersonalPart)
             CreateAdjustmentTrx(objPersonalReg, datAdjustmentDate, strNewDescription, mstrPersonalExpenseKey, curPersonalPart)
         Else
@@ -260,8 +260,8 @@ Public Class AdjustPersonalBusinessForm
 
     Private Sub CreateAdjustmentTrx(ByVal objRegister As Register, ByVal datDate As DateTime, ByVal strDescription As String,
                                     ByVal strCatKey As String, ByVal curAmount As Decimal)
-        Dim objTrx As NormalTrx = New NormalTrx(objRegister)
-        objTrx.NewStartNormal(True, "Pmt", datDate, strDescription, "", Trx.TrxStatus.Unreconciled, False, 0D, False, False, 0, "", "")
+        Dim objTrx As BankTrx = New BankTrx(objRegister)
+        objTrx.NewStartNormal(True, "Pmt", datDate, strDescription, "", BaseTrx.TrxStatus.Unreconciled, False, 0D, False, False, 0, "", "")
         objTrx.AddSplit("", strCatKey, "", "", Utilities.datEmpty, Utilities.datEmpty, "", "", curAmount)
         objRegister.NewAddEnd(objTrx, New LogAdd(), "AdjustPersonalBusiness.AddTrx")
     End Sub
@@ -270,7 +270,7 @@ Public Class AdjustPersonalBusinessForm
         Dim curResult As Decimal = 0D
         Dim datEndDate As DateTime = ctlEndDate.Value
         For Each objReg As Register In objAccount.colRegisters
-            For Each objTrx As Trx In objReg.colAllTrx(Of Trx)()
+            For Each objTrx As BaseTrx In objReg.colAllTrx(Of BaseTrx)()
                 If objTrx.datDate >= datAfterEndDate Then
                     Exit For
                 End If

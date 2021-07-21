@@ -31,7 +31,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
 
         private void btnRenumber_Click(object sender, EventArgs e)
         {
-            List<NormalTrx> objToChange = new List<NormalTrx>();
+            List<BankTrx> objToChange = new List<BankTrx>();
             if (!Int32.TryParse(txtStartNumber.Text, out int startNumber))
             {
                 HostUI.ErrorMessageBox("Invalid starting check number.");
@@ -48,7 +48,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 return;
             }
             Register reg = HostUI.objGetCurrentRegister();
-            foreach (var objNormal in reg.colDateRange<NormalTrx>(ctlStartDate.Value, ctlEndDate.Value))
+            foreach (var objNormal in reg.colDateRange<BankTrx>(ctlStartDate.Value, ctlEndDate.Value))
             {
                 if (Int32.TryParse(objNormal.strNumber, out int checkNumber))
                 {

@@ -7,7 +7,7 @@ using Willowsoft.CheckBook.Lib;
 namespace Willowsoft.CheckBook.Powershell
 {
     [Cmdlet(VerbsCommon.Find, "CheckbookNormalTrx")]
-    [OutputType(typeof(NormalTrx))]
+    [OutputType(typeof(BankTrx))]
     public class FindNormalTrx : Cmdlet
     {
         [Parameter(Mandatory = true)]
@@ -42,8 +42,8 @@ namespace Willowsoft.CheckBook.Powershell
 
         protected override void BeginProcessing()
         {
-            ICollection<NormalTrx> colMatches = null;
-            ICollection<NormalTrx> colExactMatches = null;
+            ICollection<BankTrx> colMatches = null;
+            ICollection<BankTrx> colExactMatches = null;
             bool blnExactMatch = false;
             Register.MatchNormalCore(
                 lngNumber: Number,
@@ -59,7 +59,7 @@ namespace Willowsoft.CheckBook.Powershell
                 colExactMatches: ref colExactMatches,
                 blnExactMatch: ref blnExactMatch);
             SearchUtilities.PruneToExactMatches(colExactMatches, Date, ref colMatches, ref blnExactMatch);
-            foreach(NormalTrx objTrx in colMatches)
+            foreach(BankTrx objTrx in colMatches)
             {
                 WriteObject(objTrx);
             }

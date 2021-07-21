@@ -17,20 +17,20 @@ Public Class ImportHandlerInvoices
         End Get
     End Property
 
-    Public Sub AutoNewSearch(objImportedTrx As ImportedTrx, objReg As Register, ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.AutoNewSearch
+    Public Sub AutoNewSearch(objImportedTrx As ImportedTrx, objReg As Register, ByRef colMatches As ICollection(Of BankTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.AutoNewSearch
         objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.objFirstSplit.strInvoiceNum, colMatches)
         blnExactMatch = True
     End Sub
 
     Public Function blnAlternateAutoNewHandling(objImportedTrx As ImportedTrx, objReg As Register) As Boolean Implements IImportHandler.blnAlternateAutoNewHandling
         Dim objImportedSplit As TrxSplit
-        Dim colPOMatches As ICollection(Of NormalTrx) = Nothing
-        Dim objMatchedTrx As NormalTrx
+        Dim colPOMatches As ICollection(Of BankTrx) = Nothing
+        Dim objMatchedTrx As BankTrx
         Dim objMatchedSplit As TrxSplit
         Dim strPONumber As String
         'Check if we are importing an invoice that can be matched to a purchase order.
-        'If this happens we update an existing Trx by adding a split rather than creating
-        'a new Trx as would normally be the case in this method.
+        'If this happens we update an existing BaseTrx by adding a split rather than creating
+        'a new BaseTrx as would normally be the case in this method.
         If objImportedTrx.lngSplits > 0 Then
             objImportedSplit = objImportedTrx.objFirstSplit
             strPONumber = objImportedSplit.strPONumber
@@ -39,13 +39,13 @@ Public Class ImportHandlerInvoices
             End If
             If strPONumber <> "" Then
                 objReg.MatchPONumber(objImportedTrx.datDate, 14, objImportedTrx.strDescription, strPONumber, colPOMatches)
-                'There should be only one matching Trx, but we'll check all matches
+                'There should be only one matching BaseTrx, but we'll check all matches
                 'and use the first one with a split with no invoice number. That split
                 'represents the uninvoiced part of the purchase order due on that date.
                 For Each objMatchedTrx In colPOMatches
                     For Each objMatchedSplit In objMatchedTrx.colSplits
                         If objMatchedSplit.strPONumber = strPONumber And objMatchedSplit.strInvoiceNum = "" Then
-                            'Add the imported Trx as a new split in objMatchedTrx,
+                            'Add the imported BaseTrx as a new split in objMatchedTrx,
                             'and reduce the amount of objMatchedSplit by the same amount
                             'so the total amount of objMatchedTrx does not change.
                             objReg.ImportUpdatePurchaseOrder(objMatchedTrx, objMatchedSplit, objImportedSplit)
@@ -66,8 +66,8 @@ Public Class ImportHandlerInvoices
         Return Nothing
     End Function
 
-    Public Function objStatusSearch(objImportedTrx As ImportedTrx, objReg As Register) As NormalTrx Implements IImportHandler.objStatusSearch
-        Dim colMatches As ICollection(Of NormalTrx) = Nothing
+    Public Function objStatusSearch(objImportedTrx As ImportedTrx, objReg As Register) As BankTrx Implements IImportHandler.objStatusSearch
+        Dim colMatches As ICollection(Of BankTrx) = Nothing
         objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.objFirstSplit.strInvoiceNum, colMatches)
         If colMatches.Count() > 0 Then
             Return Utilities.objFirstElement(colMatches)
@@ -75,11 +75,11 @@ Public Class ImportHandlerInvoices
         Return Nothing
     End Function
 
-    Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx, ByVal intMultiPartSeqNumber As Integer) Implements IImportHandler.BatchUpdate
+    Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As BankTrx, ByVal intMultiPartSeqNumber As Integer) Implements IImportHandler.BatchUpdate
         'Do nothing for invoices.
     End Sub
 
-    Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colImportMatchedTrx As IEnumerable(Of NormalTrx), ByRef colUnusedMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
+    Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colImportMatchedTrx As IEnumerable(Of BankTrx), ByRef colUnusedMatches As ICollection(Of BankTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
         'Do nothing
     End Sub
 
@@ -107,12 +107,12 @@ Public Class ImportHandlerInvoices
         End Get
     End Property
 
-    Public Sub IndividualSearch(objReg As Register, objImportedTrx As ImportedTrx, blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.IndividualSearch
+    Public Sub IndividualSearch(objReg As Register, objImportedTrx As ImportedTrx, blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of BankTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.IndividualSearch
         objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.objFirstSplit.strInvoiceNum, colMatches)
         blnExactMatch = True
     End Sub
 
-    Public Function blnIndividualUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx) As Boolean Implements IImportHandler.blnIndividualUpdate
+    Public Function blnIndividualUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As BankTrx) As Boolean Implements IImportHandler.blnIndividualUpdate
         'Do nothing
         Return False
     End Function

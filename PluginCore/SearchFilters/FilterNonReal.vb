@@ -4,7 +4,7 @@ Option Explicit On
 Public Class FilterNonReal
     Implements ISearchFilter
 
-    Public Function blnInclude(objTrx As Trx) As Boolean Implements ISearchFilter.blnInclude
+    Public Function blnInclude(objTrx As BaseTrx) As Boolean Implements ISearchFilter.blnInclude
         Return objTrx.blnFake
     End Function
 

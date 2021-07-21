@@ -11,7 +11,7 @@ namespace Willowsoft.CheckBook.Powershell
     public class UpdateNormalTrx : Cmdlet
     {
         [Parameter(Mandatory = true)]
-        public NormalTrx NormalTrx { get; set; }
+        public BankTrx NormalTrx { get; set; }
 
         [Parameter]
         public DateTime? Date { get; set; }
@@ -26,7 +26,7 @@ namespace Willowsoft.CheckBook.Powershell
         public string Memo { get; set; }
 
         [Parameter]
-        public Trx.TrxStatus? Status { get; set; }
+        public BaseTrx.TrxStatus? Status { get; set; }
 
         [Parameter]
         public bool? Fake { get; set; }
@@ -77,7 +77,7 @@ namespace Willowsoft.CheckBook.Powershell
                 ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation("-OneSplit and -Splits may not both be specified", "SplitError"));
             }
             NormalTrxManager mgr = new NormalTrxManager(NormalTrx);
-            mgr.Update(delegate (NormalTrx objTrx)
+            mgr.Update(delegate (BankTrx objTrx)
             {
                 objTrx.UpdateStartNormal(
                     strNumber_: !string.IsNullOrEmpty(Number) ? Number : objTrx.strNumber,
@@ -117,7 +117,7 @@ namespace Willowsoft.CheckBook.Powershell
 
         private string TrxValidationError = null;
 
-        private void Register_ValidationError(Trx objTrx, string strMsg)
+        private void Register_ValidationError(BaseTrx objTrx, string strMsg)
         {
             TrxValidationError = strMsg;
         }

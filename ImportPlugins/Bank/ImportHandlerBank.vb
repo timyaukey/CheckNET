@@ -16,9 +16,9 @@ Public Class ImportHandlerBank
         End Get
     End Property
 
-    Public Sub AutoNewSearch(ByVal objImportedTrx As ImportedTrx, ByVal objReg As Register, ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.AutoNewSearch
+    Public Sub AutoNewSearch(ByVal objImportedTrx As ImportedTrx, ByVal objReg As Register, ByRef colMatches As ICollection(Of BankTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.AutoNewSearch
         Dim lngNumber As Integer = 0
-        Dim colExactMatches As ICollection(Of NormalTrx) = Nothing
+        Dim colExactMatches As ICollection(Of BankTrx) = Nothing
         objReg.MatchNormalCore(lngNumber, objImportedTrx.datDate, 60, 60, objImportedTrx.strDescription, objImportedTrx.curAmount,
                                      objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
         SearchUtilities.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
@@ -35,8 +35,8 @@ Public Class ImportHandlerBank
         Dim intCompareLen As Integer = 8
         Dim strImportName As String = objImportedTrx.strDescription
         For Each objReg As Register In objAccount.colRegisters
-            For Each objTrx As Trx In objReg.colDbgRepeatTrx.Values
-                If TypeOf objTrx Is NormalTrx Then
+            For Each objTrx As BaseTrx In objReg.colDbgRepeatTrx.Values
+                If TypeOf objTrx Is BankTrx Then
                     If String.Compare(objTrx.strDescription, 0, strImportName, 0, intCompareLen, True) = 0 Then
                         If Math.Abs(objImportedTrx.datDate.Subtract(objTrx.datDate).TotalDays) < 30D Then
                             Return "There is a repeating bank transaction with a similar name"
@@ -48,14 +48,14 @@ Public Class ImportHandlerBank
         Return Nothing
     End Function
 
-    Public Function objStatusSearch(ByVal objImportedTrx As ImportedTrx, ByVal objReg As Register) As NormalTrx Implements IImportHandler.objStatusSearch
+    Public Function objStatusSearch(ByVal objImportedTrx As ImportedTrx, ByVal objReg As Register) As BankTrx Implements IImportHandler.objStatusSearch
         If objImportedTrx.strImportKey <> "" Then
             Return objReg.objMatchImportKey(objImportedTrx.strImportKey)
         End If
         Return Nothing
     End Function
 
-    Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx, ByVal intMultiPartSeqNumber As Integer) Implements IImportHandler.BatchUpdate
+    Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As BankTrx, ByVal intMultiPartSeqNumber As Integer) Implements IImportHandler.BatchUpdate
         Dim strImportKey As String
         Dim curAmount As Decimal
         If intMultiPartSeqNumber = 0 Then
@@ -68,10 +68,10 @@ Public Class ImportHandlerBank
         objMatchedTrx.objReg.ImportUpdateBank(objMatchedTrx, datNewTrxDate(objImportedTrx, objMatchedTrx), objMatchedTrx.strNumber, curAmount, strImportKey)
     End Sub
 
-    Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of NormalTrx), ByRef colUnusedMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
+    Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of BankTrx), ByRef colUnusedMatches As ICollection(Of BankTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
         Dim lngNumber As Integer = CType(Val(objImportedTrx.strNumber), Integer)
-        Dim colMatches As ICollection(Of NormalTrx) = Nothing
-        Dim colExactMatches As ICollection(Of NormalTrx) = Nothing
+        Dim colMatches As ICollection(Of BankTrx) = Nothing
+        Dim colExactMatches As ICollection(Of BankTrx) = Nothing
         objReg.MatchNormalCore(lngNumber, objImportedTrx.datDate, 120, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
                          objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
         SearchUtilities.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
@@ -103,8 +103,8 @@ Public Class ImportHandlerBank
         End Get
     End Property
 
-    Public Sub IndividualSearch(objReg As Register, objImportedTrx As ImportedTrx, blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of NormalTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.IndividualSearch
-        Dim colExactMatches As ICollection(Of NormalTrx) = Nothing
+    Public Sub IndividualSearch(objReg As Register, objImportedTrx As ImportedTrx, blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of BankTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.IndividualSearch
+        Dim colExactMatches As ICollection(Of BankTrx) = Nothing
         Dim lngNumber As Integer
         If IsNumeric(objImportedTrx.strNumber) Then
             lngNumber = CInt(objImportedTrx.strNumber)
@@ -116,7 +116,7 @@ Public Class ImportHandlerBank
         SearchUtilities.PruneToNonImportedExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
     End Sub
 
-    Public Function blnIndividualUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As NormalTrx) As Boolean Implements IImportHandler.blnIndividualUpdate
+    Public Function blnIndividualUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As BankTrx) As Boolean Implements IImportHandler.blnIndividualUpdate
         Dim blnPreserveNumAmt As Boolean
         Dim strNewNumber As String
         Dim curNewAmount As Decimal
@@ -139,7 +139,7 @@ Public Class ImportHandlerBank
         Return True
     End Function
 
-    Private Function datNewTrxDate(ByVal objImportedTrx As ImportedTrx, ByVal objMatchedTrx As NormalTrx) As DateTime
+    Private Function datNewTrxDate(ByVal objImportedTrx As ImportedTrx, ByVal objMatchedTrx As BankTrx) As DateTime
         Dim intTrxNum As Integer
         If Int32.TryParse(objMatchedTrx.strNumber, intTrxNum) Then
             Return objMatchedTrx.datDate

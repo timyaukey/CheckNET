@@ -70,7 +70,7 @@ Public Class RegisterForm
         End Get
     End Property
 
-    Private ReadOnly Property objCurrentTrx() As Trx
+    Private ReadOnly Property objCurrentTrx() As BaseTrx
         Get
             If grdReg.CurrentRow Is Nothing Then
                 Return Nothing
@@ -80,7 +80,7 @@ Public Class RegisterForm
     End Property
 
     Private Sub cmdDelete_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdDelete.Click
-        Dim objTrx As Trx
+        Dim objTrx As BaseTrx
         Dim objXfer As TransferManager
         Dim objOtherReg As Register
 
@@ -106,7 +106,7 @@ Public Class RegisterForm
                 If mobjHostUI.OkCancelMessageBox("Do you really want to delete the transaction dated " & Utilities.strFormatDate(.datDate) & " for $" & Utilities.strFormatCurrency(.curAmount) & " made out to " & .strDescription & "?") <> DialogResult.OK Then
                     Exit Sub
                 End If
-                If .lngStatus = Trx.TrxStatus.Reconciled Then
+                If .lngStatus = BaseTrx.TrxStatus.Reconciled Then
                     If mobjHostUI.OkCancelMessageBox("This transaction has been reconciled to a bank statement. " & "Are you sure you want to delete it?") <> DialogResult.OK Then
                         Exit Sub
                     End If
@@ -114,9 +114,9 @@ Public Class RegisterForm
             End With
             'This will fire events which cause this form to redisplay all affected
             'parts of the grid, with one exception: it will not update the "unmatched"
-            'column of any affected normal Trx when deleting a budget Trx. This seems like
+            'column of any affected normal BaseTrx when deleting a budget BaseTrx. This seems like
             'an unimportant case, and is difficult to fix because the process of applying
-            'splits does not let you find the register index of the normal Trx to which
+            'splits does not let you find the register index of the normal BaseTrx to which
             'a budget is applied.
             If objTrx.GetType() Is GetType(TransferTrx) Then
                 objXfer = New TransferManager
@@ -143,7 +143,7 @@ Public Class RegisterForm
     End Sub
 
     Private Sub EditTrx()
-        Dim objTrx As Trx = objCurrentTrx()
+        Dim objTrx As BaseTrx = objCurrentTrx()
         If objTrx Is Nothing Then
             mobjHostUI.ErrorMessageBox("You must first select a register row.")
             Exit Sub
@@ -202,7 +202,7 @@ Public Class RegisterForm
 
     Private Sub cmdNewNormal_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewNormal.Click
         Try
-            Dim objTrx As NormalTrx = New NormalTrx(mobjReg)
+            Dim objTrx As BankTrx = New BankTrx(mobjReg)
             objTrx.NewEmptyNormal(mdatDefaultNewDate)
             If mobjHostUI.blnAddNormalTrx(objTrx, mdatDefaultNewDate, True, "RegForm.NewNormal") Then
                 mobjHostUI.ErrorMessageBox("Canceled.")
@@ -251,9 +251,9 @@ Public Class RegisterForm
         End Try
     End Sub
 
-    Delegate Function strColumnValue(ByVal objTrx As Trx) As String
+    Delegate Function strColumnValue(ByVal objTrx As BaseTrx) As String
 
-    Private Function strColumnEmpty(ByVal objTrx As Trx) As String
+    Private Function strColumnEmpty(ByVal objTrx As BaseTrx) As String
         strColumnEmpty = ""
     End Function
 
@@ -261,36 +261,36 @@ Public Class RegisterForm
         Dim intCol As Integer
 
         ConfigGridCol(intCol, mintColDate, "Date", 700,
-            Function(objTrx As Trx) objTrx.datDate.ToString(Utilities.strDateWithTwoDigitYear))
+            Function(objTrx As BaseTrx) objTrx.datDate.ToString(Utilities.strDateWithTwoDigitYear))
         ConfigGridCol(intCol, mintColNumber, "Number", 700,
-            Function(objTrx As Trx) objTrx.strNumber)
+            Function(objTrx As BaseTrx) objTrx.strNumber)
         ConfigGridCol(intCol, mintColDescr, "Description", 3000,
-            Function(objTrx As Trx) objTrx.strDescription)
+            Function(objTrx As BaseTrx) objTrx.strDescription)
         ConfigGridCol(intCol, mintColAmount, "Amount", 900,
-            Function(objTrx As Trx) Utilities.strFormatCurrency(objTrx.curAmount), True)
+            Function(objTrx As BaseTrx) Utilities.strFormatCurrency(objTrx.curAmount), True)
         ConfigGridCol(intCol, mintColBalance, "Balance", 900,
-            Function(objTrx As Trx) Utilities.strFormatCurrency(objTrx.curBalance), True)
+            Function(objTrx As BaseTrx) Utilities.strFormatCurrency(objTrx.curBalance), True)
         ConfigGridCol(intCol, mintColCategory, "Category", 1800,
-            Function(objTrx As Trx) objTrx.strCategory)
+            Function(objTrx As BaseTrx) objTrx.strCategory)
         ConfigGridCol(intCol, mintColPONumber, "PO#", 900,
-            Function(objTrx As Trx) objTrx.strPONumber)
+            Function(objTrx As BaseTrx) objTrx.strPONumber)
         ConfigGridCol(intCol, mintColInvoiceNum, "Invoice#", 900,
-            Function(objTrx As Trx) objTrx.strInvoiceNum)
+            Function(objTrx As BaseTrx) objTrx.strInvoiceNum)
         ConfigGridCol(intCol, mintColInvoiceDate, "Inv. Date", 700,
-            Function(objTrx As Trx) If(objTrx.GetType() Is GetType(NormalTrx), DirectCast(objTrx, NormalTrx).strSummarizeInvoiceDate(), ""))
+            Function(objTrx As BaseTrx) If(objTrx.GetType() Is GetType(BankTrx), DirectCast(objTrx, BankTrx).strSummarizeInvoiceDate(), ""))
         ConfigGridCol(intCol, mintColDueDate, "Due Date", 700,
-            Function(objTrx As Trx) If(objTrx.GetType() Is GetType(NormalTrx), DirectCast(objTrx, NormalTrx).strSummarizeDueDate(), ""))
+            Function(objTrx As BaseTrx) If(objTrx.GetType() Is GetType(BankTrx), DirectCast(objTrx, BankTrx).strSummarizeDueDate(), ""))
         ConfigGridCol(intCol, mintColTerms, "Terms", 800,
-            Function(objTrx As Trx) If(objTrx.GetType() Is GetType(NormalTrx), DirectCast(objTrx, NormalTrx).strSummarizeTerms(), ""))
+            Function(objTrx As BaseTrx) If(objTrx.GetType() Is GetType(BankTrx), DirectCast(objTrx, BankTrx).strSummarizeTerms(), ""))
         ConfigGridCol(intCol, mintColFake, "Fake", 500,
-            Function(objTrx As Trx) If(objTrx.GetType() Is GetType(NormalTrx), If(objTrx.blnFake, "Y", ""), "-"))
+            Function(objTrx As BaseTrx) If(objTrx.GetType() Is GetType(BankTrx), If(objTrx.blnFake, "Y", ""), "-"))
         ConfigGridCol(intCol, mintColAutoGenerated, "Gen", 500,
-            Function(objTrx As Trx) If(objTrx.blnAutoGenerated, "Y", ""))
+            Function(objTrx As BaseTrx) If(objTrx.blnAutoGenerated, "Y", ""))
         ConfigGridCol(intCol, mintColImportKey, "Imported", 800,
-            Function(objTrx As Trx) If(objTrx.GetType() Is GetType(NormalTrx),
-                If(String.IsNullOrEmpty(DirectCast(objTrx, NormalTrx).strImportKey), "", "Y"), ""))
+            Function(objTrx As BaseTrx) If(objTrx.GetType() Is GetType(BankTrx),
+                If(String.IsNullOrEmpty(DirectCast(objTrx, BankTrx).strImportKey), "", "Y"), ""))
         ConfigGridCol(intCol, mintColStatus, "Status", 600,
-            Function(objTrx As Trx) If(objTrx.GetType() Is GetType(NormalTrx),
+            Function(objTrx As BaseTrx) If(objTrx.GetType() Is GetType(BankTrx),
                 "? RNS".Substring(objTrx.lngStatus, 1), ""))
         grdReg.Columns(mintColDescr).Frozen = True
 
@@ -315,7 +315,7 @@ Public Class RegisterForm
 
     Private Sub LoadGrid()
         grdReg.RowCount = mobjReg.lngTrxCount
-        Dim objSelectedTrx As Trx = mobjReg.objFirstOnOrAfter(Today)
+        Dim objSelectedTrx As BaseTrx = mobjReg.objFirstOnOrAfter(Today)
         If Not (objSelectedTrx Is Nothing) Then
             mobjReg.SetCurrent(objSelectedTrx)
             mobjReg.FireShowCurrent()
@@ -327,7 +327,7 @@ Public Class RegisterForm
     Private Sub grdReg_CellValueNeeded(ByVal sender As System.Object,
         ByVal e As System.Windows.Forms.DataGridViewCellValueEventArgs) Handles grdReg.CellValueNeeded
         If Not mobjReg Is Nothing Then
-            Dim objTrx As Trx
+            Dim objTrx As BaseTrx
             If e.RowIndex < mobjReg.lngTrxCount Then
                 objTrx = mobjReg.objTrx(e.RowIndex + 1)
                 e.Value = mstrColValueFuncs(e.ColumnIndex)(objTrx)
@@ -336,7 +336,7 @@ Public Class RegisterForm
     End Sub
 
     Private Sub grdReg_CellFormatting(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellFormattingEventArgs) Handles grdReg.CellFormatting
-        Dim objTrx As Trx
+        Dim objTrx As BaseTrx
         If Not mobjReg Is Nothing Then
             If e.RowIndex < mobjReg.lngTrxCount Then
                 objTrx = mobjReg.objTrx(e.RowIndex + 1)
@@ -359,19 +359,19 @@ Public Class RegisterForm
     End Sub
 
     Private Sub grdReg_CurrentCellChanged(sender As Object, e As EventArgs) Handles grdReg.CurrentCellChanged
-        Dim objTrx As Trx = objCurrentTrx()
+        Dim objTrx As BaseTrx = objCurrentTrx()
         If Not (objTrx Is Nothing) Then
             mobjReg.SetCurrent(objTrx)
         End If
     End Sub
 
-    Private Function strRepeatUnit(ByVal lngRepeatUnit As Trx.RepeatUnit) As String
+    Private Function strRepeatUnit(ByVal lngRepeatUnit As BaseTrx.RepeatUnit) As String
         Select Case lngRepeatUnit
-            Case Trx.RepeatUnit.Day
+            Case BaseTrx.RepeatUnit.Day
                 strRepeatUnit = "Days"
-            Case Trx.RepeatUnit.Week
+            Case BaseTrx.RepeatUnit.Week
                 strRepeatUnit = "Weeks"
-            Case Trx.RepeatUnit.Month
+            Case BaseTrx.RepeatUnit.Month
                 strRepeatUnit = "Months"
             Case Else
                 strRepeatUnit = ""
@@ -397,7 +397,7 @@ Public Class RegisterForm
         End Try
     End Sub
 
-    Private Sub mobjReg_BudgetChanged(ByVal objBudget As Trx) Handles mobjReg.BudgetChanged
+    Private Sub mobjReg_BudgetChanged(ByVal objBudget As BaseTrx) Handles mobjReg.BudgetChanged
         Try
             grdReg.Invalidate()
             Exit Sub
@@ -432,7 +432,7 @@ Public Class RegisterForm
         End Try
     End Sub
 
-    Private Sub mobjReg_ShowCurrent(ByVal objTrx As Trx) Handles mobjReg.ShowCurrent
+    Private Sub mobjReg_ShowCurrent(ByVal objTrx As BaseTrx) Handles mobjReg.ShowCurrent
         Try
 
             Dim lngGridRow As Integer = lngIndexToGridRow(objTrx.lngIndex)
@@ -446,7 +446,7 @@ Public Class RegisterForm
         End Try
     End Sub
 
-    Private Sub mobjReg_TrxAdded(ByVal objTrx As Trx) Handles mobjReg.TrxAdded
+    Private Sub mobjReg_TrxAdded(ByVal objTrx As BaseTrx) Handles mobjReg.TrxAdded
         Try
 
             grdReg.RowCount = grdReg.RowCount + 1
@@ -458,7 +458,7 @@ Public Class RegisterForm
         End Try
     End Sub
 
-    Private Sub mobjReg_TrxDeleted(ByVal objTrx As Trx) Handles mobjReg.TrxDeleted
+    Private Sub mobjReg_TrxDeleted(ByVal objTrx As BaseTrx) Handles mobjReg.TrxDeleted
         Try
 
             grdReg.RowCount = grdReg.RowCount - 1
@@ -470,7 +470,7 @@ Public Class RegisterForm
         End Try
     End Sub
 
-    Private Sub mobjReg_TrxUpdated(ByVal blnPositionChanged As Boolean, ByVal objTrx As Trx) Handles mobjReg.TrxUpdated
+    Private Sub mobjReg_TrxUpdated(ByVal blnPositionChanged As Boolean, ByVal objTrx As BaseTrx) Handles mobjReg.TrxUpdated
         Try
 
             If blnPositionChanged Then
@@ -485,11 +485,11 @@ Public Class RegisterForm
         End Try
     End Sub
 
-    Private Sub InvalidateGridRow(ByVal objTrx As Trx)
+    Private Sub InvalidateGridRow(ByVal objTrx As BaseTrx)
         grdReg.InvalidateRow(lngIndexToGridRow(objTrx.lngIndex))
     End Sub
 
-    Private Sub mobjReg_ValidationError(ByVal objTrx As Trx, ByVal strMsg As String) Handles mobjReg.ValidationError
+    Private Sub mobjReg_ValidationError(ByVal objTrx As BaseTrx, ByVal strMsg As String) Handles mobjReg.ValidationError
         Dim strTrxSummary As String = "(none)"
 
         Try
@@ -510,7 +510,7 @@ Public Class RegisterForm
         End Try
     End Sub
 
-    Private Function strTrxSummaryForMsg(ByVal objTrx As Trx) As String
+    Private Function strTrxSummaryForMsg(ByVal objTrx As BaseTrx) As String
         strTrxSummaryForMsg = Utilities.strFormatDate(objTrx.datDate) & " " & objTrx.strDescription & " $" & Utilities.strFormatCurrency(objTrx.curAmount)
     End Function
 

@@ -1,7 +1,7 @@
 ﻿Option Strict On
 Option Explicit On
 
-Public Class RegDateRange(Of TTrx As Trx)
+Public Class RegDateRange(Of TTrx As BaseTrx)
     Inherits RegIterator(Of TTrx)
 
     Private mdatStart As DateTime
@@ -13,11 +13,11 @@ Public Class RegDateRange(Of TTrx As Trx)
         mdatEnd = datEnd
     End Sub
 
-    Protected Overrides Function objGetFirst() As Trx
+    Protected Overrides Function objGetFirst() As BaseTrx
         Return mobjReg.objFirstOnOrAfter(mdatStart)
     End Function
 
-    Protected Overrides Function blnAfterLast(objTrx As Trx) As Boolean
+    Protected Overrides Function blnAfterLast(objTrx As BaseTrx) As Boolean
         Return objTrx.datDate > mdatEnd
     End Function
 End Class

@@ -22,7 +22,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
             return true;
         }
 
-        public override bool IncludeNormalTrx(NormalTrx normalTrx)
+        public override bool IncludeNormalTrx(BankTrx normalTrx)
         {
             return true;
         }

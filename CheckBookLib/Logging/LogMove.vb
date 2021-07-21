@@ -5,14 +5,14 @@ Public Class LogMove
     Implements ILogChange
 
     Private mstrTitle As String
-    Private mobjOldTrx As NormalTrx
-    Private mobjNewTrx As NormalTrx
+    Private mobjOldTrx As BankTrx
+    Private mobjNewTrx As BankTrx
     Private mdatTimestamp As Date
 
-    Private Sub ILogChange_Init(ByVal strTitle As String, ByVal objNewTrx As Trx, ByVal objOldTrx As Trx) Implements ILogChange.Init
+    Private Sub ILogChange_Init(ByVal strTitle As String, ByVal objNewTrx As BaseTrx, ByVal objOldTrx As BaseTrx) Implements ILogChange.Init
         mstrTitle = strTitle
-        mobjOldTrx = DirectCast(objOldTrx, NormalTrx)
-        mobjNewTrx = DirectCast(objNewTrx, NormalTrx)
+        mobjOldTrx = DirectCast(objOldTrx, BankTrx)
+        mobjNewTrx = DirectCast(objNewTrx, BankTrx)
         mdatTimestamp = Now
     End Sub
 

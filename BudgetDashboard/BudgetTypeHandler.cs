@@ -11,7 +11,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
     public abstract class BudgetTypeHandler
     {
         public abstract bool IncludeAccount(Account account);
-        public abstract bool IncludeNormalTrx(NormalTrx normalTrx);
+        public abstract bool IncludeNormalTrx(BankTrx normalTrx);
         public abstract bool IncludeBudgetTrx(BudgetTrx budgetTrx);
         public abstract bool IncludeSplit(TrxSplit split);
     }
