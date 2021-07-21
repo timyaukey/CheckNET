@@ -154,7 +154,7 @@ Public Class Account
         End Set
     End Property
 
-    Public Property Key() As Integer
+    Public Property AccountKey() As Integer
         Get
             Return mintKey
         End Get
@@ -309,7 +309,7 @@ Public Class Account
     Public Function FindRegister(ByVal strRegisterKey As String) As Register
         Dim objReg As Register
         For Each objReg In mcolRegisters
-            If objReg.strRegisterKey = strRegisterKey Then
+            If objReg.RegisterKey = strRegisterKey Then
                 FindRegister = objReg
                 Exit Function
             End If
@@ -323,7 +323,7 @@ Public Class Account
 
         objResult = New SimpleStringTranslator
         For Each objReg In mcolRegisters
-            objResult.Add(New StringTransElement(objResult, objReg.strRegisterKey, objReg.strTitle, objReg.strTitle))
+            objResult.Add(New StringTransElement(objResult, objReg.RegisterKey, objReg.Title, objReg.Title))
         Next objReg
         RegisterList = objResult
     End Function
@@ -331,7 +331,7 @@ Public Class Account
     Public Sub SetLastReconciledDate()
         mdatLastReconciled = DateTime.MinValue
         For Each reg In mcolRegisters
-            For Each objTrx As BankTrx In reg.colAllTrx(Of BankTrx)()
+            For Each objTrx As BankTrx In reg.GetAllTrx(Of BankTrx)()
                 If objTrx.lngStatus = BaseTrx.TrxStatus.Reconciled Then
                     If objTrx.datDate > mdatLastReconciled Then
                         mdatLastReconciled = objTrx.datDate
@@ -360,7 +360,7 @@ Public Class Account
             objShowMessage("Creating first checking account...")
             Dim objAccount As Account = New Account()
             objAccount.Init(objCompany)
-            objAccount.Key = objCompany.GetUnusedAccountKey()
+            objAccount.AccountKey = objCompany.GetUnusedAccountKey()
             objAccount.AcctSubType = Account.SubType.Asset_CheckingAccount
             objAccount.FileNameRoot = "Main"
             objAccount.Title = "Checking Account"
@@ -387,7 +387,7 @@ Public Class Account
             Using objAcctWriter As TextWriter = New StreamWriter(strAcctFile)
                 objAcctWriter.WriteLine("FHCKBK2")
                 objAcctWriter.WriteLine("AT" & Title)
-                objAcctWriter.WriteLine("AK" & CStr(Key))
+                objAcctWriter.WriteLine("AK" & CStr(AccountKey))
                 objAcctWriter.WriteLine("AY" & objSubTypeMatched.strSaveCode)
                 objAcctWriter.WriteLine("RK1")
                 objAcctWriter.WriteLine("RT" & Title)

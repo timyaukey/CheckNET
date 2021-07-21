@@ -221,8 +221,8 @@ Friend Class RptScanSplitsForm
 
         Try
 
-            strRegTitle = objReg.strTitle
-            For Each objTrx In objReg.colDateRange(Of BaseTrx)(mdatStart, mdatEnd)
+            strRegTitle = objReg.Title
+            For Each objTrx In objReg.GetDateRange(Of BaseTrx)(mdatStart, mdatEnd)
                 With objTrx
                     datDate = .datDate
                     If datDate <> datLastProgress Then
@@ -267,7 +267,7 @@ Friend Class RptScanSplitsForm
                 Case SplitReportType.Totals
                     intCatIndex = mobjCompany.Categories.intLookupKey(objSplit.strCategoryKey)
                     If intCatIndex = 0 Then
-                        mobjHostUI.InfoMessageBox("Could not find category key " & objSplit.strCategoryKey & " for " & "trx dated " & Utilities.strFormatDate(objTrx.datDate) & " " & "in register " & objReg.strTitle)
+                        mobjHostUI.InfoMessageBox("Could not find category key " & objSplit.strCategoryKey & " for " & "trx dated " & Utilities.strFormatDate(objTrx.datDate) & " " & "in register " & objReg.Title)
                     Else
                         With maudtCatTotals(intCatIndex)
                             .lngCount = .lngCount + 1

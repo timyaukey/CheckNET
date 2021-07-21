@@ -7,9 +7,9 @@ Public NotInheritable Class BalanceSheetScanner
         For Each objAccount In objCompany.Accounts
             If objAccount.AcctType <> Account.AccountType.Personal Then
                 Dim objGroup As LineItemGroup = objManager.objGetGroup(objAccount.AcctSubType.ToString())
-                Dim objLine As ReportLineItem = objGroup.objGetItem(objManager, objAccount.Key.ToString())
+                Dim objLine As ReportLineItem = objGroup.objGetItem(objManager, objAccount.AccountKey.ToString())
                 For Each objReg As Register In objAccount.Registers
-                    For Each objTrx As BaseTrx In objReg.colAllTrx(Of BaseTrx)()
+                    For Each objTrx As BaseTrx In objReg.GetAllTrx(Of BaseTrx)()
                         If objTrx.datDate > datEndDate Then
                             Exit For
                         End If

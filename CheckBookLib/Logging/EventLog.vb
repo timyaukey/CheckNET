@@ -33,7 +33,7 @@ Public Class EventLog
         mdomOutput = Nothing
         mstrLogin = strLogin
         mobjReg = objReg
-        mobjCompany = mobjReg.objAccount.Company
+        mobjCompany = mobjReg.Account.Company
         mdatStart = Now
     End Sub
 
@@ -83,7 +83,7 @@ Public Class EventLog
         If Dir(strLogFolder, FileAttribute.Directory) = "" Then
             MkDir(strLogFolder)
         End If
-        strLogFile = strLogFolder & "\" & strAccountTitle & "_R" & mobjReg.strRegisterKey & "_" & Utilities.strFormatDate(mdatStart, "yyyy-MMM-dd-HH-mm-ss") & ".xml"
+        strLogFile = strLogFolder & "\" & strAccountTitle & "_R" & mobjReg.RegisterKey & "_" & Utilities.strFormatDate(mdatStart, "yyyy-MMM-dd-HH-mm-ss") & ".xml"
         mdomOutput.Save(strLogFile)
     End Sub
 

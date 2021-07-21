@@ -44,7 +44,7 @@ Public Class RegisterForm
     Public Sub ShowMe(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register) Implements IRegisterForm.ShowMe
 
         mobjHostUI = objHostUI_
-        mobjAccount = objReg_.objAccount
+        mobjAccount = objReg_.Account
         mobjReg = objReg_
         mobjCompany = mobjHostUI.objCompany
         mdatDefaultNewDate = Today
@@ -75,7 +75,7 @@ Public Class RegisterForm
             If grdReg.CurrentRow Is Nothing Then
                 Return Nothing
             End If
-            Return mobjReg.objTrx(grdReg.CurrentRow.Index + 1)
+            Return mobjReg.GetTrx(grdReg.CurrentRow.Index + 1)
         End Get
     End Property
 
@@ -241,7 +241,7 @@ Public Class RegisterForm
         Try
 
             mblnLoadComplete = True
-            Me.Text = mobjReg.strTitle
+            Me.Text = mobjReg.Title
             ConfigGrid()
             LoadGrid()
 
@@ -314,8 +314,8 @@ Public Class RegisterForm
     End Sub
 
     Private Sub LoadGrid()
-        grdReg.RowCount = mobjReg.lngTrxCount
-        Dim objSelectedTrx As BaseTrx = mobjReg.objFirstOnOrAfter(Today)
+        grdReg.RowCount = mobjReg.TrxCount
+        Dim objSelectedTrx As BaseTrx = mobjReg.FirstOnOrAfter(Today)
         If Not (objSelectedTrx Is Nothing) Then
             mobjReg.SetCurrent(objSelectedTrx)
             mobjReg.FireShowCurrent()
@@ -328,8 +328,8 @@ Public Class RegisterForm
         ByVal e As System.Windows.Forms.DataGridViewCellValueEventArgs) Handles grdReg.CellValueNeeded
         If Not mobjReg Is Nothing Then
             Dim objTrx As BaseTrx
-            If e.RowIndex < mobjReg.lngTrxCount Then
-                objTrx = mobjReg.objTrx(e.RowIndex + 1)
+            If e.RowIndex < mobjReg.TrxCount Then
+                objTrx = mobjReg.GetTrx(e.RowIndex + 1)
                 e.Value = mstrColValueFuncs(e.ColumnIndex)(objTrx)
             End If
         End If
@@ -338,8 +338,8 @@ Public Class RegisterForm
     Private Sub grdReg_CellFormatting(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellFormattingEventArgs) Handles grdReg.CellFormatting
         Dim objTrx As BaseTrx
         If Not mobjReg Is Nothing Then
-            If e.RowIndex < mobjReg.lngTrxCount Then
-                objTrx = mobjReg.objTrx(e.RowIndex + 1)
+            If e.RowIndex < mobjReg.TrxCount Then
+                objTrx = mobjReg.GetTrx(e.RowIndex + 1)
                 If objTrx.blnFake Then
                     e.CellStyle.BackColor = mlngCOLOR_FAKE
                 Else

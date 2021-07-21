@@ -46,7 +46,7 @@ Public Class SearchMoveTool
         End If
 
         frmMoveTo = New MoveDstForm
-        If Not frmMoveTo.blnShowModal(mobjHostUI, objHostSearchToolUI.objReg.objAccount.Registers,
+        If Not frmMoveTo.blnShowModal(mobjHostUI, objHostSearchToolUI.objReg.Account.Registers,
                                       objHostSearchToolUI.objReg, strNewDate, objNewReg) Then
             Exit Sub
         End If
@@ -63,7 +63,7 @@ Public Class SearchMoveTool
         End If
 
         Dim objStartLogger As ILogGroupStart
-        objStartLogger = objHostSearchToolUI.objReg.objLogGroupStart("SearchForm.Move")
+        objStartLogger = objHostSearchToolUI.objReg.LogGroupStart("SearchForm.Move")
         For Each objTrxSrc In colTrx
             If blnUseDayOffset Then
                 datNewDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDayOffset, objTrxSrc.datDate)

@@ -37,14 +37,14 @@ Public Class SearchForm
 
         mobjHostUI = objHostUI_
         mobjReg = objReg_
-        mobjAccount = mobjReg.objAccount
+        mobjAccount = mobjReg.Account
         mobjCompany = mobjHostUI.objCompany
         Me.MdiParent = mobjHostUI.objGetMainForm()
         colCheckedTrx = New List(Of BaseTrx)
         mcurAmountMatched = 0
         mcurAmountTotal = 0
         mdatDefaultDate = Today
-        Me.Text = "Search " & mobjReg.strTitle
+        Me.Text = "Search " & mobjReg.Title
         txtStartDate.Text = Utilities.strFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Month, -2, Today))
         txtEndDate.Text = Utilities.strFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Month, 6, Today))
         LoadSearchIn()
@@ -164,7 +164,7 @@ Public Class SearchForm
         Try
             mblnSkipRemember = True
             If Not mobjLastSearchHandler Is Nothing Then
-                For Each objTrx As BaseTrx In mobjReg.colDateRange(Of BaseTrx)(mdatLastStart, mdatLastEnd)
+                For Each objTrx As BaseTrx In mobjReg.GetDateRange(Of BaseTrx)(mdatLastStart, mdatLastEnd)
                     If mobjLastSearchFilter.blnInclude(objTrx) Then
                         If chkShowAllSplits.Checked And objTrx.GetType() Is GetType(BankTrx) Then
                             dlgTrx = AddressOf AddSearchMatchAllSplits

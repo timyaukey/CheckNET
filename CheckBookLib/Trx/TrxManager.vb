@@ -22,7 +22,7 @@ Public MustInherit Class TrxManager(Of TTrx As BaseTrx)
     Protected mblnUpdateStarted As Boolean
 
     Public Sub New(ByVal objTrx_ As TTrx)
-        If Not objTrx_ Is objTrx_.objReg.objTrx(objTrx_.lngIndex) Then
+        If Not objTrx_ Is objTrx_.objReg.GetTrx(objTrx_.lngIndex) Then
             Throw New Exception("Trx passed to TrxManager must be at the specified index of the Register passed")
         End If
         objTrx = objTrx_

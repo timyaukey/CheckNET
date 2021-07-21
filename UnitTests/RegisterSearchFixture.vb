@@ -121,11 +121,11 @@ Public Class RegisterSearchFixture
             .AddNormal("101", #4/3/2000#, -25D, "Add2", 2, 2, 2, strImportKey:="imp2", blnFake:=True)
             .AddNormal("102", #4/3/2000#, -26D, "Add2", 3, 3, 3)
             .AddNormal("103", #4/3/2000#, -27D, "Add2", 4, 4, 4, strImportKey:="imp4")
-            objMatch = .objReg.objMatchImportKey("imp1")
+            objMatch = .objReg.MatchImportKey("imp1")
             gUTAssert(objMatch.lngIndex = 1, "Did not find 100")
-            objMatch = .objReg.objMatchImportKey("imp2")
+            objMatch = .objReg.MatchImportKey("imp2")
             gUTAssert(objMatch Is Nothing, "Did not expect to find 101")
-            objMatch = .objReg.objMatchImportKey("imp4")
+            objMatch = .objReg.MatchImportKey("imp4")
             gUTAssert(objMatch.lngIndex = 4, "Did not find 103")
         End With
 

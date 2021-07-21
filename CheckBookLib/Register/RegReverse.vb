@@ -35,7 +35,7 @@ Public Class RegReverse(Of TTrx As BaseTrx)
     End Function
 
     Protected Overridable Function objGetLast() As BaseTrx
-        Return mobjReg.objLastTrx
+        Return mobjReg.LastTrx
     End Function
 
 End Class

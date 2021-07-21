@@ -3,7 +3,7 @@ Option Explicit On
 
 ''' <summary>
 ''' A transaction register, which is a list of BaseTrx objects from one Account and
-''' a running balance of those transactions. Use .objTrx() to access those transactions.
+''' a running balance of those transactions. Use .GetTrx() to access those transactions.
 ''' The running balance is computed from scratch each time it is loaded.
 ''' Any transactions which are transfers to or from other registers must have those
 ''' registers loaded as well, which generally means all registers must be loaded.
@@ -56,8 +56,8 @@ Public Class Register
 
     'Fired by Delete().
     'Intended to allow the UI to update itself.
-    'Values returned by objTrx.objNext and objTrx.objPrevious are undefined.
-    'Value of objTrx.lngIndex is unchanged from before the delete.
+    'Values returned by GetTrx.objNext and GetTrx.objPrevious are undefined.
+    'Value of GetTrx.lngIndex is unchanged from before the delete.
     Public Event TrxDeleted(ByVal objTrx As BaseTrx)
 
     'Fired when a Split is applied or un-applied to a budget BaseTrx.
@@ -185,12 +185,12 @@ Public Class Register
     '   register which will leave it in the correct place in the sort order. Will not
     '   change the register if the BaseTrx is already in the correct place.
     '$Param lngEndIndex The index immediately above the current location of the BaseTrx
-    '   being moved. maobjTrx(lngEndIndex+1) does not actually have to refer to objTrx,
+    '   being moved. maobjTrx(lngEndIndex+1) does not actually have to refer to GetTrx,
     '   but this method will act as if it is in the sense that it will make room for
     '   it at the new location by moving everything between the new location and
     '   lngEndIndex down one row in the register, thus overwriting the object currently
     '   in that position.
-    '$Param objTrx The BaseTrx object to move. Will insert this in maobjTrx().
+    '$Param GetTrx The BaseTrx object to move. Will insert this in maobjTrx().
 
     Private Sub MoveUp(ByVal lngEndIndex As Integer, ByVal objTrx As BaseTrx)
         Dim lngFirstLesser As Integer
@@ -201,7 +201,7 @@ Public Class Register
         'When the loop is done, lngFirstLesser will equal the largest index whose BaseTrx
         'sort key is less than objNew.strSortKey, or zero if there is none.
         For lngFirstLesser = lngEndIndex To 1 Step -1
-            If Register.intSortComparison(objTrx, maobjTrx(lngFirstLesser)) >= 0 Then
+            If Register.TrxSortComparison(objTrx, maobjTrx(lngFirstLesser)) >= 0 Then
                 Exit For
             End If
         Next
@@ -221,7 +221,7 @@ Public Class Register
     '   toward the end of the register.
     '$Param lngStartIndex The index immediately below the current location of the BaseTrx
     '   being moved. See lngEndIndex argument to lngMoveUp().
-    '$Param objTrx See lngMoveUp().
+    '$Param GetTrx See lngMoveUp().
 
     Private Sub MoveDown(ByVal lngStartIndex As Integer, ByVal objTrx As BaseTrx)
         Dim lngFirstGreater As Integer
@@ -232,7 +232,7 @@ Public Class Register
         'When the loop is done, lngFirstGreater will equal the smallest index whose BaseTrx
         'sort key is greater than objNew.strSortKey, or zero if there is none.
         For lngFirstGreater = lngStartIndex To mlngTrxUsed
-            If Register.intSortComparison(objTrx, maobjTrx(lngFirstGreater)) <= 0 Then
+            If Register.TrxSortComparison(objTrx, maobjTrx(lngFirstGreater)) <= 0 Then
                 Exit For
             End If
         Next
@@ -291,17 +291,17 @@ Public Class Register
 
     Private Sub UpdateMove(ByVal lngOldIndex As Integer)
 
-        Dim objTrx As BaseTrx = Me.objTrx(lngOldIndex)
+        Dim objTrx As BaseTrx = Me.GetTrx(lngOldIndex)
 
         If lngOldIndex > 1 Then
-            If Register.intSortComparison(objTrx, Me.objTrx(lngOldIndex - 1)) < 0 Then
+            If Register.TrxSortComparison(objTrx, Me.GetTrx(lngOldIndex - 1)) < 0 Then
                 MoveUp(lngOldIndex - 1, objTrx)
                 Exit Sub
             End If
         End If
 
         If lngOldIndex < mlngTrxUsed Then
-            If Register.intSortComparison(objTrx, Me.objTrx(lngOldIndex + 1)) > 0 Then
+            If Register.TrxSortComparison(objTrx, Me.GetTrx(lngOldIndex + 1)) > 0 Then
                 MoveDown(lngOldIndex + 1, objTrx)
                 Exit Sub
             End If
@@ -309,7 +309,7 @@ Public Class Register
 
     End Sub
 
-    Public Shared Function intSortComparison(ByVal objTrx1 As BaseTrx, ByVal objTrx2 As BaseTrx) As Integer
+    Public Shared Function TrxSortComparison(ByVal objTrx1 As BaseTrx, ByVal objTrx2 As BaseTrx) As Integer
         Dim result As Integer = objTrx1.datDate.CompareTo(objTrx2.datDate)
         If result <> 0 Then
             Return result
@@ -346,7 +346,7 @@ Public Class Register
         Implements IComparer(Of BaseTrx)
 
         Public Function Compare(objTrx1 As BaseTrx, objTrx2 As BaseTrx) As Integer Implements IComparer(Of BaseTrx).Compare
-            Return intSortComparison(objTrx1, objTrx2)
+            Return TrxSortComparison(objTrx1, objTrx2)
         End Function
     End Class
 
@@ -379,7 +379,7 @@ Public Class Register
         End If
     End Sub
 
-    Public ReadOnly Property blnCriticalOperationFailed() As Boolean
+    Public ReadOnly Property AnyCriticalOperationFailed() As Boolean
         Get
             Return mblnCriticalOperationFailed
         End Get
@@ -492,11 +492,11 @@ Public Class Register
         If lngStartIndex = 1 Then
             curBalance = 0
         Else
-            curBalance = Me.objTrx(lngStartIndex - 1).curBalance
+            curBalance = Me.GetTrx(lngStartIndex - 1).curBalance
         End If
         lngLastChange = lngStartIndex
         For lngIndex = lngStartIndex To mlngTrxUsed
-            With Me.objTrx(lngIndex)
+            With Me.GetTrx(lngIndex)
                 curBalance = curBalance + .curBalanceChange
                 If curBalance <> .curBalance Then
                     .curBalance = curBalance
@@ -514,7 +514,7 @@ Public Class Register
     Public Sub LoadApply()
         BeginCriticalOperation()
         For lngIndex As Integer = 1 To mlngTrxUsed
-            Me.objTrx(lngIndex).Apply(True)
+            Me.GetTrx(lngIndex).Apply(True)
         Next
         EndCriticalOperation()
     End Sub
@@ -527,7 +527,7 @@ Public Class Register
         Dim curBalance As Decimal = 0
         BeginCriticalOperation()
         mdatOldestBudgetEndAllowed = mobjAccount.LastReconciledDate.AddDays(1D)
-        For Each objTrx As BaseTrx In colAllTrx(Of BaseTrx)()
+        For Each objTrx As BaseTrx In GetAllTrx(Of BaseTrx)()
             If TypeOf (objTrx) Is BudgetTrx Then
                 DirectCast(objTrx, BudgetTrx).SetAmountForBudget()
             End If
@@ -603,8 +603,8 @@ Public Class Register
     '$Param strImportKey The import key to match.
     '$Returns The index of the matching BaseTrx, or zero if there is no match.
 
-    Public Function objMatchImportKey(ByVal strImportKey As String) As BankTrx
-        For Each objTrx As BankTrx In Me.colAllTrxReverse(Of BankTrx)
+    Public Function MatchImportKey(ByVal strImportKey As String) As BankTrx
+        For Each objTrx As BankTrx In Me.GetAllTrxReverse(Of BankTrx)
             If Not objTrx.blnFake Then
                 If objTrx.strImportKey = strImportKey Then
                     Return objTrx
@@ -623,13 +623,13 @@ Public Class Register
     '   procedure for adding a BaseTrx.
     '$Returns The index of the matching BaseTrx, or zero if there is no match.
 
-    Public Function objMatchPaymentDetails(ByVal strNumber As String, ByVal datDate As Date, ByVal intDateRange As Short,
+    Public Function MatchPaymentDetails(ByVal strNumber As String, ByVal datDate As Date, ByVal intDateRange As Short,
                                            ByVal strDescription As String, ByVal curAmount As Decimal) As BankTrx
         Dim datEarliestMatch As Date
         Dim datLatestMatch As Date
         datEarliestMatch = DateAdd(DateInterval.Day, -(intDateRange - 1), datDate)
         datLatestMatch = DateAdd(DateInterval.Day, intDateRange - 1, datDate)
-        For Each objTrx As BankTrx In Me.colAllTrxReverse(Of BankTrx)
+        For Each objTrx As BankTrx In Me.GetAllTrxReverse(Of BankTrx)
             With objTrx
                 If .datDate < datEarliestMatch Then
                     Exit For
@@ -759,13 +759,13 @@ Public Class Register
         intDescrMatchLen = 10
         datStart = DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDaysBefore, datDate)
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDaysAfter, datDate)
-        strNumber = strComparableCheckNumber(CStr(lngNumber))
+        strNumber = MakeComparableCheckNumber(CStr(lngNumber))
         strDescrLC = Left(LCase(strDescription), intDescrMatchLen)
-        For Each objNormalTrx As BankTrx In Me.colDateRange(Of BankTrx)(datStart, datEnd)
+        For Each objNormalTrx As BankTrx In Me.GetDateRange(Of BankTrx)(datStart, datEnd)
             With objNormalTrx
                 blnMatched = False
                 If lngNumber <> 0 Then
-                    If (curAmount = .curAmount Or blnLooseMatch) And strComparableCheckNumber(.strNumber) = strNumber Then
+                    If (curAmount = .curAmount Or blnLooseMatch) And MakeComparableCheckNumber(.strNumber) = strNumber Then
                         blnMatched = True
                     End If
                 End If
@@ -794,7 +794,7 @@ Public Class Register
                     End If
                 End If
                 If .curAmount = curAmount Then
-                    If (blnDescrMatches And blnDateMatches) Or (strComparableCheckNumber(.strNumber) = strNumber) Then
+                    If (blnDescrMatches And blnDateMatches) Or (MakeComparableCheckNumber(.strNumber) = strNumber) Then
                         colExactMatches.Add(objNormalTrx)
                     End If
                 End If
@@ -810,7 +810,7 @@ Public Class Register
     ''' </summary>
     ''' <param name="strInput"></param>
     ''' <returns></returns>
-    Private Function strComparableCheckNumber(ByVal strInput As String) As String
+    Private Function MakeComparableCheckNumber(ByVal strInput As String) As String
         Dim CheckNumDigitsToUse As Integer = 3
         If Val(strInput) = 0 Then
             Return strInput
@@ -845,7 +845,7 @@ Public Class Register
         blnExactMatch = False
         datStart = DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
-        For Each objNormalTrx As BankTrx In Me.colDateRange(Of BankTrx)(datStart, datEnd)
+        For Each objNormalTrx As BankTrx In Me.GetDateRange(Of BankTrx)(datStart, datEnd)
             blnImportOkay = (objNormalTrx.strImportKey = "") Or (blnMatchImportedFromBank) 'Used to be (not blnMatchImportedFromBank)
             If objNormalTrx.strDescription = strDescription And blnImportOkay Then
                 colMatches.Add(objNormalTrx)
@@ -875,7 +875,7 @@ Public Class Register
         colMatches = New List(Of BankTrx)
         datStart = DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
-        For Each objNormalTrx As BankTrx In Me.colDateRange(Of BankTrx)(datStart, datEnd)
+        For Each objNormalTrx As BankTrx In Me.GetDateRange(Of BankTrx)(datStart, datEnd)
             If objNormalTrx.strDescription = strPayee Then
                 For Each objSplit In objNormalTrx.colSplits
                     If objSplit.strInvoiceNum = strInvoiceNum Then
@@ -905,7 +905,7 @@ Public Class Register
         colMatches = New List(Of BankTrx)
         datStart = DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
-        For Each objNormalTrx As BankTrx In Me.colDateRange(Of BankTrx)(datStart, datEnd)
+        For Each objNormalTrx As BankTrx In Me.GetDateRange(Of BankTrx)(datStart, datEnd)
             If objNormalTrx.strDescription = strPayee Then
                 For Each objSplit In objNormalTrx.colSplits
                     If objSplit.strPONumber = strPONumber Then
@@ -917,12 +917,12 @@ Public Class Register
 
     End Sub
 
-    Public Function objFirstOnOrAfter(ByVal datDate As Date) As BaseTrx
+    Public Function FirstOnOrAfter(ByVal datDate As Date) As BaseTrx
         Dim lngIndexBeforeDate As Integer
         'lngIndex is initialized to mlngTrxUsed even if the body of the loop
         'is never executed, and will be left as zero if no matching BaseTrx is found.
         For lngIndexBeforeDate = mlngTrxUsed To 1 Step -1
-            If Me.objTrx(lngIndexBeforeDate).datDate < datDate Then
+            If Me.GetTrx(lngIndexBeforeDate).datDate < datDate Then
                 Exit For
             End If
         Next
@@ -930,7 +930,7 @@ Public Class Register
         If lngIndex > mlngTrxUsed Then
             Return Nothing
         End If
-        Return Me.objTrx(lngIndex)
+        Return Me.GetTrx(lngIndex)
     End Function
 
     '$Description Find the transfer BaseTrx which is an exact match to the specified info.
@@ -941,9 +941,9 @@ Public Class Register
     '   there is no such match. If there are multiple matches it will pick one,
     '   but it is undefined which it will pick.
 
-    Friend Function objMatchTransfer(ByVal datDate As Date, ByVal strTransferKey_ As String, ByVal curAmount As Decimal) As TransferTrx
+    Friend Function MatchTransfer(ByVal datDate As Date, ByVal strTransferKey_ As String, ByVal curAmount As Decimal) As TransferTrx
 
-        For Each objTrx As TransferTrx In Me.colAllTrxReverse(Of TransferTrx)
+        For Each objTrx As TransferTrx In Me.GetAllTrxReverse(Of TransferTrx)
             If objTrx.datDate < datDate Then
                 Return Nothing
             End If
@@ -968,7 +968,7 @@ Public Class Register
     '   will be the latest dated budget BaseTrx whose budget period includes datDate,
     '   and with the exact same strBudgetKey value.
 
-    Friend Function objMatchBudget(ByVal objNormalTrx As BankTrx, ByVal strBudgetKey As String, ByRef blnNoMatch As Boolean) As BudgetTrx
+    Friend Function MatchBudget(ByVal objNormalTrx As BankTrx, ByVal strBudgetKey As String, ByRef blnNoMatch As Boolean) As BudgetTrx
 
         Dim datDate As DateTime = objNormalTrx.datDate
         Dim objNextTrx As BaseTrx
@@ -1016,16 +1016,16 @@ Public Class Register
     End Sub
 
     '$Description Return the BaseTrx object at the specified row of the register.
-    '$Param lngIndex 1 to lngTrxCount.
+    '$Param lngIndex 1 to TrxCount.
     '$Returns The BaseTrx object. Properties of this object may be changed, if the
     '   caller takes the proper steps to update the register afterward.
 
-    Public ReadOnly Property objTrx(ByVal lngIndex As Integer) As BaseTrx
+    Public ReadOnly Property GetTrx(ByVal lngIndex As Integer) As BaseTrx
         Get
             'This does not have to be implemented as a single array. If you convert all
-            'the code inside this class to use objTrx() instead of maobjTrx(), this can
+            'the code inside this class to use GetTrx() instead of maobjTrx(), this can
             'be implemented any way you want. One choice is a Collection of "month list"
-            'objects, where each "month list" contains the array for that month. objTrx()
+            'objects, where each "month list" contains the array for that month. GetTrx()
             'would have to count through the Collection to find the correct month, but
             'that's fast enough for a few dozen months. You could even use a 2 level
             'structure with years on the top and months underneath. Organizing by date
@@ -1033,13 +1033,13 @@ Public Class Register
             'maobjTrx() is to make inserts and deletions much more efficient away from
             'the end of the register.
             If lngIndex < 1 Or lngIndex > mlngTrxUsed Then
-                gRaiseError("Invalid index " & lngIndex & " in Register.objTrx")
+                gRaiseError("Invalid index " & lngIndex & " in Register.GetTrx")
             End If
             Return maobjTrx(lngIndex)
         End Get
     End Property
 
-    Public ReadOnly Property objFirstTrx() As BaseTrx
+    Public ReadOnly Property FirstTrx() As BaseTrx
         Get
             If mlngTrxUsed = 0 Then
                 Return Nothing
@@ -1049,7 +1049,7 @@ Public Class Register
         End Get
     End Property
 
-    Public ReadOnly Property objLastTrx() As BaseTrx
+    Public ReadOnly Property LastTrx() As BaseTrx
         Get
             If mlngTrxUsed = 0 Then
                 Return Nothing
@@ -1064,27 +1064,27 @@ Public Class Register
         objTrx_.lngIndex = lngIndex
     End Sub
 
-    Public ReadOnly Property objNormalTrx(ByVal lngIndex As Integer) As BankTrx
+    Public ReadOnly Property GetBankTrx(ByVal lngIndex As Integer) As BankTrx
         Get
-            Return DirectCast(objTrx(lngIndex), BankTrx)
+            Return DirectCast(GetTrx(lngIndex), BankTrx)
         End Get
     End Property
 
-    Public ReadOnly Property objBudgetTrx(ByVal lngIndex As Integer) As BudgetTrx
+    Public ReadOnly Property GetBudgetTrx(ByVal lngIndex As Integer) As BudgetTrx
         Get
-            Return DirectCast(objTrx(lngIndex), BudgetTrx)
+            Return DirectCast(GetTrx(lngIndex), BudgetTrx)
         End Get
     End Property
 
-    Public ReadOnly Property objTransferTrx(ByVal lngIndex As Integer) As TransferTrx
+    Public ReadOnly Property GetTransferTrx(ByVal lngIndex As Integer) As TransferTrx
         Get
-            Return DirectCast(objTrx(lngIndex), TransferTrx)
+            Return DirectCast(GetTrx(lngIndex), TransferTrx)
         End Get
     End Property
 
     '$Description The number of transactions in the register.
 
-    Public ReadOnly Property lngTrxCount() As Integer
+    Public ReadOnly Property TrxCount() As Integer
         Get
             Return mlngTrxUsed
         End Get
@@ -1093,25 +1093,25 @@ Public Class Register
     '$Description The unique identifier for this register (sub-account).
     '   Used to identify transfer destinations, among other things.
 
-    Public ReadOnly Property strRegisterKey() As String
+    Public ReadOnly Property RegisterKey() As String
         Get
             Return mstrRegisterKey
         End Get
     End Property
 
-    Public ReadOnly Property objAccount() As Account
+    Public ReadOnly Property Account() As Account
         Get
             Return mobjAccount
         End Get
     End Property
 
-    Public ReadOnly Property strCatKey() As String
+    Public ReadOnly Property CatKey() As String
         Get
-            Return objAccount.Key.ToString() + "." + strRegisterKey
+            Return Account.AccountKey.ToString() + "." + RegisterKey
         End Get
     End Property
 
-    Public Property strTitle() As String
+    Public Property Title() As String
         Get
             Return mstrTitle
         End Get
@@ -1122,7 +1122,7 @@ Public Class Register
         End Set
     End Property
 
-    Public Property datOldestBudgetEndAllowed() As Date
+    Public Property OldestBudgetEndAllowed() As Date
         Get
             Return mdatOldestBudgetEndAllowed
         End Get
@@ -1131,7 +1131,7 @@ Public Class Register
         End Set
     End Property
 
-    Public Property blnShowInitially() As Boolean
+    Public Property ShowInitially() As Boolean
         Get
             Return mblnShowInitially
         End Get
@@ -1142,7 +1142,7 @@ Public Class Register
         End Set
     End Property
 
-    Public Property blnDeleted() As Boolean
+    Public Property IsDeleted() As Boolean
         Get
             Return mblnDeleted
         End Get
@@ -1153,7 +1153,7 @@ Public Class Register
 
     '$Description For debugging use only - return the internal mcolRepeatTrx collection.
 
-    Public ReadOnly Property colDbgRepeatTrx() As Dictionary(Of String, BaseTrx)
+    Public ReadOnly Property DbgRepeatTrx() As Dictionary(Of String, BaseTrx)
         Get
             Return mcolRepeatTrx
         End Get
@@ -1178,7 +1178,7 @@ Public Class Register
         mcolRepeatTrx.Item(objTrx.strRepeatId) = objTrx
     End Sub
 
-    Public Function objRepeatTrx(ByVal strRepeatKey As String, ByVal intRepeatSeq As Integer) As BaseTrx
+    Public Function FindRepeatTrx(ByVal strRepeatKey As String, ByVal intRepeatSeq As Integer) As BaseTrx
         Dim objTrx As BaseTrx = Nothing
         If mcolRepeatTrx.TryGetValue(BaseTrx.strMakeRepeatId(strRepeatKey, intRepeatSeq), objTrx) Then
             Return objTrx
@@ -1191,27 +1191,27 @@ Public Class Register
         mcolRepeatTrx.Remove(objTrx.strRepeatId)
     End Sub
 
-    Public ReadOnly Property objCurrentTrx() As BaseTrx
+    Public ReadOnly Property CurrentTrx() As BaseTrx
         Get
             Return mobjTrxCurrent
         End Get
     End Property
 
-    Public Function colDateRange(Of TTrx As BaseTrx)(ByVal datStart As DateTime, ByVal datEnd As DateTime) As IEnumerable(Of TTrx)
+    Public Function GetDateRange(Of TTrx As BaseTrx)(ByVal datStart As DateTime, ByVal datEnd As DateTime) As IEnumerable(Of TTrx)
         Return New RegDateRange(Of TTrx)(Me, datStart, datEnd)
     End Function
 
-    Public Function colAllTrx(Of TTrx As BaseTrx)() As IEnumerable(Of TTrx)
+    Public Function GetAllTrx(Of TTrx As BaseTrx)() As IEnumerable(Of TTrx)
         Return New RegIterator(Of TTrx)(Me)
     End Function
 
-    Public Function colAllTrxReverse(Of TTrx As BaseTrx)() As IEnumerable(Of TTrx)
+    Public Function GetAllTrxReverse(Of TTrx As BaseTrx)() As IEnumerable(Of TTrx)
         Return New RegReverse(Of TTrx)(Me)
     End Function
 
-    Public Function curEndingBalance(ByVal datEndDate As DateTime) As Decimal
+    Public Function EndingBalance(ByVal datEndDate As DateTime) As Decimal
         Dim curBalance As Decimal
-        For Each objTrx As BaseTrx In colAllTrx(Of BaseTrx)()
+        For Each objTrx As BaseTrx In GetAllTrx(Of BaseTrx)()
             If objTrx.datDate > datEndDate Then
                 Exit For
             End If
@@ -1234,14 +1234,14 @@ Public Class Register
         curPriorBalance = 0
         objPriorTrx = Nothing
 
-        For Each objTrx In Me.colAllTrx(Of BaseTrx)()
+        For Each objTrx In Me.GetAllTrx(Of BaseTrx)()
             With objTrx
                 If .curBalance <> (curPriorBalance + .curAmount) Then
                     FireValidationError(objTrx, "Incorrect balance")
                 End If
                 curPriorBalance = .curBalance
                 If Not objPriorTrx Is Nothing Then
-                    If Register.intSortComparison(objTrx, objPriorTrx) < 0 Then
+                    If Register.TrxSortComparison(objTrx, objPriorTrx) < 0 Then
                         FireValidationError(objTrx, "Not in correct sort order")
                     End If
                 End If
@@ -1258,7 +1258,7 @@ Public Class Register
         End If
 
         For Each objTrx In mcolRepeatTrx.Values
-            objTrx2 = objRepeatTrx(objTrx.strRepeatKey, objTrx.intRepeatSeq)
+            objTrx2 = FindRepeatTrx(objTrx.strRepeatKey, objTrx.intRepeatSeq)
             If Not objTrx Is objTrx2 Then
                 FireValidationError(Nothing, "Repeat collection element points to wrong trx")
             End If
@@ -1272,8 +1272,8 @@ Public Class Register
 
     '$Description Registry key name specific to a register.
 
-    Public Function strRegistryKey() As String
-        Return "Registers\" & strTitle
+    Public Function WindowsRegistryKey() As String
+        Return "Registers\" & Title
     End Function
 
     Public Sub LogAction(ByVal strTitle As String)
@@ -1284,11 +1284,11 @@ Public Class Register
         mobjLog.AddILogAction(New LogSave, "Register.Save")
     End Sub
 
-    Public Function objLogGroupStart(ByVal strTitle As String) As ILogGroupStart
+    Public Function LogGroupStart(ByVal strTitle As String) As ILogGroupStart
         Dim objStartLogger As ILogGroupStart
         objStartLogger = New LogGroupStart
         mobjLog.AddILogGroupStart(objStartLogger, strTitle)
-        objLogGroupStart = objStartLogger
+        LogGroupStart = objStartLogger
     End Function
 
     Public Sub LogGroupEnd(ByVal objStartLogger As ILogGroupStart)
@@ -1300,6 +1300,6 @@ Public Class Register
     End Sub
 
     Public Overrides Function ToString() As String
-        Return Me.strTitle
+        Return Me.Title
     End Function
 End Class

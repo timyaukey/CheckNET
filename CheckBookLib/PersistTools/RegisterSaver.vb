@@ -18,7 +18,7 @@ Public Class RegisterSaver
         mobjSaveFile = objSaveFile_
         mobjReg = objReg_
         mcolFakeLines = colFakeLines_
-        For Each objTrx As BaseTrx In objReg_.colAllTrx(Of BaseTrx)()
+        For Each objTrx As BaseTrx In objReg_.GetAllTrx(Of BaseTrx)()
             SaveTrx(objTrx)
         Next
     End Sub

@@ -24,7 +24,7 @@ Friend Class MoveDstForm
         cboRegister.Items.Add(UITools.CreateListBoxItem("", -1))
         For intRegIdx = 0 To mcolRegisters.Count() - 1
             objReg = mcolRegisters.Item(intRegIdx)
-            cboRegister.Items.Add(UITools.CreateListBoxItem(objReg.strTitle, intRegIdx))
+            cboRegister.Items.Add(UITools.CreateListBoxItem(objReg.Title, intRegIdx))
         Next
         cboRegister.SelectedIndex = 0
         Me.ShowDialog()

@@ -16,7 +16,7 @@ Public Class PersonalBusinessPlugin
     Private Sub ClickHandler(sender As Object, e As RegisterEventArgs)
         Try
             Dim frmAdjust As AdjustPersonalBusinessForm = New AdjustPersonalBusinessForm
-            frmAdjust.ShowModal(HostUI, e.objReg.objAccount)
+            frmAdjust.ShowModal(HostUI, e.objReg.Account)
             Exit Sub
         Catch ex As Exception
             gTopException(ex)

@@ -15,7 +15,7 @@ Friend Class LiveBudgetListForm
         mobjHostUI = objHostUI_
         mobjReg = objReg_
         mobjBudgets = objBudgets_
-        Me.Text = "Live Budgets In " & mobjReg.strTitle
+        Me.Text = "Live Budgets In " & mobjReg.Title
         Me.ShowDialog()
 
     End Sub
@@ -33,7 +33,7 @@ Friend Class LiveBudgetListForm
             datTarget = CDate(txtTargetDate.Text)
 
             lvwMatches.Items.Clear()
-            For Each objTrx As BudgetTrx In mobjReg.colAllTrx(Of BudgetTrx)()
+            For Each objTrx As BudgetTrx In mobjReg.GetAllTrx(Of BudgetTrx)()
                 With objTrx
                     If .InBudgetPeriod(datTarget) Then
                         objItem = UITools.ListViewAdd(lvwMatches)

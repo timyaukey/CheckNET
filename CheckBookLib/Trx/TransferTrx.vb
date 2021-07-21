@@ -117,7 +117,7 @@ Public Class TransferTrx
         If mstrTransferKey = "" Then
             objReg.FireValidationError(Me, "Transfer trx requires transfer key")
         End If
-        If mstrTransferKey = objReg.strRegisterKey Then
+        If mstrTransferKey = objReg.RegisterKey Then
             objReg.FireValidationError(Me, "Transfer trx cannot transfer to same register")
         End If
     End Sub

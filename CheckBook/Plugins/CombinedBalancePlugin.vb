@@ -15,7 +15,7 @@ Public Class CombinedBalancePlugin
 
     Private Sub ClickHandler(sender As Object, e As RegisterEventArgs)
         Try
-            Dim objLiabilityAcct As Account = e.objReg.objAccount
+            Dim objLiabilityAcct As Account = e.objReg.Account
             If objLiabilityAcct.AcctType <> Account.AccountType.Liability Then
                 HostUI.ErrorMessageBox("Combined personal and business balance may only be computed for liability accounts.")
                 Exit Sub
@@ -33,10 +33,10 @@ Public Class CombinedBalancePlugin
             Dim datEndDate As DateTime = CDate(strEndDate)
             Dim curCombinedBalance As Decimal = 0
             For Each objLiabilityReg As Register In objLiabilityAcct.Registers
-                curCombinedBalance = curCombinedBalance + objLiabilityReg.curEndingBalance(datEndDate)
+                curCombinedBalance = curCombinedBalance + objLiabilityReg.EndingBalance(datEndDate)
             Next
             For Each objPersonalReg As Register In objPersonalAcct.Registers
-                curCombinedBalance = curCombinedBalance + objPersonalReg.curEndingBalance(datEndDate)
+                curCombinedBalance = curCombinedBalance + objPersonalReg.EndingBalance(datEndDate)
             Next
             HostUI.InfoMessageBox("Combined personal and business balance as of " & datEndDate.ToShortDateString() & " is " & Utilities.strFormatCurrency(curCombinedBalance) & ".")
             Exit Sub

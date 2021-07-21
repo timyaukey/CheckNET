@@ -124,7 +124,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                     foreach (Register reg in acct.Registers)
                     {
                         bool fakeReportedInReg = false;
-                        foreach (BaseTrx trx in reg.colAllTrx<BaseTrx>())
+                        foreach (BaseTrx trx in reg.GetAllTrx<BaseTrx>())
                         {
                             if (trx.datDate > EndDate)
                                 break;
@@ -135,7 +135,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                                 {
                                     if (!fakeReportedInReg)
                                     {
-                                        var fakeFoundResponse = HostUI.OkCancelMessageBox("Register \"" + reg.strTitle + "\" contains fake transaction(s) " +
+                                        var fakeFoundResponse = HostUI.OkCancelMessageBox("Register \"" + reg.Title + "\" contains fake transaction(s) " +
                                             "dated on or before the end date of this export. These transactions will not be included " +
                                             "in this export, and likely will be missed in future exports as well even if their " +
                                             "\"fake\" box is unchecked because future exports will almost always be for dates " +
@@ -284,7 +284,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             else
             {
                 int acctKey = int.Parse(split.strCategoryKey.Substring(0, periodIndex));
-                Account matchingAcct = Company.Accounts.First(acct => acct.Key == acctKey);
+                Account matchingAcct = Company.Accounts.First(acct => acct.AccountKey == acctKey);
                 exportName = MakeBalanceSheetExportName(matchingAcct);
             }
             return exportName;
@@ -485,7 +485,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         private void OutputAccount(Account acct, string acctType, string extra = "")
         {
             CatDef cat;
-            string balExportKey = GetBalanceSheetExportKey(acct.Key.ToString());
+            string balExportKey = GetBalanceSheetExportKey(acct.AccountKey.ToString());
             if (!Categories.TryGetValue(balExportKey, out cat))
             {
                 // We probably don't need to add this CatDef to Categories, because
@@ -552,7 +552,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 {
                     foreach (Register reg in acct.Registers)
                     {
-                        foreach (BankTrx normalTrx in reg.colDateRange<BankTrx>(StartDate, EndDate))
+                        foreach (BankTrx normalTrx in reg.GetDateRange<BankTrx>(StartDate, EndDate))
                         {
                             if (!normalTrx.blnFake)
                                 OutputNormalTrx(normalTrx);
@@ -566,7 +566,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         {
             PayeeDef payee = Payees[TrimPayeeName(trx.strDescription).ToLower()];
             TrxOutputType usage = GetPayeeUsage(trx);
-            string exportAccountName = Categories[GetBalanceSheetExportKey(trx.objReg.objAccount.Key.ToString())].ExportName;
+            string exportAccountName = Categories[GetBalanceSheetExportKey(trx.objReg.Account.AccountKey.ToString())].ExportName;
             switch (usage)
             {
                 case TrxOutputType.Check:
@@ -627,7 +627,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             if (dotIndex < 0)
                 return false;
             int acctKey = int.Parse(split.strCategoryKey.Substring(0, dotIndex));
-            return Company.Accounts.First(acct => acct.Key == acctKey).AcctSubType == Account.SubType.Liability_AccountsPayable;
+            return Company.Accounts.First(acct => acct.AccountKey == acctKey).AcctSubType == Account.SubType.Liability_AccountsPayable;
         }
 
         private void OutputNormalTrx(BankTrx trx, string transType, string exportAccountName, string payeeName, decimal amount)
@@ -647,7 +647,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
 
         private TrxOutputType GetPayeeUsage(BankTrx trx)
         {
-            Account.SubType subType = trx.objReg.objAccount.AcctSubType;
+            Account.SubType subType = trx.objReg.Account.AcctSubType;
             if (subType == Account.SubType.Asset_CheckingAccount ||
                 subType == Account.SubType.Asset_SavingsAccount)
             {

@@ -10,7 +10,7 @@ Public NotInheritable Class IncomeExpenseScanner
             If objAccount.AcctType <> Account.AccountType.Personal Then
                 If blnIncludeRetainedEarnings Or objAccount.AcctSubType <> Account.SubType.Equity_RetainedEarnings Then
                     For Each objReg As Register In objAccount.Registers
-                        For Each objNormalTrx In objReg.colDateRange(Of BankTrx)(datStartDate, datEndDate)
+                        For Each objNormalTrx In objReg.GetDateRange(Of BankTrx)(datStartDate, datEndDate)
                             If Not objNormalTrx.blnFake Then
                                 For Each objSplit As TrxSplit In objNormalTrx.colSplits
                                     If Not objSplit.blnHasReplicaTrx Then

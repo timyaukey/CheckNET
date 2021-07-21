@@ -39,7 +39,7 @@ Public Class AdjustPersonalBusinessForm
             Exit Sub
         End If
         mobjLoanToAccount = objBusinessAccount.RelatedAcct2
-        mstrLoanToPersonKey = mobjLoanToAccount.Registers(0).strCatKey
+        mstrLoanToPersonKey = mobjLoanToAccount.Registers(0).CatKey
         txtLoanToAccount.Text = mobjLoanToAccount.Title
 
         For intCatIndex As Integer = 1 To mobjCompany.Categories.intElements
@@ -113,8 +113,8 @@ Public Class AdjustPersonalBusinessForm
         Dim objTrx As BaseTrx
         Dim intDeleteCount As Integer = 0
         For Each objReg As Register In objAccount.Registers
-            ShowProgress("Scanning " + objReg.strTitle)
-            For Each objTrx In objReg.colDateRange(Of BaseTrx)(ctlStartDate.Value, ctlEndDate.Value)
+            ShowProgress("Scanning " + objReg.Title)
+            For Each objTrx In objReg.GetDateRange(Of BaseTrx)(ctlStartDate.Value, ctlEndDate.Value)
                 If blnIsInvalid(objTrx) Then
                     mobjHostUI.InfoMessageBox("Invalid transaction found: " + objTrx.ToString())
                 End If
@@ -169,8 +169,8 @@ Public Class AdjustPersonalBusinessForm
         Dim objBusinessTrx As BaseTrx
         Dim colToDivide As List(Of BaseTrx) = New List(Of BaseTrx)
         Dim intAdjustCount As Integer = 0
-        ShowProgress("Scanning " + objBusinessReg.strTitle)
-        For Each objBusinessTrx In objBusinessReg.colDateRange(Of BaseTrx)(ctlStartDate.Value, ctlEndDate.Value)
+        ShowProgress("Scanning " + objBusinessReg.Title)
+        For Each objBusinessTrx In objBusinessReg.GetDateRange(Of BaseTrx)(ctlStartDate.Value, ctlEndDate.Value)
             If blnTrxNeedsDividing(objBusinessTrx) Then
                 colToDivide.Add(objBusinessTrx)
             End If
@@ -270,11 +270,11 @@ Public Class AdjustPersonalBusinessForm
         Dim curResult As Decimal = 0D
         Dim datEndDate As DateTime = ctlEndDate.Value
         For Each objReg As Register In objAccount.Registers
-            For Each objTrx As BaseTrx In objReg.colAllTrx(Of BaseTrx)()
+            For Each objTrx As BaseTrx In objReg.GetAllTrx(Of BaseTrx)()
                 If objTrx.datDate >= datAfterEndDate Then
                     Exit For
                 End If
-                'Don't use objTrx.curBalance, because we want to use only "real" trx in computing the balance.
+                'Don't use GetTrx.curBalance, because we want to use only "real" trx in computing the balance.
                 If objTrx.blnFake Then
                     mblnFakeTrxFound = True
                 Else

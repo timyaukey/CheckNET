@@ -86,8 +86,8 @@ Public Class CompanyLoader
         For Each objAccount As Account In objCompany.Accounts
             If objAccount.AcctType = lngType Then
                 For Each objReg As Register In objAccount.Registers
-                    Dim strKey As String = objReg.strCatKey
-                    elm = New StringTransElement(objCompany.Categories, strKey, strPrefix + ":" + objReg.strTitle, " " + objReg.strTitle)
+                    Dim strKey As String = objReg.CatKey
+                    elm = New StringTransElement(objCompany.Categories, strKey, strPrefix + ":" + objReg.Title, " " + objReg.Title)
                     objCats.Add(elm)
                 Next
             End If

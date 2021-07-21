@@ -14,7 +14,7 @@ Public Class RegDateRange(Of TTrx As BaseTrx)
     End Sub
 
     Protected Overrides Function objGetFirst() As BaseTrx
-        Return mobjReg.objFirstOnOrAfter(mdatStart)
+        Return mobjReg.FirstOnOrAfter(mdatStart)
     End Function
 
     Protected Overrides Function blnAfterLast(objTrx As BaseTrx) As Boolean

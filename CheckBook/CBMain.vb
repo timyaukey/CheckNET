@@ -28,7 +28,7 @@ Public Module CBMain
 
         objAccount = New Account()
         objAccount.Init(objHostUI.objCompany)
-        objAccount.Key = objHostUI.objCompany.GetUnusedAccountKey()
+        objAccount.AccountKey = objHostUI.objCompany.GetUnusedAccountKey()
         objAccount.AcctSubType = Account.SubType.Liability_LoanPayable
 
         Using frm As AccountForm = New AccountForm()

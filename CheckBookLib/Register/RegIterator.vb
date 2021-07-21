@@ -38,7 +38,7 @@ Public Class RegIterator(Of TTrx As BaseTrx)
     End Function
 
     Protected Overridable Function objGetFirst() As BaseTrx
-        Return mobjReg.objFirstTrx
+        Return mobjReg.FirstTrx
     End Function
 
     Protected Overridable Function blnAfterLast(ByVal objTrx As BaseTrx) As Boolean

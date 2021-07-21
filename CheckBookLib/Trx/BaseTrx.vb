@@ -15,10 +15,10 @@ Option Explicit On
 ''' 
 ''' To update an existing transaction, create a NormalTrxManager, BudgetTrxManager, 
 ''' TransferTrxManager or ReplicaTrxManager and call UpdateStart() on that instance.
-''' Then make changes to members of .objTrx of that instance. You can make changes to individual
+''' Then make changes to members of .GetTrx of that instance. You can make changes to individual
 ''' members directly, or remake the entire BaseTrx from scratch by calling something like 
-''' .objTrx.UpdateStartNormal(). If you do call UpdateStartNormal(), always call
-''' .objTrx.AddSplit() at least once. When you are done making changes to .objTrx,
+''' .GetTrx.UpdateStartNormal(). If you do call UpdateStartNormal(), always call
+''' .GetTrx.AddSplit() at least once. When you are done making changes to .GetTrx,
 ''' finish by calling TrxManager.UpdateEnd().
 ''' 
 ''' To delete a transaction, call either Register.Delete() or BaseTrx.Delete().
@@ -52,7 +52,7 @@ Public MustInherit Class BaseTrx
 
     'Register this BaseTrx belongs to.
     Protected mobjReg As Register
-    'Index of this BaseTrx in mobjReg.objTrx().
+    'Index of this BaseTrx in mobjReg.GetTrx().
     Protected mlngIndex As Integer
     'Transaction number.
     Protected mstrNumber As String
@@ -118,10 +118,10 @@ Public MustInherit Class BaseTrx
 
     Public ReadOnly Property objNext() As BaseTrx
         Get
-            If mlngIndex >= mobjReg.lngTrxCount Then
+            If mlngIndex >= mobjReg.TrxCount Then
                 Return Nothing
             Else
-                Return mobjReg.objTrx(mlngIndex + 1)
+                Return mobjReg.GetTrx(mlngIndex + 1)
             End If
         End Get
     End Property
@@ -131,7 +131,7 @@ Public MustInherit Class BaseTrx
             If mlngIndex <= 1 Then
                 Return Nothing
             Else
-                Return mobjReg.objTrx(mlngIndex - 1)
+                Return mobjReg.GetTrx(mlngIndex - 1)
             End If
         End Get
     End Property
@@ -347,7 +347,7 @@ Public MustInherit Class BaseTrx
     Public Overridable Sub Validate()
         Dim objRepeatTrx As BaseTrx
         If mlngIndex > 0 Then
-            If Not mobjReg.objTrx(mlngIndex) Is Me Then
+            If Not mobjReg.GetTrx(mlngIndex) Is Me Then
                 mobjReg.FireValidationError(Me, "lngIndex is wrong")
             End If
         End If
@@ -358,7 +358,7 @@ Public MustInherit Class BaseTrx
             If mintRepeatSeq = 0 Then
                 mobjReg.FireValidationError(Me, "Repeat key has no repeat seq")
             End If
-            objRepeatTrx = objReg.objRepeatTrx(mstrRepeatKey, mintRepeatSeq)
+            objRepeatTrx = objReg.FindRepeatTrx(mstrRepeatKey, mintRepeatSeq)
             If Not objRepeatTrx Is Me Then
                 mobjReg.FireValidationError(Me, "objRepeatTrx() returned wrong Trx")
             End If

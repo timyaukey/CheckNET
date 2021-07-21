@@ -263,7 +263,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                     Number,
                     Split.objParent.strDescription,
                     Split.curAmount.ToString("F2"),
-                    Split.objParent.objReg.objAccount.Title
+                    Split.objParent.objReg.Account.Title
                 });
                 item.Tag = Split;
                 return item;
@@ -290,7 +290,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                     Number,
                     Budget.strDescription,
                     Budget.curAmount.ToString("F2"),
-                    Budget.objReg.objAccount.Title
+                    Budget.objReg.Account.Title
                 });
                 item.Tag = Budget;
                 return item;

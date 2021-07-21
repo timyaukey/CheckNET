@@ -18,9 +18,9 @@ Friend Class RegPropertiesForm
             End If
         Next frm
         mobjReg = objReg
-        txtTitle.Text = mobjReg.strTitle
+        txtTitle.Text = mobjReg.Title
         txtTitle.Enabled = Not blnReadOnly
-        chkShowInitially.CheckState = DirectCast(IIf(mobjReg.blnShowInitially, CheckState.Checked, CheckState.Unchecked), CheckState)
+        chkShowInitially.CheckState = DirectCast(IIf(mobjReg.ShowInitially, CheckState.Checked, CheckState.Unchecked), CheckState)
         chkShowInitially.Enabled = Not blnReadOnly
         cmdOkay.Enabled = Not blnReadOnly
         Me.ShowDialog()
@@ -35,8 +35,8 @@ Friend Class RegPropertiesForm
             mobjHostUI.InfoMessageBox("Register title must be at least 2 letters.")
             Exit Sub
         End If
-        mobjReg.strTitle = Trim(txtTitle.Text)
-        mobjReg.blnShowInitially = (chkShowInitially.CheckState = System.Windows.Forms.CheckState.Checked)
+        mobjReg.Title = Trim(txtTitle.Text)
+        mobjReg.ShowInitially = (chkShowInitially.CheckState = System.Windows.Forms.CheckState.Checked)
         Me.Close()
     End Sub
 End Class

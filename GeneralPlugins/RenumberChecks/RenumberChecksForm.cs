@@ -48,7 +48,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 return;
             }
             Register reg = HostUI.objGetCurrentRegister();
-            foreach (var objNormal in reg.colDateRange<BankTrx>(ctlStartDate.Value, ctlEndDate.Value))
+            foreach (var objNormal in reg.GetDateRange<BankTrx>(ctlStartDate.Value, ctlEndDate.Value))
             {
                 if (Int32.TryParse(objNormal.strNumber, out int checkNumber))
                 {

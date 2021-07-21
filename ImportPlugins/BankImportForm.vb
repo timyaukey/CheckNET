@@ -565,12 +565,12 @@ Public Class BankImportForm
         Dim datStartDate As DateTime = datDate.AddDays(-6.0#)
         Dim datEndDate As DateTime = datDate.AddDays(2.0#)
         For Each objReg As Register In mobjAccount.Registers
-            For Each objNormalTrx As BankTrx In objReg.colDateRange(Of BankTrx)(datStartDate, datEndDate)
+            For Each objNormalTrx As BankTrx In objReg.GetDateRange(Of BankTrx)(datStartDate, datEndDate)
                 If objNormalTrx.strDescription.StartsWith(strDescrStartsWith) Then
                     If Not blnTrxIsMatched(objNormalTrx) Then
                         colResult.Add(objNormalTrx)
                         'Else  'uncomment to allow a breakpoint when debugging
-                        '    objNormalTrx = objNormalTrx
+                        '    GetBankTrx = GetBankTrx
                     End If
                 End If
             Next
@@ -1053,7 +1053,7 @@ Public Class BankImportForm
                 .SubItems.Insert(4, New ListViewItem.ListViewSubItem(Nothing, strSummarizeTrxCat(objTrx)))
                 .SubItems.Insert(5, New ListViewItem.ListViewSubItem(Nothing, strStatus))
                 If Not objReg Is Nothing Then
-                    strRegTitle = objReg.strTitle
+                    strRegTitle = objReg.Title
                 End If
                 .SubItems.Insert(6, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, strRegTitle))
                 .SubItems.Insert(mintITMCOL_INDEX, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, CStr(intIndex)))
@@ -1073,7 +1073,7 @@ Public Class BankImportForm
             .Items.Clear()
             intIndex = 0
             For Each objReg In mobjAccount.Registers
-                .Items.Add(UITools.CreateListBoxItem(objReg.strTitle, intIndex))
+                .Items.Add(UITools.CreateListBoxItem(objReg.Title, intIndex))
                 intIndex = intIndex + 1
             Next objReg
         End With
@@ -1353,7 +1353,7 @@ Public Class BankImportForm
             .SubItems.Insert(6, New ListViewItem.ListViewSubItem(Nothing, strFake))
             .SubItems.Insert(7, New ListViewItem.ListViewSubItem(Nothing, strGen))
             .SubItems.Insert(8, New ListViewItem.ListViewSubItem(Nothing, strImport))
-            .SubItems.Insert(9, New ListViewItem.ListViewSubItem(Nothing, objTrx.objReg.strTitle))
+            .SubItems.Insert(9, New ListViewItem.ListViewSubItem(Nothing, objTrx.objReg.Title))
             .SubItems.Insert(mintMCHCOL_INDEX, New ListViewItem.ListViewSubItem(Nothing, CStr(intIndex)))
         End With
 

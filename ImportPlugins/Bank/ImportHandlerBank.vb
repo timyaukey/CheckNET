@@ -35,7 +35,7 @@ Public Class ImportHandlerBank
         Dim intCompareLen As Integer = 8
         Dim strImportName As String = objImportedTrx.strDescription
         For Each objReg As Register In objAccount.Registers
-            For Each objTrx As BaseTrx In objReg.colDbgRepeatTrx.Values
+            For Each objTrx As BaseTrx In objReg.DbgRepeatTrx.Values
                 If TypeOf objTrx Is BankTrx Then
                     If String.Compare(objTrx.strDescription, 0, strImportName, 0, intCompareLen, True) = 0 Then
                         If Math.Abs(objImportedTrx.datDate.Subtract(objTrx.datDate).TotalDays) < 30D Then
@@ -50,7 +50,7 @@ Public Class ImportHandlerBank
 
     Public Function objStatusSearch(ByVal objImportedTrx As ImportedTrx, ByVal objReg As Register) As BankTrx Implements IImportHandler.objStatusSearch
         If objImportedTrx.strImportKey <> "" Then
-            Return objReg.objMatchImportKey(objImportedTrx.strImportKey)
+            Return objReg.MatchImportKey(objImportedTrx.strImportKey)
         End If
         Return Nothing
     End Function

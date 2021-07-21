@@ -33,7 +33,7 @@ Public Class AccountSaver
             If mobjAccount.Title <> "" Then
                 SaveLine("AT" & mobjAccount.Title)
             End If
-            SaveLine("AK" & CStr(mobjAccount.Key))
+            SaveLine("AK" & CStr(mobjAccount.AccountKey))
             For Each objSubType As Account.SubTypeDef In Account.SubTypeDefs
                 If objSubType.lngSubType = mobjAccount.AcctSubType Then
                     objSubTypeMatched = objSubType
@@ -45,7 +45,7 @@ Public Class AccountSaver
             SaveLine("AY" & objSubTypeMatched.strSaveCode)
             'Define each register at the top of the file.
             For Each objReg In mobjAccount.Registers
-                If Not objReg.blnDeleted Then
+                If Not objReg.IsDeleted Then
                     SaveDefineRegister(objReg)
                 End If
             Next objReg
@@ -55,7 +55,7 @@ Public Class AccountSaver
             SaveRelatedAcct(mobjAccount.RelatedAcct4, "4")
             'Save the transactions for each register.
             For Each objReg In mobjAccount.Registers
-                If Not objReg.blnDeleted Then
+                If Not objReg.IsDeleted Then
                     SaveLoadedRegister(objReg)
                 End If
             Next objReg
@@ -76,15 +76,15 @@ Public Class AccountSaver
 
     Private Sub SaveRelatedAcct(ByVal objRelatedAccount As Account, ByVal strSelector As String)
         If Not objRelatedAccount Is Nothing Then
-            SaveLine("AR" + strSelector + " " + objRelatedAccount.Key.ToString())
+            SaveLine("AR" + strSelector + " " + objRelatedAccount.AccountKey.ToString())
         End If
     End Sub
 
     Private Sub SaveDefineRegister(ByVal objReg As Register)
         With objReg
-            SaveLine("RK" & .strRegisterKey)
-            SaveLine("RT" & .strTitle)
-            If .blnShowInitially Then
+            SaveLine("RK" & .RegisterKey)
+            SaveLine("RT" & .Title)
+            If .ShowInitially Then
                 SaveLine("RS")
             End If
             SaveLine("RI")
@@ -103,12 +103,12 @@ Public Class AccountSaver
 
         'Output the non-fake BaseTrx, and remember the non-generated fake.
         colFakeLines = New List(Of String)
-        SaveLine("RL" & objReg.strRegisterKey)
+        SaveLine("RL" & objReg.RegisterKey)
         objSaver.Save(mobjSaveFile, objReg, colFakeLines)
         SaveLine(".R")
 
         'Save non-generated fake BaseTrx we saved above.
-        SaveLine("RF" & objReg.strRegisterKey)
+        SaveLine("RF" & objReg.RegisterKey)
         For Each strLine In colFakeLines
             SaveLine(strLine)
         Next strLine

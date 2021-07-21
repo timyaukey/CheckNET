@@ -102,7 +102,7 @@ Public Module TrxGeneratorLoader
     '   register in specified account.
 
     Public Function gstrGeneratorPath(ByVal objAccount As Account, ByVal objReg As Register) As String
-        gstrGeneratorPath = objAccount.Company.AccountsFolderPath() & "\" & objAccount.FileNameRoot & ".gen\" & objReg.strRegisterKey
+        gstrGeneratorPath = objAccount.Company.AccountsFolderPath() & "\" & objAccount.FileNameRoot & ".gen\" & objReg.RegisterKey
     End Function
 
     '$Description Report an error detected while loading a transaction generator file.
@@ -193,7 +193,7 @@ Public Module TrxGeneratorLoader
             Exit Function
         End If
         strRepeatKey = CStr(vntAttrib)
-        'If objAccount.Repeats.intLookupKey(strRepeatKey) = 0 Then
+        'If Account.Repeats.intLookupKey(strRepeatKey) = 0 Then
         '    gstrLoadTrxGeneratorCore = "Invalid [repeatkey] attribute"
         '    Exit Function
         'End If
@@ -553,7 +553,7 @@ Public Module TrxGeneratorLoader
         datTrxTemplate.lngStatus = BaseTrx.TrxStatus.NonBank
         'Amount.
         datTrxTemplate.curAmount = curAmount
-        'Key of other register.
+        'AccountKey of other register.
         vntAttrib = elmTrxTpt.GetAttribute("transferkey")
         If gblnXmlAttributeMissing(vntAttrib) Then
             gstrGetTrxGenTemplateTransfer = "Missing [transferkey] attribute"

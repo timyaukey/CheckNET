@@ -65,7 +65,7 @@ Public Class SearchRecategorizeTool
             Exit Sub
         End If
 
-        objStartLogger = objHostSearchToolUI.objReg.objLogGroupStart("SearchForm.Recategorize")
+        objStartLogger = objHostSearchToolUI.objReg.LogGroupStart("SearchForm.Recategorize")
         For Each objNormalTrx In colTrx
             objTrxManager = New NormalTrxManager(objNormalTrx)
             colSplits = objNormalTrx.colSplits

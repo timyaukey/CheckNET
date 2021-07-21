@@ -46,8 +46,8 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                 {
                     foreach (Register reg in account.Registers)
                     {
-                        StartingBalance += reg.curEndingBalance(StartDate.AddDays(-1d));
-                        foreach (BaseTrx trx in reg.colDateRange<BaseTrx>(StartDate, EndDate))
+                        StartingBalance += reg.EndingBalance(StartDate.AddDays(-1d));
+                        foreach (BaseTrx trx in reg.GetDateRange<BaseTrx>(StartDate, EndDate))
                         {
                             LoadTrx(trx);
                         }
@@ -164,7 +164,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                 string sequence = "";
                 if (!string.IsNullOrEmpty(split.objParent.strRepeatKey))
                 {
-                    sequence = split.objParent.objReg.objAccount.Repeats.strKeyToValue1(split.objParent.strRepeatKey);
+                    sequence = split.objParent.objReg.Account.Repeats.strKeyToValue1(split.objParent.strRepeatKey);
                 }
                 row = new SplitDetailRow(PeriodCount, split.strCategoryKey,
                     Company.Categories.strKeyToValue1(split.strCategoryKey), sequence);
@@ -181,7 +181,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                 string sequence = "(none)";
                 if (!string.IsNullOrEmpty(budgetTrx.strRepeatKey))
                 {
-                    sequence = budgetTrx.objReg.objAccount.Repeats.strKeyToValue1(budgetTrx.strRepeatKey);
+                    sequence = budgetTrx.objReg.Account.Repeats.strKeyToValue1(budgetTrx.strRepeatKey);
                 }
                 row = new BudgetDetailRow(PeriodCount, budgetTrx.strBudgetKey,
                     Company.Budgets.strKeyToValue1(budgetTrx.strBudgetKey), sequence);

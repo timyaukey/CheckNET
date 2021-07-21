@@ -467,7 +467,7 @@ Public Class TrxForm
 
         mobjHostUI = objHostUI_
         mobjReg = objReg_
-        mobjAccount = mobjReg.objAccount
+        mobjAccount = mobjReg.Account
         mobjCompany = mobjHostUI.objCompany
         mblnEditMode = blnEditMode_
         mlngIndex = lngIndex_
@@ -909,10 +909,10 @@ Public Class TrxForm
                 ValidationError("Repeat sequence number must be greater than zero.")
                 Exit Function
             End If
-            objMatchingTrx = mobjReg.objRepeatTrx(strRepeatKey(), intRepeatSeq)
+            objMatchingTrx = mobjReg.FindRepeatTrx(strRepeatKey(), intRepeatSeq)
             If Not objMatchingTrx Is Nothing Then
                 If mblnEditMode Then
-                    blnKeySeqInUse = (Not objMatchingTrx Is mobjReg.objTrx(mlngIndex))
+                    blnKeySeqInUse = (Not objMatchingTrx Is mobjReg.GetTrx(mlngIndex))
                 Else
                     blnKeySeqInUse = True
                 End If
@@ -1024,7 +1024,7 @@ Public Class TrxForm
                 Exit Function
             End If
         End If
-        Dim blnAccountIsPersonal As Boolean = (mobjReg.objAccount.AcctType = Account.AccountType.Personal)
+        Dim blnAccountIsPersonal As Boolean = (mobjReg.Account.AcctType = Account.AccountType.Personal)
         For intSplit = 1 To mintSplits
             If blnSplitUsed(intSplit) Then
                 intSplitsUsed = intSplitsUsed + 1
@@ -1036,7 +1036,7 @@ Public Class TrxForm
                         Dim intDotOffset As Integer = .strCategoryKey.IndexOf("."c)
                         If intDotOffset > 0 Then
                             Dim intAccountKey As Integer = Integer.Parse(.strCategoryKey.Substring(0, intDotOffset))
-                            If intAccountKey = mobjReg.objAccount.Key Then
+                            If intAccountKey = mobjReg.Account.AccountKey Then
                                 ValidationError("Split category uses the same account")
                                 Exit Function
                             End If
@@ -1153,14 +1153,14 @@ Public Class TrxForm
         'Start from latest trx and work backward, in case we decide
         'to start checking datEarliestToCheck.
         'datEarliestToCheck = DateAdd("d", -180, Date)
-        lngIndex = objReg.lngTrxCount
+        lngIndex = objReg.TrxCount
         Do
             If lngIndex < 1 Then
                 Exit Do
             End If
-            objTrx = objReg.objTrx(lngIndex)
+            objTrx = objReg.GetTrx(lngIndex)
             If objTrx.GetType() Is GetType(BankTrx) Then
-                'If objTrx.datDate < datEarliestToCheck Then
+                'If GetTrx.datDate < datEarliestToCheck Then
                 '    Exit Do
                 'End If
                 'If not the same trx in edit mode
@@ -1194,7 +1194,7 @@ Public Class TrxForm
                                     'If Utilities.blnIsValidAmount(maudtSplits(intSplit).strAmount) Then
                                     '    If CCur(maudtSplits(intSplit).strAmount) = objSplit.curAmount Then
                                     '        If MsgBox("Invoice number " & objSplit.strInvoiceNum & _
-                                    ''            " for payee " & objTrx.strDescription & _
+                                    ''            " for payee " & GetTrx.strDescription & _
                                     ''            " has the same amount. Continue?", _
                                     ''            vbCritical + vbOKCancel + vbDefaultButton2, _
                                     ''            "Possible Duplicate Invoice") = vbCancel Then
@@ -1275,7 +1275,7 @@ Public Class TrxForm
     Private Sub SaveNormal()
         Dim objTrx As BankTrx
         If mblnEditMode Then
-            objTrx = mobjReg.objNormalTrx(mlngIndex)
+            objTrx = mobjReg.GetBankTrx(mlngIndex)
             Dim objTrxManager As NormalTrxManager = New NormalTrxManager(objTrx)
             objTrxManager.Update(
                 Sub(ByVal objNormalTrx As BankTrx)
@@ -1518,10 +1518,10 @@ Public Class TrxForm
                 Exit Sub
             End If
 
-            objStartLogger = mobjReg.objLogGroupStart("TrxForm.Divide")
+            objStartLogger = mobjReg.LogGroupStart("TrxForm.Divide")
 
             'Update the existing trx, without the checked splits.
-            Dim objTrxManager As NormalTrxManager = New NormalTrxManager(mobjReg.objNormalTrx(mlngIndex))
+            Dim objTrxManager As NormalTrxManager = New NormalTrxManager(mobjReg.GetBankTrx(mlngIndex))
             objTrxManager.Update(
                 Sub(ByVal objOriginalTrx As BankTrx)
                     UpdateNormal(objOriginalTrx)
@@ -1692,7 +1692,7 @@ Public Class TrxForm
             End If
 
             If IsNumeric(txtNumber.Text) Then
-                SaveSetting(gstrREG_APP, mobjReg.strRegistryKey(), "TrxNum", txtNumber.Text)
+                SaveSetting(gstrREG_APP, mobjReg.WindowsRegistryKey(), "TrxNum", txtNumber.Text)
             ElseIf LCase(txtNumber.Text) = "inv" Or LCase(txtNumber.Text) = "crm" Then
                 chkFake.CheckState = System.Windows.Forms.CheckState.Checked
             End If
@@ -1720,7 +1720,7 @@ Public Class TrxForm
             If IsNumeric(txtNumber.Text) Then
                 lngOldNum = CInt(txtNumber.Text)
             Else
-                lngOldNum = CInt(GetSetting(gstrREG_APP, mobjReg.strRegistryKey(), "TrxNum", "1000"))
+                lngOldNum = CInt(GetSetting(gstrREG_APP, mobjReg.WindowsRegistryKey(), "TrxNum", "1000"))
             End If
 
             If strKey = "-" Then
@@ -2018,7 +2018,7 @@ Public Class TrxForm
         strBudgetKey = strGetStringTranslatorKeyFromCombo(cboBudgetName, mobjCompany.Budgets)
         datBudgetStarts = CDate(txtBudgetStarts.Text)
         If mblnEditMode Then
-            objTrxManager = New BudgetTrxManager(mobjReg.objBudgetTrx(mlngIndex))
+            objTrxManager = New BudgetTrxManager(mobjReg.GetBudgetTrx(mlngIndex))
             objTrxManager.UpdateStart()
             objTrxManager.objTrx.UpdateStartBudget(CDate(txtDate.Text), txtDescription.Text, txtMemo.Text, blnAwaitingReview(),
                                      blnAutoGenerated(), intRepeatSeq(), strRepeatKey(),
@@ -2047,7 +2047,7 @@ Public Class TrxForm
             Exit Function
         End If
         strOtherRegisterKey = strGetStringTranslatorKeyFromCombo(cboTransferTo, mobjAccount.RegisterList())
-        If strOtherRegisterKey = mobjReg.strRegisterKey Then
+        If strOtherRegisterKey = mobjReg.RegisterKey Then
             ValidationError("You may not transfer to the same register.")
             Exit Function
         End If
@@ -2061,7 +2061,7 @@ Public Class TrxForm
         objOtherReg = mobjAccount.FindRegister(strOtherRegisterKey)
         objXfer = New TransferManager
         If mblnEditMode Then
-            objXfer.UpdateTransfer(mobjReg, mobjReg.objTransferTrx(mlngIndex), objOtherReg, CDate(txtDate.Text), txtDescription.Text, txtMemo.Text, blnTrxFake(), CDec(txtTransferAmount.Text), strRepeatKey(), blnAwaitingReview(), blnAutoGenerated(), intRepeatSeq())
+            objXfer.UpdateTransfer(mobjReg, mobjReg.GetTransferTrx(mlngIndex), objOtherReg, CDate(txtDate.Text), txtDescription.Text, txtMemo.Text, blnTrxFake(), CDec(txtTransferAmount.Text), strRepeatKey(), blnAwaitingReview(), blnAutoGenerated(), intRepeatSeq())
         Else
             objXfer.AddTransfer(mobjReg, objOtherReg, CDate(txtDate.Text), txtDescription.Text, txtMemo.Text, blnTrxFake(), CDec(txtTransferAmount.Text), strRepeatKey(), blnAwaitingReview(), blnAutoGenerated(), intRepeatSeq())
         End If

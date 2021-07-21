@@ -128,7 +128,7 @@ Public Class BudgetTrx
             mdatBudgetStarts = mdatBudgetEnds
             mdatBudgetEnds = datTemp
             mdatDate = datTemp
-            Me.objReg.objAccount.SetChanged()
+            Me.objReg.Account.SetChanged()
         End If
     End Sub
 
@@ -197,7 +197,7 @@ Public Class BudgetTrx
     '   mcurBudgetApplied or mcurBudgetLimit changes.
 
     Public Sub SetAmountForBudget()
-        If mdatBudgetEnds < mobjReg.datOldestBudgetEndAllowed Or System.Math.Abs(mcurBudgetApplied) > System.Math.Abs(mcurBudgetLimit) Then
+        If mdatBudgetEnds < mobjReg.OldestBudgetEndAllowed Or System.Math.Abs(mcurBudgetApplied) > System.Math.Abs(mcurBudgetLimit) Then
             mcurAmount = 0
             mblnIsExpired = True
         Else
@@ -257,7 +257,7 @@ Public Class BudgetTrx
                 Return objOtherTrx.objNext
             End If
         Next
-        Return mobjReg.objFirstTrx
+        Return mobjReg.FirstTrx
     End Function
 
     '$Description Apply a Split to this BudgetTrx.

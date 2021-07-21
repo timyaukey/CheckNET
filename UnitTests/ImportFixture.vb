@@ -21,8 +21,8 @@ Public Class ImportFixture
 
         gUTSetSubTest("Test first import")
 
-        objUTReg.objReg.ImportUpdateBank(objUTReg.objReg.objNormalTrx(1), #4/3/2001#, "200", -25D, "importkey-1")
-        objTrx = objUTReg.objReg.objTrx(1)
+        objUTReg.objReg.ImportUpdateBank(objUTReg.objReg.GetBankTrx(1), #4/3/2001#, "200", -25D, "importkey-1")
+        objTrx = objUTReg.objReg.GetTrx(1)
         With DirectCast(objTrx, BankTrx)
             gUTAssert(.datDate = #4/3/2000#, "Bad date")
             gUTAssert(.strNumber = "200", "Bad number")
@@ -34,8 +34,8 @@ Public Class ImportFixture
 
         gUTSetSubTest("Test second import")
 
-        objUTReg.objReg.ImportUpdateBank(objUTReg.objReg.objNormalTrx(2), #4/4/2000#, "201", -50D, "importkey-2")
-        objTrx = objUTReg.objReg.objTrx(2)
+        objUTReg.objReg.ImportUpdateBank(objUTReg.objReg.GetBankTrx(2), #4/4/2000#, "201", -50D, "importkey-2")
+        objTrx = objUTReg.objReg.GetTrx(2)
         With objTrx
             gUTAssert(.datDate = #4/4/2000#, "Bad date")
             gUTAssert(.strNumber = "201", "Bad number")
@@ -46,8 +46,8 @@ Public Class ImportFixture
 
         gUTSetSubTest("Test third import")
 
-        objUTReg.objReg.ImportUpdateBank(objUTReg.objReg.objNormalTrx(3), #4/15/2002#, "Pmt", -40.01D, "importkey-3")
-        objTrx = objUTReg.objReg.objTrx(3)
+        objUTReg.objReg.ImportUpdateBank(objUTReg.objReg.GetBankTrx(3), #4/15/2002#, "Pmt", -40.01D, "importkey-3")
+        objTrx = objUTReg.objReg.GetTrx(3)
         With objTrx
             gUTAssert(.datDate = #4/15/2002#, "Bad date")
             gUTAssert(.strNumber = "Pmt", "Bad number")

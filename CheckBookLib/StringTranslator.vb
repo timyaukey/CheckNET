@@ -29,7 +29,7 @@ Public MustInherit Class StringTranslator(Of TElement As StringTransElement)
     Public MustOverride Sub LoadFile(ByVal strPath As String)
 
     '$Description Add a key string and its pair of values to the list.
-    '   Key and value strings do not have to be in any particular order
+    '   AccountKey and value strings do not have to be in any particular order
     '   in the list.
     '$Param strKey_ The key string. Must be unique in list.
     '$Param strValue1_ The first value string for this key string. Must be unique in list.

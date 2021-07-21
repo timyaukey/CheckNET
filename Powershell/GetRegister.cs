@@ -21,7 +21,7 @@ namespace Willowsoft.CheckBook.Powershell
             Register regMatch = null;
             foreach (Register regTest in Account.Registers)
             {
-                if (regTest.strTitle.Equals(RegisterName, StringComparison.InvariantCultureIgnoreCase))
+                if (regTest.Title.Equals(RegisterName, StringComparison.InvariantCultureIgnoreCase))
                 {
                     if (regMatch == null)
                         regMatch = regTest;

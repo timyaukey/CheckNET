@@ -46,7 +46,7 @@ Public Class Company
     'keys have "(" and ")" around them.
     Public ShortTermsCatKeys As String
 
-    'Key of budget used as placeholder in fake trx.
+    'AccountKey of budget used as placeholder in fake trx.
     Public PlaceholderBudgetKey As String
 
     Public Shared MainLicense As IStandardLicense = LoadMainLicenseFile()
@@ -154,7 +154,7 @@ Public Class Company
 
     Public Function IsAccountKeyUsed(ByVal intKey As Integer) As Boolean
         For Each act As Account In Accounts
-            If act.Key = intKey Then
+            If act.AccountKey = intKey Then
                 Return True
             End If
         Next
@@ -580,7 +580,7 @@ Public Class Company
             For Each objAcct As Account In Accounts
                 For Each objReg In objAcct.Registers
                     objReg.CheckIfInCriticalOperation()
-                    If objReg.blnCriticalOperationFailed Then
+                    If objReg.AnyCriticalOperationFailed Then
                         Return True
                     End If
                 Next

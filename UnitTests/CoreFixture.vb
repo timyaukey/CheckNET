@@ -284,7 +284,7 @@ Public Class CoreFixture
             .Validate("", 3, 5, 2, 7, 6)
 
             'Delete one of the budgets, to show the applied splits are un-applied.
-            objTrx = objUTReg.objReg.objTrx(4)
+            objTrx = objUTReg.objReg.GetTrx(4)
             gUTAssert(Not DirectCast(objTrx, BankTrx).objFirstSplit.objBudget Is Nothing, "Expected first split to be applied")
             gUTAssert(DirectCast(objTrx, BankTrx).objSecondSplit.objBudget Is Nothing, "Expected second split to not be applied")
             .DeleteEntry(5, False, "Fourth delete")
@@ -350,15 +350,15 @@ Public Class CoreFixture
 
         objXfr.AddTransfer(objUTReg1.objReg, objUTReg2.objReg, #4/4/2000#, "xfer1", "", False, 100.39D, "", False, False, 0)
 
-        objUTReg1.AddTrx(objUTReg1.objReg.objTrx(3))
+        objUTReg1.AddTrx(objUTReg1.objReg.GetTrx(3))
         objUTReg1.Validate("Transfer added to 1", 1, 2, 5, 3, 4)
 
-        objUTReg2.AddTrx(objUTReg2.objReg.objTrx(3))
+        objUTReg2.AddTrx(objUTReg2.objReg.GetTrx(3))
         objUTReg2.Validate("Transfer added to 2", 1, 2, 5, 3, 4)
 
         gUTSetSubTest("Update transfer")
 
-        objXfr.UpdateTransfer(objUTReg1.objReg, objUTReg1.objReg.objTransferTrx(3), objUTReg2.objReg, #4/6/2000#, "xfer1", "", False, 29.95D, "", False, False, 0)
+        objXfr.UpdateTransfer(objUTReg1.objReg, objUTReg1.objReg.GetTransferTrx(3), objUTReg2.objReg, #4/6/2000#, "xfer1", "", False, 29.95D, "", False, False, 0)
 
         objUTReg1.SetTrxAmount(5, 29.95D)
         objUTReg1.SetTrxDate(5, #4/6/2000#)
@@ -370,7 +370,7 @@ Public Class CoreFixture
 
         gUTSetSubTest("Delete transfer")
 
-        objXfr.DeleteTransfer(objUTReg1.objReg, objUTReg1.objReg.objTrx(4), objUTReg2.objReg)
+        objXfr.DeleteTransfer(objUTReg1.objReg, objUTReg1.objReg.GetTrx(4), objUTReg2.objReg)
         objUTReg1.Validate("Transfer deleted 1", 1, 2, 3, 4)
         objUTReg2.Validate("Transfer deleted 2", 1, 2, 3, 4)
 
@@ -402,37 +402,37 @@ Public Class CoreFixture
 
         objXfr.AddTransfer(objUTReg1.objReg, objUTReg2.objReg, #4/4/2000#, "xfer1", "", False, 100.39D, "r2", False, False, 2)
 
-        objUTReg1.AddTrx(objUTReg1.objReg.objTrx(3))
+        objUTReg1.AddTrx(objUTReg1.objReg.GetTrx(3))
         objUTReg1.Validate("Transfer added to 1", 1, 2, 5, 3, 4)
-        gUTAssert(objUTReg1.objReg.colDbgRepeatTrx.Count() = 2, "")
+        gUTAssert(objUTReg1.objReg.DbgRepeatTrx.Count() = 2, "")
 
-        objUTReg2.AddTrx(objUTReg2.objReg.objTrx(3))
+        objUTReg2.AddTrx(objUTReg2.objReg.GetTrx(3))
         objUTReg2.Validate("Transfer added to 2", 1, 2, 5, 3, 4)
 
         gUTSetSubTest("Update transfer (repeat)")
 
-        objXfr.UpdateTransfer(objUTReg1.objReg, objUTReg1.objReg.objTransferTrx(3), objUTReg2.objReg, #4/6/2000#, "xfer1", "", False, 29.95D, "r3", False, False, 3)
+        objXfr.UpdateTransfer(objUTReg1.objReg, objUTReg1.objReg.GetTransferTrx(3), objUTReg2.objReg, #4/6/2000#, "xfer1", "", False, 29.95D, "r3", False, False, 3)
 
         objUTReg1.SetTrxAmount(5, 29.95D)
         objUTReg1.SetTrxDate(5, #4/6/2000#)
         objUTReg1.SetTrxRepeatKey(5, "r3")
         objUTReg1.SetTrxRepeatSeq(5, 3)
         objUTReg1.Validate("Transfer changed 1", 1, 2, 3, 5, 4)
-        gUTAssert(objUTReg1.objReg.colDbgRepeatTrx.Count() = 2, "")
+        gUTAssert(objUTReg1.objReg.DbgRepeatTrx.Count() = 2, "")
 
         objUTReg2.SetTrxAmount(5, -29.95D)
         objUTReg2.SetTrxDate(5, #4/6/2000#)
         objUTReg2.SetTrxRepeatKey(5, "r3")
         objUTReg2.SetTrxRepeatSeq(5, 3)
         objUTReg2.Validate("Transfer changed 2", 1, 2, 5, 3, 4)
-        gUTAssert(objUTReg1.objReg.colDbgRepeatTrx.Count() = 2, "")
+        gUTAssert(objUTReg1.objReg.DbgRepeatTrx.Count() = 2, "")
 
         gUTSetSubTest("Delete transfer (repeat)")
 
-        objXfr.DeleteTransfer(objUTReg1.objReg, objUTReg1.objReg.objTrx(4), objUTReg2.objReg)
+        objXfr.DeleteTransfer(objUTReg1.objReg, objUTReg1.objReg.GetTrx(4), objUTReg2.objReg)
         objUTReg1.Validate("Transfer deleted 1", 1, 2, 3, 4)
         objUTReg2.Validate("Transfer deleted 2", 1, 2, 3, 4)
-        gUTAssert(objUTReg1.objReg.colDbgRepeatTrx.Count() = 1, "")
+        gUTAssert(objUTReg1.objReg.DbgRepeatTrx.Count() = 1, "")
 
     End Sub
 
@@ -449,13 +449,13 @@ Public Class CoreFixture
         objAccount = New Account()
         objAccount.Init(objCompany)
         objReg = objLoadFile(objAccount, "UTRegLoad1.txt")
-        If objReg.lngTrxCount <> 4 Then
+        If objReg.TrxCount <> 4 Then
             Exit Sub
         End If
 
         gUTSetSubTest("Verify 1")
 
-        objTrx = objReg.objTrx(1)
+        objTrx = objReg.GetTrx(1)
         With DirectCast(objTrx, BankTrx)
             gUTAssert(.GetType() Is GetType(BankTrx), "Wrong type")
             gUTAssert(.datDate = #4/13/2000#, "Wrong date")
@@ -475,7 +475,7 @@ Public Class CoreFixture
 
         gUTSetSubTest("Verify 2")
 
-        objTrx = objReg.objTrx(2)
+        objTrx = objReg.GetTrx(2)
         With DirectCast(objTrx, BankTrx)
             gUTAssert(.GetType() Is GetType(BankTrx), "Wrong type")
             gUTAssert(.datDate = #4/15/2000#, "Wrong date")
@@ -487,7 +487,7 @@ Public Class CoreFixture
 
         gUTSetSubTest("Verify 3")
 
-        objTrx = objReg.objTrx(3)
+        objTrx = objReg.GetTrx(3)
         With DirectCast(objTrx, BudgetTrx)
             gUTAssert(.GetType() Is GetType(BudgetTrx), "Wrong type")
             gUTAssert(.datDate = #4/16/2000#, "Wrong date")
@@ -500,7 +500,7 @@ Public Class CoreFixture
 
         gUTSetSubTest("Verify 4")
 
-        objTrx = objReg.objTrx(4)
+        objTrx = objReg.GetTrx(4)
         With DirectCast(objTrx, TransferTrx)
             gUTAssert(.GetType() Is GetType(TransferTrx), "Wrong type")
             gUTAssert(.datDate = #4/20/2000#, "Wrong date")
@@ -575,7 +575,7 @@ Public Class CoreFixture
             .objReg.LoadApply()
             .objReg.LoadFinish()
             .Validate("", 1)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 1, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 1, "count")
         End With
 
         'Two repeating trx in one sequence.
@@ -586,7 +586,7 @@ Public Class CoreFixture
             .objReg.LoadApply()
             .objReg.LoadFinish()
             .Validate("", 1, 2)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 2, "count")
         End With
 
         'Three repeating trx in two sequences.
@@ -599,7 +599,7 @@ Public Class CoreFixture
             .objReg.LoadApply()
             .objReg.LoadFinish()
             .Validate("", 1, 2, 3, 4)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 3, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 3, "count")
         End With
 
         gUTSetSubTest("Test register adding")
@@ -609,7 +609,7 @@ Public Class CoreFixture
         With objUTReg
             .AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
             .Validate("", 1)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 1, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 1, "count")
         End With
 
         'One repeating and one non-repeating trx.
@@ -618,7 +618,7 @@ Public Class CoreFixture
             .AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
             .AddNormal("1501", #6/2/2000#, -10D, "Second add", 2, 2, 2)
             .Validate("", 1, 2)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 1, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 1, "count")
         End With
 
         'Two repeating trx in one sequence.
@@ -627,7 +627,7 @@ Public Class CoreFixture
             .AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1, strRepeatKey:="r1", intRepeatSeq:=1)
             .AddNormal("1501", #6/2/2000#, -10D, "Second add", 2, 2, 2, strRepeatKey:="r1", intRepeatSeq:=2)
             .Validate("", 1, 2)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 2, "count")
         End With
 
         'Three repeating trx in two sequences.
@@ -637,7 +637,7 @@ Public Class CoreFixture
             .AddNormal("1501", #6/2/2000#, -10D, "Second add", 2, 2, 2, strRepeatKey:="r1", intRepeatSeq:=2)
             .AddNormal("1499", #5/30/2000#, -10D, "Third add", 1, 1, 3, strRepeatKey:="r2", intRepeatSeq:=1)
             .Validate("", 3, 1, 2)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 3, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 3, "count")
         End With
 
         gUTSetSubTest("Test trx changing")
@@ -653,7 +653,7 @@ Public Class CoreFixture
             .SetTrxRepeatSeq(1, 3)
             .UpdateNormal("1500", #6/1/2000#, 399D, "First upd", 1, 1, 1, 2, strRepeatKey:="R4", intRepeatSeq:=3)
             .Validate("", 1, 2)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 1, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 1, "count")
         End With
 
         'One repeating and one non-repeating trx (2).
@@ -667,7 +667,7 @@ Public Class CoreFixture
             .SetTrxRepeatSeq(2, 3)
             .UpdateNormal("1501", #6/2/2000#, 399D, "First upd", 2, 2, 2, 2, strRepeatKey:="R4", intRepeatSeq:=3)
             .Validate("", 1, 2)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 2, "count")
         End With
 
         'Two repeating, change one to a different key.
@@ -680,7 +680,7 @@ Public Class CoreFixture
             .SetTrxRepeatSeq(2, 3)
             .UpdateNormal("1501", #6/2/2000#, -10D, "First upd", 2, 2, 2, 2, strRepeatKey:="R4", intRepeatSeq:=3)
             .Validate("", 1, 2)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 2, "count")
         End With
 
         'Two repeating, change one to a different seq.
@@ -692,7 +692,7 @@ Public Class CoreFixture
             .SetTrxRepeatSeq(2, 3)
             .UpdateNormal("1501", #6/2/2000#, -10D, "First upd", 2, 2, 2, 2, strRepeatKey:="r2", intRepeatSeq:=3)
             .Validate("", 1, 2)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 2, "count")
         End With
 
         gUTSetSubTest("Test delete trx")
@@ -705,7 +705,7 @@ Public Class CoreFixture
             'Delete the second trx.
             .DeleteEntry(2, False, "delete")
             .Validate("", 1)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 1, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 1, "count")
         End With
 
         gUTSetSubTest("Test long list with many changes")
@@ -720,21 +720,21 @@ Public Class CoreFixture
             .AddNormal("Pmt", #6/16/2000#, -12D, "payee", 5, 5, 5)
             .AddNormal("Pmt", #6/17/2000#, -13D, "payee", 6, 6, 6)
             .Validate("", 1, 2, 3, 4, 5, 6)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 2, "count")
             'Change the second.
             .SetTrxRepeatKey(2, "r3")
             .SetTrxRepeatSeq(2, 3)
             .SetTrxDate(2, #6/14/2000#)
             .UpdateNormal("1501", #6/14/2000#, -10D, "First upd", 2, 3, 2, 3, strRepeatKey:="r3", intRepeatSeq:=3)
             .Validate("", 1, 3, 2, 4, 5, 6)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 2, "count")
             .DeleteEntry(4, True, "delete")
             .Validate("", 1, 3, 2, 5, 6)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 2, "count")
             .UpdateNormal("Pmt", #6/16/2000#, -11D, "update", 4, 4, 4, 5)
             .SetTrxAmount(5, -11D)
             .Validate("", 1, 3, 2, 5, 6)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 2, "count")
             .AddNormal("Inv", #7/1/2000#, -100D, "payee", 6, 6, 6, strRepeatKey:="r3", intRepeatSeq:=1)
             .Validate("", 1, 3, 2, 5, 6, 7)
         End With
@@ -749,15 +749,15 @@ Public Class CoreFixture
             .objReg.LoadApply()
             .objReg.LoadFinish()
             .Validate("", 1, 2, 3, 4)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 2, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 2, "count")
             .AddBudget(#6/20/2000#, -100D, #6/3/2000#, "03", "", 5, 5, 5, strRepeatKey:="r2", intRepeatSeq:=2)
             .Validate("", 1, 2, 3, 4, 5)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 3, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 3, "count")
             .UpdateBudget(#7/10/2000#, -100D, #7/1/2000#, "01", "", 3, 5, 3, 5)
             .SetTrxAmount(3, -100D)
             .SetTrxDate(3, #7/10/2000#)
             .Validate("", 1, 2, 4, 5, 3)
-            gUTAssert(.objReg.colDbgRepeatTrx.Count() = 3, "count")
+            gUTAssert(.objReg.DbgRepeatTrx.Count() = 3, "count")
             .DeleteEntry(1, True, "")
             .Validate("", 2, 4, 5, 3)
         End With
@@ -829,10 +829,10 @@ Public Class CoreFixture
         objUTReg.UpdateNormal("DP2", #5/1/2000#, 399D, "First upd", 1, 1, 1, 5)
         objUTReg.Validate("", 1, 2)
 
-        Dim objTrxManager As NormalTrxManager = New NormalTrxManager(objUTReg.objReg.objNormalTrx(1))
+        Dim objTrxManager As NormalTrxManager = New NormalTrxManager(objUTReg.objReg.GetBankTrx(1))
         objTrxManager.UpdateStart()
 
-        objTrxManager = New NormalTrxManager(objUTReg.objReg.objNormalTrx(2))
+        objTrxManager = New NormalTrxManager(objUTReg.objReg.GetBankTrx(2))
         Try
             objTrxManager.UpdateStart()
             gUTFailure("Did not fail critical operation check")
@@ -847,7 +847,7 @@ Public Class CoreFixture
         objUTReg.AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1)
         objUTReg.Validate("", 1)
 
-        gUTAssert(Not objUTReg.objReg.objAccount.Company.AnyCriticalOperationFailed, "Unexpectedly said critical operation failed")
+        gUTAssert(Not objUTReg.objReg.Account.Company.AnyCriticalOperationFailed, "Unexpectedly said critical operation failed")
 
         objUTReg.AddNormal("1501", #6/1/2000#, -24.95D, "Second add", 2, 2, 2)
         objUTReg.Validate("", 1, 2)
@@ -858,10 +858,10 @@ Public Class CoreFixture
         objUTReg.UpdateNormal("DP2", #5/1/2000#, 399D, "First upd", 1, 1, 1, 5)
         objUTReg.Validate("", 1, 2)
 
-        objTrxManager = New NormalTrxManager(objUTReg.objReg.objNormalTrx(1))
+        objTrxManager = New NormalTrxManager(objUTReg.objReg.GetBankTrx(1))
         objTrxManager.UpdateStart()
 
-        gUTAssert(objUTReg.objReg.objAccount.Company.AnyCriticalOperationFailed, "Did not detect interrupted critical operation 2")
+        gUTAssert(objUTReg.objReg.Account.Company.AnyCriticalOperationFailed, "Did not detect interrupted critical operation 2")
 
 
     End Sub

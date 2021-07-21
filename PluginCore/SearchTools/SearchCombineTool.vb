@@ -66,12 +66,12 @@ Public Class SearchCombineTool
             mobjHostUI.InfoMessageBox("Canceled.")
             Exit Sub
         End If
-        objNewTrx = DirectCast(objHostSearchToolUI.objReg.objCurrentTrx, BankTrx)
+        objNewTrx = DirectCast(objHostSearchToolUI.objReg.CurrentTrx, BankTrx)
 
         'Now delete old trx.
         'Because we start from the BaseTrx object instead of its index, we don't need
         'to worry if saving the new trx or a prior delete changed the index of a BaseTrx.
-        objStartLogger = objHostSearchToolUI.objReg.objLogGroupStart("SearchForm.CombineDelete")
+        objStartLogger = objHostSearchToolUI.objReg.LogGroupStart("SearchForm.CombineDelete")
         For Each objOldTrx In colOldTrx
             objOldTrx.Delete(New LogDelete, "SearchForm.CombineDeleteTrx")
         Next

@@ -74,8 +74,8 @@ Public Class AccountLoader
                         If mobjCompany.IsAccountKeyUsed(intNewKey) Then
                             Throw New Exception("Duplicate use of account key " & intNewKey)
                         End If
-                        mobjAccount.Key = intNewKey
-                        mobjCompany.UseAccountKey(mobjAccount.Key)
+                        mobjAccount.AccountKey = intNewKey
+                        mobjCompany.UseAccountKey(mobjAccount.AccountKey)
                     Case "AY"
                         Dim objSubTypeMatched As Account.SubTypeDef = Nothing
                         For Each objSubType In Account.SubTypeDefs
@@ -104,7 +104,7 @@ Public Class AccountLoader
                     Case "RK"
                         If Not blnAccountPropertiesValidated Then
                             'The lines that set these properties come before the first "RK" line.
-                            If mobjAccount.Key = 0 Then
+                            If mobjAccount.AccountKey = 0 Then
                                 Throw New Exception("Account key not specified")
                             End If
                             If mobjAccount.AcctType = Account.AccountType.Unspecified Then
@@ -217,7 +217,7 @@ Public Class AccountLoader
             Return Nothing
         End If
         For Each objAccount As Account In mobjCompany.Accounts
-            If objAccount.Key = intRelatedKey Then
+            If objAccount.AccountKey = intRelatedKey Then
                 Return objAccount
             End If
         Next

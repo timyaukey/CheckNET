@@ -8,7 +8,7 @@ Public Module TrxGenerator
     'Routines to create ITrxGenerator objects are in TrxGeneratorLoader.bas.
 
     '$Description Create all generated BaseTrx for a Register.
-    '$Param objAccount The Account to which objReg belongs.
+    '$Param Account The Account to which objReg belongs.
     '$Param objReg The Register to generate BaseTrx in.
     '$Param datRptEndMax Latest date to create BaseTrx for.
 
@@ -43,7 +43,7 @@ Public Module TrxGenerator
                     colTrx = objGenerator.colCreateTrx(objReg, datRptEndMax)
                     For Each datTrxToCreate In colTrx
 
-                        objRepeatTrx = objReg.objRepeatTrx(datTrxToCreate.strRepeatKey, datTrxToCreate.intRepeatSeq)
+                        objRepeatTrx = objReg.FindRepeatTrx(datTrxToCreate.strRepeatKey, datTrxToCreate.intRepeatSeq)
                         If datTrxToCreate.datDate >= datOldestTrxDate Then
                             'Only create BaseTrx for seq numbers we don't already have in reg.
                             If objRepeatTrx Is Nothing Then
@@ -133,7 +133,7 @@ Public Module TrxGenerator
                     'UPGRADE_NOTE: Object objOtherReg may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
                     objOtherReg = Nothing
                     For Each objCompareReg In colRegisters
-                        If objCompareReg.strRegisterKey = c.strTransferKey Then
+                        If objCompareReg.RegisterKey = c.strTransferKey Then
                             If objCompareReg Is objTargetReg Then
                                 gstrCreateOneTrx = "Cannot transfer to the same register in transfer trx"
                                 Exit Function
