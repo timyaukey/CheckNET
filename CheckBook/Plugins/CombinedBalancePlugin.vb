@@ -16,11 +16,11 @@ Public Class CombinedBalancePlugin
     Private Sub ClickHandler(sender As Object, e As RegisterEventArgs)
         Try
             Dim objLiabilityAcct As Account = e.objReg.objAccount
-            If objLiabilityAcct.lngType <> Account.AccountType.Liability Then
+            If objLiabilityAcct.AcctType <> Account.AccountType.Liability Then
                 HostUI.ErrorMessageBox("Combined personal and business balance may only be computed for liability accounts.")
                 Exit Sub
             End If
-            Dim objPersonalAcct As Account = objLiabilityAcct.objRelatedAcct1
+            Dim objPersonalAcct As Account = objLiabilityAcct.RelatedAcct1
             If objPersonalAcct Is Nothing Then
                 HostUI.ErrorMessageBox("Account does not have a ""Related account #1"" (this is the related personal account)")
                 Exit Sub
@@ -32,10 +32,10 @@ Public Class CombinedBalancePlugin
             End If
             Dim datEndDate As DateTime = CDate(strEndDate)
             Dim curCombinedBalance As Decimal = 0
-            For Each objLiabilityReg As Register In objLiabilityAcct.colRegisters
+            For Each objLiabilityReg As Register In objLiabilityAcct.Registers
                 curCombinedBalance = curCombinedBalance + objLiabilityReg.curEndingBalance(datEndDate)
             Next
-            For Each objPersonalReg As Register In objPersonalAcct.colRegisters
+            For Each objPersonalReg As Register In objPersonalAcct.Registers
                 curCombinedBalance = curCombinedBalance + objPersonalReg.curEndingBalance(datEndDate)
             Next
             HostUI.InfoMessageBox("Combined personal and business balance as of " & datEndDate.ToShortDateString() & " is " & Utilities.strFormatCurrency(curCombinedBalance) & ".")

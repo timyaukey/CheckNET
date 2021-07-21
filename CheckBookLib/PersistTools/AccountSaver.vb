@@ -12,7 +12,7 @@ Public Class AccountSaver
 
     Public Sub New(ByVal objAccount As Account)
         mobjAccount = objAccount
-        mobjCompany = mobjAccount.objCompany
+        mobjCompany = mobjAccount.Company
     End Sub
 
     Public ReadOnly Property objAccount As Account
@@ -30,38 +30,38 @@ Public Class AccountSaver
             mobjSaveFile = New StreamWriter(mobjCompany.AccountsFolderPath() & "\" & strPath_)
 
             SaveLine("FHCKBK2")
-            If mobjAccount.strTitle <> "" Then
-                SaveLine("AT" & mobjAccount.strTitle)
+            If mobjAccount.Title <> "" Then
+                SaveLine("AT" & mobjAccount.Title)
             End If
-            SaveLine("AK" & CStr(mobjAccount.intKey))
-            For Each objSubType As Account.SubTypeDef In Account.arrSubTypeDefs
-                If objSubType.lngSubType = mobjAccount.lngSubType Then
+            SaveLine("AK" & CStr(mobjAccount.Key))
+            For Each objSubType As Account.SubTypeDef In Account.SubTypeDefs
+                If objSubType.lngSubType = mobjAccount.AcctSubType Then
                     objSubTypeMatched = objSubType
                 End If
             Next
             If objSubTypeMatched Is Nothing Then
-                Throw New Exception("Could not match account subtype in save for " + mobjAccount.strTitle)
+                Throw New Exception("Could not match account subtype in save for " + mobjAccount.Title)
             End If
             SaveLine("AY" & objSubTypeMatched.strSaveCode)
             'Define each register at the top of the file.
-            For Each objReg In mobjAccount.colRegisters
+            For Each objReg In mobjAccount.Registers
                 If Not objReg.blnDeleted Then
                     SaveDefineRegister(objReg)
                 End If
             Next objReg
-            SaveRelatedAcct(mobjAccount.objRelatedAcct1, "1")
-            SaveRelatedAcct(mobjAccount.objRelatedAcct2, "2")
-            SaveRelatedAcct(mobjAccount.objRelatedAcct3, "3")
-            SaveRelatedAcct(mobjAccount.objRelatedAcct4, "4")
+            SaveRelatedAcct(mobjAccount.RelatedAcct1, "1")
+            SaveRelatedAcct(mobjAccount.RelatedAcct2, "2")
+            SaveRelatedAcct(mobjAccount.RelatedAcct3, "3")
+            SaveRelatedAcct(mobjAccount.RelatedAcct4, "4")
             'Save the transactions for each register.
-            For Each objReg In mobjAccount.colRegisters
+            For Each objReg In mobjAccount.Registers
                 If Not objReg.blnDeleted Then
                     SaveLoadedRegister(objReg)
                 End If
             Next objReg
             SaveLine(".A")
 
-            mobjAccount.blnUnsavedChanges = False
+            mobjAccount.HasUnsavedChanges = False
 
             Exit Sub
         Catch ex As Exception
@@ -76,7 +76,7 @@ Public Class AccountSaver
 
     Private Sub SaveRelatedAcct(ByVal objRelatedAccount As Account, ByVal strSelector As String)
         If Not objRelatedAccount Is Nothing Then
-            SaveLine("AR" + strSelector + " " + objRelatedAccount.intKey.ToString())
+            SaveLine("AR" + strSelector + " " + objRelatedAccount.Key.ToString())
         End If
     End Sub
 
@@ -117,7 +117,7 @@ Public Class AccountSaver
         'RR line is for repeating register, no longer used.
 
         objReg.LogSave()
-        objReg.WriteEventLog(System.IO.Path.GetFileNameWithoutExtension(mobjAccount.strFileNameRoot), mobjAccount.objRepeats)
+        objReg.WriteEventLog(System.IO.Path.GetFileNameWithoutExtension(mobjAccount.FileNameRoot), mobjAccount.Repeats)
     End Sub
 
     '$Description Write one line to the Save() output file.

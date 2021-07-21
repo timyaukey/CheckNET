@@ -38,7 +38,7 @@ Public Class TrxGenInterpolate
             Return strError
         End If
 
-        Return gstrGetTrxGenTemplate(objAccount.objCompany, domDoc, mstrRepeatKey, 0, mdatTrxTemplate)
+        Return gstrGetTrxGenTemplate(objAccount.Company, domDoc, mstrRepeatKey, 0, mdatTrxTemplate)
     End Function
 
     Public Overrides ReadOnly Property strDescription() As String

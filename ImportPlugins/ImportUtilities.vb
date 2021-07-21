@@ -40,7 +40,7 @@ Public Class ImportUtilities
 
     Public Sub Init(ByVal objAccount_ As Account)
         mobjAccount = objAccount_
-        mobjCompany = mobjAccount.objCompany
+        mobjCompany = mobjAccount.Company
     End Sub
 
     Public Sub LoadTrxTypeTable()

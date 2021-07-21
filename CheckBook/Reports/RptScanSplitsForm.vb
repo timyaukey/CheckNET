@@ -197,7 +197,7 @@ Friend Class RptScanSplitsForm
                 If lstAccounts.GetSelected(intAcctIdx) Then
                     objAcct = mobjCompany.Accounts.Item(intAcctIdx)
                     mcolSelectAccounts.Add(objAcct)
-                    For Each objReg In objAcct.colRegisters
+                    For Each objReg In objAcct.Registers
                         ScanRegister(objReg)
                     Next objReg
                 End If

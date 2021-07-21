@@ -120,7 +120,7 @@ Public Class TrxSplit
                     intDaysBack = 30
                 Else
                     'Is the category one we guessed to have short terms?
-                    If InStr(objParent.objReg.objAccount.objCompany.ShortTermsCatKeys, Company.EncodeCatKey(mstrCategoryKey)) > 0 Then
+                    If InStr(objParent.objReg.objAccount.Company.ShortTermsCatKeys, Company.EncodeCatKey(mstrCategoryKey)) > 0 Then
                         intDaysBack = 14
                     Else
                         intDaysBack = 30
@@ -208,7 +208,7 @@ Public Class TrxSplit
 
         mobjBudget = Nothing
         blnNoMatch = False
-        If mstrBudgetKey = "" Or mstrBudgetKey = objReg.objAccount.objCompany.PlaceholderBudgetKey Then
+        If mstrBudgetKey = "" Or mstrBudgetKey = objReg.objAccount.Company.PlaceholderBudgetKey Then
             Exit Sub
         End If
         objBudgetTrx = objReg.objMatchBudget(mobjParent, mstrBudgetKey, blnNoMatch)
@@ -234,12 +234,12 @@ Public Class TrxSplit
         If intDotOffset > 0 Then
             Dim intAccountKey As Integer = Integer.Parse(mstrCategoryKey.Substring(0, intDotOffset))
             For Each objAccount In objCompany_.Accounts
-                If objAccount.intKey = intAccountKey Then
+                If objAccount.Key = intAccountKey Then
                     Dim strRegKey As String = mstrCategoryKey.Substring(intDotOffset + 1)
-                    For Each objReg In objAccount.colRegisters
+                    For Each objReg In objAccount.Registers
                         If objReg.strRegisterKey = strRegKey Then
                             Dim objReplicaTrx As ReplicaTrx = New ReplicaTrx(objReg)
-                            Dim strCatKey As String = objNormalTrx.objReg.objAccount.intKey.ToString() + "." + objNormalTrx.objReg.strRegisterKey
+                            Dim strCatKey As String = objNormalTrx.objReg.objAccount.Key.ToString() + "." + objNormalTrx.objReg.strRegisterKey
                             Dim strReplDescr As String
                             If Not String.IsNullOrEmpty(mstrMemo) Then
                                 strReplDescr = mstrMemo

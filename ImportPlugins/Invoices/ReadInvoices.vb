@@ -119,7 +119,7 @@ Public Class ReadInvoices
         strCatKey = mobjCompany.Categories.strKey(intCatIdx)
 
         objTrx = New ImportedTrx(Nothing)
-        blnUseFakeInvoices = (mobjAccount.lngSubType <> Account.SubType.Liability_AccountsPayable)
+        blnUseFakeInvoices = (mobjAccount.AcctSubType <> Account.SubType.Liability_AccountsPayable)
         objTrx.NewStartNormal(False, strTrxNum, datDate, strDescription, "", BaseTrx.TrxStatus.Unreconciled,
                               TrxGenImportData.NewFake(blnUseFakeInvoices))
         objTrx.AddSplit("", strCatKey, strPONumber, strInvNumber, datInvDate, datDueDate, strTerms, "", curAmount)

@@ -22,25 +22,25 @@ Public Class AdjustPersonalBusinessForm
         mobjCompany = mobjHostUI.objCompany
         mobjBusinessAccount = objBusinessAccount
 
-        If objBusinessAccount.lngType <> Account.AccountType.Liability Then
+        If objBusinessAccount.AcctType <> Account.AccountType.Liability Then
             mobjHostUI.ErrorMessageBox("Only liability accounts may be adjusted for personal/business use")
             Exit Sub
         End If
 
-        If objBusinessAccount.objRelatedAcct1 Is Nothing Then
+        If objBusinessAccount.RelatedAcct1 Is Nothing Then
             mobjHostUI.ErrorMessageBox("Related account #1 is not set (this is the related personal account)")
             Exit Sub
         End If
-        mobjPersonalAccount = objBusinessAccount.objRelatedAcct1
-        txtPersonalAccount.Text = mobjPersonalAccount.strTitle
+        mobjPersonalAccount = objBusinessAccount.RelatedAcct1
+        txtPersonalAccount.Text = mobjPersonalAccount.Title
 
-        If objBusinessAccount.objRelatedAcct2 Is Nothing Then
+        If objBusinessAccount.RelatedAcct2 Is Nothing Then
             mobjHostUI.ErrorMessageBox("Related account #2 is not set (this is the loan to person account)")
             Exit Sub
         End If
-        mobjLoanToAccount = objBusinessAccount.objRelatedAcct2
-        mstrLoanToPersonKey = mobjLoanToAccount.colRegisters(0).strCatKey
-        txtLoanToAccount.Text = mobjLoanToAccount.strTitle
+        mobjLoanToAccount = objBusinessAccount.RelatedAcct2
+        mstrLoanToPersonKey = mobjLoanToAccount.Registers(0).strCatKey
+        txtLoanToAccount.Text = mobjLoanToAccount.Title
 
         For intCatIndex As Integer = 1 To mobjCompany.Categories.intElements
             Dim strCatName As String = mobjCompany.Categories.strValue1(intCatIndex)
@@ -112,7 +112,7 @@ Public Class AdjustPersonalBusinessForm
         Dim colToDelete As List(Of BaseTrx) = New List(Of BaseTrx)
         Dim objTrx As BaseTrx
         Dim intDeleteCount As Integer = 0
-        For Each objReg As Register In objAccount.colRegisters
+        For Each objReg As Register In objAccount.Registers
             ShowProgress("Scanning " + objReg.strTitle)
             For Each objTrx In objReg.colDateRange(Of BaseTrx)(ctlStartDate.Value, ctlEndDate.Value)
                 If blnIsInvalid(objTrx) Then
@@ -155,8 +155,8 @@ Public Class AdjustPersonalBusinessForm
         Dim objPersonalReg As Register
         Dim intAdjustCount As Integer = 0
         mblnFakeTrxFound = False
-        objPersonalReg = mobjPersonalAccount.colRegisters(0)
-        For Each objBusinessReg As Register In mobjBusinessAccount.colRegisters
+        objPersonalReg = mobjPersonalAccount.Registers(0)
+        For Each objBusinessReg As Register In mobjBusinessAccount.Registers
             intAdjustCount += intCreateAdjustments(objBusinessReg, objPersonalReg)
         Next
         If mblnFakeTrxFound Then
@@ -269,7 +269,7 @@ Public Class AdjustPersonalBusinessForm
     Private Function curGetAccountBalance(ByVal objAccount As Account, ByVal datAfterEndDate As DateTime) As Decimal
         Dim curResult As Decimal = 0D
         Dim datEndDate As DateTime = ctlEndDate.Value
-        For Each objReg As Register In objAccount.colRegisters
+        For Each objReg As Register In objAccount.Registers
             For Each objTrx As BaseTrx In objReg.colAllTrx(Of BaseTrx)()
                 If objTrx.datDate >= datAfterEndDate Then
                     Exit For

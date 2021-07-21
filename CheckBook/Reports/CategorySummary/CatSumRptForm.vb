@@ -102,8 +102,8 @@ Friend Class CatSumRptForm
             With lstAccounts
                 .Items.Clear()
                 For Each objAcct In colSelectedAccounts
-                    .Items.Add(objAcct.strTitle)
-                    WriteRptLine("  " & objAcct.strTitle)
+                    .Items.Add(objAcct.Title)
+                    WriteRptLine("  " & objAcct.Title)
                 Next objAcct
             End With
             WriteRptLine("")

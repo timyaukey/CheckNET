@@ -27,8 +27,8 @@ Public Class CompanyLoader
     ''' if the user successfully authenticates, or no authentication is required
     ''' for the Company. Otherwise returns an object subclassing CompanyLoadError, 
     ''' whose type indicates the specific problem encountered.
-    ''' Uses objCompany.SecData.blnNoFile to determine if authentication is 
-    ''' required, and objCompany.SecData.blnAuthenticate() to authenticate 
+    ''' Uses Company.SecData.blnNoFile to determine if authentication is 
+    ''' required, and Company.SecData.blnAuthenticate() to authenticate 
     ''' user name and password if that is required.
     ''' </param>
     ''' <returns></returns>
@@ -82,10 +82,10 @@ Public Class CompanyLoader
     Private Shared Sub AddAccountTypeToCategories(ByVal objCompany As Company, ByVal lngType As Account.AccountType)
         Dim objCats As List(Of StringTransElement) = New List(Of StringTransElement)
         Dim elm As StringTransElement
-        Dim strPrefix As String = Account.strTypeToLetter(lngType)
+        Dim strPrefix As String = Account.AccountTypeToLetter(lngType)
         For Each objAccount As Account In objCompany.Accounts
-            If objAccount.lngType = lngType Then
-                For Each objReg As Register In objAccount.colRegisters
+            If objAccount.AcctType = lngType Then
+                For Each objReg As Register In objAccount.Registers
                     Dim strKey As String = objReg.strCatKey
                     elm = New StringTransElement(objCompany.Categories, strKey, strPrefix + ":" + objReg.strTitle, " " + objReg.strTitle)
                     objCats.Add(elm)
@@ -183,17 +183,17 @@ Public Class CompanyLoader
             Next
         Catch ex As Exception
             For Each objLoader In colLoaders
-                objLoader.objAccount.blnUnsavedChanges = False
+                objLoader.objAccount.HasUnsavedChanges = False
             Next
             gNestedException(ex)
         End Try
     End Sub
 
     Private Shared Function AccountComparer(ByVal objAcct1 As Account, ByVal objAcct2 As Account) As Integer
-        If objAcct1.lngType <> objAcct2.lngType Then
-            Return objAcct1.lngType.CompareTo(objAcct2.lngType)
+        If objAcct1.AcctType <> objAcct2.AcctType Then
+            Return objAcct1.AcctType.CompareTo(objAcct2.AcctType)
         End If
-        Return objAcct1.strTitle.CompareTo(objAcct2.strTitle)
+        Return objAcct1.Title.CompareTo(objAcct2.Title)
     End Function
 
     Public Shared Sub RecreateGeneratedTrx(ByVal objCompany As Company, ByVal datRegisterEndDate As Date, ByVal datCutoff As Date)
@@ -201,7 +201,7 @@ Public Class CompanyLoader
         Dim objReg As Register
 
         For Each objAccount In objCompany.Accounts
-            For Each objReg In objAccount.colRegisters
+            For Each objReg In objAccount.Registers
                 'Allow UI to hide all register windows for all accounts before
                 'we start any of them, because regenerating can cause ReplicaTrx
                 'to be recreated in any Register.
@@ -217,7 +217,7 @@ Public Class CompanyLoader
         Next
         For Each objAccount In objCompany.Accounts
             'Tell all register windows to refresh themselves.
-            For Each objReg In objAccount.colRegisters
+            For Each objReg In objAccount.Registers
                 'Recompute the running balances, because replica trx can be added anywhere.
                 objReg.LoadFinish()
                 objReg.FireEndRegenerating()
@@ -228,7 +228,7 @@ Public Class CompanyLoader
 
     Private Shared Sub SortAllRegisters(ByVal colLoaders As List(Of AccountLoader))
         For Each objLoader In colLoaders
-            For Each objReg In objLoader.objAccount.colRegisters
+            For Each objReg In objLoader.objAccount.Registers
                 objReg.Sort()
             Next
         Next

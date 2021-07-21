@@ -34,7 +34,7 @@ Public Class ImportHandlerBank
         End If
         Dim intCompareLen As Integer = 8
         Dim strImportName As String = objImportedTrx.strDescription
-        For Each objReg As Register In objAccount.colRegisters
+        For Each objReg As Register In objAccount.Registers
             For Each objTrx As BaseTrx In objReg.colDbgRepeatTrx.Values
                 If TypeOf objTrx Is BankTrx Then
                     If String.Compare(objTrx.strDescription, 0, strImportName, 0, intCompareLen, True) = 0 Then

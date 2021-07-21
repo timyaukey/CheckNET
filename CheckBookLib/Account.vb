@@ -6,7 +6,7 @@ Imports System.IO
 ''' <summary>
 ''' Represents one general ledger account and all the transactions in it,
 ''' like a checking account or a loan account. The most important member
-''' is colRegisters, which is a collection of the Register objects containing
+''' is Registers, which is a collection of the Register objects containing
 ''' the transactions in this account. Most commonly there is one register
 ''' per account.
 ''' </summary>
@@ -81,7 +81,7 @@ Public Class Account
         End Function
     End Class
 
-    Public Shared arrSubTypeDefs() As SubTypeDef =
+    Public Shared SubTypeDefs() As SubTypeDef =
     {
         New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_CheckingAccount, .strName = "Asset - Checking Account", .strSaveCode = "A"},
         New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_SavingsAccount, .strName = "Asset - Savings Account", .strSaveCode = "ASA"},
@@ -125,13 +125,13 @@ Public Class Account
         mobjCompany = objCompany
     End Sub
 
-    Public ReadOnly Property objCompany() As Company
+    Public ReadOnly Property Company() As Company
         Get
             Return mobjCompany
         End Get
     End Property
 
-    Public Property strFileNameRoot() As String
+    Public Property FileNameRoot() As String
         Get
             Return mstrFileNameRoot
         End Get
@@ -140,7 +140,7 @@ Public Class Account
         End Set
     End Property
 
-    Public Property strTitle() As String
+    Public Property Title() As String
         Get
             If Len(mstrTitle) > 0 Then
                 Return mstrTitle
@@ -154,7 +154,7 @@ Public Class Account
         End Set
     End Property
 
-    Public Property intKey() As Integer
+    Public Property Key() As Integer
         Get
             Return mintKey
         End Get
@@ -164,7 +164,7 @@ Public Class Account
         End Set
     End Property
 
-    Public Property lngType() As AccountType
+    Public Property AcctType() As AccountType
         Get
             Return mlngType
         End Get
@@ -174,7 +174,7 @@ Public Class Account
         End Set
     End Property
 
-    Public Property lngSubType() As SubType
+    Public Property AcctSubType() As SubType
         Get
             Return mlngSubType
         End Get
@@ -184,7 +184,7 @@ Public Class Account
         End Set
     End Property
 
-    Public Property objRelatedAcct1() As Account
+    Public Property RelatedAcct1() As Account
         Get
             Return mobjRelatedAcct1
         End Get
@@ -194,7 +194,7 @@ Public Class Account
         End Set
     End Property
 
-    Public Property objRelatedAcct2() As Account
+    Public Property RelatedAcct2() As Account
         Get
             Return mobjRelatedAcct2
         End Get
@@ -204,7 +204,7 @@ Public Class Account
         End Set
     End Property
 
-    Public Property objRelatedAcct3() As Account
+    Public Property RelatedAcct3() As Account
         Get
             Return mobjRelatedAcct3
         End Get
@@ -214,7 +214,7 @@ Public Class Account
         End Set
     End Property
 
-    Public Property objRelatedAcct4() As Account
+    Public Property RelatedAcct4() As Account
         Get
             Return mobjRelatedAcct4
         End Get
@@ -224,19 +224,19 @@ Public Class Account
         End Set
     End Property
 
-    Public ReadOnly Property strType() As String
+    Public ReadOnly Property AccountTypeLetter() As String
         Get
-            Return strTypeToLetter(lngType)
+            Return AccountTypeToLetter(AcctType)
         End Get
     End Property
 
-    Public ReadOnly Property datLastReconciled() As DateTime
+    Public ReadOnly Property LastReconciledDate() As DateTime
         Get
             Return mdatLastReconciled
         End Get
     End Property
 
-    Public Shared Function strTypeToLetter(ByVal lngType_ As AccountType) As String
+    Public Shared Function AccountTypeToLetter(ByVal lngType_ As AccountType) As String
         Select Case lngType_
             Case AccountType.Asset : Return "A"
             Case AccountType.Liability : Return "L"
@@ -247,13 +247,13 @@ Public Class Account
         End Select
     End Function
 
-    Public ReadOnly Property colRegisters() As List(Of Register)
+    Public ReadOnly Property Registers() As List(Of Register)
         Get
             Return mcolRegisters
         End Get
     End Property
 
-    Public ReadOnly Property objRepeats() As SimpleStringTranslator
+    Public ReadOnly Property Repeats() As SimpleStringTranslator
         Get
             Return mobjRepeats
         End Get
@@ -263,13 +263,13 @@ Public Class Account
         mobjRepeats = mobjRepeatSummarizer.BuildStringTranslator()
     End Sub
 
-    Public ReadOnly Property objRepeatSummarizer() As RepeatSummarizer
+    Public ReadOnly Property RepeatSummarizer() As RepeatSummarizer
         Get
             Return mobjRepeatSummarizer
         End Get
     End Property
 
-    Public Property blnUnsavedChanges() As Boolean
+    Public Property HasUnsavedChanges() As Boolean
         Get
             Return mblnUnsavedChanges
         End Get
@@ -292,7 +292,7 @@ Public Class Account
         If strRegTitle = "" Then
             gRaiseError("Missing RT line before RI line")
         End If
-        If Not objFindReg(strRegKey) Is Nothing Then
+        If Not FindRegister(strRegKey) Is Nothing Then
             gRaiseError("Reg key already used in RI line")
         End If
         objReg = New Register
@@ -303,21 +303,21 @@ Public Class Account
     Public Sub SetChanged()
         mblnUnsavedChanges = True
         RaiseEvent ChangeMade()
-        objCompany.FireSomethingModified()
+        Company.FireSomethingModified()
     End Sub
 
-    Public Function objFindReg(ByVal strRegisterKey As String) As Register
+    Public Function FindRegister(ByVal strRegisterKey As String) As Register
         Dim objReg As Register
         For Each objReg In mcolRegisters
             If objReg.strRegisterKey = strRegisterKey Then
-                objFindReg = objReg
+                FindRegister = objReg
                 Exit Function
             End If
         Next objReg
-        objFindReg = Nothing
+        FindRegister = Nothing
     End Function
 
-    Public Function objRegisterList() As SimpleStringTranslator
+    Public Function RegisterList() As SimpleStringTranslator
         Dim objReg As Register
         Dim objResult As SimpleStringTranslator
 
@@ -325,7 +325,7 @@ Public Class Account
         For Each objReg In mcolRegisters
             objResult.Add(New StringTransElement(objResult, objReg.strRegisterKey, objReg.strTitle, objReg.strTitle))
         Next objReg
-        objRegisterList = objResult
+        RegisterList = objResult
     End Function
 
     Public Sub SetLastReconciledDate()
@@ -352,7 +352,7 @@ Public Class Account
     End Sub
 
     Public Overrides Function ToString() As String
-        Return Me.strTitle
+        Return Me.Title
     End Function
 
     Public Shared Sub CreateStandardChecking(ByVal objCompany As Company, ByVal objShowMessage As Action(Of String))
@@ -360,10 +360,10 @@ Public Class Account
             objShowMessage("Creating first checking account...")
             Dim objAccount As Account = New Account()
             objAccount.Init(objCompany)
-            objAccount.intKey = objCompany.GetUnusedAccountKey()
-            objAccount.lngSubType = Account.SubType.Asset_CheckingAccount
-            objAccount.strFileNameRoot = "Main"
-            objAccount.strTitle = "Checking Account"
+            objAccount.Key = objCompany.GetUnusedAccountKey()
+            objAccount.AcctSubType = Account.SubType.Asset_CheckingAccount
+            objAccount.FileNameRoot = "Main"
+            objAccount.Title = "Checking Account"
             objAccount.Create()
         Catch ex As Exception
             gNestedException(ex)
@@ -374,8 +374,8 @@ Public Class Account
         Try
             Dim objSubTypeMatched As Account.SubTypeDef = Nothing
 
-            For Each objSubType As Account.SubTypeDef In Account.arrSubTypeDefs
-                If objSubType.lngSubType = lngSubType Then
+            For Each objSubType As Account.SubTypeDef In Account.SubTypeDefs
+                If objSubType.lngSubType = AcctSubType Then
                     objSubTypeMatched = objSubType
                 End If
             Next
@@ -383,14 +383,14 @@ Public Class Account
                 Throw New Exception("Unrecognized account subtype")
             End If
 
-            Dim strAcctFile As String = mobjCompany.AccountsFolderPath() & "\" & strFileNameRoot & ".act"
+            Dim strAcctFile As String = mobjCompany.AccountsFolderPath() & "\" & FileNameRoot & ".act"
             Using objAcctWriter As TextWriter = New StreamWriter(strAcctFile)
                 objAcctWriter.WriteLine("FHCKBK2")
-                objAcctWriter.WriteLine("AT" & strTitle)
-                objAcctWriter.WriteLine("AK" & CStr(intKey))
+                objAcctWriter.WriteLine("AT" & Title)
+                objAcctWriter.WriteLine("AK" & CStr(Key))
                 objAcctWriter.WriteLine("AY" & objSubTypeMatched.strSaveCode)
                 objAcctWriter.WriteLine("RK1")
-                objAcctWriter.WriteLine("RT" & strTitle)
+                objAcctWriter.WriteLine("RT" & Title)
                 objAcctWriter.WriteLine("RS")
                 objAcctWriter.WriteLine("RI")
                 objAcctWriter.WriteLine("RL1")
@@ -402,7 +402,7 @@ Public Class Account
                 objAcctWriter.WriteLine(".A")
             End Using
 
-            Dim strRepeatFile As String = mobjCompany.AccountsFolderPath() & "\" & strFileNameRoot & ".rep"
+            Dim strRepeatFile As String = mobjCompany.AccountsFolderPath() & "\" & FileNameRoot & ".rep"
             Using objRepeatWriter As TextWriter = New StreamWriter(strRepeatFile)
                 objRepeatWriter.WriteLine("dummy line")
             End Using

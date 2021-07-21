@@ -308,7 +308,7 @@ Friend Class ListEditorForm
     '$Param strNewElement The element to insert, which is either a word like
     '   "Groceries" for a non-heirarchical list, or a path like "E:Groceries"
     '   for a heirarchical list. Used as the text of the list element.
-    '$Param intKey The key value for the element. Stored in the list ItemData.
+    '$Param Key The key value for the element. Stored in the list ItemData.
     '$Returns True iff element could not be inserted.
 
     Private Function blnInsertElement(ByVal objTransElem As StringTransElement, ByVal blnInLoad As Boolean, ByRef strError As String) As Boolean
@@ -539,7 +539,7 @@ Friend Class ListEditorForm
             Dim isUsed As Boolean = False
             For Each objAccount In mobjCompany.Accounts
                 If blnElementIsUsedInAccount(objAccount, strKey) Then
-                    strAccounts = strAccounts + strSep + objAccount.strTitle
+                    strAccounts = strAccounts + strSep + objAccount.Title
                     strSep = ", "
                     isUsed = True
                 End If
@@ -557,7 +557,7 @@ Friend Class ListEditorForm
 
         Try
 
-            For Each objReg In objAccount.colRegisters
+            For Each objReg In objAccount.Registers
                 If blnElementIsUsedInRegister(objReg, strKey) Then
                     blnElementIsUsedInAccount = True
                     Exit Function
@@ -639,7 +639,7 @@ Friend Class ListEditorForm
     End Function
 
     '$Description Construct a key string from an integer, if possible.
-    '$Param intKey The integer to construct the key from.
+    '$Param Key The integer to construct the key from.
     '$Returns The key string, or an empty string if the integer could not be
     '   converted to a key string. The only plausible reason for failure is if
     '   there are too many keys, so the integer is too large.

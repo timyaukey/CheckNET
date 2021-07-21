@@ -121,7 +121,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             {
                 if (!SkipAccount(acct))
                 {
-                    foreach (Register reg in acct.colRegisters)
+                    foreach (Register reg in acct.Registers)
                     {
                         bool fakeReportedInReg = false;
                         foreach (BaseTrx trx in reg.colAllTrx<BaseTrx>())
@@ -186,8 +186,8 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             // it is possible to import transactions into that account, but those
             // cannot be edited either. So we need to let QuickBooks manufacture
             // everything in that account instead of importing it.
-            return (acct.lngType == Account.AccountType.Personal) ||
-                (acct.lngSubType == Account.SubType.Equity_RetainedEarnings);
+            return (acct.AcctType == Account.AccountType.Personal) ||
+                (acct.AcctSubType == Account.SubType.Equity_RetainedEarnings);
         }
 
         /// <summary>
@@ -284,7 +284,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             else
             {
                 int acctKey = int.Parse(split.strCategoryKey.Substring(0, periodIndex));
-                Account matchingAcct = Company.Accounts.First(acct => acct.intKey == acctKey);
+                Account matchingAcct = Company.Accounts.First(acct => acct.Key == acctKey);
                 exportName = MakeBalanceSheetExportName(matchingAcct);
             }
             return exportName;
@@ -299,7 +299,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         {
             string exportName = GetPreExistingIntuitAccountName(acct);
             if (exportName == null)
-                exportName = MakeUniqueAccountExportName(acct.strTitle);
+                exportName = MakeUniqueAccountExportName(acct.Title);
             return exportName;
         }
 
@@ -416,11 +416,11 @@ namespace Willowsoft.CheckBook.GeneralPlugins
 
         private void OutputAccount(Account acct, ref bool retEarningsCreated)
         {
-            if (acct.lngType == Account.AccountType.Personal)
+            if (acct.AcctType == Account.AccountType.Personal)
                 return;
             if (GetPreExistingIntuitAccountName(acct) != null)
                 return;
-            switch (acct.lngSubType)
+            switch (acct.AcctSubType)
             {
                 case Account.SubType.Asset_AccountsReceivable:
                     OutputAccount(acct, "AR");
@@ -485,13 +485,13 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         private void OutputAccount(Account acct, string acctType, string extra = "")
         {
             CatDef cat;
-            string balExportKey = GetBalanceSheetExportKey(acct.intKey.ToString());
+            string balExportKey = GetBalanceSheetExportKey(acct.Key.ToString());
             if (!Categories.TryGetValue(balExportKey, out cat))
             {
                 // We probably don't need to add this CatDef to Categories, because
                 // nothing will search for at after this point in the export, but
                 // we add it for consistency.
-                cat = new CatDef(acct.strTitle, MakeBalanceSheetExportName(acct), null);
+                cat = new CatDef(acct.Title, MakeBalanceSheetExportName(acct), null);
                 Categories.Add(balExportKey, cat);
             }
             OutputLine("ACCNT\t" + cat.ExportName + "\t" + acctType);
@@ -512,7 +512,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
 
         private string GetPreExistingIntuitAccountName(Account acct)
         {
-            if (BalanceSheetMaps.TryGetValue(acct.strFileNameRoot, out BalanceSheetMap balMap))
+            if (BalanceSheetMaps.TryGetValue(acct.FileNameRoot, out BalanceSheetMap balMap))
             {
                 return balMap.IntuitName;
             }
@@ -550,7 +550,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             {
                 if (!SkipAccount(acct))
                 {
-                    foreach (Register reg in acct.colRegisters)
+                    foreach (Register reg in acct.Registers)
                     {
                         foreach (BankTrx normalTrx in reg.colDateRange<BankTrx>(StartDate, EndDate))
                         {
@@ -566,7 +566,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         {
             PayeeDef payee = Payees[TrimPayeeName(trx.strDescription).ToLower()];
             TrxOutputType usage = GetPayeeUsage(trx);
-            string exportAccountName = Categories[GetBalanceSheetExportKey(trx.objReg.objAccount.intKey.ToString())].ExportName;
+            string exportAccountName = Categories[GetBalanceSheetExportKey(trx.objReg.objAccount.Key.ToString())].ExportName;
             switch (usage)
             {
                 case TrxOutputType.Check:
@@ -627,7 +627,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             if (dotIndex < 0)
                 return false;
             int acctKey = int.Parse(split.strCategoryKey.Substring(0, dotIndex));
-            return Company.Accounts.First(acct => acct.intKey == acctKey).lngSubType == Account.SubType.Liability_AccountsPayable;
+            return Company.Accounts.First(acct => acct.Key == acctKey).AcctSubType == Account.SubType.Liability_AccountsPayable;
         }
 
         private void OutputNormalTrx(BankTrx trx, string transType, string exportAccountName, string payeeName, decimal amount)
@@ -647,7 +647,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
 
         private TrxOutputType GetPayeeUsage(BankTrx trx)
         {
-            Account.SubType subType = trx.objReg.objAccount.lngSubType;
+            Account.SubType subType = trx.objReg.objAccount.AcctSubType;
             if (subType == Account.SubType.Asset_CheckingAccount ||
                 subType == Account.SubType.Asset_SavingsAccount)
             {

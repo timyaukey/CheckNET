@@ -13,8 +13,8 @@ namespace Willowsoft.CheckBook.BudgetDashboard
         public override bool IncludeAccount(Account account)
         {
             return 
-                (account.lngSubType == Account.SubType.Asset_CheckingAccount) ||
-                (account.lngSubType == Account.SubType.Asset_SavingsAccount);
+                (account.AcctSubType == Account.SubType.Asset_CheckingAccount) ||
+                (account.AcctSubType == Account.SubType.Asset_SavingsAccount);
         }
 
         public override bool IncludeBudgetTrx(BudgetTrx budgetTrx)

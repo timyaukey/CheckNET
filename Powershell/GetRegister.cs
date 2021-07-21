@@ -19,7 +19,7 @@ namespace Willowsoft.CheckBook.Powershell
         {
             const string errorId = "RegisterSearchFailure";
             Register regMatch = null;
-            foreach (Register regTest in Account.colRegisters)
+            foreach (Register regTest in Account.Registers)
             {
                 if (regTest.strTitle.Equals(RegisterName, StringComparison.InvariantCultureIgnoreCase))
                 {

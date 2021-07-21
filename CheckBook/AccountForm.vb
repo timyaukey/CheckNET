@@ -11,13 +11,13 @@ Public Class AccountForm
         mblnUpdateMode = blnUpdateMode
         mobjHostUI = objHostUI
         mobjCompany = mobjHostUI.objCompany
-        txtAccountName.Text = objAccount.strTitle
-        txtFileName.Text = objAccount.strFileNameRoot
-        For Each objSubType As Account.SubTypeDef In Account.arrSubTypeDefs
+        txtAccountName.Text = objAccount.Title
+        txtFileName.Text = objAccount.FileNameRoot
+        For Each objSubType As Account.SubTypeDef In Account.SubTypeDefs
             cboAccountType.Items.Add(objSubType)
         Next
         For Each objItem As Account.SubTypeDef In cboAccountType.Items
-            If objItem.lngSubType = objAccount.lngSubType Then
+            If objItem.lngSubType = objAccount.AcctSubType Then
                 cboAccountType.SelectedItem = objItem
                 Exit For
             End If
@@ -25,21 +25,21 @@ Public Class AccountForm
         txtAccountName.Enabled = (Not blnReadOnly)
         txtFileName.Enabled = (Not mblnUpdateMode) And (Not blnReadOnly)
         cboAccountType.Enabled = (Not blnReadOnly)
-        LoadAccountList(cboRelated1, objAccount.objRelatedAcct1, blnReadOnly)
-        LoadAccountList(cboRelated2, objAccount.objRelatedAcct2, blnReadOnly)
-        LoadAccountList(cboRelated3, objAccount.objRelatedAcct3, blnReadOnly)
-        LoadAccountList(cboRelated4, objAccount.objRelatedAcct4, blnReadOnly)
+        LoadAccountList(cboRelated1, objAccount.RelatedAcct1, blnReadOnly)
+        LoadAccountList(cboRelated2, objAccount.RelatedAcct2, blnReadOnly)
+        LoadAccountList(cboRelated3, objAccount.RelatedAcct3, blnReadOnly)
+        LoadAccountList(cboRelated4, objAccount.RelatedAcct4, blnReadOnly)
         btnOkay.Enabled = (Not blnReadOnly)
         Dim result As DialogResult = Me.ShowDialog()
         If result = DialogResult.OK Then
-            objAccount.strTitle = txtAccountName.Text
-            objAccount.lngSubType = DirectCast(cboAccountType.SelectedItem, Account.SubTypeDef).lngSubType
-            objAccount.objRelatedAcct1 = DirectCast(cboRelated1.SelectedItem, AccountItem).objAccount
-            objAccount.objRelatedAcct2 = DirectCast(cboRelated2.SelectedItem, AccountItem).objAccount
-            objAccount.objRelatedAcct3 = DirectCast(cboRelated3.SelectedItem, AccountItem).objAccount
-            objAccount.objRelatedAcct4 = DirectCast(cboRelated4.SelectedItem, AccountItem).objAccount
+            objAccount.Title = txtAccountName.Text
+            objAccount.AcctSubType = DirectCast(cboAccountType.SelectedItem, Account.SubTypeDef).lngSubType
+            objAccount.RelatedAcct1 = DirectCast(cboRelated1.SelectedItem, AccountItem).objAccount
+            objAccount.RelatedAcct2 = DirectCast(cboRelated2.SelectedItem, AccountItem).objAccount
+            objAccount.RelatedAcct3 = DirectCast(cboRelated3.SelectedItem, AccountItem).objAccount
+            objAccount.RelatedAcct4 = DirectCast(cboRelated4.SelectedItem, AccountItem).objAccount
             If Not blnUpdateMode Then
-                objAccount.strFileNameRoot = txtFileName.Text
+                objAccount.FileNameRoot = txtFileName.Text
             End If
             Return result
         End If
@@ -57,7 +57,7 @@ Public Class AccountForm
         For Each objAccount As Account In mobjCompany.Accounts
             objItem = New AccountItem()
             objItem.objAccount = objAccount
-            objItem.strTitle = objAccount.strType + ":" + objAccount.strTitle
+            objItem.strTitle = objAccount.AccountTypeLetter + ":" + objAccount.Title
             ctl.Items.Add(objItem)
             If objAccount Is objSelectedAccount Then
                 objSelectedItem = objItem

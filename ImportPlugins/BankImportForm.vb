@@ -125,7 +125,7 @@ Public Class BankImportForm
         Try
             mobjHostUI = objHostUI
             mobjAccount = objAccount
-            mobjCompany = mobjAccount.objCompany
+            mobjCompany = mobjAccount.Company
             mobjImportHandler = objImportHandler
             mobjTrxReader = objTrxReader
 
@@ -364,7 +364,7 @@ Public Class BankImportForm
             'Verify that all the checked ImportItems really do have a
             'single exact match, because the user may have checked additional items.
             intExactCount = 0
-            For Each objReg In mobjAccount.colRegisters
+            For Each objReg In mobjAccount.Registers
 
                 mobjImportHandler.BatchUpdateSearch(objReg, objImportedTrx, colAllMatchedTrx, colUnusedMatches, blnExactMatch)
                 'If we have one match that wasn't matched by a previous import item.
@@ -564,7 +564,7 @@ Public Class BankImportForm
         Dim colResult As List(Of BankTrx) = New List(Of BankTrx)()
         Dim datStartDate As DateTime = datDate.AddDays(-6.0#)
         Dim datEndDate As DateTime = datDate.AddDays(2.0#)
-        For Each objReg As Register In mobjAccount.colRegisters
+        For Each objReg As Register In mobjAccount.Registers
             For Each objNormalTrx As BankTrx In objReg.colDateRange(Of BankTrx)(datStartDate, datEndDate)
                 If objNormalTrx.strDescription.StartsWith(strDescrStartsWith) Then
                     If Not blnTrxIsMatched(objNormalTrx) Then
@@ -850,7 +850,7 @@ Public Class BankImportForm
             Return False
         End If
 
-        For Each objReg In mobjAccount.colRegisters
+        For Each objReg In mobjAccount.Registers
             colMatches = New List(Of BankTrx)
             blnExactMatch = False
             mobjImportHandler.AutoNewSearch(objImportedTrx, objReg, colMatches, blnExactMatch)
@@ -1072,7 +1072,7 @@ Public Class BankImportForm
         With cboRegister
             .Items.Clear()
             intIndex = 0
-            For Each objReg In mobjAccount.colRegisters
+            For Each objReg In mobjAccount.Registers
                 .Items.Add(UITools.CreateListBoxItem(objReg.strTitle, intIndex))
                 intIndex = intIndex + 1
             Next objReg
@@ -1229,7 +1229,7 @@ Public Class BankImportForm
             End If
 
             'Look for possible matches in ALL registers, not just the selected register.
-            For Each objReg In mobjAccount.colRegisters
+            For Each objReg In mobjAccount.Registers
                 mobjImportHandler.IndividualSearch(objReg, objImportedTrx,
                     chkLooseMatch.CheckState = System.Windows.Forms.CheckState.Checked,
                     colMatches, blnExactMatch)
@@ -1294,7 +1294,7 @@ Public Class BankImportForm
 
             'Look for an import match in ALL registers, not just the selected register.
             'If found, update maudtItem() and redisplay it with the match info.
-            For Each objReg In mobjAccount.colRegisters
+            For Each objReg In mobjAccount.Registers
                 objImportMatch = mobjImportHandler.objStatusSearch(objImportedTrx, objReg)
                 If Not objImportMatch Is Nothing Then
                     maudtItem(intItemIndex).lngStatus = ImportStatus.mlngIMPSTS_PRIOR
@@ -1504,7 +1504,7 @@ Public Class BankImportForm
                     'UPGRADE_NOTE: Object mobjSelectedRegister may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
                     mobjSelectedRegister = Nothing
                 Else
-                    mobjSelectedRegister = mobjAccount.colRegisters.Item(UITools.GetItemData(cboRegister, .SelectedIndex))
+                    mobjSelectedRegister = mobjAccount.Registers.Item(UITools.GetItemData(cboRegister, .SelectedIndex))
                 End If
             End With
 

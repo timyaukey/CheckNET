@@ -14,8 +14,8 @@ Friend Class ShowRegisterForm
                 If Not objReg Is Nothing Then
                     Return objReg
                 End If
-                If objAccount.colRegisters.Count = 1 Then
-                    Return objAccount.colRegisters(0)
+                If objAccount.Registers.Count = 1 Then
+                    Return objAccount.Registers(0)
                 End If
                 Return Nothing
             End Get
@@ -57,11 +57,11 @@ Friend Class ShowRegisterForm
                     mobjHostUI.InfoMessageBox("You must select a register, not an account.")
                     Exit Sub
                 End If
-                If .objAccount.blnUnsavedChanges Then
+                If .objAccount.HasUnsavedChanges Then
                     mobjHostUI.ErrorMessageBox("You may not delete a register from an account " & "with unsaved changes.")
                     Exit Sub
                 End If
-                If .objAccount.colRegisters.Count() <= 1 Then
+                If .objAccount.Registers.Count() <= 1 Then
                     mobjHostUI.ErrorMessageBox("You may not delete the last register from an account.")
                     Exit Sub
                 End If
@@ -86,7 +86,7 @@ Friend Class ShowRegisterForm
                 Next
                 For Each objTransferTrx As TransferTrx In colToDelete
                     Dim objXfer As TransferManager = New TransferManager
-                    Dim objOtherReg As Register = .objAccount.objFindReg(objTransferTrx.strTransferKey)
+                    Dim objOtherReg As Register = .objAccount.FindRegister(objTransferTrx.strTransferKey)
                     objXfer.DeleteTransfer(objReg, objTransferTrx, objOtherReg)
                 Next
                 objReg.blnDeleted = True
@@ -135,11 +135,11 @@ Friend Class ShowRegisterForm
             End If
 
             With maudtElement(lstRegisters.SelectedIndex)
-                strNameRoot = Replace(LCase(.objAccount.strFileNameRoot), ".act", "")
-                If mobjHostUI.OkCancelMessageBox("Are you sure you want to delete account """ & .objAccount.strTitle & """?") <> DialogResult.OK Then
+                strNameRoot = Replace(LCase(.objAccount.FileNameRoot), ".act", "")
+                If mobjHostUI.OkCancelMessageBox("Are you sure you want to delete account """ & .objAccount.Title & """?") <> DialogResult.OK Then
                     Exit Sub
                 End If
-                If mobjHostUI.OkCancelMessageBox("Are you REALLY, REALLY, SURE you want to delete account """ & .objAccount.strTitle & """?") <> DialogResult.OK Then
+                If mobjHostUI.OkCancelMessageBox("Are you REALLY, REALLY, SURE you want to delete account """ & .objAccount.Title & """?") <> DialogResult.OK Then
                     Exit Sub
                 End If
             End With
@@ -202,10 +202,10 @@ Friend Class ShowRegisterForm
             End If
 
             With maudtElement(lstRegisters.SelectedIndex)
-                If mobjHostUI.OkCancelMessageBox("Do you really want to create a new register named """ & strName & """ in account """ & .objAccount.strTitle & """?") <> DialogResult.OK Then
+                If mobjHostUI.OkCancelMessageBox("Do you really want to create a new register named """ & strName & """ in account """ & .objAccount.Title & """?") <> DialogResult.OK Then
                     Exit Sub
                 End If
-                For Each objReg In .objAccount.colRegisters
+                For Each objReg In .objAccount.Registers
                     If CInt(Val(objReg.strRegisterKey)) > intHighestKey Then
                         intHighestKey = CInt(Val(objReg.strRegisterKey))
                     End If
@@ -332,10 +332,10 @@ Friend Class ShowRegisterForm
                     .objAccount = objAccount
                     .objReg = Nothing
                     .objReg = Nothing
-                    lstRegisters.Items.Add(objAccount.strType + ":" + objAccount.strTitle)
+                    lstRegisters.Items.Add(objAccount.AccountTypeLetter + ":" + objAccount.Title)
                 End With
-                If objAccount.colRegisters.Count > 1 Then
-                    For Each objReg In objAccount.colRegisters
+                If objAccount.Registers.Count > 1 Then
+                    For Each objReg In objAccount.Registers
                         mintElements = mintElements + 1
                         ReDim Preserve maudtElement(mintElements - 1)
                         With maudtElement(mintElements - 1)
@@ -360,7 +360,7 @@ Friend Class ShowRegisterForm
         Try
 
             blnRegisterSelected = Not (maudtElement(lstRegisters.SelectedIndex).objReg Is Nothing)
-            blnOneRegister = (maudtElement(lstRegisters.SelectedIndex).objAccount.colRegisters.Count = 1)
+            blnOneRegister = (maudtElement(lstRegisters.SelectedIndex).objAccount.Registers.Count = 1)
             cmdSetAccountProperties.Enabled = Not blnRegisterSelected
             cmdDeleteAccount.Enabled = Not blnRegisterSelected
             cmdShowRegister.Enabled = blnRegisterSelected Or blnOneRegister

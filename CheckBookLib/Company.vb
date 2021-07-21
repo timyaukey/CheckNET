@@ -154,7 +154,7 @@ Public Class Company
 
     Public Function IsAccountKeyUsed(ByVal intKey As Integer) As Boolean
         For Each act As Account In Accounts
-            If act.intKey = intKey Then
+            If act.Key = intKey Then
                 Return True
             End If
         Next
@@ -165,8 +165,8 @@ Public Class Company
         Dim datResult As DateTime = DateTime.MinValue
         For Each act As Account In Accounts
             act.SetLastReconciledDate()
-            If act.datLastReconciled > datResult Then
-                datResult = act.datLastReconciled
+            If act.LastReconciledDate > datResult Then
+                datResult = act.LastReconciledDate
             End If
         Next
         Return datResult
@@ -578,7 +578,7 @@ Public Class Company
     Public ReadOnly Property AnyCriticalOperationFailed() As Boolean
         Get
             For Each objAcct As Account In Accounts
-                For Each objReg In objAcct.colRegisters
+                For Each objReg In objAcct.Registers
                     objReg.CheckIfInCriticalOperation()
                     If objReg.blnCriticalOperationFailed Then
                         Return True

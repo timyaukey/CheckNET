@@ -51,7 +51,7 @@ Friend Class ReconcileForm
         Try
 
             LoadTrx()
-            txtEndingBalance.Text = GetSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.strTitle)
+            txtEndingBalance.Text = GetSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.Title)
 
             Exit Sub
         Catch ex As Exception
@@ -68,7 +68,7 @@ Friend Class ReconcileForm
         mlngTrxUsed = 0
         ReDim maudtTrx(mlngTrxAllocated)
 
-        For Each objReg As Register In mobjAccount.colRegisters
+        For Each objReg As Register In mobjAccount.Registers
             For Each objNormalTrx As BankTrx In objReg.colAllTrx(Of BankTrx)
                 With objNormalTrx
                     If Not .blnFake Then
@@ -233,7 +233,7 @@ Friend Class ReconcileForm
             End If
 
             SaveChanges(BaseTrx.TrxStatus.Reconciled)
-            SaveSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.strTitle, "")
+            SaveSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.Title, "")
 
             mobjHostUI.InfoMessageBox("Congratulations!" & vbCrLf & vbCrLf & "You have reconciled your account to the ending balance " & "on your bank statement. This means that the total of transactions marked as " & "reconciled in the software equals the bank statement ending balance.")
             Me.Close()
@@ -248,7 +248,7 @@ Friend Class ReconcileForm
         Try
 
             SaveChanges(BaseTrx.TrxStatus.Selected)
-            SaveSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.strTitle, txtEndingBalance.Text)
+            SaveSetting(gstrREG_APP, mstrREG_ENDING_BAL, mobjAccount.Title, txtEndingBalance.Text)
 
             mobjHostUI.InfoMessageBox("Your work has been saved. To resume this reconciliation, just " & "reconcile normally. The software will remember what you have already done.")
 
@@ -272,7 +272,7 @@ Friend Class ReconcileForm
                 End If
             End With
         Next
-        For Each objReg As Register In mobjAccount.colRegisters
+        For Each objReg As Register In mobjAccount.Registers
             objReg.FireManyTrxChanged()
         Next
 

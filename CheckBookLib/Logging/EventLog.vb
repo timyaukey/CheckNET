@@ -33,7 +33,7 @@ Public Class EventLog
         mdomOutput = Nothing
         mstrLogin = strLogin
         mobjReg = objReg
-        mobjCompany = mobjReg.objAccount.objCompany
+        mobjCompany = mobjReg.objAccount.Company
         mdatStart = Now
     End Sub
 

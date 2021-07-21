@@ -206,7 +206,7 @@ Public Class BankTrx
                     Return "(mixed)"
                 End If
             Next objSplit
-            Return mobjReg.objAccount.objCompany.Categories.strTranslateKey(strCategoryKey)
+            Return mobjReg.objAccount.Company.Categories.strTranslateKey(strCategoryKey)
         End Get
     End Property
 
@@ -398,7 +398,7 @@ Public Class BankTrx
 
     Public Sub CreateReplicaTrx(ByVal blnLoading As Boolean)
         If Not objReg.objAccount Is Nothing Then
-            Dim objCompany As Company = objReg.objAccount.objCompany
+            Dim objCompany As Company = objReg.objAccount.Company
             For Each objSplit As TrxSplit In mcolSplits
                 objSplit.CreateReplicaTrx(objCompany, Me, blnLoading)
             Next
@@ -590,8 +590,8 @@ Public Class BankTrx
     Public Overrides Sub Validate()
         Dim objSplit As TrxSplit
         Dim curTotal As Decimal
-        Dim objCategories As CategoryTranslator = mobjReg.objAccount.objCompany.Categories
-        Dim blnAccountIsPersonal As Boolean = (mobjReg.objAccount.lngType = Account.AccountType.Personal)
+        Dim objCategories As CategoryTranslator = mobjReg.objAccount.Company.Categories
+        Dim blnAccountIsPersonal As Boolean = (mobjReg.objAccount.AcctType = Account.AccountType.Personal)
         MyBase.Validate()
         If mcolSplits Is Nothing Then
             objReg.FireValidationError(Me, "Missing split collection")
@@ -616,7 +616,7 @@ Public Class BankTrx
                 Dim intDotOffset As Integer = objSplit.strCategoryKey.IndexOf("."c)
                 If intDotOffset > 0 Then
                     Dim intAccountKey As Integer = Integer.Parse(objSplit.strCategoryKey.Substring(0, intDotOffset))
-                    If intAccountKey = objReg.objAccount.intKey Then
+                    If intAccountKey = objReg.objAccount.Key Then
                         objReg.FireValidationError(Me, "Split category uses the same account")
                     End If
                 End If

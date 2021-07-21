@@ -7,9 +7,9 @@ Public NotInheritable Class IncomeExpenseScanner
         Dim objManager As CategoryGroupManager = New CategoryGroupManager(objCompany)
         Dim objCategories As CategoryTranslator = objCompany.Categories
         For Each objAccount In objCompany.Accounts
-            If objAccount.lngType <> Account.AccountType.Personal Then
-                If blnIncludeRetainedEarnings Or objAccount.lngSubType <> Account.SubType.Equity_RetainedEarnings Then
-                    For Each objReg As Register In objAccount.colRegisters
+            If objAccount.AcctType <> Account.AccountType.Personal Then
+                If blnIncludeRetainedEarnings Or objAccount.AcctSubType <> Account.SubType.Equity_RetainedEarnings Then
+                    For Each objReg As Register In objAccount.Registers
                         For Each objNormalTrx In objReg.colDateRange(Of BankTrx)(datStartDate, datEndDate)
                             If Not objNormalTrx.blnFake Then
                                 For Each objSplit As TrxSplit In objNormalTrx.colSplits

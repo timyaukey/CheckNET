@@ -25,7 +25,7 @@ Public Module TrxGenerator
         Dim objRepeatTrx As BaseTrx
 
         colReg = New List(Of Register)
-        For Each objReg2 In objAccount.colRegisters
+        For Each objReg2 In objAccount.Registers
             colReg.Add(objReg2)
         Next objReg2
 
@@ -33,7 +33,7 @@ Public Module TrxGenerator
         For Each objGenerator In colGenerators
             If objGenerator.blnEnabled Then
                 objAccount.RaiseLoadStatus("Generate " + objGenerator.strDescription)
-                objAccount.objRepeatSummarizer.Define(objGenerator.strRepeatKey, objGenerator.strDescription, True)
+                objAccount.RepeatSummarizer.Define(objGenerator.strRepeatKey, objGenerator.strDescription, True)
                 If objGenerator.intMaxDaysOld.HasValue Then
                     datOldestTrxDate = datCutoff.AddDays(-CDbl(objGenerator.intMaxDaysOld.Value))
                 Else

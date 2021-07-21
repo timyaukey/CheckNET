@@ -43,7 +43,7 @@ Public Class TrxGenRepeat
         End If
         mcurAmount = CDec(vntAttrib)
 
-        Return gstrGetTrxGenTemplate(objAccount.objCompany, domDoc, mstrRepeatKey, mcurAmount, mdatTrxTemplate)
+        Return gstrGetTrxGenTemplate(objAccount.Company, domDoc, mstrRepeatKey, mcurAmount, mdatTrxTemplate)
     End Function
 
     Public Overrides ReadOnly Property strDescription() As String

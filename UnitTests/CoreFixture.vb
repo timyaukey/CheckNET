@@ -847,7 +847,7 @@ Public Class CoreFixture
         objUTReg.AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1)
         objUTReg.Validate("", 1)
 
-        gUTAssert(Not objUTReg.objReg.objAccount.objCompany.AnyCriticalOperationFailed, "Unexpectedly said critical operation failed")
+        gUTAssert(Not objUTReg.objReg.objAccount.Company.AnyCriticalOperationFailed, "Unexpectedly said critical operation failed")
 
         objUTReg.AddNormal("1501", #6/1/2000#, -24.95D, "Second add", 2, 2, 2)
         objUTReg.Validate("", 1, 2)
@@ -861,7 +861,7 @@ Public Class CoreFixture
         objTrxManager = New NormalTrxManager(objUTReg.objReg.objNormalTrx(1))
         objTrxManager.UpdateStart()
 
-        gUTAssert(objUTReg.objReg.objAccount.objCompany.AnyCriticalOperationFailed, "Did not detect interrupted critical operation 2")
+        gUTAssert(objUTReg.objReg.objAccount.Company.AnyCriticalOperationFailed, "Did not detect interrupted critical operation 2")
 
 
     End Sub

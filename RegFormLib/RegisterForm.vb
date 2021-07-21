@@ -120,7 +120,7 @@ Public Class RegisterForm
             'a budget is applied.
             If objTrx.GetType() Is GetType(TransferTrx) Then
                 objXfer = New TransferManager
-                objOtherReg = mobjAccount.objFindReg(DirectCast(objTrx, TransferTrx).strTransferKey)
+                objOtherReg = mobjAccount.FindRegister(DirectCast(objTrx, TransferTrx).strTransferKey)
                 objXfer.DeleteTransfer(mobjReg, objTrx, objOtherReg)
             Else
                 objTrx.Delete(New LogDelete, "RegisterForm.Delete")

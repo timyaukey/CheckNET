@@ -110,7 +110,7 @@ Public Class Register
         mblnInCriticalOperation = False
         mblnCriticalOperationFailed = False
         mobjLog = New EventLog
-        mobjLog.Init(Me, mobjAccount.objCompany.SecData.strLogin)
+        mobjLog.Init(Me, mobjAccount.Company.SecData.strLogin)
 
     End Sub
 
@@ -526,7 +526,7 @@ Public Class Register
     Public Sub LoadFinish()
         Dim curBalance As Decimal = 0
         BeginCriticalOperation()
-        mdatOldestBudgetEndAllowed = mobjAccount.datLastReconciled.AddDays(1D)
+        mdatOldestBudgetEndAllowed = mobjAccount.LastReconciledDate.AddDays(1D)
         For Each objTrx As BaseTrx In colAllTrx(Of BaseTrx)()
             If TypeOf (objTrx) Is BudgetTrx Then
                 DirectCast(objTrx, BudgetTrx).SetAmountForBudget()
@@ -1107,7 +1107,7 @@ Public Class Register
 
     Public ReadOnly Property strCatKey() As String
         Get
-            Return objAccount.intKey.ToString() + "." + strRegisterKey
+            Return objAccount.Key.ToString() + "." + strRegisterKey
         End Get
     End Property
 

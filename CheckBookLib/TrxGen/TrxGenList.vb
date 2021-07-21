@@ -49,7 +49,7 @@ Public Class TrxGenList
                     If strMsg <> "" Then
                         Return strMsg
                     End If
-                    strMsg = gstrGetTrxGenTemplateNormal(objAccount.objCompany, elmTrx, mstrRepeatKey, curAmount, udtTrx)
+                    strMsg = gstrGetTrxGenTemplateNormal(objAccount.Company, elmTrx, mstrRepeatKey, curAmount, udtTrx)
                     If strMsg <> "" Then
                         Return strMsg
                     End If

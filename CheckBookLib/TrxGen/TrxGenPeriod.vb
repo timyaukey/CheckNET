@@ -112,7 +112,7 @@ Public Class TrxGenPeriod
             Return strError
         End If
 
-        Return gstrGetTrxGenTemplate(objAccount.objCompany, domDoc, mstrRepeatKey, 0, mdatTrxTemplate)
+        Return gstrGetTrxGenTemplate(objAccount.Company, domDoc, mstrRepeatKey, 0, mdatTrxTemplate)
     End Function
 
     Private Function dblGetWeight(ByVal elmDOWUsage As VB6XmlElement, ByVal strName As String, ByRef strError As String, ByRef dblTotalDOWUsage As Double) As Double

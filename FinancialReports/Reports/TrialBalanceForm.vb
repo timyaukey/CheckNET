@@ -255,8 +255,8 @@ Public Class TrialBalanceForm
             End If
             'Find a Retained Earnings register to add BankTrx to.
             For Each objAccount As Account In mobjCompany.Accounts
-                If objAccount.lngSubType = Account.SubType.Equity_RetainedEarnings Then
-                    objRegister = objAccount.colRegisters(0)
+                If objAccount.AcctSubType = Account.SubType.Equity_RetainedEarnings Then
+                    objRegister = objAccount.Registers(0)
                     Exit For
                 End If
             Next

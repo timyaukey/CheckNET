@@ -46,7 +46,7 @@ Public Class SearchMoveTool
         End If
 
         frmMoveTo = New MoveDstForm
-        If Not frmMoveTo.blnShowModal(mobjHostUI, objHostSearchToolUI.objReg.objAccount.colRegisters,
+        If Not frmMoveTo.blnShowModal(mobjHostUI, objHostSearchToolUI.objReg.objAccount.Registers,
                                       objHostSearchToolUI.objReg, strNewDate, objNewReg) Then
             Exit Sub
         End If

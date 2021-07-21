@@ -21,7 +21,7 @@ namespace Willowsoft.CheckBook.Powershell
             Account acctMatch = null;
             foreach(Account acctTest in Company.Accounts)
             {
-                if (acctTest.strTitle.Equals(AccountName, StringComparison.InvariantCultureIgnoreCase))
+                if (acctTest.Title.Equals(AccountName, StringComparison.InvariantCultureIgnoreCase))
                 {
                     if (acctMatch == null)
                         acctMatch = acctTest;

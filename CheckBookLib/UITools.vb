@@ -43,7 +43,7 @@ Public Class UITools
         With lst
             .Items.Clear()
             For Each objAccount In objCompany.Accounts
-                .Items.Add(objAccount.strTitle)
+                .Items.Add(objAccount.Title)
             Next objAccount
         End With
     End Sub

@@ -101,7 +101,7 @@ Friend Class CBMainForm
             End If
 
             For Each objAccount In mobjCompany.Accounts
-                For Each objReg In objAccount.colRegisters
+                For Each objReg In objAccount.Registers
                     If objReg.blnShowInitially Then
                         ShowRegister(objReg)
                     End If

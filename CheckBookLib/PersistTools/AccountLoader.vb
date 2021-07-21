@@ -19,7 +19,7 @@ Public Class AccountLoader
 
     Public Sub New(ByVal objAccount As Account)
         mobjAccount = objAccount
-        mobjCompany = mobjAccount.objCompany
+        mobjCompany = mobjAccount.Company
     End Sub
 
     Public ReadOnly Property objAccount As Account
@@ -35,7 +35,7 @@ Public Class AccountLoader
     Public Sub LoadStart(ByVal strAcctFile As String)
 
         mobjAccount.RaiseLoadStatus("Loading " & strAcctFile)
-        mobjAccount.strFileNameRoot = strAcctFile
+        mobjAccount.FileNameRoot = strAcctFile
         LoadIndividual()
         'LoadGenerated()
     End Sub
@@ -49,7 +49,7 @@ Public Class AccountLoader
         Dim blnAccountPropertiesValidated As Boolean
 
         Try
-            mobjLoadFile = New StreamReader(mobjCompany.AccountsFolderPath() & "\" & mobjAccount.strFileNameRoot)
+            mobjLoadFile = New StreamReader(mobjCompany.AccountsFolderPath() & "\" & mobjAccount.FileNameRoot)
 
             strLine = mobjLoadFile.ReadLine()
             lngLinesRead = lngLinesRead + 1
@@ -68,17 +68,17 @@ Public Class AccountLoader
                 lngLinesRead = lngLinesRead + 1
                 Select Case Left(strLine, 2)
                     Case "AT"
-                        mobjAccount.strTitle = Mid(strLine, 3)
+                        mobjAccount.Title = Mid(strLine, 3)
                     Case "AK"
                         Dim intNewKey As Integer = CInt(Mid(strLine, 3))
                         If mobjCompany.IsAccountKeyUsed(intNewKey) Then
                             Throw New Exception("Duplicate use of account key " & intNewKey)
                         End If
-                        mobjAccount.intKey = intNewKey
-                        mobjCompany.UseAccountKey(mobjAccount.intKey)
+                        mobjAccount.Key = intNewKey
+                        mobjCompany.UseAccountKey(mobjAccount.Key)
                     Case "AY"
                         Dim objSubTypeMatched As Account.SubTypeDef = Nothing
-                        For Each objSubType In Account.arrSubTypeDefs
+                        For Each objSubType In Account.SubTypeDefs
                             If objSubType.strSaveCode = Mid(strLine, 3) Then
                                 objSubTypeMatched = objSubType
                             End If
@@ -86,8 +86,8 @@ Public Class AccountLoader
                         If objSubTypeMatched Is Nothing Then
                             Throw New Exception("Unrecognized account subtype")
                         End If
-                        mobjAccount.lngType = objSubTypeMatched.lngType
-                        mobjAccount.lngSubType = objSubTypeMatched.lngSubType
+                        mobjAccount.AcctType = objSubTypeMatched.lngType
+                        mobjAccount.AcctSubType = objSubTypeMatched.lngSubType
                     Case "AR"
                         Select Case Mid(strLine, 3, 1)
                             Case "1"
@@ -104,10 +104,10 @@ Public Class AccountLoader
                     Case "RK"
                         If Not blnAccountPropertiesValidated Then
                             'The lines that set these properties come before the first "RK" line.
-                            If mobjAccount.intKey = 0 Then
+                            If mobjAccount.Key = 0 Then
                                 Throw New Exception("Account key not specified")
                             End If
-                            If mobjAccount.lngType = Account.AccountType.Unspecified Then
+                            If mobjAccount.AcctType = Account.AccountType.Unspecified Then
                                 Throw New Exception("Account type not specified")
                             End If
                             blnAccountPropertiesValidated = True
@@ -141,7 +141,7 @@ Public Class AccountLoader
                 End Select
             Loop
         Catch ex As Exception
-            Throw New Exception("Error in Account.LoadIndividual(" & mobjAccount.strFileNameRoot & ";" & lngLinesRead & ")", ex)
+            Throw New Exception("Error in Account.LoadIndividual(" & mobjAccount.FileNameRoot & ";" & lngLinesRead & ")", ex)
         Finally
             mobjLoadFile.Close()
             mobjLoadFile = Nothing
@@ -165,50 +165,50 @@ Public Class AccountLoader
             'Have to generate for all registers before computing
             'balances or doing any post processing for any of them,
             'because generating a transfer adds BaseTrx to two registers.
-            mobjAccount.RaiseLoadStatus("Generate for " + mobjAccount.strTitle)
-            For Each objReg In mobjAccount.colRegisters
+            mobjAccount.RaiseLoadStatus("Generate for " + mobjAccount.Title)
+            For Each objReg In mobjAccount.Registers
                 gCreateGeneratedTrx(mobjAccount, objReg, datRegisterEndDate, datCutoff)
             Next objReg
         Catch ex As Exception
-            Throw New Exception("Error in Account.LoadGenerated(" & mobjAccount.strFileNameRoot & ")", ex)
+            Throw New Exception("Error in Account.LoadGenerated(" & mobjAccount.FileNameRoot & ")", ex)
         End Try
     End Sub
 
     Public Sub LoadApply()
         Try
-            mobjAccount.RaiseLoadStatus("Apply for " + mobjAccount.strTitle)
-            For Each objReg As Register In mobjAccount.colRegisters
+            mobjAccount.RaiseLoadStatus("Apply for " + mobjAccount.Title)
+            For Each objReg As Register In mobjAccount.Registers
                 objReg.LoadApply()
             Next
 
             Exit Sub
         Catch ex As Exception
-            Throw New Exception("Error in Account.LoadApply(" & mobjAccount.strFileNameRoot & ")", ex)
+            Throw New Exception("Error in Account.LoadApply(" & mobjAccount.FileNameRoot & ")", ex)
         End Try
     End Sub
 
     Public Sub LoadFinish()
         Try
             'This has to happen after all Account objects are loaded, not when the "AR" lines are read.
-            mobjAccount.objRelatedAcct1 = objLoadResolveRelatedAccount(mintRelatedKey1)
-            mobjAccount.objRelatedAcct2 = objLoadResolveRelatedAccount(mintRelatedKey2)
-            mobjAccount.objRelatedAcct3 = objLoadResolveRelatedAccount(mintRelatedKey3)
-            mobjAccount.objRelatedAcct4 = objLoadResolveRelatedAccount(mintRelatedKey4)
+            mobjAccount.RelatedAcct1 = objLoadResolveRelatedAccount(mintRelatedKey1)
+            mobjAccount.RelatedAcct2 = objLoadResolveRelatedAccount(mintRelatedKey2)
+            mobjAccount.RelatedAcct3 = objLoadResolveRelatedAccount(mintRelatedKey3)
+            mobjAccount.RelatedAcct4 = objLoadResolveRelatedAccount(mintRelatedKey4)
 
             'Construct repeat key StringTranslator from actual transaction
             'data and info in .GEN files.
             mobjAccount.BuildRepeatList()
 
             'Call LoadPostProcessing after everything has been loaded.
-            mobjAccount.RaiseLoadStatus("Finish " + mobjAccount.strTitle)
-            For Each objReg As Register In mobjAccount.colRegisters
+            mobjAccount.RaiseLoadStatus("Finish " + mobjAccount.Title)
+            For Each objReg As Register In mobjAccount.Registers
                 objReg.LoadFinish()
             Next
-            mobjAccount.blnUnsavedChanges = False
+            mobjAccount.HasUnsavedChanges = False
 
             Exit Sub
         Catch ex As Exception
-            Throw New Exception("Error in Account.LoadFinish(" & mobjAccount.strFileNameRoot & ")", ex)
+            Throw New Exception("Error in Account.LoadFinish(" & mobjAccount.FileNameRoot & ")", ex)
         End Try
     End Sub
 
@@ -217,7 +217,7 @@ Public Class AccountLoader
             Return Nothing
         End If
         For Each objAccount As Account In mobjCompany.Accounts
-            If objAccount.intKey = intRelatedKey Then
+            If objAccount.Key = intRelatedKey Then
                 Return objAccount
             End If
         Next
@@ -231,7 +231,7 @@ Public Class AccountLoader
         Dim objReg As Register
 
         'Purge generated BaseTrx and clear all budget allocations for each register.
-        For Each objReg In mobjAccount.colRegisters
+        For Each objReg In mobjAccount.Registers
             objReg.PurgeGenerated()
         Next objReg
 
@@ -242,7 +242,7 @@ Public Class AccountLoader
         'This only takes 5 to 10 percent of the total time spent
         'in this routine. The rest is divided fairly evenly between
         'LoadPostProcessing() and FireRedisplayTrx().
-        For Each objReg In mobjAccount.colRegisters
+        For Each objReg In mobjAccount.Registers
             gCreateGeneratedTrx(mobjAccount, objReg, datRegisterEndDate, datCutoff)
         Next objReg
 
@@ -250,7 +250,7 @@ Public Class AccountLoader
         mobjAccount.BuildRepeatList()
 
         'Compute budgets and balances.
-        For Each objReg In mobjAccount.colRegisters
+        For Each objReg In mobjAccount.Registers
             objReg.LoadApply()
         Next objReg
 
@@ -262,12 +262,12 @@ Public Class AccountLoader
         Dim objReg As Register
 
         strSearchRegKey = Mid(strLine, 3)
-        objReg = mobjAccount.objFindReg(strSearchRegKey)
+        objReg = mobjAccount.FindRegister(strSearchRegKey)
         If objReg Is Nothing Then
             gRaiseError("Register key " & strSearchRegKey & " not found in " & Left(strLine, 2) & " line")
         Else
             mobjLoader = New RegisterLoader
-            mobjLoader.LoadFile(mobjLoadFile, objReg, mobjAccount.objRepeatSummarizer, blnFake, lngLinesRead)
+            mobjLoader.LoadFile(mobjLoadFile, objReg, mobjAccount.RepeatSummarizer, blnFake, lngLinesRead)
             mobjLoader = Nothing
         End If
     End Sub
@@ -283,7 +283,7 @@ Public Class AccountLoader
     End Sub
 
     Private Sub mobjLoader_FindRegister(ByVal strRegisterKey As String, ByRef objReg As Register) Handles mobjLoader.FindRegister
-        objReg = mobjAccount.objFindReg(strRegisterKey)
+        objReg = mobjAccount.FindRegister(strRegisterKey)
     End Sub
 
 End Class

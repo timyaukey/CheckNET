@@ -52,7 +52,7 @@ Public Class UTRegister
         mobjReg = New Register
         mobjReg.Init(mobjAccount, "title", strRegisterKey, False, 3)
         mobjReg.datOldestBudgetEndAllowed = DateTime.Parse("1/1/1980")
-        mobjAccount.colRegisters.Add(mobjReg)
+        mobjAccount.Registers.Add(mobjReg)
     End Sub
 
     'The Register managed by this UTRegister.

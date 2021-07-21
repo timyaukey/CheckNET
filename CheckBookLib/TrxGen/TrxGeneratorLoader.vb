@@ -102,7 +102,7 @@ Public Module TrxGeneratorLoader
     '   register in specified account.
 
     Public Function gstrGeneratorPath(ByVal objAccount As Account, ByVal objReg As Register) As String
-        gstrGeneratorPath = objAccount.objCompany.AccountsFolderPath() & "\" & objAccount.strFileNameRoot & ".gen\" & objReg.strRegisterKey
+        gstrGeneratorPath = objAccount.Company.AccountsFolderPath() & "\" & objAccount.FileNameRoot & ".gen\" & objReg.strRegisterKey
     End Function
 
     '$Description Report an error detected while loading a transaction generator file.
@@ -193,7 +193,7 @@ Public Module TrxGeneratorLoader
             Exit Function
         End If
         strRepeatKey = CStr(vntAttrib)
-        'If objAccount.objRepeats.intLookupKey(strRepeatKey) = 0 Then
+        'If objAccount.Repeats.intLookupKey(strRepeatKey) = 0 Then
         '    gstrLoadTrxGeneratorCore = "Invalid [repeatkey] attribute"
         '    Exit Function
         'End If
