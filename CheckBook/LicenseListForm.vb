@@ -12,11 +12,11 @@ Public Class LicenseListForm
 
     Private Sub ShowLicenses()
         lvwLicenses.Items.Clear()
-        ShowLicense(Company.objMainLicense)
-        For Each objLicense As Willowsoft.TamperProofData.IStandardLicense In Company.colExtraLicenses
+        ShowLicense(Company.MainLicense)
+        For Each objLicense As Willowsoft.TamperProofData.IStandardLicense In Company.ExtraLicenses
             ShowLicense(objLicense)
         Next
-        If Company.blnAnyNonActiveLicenses Then
+        If Company.AnyNonActiveLicenses Then
             lblLicenseStatus.Text = "WARNING: One or more licenses / registrations are missing, expired, or invalid for some other reason."
             lblLicenseStatus.Visible = True
         Else

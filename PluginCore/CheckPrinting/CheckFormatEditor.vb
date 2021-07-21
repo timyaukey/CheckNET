@@ -17,7 +17,7 @@ Public Class CheckFormatEditor
     Private Sub CheckFormatEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
             Dim ser As XmlSerializer = New XmlSerializer(GetType(CheckFormat))
-            Using inputStream As System.IO.FileStream = New IO.FileStream(mobjCompany.strCheckFormatPath(), IO.FileMode.Open)
+            Using inputStream As System.IO.FileStream = New IO.FileStream(mobjCompany.CheckFormatFilePath(), IO.FileMode.Open)
                 mobjFormat = DirectCast(ser.Deserialize(inputStream), CheckFormat)
                 prpDetails.SelectedObject = mobjFormat
             End Using
@@ -36,7 +36,7 @@ Public Class CheckFormatEditor
     Private Sub cmdOkay_Click(sender As Object, e As EventArgs) Handles cmdOkay.Click
         Try
             Dim ser As XmlSerializer = New XmlSerializer(GetType(CheckFormat))
-            Using outputStream As System.IO.FileStream = New IO.FileStream(mobjCompany.strCheckFormatPath(), IO.FileMode.Create)
+            Using outputStream As System.IO.FileStream = New IO.FileStream(mobjCompany.CheckFormatFilePath(), IO.FileMode.Create)
                 ser.Serialize(outputStream, prpDetails.SelectedObject)
                 Me.Close()
             End Using

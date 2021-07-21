@@ -22,7 +22,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
             setup.objReportMenu.Add(new MenuElementAction("Budget Dashboard", 300, ClickHandler, GetPluginPath()));
             setup.objHelpMenu.Add(new MenuElementAction("Budget Dashboard", 220, HelpHandler, GetPluginPath()));
             Willowsoft.TamperProofData.IStandardLicense license = new BudgetDashboardLicense();
-            license.Load(Company.strLicenseFolder());
+            license.Load(Company.LicenseFolderPath());
             setup.AddExtraLicense(license);
         }
 

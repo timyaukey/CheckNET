@@ -55,7 +55,7 @@ Public Class CategoryUIEditor
     Inherits StringTranslatorUIEditor
 
     Protected Overrides Function GetStringTranslator() As IStringTranslator
-        Return objCompany.objCategories
+        Return objCompany.Categories
     End Function
 End Class
 
@@ -63,7 +63,7 @@ Public Class BudgetUIEditor
     Inherits StringTranslatorUIEditor
 
     Protected Overrides Function GetStringTranslator() As IStringTranslator
-        Return objCompany.objBudgets
+        Return objCompany.Budgets
     End Function
 End Class
 
@@ -94,7 +94,7 @@ Public Class CategoryConverter
 
     Public Overrides Function ConvertTo(context As ITypeDescriptorContext, culture As Globalization.CultureInfo, value As Object, destinationType As Type) As Object
         If destinationType Is GetType(String) And TypeOf value Is String Then
-            Return StringTranslatorUIEditor.objCompany.objCategories.strKeyToValue1(CType(value, String))
+            Return StringTranslatorUIEditor.objCompany.Categories.strKeyToValue1(CType(value, String))
         End If
 
         Return MyBase.ConvertTo(context, culture, value, destinationType)
@@ -113,7 +113,7 @@ Public Class BudgetConverter
 
     Public Overrides Function ConvertTo(context As ITypeDescriptorContext, culture As Globalization.CultureInfo, value As Object, destinationType As Type) As Object
         If destinationType Is GetType(String) And TypeOf value Is String Then
-            Return StringTranslatorUIEditor.objCompany.objBudgets.strKeyToValue1(CType(value, String))
+            Return StringTranslatorUIEditor.objCompany.Budgets.strKeyToValue1(CType(value, String))
         End If
 
         Return MyBase.ConvertTo(context, culture, value, destinationType)

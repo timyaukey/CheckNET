@@ -5,8 +5,8 @@ Public NotInheritable Class IncomeExpenseScanner
     Public Shared Function objRun(ByVal objCompany As Company, ByVal datStartDate As DateTime,
                                   ByVal datEndDate As DateTime, ByVal blnIncludeRetainedEarnings As Boolean) As CategoryGroupManager
         Dim objManager As CategoryGroupManager = New CategoryGroupManager(objCompany)
-        Dim objCategories As CategoryTranslator = objCompany.objCategories
-        For Each objAccount In objCompany.colAccounts
+        Dim objCategories As CategoryTranslator = objCompany.Categories
+        For Each objAccount In objCompany.Accounts
             If objAccount.lngType <> Account.AccountType.Personal Then
                 If blnIncludeRetainedEarnings Or objAccount.lngSubType <> Account.SubType.Equity_RetainedEarnings Then
                     For Each objReg As Register In objAccount.colRegisters

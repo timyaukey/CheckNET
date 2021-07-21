@@ -49,7 +49,7 @@ Public Class AccountLoader
         Dim blnAccountPropertiesValidated As Boolean
 
         Try
-            mobjLoadFile = New StreamReader(mobjCompany.strAccountPath() & "\" & mobjAccount.strFileNameRoot)
+            mobjLoadFile = New StreamReader(mobjCompany.AccountsFolderPath() & "\" & mobjAccount.strFileNameRoot)
 
             strLine = mobjLoadFile.ReadLine()
             lngLinesRead = lngLinesRead + 1
@@ -71,7 +71,7 @@ Public Class AccountLoader
                         mobjAccount.strTitle = Mid(strLine, 3)
                     Case "AK"
                         Dim intNewKey As Integer = CInt(Mid(strLine, 3))
-                        If mobjCompany.blnAccountKeyUsed(intNewKey) Then
+                        If mobjCompany.IsAccountKeyUsed(intNewKey) Then
                             Throw New Exception("Duplicate use of account key " & intNewKey)
                         End If
                         mobjAccount.intKey = intNewKey
@@ -216,7 +216,7 @@ Public Class AccountLoader
         If intRelatedKey = 0 Then
             Return Nothing
         End If
-        For Each objAccount As Account In mobjCompany.colAccounts
+        For Each objAccount As Account In mobjCompany.Accounts
             If objAccount.intKey = intRelatedKey Then
                 Return objAccount
             End If

@@ -15,8 +15,8 @@ Friend Class ChangeCategoryForm
 
         mobjHostUI = objHostUI
         mobjCompany = mobjHostUI.objCompany
-        UITools.LoadComboFromStringTranslator(cboOldCategory, mobjCompany.objCategories, True)
-        UITools.LoadComboFromStringTranslator(cboNewCategory, mobjCompany.objCategories, True)
+        UITools.LoadComboFromStringTranslator(cboOldCategory, mobjCompany.Categories, True)
+        UITools.LoadComboFromStringTranslator(cboNewCategory, mobjCompany.Categories, True)
         mblnSuccess = False
         ShowDialog()
         strOldCatKey = mstrOldCatKey
@@ -47,10 +47,10 @@ Friend Class ChangeCategoryForm
         End If
 
         lngItemData = UITools.GetItemData(cboOldCategory, cboOldCategory.SelectedIndex)
-        mstrOldCatKey = mobjCompany.objCategories.strKey(lngItemData)
+        mstrOldCatKey = mobjCompany.Categories.strKey(lngItemData)
 
         lngItemData = UITools.GetItemData(cboNewCategory, cboNewCategory.SelectedIndex)
-        mstrNewCatKey = mobjCompany.objCategories.strKey(lngItemData)
+        mstrNewCatKey = mobjCompany.Categories.strKey(lngItemData)
 
         mblnSuccess = True
 		Me.Close()

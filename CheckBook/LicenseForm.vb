@@ -92,7 +92,7 @@ Public Class LicenseForm
                 Return
             End If
             System.IO.File.Copy(dlgOpenLicenseFile.FileName, strLicenseFilePath(), True)
-            mobjLicense.Load(Company.strLicenseFolder())
+            mobjLicense.Load(Company.LicenseFolderPath())
             SetControlValues()
             If mobjLicense.Status = TamperProofData.LicenseStatus.Active Then
                 mobjHostUI.InfoMessageBox("License file successfully installed.")
@@ -113,7 +113,7 @@ Public Class LicenseForm
         Try
             If mobjHostUI.OkCancelMessageBox("Are you sure you want to remove this license?") = DialogResult.OK Then
                 System.IO.File.Delete(strLicenseFilePath())
-                mobjLicense.Load(Company.strLicenseFolder())
+                mobjLicense.Load(Company.LicenseFolderPath())
                 SetControlValues()
                 mobjHostUI.InfoMessageBox("License removed.")
             End If
@@ -123,7 +123,7 @@ Public Class LicenseForm
     End Sub
 
     Private Function strLicenseFilePath() As String
-        Return System.IO.Path.Combine(Company.strLicenseFolder(), mobjLicense.BaseFileName)
+        Return System.IO.Path.Combine(Company.LicenseFolderPath(), mobjLicense.BaseFileName)
     End Function
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click

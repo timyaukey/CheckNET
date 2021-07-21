@@ -206,7 +206,7 @@ Public Class BankTrx
                     Return "(mixed)"
                 End If
             Next objSplit
-            Return mobjReg.objAccount.objCompany.objCategories.strTranslateKey(strCategoryKey)
+            Return mobjReg.objAccount.objCompany.Categories.strTranslateKey(strCategoryKey)
         End Get
     End Property
 
@@ -315,7 +315,7 @@ Public Class BankTrx
         blnFirstSplit = True
         curAvailable = 0
         For Each objSplit In Me.colSplits
-            If objSplit.strBudgetKey = objCompany.strPlaceholderBudgetKey Then
+            If objSplit.strBudgetKey = objCompany.PlaceholderBudgetKey Then
                 curAvailable = curAvailable + objSplit.curAmount
             End If
             If blnFirstSplit Then
@@ -328,7 +328,7 @@ Public Class BankTrx
                 strTerms2 = objSplit.strTerms
                 strBudgetKey = objSplit.strBudgetKey
                 'Format fields from the first split.
-                strCategory = objCompany.objCategories.strTranslateKey(strCatKey)
+                strCategory = objCompany.Categories.strTranslateKey(strCatKey)
                 strInvoiceNum = strInvoiceNum2
                 strPONumber = strPONumber2
                 If datInvoiceDate = Utilities.datEmpty Then
@@ -342,7 +342,7 @@ Public Class BankTrx
                     strDueDate = Utilities.strFormatDate(datDueDate)
                 End If
                 strTerms = strTerms2
-                strBudget = objCompany.objBudgets.strTranslateKey(strBudgetKey)
+                strBudget = objCompany.Budgets.strTranslateKey(strBudgetKey)
                 blnFirstSplit = False
             Else
                 If strCatKey <> objSplit.strCategoryKey Then
@@ -590,7 +590,7 @@ Public Class BankTrx
     Public Overrides Sub Validate()
         Dim objSplit As TrxSplit
         Dim curTotal As Decimal
-        Dim objCategories As CategoryTranslator = mobjReg.objAccount.objCompany.objCategories
+        Dim objCategories As CategoryTranslator = mobjReg.objAccount.objCompany.Categories
         Dim blnAccountIsPersonal As Boolean = (mobjReg.objAccount.lngType = Account.AccountType.Personal)
         MyBase.Validate()
         If mcolSplits Is Nothing Then

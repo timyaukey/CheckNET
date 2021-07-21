@@ -27,8 +27,8 @@ Public Class CompanyLoader
     ''' if the user successfully authenticates, or no authentication is required
     ''' for the Company. Otherwise returns an object subclassing CompanyLoadError, 
     ''' whose type indicates the specific problem encountered.
-    ''' Uses objCompany.objSecurity.blnNoFile to determine if authentication is 
-    ''' required, and objCompany.objSecurity.blnAuthenticate() to authenticate 
+    ''' Uses objCompany.SecData.blnNoFile to determine if authentication is 
+    ''' required, and objCompany.SecData.blnAuthenticate() to authenticate 
     ''' user name and password if that is required.
     ''' </param>
     ''' <returns></returns>
@@ -36,19 +36,19 @@ Public Class CompanyLoader
         ByVal showAccount As Action(Of Account),
         ByVal authenticator As Func(Of Company, CompanyLoadError)) As CompanyLoadError
 
-        If Not Company.blnDataPathIsValid(objCompany.strDataPath()) Then
+        If Not Company.IsDataPathValid(objCompany.DataFolderPath()) Then
             Return New CompanyLoadNotFound()
         End If
-        objCompany.objSecurity.Load()
+        objCompany.SecData.Load()
         Dim objAuthenticatorError As CompanyLoadError = authenticator(objCompany)
         If Not objAuthenticatorError Is Nothing Then
             Return objAuthenticatorError
         End If
-        If Not objCompany.blnTryLockCompany() Then
+        If Not objCompany.TryLockCompany() Then
             Return New CompanyLoadInUse()
         End If
         LoadGlobalLists(objCompany)
-        objCompany.LoadTransTable()
+        objCompany.LoadMemorizedTrans()
         LoadAccountFiles(objCompany, showAccount)
         Return Nothing
     End Function
@@ -56,8 +56,8 @@ Public Class CompanyLoader
     Public Shared Sub LoadGlobalLists(ByVal objCompany As Company)
         Try
 
-            objCompany.objBudgets.LoadFile(objCompany.strBudgetPath())
-            objCompany.objIncExpAccounts.LoadFile(objCompany.strCategoryPath())
+            objCompany.Budgets.LoadFile(objCompany.BudgetFilePath())
+            objCompany.IncExpAccounts.LoadFile(objCompany.CategoryFilePath())
             LoadCategories(objCompany)  'Will not include asset, liability and equity accounts, but that's okay at this point.
             FindPlaceholderBudget(objCompany)
 
@@ -69,9 +69,9 @@ Public Class CompanyLoader
 
     Public Shared Sub LoadCategories(ByVal objCompany As Company)
         Dim intIndex As Integer
-        objCompany.objCategories.Init()
-        For intIndex = 1 To objCompany.objIncExpAccounts.intElements
-            objCompany.objCategories.Add(objCompany.objIncExpAccounts.objElement(intIndex))
+        objCompany.Categories.Init()
+        For intIndex = 1 To objCompany.IncExpAccounts.intElements
+            objCompany.Categories.Add(objCompany.IncExpAccounts.objElement(intIndex))
         Next
         AddAccountTypeToCategories(objCompany, Account.AccountType.Asset)
         AddAccountTypeToCategories(objCompany, Account.AccountType.Liability)
@@ -83,18 +83,18 @@ Public Class CompanyLoader
         Dim objCats As List(Of StringTransElement) = New List(Of StringTransElement)
         Dim elm As StringTransElement
         Dim strPrefix As String = Account.strTypeToLetter(lngType)
-        For Each objAccount As Account In objCompany.colAccounts
+        For Each objAccount As Account In objCompany.Accounts
             If objAccount.lngType = lngType Then
                 For Each objReg As Register In objAccount.colRegisters
                     Dim strKey As String = objReg.strCatKey
-                    elm = New StringTransElement(objCompany.objCategories, strKey, strPrefix + ":" + objReg.strTitle, " " + objReg.strTitle)
+                    elm = New StringTransElement(objCompany.Categories, strKey, strPrefix + ":" + objReg.strTitle, " " + objReg.strTitle)
                     objCats.Add(elm)
                 Next
             End If
         Next
         objCats.Sort(AddressOf intCategoryComparer)
         For Each elm In objCats
-            objCompany.objCategories.Add(elm)
+            objCompany.Categories.Add(elm)
         Next
     End Sub
 
@@ -106,13 +106,13 @@ Public Class CompanyLoader
     'is "(budget)", or set it to "---" if there is no such budget.
     Public Shared Sub FindPlaceholderBudget(ByVal objCompany As Company)
         Dim intPlaceholderIndex As Integer
-        intPlaceholderIndex = objCompany.objBudgets.intLookupValue1("(placeholder)")
+        intPlaceholderIndex = objCompany.Budgets.intLookupValue1("(placeholder)")
         If intPlaceholderIndex > 0 Then
-            objCompany.strPlaceholderBudgetKey = objCompany.objBudgets.strKey(intPlaceholderIndex)
+            objCompany.PlaceholderBudgetKey = objCompany.Budgets.strKey(intPlaceholderIndex)
         Else
             'Don't use empty string, because that's the key used
             'if a split doesn't use a budget.
-            objCompany.strPlaceholderBudgetKey = "---"
+            objCompany.PlaceholderBudgetKey = "---"
         End If
     End Sub
 
@@ -121,7 +121,7 @@ Public Class CompanyLoader
         Dim colLoaders As List(Of AccountLoader) = New List(Of AccountLoader)
         Try
             'Find all ".act" files.
-            Dim strFile As String = Dir(objCompany.strAccountPath() & "\*.act")
+            Dim strFile As String = Dir(objCompany.AccountsFolderPath() & "\*.act")
             Dim intFiles As Integer = 0
             Dim datCutoff As Date
             Dim astrFiles() As String = Nothing
@@ -141,14 +141,14 @@ Public Class CompanyLoader
                 colLoaders.Add(objLoader)
                 showAccount(objAccount)
                 objLoader.LoadStart(strFile)
-                objCompany.colAccounts.Add(objAccount)
+                objCompany.Accounts.Add(objAccount)
                 showAccount(Nothing)
             Next strFile
 
-            objCompany.colAccounts.Sort(AddressOf AccountComparer)
+            objCompany.Accounts.Sort(AddressOf AccountComparer)
 
             'With all Account objects loaded we can add them to the category list.
-            datCutoff = objCompany.datLastReconciled().AddDays(1D)
+            datCutoff = objCompany.LastReconciledDate().AddDays(1D)
             LoadCategories(objCompany)
 
             'Load generated transactions for all of them.
@@ -200,7 +200,7 @@ Public Class CompanyLoader
         Dim objAccount As Account
         Dim objReg As Register
 
-        For Each objAccount In objCompany.colAccounts
+        For Each objAccount In objCompany.Accounts
             For Each objReg In objAccount.colRegisters
                 'Allow UI to hide all register windows for all accounts before
                 'we start any of them, because regenerating can cause ReplicaTrx
@@ -211,11 +211,11 @@ Public Class CompanyLoader
         'Need to do all accounts, not just the selected account, because there may be many, many
         'accounts and even there are only a few each one can create trx in others through
         'balance sheet categories in trx.
-        For Each objAccount In objCompany.colAccounts
+        For Each objAccount In objCompany.Accounts
             Dim objLoader As AccountLoader = New AccountLoader(objAccount)
             objLoader.RecreateGeneratedTrx(datRegisterEndDate, datCutoff)
         Next
-        For Each objAccount In objCompany.colAccounts
+        For Each objAccount In objCompany.Accounts
             'Tell all register windows to refresh themselves.
             For Each objReg In objAccount.colRegisters
                 'Recompute the running balances, because replica trx can be added anywhere.

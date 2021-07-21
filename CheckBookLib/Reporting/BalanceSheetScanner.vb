@@ -4,7 +4,7 @@ Option Explicit On
 Public NotInheritable Class BalanceSheetScanner
     Public Shared Function objRun(ByVal objCompany As Company, ByVal datEndDate As DateTime) As AccountGroupManager
         Dim objManager As AccountGroupManager = New AccountGroupManager(objCompany)
-        For Each objAccount In objCompany.colAccounts
+        For Each objAccount In objCompany.Accounts
             If objAccount.lngType <> Account.AccountType.Personal Then
                 Dim objGroup As LineItemGroup = objManager.objGetGroup(objAccount.lngSubType.ToString())
                 Dim objLine As ReportLineItem = objGroup.objGetItem(objManager, objAccount.intKey.ToString())

@@ -9,11 +9,11 @@ Public Class CategoryGroupManager
     End Sub
 
     Public Overrides Function objMakeLineItem(ByVal objParent As LineItemGroup, strItemKey As String) As ReportLineItem
-        Dim intIndex As Integer = objCompany.objCategories.intLookupKey(strItemKey)
+        Dim intIndex As Integer = objCompany.Categories.intLookupKey(strItemKey)
         If intIndex = 0 Then
             Throw New Exception("Could not find category")
         End If
-        Return New ReportLineItem(objParent, strItemKey, objCompany.objCategories.strValue2(intIndex).TrimStart(" "c))
+        Return New ReportLineItem(objParent, strItemKey, objCompany.Categories.strValue2(intIndex).TrimStart(" "c))
     End Function
 
     Public Overrides Function strGetGroupTitle(strGroupKey As String) As String

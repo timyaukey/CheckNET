@@ -29,7 +29,7 @@ Public MustInherit Class TrxNameSummary
         Dim colSummary As List(Of TSummary) = New List(Of TSummary)()
         Dim objDict As Dictionary(Of String, TSummary) = New Dictionary(Of String, TSummary)()
 
-        For Each objAccount As Account In objCompany.colAccounts
+        For Each objAccount As Account In objCompany.Accounts
             If objAccount.lngSubType = lngSubType Then
                 For Each objReg As Register In objAccount.colRegisters
                     For Each objTrx As BaseTrx In objReg.colDateRange(Of BaseTrx)(New DateTime(1900, 1, 1), datEnd)

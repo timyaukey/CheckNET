@@ -40,7 +40,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
         public void Load()
         {
             StartingBalance = 0m;
-            foreach(Account account in Company.colAccounts)
+            foreach(Account account in Company.Accounts)
             {
                 if (Handler.IncludeAccount(account))
                 {
@@ -167,7 +167,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                     sequence = split.objParent.objReg.objAccount.objRepeats.strKeyToValue1(split.objParent.strRepeatKey);
                 }
                 row = new SplitDetailRow(PeriodCount, split.strCategoryKey,
-                    Company.objCategories.strKeyToValue1(split.strCategoryKey), sequence);
+                    Company.Categories.strKeyToValue1(split.strCategoryKey), sequence);
                 SplitDetailRows[rowKey] = row;
             }
             return row;
@@ -184,7 +184,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                     sequence = budgetTrx.objReg.objAccount.objRepeats.strKeyToValue1(budgetTrx.strRepeatKey);
                 }
                 row = new BudgetDetailRow(PeriodCount, budgetTrx.strBudgetKey,
-                    Company.objBudgets.strKeyToValue1(budgetTrx.strBudgetKey), sequence);
+                    Company.Budgets.strKeyToValue1(budgetTrx.strBudgetKey), sequence);
                 BudgetDetailRows[rowKey] = row;
             }
             return row;

@@ -72,7 +72,7 @@ Friend Class CatSumRptForm
 
         Try
 
-            strOutFile = mobjCompany.strReportPath() & "\CatSum.rpt"
+            strOutFile = mobjCompany.ReportsFolderPath() & "\CatSum.rpt"
             Using objOutFile As IO.StreamWriter = New IO.StreamWriter(strOutFile)
                 mobjOutFile = objOutFile
                 ShowSpecs(mcolSelectedAccounts, mdatStart, mdatEnd, mblnIncludeFake, mblnIncludeGenerated)

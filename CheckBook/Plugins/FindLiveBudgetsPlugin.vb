@@ -16,7 +16,7 @@ Public Class FindLiveBudgetsPlugin
     Private Sub ClickHandler(sender As Object, e As RegisterEventArgs)
         Try
             Dim frmFind As LiveBudgetListForm = New LiveBudgetListForm
-            frmFind.ShowModal(HostUI, e.objReg, HostUI.objCompany.objBudgets)
+            frmFind.ShowModal(HostUI, e.objReg, HostUI.objCompany.Budgets)
             Exit Sub
         Catch ex As Exception
             gTopException(ex)

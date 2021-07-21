@@ -6,16 +6,16 @@ Public Class CompanySaver
     Public Shared Sub SaveChangedAccounts(ByVal objCompany As Company)
         Dim objAccount As Account
         Dim strBackupFile As String
-        If objCompany.blnCriticalOperationFailed Then
+        If objCompany.AnyCriticalOperationFailed Then
             Throw New Register.CriticalOperationException("Unable to save company because a critical operation failed earlier")
         End If
-        For Each objAccount In objCompany.colAccounts
+        For Each objAccount In objCompany.Accounts
             If objAccount.blnUnsavedChanges Then
-                strBackupFile = objCompany.strBackupPath() & "\" & objAccount.strFileNameRoot & "." & Now.ToString("MM$dd$yy$hh$mm")
+                strBackupFile = objCompany.BackupsFolderPath() & "\" & objAccount.strFileNameRoot & "." & Now.ToString("MM$dd$yy$hh$mm")
                 If Len(Dir(strBackupFile)) > 0 Then
                     Kill(strBackupFile)
                 End If
-                Rename(objCompany.strAccountPath() & "\" & objAccount.strFileNameRoot, strBackupFile)
+                Rename(objCompany.AccountsFolderPath() & "\" & objAccount.strFileNameRoot, strBackupFile)
                 PurgeAccountBackups(objAccount)
                 Dim objSaver As AccountSaver = New AccountSaver(objAccount)
                 objSaver.Save(objAccount.strFileNameRoot)
@@ -45,7 +45,7 @@ Public Class CompanySaver
                 adatDays(intIndex).colInstances = New List(Of BackupInstance)
             Next
 
-            strBackup = Dir(objAccount.objCompany.strBackupPath() & "\" & objAccount.strFileNameRoot & ".*", FileAttribute.Normal)
+            strBackup = Dir(objAccount.objCompany.BackupsFolderPath() & "\" & objAccount.strFileNameRoot & ".*", FileAttribute.Normal)
             Do While strBackup <> ""
                 strEncodedDate = Mid(strBackup, InStr(UCase(strBackup), ".ACT.") + 5)
                 strParsableDate = "20" & Mid(strEncodedDate, 7, 2) & "/" & Mid(strEncodedDate, 1, 2) & "/" & Mid(strEncodedDate, 4, 2) & " " & Mid(strEncodedDate, 10, 2) & ":" & Mid(strEncodedDate, 13, 2)
@@ -65,7 +65,7 @@ Public Class CompanySaver
 
             'Delete the very old backups
             For Each strBackup In colOlderFiles
-                Kill(objAccount.objCompany.strBackupPath() & "\" & strBackup)
+                Kill(objAccount.objCompany.BackupsFolderPath() & "\" & strBackup)
             Next
 
             'Delete everything but the "intBackupsToKeep" most recent backups created on each date.
@@ -83,7 +83,7 @@ Public Class CompanySaver
                 colInstances.Sort(AddressOf BackupInstanceComparer)
                 For intIndex = 1 To colInstances.Count() - intBackupsToKeep
                     strBackup = colInstances(intIndex - 1).strName
-                    Kill(objAccount.objCompany.strBackupPath() & "\" & strBackup)
+                    Kill(objAccount.objCompany.BackupsFolderPath() & "\" & strBackup)
                 Next
             Next
 

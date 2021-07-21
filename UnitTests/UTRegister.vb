@@ -48,7 +48,7 @@ Public Class UTRegister
         mobjAccount = New Account()
         mobjAccount.Init(mobjCompany)
         mobjAccount.InitForLoad()
-        mobjCompany.colAccounts.Add(mobjAccount)
+        mobjCompany.Accounts.Add(mobjAccount)
         mobjReg = New Register
         mobjReg.Init(mobjAccount, "title", strRegisterKey, False, 3)
         mobjReg.datOldestBudgetEndAllowed = DateTime.Parse("1/1/1980")

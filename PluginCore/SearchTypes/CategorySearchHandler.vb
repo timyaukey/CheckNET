@@ -38,8 +38,8 @@ Public Class CategorySearchHandler
 
         objComparer = DirectCast(objHostSearchUI.objGetSearchType(), SearchComparer)
         Dim lngItemData As Integer = DirectCast(objHostSearchUI.objGetComboBoxSearchFor(), CBListBoxItem).intValue
-        strParameter = mobjHostUI.objCompany.objCategories.strKey(lngItemData)
-        strParameter = mobjHostUI.objCompany.objCategories.strKeyToValue1(strParameter)
+        strParameter = mobjHostUI.objCompany.Categories.strKey(lngItemData)
+        strParameter = mobjHostUI.objCompany.Categories.strKeyToValue1(strParameter)
         Return True
     End Function
 
@@ -51,7 +51,7 @@ Public Class CategorySearchHandler
 
         If TypeOf (objTrx) Is BankTrx Then
             For Each objSplit In DirectCast(objTrx, BankTrx).colSplits
-                If objComparer.blnCompare(mobjHostUI.objCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey), strParameter) Then
+                If objComparer.blnCompare(mobjHostUI.objCompany.Categories.strKeyToValue1(objSplit.strCategoryKey), strParameter) Then
                     dlgAddSplitResult(DirectCast(objTrx, BankTrx), objSplit)
                 End If
             Next
@@ -59,7 +59,7 @@ Public Class CategorySearchHandler
     End Sub
 
     Private Iterator Function objGetCategories(ByVal objCompany As Company) As IEnumerable(Of Object)
-        Dim objList As IStringTranslator = objCompany.objCategories
+        Dim objList As IStringTranslator = objCompany.Categories
         Dim intIndex As Integer
         For intIndex = 1 To objList.intElements
             Yield UITools.CreateListBoxItem(objList.strValue1(intIndex), intIndex)

@@ -500,7 +500,7 @@ Friend Class ListEditorForm
         Dim strTmpFile As String
 
         Try
-            strTmpFile = mobjCompany.strAddPath("NewList.tmp")
+            strTmpFile = mobjCompany.AddNameToDataPath("NewList.tmp")
             Using objFile As IO.StreamWriter = New IO.StreamWriter(strTmpFile)
                 objFile.WriteLine("Generated " & Now)
                 With mobjList
@@ -537,7 +537,7 @@ Friend Class ListEditorForm
             strAccounts = ""
             Dim strSep As String = ""
             Dim isUsed As Boolean = False
-            For Each objAccount In mobjCompany.colAccounts
+            For Each objAccount In mobjCompany.Accounts
                 If blnElementIsUsedInAccount(objAccount, strKey) Then
                     strAccounts = strAccounts + strSep + objAccount.strTitle
                     strSep = ", "

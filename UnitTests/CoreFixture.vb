@@ -524,7 +524,7 @@ Public Class CoreFixture
         lngLinesRead = 0
         Dim objReader As System.IO.TextReader = Nothing
         Try
-            objReader = New System.IO.StreamReader(mobjCompany.strAddPath("UTData\" & strFileName))
+            objReader = New System.IO.StreamReader(mobjCompany.AddNameToDataPath("UTData\" & strFileName))
             objLoader.LoadFile(objReader, objReg, objRepeatSummarizer, False, lngLinesRead)
         Catch ex As Exception
             Throw ex
@@ -543,7 +543,7 @@ Public Class CoreFixture
         gUTSetSubTest("Load")
 
         objString = New SimpleStringTranslator()
-        objString.LoadFile(mobjCompany.strAddPath("UTData\UTStringTran1.txt"))
+        objString.LoadFile(mobjCompany.AddNameToDataPath("UTData\UTStringTran1.txt"))
 
         gUTSetSubTest("Verify")
 
@@ -847,7 +847,7 @@ Public Class CoreFixture
         objUTReg.AddNormal("1500", #6/1/2000#, -50.75D, "First add", 1, 1, 1)
         objUTReg.Validate("", 1)
 
-        gUTAssert(Not objUTReg.objReg.objAccount.objCompany.blnCriticalOperationFailed, "Unexpectedly said critical operation failed")
+        gUTAssert(Not objUTReg.objReg.objAccount.objCompany.AnyCriticalOperationFailed, "Unexpectedly said critical operation failed")
 
         objUTReg.AddNormal("1501", #6/1/2000#, -24.95D, "Second add", 2, 2, 2)
         objUTReg.Validate("", 1, 2)
@@ -861,7 +861,7 @@ Public Class CoreFixture
         objTrxManager = New NormalTrxManager(objUTReg.objReg.objNormalTrx(1))
         objTrxManager.UpdateStart()
 
-        gUTAssert(objUTReg.objReg.objAccount.objCompany.blnCriticalOperationFailed, "Did not detect interrupted critical operation 2")
+        gUTAssert(objUTReg.objReg.objAccount.objCompany.AnyCriticalOperationFailed, "Did not detect interrupted critical operation 2")
 
 
     End Sub

@@ -12,7 +12,7 @@ Public Class SelectCompanyForm
     Public Function ShowCompanyDialog(ByVal objHostUI As IHostUI, ByVal objShowMessage As Action(Of String)) As DialogResult
         mobjHostUI = objHostUI
         mobjShowMessage = objShowMessage
-        mstrDefaultRootFolder = Company.strDefaultRootFolder(mobjHostUI.strSoftwareName)
+        mstrDefaultRootFolder = Company.DefaultRootFolder(mobjHostUI.strSoftwareName)
         mblnNewOnEmptyAsked = False
         If My.Settings.CompanyList Is Nothing Then
             My.Settings.CompanyList = New Specialized.StringCollection()
@@ -39,7 +39,7 @@ Public Class SelectCompanyForm
                 mobjHostUI.ErrorMessageBox("Please select a company folder from the list above.")
                 Return
             End If
-            If Not Company.blnDataPathIsValid(objHistItem.strDataPath) Then
+            If Not Company.IsDataPathValid(objHistItem.strDataPath) Then
                 If mobjHostUI.OkCancelMessageBox("Could not find the selected company folder. " +
                 "Do you want to remove it from the list?") = DialogResult.OK Then
                     HistoryRemove(objHistItem.strDataPath)
@@ -95,7 +95,7 @@ Public Class SelectCompanyForm
             If result <> DialogResult.OK Then
                 Exit Sub
             End If
-            If Company.blnDataPathIsValid(dlgBrowseCompany.SelectedPath) Then
+            If Company.IsDataPathValid(dlgBrowseCompany.SelectedPath) Then
                 Me.strDataPath = dlgBrowseCompany.SelectedPath
                 HistoryRemove(Me.strDataPath)
                 HistoryAdd(Me.strDataPath)

@@ -360,7 +360,7 @@ Public Class Account
             objShowMessage("Creating first checking account...")
             Dim objAccount As Account = New Account()
             objAccount.Init(objCompany)
-            objAccount.intKey = objCompany.intGetUnusedAccountKey()
+            objAccount.intKey = objCompany.GetUnusedAccountKey()
             objAccount.lngSubType = Account.SubType.Asset_CheckingAccount
             objAccount.strFileNameRoot = "Main"
             objAccount.strTitle = "Checking Account"
@@ -383,7 +383,7 @@ Public Class Account
                 Throw New Exception("Unrecognized account subtype")
             End If
 
-            Dim strAcctFile As String = mobjCompany.strAccountPath() & "\" & strFileNameRoot & ".act"
+            Dim strAcctFile As String = mobjCompany.AccountsFolderPath() & "\" & strFileNameRoot & ".act"
             Using objAcctWriter As TextWriter = New StreamWriter(strAcctFile)
                 objAcctWriter.WriteLine("FHCKBK2")
                 objAcctWriter.WriteLine("AT" & strTitle)
@@ -402,7 +402,7 @@ Public Class Account
                 objAcctWriter.WriteLine(".A")
             End Using
 
-            Dim strRepeatFile As String = mobjCompany.strAccountPath() & "\" & strFileNameRoot & ".rep"
+            Dim strRepeatFile As String = mobjCompany.AccountsFolderPath() & "\" & strFileNameRoot & ".rep"
             Using objRepeatWriter As TextWriter = New StreamWriter(strRepeatFile)
                 objRepeatWriter.WriteLine("dummy line")
             End Using

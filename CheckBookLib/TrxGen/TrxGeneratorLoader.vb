@@ -102,7 +102,7 @@ Public Module TrxGeneratorLoader
     '   register in specified account.
 
     Public Function gstrGeneratorPath(ByVal objAccount As Account, ByVal objReg As Register) As String
-        gstrGeneratorPath = objAccount.objCompany.strAccountPath() & "\" & objAccount.strFileNameRoot & ".gen\" & objReg.strRegisterKey
+        gstrGeneratorPath = objAccount.objCompany.AccountsFolderPath() & "\" & objAccount.strFileNameRoot & ".gen\" & objReg.strRegisterKey
     End Function
 
     '$Description Report an error detected while loading a transaction generator file.
@@ -581,7 +581,7 @@ Public Module TrxGeneratorLoader
             gstrGetTrxGenTemplateBudget = "Missing [budgetkey] attribute"
             Exit Function
         End If
-        If objCompany.objBudgets.intLookupKey(CStr(vntAttrib)) = 0 Then
+        If objCompany.Budgets.intLookupKey(CStr(vntAttrib)) = 0 Then
             gstrGetTrxGenTemplateBudget = "Invalid [budgetkey] attribute"
             Exit Function
         End If
@@ -650,7 +650,7 @@ Public Module TrxGeneratorLoader
             gstrGetTrxGenTemplateNormal = "Missing [catkey] attribute"
             Exit Function
         End If
-        If objCompany.objCategories.intLookupKey(CStr(vntAttrib)) = 0 Then
+        If objCompany.Categories.intLookupKey(CStr(vntAttrib)) = 0 Then
             gstrGetTrxGenTemplateNormal = "Invalid [catkey] attribute"
             Exit Function
         End If
@@ -658,7 +658,7 @@ Public Module TrxGeneratorLoader
         'Budget key.
         vntAttrib = elmTrxTpt.GetAttribute("budgetkey")
         If Not gblnXmlAttributeMissing(vntAttrib) Then
-            If objCompany.objBudgets.intLookupKey(CStr(vntAttrib)) = 0 Then
+            If objCompany.Budgets.intLookupKey(CStr(vntAttrib)) = 0 Then
                 gstrGetTrxGenTemplateNormal = "Invalid [budgetkey] attribute"
                 Exit Function
             End If

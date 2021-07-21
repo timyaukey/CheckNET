@@ -19,7 +19,7 @@ namespace Willowsoft.CheckBook.Powershell
         {
             const string errorId = "AccountSearchFailure";
             Account acctMatch = null;
-            foreach(Account acctTest in Company.colAccounts)
+            foreach(Account acctTest in Company.Accounts)
             {
                 if (acctTest.strTitle.Equals(AccountName, StringComparison.InvariantCultureIgnoreCase))
                 {

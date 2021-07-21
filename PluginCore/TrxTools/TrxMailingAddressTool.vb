@@ -34,7 +34,7 @@ Public Class TrxMailingAddressTool
             Exit Sub
         End If
 
-        colPayees = mobjHostUI.objCompany.colFindPayeeMatches(objNormalTrx.strDescription)
+        colPayees = mobjHostUI.objCompany.FindPayeeMatches(objNormalTrx.strDescription)
         If colPayees.Length = 0 Then
             strMsg = "No matching memorized transactions."
         Else

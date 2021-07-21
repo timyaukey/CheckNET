@@ -40,7 +40,7 @@ Public Class CheckPrinting
 
     Public Function blnPrepareForFirstCheck() As Boolean
 
-        If Not System.IO.File.Exists(mobjHostUI.objCompany.strCheckFormatPath()) Then
+        If Not System.IO.File.Exists(mobjHostUI.objCompany.CheckFormatFilePath()) Then
             mobjHostUI.InfoMessageBox("You must set up your check format first, using the option on the ""Setup"" menu.")
             Return False
         End If
@@ -64,7 +64,7 @@ Public Class CheckPrinting
         Dim objParseError As VB6XmlParseError
 
         mdomCheckFormat = New VB6XmlDocument
-        strCheckFormatFile = mobjHostUI.objCompany.strCheckFormatPath()
+        strCheckFormatFile = mobjHostUI.objCompany.CheckFormatFilePath()
         mdomCheckFormat.Load(strCheckFormatFile)
         objParseError = mdomCheckFormat.ParseError
         If Not objParseError Is Nothing Then
@@ -137,7 +137,7 @@ Public Class CheckPrinting
 
         'Find the first memorized trx with the same payee name
         'and a mailing address.
-        colPayees = mobjCompany.colFindPayeeMatches((mobjTrx.strDescription))
+        colPayees = mobjCompany.FindPayeeMatches((mobjTrx.strDescription))
         intPayeeIndex = 0
         Do
             If intPayeeIndex >= colPayees.Length Then

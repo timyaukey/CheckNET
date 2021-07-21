@@ -75,7 +75,7 @@ Public Class EventLog
         For Each objLogger In mcolLoggers
             objLogger.WriteLog(Me)
         Next objLogger
-        strLogFolder = mobjCompany.strAddPath("EventLogs")
+        strLogFolder = mobjCompany.AddNameToDataPath("EventLogs")
         If Dir(strLogFolder, FileAttribute.Directory) = "" Then
             MkDir(strLogFolder)
         End If
@@ -173,7 +173,7 @@ Public Class EventLog
                         elmTrx.AppendChild(elmSplitParent)
                     End If
                     With elmSplitParent
-                        .SetAttribute("CatName", mobjCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey))
+                        .SetAttribute("CatName", mobjCompany.Categories.strKeyToValue1(objSplit.strCategoryKey))
                         If objNormalTrx.lngSplits > 1 Then
                             .SetAttribute("Amount", Utilities.strFormatCurrency(objSplit.curAmount))
                         End If
@@ -193,7 +193,7 @@ Public Class EventLog
                             .SetAttribute("Terms", objSplit.strTerms)
                         End If
                         If objSplit.strBudgetKey <> "" Then
-                            .SetAttribute("BudgetName", mobjCompany.objBudgets.strKeyToValue1(objSplit.strBudgetKey))
+                            .SetAttribute("BudgetName", mobjCompany.Budgets.strKeyToValue1(objSplit.strBudgetKey))
                         End If
                     End With
                 Next objSplit
@@ -201,7 +201,7 @@ Public Class EventLog
                 Dim objBudgetTrx As BudgetTrx = DirectCast(objTrx, BudgetTrx)
                 .SetAttribute("Type", "Budget")
                 .SetAttribute("BudgetLimit", Utilities.strFormatCurrency(objBudgetTrx.curBudgetLimit))
-                .SetAttribute("BudgetName", mobjCompany.objBudgets.strKeyToValue1(objBudgetTrx.strBudgetKey))
+                .SetAttribute("BudgetName", mobjCompany.Budgets.strKeyToValue1(objBudgetTrx.strBudgetKey))
             ElseIf TypeOf objTrx Is TransferTrx Then
                 .SetAttribute("Type", "Transfer")
             Else

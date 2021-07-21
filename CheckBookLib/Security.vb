@@ -42,7 +42,7 @@ Public Class Security
             mstrLogin = "anonymous"
             Return
         End If
-        mdomSecurity = mobjCompany.domLoadFile(mstrFilePath)
+        mdomSecurity = mobjCompany.LoadXmlFile(mstrFilePath)
         If mdomSecurity.DocumentElement.Name <> "security" Then
             gRaiseError("Invalid security file document element")
         End If
@@ -57,7 +57,7 @@ Public Class Security
     End Sub
 
     Private Sub MakePath()
-        mstrFilePath = mobjCompany.strAddPath("Security.xml")
+        mstrFilePath = mobjCompany.AddNameToDataPath("Security.xml")
     End Sub
 
     Public ReadOnly Property blnNoFile() As Boolean

@@ -14,7 +14,7 @@ Public Class TrialBalancePlugIn
         setup.objReportMenu.Add(New MenuElementAction("Financial Statements", 400, AddressOf ClickHandler, GetPluginPath()))
         setup.objHelpMenu.Add(New MenuElementAction("Financial Statements", 350, AddressOf HelpHandler, GetPluginPath()))
         Dim objLicense As Willowsoft.TamperProofData.IStandardLicense = New FinancialReportsLicense()
-        objLicense.Load(Company.strLicenseFolder)
+        objLicense.Load(Company.LicenseFolderPath)
         setup.AddExtraLicense(objLicense)
     End Sub
 

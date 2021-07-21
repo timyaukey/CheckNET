@@ -276,7 +276,7 @@ Public Class SearchForm
         Dim curAvailable As Decimal
 
         objItem = objAddNewMatch(objTrx, objSplit.curAmount)
-        If objSplit.strBudgetKey = mobjCompany.strPlaceholderBudgetKey Then
+        If objSplit.strBudgetKey = mobjCompany.PlaceholderBudgetKey Then
             curAvailable = objSplit.curAmount
         Else
             curAvailable = 0
@@ -292,7 +292,7 @@ Public Class SearchForm
             strDueDate = Utilities.strFormatDate(objSplit.datDueDate)
         End If
         UITools.AddListSubItem(objItem, 4, Utilities.strFormatCurrency(curAvailable))
-        UITools.AddListSubItem(objItem, 5, mobjCompany.objCategories.strTranslateKey(objSplit.strCategoryKey))
+        UITools.AddListSubItem(objItem, 5, mobjCompany.Categories.strTranslateKey(objSplit.strCategoryKey))
         UITools.AddListSubItem(objItem, 6, objSplit.strPONumber)
         UITools.AddListSubItem(objItem, 7, objSplit.strInvoiceNum)
         UITools.AddListSubItem(objItem, 8, strInvoiceDate)

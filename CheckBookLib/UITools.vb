@@ -42,7 +42,7 @@ Public Class UITools
 
         With lst
             .Items.Clear()
-            For Each objAccount In objCompany.colAccounts
+            For Each objAccount In objCompany.Accounts
                 .Items.Add(objAccount.strTitle)
             Next objAccount
         End With
@@ -54,7 +54,7 @@ Public Class UITools
             objGetSelectedAccountAndUnload = Nothing
             Exit Function
         End If
-        objGetSelectedAccountAndUnload = objCompany.colAccounts.Item(lst.SelectedIndex)
+        objGetSelectedAccountAndUnload = objCompany.Accounts.Item(lst.SelectedIndex)
         frm.Close()
         Application.DoEvents()
     End Function

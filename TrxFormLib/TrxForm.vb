@@ -282,8 +282,8 @@ Public Class TrxForm
             cboToolList.Items.Add(objTool)
         Next
         For intIndex = 0 To mintSPLIT_CTRL_ARRAY_SIZE - 1
-            UITools.LoadComboFromStringTranslator(cboSplitCategory(intIndex), mobjCompany.objCategories, True)
-            UITools.LoadComboFromStringTranslator(cboSplitBudget(intIndex), mobjCompany.objBudgets, True)
+            UITools.LoadComboFromStringTranslator(cboSplitCategory(intIndex), mobjCompany.Categories, True)
+            UITools.LoadComboFromStringTranslator(cboSplitBudget(intIndex), mobjCompany.Budgets, True)
         Next
         ShowFrame(frmNormal)
     End Sub
@@ -328,7 +328,7 @@ Public Class TrxForm
         Dim intIndex As Integer
         mblnHasPlaceholderBudget = False
         For intIndex = 1 To mintSplits
-            If maudtSplits(intIndex).strBudgetKey = mobjCompany.strPlaceholderBudgetKey Then
+            If maudtSplits(intIndex).strBudgetKey = mobjCompany.PlaceholderBudgetKey Then
                 mblnHasPlaceholderBudget = True
                 Exit Sub
 
@@ -356,7 +356,7 @@ Public Class TrxForm
         chkFake.Visible = False
         cmdRunTool.Visible = False
         cboToolList.Visible = False
-        UITools.LoadComboFromStringTranslator(cboBudgetName, mobjCompany.objBudgets, True)
+        UITools.LoadComboFromStringTranslator(cboBudgetName, mobjCompany.Budgets, True)
         ShowFrame(frmBudget)
     End Sub
 
@@ -370,7 +370,7 @@ Public Class TrxForm
     Private Sub SetBudgetControls(ByVal objTrx As BudgetTrx)
         With objTrx
             txtBudgetLimit.Text = Utilities.strFormatCurrency(.curBudgetLimit)
-            SetComboFromStringTranslator(cboBudgetName, mobjCompany.objBudgets, .strBudgetKey)
+            SetComboFromStringTranslator(cboBudgetName, mobjCompany.Budgets, .strBudgetKey)
             txtBudgetApplied.Text = Utilities.strFormatCurrency(.curBudgetApplied)
             txtBudgetStarts.Text = Utilities.strFormatDate(.datBudgetStarts)
         End With
@@ -403,7 +403,7 @@ Public Class TrxForm
                             objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(objSplit.curAmount)))
                             curTotalApplied = curTotalApplied + objSplit.curAmount
                             objItem.SubItems.Insert(6, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing,
-                                mobjCompany.objCategories.strTranslateKey(objSplit.strCategoryKey)))
+                                mobjCompany.Categories.strTranslateKey(objSplit.strCategoryKey)))
                         End With
                     End If
                 Next objSplit
@@ -622,13 +622,13 @@ Public Class TrxForm
             For intIndex = 0 To mintSPLIT_CTRL_ARRAY_SIZE - 1
                 With maudtSplits(intIndex + mintSplitOffset + 1)
                     lblSplitNumber(intIndex).Text = Utilities.strFormatInteger(intIndex + 1 + mintSplitOffset, "##0") & "."
-                    SetComboFromStringTranslator(cboSplitCategory(intIndex), mobjCompany.objCategories, .strCategoryKey)
+                    SetComboFromStringTranslator(cboSplitCategory(intIndex), mobjCompany.Categories, .strCategoryKey)
                     txtSplitPONum(intIndex).Text = .strPONumber
                     txtSplitInvoiceNum(intIndex).Text = .strInvoiceNum
                     txtSplitInvoiceDate(intIndex).Text = .strInvoiceDate
                     txtSplitDueDate(intIndex).Text = .strDueDate
                     txtSplitTerms(intIndex).Text = .strTerms
-                    SetComboFromStringTranslator(cboSplitBudget(intIndex), mobjCompany.objBudgets, .strBudgetKey)
+                    SetComboFromStringTranslator(cboSplitBudget(intIndex), mobjCompany.Budgets, .strBudgetKey)
                     txtSplitMemo(intIndex).Text = .strMemo
                     mblnSuppressPlaceholderAdjustment = True
                     txtSplitAmount(intIndex).Text = .strAmount
@@ -694,7 +694,7 @@ Public Class TrxForm
     '   if the amount of the specified split is changed.
 
     Private Function blnPlaceholderAdjustmentRequired(ByRef intSplitIndex As Integer) As Boolean
-        If mblnHasPlaceholderBudget And maudtSplits(intSplitIndex).strBudgetKey <> mobjCompany.strPlaceholderBudgetKey Then
+        If mblnHasPlaceholderBudget And maudtSplits(intSplitIndex).strBudgetKey <> mobjCompany.PlaceholderBudgetKey Then
             blnPlaceholderAdjustmentRequired = True
         Else
             blnPlaceholderAdjustmentRequired = False
@@ -723,7 +723,7 @@ Public Class TrxForm
         ReDim intPlaceholderIndexes(1)
         'Scan splits to find placeholders, and add up non-placeholders.
         For intSplitIndex = 1 To mintSplits
-            If maudtSplits(intSplitIndex).strBudgetKey = mobjCompany.strPlaceholderBudgetKey Then
+            If maudtSplits(intSplitIndex).strBudgetKey = mobjCompany.PlaceholderBudgetKey Then
                 intPlaceholders = intPlaceholders + 1
                 ReDim Preserve intPlaceholderIndexes(intPlaceholders)
                 intPlaceholderIndexes(intPlaceholders) = intSplitIndex
@@ -1041,7 +1041,7 @@ Public Class TrxForm
                                 Exit Function
                             End If
                         Else
-                            If blnAccountIsPersonal <> CategoryTranslator.blnIsPersonal(mobjCompany.objCategories.strKeyToValue1(.strCategoryKey)) Then
+                            If blnAccountIsPersonal <> CategoryTranslator.blnIsPersonal(mobjCompany.Categories.strKeyToValue1(.strCategoryKey)) Then
                                 ValidationError("Personal category may not be used in a non-personal account, or visa versa")
                                 Exit Function
                             End If
@@ -1461,8 +1461,8 @@ Public Class TrxForm
             intSplitIndex = intControlIndex + mintSplitOffset + 1
             If intSplitIndex <= mintSplits Then
                 With maudtSplits(intSplitIndex)
-                    SetComboFromStringTranslator(cboSplitCategory(intControlIndex), mobjCompany.objCategories, .strCategoryKey)
-                    SetComboFromStringTranslator(cboSplitBudget(intControlIndex), mobjCompany.objBudgets, .strBudgetKey)
+                    SetComboFromStringTranslator(cboSplitCategory(intControlIndex), mobjCompany.Categories, .strCategoryKey)
+                    SetComboFromStringTranslator(cboSplitBudget(intControlIndex), mobjCompany.Budgets, .strBudgetKey)
                 End With
             End If
         Next
@@ -1642,7 +1642,7 @@ Public Class TrxForm
             strPayee = ""
             strCategory = ""
 
-            colPayees = mobjCompany.colFindPayeeMatches(txtDescription.Text)
+            colPayees = mobjCompany.FindPayeeMatches(txtDescription.Text)
             If colPayees.Length = 0 Then
                 Exit Function
             End If
@@ -2015,7 +2015,7 @@ Public Class TrxForm
         Dim objTrxManager As BudgetTrxManager
         Dim strBudgetKey As String
         Dim datBudgetStarts As Date
-        strBudgetKey = strGetStringTranslatorKeyFromCombo(cboBudgetName, mobjCompany.objBudgets)
+        strBudgetKey = strGetStringTranslatorKeyFromCombo(cboBudgetName, mobjCompany.Budgets)
         datBudgetStarts = CDate(txtBudgetStarts.Text)
         If mblnEditMode Then
             objTrxManager = New BudgetTrxManager(mobjReg.objBudgetTrx(mlngIndex))
@@ -2162,7 +2162,7 @@ Public Class TrxForm
                 If Not cboSplitCategory Is Nothing Then
                     If Not mblnInDisplaySplits Then
                         maudtSplits(index + 1 + mintSplitOffset).strCategoryKey = strGetStringTranslatorKeyFromCombo(cboSplitCategory(index),
-                            mobjCompany.objCategories)
+                            mobjCompany.Categories)
                     End If
                 End If
                 Exit Sub
@@ -2234,7 +2234,7 @@ Public Class TrxForm
                 Dim index As Short = CShort(CType(sender, ComboBox).Tag)
                 If Not cboSplitBudget Is Nothing Then
                     If Not mblnInDisplaySplits Then
-                        maudtSplits(index + 1 + mintSplitOffset).strBudgetKey = strGetStringTranslatorKeyFromCombo(cboSplitBudget(index), mobjCompany.objBudgets)
+                        maudtSplits(index + 1 + mintSplitOffset).strBudgetKey = strGetStringTranslatorKeyFromCombo(cboSplitBudget(index), mobjCompany.Budgets)
                         CheckForPlaceholderBudget()
                     End If
                 End If

@@ -48,8 +48,8 @@ Public Class ImportUtilities
 
             Dim strTableFile As String
 
-            strTableFile = mobjCompany.strTrxTypeFilePath()
-            mdomTrxTypes = mobjCompany.domLoadFile(strTableFile)
+            strTableFile = mobjCompany.TrxTypeFilePath()
+            mdomTrxTypes = mobjCompany.LoadXmlFile(strTableFile)
 
             Exit Sub
         Catch ex As Exception
@@ -158,13 +158,13 @@ Public Class ImportUtilities
             strMemo = Trim(mstrTrxMemo)
             datSplitInvoiceDate = Utilities.datEmpty
             datSplitDueDate = Utilities.datEmpty
-            With mobjCompany.objCategories
+            With mobjCompany.Categories
                 intCatIndex = .intLookupValue1(mstrTrxCategory)
                 If intCatIndex > 0 Then
                     strCatKey = .strKey(intCatIndex)
                 End If
             End With
-            With mobjCompany.objBudgets
+            With mobjCompany.Budgets
                 intBudIndex = .intLookupValue1(mstrTrxBudget)
                 If intBudIndex > 0 Then
                     strBudKey = .strKey(intBudIndex)
@@ -363,7 +363,7 @@ Public Class ImportUtilities
             Dim curMatchTmp As Decimal
 
             strOutputPayee = strTrimmedPayee
-            objPayees = mobjCompany.objTransTable.Payees
+            objPayees = mobjCompany.MemorizedTrans.Payees
             For Each objPayee In objPayees
                 strInput = UCase(Trim(objPayee.Input))
                 If (strInput <> "") And (InStr(UCase(strTrimmedPayee), strInput) > 0) Then

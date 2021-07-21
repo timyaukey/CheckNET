@@ -42,7 +42,7 @@ Friend Class ShowRegisterForm
 
         Try
 
-            If Not mobjCompany.objSecurity.blnIsAdministrator Then
+            If Not mobjCompany.SecData.blnIsAdministrator Then
                 mobjHostUI.InfoMessageBox("Your login is not authorized to delete registers.")
                 Exit Sub
             End If
@@ -104,7 +104,7 @@ Friend Class ShowRegisterForm
     Private Sub cmdNewAccount_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewAccount.Click
         Try
 
-            If Not mobjCompany.objSecurity.blnIsAdministrator Then
+            If Not mobjCompany.SecData.blnIsAdministrator Then
                 mobjHostUI.InfoMessageBox("Your login is not authorized to create accounts.")
                 Exit Sub
             End If
@@ -124,7 +124,7 @@ Friend Class ShowRegisterForm
 
         Try
 
-            If Not mobjCompany.objSecurity.blnIsAdministrator Then
+            If Not mobjCompany.SecData.blnIsAdministrator Then
                 mobjHostUI.InfoMessageBox("Your login is not authorized to delete accounts.")
                 Exit Sub
             End If
@@ -159,21 +159,21 @@ Friend Class ShowRegisterForm
         Try
 
             Do
-                strFile = Dir(mobjCompany.strBackupPath() & "\" & strNameRoot & ".act.*")
+                strFile = Dir(mobjCompany.BackupsFolderPath() & "\" & strNameRoot & ".act.*")
                 If strFile = "" Then
                     Exit Do
                 End If
-                Kill(mobjCompany.strBackupPath() & "\" & strFile)
+                Kill(mobjCompany.BackupsFolderPath() & "\" & strFile)
             Loop
 
-            strFile = mobjCompany.strAccountPath() & "\" & strNameRoot & ".rep"
+            strFile = mobjCompany.AccountsFolderPath() & "\" & strNameRoot & ".rep"
             If Dir(strFile) <> "" Then
                 Kill(strFile)
             End If
 
             'It looks for ACT files to find accounts, so delete this one last
             'in case it crashes deleting other files. So you can try again.
-            strFile = mobjCompany.strAccountPath() & "\" & strNameRoot & ".act"
+            strFile = mobjCompany.AccountsFolderPath() & "\" & strNameRoot & ".act"
             If Dir(strFile) <> "" Then
                 Kill(strFile)
             End If
@@ -191,7 +191,7 @@ Friend Class ShowRegisterForm
 
         Try
 
-            If Not mobjCompany.objSecurity.blnIsAdministrator Then
+            If Not mobjCompany.SecData.blnIsAdministrator Then
                 mobjHostUI.InfoMessageBox("Your login is not authorized to create a new register.")
                 Exit Sub
             End If
@@ -225,7 +225,7 @@ Friend Class ShowRegisterForm
         Try
             With maudtElement(lstRegisters.SelectedIndex)
                 Using frm As AccountForm = New AccountForm
-                    If frm.ShowDialog(mobjHostUI, .objAccount, True, Not mobjCompany.objSecurity.blnIsAdministrator) = DialogResult.OK Then
+                    If frm.ShowDialog(mobjHostUI, .objAccount, True, Not mobjCompany.SecData.blnIsAdministrator) = DialogResult.OK Then
                         mobjHostUI.InfoMessageBox("Account property changes will take effect the next time you start the software.")
                     End If
                 End Using
@@ -276,7 +276,7 @@ Friend Class ShowRegisterForm
                     Exit Sub
                 End If
                 objProps = New RegPropertiesForm
-                objProps.ShowModal(mobjHostUI, .objSelectedReg, Not mobjCompany.objSecurity.blnIsAdministrator)
+                objProps.ShowModal(mobjHostUI, .objSelectedReg, Not mobjCompany.SecData.blnIsAdministrator)
             End With
 
             Exit Sub
@@ -293,7 +293,7 @@ Friend Class ShowRegisterForm
                 "Ending Date", Utilities.strFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, 90, Now)))
             If strRegisterEndDate <> "" Then
                 If Utilities.blnIsValidDate(strRegisterEndDate) Then
-                    Dim strCutoffDate As String = Utilities.strFormatDate(mobjCompany.datLastReconciled().AddDays(1D))
+                    Dim strCutoffDate As String = Utilities.strFormatDate(mobjCompany.LastReconciledDate().AddDays(1D))
                     strCutoffDate = InputBox("Enter cutoff date for transaction generators that do not " +
                         "generate transactions older than some number of days relative to a cutoff date:", "Cutoff Date", strCutoffDate)
                     If Utilities.blnIsValidDate(strCutoffDate) Then
@@ -325,7 +325,7 @@ Friend Class ShowRegisterForm
             mintElements = 0
             lstRegisters.Items.Clear()
 
-            For Each objAccount In mobjCompany.colAccounts
+            For Each objAccount In mobjCompany.Accounts
                 mintElements = mintElements + 1
                 ReDim Preserve maudtElement(mintElements - 1)
                 With maudtElement(mintElements - 1)

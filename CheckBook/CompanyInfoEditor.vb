@@ -12,7 +12,7 @@ Public Class CompanyInfoEditor
     End Sub
 
     Private Sub CompanyInfoEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        prpDetails.SelectedObject = mobjCompany.objInfo.Clone()
+        prpDetails.SelectedObject = mobjCompany.Info.Clone()
     End Sub
 
     Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
@@ -22,9 +22,9 @@ Public Class CompanyInfoEditor
     Private Sub cmdOkay_Click(sender As Object, e As EventArgs) Handles cmdOkay.Click
         Try
             Dim ser As XmlSerializer = New XmlSerializer(GetType(CompanyInfo))
-            Using outputStream As System.IO.FileStream = New IO.FileStream(mobjCompany.strCompanyInfoPath(), IO.FileMode.Create)
+            Using outputStream As System.IO.FileStream = New IO.FileStream(mobjCompany.CompanyInfoFilePath(), IO.FileMode.Create)
                 ser.Serialize(outputStream, prpDetails.SelectedObject)
-                mobjCompany.objInfo = DirectCast(prpDetails.SelectedObject, CompanyInfo)
+                mobjCompany.Info = DirectCast(prpDetails.SelectedObject, CompanyInfo)
                 Me.Close()
             End Using
         Catch ex As Exception

@@ -26,8 +26,8 @@ Friend Class TrxTypeListForm
         Try
             mobjHostUI = objHostUI
             mobjCompany = mobjHostUI.objCompany
-            strTableFile = mobjCompany.strTrxTypeFilePath()
-            mdomTypeTable = mobjCompany.domLoadFile(strTableFile)
+            strTableFile = mobjCompany.TrxTypeFilePath()
+            mdomTypeTable = mobjCompany.LoadXmlFile(strTableFile)
             melmTypeTable = mdomTypeTable.DocumentElement
             Me.ShowDialog()
 
@@ -59,7 +59,7 @@ Friend Class TrxTypeListForm
             If blnValidateAndCopyTrxTypeToXML() Then
                 Exit Sub
             End If
-            mdomTypeTable.Save(mobjCompany.strTrxTypeFilePath())
+            mdomTypeTable.Save(mobjCompany.TrxTypeFilePath())
             mobjHostUI.InfoMessageBox("Changes saved.")
             Me.Close()
 

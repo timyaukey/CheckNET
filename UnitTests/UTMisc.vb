@@ -21,7 +21,7 @@ Module UTMisc
 		Dim strDataPathValue As String = My.Application.Info.DirectoryPath & "\..\..\Data"
 		Dim objCompany As Company = New Company(strDataPathValue)
 		CompanyLoader.LoadGlobalLists(objCompany)
-		objCompany.objSecurity.CreateEmpty()
+		objCompany.SecData.CreateEmpty()
 		Return objCompany
 	End Function
 

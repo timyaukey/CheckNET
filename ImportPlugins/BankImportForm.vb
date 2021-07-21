@@ -146,7 +146,7 @@ Public Class BankImportForm
             End If
             DisplayImportItems()
             LoadRegisterList()
-            UITools.LoadComboFromStringTranslator(cboDefaultCategory, mobjCompany.objCategories, True)
+            UITools.LoadComboFromStringTranslator(cboDefaultCategory, mobjCompany.Categories, True)
 
             Me.Text = strTitle
             ConfigureButtons()
@@ -835,7 +835,7 @@ Public Class BankImportForm
             If cboDefaultCategory.SelectedIndex <> -1 Then
                 lngCatIdx = UITools.GetItemData(cboDefaultCategory, cboDefaultCategory.SelectedIndex)
                 If lngCatIdx > 0 Then
-                    strDefaultCatKey = mobjCompany.objCategories.strKey(lngCatIdx)
+                    strDefaultCatKey = mobjCompany.Categories.strKey(lngCatIdx)
                     objSplit.strCategoryKey = strDefaultCatKey
                 End If
             End If
@@ -1362,7 +1362,7 @@ Public Class BankImportForm
     Private Function strSummarizeTrxCat(ByVal objTrx As BankTrx) As String
 
         If objTrx.lngSplits = 1 Then
-            strSummarizeTrxCat = mobjCompany.objCategories.strKeyToValue1(objTrx.objFirstSplit.strCategoryKey)
+            strSummarizeTrxCat = mobjCompany.Categories.strKeyToValue1(objTrx.objFirstSplit.strCategoryKey)
         Else
             strSummarizeTrxCat = "(split)"
         End If

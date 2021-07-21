@@ -28,12 +28,12 @@ Public Module CBMain
 
         objAccount = New Account()
         objAccount.Init(objHostUI.objCompany)
-        objAccount.intKey = objHostUI.objCompany.intGetUnusedAccountKey()
+        objAccount.intKey = objHostUI.objCompany.GetUnusedAccountKey()
         objAccount.lngSubType = Account.SubType.Liability_LoanPayable
 
         Using frm As AccountForm = New AccountForm()
             If frm.ShowDialog(objHostUI, objAccount, False, False) = DialogResult.OK Then
-                strFile = objHostUI.objCompany.strAccountPath() & "\" & objAccount.strFileNameRoot & ".act"
+                strFile = objHostUI.objCompany.AccountsFolderPath() & "\" & objAccount.strFileNameRoot & ".act"
                 If Dir(strFile) <> "" Then
                     objHostUI.ErrorMessageBox("Account file already exists with that name.")
                     Exit Function

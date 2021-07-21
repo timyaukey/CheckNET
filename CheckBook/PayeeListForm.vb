@@ -31,8 +31,8 @@ Friend Class PayeeListForm
             mobjHostUI = objHostUI
             mobjCompany = mobjHostUI.objCompany
             LoadSharedDocument()
-            UITools.LoadComboFromStringTranslator(cboCategory, mobjCompany.objCategories, True)
-            UITools.LoadComboFromStringTranslator(cboBudget, mobjCompany.objBudgets, True)
+            UITools.LoadComboFromStringTranslator(cboCategory, mobjCompany.Categories, True)
+            UITools.LoadComboFromStringTranslator(cboBudget, mobjCompany.Budgets, True)
             gLoadMatchNarrowingMethods(cboNarrowMethod)
             Me.ShowDialog()
 
@@ -44,7 +44,7 @@ Friend Class PayeeListForm
     End Sub
 
     Private Sub LoadSharedDocument()
-        mdomNewTransTable = mobjCompany.domTransTable.CloneNode(True)
+        mdomNewTransTable = mobjCompany.MemorizedTransXml.CloneNode(True)
         melmTransTable = mdomNewTransTable.DocumentElement
     End Sub
 
@@ -68,11 +68,11 @@ Friend Class PayeeListForm
             If blnValidateAndCopyPayeeToXML() Then
                 Exit Sub
             End If
-            mobjCompany.domTransTable = mdomNewTransTable
+            mobjCompany.MemorizedTransXml = mdomNewTransTable
             LoadSharedDocument()
-            mobjCompany.domTransTable.Save(mobjCompany.strPayeeFilePath())
-            mobjCompany.CreateTransTableUCS()
-            mobjCompany.LoadTransTableNew()
+            mobjCompany.MemorizedTransXml.Save(mobjCompany.MemorizedTransFilePath())
+            mobjCompany.CreateMemorizedTransXmlUCS()
+            mobjCompany.LoadMemorizedTransNew()
             Me.Close()
 
             Exit Sub

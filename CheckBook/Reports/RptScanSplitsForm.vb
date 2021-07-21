@@ -138,7 +138,7 @@ Friend Class RptScanSplitsForm
                     'MsgBox "You must select a category.", vbCritical
                     'Exit Function
                 Else
-                    mstrCatKey = mobjCompany.objCategories.strKey(UITools.GetItemData(cboCategory, cboCategory.SelectedIndex))
+                    mstrCatKey = mobjCompany.Categories.strKey(UITools.GetItemData(cboCategory, cboCategory.SelectedIndex))
                 End If
             End If
 
@@ -168,9 +168,9 @@ Friend Class RptScanSplitsForm
 
         Try
 
-            ReDim maudtCatTotals(mobjCompany.objCategories.intElements)
-            For intCatIndex = 1 To mobjCompany.objCategories.intElements
-                strCatName = mobjCompany.objCategories.strValue1(intCatIndex)
+            ReDim maudtCatTotals(mobjCompany.Categories.intElements)
+            For intCatIndex = 1 To mobjCompany.Categories.intElements
+                strCatName = mobjCompany.Categories.strValue1(intCatIndex)
                 For intCharPos = 1 To Len(strCatName)
                     If Mid(strCatName, intCharPos, 1) = ":" Then
                         maudtCatTotals(intCatIndex).intNestingLevel = maudtCatTotals(intCatIndex).intNestingLevel + 1
@@ -195,7 +195,7 @@ Friend Class RptScanSplitsForm
             mlngSplitCount = 0
             For intAcctIdx = 0 To lstAccounts.Items.Count - 1
                 If lstAccounts.GetSelected(intAcctIdx) Then
-                    objAcct = mobjCompany.colAccounts.Item(intAcctIdx)
+                    objAcct = mobjCompany.Accounts.Item(intAcctIdx)
                     mcolSelectAccounts.Add(objAcct)
                     For Each objReg In objAcct.colRegisters
                         ScanRegister(objReg)
@@ -265,7 +265,7 @@ Friend Class RptScanSplitsForm
 
             Select Case mlngRptType
                 Case SplitReportType.Totals
-                    intCatIndex = mobjCompany.objCategories.intLookupKey(objSplit.strCategoryKey)
+                    intCatIndex = mobjCompany.Categories.intLookupKey(objSplit.strCategoryKey)
                     If intCatIndex = 0 Then
                         mobjHostUI.InfoMessageBox("Could not find category key " & objSplit.strCategoryKey & " for " & "trx dated " & Utilities.strFormatDate(objTrx.datDate) & " " & "in register " & objReg.strTitle)
                     Else
@@ -292,7 +292,7 @@ Friend Class RptScanSplitsForm
             Select Case mlngRptType
                 Case SplitReportType.Totals
                     frmSumRpt = New CatSumRptForm
-                    frmSumRpt.ShowMe(mobjHostUI, maudtCatTotals, mcolSelectAccounts, mobjCompany.objCategories, mdatStart, mdatEnd,
+                    frmSumRpt.ShowMe(mobjHostUI, maudtCatTotals, mcolSelectAccounts, mobjCompany.Categories, mdatStart, mdatEnd,
                                      mblnIncludeFake, mblnIncludeGenerated)
                 Case Else
                     gRaiseError("Unrecognized category report type")

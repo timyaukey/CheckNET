@@ -112,11 +112,11 @@ Public Class ReadInvoices
             Throw New ImportReadException("Invalid document type in column 8")
         End If
         strCatName = Trim(astrParts(8))
-        intCatIdx = mobjCompany.objCategories.intLookupValue1(strCatName)
+        intCatIdx = mobjCompany.Categories.intLookupValue1(strCatName)
         If intCatIdx = 0 Then
             Throw New ImportReadException("Unrecognized category name - " + strCatName)
         End If
-        strCatKey = mobjCompany.objCategories.strKey(intCatIdx)
+        strCatKey = mobjCompany.Categories.strKey(intCatIdx)
 
         objTrx = New ImportedTrx(Nothing)
         blnUseFakeInvoices = (mobjAccount.lngSubType <> Account.SubType.Liability_AccountsPayable)

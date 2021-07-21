@@ -33,8 +33,8 @@ Public Class HTMLWriter
     End Sub
 
     Private Sub CopyStylesheet(ByVal strFileName As String)
-        Dim strInputPath As String = Company.strExecutableFolder() + "\\Reports\\" + strFileName
-        Dim strOutputPath As String = mobjCompany.strReportPath() + "\\" + strFileName
+        Dim strInputPath As String = Company.ExecutableFolder() + "\\Reports\\" + strFileName
+        Dim strOutputPath As String = mobjCompany.ReportsFolderPath() + "\\" + strFileName
         System.IO.File.Copy(strInputPath, strOutputPath, True)
     End Sub
 
@@ -45,7 +45,7 @@ Public Class HTMLWriter
     End Sub
 
     Public Sub OutputHeader(ByVal strTitle As String, ByVal strSubTitle As String)
-        OutputDiv("ReportCompanyName", mobjCompany.objInfo.strCompanyName)
+        OutputDiv("ReportCompanyName", mobjCompany.Info.strCompanyName)
         OutputDiv("ReportTitle", strTitle)
         OutputDiv("ReportSubTitle", strSubTitle)
         OutputDiv("ReportPrepared", "Prepared " + DateTime.Today.ToLongDateString())
@@ -147,7 +147,7 @@ Public Class HTMLWriter
     End Sub
 
     Public Sub ShowReport()
-        Dim strReportFile As String = mobjCompany.strReportPath() + "\" + mstrFileNameRoot + ".html"
+        Dim strReportFile As String = mobjCompany.ReportsFolderPath() + "\" + mstrFileNameRoot + ".html"
         Using objFile As System.IO.TextWriter = New System.IO.StreamWriter(strReportFile)
             objFile.Write(mobjBuilder.ToString())
         End Using

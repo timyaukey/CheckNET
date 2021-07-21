@@ -120,7 +120,7 @@ Public Class TrxSplit
                     intDaysBack = 30
                 Else
                     'Is the category one we guessed to have short terms?
-                    If InStr(objParent.objReg.objAccount.objCompany.strShortTermsCatKeys, Company.strEncodeCatKey(mstrCategoryKey)) > 0 Then
+                    If InStr(objParent.objReg.objAccount.objCompany.ShortTermsCatKeys, Company.EncodeCatKey(mstrCategoryKey)) > 0 Then
                         intDaysBack = 14
                     Else
                         intDaysBack = 30
@@ -208,7 +208,7 @@ Public Class TrxSplit
 
         mobjBudget = Nothing
         blnNoMatch = False
-        If mstrBudgetKey = "" Or mstrBudgetKey = objReg.objAccount.objCompany.strPlaceholderBudgetKey Then
+        If mstrBudgetKey = "" Or mstrBudgetKey = objReg.objAccount.objCompany.PlaceholderBudgetKey Then
             Exit Sub
         End If
         objBudgetTrx = objReg.objMatchBudget(mobjParent, mstrBudgetKey, blnNoMatch)
@@ -233,7 +233,7 @@ Public Class TrxSplit
         Dim intDotOffset As Integer = mstrCategoryKey.IndexOf("."c)
         If intDotOffset > 0 Then
             Dim intAccountKey As Integer = Integer.Parse(mstrCategoryKey.Substring(0, intDotOffset))
-            For Each objAccount In objCompany_.colAccounts
+            For Each objAccount In objCompany_.Accounts
                 If objAccount.intKey = intAccountKey Then
                     Dim strRegKey As String = mstrCategoryKey.Substring(intDotOffset + 1)
                     For Each objReg In objAccount.colRegisters

@@ -9,7 +9,7 @@ Public Class AccountGroupManager
     End Sub
 
     Public Overrides Function objMakeLineItem(ByVal objParent As LineItemGroup, strItemKey As String) As ReportLineItem
-        For Each objAccount As Account In objCompany.colAccounts
+        For Each objAccount As Account In objCompany.Accounts
             If objAccount.intKey.ToString() = strItemKey Then
                 Return New ReportLineItem(objParent, strItemKey, objAccount.strTitle)
             End If

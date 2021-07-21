@@ -27,7 +27,7 @@ Public Class AccountSaver
 
         Try
 
-            mobjSaveFile = New StreamWriter(mobjCompany.strAccountPath() & "\" & strPath_)
+            mobjSaveFile = New StreamWriter(mobjCompany.AccountsFolderPath() & "\" & strPath_)
 
             SaveLine("FHCKBK2")
             If mobjAccount.strTitle <> "" Then

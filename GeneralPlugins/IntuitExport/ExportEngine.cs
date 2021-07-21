@@ -74,7 +74,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             CategoryMaps = null;
             Payees = new Dictionary<string, PayeeDef>();
             Categories = new Dictionary<string, CatDef>();
-            CatTrans = HostUI.objCompany.objCategories;
+            CatTrans = HostUI.objCompany.Categories;
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         {
             if (!AnalyzeTransactions())
                 return false;
-            OutputPath_ = System.IO.Path.Combine(Company.strReportPath(), "IntuitExport.iif");
+            OutputPath_ = System.IO.Path.Combine(Company.ReportsFolderPath(), "IntuitExport.iif");
             using (OutputWriter = new System.IO.StreamWriter(OutputPath_))
             {
                 OutputAccounts();
@@ -117,7 +117,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             // not be different for different runs of the software unless old
             // transactions are changed (which should never happen).
             List<BankTrx> normalTrxToAnalyze = new List<BankTrx>();
-            foreach (Account acct in Company.colAccounts)
+            foreach (Account acct in Company.Accounts)
             {
                 if (!SkipAccount(acct))
                 {
@@ -226,8 +226,8 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 if (!Categories.TryGetValue(catExportKey, out cat))
                 {
                     string catName = CatTrans.strKeyToValue1(split.strCategoryKey);
-                    // objCategories includes balance sheet accounts
-                    StringTransElement catElem = this.Company.objCategories.get_objElement(this.Company.objCategories.intLookupKey(split.strCategoryKey));
+                    // Categories includes balance sheet accounts
+                    StringTransElement catElem = this.Company.Categories.get_objElement(this.Company.Categories.intLookupKey(split.strCategoryKey));
                     // A null intuitCatType value will cause this category to NOT be output to the IIF file.
                     // This is how we prevent categories that are actually asset, liability and equity accounts
                     // from being output to the IIF as income, expense or COGS account.
@@ -284,7 +284,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             else
             {
                 int acctKey = int.Parse(split.strCategoryKey.Substring(0, periodIndex));
-                Account matchingAcct = Company.colAccounts.First(acct => acct.intKey == acctKey);
+                Account matchingAcct = Company.Accounts.First(acct => acct.intKey == acctKey);
                 exportName = MakeBalanceSheetExportName(matchingAcct);
             }
             return exportName;
@@ -408,7 +408,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         {
             bool retEarningsCreated = false;
             OutputLine("!ACCNT\tNAME\tACCNTTYPE\tEXTRA");
-            foreach (Account acct in Company.colAccounts)
+            foreach (Account acct in Company.Accounts)
             {
                 OutputAccount(acct, ref retEarningsCreated);
             }
@@ -546,7 +546,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             OutputLine("!SPL\tSPLID\tTRNSTYPE\tDATE\tACCNT\tNAME\tAMOUNT\tDOCNUM\tMEMO\tCLEAR");
             OutputLine("!ENDTRNS");
 
-            foreach (Account acct in Company.colAccounts)
+            foreach (Account acct in Company.Accounts)
             {
                 if (!SkipAccount(acct))
                 {
@@ -627,7 +627,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             if (dotIndex < 0)
                 return false;
             int acctKey = int.Parse(split.strCategoryKey.Substring(0, dotIndex));
-            return Company.colAccounts.First(acct => acct.intKey == acctKey).lngSubType == Account.SubType.Liability_AccountsPayable;
+            return Company.Accounts.First(acct => acct.intKey == acctKey).lngSubType == Account.SubType.Liability_AccountsPayable;
         }
 
         private void OutputNormalTrx(BankTrx trx, string transType, string exportAccountName, string payeeName, decimal amount)

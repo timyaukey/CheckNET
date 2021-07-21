@@ -54,7 +54,7 @@ Public Class AccountForm
         objItem.strTitle = "(none)"
         objSelectedItem = objItem
         ctl.Items.Add(objItem)
-        For Each objAccount As Account In mobjCompany.colAccounts
+        For Each objAccount As Account In mobjCompany.Accounts
             objItem = New AccountItem()
             objItem.objAccount = objAccount
             objItem.strTitle = objAccount.strType + ":" + objAccount.strTitle

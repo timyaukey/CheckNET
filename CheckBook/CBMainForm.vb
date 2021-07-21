@@ -30,13 +30,13 @@ Friend Class CBMainForm
             mobjHostUI = Me
 
             Dim strUserLicenseStatement As String = "License error"
-            If Company.objMainLicense.Status = LicenseStatus.Active Then
-                strUserLicenseStatement = "Licensed to " + Company.objMainLicense.LicensedTo
-            ElseIf Company.objMainLicense.Status = LicenseStatus.Expired Then
-                strUserLicenseStatement = "License to " + Company.objMainLicense.LicensedTo + " expired " + Company.objMainLicense.ExpirationDate.Value.ToShortDateString()
-            ElseIf Company.objMainLicense.Status = LicenseStatus.Invalid Then
+            If Company.MainLicense.Status = LicenseStatus.Active Then
+                strUserLicenseStatement = "Licensed to " + Company.MainLicense.LicensedTo
+            ElseIf Company.MainLicense.Status = LicenseStatus.Expired Then
+                strUserLicenseStatement = "License to " + Company.MainLicense.LicensedTo + " expired " + Company.MainLicense.ExpirationDate.Value.ToShortDateString()
+            ElseIf Company.MainLicense.Status = LicenseStatus.Invalid Then
                 strUserLicenseStatement = "License file is invalid"
-            ElseIf Company.objMainLicense.Status = LicenseStatus.Missing Then
+            ElseIf Company.MainLicense.Status = LicenseStatus.Missing Then
                 strUserLicenseStatement = "License file is missing"
             End If
 
@@ -61,7 +61,7 @@ Friend Class CBMainForm
             'things that have to happen to load everything for a Company into memory.
             'The rest of this routine is load the UI (this program).
             mobjCompany = New Company(strDataPathValue)
-            mobjSecurity = mobjCompany.objSecurity
+            mobjSecurity = mobjCompany.SecData
 
             Dim objError As CompanyLoadError = CompanyLoader.objLoad(mobjCompany,
                 AddressOf frmStartup.Configure, AddressOf objAuthenticate)
@@ -76,7 +76,7 @@ Friend Class CBMainForm
 
             Me.Text = strSoftwareTitle & " " & My.Application.Info.Version.Major & "." &
                         My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build &
-                        " [" & LCase(mobjCompany.strDataPath()) & "]"
+                        " [" & LCase(mobjCompany.DataFolderPath()) & "]"
 
             If mobjSecurity.blnNoFile Then
                 mnuEnableUserAccounts.Enabled = True
@@ -94,13 +94,13 @@ Friend Class CBMainForm
                 mnuRepairUserAccounts.Enabled = mobjSecurity.blnIsAdministrator
             End If
 
-            If Company.blnAnyNonActiveLicenses Then
+            If Company.AnyNonActiveLicenses Then
                 Using frm As LicenseListForm = New LicenseListForm()
                     frm.ShowMe(Me)
                 End Using
             End If
 
-            For Each objAccount In mobjCompany.colAccounts
+            For Each objAccount In mobjCompany.Accounts
                 For Each objReg In objAccount.colRegisters
                     If objReg.blnShowInitially Then
                         ShowRegister(objReg)
@@ -117,7 +117,7 @@ Friend Class CBMainForm
     End Sub
 
     Private Function objAuthenticate(ByVal objCompany As Company) As CompanyLoadError
-        If objCompany.objSecurity.blnNoFile Then
+        If objCompany.SecData.blnNoFile Then
             Return Nothing
         End If
         Do
@@ -129,7 +129,7 @@ Friend Class CBMainForm
                     Return New CompanyLoadCanceled()
                 End If
             End Using
-            If objCompany.objSecurity.blnAuthenticate(strLogin, strPassword) Then
+            If objCompany.SecData.blnAuthenticate(strLogin, strPassword) Then
                 Return Nothing
             End If
             mobjHostUI.ErrorMessageBox((New CompanyLoadNotAuthorized()).strMessage)
@@ -469,8 +469,8 @@ Friend Class CBMainForm
         Try
 
             frm = New ListEditorForm
-            frm.blnShowMe(Me, ListEditorForm.ListType.Budget, mobjCompany.strBudgetPath(),
-                          mobjCompany.objBudgets, "Budget List", AddressOf blnEditStringTransElem)
+            frm.blnShowMe(Me, ListEditorForm.ListType.Budget, mobjCompany.BudgetFilePath(),
+                          mobjCompany.Budgets, "Budget List", AddressOf blnEditStringTransElem)
 
             Exit Sub
         Catch ex As Exception
@@ -482,8 +482,8 @@ Friend Class CBMainForm
         Try
             Using frmListEditor As ListEditorForm = New ListEditorForm()
                 Using frmCatEditor As CategoryEditorForm = New CategoryEditorForm()
-                    If frmListEditor.blnShowMe(Me, ListEditorForm.ListType.Category, mobjCompany.strCategoryPath(),
-                             mobjCompany.objIncExpAccounts, "Category List", AddressOf frmCatEditor.blnShowDialog) Then
+                    If frmListEditor.blnShowMe(Me, ListEditorForm.ListType.Category, mobjCompany.CategoryFilePath(),
+                             mobjCompany.IncExpAccounts, "Category List", AddressOf frmCatEditor.blnShowDialog) Then
                         CompanyLoader.LoadCategories(mobjCompany)
                     End If
                 End Using
@@ -775,7 +775,7 @@ Friend Class CBMainForm
     Private Sub mnuLicensing_Click(sender As Object, e As EventArgs) Handles mnuLicensing.Click
         Try
             'Using frm As LicenseForm = New LicenseForm()
-            '    frm.ShowLicense(mobjHostUI, Company.objMainLicense)
+            '    frm.ShowLicense(mobjHostUI, Company.MainLicense)
             'End Using
             Using frm As LicenseListForm = New LicenseListForm()
                 frm.ShowMe(mobjHostUI)

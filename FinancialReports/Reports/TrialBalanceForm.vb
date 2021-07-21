@@ -96,7 +96,7 @@ Public Class TrialBalanceForm
             Dim strLineFooterTitleClass As String = "ReportFooterTitle2"
             Dim strLineFooterAmountClass As String = "ReportFooterAmount2"
             Dim strMinusClass As String = "Minus"
-            Dim objConfig As CompanyInfo = mobjCompany.objInfo
+            Dim objConfig As CompanyInfo = mobjCompany.Info
 
             objWriter.BeginReport()
             objWriter.OutputHeader("Balance Sheet", "As Of " + ctlEndDate.Value.Date.ToShortDateString())
@@ -254,7 +254,7 @@ Public Class TrialBalanceForm
                 Exit Sub
             End If
             'Find a Retained Earnings register to add BankTrx to.
-            For Each objAccount As Account In mobjCompany.colAccounts
+            For Each objAccount As Account In mobjCompany.Accounts
                 If objAccount.lngSubType = Account.SubType.Equity_RetainedEarnings Then
                     objRegister = objAccount.colRegisters(0)
                     Exit For

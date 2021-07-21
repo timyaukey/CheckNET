@@ -33,7 +33,7 @@ Friend Class ExportForm
         mobjHostUI = objHostUI
         mobjCompany = mobjHostUI.objCompany
         mblnCancel = True
-        mstrOutputFile = mobjCompany.strReportPath() & "\ExportSplits.csv"
+        mstrOutputFile = mobjCompany.ReportsFolderPath() & "\ExportSplits.csv"
         lblOutputFile.Text = "Will output to " & mstrOutputFile
         Me.ShowDialog()
         blnGetSettings = Not mblnCancel
@@ -157,7 +157,7 @@ Friend Class ExportForm
             End If
 
             strLine = Utilities.strFormatDate(objTrx.datDate) & "," & objTrx.strNumber & ",""" & objTrx.strDescription & """," _
-                & Utilities.strFormatCurrency(objSplit.curAmount) & ",""" & mobjCompany.objCategories.strKeyToValue1(objSplit.strCategoryKey) _
+                & Utilities.strFormatCurrency(objSplit.curAmount) & ",""" & mobjCompany.Categories.strKeyToValue1(objSplit.strCategoryKey) _
                 & """," & strDueDate & "," & Utilities.strFormatDate(datDueToUse) & "," & strInvDate & "," _
                 & Utilities.strFormatDate(datInvToUse) & ",""" & objSplit.strPONumber & """,""" & objSplit.strInvoiceNum & """,""" & objSplit.strTerms & """"
 
