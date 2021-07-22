@@ -13,7 +13,7 @@ Public Class RegForwardFrom(Of TTrx As BaseTrx)
         mobjStartTrx = objStartTrx
     End Sub
 
-    Protected Overrides Function objGetFirst() As BaseTrx
+    Protected Overrides Function GetFirst() As BaseTrx
         Return mobjStartTrx
     End Function
 

@@ -16,7 +16,7 @@ Public Class RegReverse(Of TTrx As BaseTrx)
         'Using a BaseTrx as the cursor instead of a Register index means
         'we always return the BaseTrx after the last one returned,
         'even if BaseTrx are inserted or deleted earlier in the Register order.
-        Dim objCurrentTrx As BaseTrx = objGetLast()
+        Dim objCurrentTrx As BaseTrx = GetLast()
         Do
             If objCurrentTrx Is Nothing Then
                 Return
@@ -34,7 +34,7 @@ Public Class RegReverse(Of TTrx As BaseTrx)
         Return GetEnumerator()
     End Function
 
-    Protected Overridable Function objGetLast() As BaseTrx
+    Protected Overridable Function GetLast() As BaseTrx
         Return mobjReg.LastTrx
     End Function
 

@@ -13,7 +13,7 @@ Public Class RegBackwardFrom(Of TTrx As BaseTrx)
         mobjStartTrx = objStartTrx
     End Sub
 
-    Protected Overrides Function objGetLast() As BaseTrx
+    Protected Overrides Function GetLast() As BaseTrx
         Return mobjStartTrx
     End Function
 
