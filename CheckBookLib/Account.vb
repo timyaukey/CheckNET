@@ -332,9 +332,9 @@ Public Class Account
         mdatLastReconciled = DateTime.MinValue
         For Each reg In mcolRegisters
             For Each objTrx As BankTrx In reg.GetAllTrx(Of BankTrx)()
-                If objTrx.lngStatus = BaseTrx.TrxStatus.Reconciled Then
-                    If objTrx.datDate > mdatLastReconciled Then
-                        mdatLastReconciled = objTrx.datDate
+                If objTrx.Status = BaseTrx.TrxStatus.Reconciled Then
+                    If objTrx.TrxDate > mdatLastReconciled Then
+                        mdatLastReconciled = objTrx.TrxDate
                     End If
                 End If
             Next

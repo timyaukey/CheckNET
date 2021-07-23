@@ -59,10 +59,10 @@ Public Class TransferManager
         End If
         'objTrx1.strTransferKey is the OLD transfer key, because objTrx1 hasn't been
         'updated yet. objReg2 is the Register chosen to save as the new TransferKey.
-        If objTrx1.strTransferKey <> objReg2.RegisterKey Then
+        If objTrx1.TransferKey <> objReg2.RegisterKey Then
             gRaiseError("Transfer key may not be changed in TransferManager.UpdateTransfer")
         End If
-        objTrx2 = objReg2.MatchTransfer(objTrx1.datDate, objReg1.RegisterKey, -objTrx1.curAmount)
+        objTrx2 = objReg2.MatchTransfer(objTrx1.TrxDate, objReg1.RegisterKey, -objTrx1.Amount)
         If objTrx2 Is Nothing Then
             gRaiseError("Could not find matching Trx in TransferManager.UpdateTransfer")
         End If
@@ -81,7 +81,7 @@ Public Class TransferManager
         If objTrx1.GetType() IsNot GetType(TransferTrx) Then
             gRaiseError("Trx is not a transfer in TransferManager.DeleteTransfer")
         End If
-        Dim objTrx2 As TransferTrx = objReg2.MatchTransfer(objTrx1.datDate, objReg1.RegisterKey, -objTrx1.curAmount)
+        Dim objTrx2 As TransferTrx = objReg2.MatchTransfer(objTrx1.TrxDate, objReg1.RegisterKey, -objTrx1.Amount)
         If objTrx2 Is Nothing Then
             gRaiseError("Could not find matching Trx in TransferManager.DeleteTransfer")
         End If

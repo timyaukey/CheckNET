@@ -23,13 +23,13 @@ Public Class CheckPrinting
 
     Public Function blnAllowedToPrintCheck(ByVal objTestTrx As BankTrx) As Boolean
 
-        If objTestTrx.curAmount >= 0 Then
+        If objTestTrx.Amount >= 0 Then
             mobjHostUI.ErrorMessageBox("You may only print a check for a debit transaction.")
             Return False
         End If
 
         Dim intCheckNum As Integer
-        If Int32.TryParse(objTestTrx.strNumber, intCheckNum) Then
+        If Int32.TryParse(objTestTrx.Number, intCheckNum) Then
             mobjHostUI.ErrorMessageBox("You may not print a check for a transaction that already has a check number.")
             Return False
         End If
@@ -133,11 +133,11 @@ Public Class CheckPrinting
         ev.Graphics.PageUnit = GraphicsUnit.Inch
         dblLineHeight = mobjFont.GetHeight(ev.Graphics)
 
-        curAmount = -mobjTrx.curAmount
+        curAmount = -mobjTrx.Amount
 
         'Find the first memorized trx with the same payee name
         'and a mailing address.
-        colPayees = mobjCompany.FindPayeeMatches((mobjTrx.strDescription))
+        colPayees = mobjCompany.FindPayeeMatches((mobjTrx.Description))
         intPayeeIndex = 0
         Do
             If intPayeeIndex >= colPayees.Length Then
@@ -150,7 +150,7 @@ Public Class CheckPrinting
             strAccountNumber = gstrGetXMLChildText(objPayee, "Account")
             intSemiPos = InStr(strMailAddr, ";")
             If intSemiPos = 0 Then
-                strMailName = mobjTrx.strDescription
+                strMailName = mobjTrx.Description
             Else
                 strMailName = Left(strMailAddr, intSemiPos - 1)
                 strMailAddr = Mid(strMailAddr, intSemiPos + 1)
@@ -165,9 +165,9 @@ Public Class CheckPrinting
             intPayeeIndex = intPayeeIndex + 1
         Loop
 
-        PrintCheckText("Date", Utilities.strFormatDate(mobjTrx.datDate), ev)
+        PrintCheckText("Date", Utilities.strFormatDate(mobjTrx.TrxDate), ev)
         PrintCheckText("ShortAmount", Utilities.strFormatCurrency(curAmount), ev)
-        PrintCheckText("Payee", mobjTrx.strDescription, ev)
+        PrintCheckText("Payee", mobjTrx.Description, ev)
         Dim intPennies As Integer
         intPennies = CInt(Fix(curAmount * 100.0#) - Fix(curAmount) * 100.0#)
         Dim strDollars As String
@@ -192,8 +192,8 @@ Public Class CheckPrinting
 
         PrintOptionalCheckText("Payee2", strMailName, ev)
         PrintOptionalCheckText("Amount2", "$" & Utilities.strFormatCurrency(curAmount), ev)
-        PrintOptionalCheckText("Date2", Utilities.strFormatDate(mobjTrx.datDate), ev)
-        PrintOptionalCheckText("Number2", "#" & mobjTrx.strNumber, ev)
+        PrintOptionalCheckText("Date2", Utilities.strFormatDate(mobjTrx.TrxDate), ev)
+        PrintOptionalCheckText("Number2", "#" & mobjTrx.Number, ev)
 
         PrintInvoiceNumbers("InvoiceList1", mobjTrx, dblLineHeight, ev)
         PrintInvoiceNumbers("InvoiceList2", mobjTrx, dblLineHeight, ev)
@@ -252,8 +252,8 @@ Public Class CheckPrinting
         intRowNum = 1
         intColNum = 1
 
-        For Each objSplit In objTrx.colSplits
-            strInvoiceNum = objSplit.strInvoiceNum
+        For Each objSplit In objTrx.Splits
+            strInvoiceNum = objSplit.InvoiceNum
             If strInvoiceNum <> "" Then
                 If intRowNum = 1 And intColNum = 1 Then
                     PrintCheckLine(dblX, dblY, dblLineHeight, "Invoice Numbers:", ev)

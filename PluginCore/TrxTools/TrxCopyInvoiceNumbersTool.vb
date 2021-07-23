@@ -26,9 +26,9 @@ Public Class TrxCopyInvoiceNumbersTool
         If objNormalTrx Is Nothing Then
             Return
         End If
-        For Each objSplit As TrxSplit In objNormalTrx.colSplits
-            If Not String.IsNullOrEmpty(objSplit.strInvoiceNum) Then
-                strNumbers = strNumbers & " " & objSplit.strInvoiceNum
+        For Each objSplit As TrxSplit In objNormalTrx.Splits
+            If Not String.IsNullOrEmpty(objSplit.InvoiceNum) Then
+                strNumbers = strNumbers & " " & objSplit.InvoiceNum
             End If
         Next
         strNumbers = Trim(strNumbers)

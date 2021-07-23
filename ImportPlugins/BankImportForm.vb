@@ -53,7 +53,7 @@ Public Class BankImportForm
 
         Public Overrides Function ToString() As String
             With objImportedTrx
-                Return Utilities.strFormatDate(.datDate) + " " + .strDescription + " " + Utilities.strFormatCurrency(.curAmount)
+                Return Utilities.strFormatDate(.TrxDate) + " " + .Description + " " + Utilities.strFormatCurrency(.Amount)
             End With
         End Function
     End Class
@@ -206,7 +206,7 @@ Public Class BankImportForm
                                 strMultiPartNote = ", in a " + .objMultiPart.strSummary()
                             End If
                             With .objMatchedTrx
-                                strTip = "Matched to " + Utilities.strFormatDate(.datDate) + " " + .strDescription + " " + Utilities.strFormatCurrency(.curAmount) +
+                                strTip = "Matched to " + Utilities.strFormatDate(.TrxDate) + " " + .Description + " " + Utilities.strFormatCurrency(.Amount) +
                                     strMultiPartNote + "."
                             End With
                             objItem.ToolTipText = strTip
@@ -216,20 +216,20 @@ Public Class BankImportForm
                             Dim curImportTotal As Decimal = 0D
                             objExplain.AppendLine("Import Items:")
                             For Each objImport As ImportItem In .objMultiPart.colImports
-                                objExplain.AppendLine(" " + Utilities.strFormatDate(objImport.objImportedTrx.datDate) + " " +
-                                                          objImport.objImportedTrx.strDescription + " " +
-                                                          Utilities.strFormatCurrency(objImport.objImportedTrx.curAmount))
-                                curImportTotal = curImportTotal + objImport.objImportedTrx.curAmount
+                                objExplain.AppendLine(" " + Utilities.strFormatDate(objImport.objImportedTrx.TrxDate) + " " +
+                                                          objImport.objImportedTrx.Description + " " +
+                                                          Utilities.strFormatCurrency(objImport.objImportedTrx.Amount))
+                                curImportTotal = curImportTotal + objImport.objImportedTrx.Amount
                             Next
                             objExplain.AppendLine("Import Total Amount: " + Utilities.strFormatCurrency(curImportTotal))
                             objExplain.AppendLine()
                             objExplain.AppendLine("Matched Transactions:")
                             Dim curMatchTotal As Decimal = 0D
                             For Each objNormalTrx As BankTrx In .objMultiPart.colMatches
-                                objExplain.AppendLine(" " + Utilities.strFormatDate(objNormalTrx.datDate) + " " +
-                                                          objNormalTrx.strDescription + " " +
-                                                          Utilities.strFormatCurrency(objNormalTrx.curAmount))
-                                curMatchTotal = curMatchTotal + objNormalTrx.curAmount
+                                objExplain.AppendLine(" " + Utilities.strFormatDate(objNormalTrx.TrxDate) + " " +
+                                                          objNormalTrx.Description + " " +
+                                                          Utilities.strFormatCurrency(objNormalTrx.Amount))
+                                curMatchTotal = curMatchTotal + objNormalTrx.Amount
                             Next
                             objExplain.AppendLine("Match Total Amount: " + Utilities.strFormatCurrency(curImportTotal))
                             MsgBox(objExplain.ToString(), MsgBoxStyle.Information, "Multi-Part Match")
@@ -282,7 +282,7 @@ Public Class BankImportForm
                             If Not .objMatchedReg Is Nothing Then
                                 'Insert .objImportedTrx in .objMatchedReg with .objImportedTrx.strImportKey
                                 Dim datDummy As DateTime
-                                .objImportedTrx.objReg = .objMatchedReg
+                                .objImportedTrx.Register = .objMatchedReg
                                 If mobjHostUI.blnAddNormalTrxSilent(.objImportedTrx, datDummy, True, "ImportAutoBatch") Then
                                     MsgBox("Failed to insert transaction " + strDescribeItem(intItemIndex) + " required as part of a multi-part match.")
                                 End If
@@ -378,11 +378,11 @@ Public Class BankImportForm
                     objPossibleMatchTrx = Utilities.objFirstElement(colUnusedMatches)
                     blnCheckWithoutAmount = False
                     'A check in the register with a zero amount means we didn't know the amount when we entered it, or imported it.
-                    If Val(objPossibleMatchTrx.strNumber) > 0 And objPossibleMatchTrx.curAmount = 0.0# Then
+                    If Val(objPossibleMatchTrx.Number) > 0 And objPossibleMatchTrx.Amount = 0.0# Then
                         blnCheckWithoutAmount = True
                     End If
                     If (blnExactMatch Or blnNonExactConfirmed Or blnCheckWithoutAmount) Then
-                        If objPossibleMatchTrx.strImportKey = "" Then
+                        If objPossibleMatchTrx.ImportKey = "" Then
                             .objMatchedTrx = objPossibleMatchTrx
                             .objMatchedReg = objReg
                             mobjHashedMatches = Nothing
@@ -433,9 +433,9 @@ Public Class BankImportForm
 
         objRootImportItem = maudtItem(intRootItemIndex)
         objRootImportedTrx = objRootImportItem.objImportedTrx
-        strDescrStartsWith = VB.Left(objRootImportedTrx.strDescription, 8)
+        strDescrStartsWith = VB.Left(objRootImportedTrx.Description, 8)
         colAllCandidateImports = colFindAllCandidateImports(strDescrStartsWith, intRootItemIndex)
-        colAllCandidateMatches = colFindAllCandidateMatches(strDescrStartsWith, objRootImportedTrx.datDate)
+        colAllCandidateMatches = colFindAllCandidateMatches(strDescrStartsWith, objRootImportedTrx.TrxDate)
 
         'No multi-part matches are possible unless at least one of the input collections
         'has more than one member, and both input collections have at least one possible match.
@@ -458,10 +458,10 @@ Public Class BankImportForm
         colImportSubsets = New List(Of ImportSubset)()
         For Each colImportSubset In colGetSubsets(Of ImportItem, ImportSubset)(colAllCandidateImports, 9,
                 Function(ByVal objItem As ImportItem) As Decimal
-                    Return objItem.objImportedTrx.curAmount
+                    Return objItem.objImportedTrx.Amount
                 End Function)
             colImportSubset.Add(objRootImportItem)
-            colImportSubset.curTotal = colImportSubset.curTotal + objRootImportItem.objImportedTrx.curAmount
+            colImportSubset.curTotal = colImportSubset.curTotal + objRootImportItem.objImportedTrx.Amount
             colImportSubsets.Add(colImportSubset)
         Next
 
@@ -470,7 +470,7 @@ Public Class BankImportForm
         colMatchSubsets = New List(Of MatchSubset)()
         For Each colMatchSubset In colGetSubsets(Of BankTrx, MatchSubset)(colAllCandidateMatches, 9,
             Function(ByVal objItem As BankTrx) As Decimal
-                Return objItem.curAmount
+                Return objItem.Amount
             End Function)
             colMatchSubsets.Add(colMatchSubset)
         Next
@@ -532,7 +532,7 @@ Public Class BankImportForm
         Dim objImportItem As ImportItem
         Dim objImportedTrx As ImportedTrx
 
-        datRootDate = maudtItem(intRootItemIndex).objImportedTrx.datDate
+        datRootDate = maudtItem(intRootItemIndex).objImportedTrx.TrxDate
         datStartDate = datRootDate.AddDays(-2.0#)
         datEndDate = datRootDate.AddDays(2.0#)
         Dim colResult As List(Of ImportItem) = New List(Of ImportItem)()
@@ -540,9 +540,9 @@ Public Class BankImportForm
             objImportItem = maudtItem(intItemIndex)
             If (objImportItem.objMatchedReg Is Nothing) And (objImportItem.lngStatus = ImportStatus.mlngIMPSTS_UNRESOLVED) Then
                 objImportedTrx = objImportItem.objImportedTrx
-                If objImportedTrx.datDate >= datStartDate And objImportedTrx.datDate <= datEndDate Then
+                If objImportedTrx.TrxDate >= datStartDate And objImportedTrx.TrxDate <= datEndDate Then
                     If intItemIndex <> intRootItemIndex Then
-                        If objImportedTrx.strDescription.StartsWith(strDescrStartsWith, StringComparison.InvariantCultureIgnoreCase) Then
+                        If objImportedTrx.Description.StartsWith(strDescrStartsWith, StringComparison.InvariantCultureIgnoreCase) Then
                             colResult.Add(objImportItem)
                         End If
                     End If
@@ -566,7 +566,7 @@ Public Class BankImportForm
         Dim datEndDate As DateTime = datDate.AddDays(2.0#)
         For Each objReg As Register In mobjAccount.Registers
             For Each objNormalTrx As BankTrx In objReg.GetDateRange(Of BankTrx)(datStartDate, datEndDate)
-                If objNormalTrx.strDescription.StartsWith(strDescrStartsWith) Then
+                If objNormalTrx.Description.StartsWith(strDescrStartsWith) Then
                     If Not blnTrxIsMatched(objNormalTrx) Then
                         colResult.Add(objNormalTrx)
                         'Else  'uncomment to allow a breakpoint when debugging
@@ -670,7 +670,7 @@ Public Class BankImportForm
                 'We ran out of matched BankTrx, so create new BankTrx for each remaining ImportItem.
                 Do
                     objImportEnum.Current.objMultiPart = objMultiPart
-                    objImportEnum.Current.objMatchedReg = objLastMatchedTrx.objReg
+                    objImportEnum.Current.objMatchedReg = objLastMatchedTrx.Register
                     objImportEnum.Current.objMatchedTrx = Nothing
                     mobjHashedMatches = Nothing
                     '.MoveNext() AFTER using .Current, because we already advanced
@@ -683,7 +683,7 @@ Public Class BankImportForm
             End If
             objLastMatchedTrx = objMatchEnum.Current
             objImportEnum.Current.objMultiPart = objMultiPart
-            objImportEnum.Current.objMatchedReg = objMatchEnum.Current.objReg
+            objImportEnum.Current.objMatchedReg = objMatchEnum.Current.Register
             objImportEnum.Current.objMatchedTrx = objMatchEnum.Current
             mobjHashedMatches = Nothing
         Loop
@@ -770,7 +770,7 @@ Public Class BankImportForm
                     blnItemImported = mobjImportHandler.blnAlternateAutoNewHandling(objImportedTrx, mobjSelectedRegister)
                     'If we did not use alternate handling.
                     If Not blnItemImported Then
-                        objImportedTrx.objReg = mobjSelectedRegister
+                        objImportedTrx.Register = mobjSelectedRegister
                         If Not mobjHostUI.blnAddNormalTrxSilent(objImportedTrx, datDummy, True, "ImportNewBatch") Then
                             blnItemImported = True
                         End If
@@ -821,7 +821,7 @@ Public Class BankImportForm
             strFailReason = """Allow Auto Batch New"" not checked in memorized transaction"
             Return False
         End If
-        If objImportedTrx.lngSplits = 0 Then
+        If objImportedTrx.SplitCount = 0 Then
             strFailReason = "Transaction has no splits"
             Return False
         End If
@@ -830,17 +830,17 @@ Public Class BankImportForm
             Return False
         End If
 
-        objSplit = objImportedTrx.objFirstSplit
-        If objSplit.strCategoryKey = "" And blnSetMissingCategory Then
+        objSplit = objImportedTrx.FirstSplit
+        If objSplit.CategoryKey = "" And blnSetMissingCategory Then
             If cboDefaultCategory.SelectedIndex <> -1 Then
                 lngCatIdx = UITools.GetItemData(cboDefaultCategory, cboDefaultCategory.SelectedIndex)
                 If lngCatIdx > 0 Then
                     strDefaultCatKey = mobjCompany.Categories.strKey(lngCatIdx)
-                    objSplit.strCategoryKey = strDefaultCatKey
+                    objSplit.CategoryKey = strDefaultCatKey
                 End If
             End If
         End If
-        If objSplit.strCategoryKey = "" Then
+        If objSplit.CategoryKey = "" Then
             strFailReason = "Transaction has no category"
             Return False
         End If
@@ -953,15 +953,15 @@ Public Class BankImportForm
         If objItem2.objImportedTrx Is Nothing Then
             Return 1
         End If
-        intResult = objItem1.objImportedTrx.datDate.CompareTo(objItem2.objImportedTrx.datDate)
+        intResult = objItem1.objImportedTrx.TrxDate.CompareTo(objItem2.objImportedTrx.TrxDate)
         If intResult <> 0 Then
             Return intResult
         End If
-        intResult = objItem1.objImportedTrx.strNumber.CompareTo(objItem2.objImportedTrx.strNumber)
+        intResult = objItem1.objImportedTrx.Number.CompareTo(objItem2.objImportedTrx.Number)
         If intResult <> 0 Then
             Return intResult
         End If
-        Return objItem1.objImportedTrx.strDescription.CompareTo(objItem2.objImportedTrx.strDescription)
+        Return objItem1.objImportedTrx.Description.CompareTo(objItem2.objImportedTrx.Description)
     End Function
 
     '$Description Display import items.
@@ -988,7 +988,7 @@ Public Class BankImportForm
                 If strDescriptionFilter = "" Then
                     blnMatchesFilter = True
                 Else
-                    blnMatchesFilter = maudtItem(intIndex).objImportedTrx.strDescription.ToLower().Contains(strDescriptionFilter)
+                    blnMatchesFilter = maudtItem(intIndex).objImportedTrx.Description.ToLower().Contains(strDescriptionFilter)
                 End If
                 If (maudtItem(intIndex).lngStatus = ImportStatus.mlngIMPSTS_UNRESOLVED Or blnShowCompleted) And blnMatchesFilter Then
                     blnMatchImport(intIndex)
@@ -1046,10 +1046,10 @@ Public Class BankImportForm
                     strStatus = "Update"
             End Select
             With objItem
-                .Text = Utilities.strFormatDate(objTrx.datDate)
-                .SubItems.Insert(1, New ListViewItem.ListViewSubItem(Nothing, objTrx.strNumber))
-                .SubItems.Insert(2, New ListViewItem.ListViewSubItem(Nothing, objTrx.strDescription))
-                .SubItems.Insert(3, New ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(objTrx.curAmount)))
+                .Text = Utilities.strFormatDate(objTrx.TrxDate)
+                .SubItems.Insert(1, New ListViewItem.ListViewSubItem(Nothing, objTrx.Number))
+                .SubItems.Insert(2, New ListViewItem.ListViewSubItem(Nothing, objTrx.Description))
+                .SubItems.Insert(3, New ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(objTrx.Amount)))
                 .SubItems.Insert(4, New ListViewItem.ListViewSubItem(Nothing, strSummarizeTrxCat(objTrx)))
                 .SubItems.Insert(5, New ListViewItem.ListViewSubItem(Nothing, strStatus))
                 If Not objReg Is Nothing Then
@@ -1133,7 +1133,7 @@ Public Class BankImportForm
             End If
             intItemArrayIndex = CShort(lvwTrx.Items.Item(intListItemIndex).SubItems(mintITMCOL_INDEX).Text)
             With maudtItem(intItemArrayIndex).objImportedTrx
-                If StrComp(.strNumber.ToLower(), mstrImportSearchText, CompareMethod.Text) = 0 Or Utilities.strFormatCurrency(.curAmount) = mstrImportSearchText Or InStr(1, .strDescription.ToLower(), mstrImportSearchText, CompareMethod.Text) > 0 Then
+                If StrComp(.Number.ToLower(), mstrImportSearchText, CompareMethod.Text) = 0 Or Utilities.strFormatCurrency(.Amount) = mstrImportSearchText Or InStr(1, .Description.ToLower(), mstrImportSearchText, CompareMethod.Text) > 0 Then
                     lvwTrx.SelectedItems.Clear()
                     lvwTrx.FocusedItem = lvwTrx.Items.Item(intListItemIndex)
                     lvwTrx.FocusedItem.Selected = True
@@ -1252,7 +1252,7 @@ Public Class BankImportForm
             Dim intNumberVisible As Integer = 0
             For Each objMatchItem In lvwMatches.Items
                 objMatchTrx = maudtMatch(CInt(objMatchItem.SubItems(mintMCHCOL_INDEX).Text))
-                If objMatchTrx.strImportKey = "" Then
+                If objMatchTrx.ImportKey = "" Then
                     If Not blnFoundNonImported Then
                         objMatchItem.Selected = True
                         blnFoundNonImported = True
@@ -1286,8 +1286,8 @@ Public Class BankImportForm
 
             'This is the import item they selected.
             objImportedTrx = maudtItem(intItemIndex).objImportedTrx
-            If IsNumeric(objImportedTrx.strNumber) Then
-                lngNumber = CInt(objImportedTrx.strNumber)
+            If IsNumeric(objImportedTrx.Number) Then
+                lngNumber = CInt(objImportedTrx.Number)
             Else
                 lngNumber = 0
             End If
@@ -1334,26 +1334,26 @@ Public Class BankImportForm
         Dim strFake As String = ""
         Dim strGen As String = ""
         Dim strImport As String = ""
-        If objTrx.blnFake Then
+        If objTrx.IsFake Then
             strFake = "Y"
         End If
-        If objTrx.blnAutoGenerated Then
+        If objTrx.IsAutoGenerated Then
             strGen = "Y"
         End If
-        If objTrx.strImportKey <> "" Then
+        If objTrx.ImportKey <> "" Then
             strImport = "Y"
         End If
         With objItem
-            .Text = Utilities.strFormatDate(objTrx.datDate)
-            .SubItems.Insert(1, New ListViewItem.ListViewSubItem(Nothing, objTrx.strNumber))
-            .SubItems.Insert(2, New ListViewItem.ListViewSubItem(Nothing, objTrx.strDescription))
-            .SubItems.Insert(3, New ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(objTrx.curAmount)))
+            .Text = Utilities.strFormatDate(objTrx.TrxDate)
+            .SubItems.Insert(1, New ListViewItem.ListViewSubItem(Nothing, objTrx.Number))
+            .SubItems.Insert(2, New ListViewItem.ListViewSubItem(Nothing, objTrx.Description))
+            .SubItems.Insert(3, New ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(objTrx.Amount)))
             .SubItems.Insert(4, New ListViewItem.ListViewSubItem(Nothing, strSummarizeTrxCat(objTrx)))
-            .SubItems.Insert(5, New ListViewItem.ListViewSubItem(Nothing, objTrx.strSummarizeDueDate()))
+            .SubItems.Insert(5, New ListViewItem.ListViewSubItem(Nothing, objTrx.SummarizeDueDates()))
             .SubItems.Insert(6, New ListViewItem.ListViewSubItem(Nothing, strFake))
             .SubItems.Insert(7, New ListViewItem.ListViewSubItem(Nothing, strGen))
             .SubItems.Insert(8, New ListViewItem.ListViewSubItem(Nothing, strImport))
-            .SubItems.Insert(9, New ListViewItem.ListViewSubItem(Nothing, objTrx.objReg.Title))
+            .SubItems.Insert(9, New ListViewItem.ListViewSubItem(Nothing, objTrx.Register.Title))
             .SubItems.Insert(mintMCHCOL_INDEX, New ListViewItem.ListViewSubItem(Nothing, CStr(intIndex)))
         End With
 
@@ -1361,8 +1361,8 @@ Public Class BankImportForm
 
     Private Function strSummarizeTrxCat(ByVal objTrx As BankTrx) As String
 
-        If objTrx.lngSplits = 1 Then
-            strSummarizeTrxCat = mobjCompany.Categories.strKeyToValue1(objTrx.objFirstSplit.strCategoryKey)
+        If objTrx.SplitCount = 1 Then
+            strSummarizeTrxCat = mobjCompany.Categories.strKeyToValue1(objTrx.FirstSplit.CategoryKey)
         Else
             strSummarizeTrxCat = "(split)"
         End If
@@ -1383,7 +1383,7 @@ Public Class BankImportForm
             End If
 
             With maudtItem(intSelectedItemIndex())
-                .objImportedTrx.objReg = mobjSelectedRegister
+                .objImportedTrx.Register = mobjSelectedRegister
                 If mobjHostUI.blnAddNormalTrx(.objImportedTrx, datDummy, True, "Import.CreateNew") Then
                     Exit Sub
                 End If
@@ -1415,7 +1415,7 @@ Public Class BankImportForm
                 If MsgBox("Create transaction " & strDescribeTrx(.objImportedTrx) & "?", MsgBoxStyle.OkCancel, "Create Transaction") <> MsgBoxResult.Ok Then
                     Exit Sub
                 End If
-                .objImportedTrx.objReg = mobjSelectedRegister
+                .objImportedTrx.Register = mobjSelectedRegister
                 If mobjHostUI.blnAddNormalTrxSilent(.objImportedTrx, datDummy, True, "ImportNewSilent") Then
                     Exit Sub
                 End If
@@ -1443,7 +1443,7 @@ Public Class BankImportForm
             End If
 
             objMatchedTrx = maudtMatch(intSelectedMatchIndex())
-            If objMatchedTrx.strImportKey <> "" Then
+            If objMatchedTrx.ImportKey <> "" Then
                 mobjHostUI.ErrorMessageBox("You may not update a transaction that has already been imported.")
                 Exit Sub
             End If
@@ -1451,7 +1451,7 @@ Public Class BankImportForm
                 If Not objMatchedTrx Is Nothing Then
                     If mobjImportHandler.blnIndividualUpdate(.objImportedTrx, objMatchedTrx) Then
                         .lngStatus = ImportStatus.mlngIMPSTS_UPDATE
-                        .objReg = objMatchedTrx.objReg
+                        .objReg = objMatchedTrx.Register
                     End If
                 End If
             End With
@@ -1530,7 +1530,7 @@ Public Class BankImportForm
     End Function
 
     Private Function strDescribeTrx(ByRef objTrx As ImportedTrx) As String
-        strDescribeTrx = "[ " & Utilities.strFormatDate(objTrx.datDate) & " " & objTrx.strDescription & " $" & Utilities.strFormatCurrency(objTrx.curAmount) & " ]"
+        strDescribeTrx = "[ " & Utilities.strFormatDate(objTrx.TrxDate) & " " & objTrx.Description & " $" & Utilities.strFormatCurrency(objTrx.Amount) & " ]"
     End Function
 
     Private Sub lvwTrx_ItemChecked(sender As Object, e As ItemCheckedEventArgs) Handles lvwTrx.ItemChecked

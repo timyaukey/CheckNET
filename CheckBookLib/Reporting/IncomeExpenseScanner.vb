@@ -11,18 +11,18 @@ Public NotInheritable Class IncomeExpenseScanner
                 If blnIncludeRetainedEarnings Or objAccount.AcctSubType <> Account.SubType.Equity_RetainedEarnings Then
                     For Each objReg As Register In objAccount.Registers
                         For Each objNormalTrx In objReg.GetDateRange(Of BankTrx)(datStartDate, datEndDate)
-                            If Not objNormalTrx.blnFake Then
-                                For Each objSplit As TrxSplit In objNormalTrx.colSplits
-                                    If Not objSplit.blnHasReplicaTrx Then
-                                        Dim intCatIndex As Integer = objCategories.intLookupKey(objSplit.strCategoryKey)
+                            If Not objNormalTrx.IsFake Then
+                                For Each objSplit As TrxSplit In objNormalTrx.Splits
+                                    If Not objSplit.HasReplicaTrx Then
+                                        Dim intCatIndex As Integer = objCategories.intLookupKey(objSplit.CategoryKey)
                                         Dim objTransElem As StringTransElement = objCategories.objElement(intCatIndex)
                                         Dim strGroupKey As String = Nothing
                                         If Not objTransElem.colValues.TryGetValue(CategoryTranslator.strTypeKey, strGroupKey) Then
                                             strGroupKey = CategoryTranslator.strTypeOperatingExpenses
                                         End If
                                         Dim objGroup As LineItemGroup = objManager.objGetGroup(strGroupKey)
-                                        Dim objLine As ReportLineItem = objGroup.objGetItem(objManager, objSplit.strCategoryKey)
-                                        objLine.Add(objSplit.curAmount)
+                                        Dim objLine As ReportLineItem = objGroup.objGetItem(objManager, objSplit.CategoryKey)
+                                        objLine.Add(objSplit.Amount)
                                     End If
                                 Next
                             End If

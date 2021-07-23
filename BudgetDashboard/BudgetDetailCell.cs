@@ -21,14 +21,14 @@ namespace Willowsoft.CheckBook.BudgetDashboard
             this.ClearAmounts();
             foreach(BudgetTrx budgetTrx in this.Budgets)
             {
-                this.CellAmount += budgetTrx.curAmount;
-                this.GeneratedAmount += budgetTrx.curGeneratedAmount;
-                this.BudgetLimit += budgetTrx.curBudgetLimit;
-                this.BudgetUsed += budgetTrx.curBudgetApplied;
+                this.CellAmount += budgetTrx.Amount;
+                this.GeneratedAmount += budgetTrx.GeneratedAmount;
+                this.BudgetLimit += budgetTrx.BudgetLimit;
+                this.BudgetUsed += budgetTrx.BudgetApplied;
             }
             foreach(TrxSplit split in this.Splits)
             {
-                this.CellAmount += split.curAmount;
+                this.CellAmount += split.Amount;
             }
         }
     }

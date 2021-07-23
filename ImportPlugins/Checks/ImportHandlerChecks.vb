@@ -30,26 +30,26 @@ Public Class ImportHandlerChecks
     End Function
 
     Public Function objStatusSearch(objImportedTrx As ImportedTrx, objReg As Register) As BankTrx Implements IImportHandler.objStatusSearch
-        Return objReg.MatchPaymentDetails(objImportedTrx.strNumber, objImportedTrx.datDate, 10, objImportedTrx.strDescription, objImportedTrx.curAmount)
+        Return objReg.MatchPaymentDetails(objImportedTrx.Number, objImportedTrx.TrxDate, 10, objImportedTrx.Description, objImportedTrx.Amount)
     End Function
 
     Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As BankTrx, ByVal intMultiPartSeqNumber As Integer) Implements IImportHandler.BatchUpdate
         Dim curAmount As Decimal
         If intMultiPartSeqNumber = 0 Then
-            curAmount = objImportedTrx.curAmount
+            curAmount = objImportedTrx.Amount
         Else
             curAmount = 0D
         End If
-        objMatchedTrx.objReg.ImportUpdateNumAmt(objMatchedTrx, objImportedTrx.strNumber, curAmount)
+        objMatchedTrx.Register.ImportUpdateNumAmt(objMatchedTrx, objImportedTrx.Number, curAmount)
     End Sub
 
     Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of BankTrx), ByRef colUnusedMatches As ICollection(Of BankTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
-        Dim lngNumber As Integer = CType(Val(objImportedTrx.strNumber), Integer)
+        Dim lngNumber As Integer = CType(Val(objImportedTrx.Number), Integer)
         Dim colMatches As ICollection(Of BankTrx) = Nothing
         Dim colExactMatches As ICollection(Of BankTrx) = Nothing
-        objReg.MatchNormalCore(lngNumber, objImportedTrx.datDate, 120, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
+        objReg.MatchNormalCore(lngNumber, objImportedTrx.TrxDate, 120, 120, objImportedTrx.Description, objImportedTrx.Amount,
                          objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, False, colMatches, colExactMatches, blnExactMatch)
-        SearchUtilities.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
+        SearchUtilities.PruneToExactMatches(colExactMatches, objImportedTrx.TrxDate, colMatches, blnExactMatch)
         colUnusedMatches = ImportUtilities.colRemoveAlreadyMatched(objReg, colMatches, colAllMatchedTrx)
         colUnusedMatches = ImportUtilities.colApplyNarrowMethod(objReg, objImportedTrx, colUnusedMatches, blnExactMatch)
     End Sub
@@ -81,18 +81,18 @@ Public Class ImportHandlerChecks
     Public Sub IndividualSearch(objReg As Register, objImportedTrx As ImportedTrx, blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of BankTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.IndividualSearch
         Dim colExactMatches As ICollection(Of BankTrx) = Nothing
         Dim lngNumber As Integer
-        If IsNumeric(objImportedTrx.strNumber) Then
-            lngNumber = CInt(objImportedTrx.strNumber)
+        If IsNumeric(objImportedTrx.Number) Then
+            lngNumber = CInt(objImportedTrx.Number)
         Else
             lngNumber = 0
         End If
-        objReg.MatchNormalCore(lngNumber, objImportedTrx.datDate, 60, 120, objImportedTrx.strDescription, objImportedTrx.curAmount,
+        objReg.MatchNormalCore(lngNumber, objImportedTrx.TrxDate, 60, 120, objImportedTrx.Description, objImportedTrx.Amount,
             objImportedTrx.curMatchMin, objImportedTrx.curMatchMax, blnLooseMatch, colMatches, colExactMatches, blnExactMatch)
-        SearchUtilities.PruneToExactMatches(colExactMatches, objImportedTrx.datDate, colMatches, blnExactMatch)
+        SearchUtilities.PruneToExactMatches(colExactMatches, objImportedTrx.TrxDate, colMatches, blnExactMatch)
     End Sub
 
     Public Function blnIndividualUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As BankTrx) As Boolean Implements IImportHandler.blnIndividualUpdate
-        objMatchedTrx.objReg.ImportUpdateNumAmt(objMatchedTrx, objImportedTrx.strNumber, objImportedTrx.curAmount)
+        objMatchedTrx.Register.ImportUpdateNumAmt(objMatchedTrx, objImportedTrx.Number, objImportedTrx.Amount)
         Return True
     End Function
 End Class

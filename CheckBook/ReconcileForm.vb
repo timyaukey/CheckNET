@@ -71,9 +71,9 @@ Friend Class ReconcileForm
         For Each objReg As Register In mobjAccount.Registers
             For Each objNormalTrx As BankTrx In objReg.GetAllTrx(Of BankTrx)
                 With objNormalTrx
-                    If Not .blnFake Then
-                        If .lngStatus = BaseTrx.TrxStatus.Reconciled Then
-                            curStartingBalance = curStartingBalance + .curAmount
+                    If Not .IsFake Then
+                        If .Status = BaseTrx.TrxStatus.Reconciled Then
+                            curStartingBalance = curStartingBalance + .Amount
                         Else
                             mlngTrxUsed = mlngTrxUsed + 1
                             If mlngTrxUsed > mlngTrxAllocated Then
@@ -82,9 +82,9 @@ Friend Class ReconcileForm
                             End If
                             With maudtTrx(mlngTrxUsed)
                                 .objNormalTrx = objNormalTrx
-                                .blnSelected = (objNormalTrx.lngStatus = BaseTrx.TrxStatus.Selected)
+                                .blnSelected = (objNormalTrx.Status = BaseTrx.TrxStatus.Selected)
                                 If .blnSelected Then
-                                    curSelectedTotal = curSelectedTotal + objNormalTrx.curAmount
+                                    curSelectedTotal = curSelectedTotal + objNormalTrx.Amount
                                 End If
                             End With
                             DisplayTrx(objNormalTrx, mlngTrxUsed)
@@ -112,16 +112,16 @@ Friend Class ReconcileForm
         objItem = UITools.ListViewAdd(lvwTrx)
         maudtTrx(lngTrxIndex).objLvwItem = objItem
         With objItem
-            AddSubItem(objItem, mintCOL_DATE, Utilities.strFormatDate(objTrx.datDate))
-            AddSubItem(objItem, mintCOL_NUMBER, objTrx.strNumber)
-            AddSubItem(objItem, mintCOL_DESCRIPTION, objTrx.strDescription)
-            AddSubItem(objItem, mintCOL_AMOUNT, Utilities.strFormatCurrency(objTrx.curAmount))
-            AddSubItem(objItem, mintCOL_IMPORTED, CStr(IIf(objTrx.strImportKey = "", "", "Y")))
-            intPipe2 = InStr(2, objTrx.strImportKey, "|")
+            AddSubItem(objItem, mintCOL_DATE, Utilities.strFormatDate(objTrx.TrxDate))
+            AddSubItem(objItem, mintCOL_NUMBER, objTrx.Number)
+            AddSubItem(objItem, mintCOL_DESCRIPTION, objTrx.Description)
+            AddSubItem(objItem, mintCOL_AMOUNT, Utilities.strFormatCurrency(objTrx.Amount))
+            AddSubItem(objItem, mintCOL_IMPORTED, CStr(IIf(objTrx.ImportKey = "", "", "Y")))
+            intPipe2 = InStr(2, objTrx.ImportKey, "|")
             strSortableBankDate = ""
             maudtTrx(lngTrxIndex).datBankDate = Nothing
             If intPipe2 > 0 Then
-                strBankDate = Mid(objTrx.strImportKey, 2, intPipe2 - 2)
+                strBankDate = Mid(objTrx.ImportKey, 2, intPipe2 - 2)
                 If DateTime.TryParse(strBankDate, datBankDate) Then
                     strSortableBankDate = Utilities.strFormatDate(datBankDate)
                     maudtTrx(lngTrxIndex).datBankDate = datBankDate
@@ -130,16 +130,16 @@ Friend Class ReconcileForm
                 strBankDate = ""
             End If
             AddSubItem(objItem, mintCOL_BANK_DATE, strBankDate)
-            AddSubItem(objItem, mintCOL_SORTABLE_DATE, objTrx.datDate.ToString("yyyyMMdd"))
-            If IsNumeric(objTrx.strNumber) Then
-                strSortableNumber = VB.Right("          " & objTrx.strNumber, 10)
+            AddSubItem(objItem, mintCOL_SORTABLE_DATE, objTrx.TrxDate.ToString("yyyyMMdd"))
+            If IsNumeric(objTrx.Number) Then
+                strSortableNumber = VB.Right("          " & objTrx.Number, 10)
             Else
-                strSortableNumber = objTrx.strNumber.ToUpper()
+                strSortableNumber = objTrx.Number.ToUpper()
             End If
             AddSubItem(objItem, mintCOL_SORTABLE_NUMBER, strSortableNumber)
             AddSubItem(objItem, mintCOL_SORTABLE_BANK_DATE, strSortableBankDate)
             AddSubItem(objItem, mintCOL_ARRAY_INDEX, CStr(mlngTrxUsed))
-            .Checked = (objTrx.lngStatus = BaseTrx.TrxStatus.Selected)
+            .Checked = (objTrx.Status = BaseTrx.TrxStatus.Selected)
         End With
     End Sub
 
@@ -189,10 +189,10 @@ Friend Class ReconcileForm
                 objTrx = .objNormalTrx
                 'Item.Checked still has the OLD value, unlike in VB6.
                 If Not Item.Checked Then
-                    mcurClearedBalance = mcurClearedBalance + objTrx.curAmount
+                    mcurClearedBalance = mcurClearedBalance + objTrx.Amount
                     .blnSelected = True
                 Else
-                    mcurClearedBalance = mcurClearedBalance - objTrx.curAmount
+                    mcurClearedBalance = mcurClearedBalance - objTrx.Amount
                     .blnSelected = False
                 End If
             End With
@@ -267,8 +267,8 @@ Friend Class ReconcileForm
         For lngIndex = 1 To mlngTrxUsed
             With maudtTrx(lngIndex)
                 lngNewStatus = CType(IIf(.blnSelected, lngSelectedStatus, BaseTrx.TrxStatus.Unreconciled), BaseTrx.TrxStatus)
-                If .objNormalTrx.lngStatus <> lngNewStatus Then
-                    .objNormalTrx.objReg.SetTrxStatus(.objNormalTrx, lngNewStatus, New LogStatus, "ReconcileForm.SaveChanges")
+                If .objNormalTrx.Status <> lngNewStatus Then
+                    .objNormalTrx.Register.SetTrxStatus(.objNormalTrx, lngNewStatus, New LogStatus, "ReconcileForm.SaveChanges")
                 End If
             End With
         Next

@@ -50,7 +50,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             Register reg = HostUI.objGetCurrentRegister();
             foreach (var objNormal in reg.GetDateRange<BankTrx>(ctlStartDate.Value, ctlEndDate.Value))
             {
-                if (Int32.TryParse(objNormal.strNumber, out int checkNumber))
+                if (Int32.TryParse(objNormal.Number, out int checkNumber))
                 {
                     if (checkNumber >= startNumber && checkNumber <= endNumber)
                     {
@@ -65,12 +65,12 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 foreach (var objNormal in objToChange)
                 {
                     NormalTrxManager objMgr = new NormalTrxManager(objNormal);
-                    int checkNumber = Int32.Parse(objNormal.strNumber);
+                    int checkNumber = Int32.Parse(objNormal.Number);
                     objMgr.UpdateStart();
                     string newNumber = (checkNumber + addNumber).ToString();
-                    lblProgress.Text = "Changing #" + objMgr.objTrx.strNumber + " to #" + newNumber;
+                    lblProgress.Text = "Changing #" + objMgr.Trx.Number + " to #" + newNumber;
                     lblProgress.Refresh();
-                    objMgr.objTrx.strNumber = newNumber;
+                    objMgr.Trx.Number = newNumber;
                     objMgr.UpdateEnd(new LogChange(), "RenumberChecksForm.ChangeNumber");
                 }
                 HostUI.InfoMessageBox("Renumbered " + objToChange.Count + " checks.");

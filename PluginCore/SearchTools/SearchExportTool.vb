@@ -40,7 +40,7 @@ Public Class SearchExportTool
                 'Ignore budgets and transfers instead of showing an error, because
                 'it is common to export all trx in a date range except these.
                 If TypeOf objTrx Is BankTrx Then
-                    colSplits = DirectCast(objTrx, BankTrx).colSplits
+                    colSplits = DirectCast(objTrx, BankTrx).Splits
                     For Each objSplit In colSplits
                         frmExport.WriteSplit(objTrx, objSplit)
                         lngExportCount = lngExportCount + 1

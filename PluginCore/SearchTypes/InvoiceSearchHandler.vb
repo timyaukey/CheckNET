@@ -17,13 +17,13 @@ Public Class InvoiceSearchHandler
         dlgAddSplitResult As AddSearchMatchSplitDelegate)
 
         If TypeOf (objTrx) Is BankTrx Then
-            For Each objSplit In DirectCast(objTrx, BankTrx).colSplits
-                If objComparer.blnCompare(objSplit.strInvoiceNum, strParameter) Then
+            For Each objSplit In DirectCast(objTrx, BankTrx).Splits
+                If objComparer.blnCompare(objSplit.InvoiceNum, strParameter) Then
                     dlgAddSplitResult(DirectCast(objTrx, BankTrx), objSplit)
                 End If
             Next
         ElseIf TypeOf (objTrx) Is ReplicaTrx Then
-            If objComparer.blnCompare(DirectCast(objTrx, ReplicaTrx).strInvoiceNum, strParameter) Then
+            If objComparer.blnCompare(DirectCast(objTrx, ReplicaTrx).InvoiceNum, strParameter) Then
                 dlgAddTrxResult(objTrx)
             End If
         End If

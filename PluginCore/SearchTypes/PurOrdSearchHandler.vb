@@ -17,13 +17,13 @@ Public Class PurOrdSearchHandler
         dlgAddSplitResult As AddSearchMatchSplitDelegate)
 
         If TypeOf (objTrx) Is BankTrx Then
-            For Each objSplit In DirectCast(objTrx, BankTrx).colSplits
-                If objComparer.blnCompare(objSplit.strPONumber, strParameter) Then
+            For Each objSplit In DirectCast(objTrx, BankTrx).Splits
+                If objComparer.blnCompare(objSplit.PONumber, strParameter) Then
                     dlgAddSplitResult(DirectCast(objTrx, BankTrx), objSplit)
                 End If
             Next
         ElseIf TypeOf (objTrx) Is ReplicaTrx Then
-            If objComparer.blnCompare(DirectCast(objTrx, ReplicaTrx).strPONumber, strParameter) Then
+            If objComparer.blnCompare(DirectCast(objTrx, ReplicaTrx).PONumber, strParameter) Then
                 dlgAddTrxResult(objTrx)
             End If
         End If

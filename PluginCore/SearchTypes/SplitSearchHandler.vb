@@ -45,7 +45,7 @@ Public Class SplitSearchHandler
         Implements ISearchHandler.ProcessTrx
 
         If TypeOf (objTrx) Is BankTrx Then
-            For Each objSplit In DirectCast(objTrx, BankTrx).colSplits
+            For Each objSplit In DirectCast(objTrx, BankTrx).Splits
                 If objComparer.blnCompare(dlgGetSplitData(objSplit), strParameter) Then
                     dlgAddSplitResult(DirectCast(objTrx, BankTrx), objSplit)
                 End If

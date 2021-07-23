@@ -132,19 +132,19 @@ Public Class AdjustPersonalBusinessForm
     End Function
 
     Private Function blnIsAdjustment(ByVal objTrx As BaseTrx) As Boolean
-        Return objTrx.strDescription.EndsWith(mstrExpenseMarker) Or
-            objTrx.strDescription.EndsWith(mstrPaymentMarker)
+        Return objTrx.Description.EndsWith(mstrExpenseMarker) Or
+            objTrx.Description.EndsWith(mstrPaymentMarker)
     End Function
 
     Private Function blnIsInvalid(ByVal objTrx As BaseTrx) As Boolean
-        If objTrx.strDescription.Contains(":") Then
-            If objTrx.strDescription.EndsWith(mstrDivideMarker) Then
+        If objTrx.Description.Contains(":") Then
+            If objTrx.Description.EndsWith(mstrDivideMarker) Then
                 Return False
             End If
-            If objTrx.strDescription.EndsWith(mstrPaymentMarker) Then
+            If objTrx.Description.EndsWith(mstrPaymentMarker) Then
                 Return False
             End If
-            If objTrx.strDescription.EndsWith(mstrExpenseMarker) Then
+            If objTrx.Description.EndsWith(mstrExpenseMarker) Then
                 Return False
             End If
             Return True
@@ -191,7 +191,7 @@ Public Class AdjustPersonalBusinessForm
         'is a BankTrx and it has to use the same category as the first split
         'of objBusinessTrx.
         If TypeOf objBusinessTrx Is BankTrx Then
-            Return objBusinessTrx.strDescription.EndsWith(mstrDivideMarker)
+            Return objBusinessTrx.Description.EndsWith(mstrDivideMarker)
         End If
         Return False
     End Function
@@ -201,21 +201,21 @@ Public Class AdjustPersonalBusinessForm
         'We don't need any categories from this one so it doesn't have to be a BankTrx,
         'because the adjustment is a transfer to the "loan to person" account.
         Dim objNormalTrx As BankTrx
-        If objBusinessTrx.curAmount > 0 Then
+        If objBusinessTrx.Amount > 0 Then
             If TypeOf objBusinessTrx Is ReplicaTrx Then
                 Return True
             End If
             objNormalTrx = TryCast(objBusinessTrx, BankTrx)
             If Not objNormalTrx Is Nothing Then
-                Return objNormalTrx.colSplits(0).blnHasReplicaTrx
+                Return objNormalTrx.Splits(0).HasReplicaTrx
             End If
         End If
         Return False
     End Function
 
     Private Function intDivideTrx(ByVal objBusinessTrx As BaseTrx, ByVal objPersonalReg As Register) As Integer
-        Dim curBusinessBalance As Decimal = curGetAccountBalance(mobjBusinessAccount, objBusinessTrx.datDate)
-        Dim curPersonalBalance As Decimal = curGetAccountBalance(mobjPersonalAccount, objBusinessTrx.datDate)
+        Dim curBusinessBalance As Decimal = curGetAccountBalance(mobjBusinessAccount, objBusinessTrx.TrxDate)
+        Dim curPersonalBalance As Decimal = curGetAccountBalance(mobjPersonalAccount, objBusinessTrx.TrxDate)
         Dim curBusinessPart As Decimal
         Dim curPersonalPart As Decimal
         Dim curTotalBalance As Decimal
@@ -226,29 +226,29 @@ Public Class AdjustPersonalBusinessForm
 
         curTotalBalance = curBusinessBalance + curPersonalBalance
         If curTotalBalance = 0D Then
-            curBusinessPart = objBusinessTrx.curAmount
+            curBusinessPart = objBusinessTrx.Amount
         Else
-            curBusinessPart = (curBusinessBalance / curTotalBalance) * objBusinessTrx.curAmount
+            curBusinessPart = (curBusinessBalance / curTotalBalance) * objBusinessTrx.Amount
             curBusinessPart = System.Math.Round(curBusinessPart, 2)
         End If
-        curPersonalPart = objBusinessTrx.curAmount - curBusinessPart
-        datAdjustmentDate = objBusinessTrx.datDate
+        curPersonalPart = objBusinessTrx.Amount - curBusinessPart
+        datAdjustmentDate = objBusinessTrx.TrxDate
 
         'add two new trx to move part to the personal register
         If blnIsPayment(objBusinessTrx) Then
             'Is a loan payment.
-            strNewDescription = objBusinessTrx.strDescription + mstrPaymentMarker
-            CreateAdjustmentTrx(objBusinessTrx.objReg, datAdjustmentDate, strNewDescription, mstrLoanToPersonKey, -curPersonalPart)
+            strNewDescription = objBusinessTrx.Description + mstrPaymentMarker
+            CreateAdjustmentTrx(objBusinessTrx.Register, datAdjustmentDate, strNewDescription, mstrLoanToPersonKey, -curPersonalPart)
             CreateAdjustmentTrx(objPersonalReg, datAdjustmentDate, strNewDescription, mstrPersonalPaymentKey, curPersonalPart)
         ElseIf blnIsMarkedToDivide(objBusinessTrx) Then
             'Is a charge of some kind.
-            intMarkerOffset = objBusinessTrx.strDescription.IndexOf(mstrDivideMarker)
+            intMarkerOffset = objBusinessTrx.Description.IndexOf(mstrDivideMarker)
             If intMarkerOffset <= 0 Then
                 Throw New Exception("Dividable expense trx has no divide marker")
             End If
-            strNewDescription = objBusinessTrx.strDescription.Substring(0, intMarkerOffset) + mstrExpenseMarker
-            strOrigCatKey = DirectCast(objBusinessTrx, BankTrx).colSplits(0).strCategoryKey
-            CreateAdjustmentTrx(objBusinessTrx.objReg, datAdjustmentDate, strNewDescription, strOrigCatKey, -curPersonalPart)
+            strNewDescription = objBusinessTrx.Description.Substring(0, intMarkerOffset) + mstrExpenseMarker
+            strOrigCatKey = DirectCast(objBusinessTrx, BankTrx).Splits(0).CategoryKey
+            CreateAdjustmentTrx(objBusinessTrx.Register, datAdjustmentDate, strNewDescription, strOrigCatKey, -curPersonalPart)
             CreateAdjustmentTrx(objPersonalReg, datAdjustmentDate, strNewDescription, mstrPersonalExpenseKey, curPersonalPart)
         Else
             'This should never happen, because blnTrxNeedsDividing() only returns trx
@@ -271,14 +271,14 @@ Public Class AdjustPersonalBusinessForm
         Dim datEndDate As DateTime = ctlEndDate.Value
         For Each objReg As Register In objAccount.Registers
             For Each objTrx As BaseTrx In objReg.GetAllTrx(Of BaseTrx)()
-                If objTrx.datDate >= datAfterEndDate Then
+                If objTrx.TrxDate >= datAfterEndDate Then
                     Exit For
                 End If
                 'Don't use GetTrx.curBalance, because we want to use only "real" trx in computing the balance.
-                If objTrx.blnFake Then
+                If objTrx.IsFake Then
                     mblnFakeTrxFound = True
                 Else
-                    curResult = curResult + objTrx.curAmount
+                    curResult = curResult + objTrx.Amount
                 End If
             Next
         Next

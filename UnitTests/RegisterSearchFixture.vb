@@ -103,7 +103,7 @@ Public Class RegisterSearchFixture
         Dim objElement As BankTrx
         Dim strResult As String = ""
         For Each objElement In colMatches
-            strResult = strResult & ";" & objElement.lngIndex
+            strResult = strResult & ";" & objElement.RegIndex
         Next
         strConcatMatchResults = strResult
     End Function
@@ -122,11 +122,11 @@ Public Class RegisterSearchFixture
             .AddNormal("102", #4/3/2000#, -26D, "Add2", 3, 3, 3)
             .AddNormal("103", #4/3/2000#, -27D, "Add2", 4, 4, 4, strImportKey:="imp4")
             objMatch = .objReg.MatchImportKey("imp1")
-            gUTAssert(objMatch.lngIndex = 1, "Did not find 100")
+            gUTAssert(objMatch.RegIndex = 1, "Did not find 100")
             objMatch = .objReg.MatchImportKey("imp2")
             gUTAssert(objMatch Is Nothing, "Did not expect to find 101")
             objMatch = .objReg.MatchImportKey("imp4")
-            gUTAssert(objMatch.lngIndex = 4, "Did not find 103")
+            gUTAssert(objMatch.RegIndex = 4, "Did not find 103")
         End With
 
     End Sub
@@ -150,16 +150,16 @@ Public Class RegisterSearchFixture
             .objReg.MatchPayee(#4/3/2000#, 1, "company2", True, colMatches, blnExactMatch)
             gUTAssert(colMatches.Count() = 1, "company2 fail")
             objTrx = Utilities.objFirstElement(colMatches)
-            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 2, "company2 index fail")
-            gUTAssert(objTrx.strDescription = "company2", "company2 name fail")
-            gUTAssert(objTrx.datDate = #4/3/2000#, "company2 date fail")
+            gUTAssert(Utilities.objFirstElement(colMatches).RegIndex = 2, "company2 index fail")
+            gUTAssert(objTrx.Description = "company2", "company2 name fail")
+            gUTAssert(objTrx.TrxDate = #4/3/2000#, "company2 date fail")
             gUTAssert(blnExactMatch = True, "company2 exact fail")
 
             .objReg.MatchPayee(#4/6/2000#, 1, "payee1", True, colMatches, blnExactMatch)
             gUTAssert(colMatches.Count() = 2, "payee1 fail")
             objTrx = Utilities.objFirstElement(colMatches)
-            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 3, "payee1#1 index fail")
-            gUTAssert(Utilities.objSecondElement(colMatches).lngIndex = 4, "payee1#2 index fail")
+            gUTAssert(Utilities.objFirstElement(colMatches).RegIndex = 3, "payee1#1 index fail")
+            gUTAssert(Utilities.objSecondElement(colMatches).RegIndex = 4, "payee1#2 index fail")
             gUTAssert(blnExactMatch = False, "payee#1 exact fail")
         End With
 
@@ -181,11 +181,11 @@ Public Class RegisterSearchFixture
 
             .objReg.MatchInvoice(#4/3/2000#, 10, "company2", "I1000", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 I1000 fail")
-            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 2, "company2 I1000 index fail")
+            gUTAssert(Utilities.objFirstElement(colMatches).RegIndex = 2, "company2 I1000 index fail")
 
             .objReg.MatchInvoice(#4/3/2000#, 10, "company2", "I1001", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 I1001 fail")
-            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 2, "company2 I1001 index fail")
+            gUTAssert(Utilities.objFirstElement(colMatches).RegIndex = 2, "company2 I1001 index fail")
 
             .objReg.MatchInvoice(#4/5/2000#, 1, "company2", "I1000", colMatches)
             gUTAssert(colMatches.Count() = 0, "company2 I1000 -2 fail")
@@ -215,11 +215,11 @@ Public Class RegisterSearchFixture
 
             .objReg.MatchPONumber(#4/3/2000#, 10, "company2", "P1", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 P1 fail")
-            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 2, "company2 P1 index fail")
+            gUTAssert(Utilities.objFirstElement(colMatches).RegIndex = 2, "company2 P1 index fail")
 
             .objReg.MatchPONumber(#4/3/2000#, 10, "company2", "P2", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 P2 fail")
-            gUTAssert(Utilities.objFirstElement(colMatches).lngIndex = 2, "company2 I1001 index fail")
+            gUTAssert(Utilities.objFirstElement(colMatches).RegIndex = 2, "company2 I1001 index fail")
 
             .objReg.MatchPONumber(#4/5/2000#, 1, "company2", "P1", colMatches)
             gUTAssert(colMatches.Count() = 0, "company2 P1 -2 fail")

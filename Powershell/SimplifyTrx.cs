@@ -16,11 +16,11 @@ namespace Willowsoft.CheckBook.Powershell
             ShortTrx shortTrx = new ShortTrx
             {
                 Type = Input.GetType().Name,
-                Date = Utilities.strFormatDate(Input.datDate),
-                Number = Input.strNumber,
-                Description = Input.strDescription,
-                Category = Input.strCategory,
-                Amount = Input.curAmount
+                Date = Utilities.strFormatDate(Input.TrxDate),
+                Number = Input.Number,
+                Description = Input.Description,
+                Category = Input.CategoryLabel,
+                Amount = Input.Amount
             };
             WriteObject(shortTrx);
         }

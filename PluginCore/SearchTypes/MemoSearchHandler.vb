@@ -16,12 +16,12 @@ Public Class MemoSearchHandler
         dlgAddTrxResult As AddSearchMatchTrxDelegate,
         dlgAddSplitResult As AddSearchMatchSplitDelegate)
 
-        If objComparer.blnCompare(objTrx.strMemo, strParameter) Then
+        If objComparer.blnCompare(objTrx.Memo, strParameter) Then
             dlgAddTrxResult(objTrx)
         End If
         If TypeOf (objTrx) Is BankTrx Then
-            For Each objSplit In DirectCast(objTrx, BankTrx).colSplits
-                If objComparer.blnCompare(objSplit.strMemo, strParameter) Then
+            For Each objSplit In DirectCast(objTrx, BankTrx).Splits
+                If objComparer.blnCompare(objSplit.Memo, strParameter) Then
                     dlgAddSplitResult(DirectCast(objTrx, BankTrx), objSplit)
                 End If
             Next

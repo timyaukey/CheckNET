@@ -26,6 +26,6 @@ Public Class TrxCopyDateTool
             Return
         End If
         My.Computer.Clipboard.Clear()
-        My.Computer.Clipboard.SetText(objNormalTrx.datDate.ToString("MM/dd/yyyy"))
+        My.Computer.Clipboard.SetText(objNormalTrx.TrxDate.ToString("MM/dd/yyyy"))
     End Sub
 End Class

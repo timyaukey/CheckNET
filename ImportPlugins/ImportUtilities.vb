@@ -465,7 +465,7 @@ Public Class ImportUtilities
             Case ImportMatchNarrowMethod.EarliestDate
                 datTargetDate = #1/1/1980#
             Case ImportMatchNarrowMethod.ClosestDate
-                datTargetDate = objTrx.datDate
+                datTargetDate = objTrx.TrxDate
             Case ImportMatchNarrowMethod.None
                 Return colInputMatches
             Case Else
@@ -474,8 +474,8 @@ Public Class ImportUtilities
 
         blnHaveFirstMatch = False
         For Each objPossibleMatchTrx In colInputMatches
-            If String.IsNullOrEmpty(objPossibleMatchTrx.strImportKey) And (objPossibleMatchTrx.lngStatus <> BaseTrx.TrxStatus.Reconciled) Then
-                dblCurrentDistance = Math.Abs(objPossibleMatchTrx.datDate.Subtract(datTargetDate).TotalDays)
+            If String.IsNullOrEmpty(objPossibleMatchTrx.ImportKey) And (objPossibleMatchTrx.Status <> BaseTrx.TrxStatus.Reconciled) Then
+                dblCurrentDistance = Math.Abs(objPossibleMatchTrx.TrxDate.Subtract(datTargetDate).TotalDays)
                 If (Not blnHaveFirstMatch) Or (dblCurrentDistance < dblBestDistance) Then
                     dblBestDistance = dblCurrentDistance
                     objBestMatch = objPossibleMatchTrx

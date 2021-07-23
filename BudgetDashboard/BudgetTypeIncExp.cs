@@ -27,7 +27,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
 
         public override bool IncludeSplit(TrxSplit split)
         {
-            return split.strCategoryKey.IndexOf('.') <= 0;
+            return split.CategoryKey.IndexOf('.') <= 0;
         }
 
         public override string ToString()

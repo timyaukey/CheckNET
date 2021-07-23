@@ -30,15 +30,15 @@ Public Class SearchUtilities
             blnFirstIteration = True
             For Each objTrx In colExactMatches
                 If blnFirstIteration Then
-                    datFirstMatch = objTrx.datDate
-                    datLastMatch = objTrx.datDate
+                    datFirstMatch = objTrx.TrxDate
+                    datLastMatch = objTrx.TrxDate
                     blnFirstIteration = False
                 Else
-                    If objTrx.datDate < datFirstMatch Then
-                        datFirstMatch = objTrx.datDate
+                    If objTrx.TrxDate < datFirstMatch Then
+                        datFirstMatch = objTrx.TrxDate
                     End If
-                    If objTrx.datDate > datLastMatch Then
-                        datLastMatch = objTrx.datDate
+                    If objTrx.TrxDate > datLastMatch Then
+                        datLastMatch = objTrx.TrxDate
                     End If
                 End If
                 If blnTrxPruner(objTrx) Then
@@ -67,7 +67,7 @@ Public Class SearchUtilities
 
     Public Shared Sub PruneToExactMatches(ByVal colExactMatches As ICollection(Of BankTrx), ByVal datDate As Date, ByRef colMatches As ICollection(Of BankTrx), ByRef blnExactMatch As Boolean)
 
-        PruneSearchMatches(colExactMatches, colMatches, blnExactMatch, Function(objTrx As BaseTrx) objTrx.datDate = datDate)
+        PruneSearchMatches(colExactMatches, colMatches, blnExactMatch, Function(objTrx As BaseTrx) objTrx.TrxDate = datDate)
 
     End Sub
 
@@ -75,10 +75,10 @@ Public Class SearchUtilities
 
         PruneSearchMatches(colExactMatches, colMatches, blnExactMatch,
                            Function(objTrx As BaseTrx) As Boolean
-                               If objTrx.datDate = datDate Then
-                                   If objTrx.lngStatus <> BaseTrx.TrxStatus.Reconciled Then
+                               If objTrx.TrxDate = datDate Then
+                                   If objTrx.Status <> BaseTrx.TrxStatus.Reconciled Then
                                        If TypeOf objTrx Is BankTrx Then
-                                           If String.IsNullOrEmpty(DirectCast(objTrx, BankTrx).strImportKey) Then
+                                           If String.IsNullOrEmpty(DirectCast(objTrx, BankTrx).ImportKey) Then
                                                Return True
                                            End If
                                        End If

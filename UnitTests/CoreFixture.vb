@@ -285,11 +285,11 @@ Public Class CoreFixture
 
             'Delete one of the budgets, to show the applied splits are un-applied.
             objTrx = objUTReg.objReg.GetTrx(4)
-            gUTAssert(Not DirectCast(objTrx, BankTrx).objFirstSplit.objBudget Is Nothing, "Expected first split to be applied")
-            gUTAssert(DirectCast(objTrx, BankTrx).objSecondSplit.objBudget Is Nothing, "Expected second split to not be applied")
+            gUTAssert(Not DirectCast(objTrx, BankTrx).FirstSplit.Budget Is Nothing, "Expected first split to be applied")
+            gUTAssert(DirectCast(objTrx, BankTrx).SecondSplit.Budget Is Nothing, "Expected second split to not be applied")
             .DeleteEntry(5, False, "Fourth delete")
             .Validate("", 3, 5, 2, 7)
-            gUTAssert(DirectCast(objTrx, BankTrx).objFirstSplit.objBudget Is Nothing, "Expected split to be un-applied")
+            gUTAssert(DirectCast(objTrx, BankTrx).FirstSplit.Budget Is Nothing, "Expected split to be un-applied")
 
             .AddBudget(#6/20/2000#, -32D, #6/17/2000#, "bud1", "re-add", 5, 5, 5)
             .SetTrxAmount(9, -10D)
@@ -458,19 +458,19 @@ Public Class CoreFixture
         objTrx = objReg.GetTrx(1)
         With DirectCast(objTrx, BankTrx)
             gUTAssert(.GetType() Is GetType(BankTrx), "Wrong type")
-            gUTAssert(.datDate = #4/13/2000#, "Wrong date")
-            gUTAssert(.strDescription = "Hadley Garden Center", "Wrong description")
-            gUTAssert(.strMemo = "Bird seed", "Wrong memo")
-            gUTAssert(.curAmount = (-24.95 - 10.99), "Wrong amount")
-            gUTAssert(.lngSplits = 2, "Wrong numbe of splits")
-            objSplit = .objFirstSplit
-            gUTAssert(objSplit.curAmount = -24.95, "Wrong split1 amount")
-            gUTAssert(objSplit.strBudgetKey = "", "Wrong split1 budget key")
-            gUTAssert(objSplit.strCategoryKey = "cat1", "Wrong split1 category key")
-            objSplit = .objSecondSplit
-            gUTAssert(objSplit.curAmount = -10.99, "Wrong split2 amount")
-            gUTAssert(objSplit.strCategoryKey = "cat2", "Wrong split2 category key")
-            gUTAssert(objSplit.strMemo = "sunflower", "Wrong split2 memo")
+            gUTAssert(.TrxDate = #4/13/2000#, "Wrong date")
+            gUTAssert(.Description = "Hadley Garden Center", "Wrong description")
+            gUTAssert(.Memo = "Bird seed", "Wrong memo")
+            gUTAssert(.Amount = (-24.95 - 10.99), "Wrong amount")
+            gUTAssert(.SplitCount = 2, "Wrong numbe of splits")
+            objSplit = .FirstSplit
+            gUTAssert(objSplit.Amount = -24.95, "Wrong split1 amount")
+            gUTAssert(objSplit.BudgetKey = "", "Wrong split1 budget key")
+            gUTAssert(objSplit.CategoryKey = "cat1", "Wrong split1 category key")
+            objSplit = .SecondSplit
+            gUTAssert(objSplit.Amount = -10.99, "Wrong split2 amount")
+            gUTAssert(objSplit.CategoryKey = "cat2", "Wrong split2 category key")
+            gUTAssert(objSplit.Memo = "sunflower", "Wrong split2 memo")
         End With
 
         gUTSetSubTest("Verify 2")
@@ -478,11 +478,11 @@ Public Class CoreFixture
         objTrx = objReg.GetTrx(2)
         With DirectCast(objTrx, BankTrx)
             gUTAssert(.GetType() Is GetType(BankTrx), "Wrong type")
-            gUTAssert(.datDate = #4/15/2000#, "Wrong date")
-            gUTAssert(.strNumber = "1001", "Wrong number")
-            gUTAssert(.strImportKey = "imp1", "Wrong import key")
-            gUTAssert(.strRepeatKey = "rep1", "Wrong repeat key")
-            gUTAssert(.curNormalMatchRange = 22.01, "Wrong match range")
+            gUTAssert(.TrxDate = #4/15/2000#, "Wrong date")
+            gUTAssert(.Number = "1001", "Wrong number")
+            gUTAssert(.ImportKey = "imp1", "Wrong import key")
+            gUTAssert(.RepeatKey = "rep1", "Wrong repeat key")
+            gUTAssert(.NormalMatchRange = 22.01, "Wrong match range")
         End With
 
         gUTSetSubTest("Verify 3")
@@ -490,12 +490,12 @@ Public Class CoreFixture
         objTrx = objReg.GetTrx(3)
         With DirectCast(objTrx, BudgetTrx)
             gUTAssert(.GetType() Is GetType(BudgetTrx), "Wrong type")
-            gUTAssert(.datDate = #4/16/2000#, "Wrong date")
-            gUTAssert(.strDescription = "General household", "Wrong description")
-            gUTAssert(.curAmount = (-150D + 10.99), "Wrong amount")
-            gUTAssert(.datBudgetStarts = #4/10/2000#, "Wrong budget end date")
-            gUTAssert(.strBudgetKey = "bud1", "Wrong budget key")
-            gUTAssert(.curBudgetLimit = -150D, "Wrong budget limit")
+            gUTAssert(.TrxDate = #4/16/2000#, "Wrong date")
+            gUTAssert(.Description = "General household", "Wrong description")
+            gUTAssert(.Amount = (-150D + 10.99), "Wrong amount")
+            gUTAssert(.BudgetStarts = #4/10/2000#, "Wrong budget end date")
+            gUTAssert(.BudgetKey = "bud1", "Wrong budget key")
+            gUTAssert(.BudgetLimit = -150D, "Wrong budget limit")
         End With
 
         gUTSetSubTest("Verify 4")
@@ -503,9 +503,9 @@ Public Class CoreFixture
         objTrx = objReg.GetTrx(4)
         With DirectCast(objTrx, TransferTrx)
             gUTAssert(.GetType() Is GetType(TransferTrx), "Wrong type")
-            gUTAssert(.datDate = #4/20/2000#, "Wrong date")
-            gUTAssert(.strTransferKey = "xfr55", "Wrong transfer key")
-            gUTAssert(.curAmount = 140.01, "Wrong transfer amount")
+            gUTAssert(.TrxDate = #4/20/2000#, "Wrong date")
+            gUTAssert(.TransferKey = "xfr55", "Wrong transfer key")
+            gUTAssert(.Amount = 140.01, "Wrong transfer amount")
         End With
 
     End Sub

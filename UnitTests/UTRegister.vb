@@ -179,7 +179,7 @@ Public Class UTRegister
             End Sub,
             New LogChange, "UTUpdateNormal")
         gUTAssert(mblnPositionChanged = (lngExpectedNewIndex <> lngOldIndex), strFailMsg & ": wrong position changed flag")
-        gUTAssert(objTrxManager.objTrx Is mobjTrxReported, strFailMsg & ": wrong Trx in upd normal report")
+        gUTAssert(objTrxManager.Trx Is mobjTrxReported, strFailMsg & ": wrong Trx in upd normal report")
         gUTAssert(mblnManyTrxChangedFired, strFailMsg & ": ManyTrxChanged did not fire in upd normal report")
 
     End Sub
@@ -217,7 +217,7 @@ Public Class UTRegister
             End Sub,
             New LogChange, "UTUpdateBudget")
         gUTAssert(mblnPositionChanged = (lngExpectedNewIndex <> lngExpectedOldIndex), strFailMsg & ": wrong position changed flag")
-        gUTAssert(objTrxManager.objTrx Is mobjTrxReported, strFailMsg & ": wrong Trx in upd budget report")
+        gUTAssert(objTrxManager.Trx Is mobjTrxReported, strFailMsg & ": wrong Trx in upd budget report")
         gUTAssert(mblnManyTrxChangedFired, strFailMsg & ": ManyTrxChanged did not fire in upd budget report")
 
     End Sub
@@ -251,13 +251,13 @@ Public Class UTRegister
         intTrx = intTrx + 1
         ReDim Preserve maudtTrx(intTrx)
         With maudtTrx(intTrx)
-            .datDate = objTrx.datDate
-            .curAmount = objTrx.curAmount
-            .blnFake = objTrx.blnFake
-            .strDescription = objTrx.strDescription
-            .strNumber = objTrx.strNumber
-            .strRepeatKey = objTrx.strRepeatKey
-            .intRepeatSeq = objTrx.intRepeatSeq
+            .datDate = objTrx.TrxDate
+            .curAmount = objTrx.Amount
+            .blnFake = objTrx.IsFake
+            .strDescription = objTrx.Description
+            .strNumber = objTrx.Number
+            .strRepeatKey = objTrx.RepeatKey
+            .intRepeatSeq = objTrx.RepeatSeq
         End With
     End Sub
 
@@ -312,12 +312,12 @@ Public Class UTRegister
             objTrx = objReg.GetTrx(intRegIndex)
             intUTIndex = CInt(avntUTIdx(LBound(avntUTIdx) + intRegIndex - 1))
             With maudtTrx(intUTIndex)
-                gUTAssert(objTrx.datDate = .datDate, "Bad datDate on reg index " & intRegIndex)
-                gUTAssert(objTrx.strNumber = .strNumber, "Bad strNumber on reg index " & intRegIndex)
-                gUTAssert(objTrx.curAmount = .curAmount, "Bad curAmount on reg index " & intRegIndex)
-                gUTAssert(objTrx.blnFake = .blnFake, "Bad blnFake on reg index " & intRegIndex)
-                gUTAssert(objTrx.strRepeatKey = .strRepeatKey, "Bad strRepeatKey on reg index " & intRegIndex)
-                gUTAssert(objTrx.intRepeatSeq = .intRepeatSeq, "Bad intRepeatSeq on reg index " & intRegIndex)
+                gUTAssert(objTrx.TrxDate = .datDate, "Bad datDate on reg index " & intRegIndex)
+                gUTAssert(objTrx.Number = .strNumber, "Bad strNumber on reg index " & intRegIndex)
+                gUTAssert(objTrx.Amount = .curAmount, "Bad curAmount on reg index " & intRegIndex)
+                gUTAssert(objTrx.IsFake = .blnFake, "Bad blnFake on reg index " & intRegIndex)
+                gUTAssert(objTrx.RepeatKey = .strRepeatKey, "Bad strRepeatKey on reg index " & intRegIndex)
+                gUTAssert(objTrx.RepeatSeq = .intRepeatSeq, "Bad intRepeatSeq on reg index " & intRegIndex)
             End With
         Next
 
@@ -334,7 +334,7 @@ Public Class UTRegister
     End Sub
 
     Private Sub mobjReg_BudgetChanged(ByVal objBudget As BaseTrx) Handles mobjReg.BudgetChanged
-        mstrBudgetsChanged = mstrBudgetsChanged & "," & objBudget.lngIndex
+        mstrBudgetsChanged = mstrBudgetsChanged & "," & objBudget.RegIndex
     End Sub
 
     Private Sub mobjReg_TrxAdded(ByVal objTrx As BaseTrx) Handles mobjReg.TrxAdded
@@ -355,7 +355,7 @@ Public Class UTRegister
         If objTrx Is Nothing Then
             lngIndex = 0
         Else
-            lngIndex = objTrx.lngIndex
+            lngIndex = objTrx.RegIndex
         End If
         mcolErrors.Add("Index=" & lngIndex & ": " & strMsg)
     End Sub

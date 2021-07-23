@@ -17,43 +17,43 @@ Option Explicit On
 
 Public MustInherit Class TrxManager(Of TTrx As BaseTrx)
 
-    Public ReadOnly objTrx As TTrx
-    Protected ReadOnly mobjOriginalLogTrx As TTrx
-    Protected mblnUpdateStarted As Boolean
+    Public ReadOnly Trx As TTrx
+    Protected ReadOnly mOriginalLogTrx As TTrx
+    Protected mHasUpdateStarted As Boolean
 
     Public Sub New(ByVal objTrx_ As TTrx)
-        If Not objTrx_ Is objTrx_.objReg.GetTrx(objTrx_.lngIndex) Then
+        If Not objTrx_ Is objTrx_.Register.GetTrx(objTrx_.RegIndex) Then
             Throw New Exception("Trx passed to TrxManager must be at the specified index of the Register passed")
         End If
-        objTrx = objTrx_
-        mobjOriginalLogTrx = DirectCast(objTrx_.objClone(blnWillAddToRegister:=False), TTrx)
-        mblnUpdateStarted = False
+        Trx = objTrx_
+        mOriginalLogTrx = DirectCast(objTrx_.CloneTrx(blnWillAddToRegister:=False), TTrx)
+        mHasUpdateStarted = False
     End Sub
 
     Public Sub Update(ByVal objBuilder As Action(Of TTrx), ByVal objLogger As ILogChange, ByVal strTitle As String)
         UpdateStart()
-        objBuilder(objTrx)
+        objBuilder(Trx)
         UpdateEnd(objLogger, strTitle)
     End Sub
 
     Public Sub UpdateStart()
-        objTrx.objReg.BeginCriticalOperation()
-        objTrx.objReg.ClearFirstAffected()
+        Trx.Register.BeginCriticalOperation()
+        Trx.Register.ClearFirstAffected()
         'These next two lines are why if you call UpdateStart(),
         'you must finish by calling UpdateEnd() to keep the Register in good condition.
         'I wish we could delay these steps until UpdateEnd(), but ClearRepeatTrx() requires
         'the original BaseTrx object whose contents may have been changed by then.
-        objTrx.UnApply()
-        objTrx.ClearRepeatTrx()
-        mblnUpdateStarted = True
+        Trx.UnApply()
+        Trx.ClearRepeatTrx()
+        mHasUpdateStarted = True
     End Sub
 
     Public Sub UpdateEnd(ByVal objLogger As ILogChange, ByVal strTitle As String)
-        If Not mblnUpdateStarted Then
+        If Not mHasUpdateStarted Then
             Throw New Exception("TrxManager.UpdateStart() not called before UpdateEnd()")
         End If
-        objTrx.objReg.UpdateEnd(objTrx, objLogger, strTitle, mobjOriginalLogTrx)
-        objTrx.objReg.EndCriticalOperation()
+        Trx.Register.UpdateEnd(Trx, objLogger, strTitle, mOriginalLogTrx)
+        Trx.Register.EndCriticalOperation()
     End Sub
 End Class
 

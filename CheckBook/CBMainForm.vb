@@ -182,11 +182,11 @@ Friend Class CBMainForm
     End Function
 
     Public Iterator Function objSearchHandlers() As IEnumerable(Of ISearchHandler) Implements IHostUI.objSearchHandlers
-        Yield New TrxSearchHandler(Me, "Description", Function(ByVal objTrx As BaseTrx) objTrx.strDescription)
+        Yield New TrxSearchHandler(Me, "Description", Function(ByVal objTrx As BaseTrx) objTrx.Description)
         Yield New MemoSearchHandler(Me, "Memo")
         Yield New CategorySearchHandler(Me, "Category")
-        Yield New TrxSearchHandler(Me, "Number", Function(ByVal objTrx As BaseTrx) objTrx.strNumber)
-        Yield New TrxSearchHandler(Me, "Amount", Function(ByVal objTrx As BaseTrx) Utilities.strFormatCurrency(objTrx.curAmount))
+        Yield New TrxSearchHandler(Me, "Number", Function(ByVal objTrx As BaseTrx) objTrx.Number)
+        Yield New TrxSearchHandler(Me, "Amount", Function(ByVal objTrx As BaseTrx) Utilities.strFormatCurrency(objTrx.Amount))
         Yield New InvoiceSearchHandler(Me, "Invoice #")
         Yield New PurOrdSearchHandler(Me, "PO #")
     End Function

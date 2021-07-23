@@ -20,16 +20,16 @@ namespace Willowsoft.CheckBook.BudgetDashboard
             List<BankTrx> parentsAddedToGenerated = new List<BankTrx>();
             foreach (TrxSplit split in this.Splits)
             {
-                if (split.objBudget == null)
+                if (split.Budget == null)
                 {
-                    this.CellAmount += split.curAmount;
+                    this.CellAmount += split.Amount;
                     // Because a BankTrx may have several splits that are
                     // added to this cell, and we only want to add the trx
                     // to the generated total once.
-                    if (!parentsAddedToGenerated.Contains(split.objParent))
+                    if (!parentsAddedToGenerated.Contains(split.Parent))
                     {
-                        this.GeneratedAmount += split.objParent.curGeneratedAmount;
-                        parentsAddedToGenerated.Add(split.objParent);
+                        this.GeneratedAmount += split.Parent.GeneratedAmount;
+                        parentsAddedToGenerated.Add(split.Parent);
                     }
                 }
             }

@@ -18,7 +18,7 @@ Public Class ImportHandlerInvoices
     End Property
 
     Public Sub AutoNewSearch(objImportedTrx As ImportedTrx, objReg As Register, ByRef colMatches As ICollection(Of BankTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.AutoNewSearch
-        objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.objFirstSplit.strInvoiceNum, colMatches)
+        objReg.MatchInvoice(objImportedTrx.TrxDate, 120, objImportedTrx.Description, objImportedTrx.FirstSplit.InvoiceNum, colMatches)
         blnExactMatch = True
     End Sub
 
@@ -31,20 +31,20 @@ Public Class ImportHandlerInvoices
         'Check if we are importing an invoice that can be matched to a purchase order.
         'If this happens we update an existing BaseTrx by adding a split rather than creating
         'a new BaseTrx as would normally be the case in this method.
-        If objImportedTrx.lngSplits > 0 Then
-            objImportedSplit = objImportedTrx.objFirstSplit
-            strPONumber = objImportedSplit.strPONumber
+        If objImportedTrx.SplitCount > 0 Then
+            objImportedSplit = objImportedTrx.FirstSplit
+            strPONumber = objImportedSplit.PONumber
             If LCase(strPONumber) = "none" Then
                 strPONumber = ""
             End If
             If strPONumber <> "" Then
-                objReg.MatchPONumber(objImportedTrx.datDate, 14, objImportedTrx.strDescription, strPONumber, colPOMatches)
+                objReg.MatchPONumber(objImportedTrx.TrxDate, 14, objImportedTrx.Description, strPONumber, colPOMatches)
                 'There should be only one matching BaseTrx, but we'll check all matches
                 'and use the first one with a split with no invoice number. That split
                 'represents the uninvoiced part of the purchase order due on that date.
                 For Each objMatchedTrx In colPOMatches
-                    For Each objMatchedSplit In objMatchedTrx.colSplits
-                        If objMatchedSplit.strPONumber = strPONumber And objMatchedSplit.strInvoiceNum = "" Then
+                    For Each objMatchedSplit In objMatchedTrx.Splits
+                        If objMatchedSplit.PONumber = strPONumber And objMatchedSplit.InvoiceNum = "" Then
                             'Add the imported BaseTrx as a new split in objMatchedTrx,
                             'and reduce the amount of objMatchedSplit by the same amount
                             'so the total amount of objMatchedTrx does not change.
@@ -59,7 +59,7 @@ Public Class ImportHandlerInvoices
     End Function
 
     Public Function strAutoNewValidationError(objImportedTrx As ImportedTrx, ByVal objAccount As Account, blnManualSelectionAllowed As Boolean) As String Implements IImportHandler.strAutoNewValidationError
-        Dim strTrxNum As String = LCase(objImportedTrx.strNumber)
+        Dim strTrxNum As String = LCase(objImportedTrx.Number)
         If strTrxNum <> "inv" And strTrxNum <> "crm" Then
             Return "Transaction is not an invoice or credit memo"
         End If
@@ -68,7 +68,7 @@ Public Class ImportHandlerInvoices
 
     Public Function objStatusSearch(objImportedTrx As ImportedTrx, objReg As Register) As BankTrx Implements IImportHandler.objStatusSearch
         Dim colMatches As ICollection(Of BankTrx) = Nothing
-        objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.objFirstSplit.strInvoiceNum, colMatches)
+        objReg.MatchInvoice(objImportedTrx.TrxDate, 120, objImportedTrx.Description, objImportedTrx.FirstSplit.InvoiceNum, colMatches)
         If colMatches.Count() > 0 Then
             Return Utilities.objFirstElement(colMatches)
         End If
@@ -108,7 +108,7 @@ Public Class ImportHandlerInvoices
     End Property
 
     Public Sub IndividualSearch(objReg As Register, objImportedTrx As ImportedTrx, blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of BankTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.IndividualSearch
-        objReg.MatchInvoice(objImportedTrx.datDate, 120, objImportedTrx.strDescription, objImportedTrx.objFirstSplit.strInvoiceNum, colMatches)
+        objReg.MatchInvoice(objImportedTrx.TrxDate, 120, objImportedTrx.Description, objImportedTrx.FirstSplit.InvoiceNum, colMatches)
         blnExactMatch = True
     End Sub
 

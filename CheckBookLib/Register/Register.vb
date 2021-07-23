@@ -126,7 +126,7 @@ Public Class Register
         BeginCriticalOperation()
         ExpandTrxArray()
         SetTrx(mlngTrxUsed, objNew)
-        If objNew.intRepeatSeq > 0 Then
+        If objNew.RepeatSeq > 0 Then
             AddRepeatTrx(objNew)
         End If
         EndCriticalOperation()
@@ -151,8 +151,8 @@ Public Class Register
         If blnSetChanged Then
             mobjAccount.SetChanged()
         End If
-        UpdateFirstAffected(objNew.lngIndex)
-        If objNew.intRepeatSeq > 0 Then
+        UpdateFirstAffected(objNew.RegIndex)
+        If objNew.RepeatSeq > 0 Then
             SetRepeatTrx(objNew)
         End If
         FixBalancesAndRefreshUI()
@@ -255,19 +255,19 @@ Public Class Register
 
     Friend Sub UpdateEnd(ByVal objTrx As BaseTrx, ByVal objChangeLogger As ILogChange, ByVal strTitle As String, ByVal objOldTrx As BaseTrx)
 
-        Dim lngOldIndex As Integer = objTrx.lngIndex
+        Dim lngOldIndex As Integer = objTrx.RegIndex
 
         Try
 
-            If objTrx.intRepeatSeq > 0 Then
+            If objTrx.RepeatSeq > 0 Then
                 SetRepeatTrx(objTrx)
             End If
             objTrx.Apply(False)
             UpdateMove(lngOldIndex)
-            RaiseEvent TrxUpdated(lngOldIndex <> objTrx.lngIndex, objTrx)
+            RaiseEvent TrxUpdated(lngOldIndex <> objTrx.RegIndex, objTrx)
             mobjAccount.SetChanged()
             UpdateFirstAffected(lngOldIndex)
-            UpdateFirstAffected(objTrx.lngIndex)
+            UpdateFirstAffected(objTrx.RegIndex)
             FixBalancesAndRefreshUI()
             mobjLog.AddILogChange(objChangeLogger, strTitle, objTrx, objOldTrx)
 
@@ -310,34 +310,34 @@ Public Class Register
     End Sub
 
     Public Shared Function TrxSortComparison(ByVal objTrx1 As BaseTrx, ByVal objTrx2 As BaseTrx) As Integer
-        Dim result As Integer = objTrx1.datDate.CompareTo(objTrx2.datDate)
+        Dim result As Integer = objTrx1.TrxDate.CompareTo(objTrx2.TrxDate)
         If result <> 0 Then
             Return result
         End If
-        result = objTrx1.intAmountSortKey.CompareTo(objTrx2.intAmountSortKey)
+        result = objTrx1.AmountSortKey.CompareTo(objTrx2.AmountSortKey)
         If result <> 0 Then
             Return result
         End If
-        result = objTrx1.intTrxTypeSortKey.CompareTo(objTrx2.intTrxTypeSortKey)
+        result = objTrx1.TrxTypeSortKey.CompareTo(objTrx2.TrxTypeSortKey)
         If result <> 0 Then
             Return result
         End If
-        result = String.CompareOrdinal(objTrx1.strNumber, objTrx2.strNumber)
+        result = String.CompareOrdinal(objTrx1.Number, objTrx2.Number)
         If result <> 0 Then
             Return result
         End If
-        result = String.CompareOrdinal(objTrx1.strDescription, objTrx2.strDescription)
+        result = String.CompareOrdinal(objTrx1.Description, objTrx2.Description)
         If result <> 0 Then
             Return result
         End If
-        Return String.CompareOrdinal(objTrx1.strDocNumberSortKey, objTrx2.strDocNumberSortKey)
+        Return String.CompareOrdinal(objTrx1.DocNumberSortKey, objTrx2.DocNumberSortKey)
     End Function
 
     Public Sub Sort()
         If (Not maobjTrx Is Nothing) And (mlngTrxUsed > 0) Then
             Array.Sort(Of BaseTrx)(maobjTrx, 1, mlngTrxUsed, New SortComparer())
             For lngIndex As Integer = 1 To mlngTrxUsed
-                maobjTrx(lngIndex).lngIndex = lngIndex
+                maobjTrx(lngIndex).RegIndex = lngIndex
             Next
         End If
     End Sub
@@ -417,7 +417,7 @@ Public Class Register
 
     Public Sub SetTrxStatus(ByVal objStatusTrx As BankTrx, ByVal lngStatus As BaseTrx.TrxStatus, ByVal objAddLogger As ILogAdd, ByVal strTitle As String)
 
-        objStatusTrx.lngStatus = lngStatus
+        objStatusTrx.Status = lngStatus
         mobjAccount.SetChanged()
         'Use an ILogAdd instead of a specialized logger because it's a cheap
         'hack to reuse an existing type with the correct signature rather than
@@ -436,13 +436,13 @@ Public Class Register
         BeginCriticalOperation()
         ClearFirstAffected()
         With objTrx
-            objTrxOld = .objClone(False)
+            objTrxOld = .CloneTrx(False)
             objTrx.UnApply()
-            If .strRepeatKey <> "" Then
+            If .RepeatKey <> "" Then
                 RemoveRepeatTrx(objTrx)
             End If
         End With
-        Dim lngIndex As Integer = objTrx.lngIndex
+        Dim lngIndex As Integer = objTrx.RegIndex
         For lngMoveIndex = lngIndex + 1 To mlngTrxUsed
             SetTrx(lngMoveIndex - 1, maobjTrx(lngMoveIndex))
         Next
@@ -492,14 +492,14 @@ Public Class Register
         If lngStartIndex = 1 Then
             curBalance = 0
         Else
-            curBalance = Me.GetTrx(lngStartIndex - 1).curBalance
+            curBalance = Me.GetTrx(lngStartIndex - 1).Balance
         End If
         lngLastChange = lngStartIndex
         For lngIndex = lngStartIndex To mlngTrxUsed
             With Me.GetTrx(lngIndex)
-                curBalance = curBalance + .curBalanceChange
-                If curBalance <> .curBalance Then
-                    .curBalance = curBalance
+                curBalance = curBalance + .BalanceChangeAmount
+                If curBalance <> .Balance Then
+                    .Balance = curBalance
                     lngLastChange = lngIndex
                 End If
             End With
@@ -531,8 +531,8 @@ Public Class Register
             If TypeOf (objTrx) Is BudgetTrx Then
                 DirectCast(objTrx, BudgetTrx).SetAmountForBudget()
             End If
-            curBalance = curBalance + objTrx.curBalanceChange
-            objTrx.curBalance = curBalance
+            curBalance = curBalance + objTrx.BalanceChangeAmount
+            objTrx.Balance = curBalance
         Next
         EndCriticalOperation()
     End Sub
@@ -554,8 +554,8 @@ Public Class Register
         For lngInIndex = 1 To mlngTrxUsed
             objTrx = maobjTrx(lngInIndex)
             objTrx.UnApply()
-            If objTrx.blnAutoGenerated Then
-                If objTrx.strRepeatKey <> "" Then
+            If objTrx.IsAutoGenerated Then
+                If objTrx.RepeatKey <> "" Then
                     RemoveRepeatTrx(objTrx)
                 End If
             Else
@@ -605,8 +605,8 @@ Public Class Register
 
     Public Function MatchImportKey(ByVal strImportKey As String) As BankTrx
         For Each objTrx As BankTrx In Me.GetAllTrxReverse(Of BankTrx)
-            If Not objTrx.blnFake Then
-                If objTrx.strImportKey = strImportKey Then
+            If Not objTrx.IsFake Then
+                If objTrx.ImportKey = strImportKey Then
                     Return objTrx
                 End If
             End If
@@ -631,13 +631,13 @@ Public Class Register
         datLatestMatch = DateAdd(DateInterval.Day, intDateRange - 1, datDate)
         For Each objTrx As BankTrx In Me.GetAllTrxReverse(Of BankTrx)
             With objTrx
-                If .datDate < datEarliestMatch Then
+                If .TrxDate < datEarliestMatch Then
                     Exit For
                 End If
-                If .datDate <= datLatestMatch Then
-                    If Not .blnFake Then
-                        If .strNumber = strNumber And (.curAmount = curAmount Or curAmount = 0.0#) Then
-                            If Left(.strDescription, 10).ToLower() = Left(strDescription, 10).ToLower() Then
+                If .TrxDate <= datLatestMatch Then
+                    If Not .IsFake Then
+                        If .Number = strNumber And (.Amount = curAmount Or curAmount = 0.0#) Then
+                            If Left(.Description, 10).ToLower() = Left(strDescription, 10).ToLower() Then
                                 Return objTrx
                             End If
                         End If
@@ -658,7 +658,7 @@ Public Class Register
 
         Dim objTrxManager As NormalTrxManager = New NormalTrxManager(objNormalTrx)
         objTrxManager.UpdateStart()
-        objTrxManager.objTrx.ImportUpdateBank(datDate, strNumber, curAmount, strImportKey)
+        objTrxManager.Trx.ImportUpdateBank(datDate, strNumber, curAmount, strImportKey)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdateBank")
     End Sub
 
@@ -670,7 +670,7 @@ Public Class Register
 
         Dim objTrxManager As NormalTrxManager = New NormalTrxManager(objNormalTrx)
         objTrxManager.UpdateStart()
-        objTrxManager.objTrx.ImportUpdateNumAmt(strNumber, curAmount)
+        objTrxManager.Trx.ImportUpdateNumAmt(strNumber, curAmount)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdateNumAmt")
     End Sub
 
@@ -681,7 +681,7 @@ Public Class Register
 
         Dim objTrxManager As NormalTrxManager = New NormalTrxManager(objNormalTrx)
         objTrxManager.UpdateStart()
-        objTrxManager.objTrx.ImportUpdateAmount(curAmount)
+        objTrxManager.Trx.ImportUpdateAmount(curAmount)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdateAmount")
     End Sub
 
@@ -694,7 +694,7 @@ Public Class Register
 
         Dim objTrxManager As NormalTrxManager = New NormalTrxManager(objNormalTrx)
         objTrxManager.UpdateStart()
-        objTrxManager.objTrx.ImportUpdatePurchaseOrder(objPOSplit, objImportedSplit)
+        objTrxManager.Trx.ImportUpdatePurchaseOrder(objPOSplit, objImportedSplit)
         objTrxManager.UpdateEnd(New LogChange, "ImportUpdatePurchaseOrder")
     End Sub
 
@@ -765,36 +765,36 @@ Public Class Register
             With objNormalTrx
                 blnMatched = False
                 If lngNumber <> 0 Then
-                    If (curAmount = .curAmount Or blnLooseMatch) And MakeComparableCheckNumber(.strNumber) = strNumber Then
+                    If (curAmount = .Amount Or blnLooseMatch) And MakeComparableCheckNumber(.Number) = strNumber Then
                         blnMatched = True
                     End If
                 End If
                 If blnLooseMatch Then
                     curAmountRange = System.Math.Abs(curAmount * 0.2D)
-                    If .curNormalMatchRange > curAmountRange Then
-                        curAmountRange = .curNormalMatchRange
+                    If .NormalMatchRange > curAmountRange Then
+                        curAmountRange = .NormalMatchRange
                     End If
                 Else
-                    curAmountRange = .curNormalMatchRange
+                    curAmountRange = .NormalMatchRange
                 End If
-                blnDescrMatches = (Left(LCase(.strDescription), intDescrMatchLen) = strDescrLC)
-                blnDateMatches = (System.Math.Abs(DateDiff(Microsoft.VisualBasic.DateInterval.Day, .datDate, datDate)) < 6)
-                blnAmountMatches = (System.Math.Abs(.curAmount - curAmount) <= curAmountRange)
+                blnDescrMatches = (Left(LCase(.Description), intDescrMatchLen) = strDescrLC)
+                blnDateMatches = (System.Math.Abs(DateDiff(Microsoft.VisualBasic.DateInterval.Day, .TrxDate, datDate)) < 6)
+                blnAmountMatches = (System.Math.Abs(.Amount - curAmount) <= curAmountRange)
                 If (CInt(IIf(blnAmountMatches, 1, 0)) + CInt(IIf(blnDateMatches, 1, 0))) >= CInt(IIf(blnLooseMatch, 1, 2)) Then
                     blnMatched = True
                 End If
                 If blnMatched Or blnDescrMatches Then
                     'If min/max were specified this is a mandatory amount filter, separate from blnAmountMatches.
                     If curMatchMin <> 0.0# And curMatchMax <> 0.0# Then
-                        If (.curAmount >= curMatchMin) And (.curAmount <= curMatchMax) Then
+                        If (.Amount >= curMatchMin) And (.Amount <= curMatchMax) Then
                             colMatches.Add(objNormalTrx)
                         End If
                     Else
                         colMatches.Add(objNormalTrx)
                     End If
                 End If
-                If .curAmount = curAmount Then
-                    If (blnDescrMatches And blnDateMatches) Or (MakeComparableCheckNumber(.strNumber) = strNumber) Then
+                If .Amount = curAmount Then
+                    If (blnDescrMatches And blnDateMatches) Or (MakeComparableCheckNumber(.Number) = strNumber) Then
                         colExactMatches.Add(objNormalTrx)
                     End If
                 End If
@@ -846,8 +846,8 @@ Public Class Register
         datStart = DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
         For Each objNormalTrx As BankTrx In Me.GetDateRange(Of BankTrx)(datStart, datEnd)
-            blnImportOkay = (objNormalTrx.strImportKey = "") Or (blnMatchImportedFromBank) 'Used to be (not blnMatchImportedFromBank)
-            If objNormalTrx.strDescription = strDescription And blnImportOkay Then
+            blnImportOkay = (objNormalTrx.ImportKey = "") Or (blnMatchImportedFromBank) 'Used to be (not blnMatchImportedFromBank)
+            If objNormalTrx.Description = strDescription And blnImportOkay Then
                 colMatches.Add(objNormalTrx)
             End If
         Next
@@ -876,9 +876,9 @@ Public Class Register
         datStart = DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
         For Each objNormalTrx As BankTrx In Me.GetDateRange(Of BankTrx)(datStart, datEnd)
-            If objNormalTrx.strDescription = strPayee Then
-                For Each objSplit In objNormalTrx.colSplits
-                    If objSplit.strInvoiceNum = strInvoiceNum Then
+            If objNormalTrx.Description = strPayee Then
+                For Each objSplit In objNormalTrx.Splits
+                    If objSplit.InvoiceNum = strInvoiceNum Then
                         colMatches.Add(objNormalTrx)
                     End If
                 Next objSplit
@@ -906,9 +906,9 @@ Public Class Register
         datStart = DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDateRange, datDate)
         datEnd = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDateRange, datDate)
         For Each objNormalTrx As BankTrx In Me.GetDateRange(Of BankTrx)(datStart, datEnd)
-            If objNormalTrx.strDescription = strPayee Then
-                For Each objSplit In objNormalTrx.colSplits
-                    If objSplit.strPONumber = strPONumber Then
+            If objNormalTrx.Description = strPayee Then
+                For Each objSplit In objNormalTrx.Splits
+                    If objSplit.PONumber = strPONumber Then
                         colMatches.Add(objNormalTrx)
                     End If
                 Next objSplit
@@ -922,7 +922,7 @@ Public Class Register
         'lngIndex is initialized to mlngTrxUsed even if the body of the loop
         'is never executed, and will be left as zero if no matching BaseTrx is found.
         For lngIndexBeforeDate = mlngTrxUsed To 1 Step -1
-            If Me.GetTrx(lngIndexBeforeDate).datDate < datDate Then
+            If Me.GetTrx(lngIndexBeforeDate).TrxDate < datDate Then
                 Exit For
             End If
         Next
@@ -944,12 +944,12 @@ Public Class Register
     Friend Function MatchTransfer(ByVal datDate As Date, ByVal strTransferKey_ As String, ByVal curAmount As Decimal) As TransferTrx
 
         For Each objTrx As TransferTrx In Me.GetAllTrxReverse(Of TransferTrx)
-            If objTrx.datDate < datDate Then
+            If objTrx.TrxDate < datDate Then
                 Return Nothing
             End If
-            If objTrx.datDate = datDate Then
-                If objTrx.curAmount = curAmount Then
-                    If objTrx.strTransferKey = strTransferKey_ Then
+            If objTrx.TrxDate = datDate Then
+                If objTrx.Amount = curAmount Then
+                    If objTrx.TransferKey = strTransferKey_ Then
                         Return objTrx
                     End If
                 End If
@@ -970,35 +970,35 @@ Public Class Register
 
     Friend Function MatchBudget(ByVal objNormalTrx As BankTrx, ByVal strBudgetKey As String, ByRef blnNoMatch As Boolean) As BudgetTrx
 
-        Dim datDate As DateTime = objNormalTrx.datDate
+        Dim datDate As DateTime = objNormalTrx.TrxDate
         Dim objNextTrx As BaseTrx
         Dim objBudgetTrx As BudgetTrx
 
         blnNoMatch = False
         objNextTrx = objNormalTrx
         Do
-            If objNextTrx.objPrevious Is Nothing Then
+            If objNextTrx.PreviousTrx Is Nothing Then
                 Exit Do
             End If
-            If objNextTrx.objPrevious.datDate < datDate Then
+            If objNextTrx.PreviousTrx.TrxDate < datDate Then
                 Exit Do
             End If
-            objNextTrx = objNextTrx.objPrevious
+            objNextTrx = objNextTrx.PreviousTrx
         Loop
         Do
             objBudgetTrx = TryCast(objNextTrx, BudgetTrx)
             If Not objBudgetTrx Is Nothing Then
                 If objBudgetTrx.InBudgetPeriod(datDate) Then
-                    If strBudgetKey = objBudgetTrx.strBudgetKey Then
+                    If strBudgetKey = objBudgetTrx.BudgetKey Then
                         Return objBudgetTrx
                     End If
                 End If
             End If
-            objNextTrx = objNextTrx.objNext
+            objNextTrx = objNextTrx.NextTrx
             If objNextTrx Is Nothing Then
                 Exit Do
             End If
-            If objNextTrx.datDate.Subtract(datDate).TotalDays > 400 Then
+            If objNextTrx.TrxDate.Subtract(datDate).TotalDays > 400 Then
                 Exit Do
             End If
         Loop
@@ -1011,7 +1011,7 @@ Public Class Register
     '   case balances need to be updated.
 
     Friend Sub FireBudgetChanged(ByVal objBudgetTrx As BaseTrx)
-        UpdateFirstAffected(objBudgetTrx.lngIndex)
+        UpdateFirstAffected(objBudgetTrx.RegIndex)
         RaiseEvent BudgetChanged(objBudgetTrx)
     End Sub
 
@@ -1061,7 +1061,7 @@ Public Class Register
 
     Private Sub SetTrx(lngIndex As Integer, ByVal objTrx_ As BaseTrx)
         maobjTrx(lngIndex) = objTrx_
-        objTrx_.lngIndex = lngIndex
+        objTrx_.RegIndex = lngIndex
     End Sub
 
     Public ReadOnly Property GetBankTrx(ByVal lngIndex As Integer) As BankTrx
@@ -1171,16 +1171,16 @@ Public Class Register
     End Sub
 
     Private Sub AddRepeatTrx(ByVal objTrx As BaseTrx)
-        mcolRepeatTrx.Add(objTrx.strRepeatId, objTrx)
+        mcolRepeatTrx.Add(objTrx.RepeatId, objTrx)
     End Sub
 
     Private Sub SetRepeatTrx(ByVal objTrx As BaseTrx)
-        mcolRepeatTrx.Item(objTrx.strRepeatId) = objTrx
+        mcolRepeatTrx.Item(objTrx.RepeatId) = objTrx
     End Sub
 
     Public Function FindRepeatTrx(ByVal strRepeatKey As String, ByVal intRepeatSeq As Integer) As BaseTrx
         Dim objTrx As BaseTrx = Nothing
-        If mcolRepeatTrx.TryGetValue(BaseTrx.strMakeRepeatId(strRepeatKey, intRepeatSeq), objTrx) Then
+        If mcolRepeatTrx.TryGetValue(BaseTrx.MakeRepeatId(strRepeatKey, intRepeatSeq), objTrx) Then
             Return objTrx
         Else
             Return Nothing
@@ -1188,7 +1188,7 @@ Public Class Register
     End Function
 
     Friend Sub RemoveRepeatTrx(ByVal objTrx As BaseTrx)
-        mcolRepeatTrx.Remove(objTrx.strRepeatId)
+        mcolRepeatTrx.Remove(objTrx.RepeatId)
     End Sub
 
     Public ReadOnly Property CurrentTrx() As BaseTrx
@@ -1212,10 +1212,10 @@ Public Class Register
     Public Function EndingBalance(ByVal datEndDate As DateTime) As Decimal
         Dim curBalance As Decimal
         For Each objTrx As BaseTrx In GetAllTrx(Of BaseTrx)()
-            If objTrx.datDate > datEndDate Then
+            If objTrx.TrxDate > datEndDate Then
                 Exit For
             End If
-            curBalance = curBalance + objTrx.curAmount
+            curBalance = curBalance + objTrx.Amount
         Next
         Return curBalance
     End Function
@@ -1236,10 +1236,10 @@ Public Class Register
 
         For Each objTrx In Me.GetAllTrx(Of BaseTrx)()
             With objTrx
-                If .curBalance <> (curPriorBalance + .curAmount) Then
+                If .Balance <> (curPriorBalance + .Amount) Then
                     FireValidationError(objTrx, "Incorrect balance")
                 End If
-                curPriorBalance = .curBalance
+                curPriorBalance = .Balance
                 If Not objPriorTrx Is Nothing Then
                     If Register.TrxSortComparison(objTrx, objPriorTrx) < 0 Then
                         FireValidationError(objTrx, "Not in correct sort order")
@@ -1247,7 +1247,7 @@ Public Class Register
                 End If
                 objPriorTrx = objTrx
                 .Validate()
-                If .intRepeatSeq > 0 Then
+                If .RepeatSeq > 0 Then
                     intRepeatTrxCount = intRepeatTrxCount + 1S
                 End If
             End With
@@ -1258,7 +1258,7 @@ Public Class Register
         End If
 
         For Each objTrx In mcolRepeatTrx.Values
-            objTrx2 = FindRepeatTrx(objTrx.strRepeatKey, objTrx.intRepeatSeq)
+            objTrx2 = FindRepeatTrx(objTrx.RepeatKey, objTrx.RepeatSeq)
             If Not objTrx Is objTrx2 Then
                 FireValidationError(Nothing, "Repeat collection element points to wrong trx")
             End If

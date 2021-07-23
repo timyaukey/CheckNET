@@ -53,16 +53,16 @@ Public Class TrxSplit
 
     End Sub
 
-    Public ReadOnly Property strMemo() As String
+    Public ReadOnly Property Memo() As String
         Get
-            strMemo = mstrMemo
+            Memo = mstrMemo
         End Get
     End Property
 
 
-    Public Property strCategoryKey() As String
+    Public Property CategoryKey() As String
         Get
-            strCategoryKey = mstrCategoryKey
+            CategoryKey = mstrCategoryKey
         End Get
         Set(ByVal Value As String)
             mstrCategoryKey = Value
@@ -70,9 +70,9 @@ Public Class TrxSplit
     End Property
 
 
-    Public Property strPONumber() As String
+    Public Property PONumber() As String
         Get
-            strPONumber = mstrPONumber
+            PONumber = mstrPONumber
         End Get
         Set(ByVal Value As String)
             mstrPONumber = Value
@@ -80,9 +80,9 @@ Public Class TrxSplit
     End Property
 
 
-    Public Property strInvoiceNum() As String
+    Public Property InvoiceNum() As String
         Get
-            strInvoiceNum = mstrInvoiceNum
+            InvoiceNum = mstrInvoiceNum
         End Get
         Set(ByVal Value As String)
             mstrInvoiceNum = Value
@@ -90,16 +90,16 @@ Public Class TrxSplit
     End Property
 
 
-    Public Property datInvoiceDate() As Date
+    Public Property InvoiceDate() As Date
         Get
-            datInvoiceDate = mdatInvoiceDate
+            InvoiceDate = mdatInvoiceDate
         End Get
         Set(ByVal Value As Date)
             mdatInvoiceDate = Value
         End Set
     End Property
 
-    Public ReadOnly Property datInvoiceDateEffective() As Date
+    Public ReadOnly Property InvoiceDateEffective() As Date
         Get
             Dim datEffective As Date = mdatInvoiceDate
             Dim intDaysBack As Integer
@@ -120,53 +120,53 @@ Public Class TrxSplit
                     intDaysBack = 30
                 Else
                     'Is the category one we guessed to have short terms?
-                    If InStr(objParent.objReg.Account.Company.ShortTermsCatKeys, Company.EncodeCatKey(mstrCategoryKey)) > 0 Then
+                    If InStr(Parent.Register.Account.Company.ShortTermsCatKeys, Company.EncodeCatKey(mstrCategoryKey)) > 0 Then
                         intDaysBack = 14
                     Else
                         intDaysBack = 30
                     End If
                 End If
-                datEffective = DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDaysBack, datDueDateEffective)
+                datEffective = DateAdd(Microsoft.VisualBasic.DateInterval.Day, -intDaysBack, DueDateEffective)
             End If
             Return datEffective
         End Get
     End Property
 
-    Public Property datDueDate() As Date
+    Public Property DueDate() As Date
         Get
-            datDueDate = mdatDueDate
+            DueDate = mdatDueDate
         End Get
         Set(ByVal Value As Date)
             mdatDueDate = Value
         End Set
     End Property
 
-    Public ReadOnly Property datDueDateEffective() As Date
+    Public ReadOnly Property DueDateEffective() As Date
         Get
             Dim datEffective = mdatDueDate
             If datEffective = Utilities.datEmpty Then
-                datEffective = mobjParent.datDate
+                datEffective = mobjParent.TrxDate
             End If
             Return datEffective
         End Get
     End Property
 
-    Public Property strTerms() As String
+    Public Property Terms() As String
         Get
-            strTerms = mstrTerms
+            Terms = mstrTerms
         End Get
         Set(ByVal Value As String)
             mstrTerms = Value
         End Set
     End Property
 
-    Public ReadOnly Property strBudgetKey() As String
+    Public ReadOnly Property BudgetKey() As String
         Get
-            strBudgetKey = mstrBudgetKey
+            BudgetKey = mstrBudgetKey
         End Get
     End Property
 
-    Public Property objBudget() As BudgetTrx
+    Public Property Budget() As BudgetTrx
         Get
             Return mobjBudget
         End Get
@@ -175,7 +175,7 @@ Public Class TrxSplit
         End Set
     End Property
 
-    Public Property objParent() As BankTrx
+    Public Property Parent() As BankTrx
         Get
             Return mobjParent
         End Get
@@ -184,9 +184,9 @@ Public Class TrxSplit
         End Set
     End Property
 
-    Public ReadOnly Property curAmount() As Decimal
+    Public ReadOnly Property Amount() As Decimal
         Get
-            curAmount = mcurAmount
+            Amount = mcurAmount
         End Get
     End Property
 
@@ -239,15 +239,15 @@ Public Class TrxSplit
                     For Each objReg In objAccount.Registers
                         If objReg.RegisterKey = strRegKey Then
                             Dim objReplicaTrx As ReplicaTrx = New ReplicaTrx(objReg)
-                            Dim strCatKey As String = objNormalTrx.objReg.Account.AccountKey.ToString() + "." + objNormalTrx.objReg.RegisterKey
+                            Dim strCatKey As String = objNormalTrx.Register.Account.AccountKey.ToString() + "." + objNormalTrx.Register.RegisterKey
                             Dim strReplDescr As String
                             If Not String.IsNullOrEmpty(mstrMemo) Then
                                 strReplDescr = mstrMemo
                             Else
-                                strReplDescr = objNormalTrx.strDescription
+                                strReplDescr = objNormalTrx.Description
                             End If
-                            objReplicaTrx.NewStartReplica(True, objNormalTrx.datDate, strReplDescr,
-                                strCatKey, mstrPONumber, mstrInvoiceNum, -mcurAmount, objNormalTrx.blnFake)
+                            objReplicaTrx.NewStartReplica(True, objNormalTrx.TrxDate, strReplDescr,
+                                strCatKey, mstrPONumber, mstrInvoiceNum, -mcurAmount, objNormalTrx.IsFake)
                             If blnLoading Then
                                 objReg.NewLoadEnd(objReplicaTrx)
                             Else
@@ -263,12 +263,12 @@ Public Class TrxSplit
 
     Friend Sub DeleteReplicaTrx()
         If Not mobjReplicaManager Is Nothing Then
-            mobjReplicaManager.objTrx.Delete(New LogDeleteNull(), "", blnSetChanged:=False)
+            mobjReplicaManager.Trx.Delete(New LogDeleteNull(), "", blnSetChanged:=False)
             mobjReplicaManager = Nothing
         End If
     End Sub
 
-    Public ReadOnly Property blnHasReplicaTrx() As Boolean
+    Public ReadOnly Property HasReplicaTrx() As Boolean
         Get
             Return (Not mobjReplicaManager Is Nothing)
         End Get

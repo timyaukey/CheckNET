@@ -33,10 +33,10 @@ Public Class ImportHandlerDeposits
         Dim colMatches As ICollection(Of BankTrx) = Nothing
         Dim blnExactMatch As Boolean
         Dim objNormalTrx As BankTrx
-        objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, True, colMatches, blnExactMatch)
+        objReg.MatchPayee(objImportedTrx.TrxDate, 7, objImportedTrx.Description, True, colMatches, blnExactMatch)
         If colMatches.Count > 0 Then
             objNormalTrx = Utilities.objFirstElement(colMatches)
-            If Not objNormalTrx.blnFake Then
+            If Not objNormalTrx.IsFake Then
                 Return objNormalTrx
             End If
         End If
@@ -46,16 +46,16 @@ Public Class ImportHandlerDeposits
     Public Sub BatchUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As BankTrx, ByVal intMultiPartSeqNumber As Integer) Implements IImportHandler.BatchUpdate
         Dim curAmount As Decimal
         If intMultiPartSeqNumber = 0 Then
-            curAmount = objImportedTrx.curAmount
+            curAmount = objImportedTrx.Amount
         Else
             curAmount = 0D
         End If
-        objMatchedTrx.objReg.ImportUpdateAmount(objMatchedTrx, curAmount)
+        objMatchedTrx.Register.ImportUpdateAmount(objMatchedTrx, curAmount)
     End Sub
 
     Public Sub BatchUpdateSearch(objReg As Register, objImportedTrx As ImportedTrx, colAllMatchedTrx As IEnumerable(Of BankTrx), ByRef colUnusedMatches As ICollection(Of BankTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.BatchUpdateSearch
         Dim colMatches As ICollection(Of BankTrx) = Nothing
-        objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, False, colMatches, blnExactMatch)
+        objReg.MatchPayee(objImportedTrx.TrxDate, 7, objImportedTrx.Description, False, colMatches, blnExactMatch)
         colUnusedMatches = ImportUtilities.colRemoveAlreadyMatched(objReg, colMatches, colAllMatchedTrx)
     End Sub
 
@@ -84,11 +84,11 @@ Public Class ImportHandlerDeposits
     End Property
 
     Public Sub IndividualSearch(objReg As Register, objImportedTrx As ImportedTrx, blnLooseMatch As Boolean, ByRef colMatches As ICollection(Of BankTrx), ByRef blnExactMatch As Boolean) Implements IImportHandler.IndividualSearch
-        objReg.MatchPayee(objImportedTrx.datDate, 7, objImportedTrx.strDescription, False, colMatches, blnExactMatch)
+        objReg.MatchPayee(objImportedTrx.TrxDate, 7, objImportedTrx.Description, False, colMatches, blnExactMatch)
     End Sub
 
     Public Function blnIndividualUpdate(objImportedTrx As ImportedTrx, objMatchedTrx As BankTrx) As Boolean Implements IImportHandler.blnIndividualUpdate
-        objMatchedTrx.objReg.ImportUpdateAmount(objMatchedTrx, objImportedTrx.curAmount)
+        objMatchedTrx.Register.ImportUpdateAmount(objMatchedTrx, objImportedTrx.Amount)
         Return True
     End Function
 End Class

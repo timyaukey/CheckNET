@@ -66,7 +66,7 @@ Public Class SearchMoveTool
         objStartLogger = objHostSearchToolUI.objReg.LogGroupStart("SearchForm.Move")
         For Each objTrxSrc In colTrx
             If blnUseDayOffset Then
-                datNewDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDayOffset, objTrxSrc.datDate)
+                datNewDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDayOffset, objTrxSrc.TrxDate)
             Else
                 datNewDate = datExplicitDate
             End If
@@ -75,7 +75,7 @@ Public Class SearchMoveTool
                     'Changing date, not register.
                     Dim objTrxManager As NormalTrxManager = New NormalTrxManager(objTrxSrc)
                     objTrxManager.UpdateStart()
-                    objTrxManager.objTrx.datDate = datNewDate
+                    objTrxManager.Trx.TrxDate = datNewDate
                     objTrxManager.UpdateEnd(New LogMove, "SearchForm.MoveUpdate")
                     If objTrxFirst Is Nothing Then
                         objTrxFirst = objTrxSrc
@@ -84,7 +84,7 @@ Public Class SearchMoveTool
                     'Changing register, and possibly date.
                     Dim objTrxNew As BankTrx = New BankTrx(objNewReg)
                     objTrxNew.NewStartNormal(True, objTrxSrc)
-                    objTrxNew.datDate = datNewDate
+                    objTrxNew.TrxDate = datNewDate
                     .CopySplits(objTrxNew)
                     objNewReg.NewAddEnd(objTrxNew, New LogAdd, "SearchForm.MoveAdd")
                     If objTrxFirst Is Nothing Then

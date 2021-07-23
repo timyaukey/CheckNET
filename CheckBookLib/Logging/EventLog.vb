@@ -93,17 +93,17 @@ Public Class EventLog
     End Sub
 
     Public Sub AddILogAdd(ByVal objAddLogger As ILogAdd, ByVal strTitle As String, ByVal objNewTrx As BaseTrx)
-        objAddLogger.Init(strTitle, objNewTrx.objClone(False))
+        objAddLogger.Init(strTitle, objNewTrx.CloneTrx(False))
         mcolLoggers.Add(objAddLogger)
     End Sub
 
     Public Sub AddILogChange(ByVal objChangeLogger As ILogChange, ByVal strTitle As String, ByVal objNewTrx As BaseTrx, ByVal objOldTrx As BaseTrx)
-        objChangeLogger.Init(strTitle, objNewTrx.objClone(False), objOldTrx.objClone(False))
+        objChangeLogger.Init(strTitle, objNewTrx.CloneTrx(False), objOldTrx.CloneTrx(False))
         mcolLoggers.Add(objChangeLogger)
     End Sub
 
     Public Sub AddILogDelete(ByVal objDeleteLogger As ILogDelete, ByVal strTitle As String, ByVal objOldTrx As BaseTrx)
-        objDeleteLogger.Init(strTitle, objOldTrx.objClone(False))
+        objDeleteLogger.Init(strTitle, objOldTrx.CloneTrx(False))
         mcolLoggers.Add(objDeleteLogger)
     End Sub
 
@@ -151,57 +151,57 @@ Public Class EventLog
         elmTrx = mdomOutput.CreateElement(strName)
         melmEvent.AppendChild(elmTrx)
         With elmTrx
-            .SetAttribute("Date", Utilities.strFormatDate(objTrx.datDate))
-            .SetAttribute("Number", objTrx.strNumber)
-            .SetAttribute("Payee", objTrx.strDescription)
-            .SetAttribute("Amount", Utilities.strFormatCurrency(objTrx.curAmount))
-            .SetAttribute("FakeStatus", objTrx.strFakeStatus)
-            If objTrx.strMemo <> "" Then
-                .SetAttribute("TrxMemo", objTrx.strMemo)
+            .SetAttribute("Date", Utilities.strFormatDate(objTrx.TrxDate))
+            .SetAttribute("Number", objTrx.Number)
+            .SetAttribute("Payee", objTrx.Description)
+            .SetAttribute("Amount", Utilities.strFormatCurrency(objTrx.Amount))
+            .SetAttribute("FakeStatus", objTrx.FakeStatusLabel)
+            If objTrx.Memo <> "" Then
+                .SetAttribute("TrxMemo", objTrx.Memo)
             End If
-            If objTrx.strRepeatKey <> "" Then
-                .SetAttribute("RptName", mobjRepeats.strKeyToValue1(objTrx.strRepeatKey))
-                .SetAttribute("RptSeq", CStr(objTrx.intRepeatSeq))
+            If objTrx.RepeatKey <> "" Then
+                .SetAttribute("RptName", mobjRepeats.strKeyToValue1(objTrx.RepeatKey))
+                .SetAttribute("RptSeq", CStr(objTrx.RepeatSeq))
             End If
             If TypeOf objTrx Is BankTrx Then
                 .SetAttribute("Type", "Normal")
                 elmSplitParent = elmTrx
                 objNormalTrx = DirectCast(objTrx, BankTrx)
-                For Each objSplit In objNormalTrx.colSplits
-                    If objNormalTrx.lngSplits > 1 Then
+                For Each objSplit In objNormalTrx.Splits
+                    If objNormalTrx.SplitCount > 1 Then
                         elmSplitParent = mdomOutput.CreateElement("Split")
                         elmTrx.AppendChild(elmSplitParent)
                     End If
                     With elmSplitParent
-                        .SetAttribute("CatName", mobjCompany.Categories.strKeyToValue1(objSplit.strCategoryKey))
-                        If objNormalTrx.lngSplits > 1 Then
-                            .SetAttribute("Amount", Utilities.strFormatCurrency(objSplit.curAmount))
+                        .SetAttribute("CatName", mobjCompany.Categories.strKeyToValue1(objSplit.CategoryKey))
+                        If objNormalTrx.SplitCount > 1 Then
+                            .SetAttribute("Amount", Utilities.strFormatCurrency(objSplit.Amount))
                         End If
-                        If objSplit.strPONumber <> "" Then
-                            .SetAttribute("PONum", objSplit.strPONumber)
+                        If objSplit.PONumber <> "" Then
+                            .SetAttribute("PONum", objSplit.PONumber)
                         End If
-                        If objSplit.strInvoiceNum <> "" Then
-                            .SetAttribute("InvNum", objSplit.strInvoiceNum)
+                        If objSplit.InvoiceNum <> "" Then
+                            .SetAttribute("InvNum", objSplit.InvoiceNum)
                         End If
-                        If objSplit.datInvoiceDate <> Utilities.datEmpty Then
-                            .SetAttribute("InvDate", Utilities.strFormatDate(objSplit.datInvoiceDate))
+                        If objSplit.InvoiceDate <> Utilities.datEmpty Then
+                            .SetAttribute("InvDate", Utilities.strFormatDate(objSplit.InvoiceDate))
                         End If
-                        If objSplit.datDueDate <> Utilities.datEmpty Then
-                            .SetAttribute("DueDate", Utilities.strFormatDate(objSplit.datDueDate))
+                        If objSplit.DueDate <> Utilities.datEmpty Then
+                            .SetAttribute("DueDate", Utilities.strFormatDate(objSplit.DueDate))
                         End If
-                        If objSplit.strTerms <> "" Then
-                            .SetAttribute("Terms", objSplit.strTerms)
+                        If objSplit.Terms <> "" Then
+                            .SetAttribute("Terms", objSplit.Terms)
                         End If
-                        If objSplit.strBudgetKey <> "" Then
-                            .SetAttribute("BudgetName", mobjCompany.Budgets.strKeyToValue1(objSplit.strBudgetKey))
+                        If objSplit.BudgetKey <> "" Then
+                            .SetAttribute("BudgetName", mobjCompany.Budgets.strKeyToValue1(objSplit.BudgetKey))
                         End If
                     End With
                 Next objSplit
             ElseIf TypeOf objTrx Is BudgetTrx Then
                 Dim objBudgetTrx As BudgetTrx = DirectCast(objTrx, BudgetTrx)
                 .SetAttribute("Type", "Budget")
-                .SetAttribute("BudgetLimit", Utilities.strFormatCurrency(objBudgetTrx.curBudgetLimit))
-                .SetAttribute("BudgetName", mobjCompany.Budgets.strKeyToValue1(objBudgetTrx.strBudgetKey))
+                .SetAttribute("BudgetLimit", Utilities.strFormatCurrency(objBudgetTrx.BudgetLimit))
+                .SetAttribute("BudgetName", mobjCompany.Budgets.strKeyToValue1(objBudgetTrx.BudgetKey))
             ElseIf TypeOf objTrx Is TransferTrx Then
                 .SetAttribute("Type", "Transfer")
             Else

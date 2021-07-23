@@ -147,30 +147,30 @@ Friend Class ExportForm
 
         Try
 
-            datInvToUse = objSplit.datInvoiceDateEffective
-            datDueToUse = objSplit.datDueDateEffective
-            If objSplit.datInvoiceDate > Utilities.datEmpty Then
-                strInvDate = Utilities.strFormatDate(objSplit.datInvoiceDate)
+            datInvToUse = objSplit.InvoiceDateEffective
+            datDueToUse = objSplit.DueDateEffective
+            If objSplit.InvoiceDate > Utilities.datEmpty Then
+                strInvDate = Utilities.strFormatDate(objSplit.InvoiceDate)
             End If
-            If objSplit.datDueDate > Utilities.datEmpty Then
-                strDueDate = Utilities.strFormatDate(objSplit.datDueDate)
+            If objSplit.DueDate > Utilities.datEmpty Then
+                strDueDate = Utilities.strFormatDate(objSplit.DueDate)
             End If
 
-            strLine = Utilities.strFormatDate(objTrx.datDate) & "," & objTrx.strNumber & ",""" & objTrx.strDescription & """," _
-                & Utilities.strFormatCurrency(objSplit.curAmount) & ",""" & mobjCompany.Categories.strKeyToValue1(objSplit.strCategoryKey) _
+            strLine = Utilities.strFormatDate(objTrx.TrxDate) & "," & objTrx.Number & ",""" & objTrx.Description & """," _
+                & Utilities.strFormatCurrency(objSplit.Amount) & ",""" & mobjCompany.Categories.strKeyToValue1(objSplit.CategoryKey) _
                 & """," & strDueDate & "," & Utilities.strFormatDate(datDueToUse) & "," & strInvDate & "," _
-                & Utilities.strFormatDate(datInvToUse) & ",""" & objSplit.strPONumber & """,""" & objSplit.strInvoiceNum & """,""" & objSplit.strTerms & """"
+                & Utilities.strFormatDate(datInvToUse) & ",""" & objSplit.PONumber & """,""" & objSplit.InvoiceNum & """,""" & objSplit.Terms & """"
 
             'The order of these extra fields must match the order they
             'are added in OpenOutput().
 
             If mblnIncludeAging Then
-                strBracket = AgingUtils.strMakeAgeBracket(mdatAgingDate, mintAgingDays, objTrx.blnFake, objTrx.datDate, datInvToUse, datDueToUse)
+                strBracket = AgingUtils.strMakeAgeBracket(mdatAgingDate, mintAgingDays, objTrx.IsFake, objTrx.TrxDate, datInvToUse, datDueToUse)
                 strLine = strLine & ",""" & strBracket & """"
             End If
 
             If mblnIncludeTrans Then
-                strBracket = AgingUtils.strMakeDateBracket(objTrx.datDate, mintTransDays, mdatTransDate)
+                strBracket = AgingUtils.strMakeDateBracket(objTrx.TrxDate, mintTransDays, mdatTransDate)
                 strLine = strLine & ",""" & strBracket & """"
             End If
 

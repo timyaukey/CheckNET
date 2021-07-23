@@ -33,18 +33,18 @@ Public MustInherit Class TrxNameSummary
             If objAccount.AcctSubType = lngSubType Then
                 For Each objReg As Register In objAccount.Registers
                     For Each objTrx As BaseTrx In objReg.GetDateRange(Of BaseTrx)(New DateTime(1900, 1, 1), datEnd)
-                        If Not objTrx.blnFake Then
+                        If Not objTrx.IsFake Then
                             Dim objNormalTrx As BankTrx = TryCast(objTrx, BankTrx)
                             If Not objNormalTrx Is Nothing Then
                                 Dim objSummary As TSummary = objGetSummary(colSummary, objDict, objTrx)
-                                For Each objSplit As TrxSplit In objNormalTrx.colSplits
-                                    objSummary.AddAmountToCorrectAge(objSplit.curAmount, objSplit.datDueDateEffective, datAging)
+                                For Each objSplit As TrxSplit In objNormalTrx.Splits
+                                    objSummary.AddAmountToCorrectAge(objSplit.Amount, objSplit.DueDateEffective, datAging)
                                 Next
                             Else
                                 Dim objReplicaTrx As ReplicaTrx = TryCast(objTrx, ReplicaTrx)
                                 If Not objReplicaTrx Is Nothing Then
                                     Dim objSummary As TSummary = objGetSummary(colSummary, objDict, objTrx)
-                                    objSummary.AddAmountToCorrectAge(objReplicaTrx.curAmount, objReplicaTrx.datDate, datAging)
+                                    objSummary.AddAmountToCorrectAge(objReplicaTrx.Amount, objReplicaTrx.TrxDate, datAging)
                                 End If
                             End If
                         End If
@@ -64,13 +64,13 @@ Public MustInherit Class TrxNameSummary
                                          ByVal objDict As Dictionary(Of String, TSummary),
                                          ByVal objTrx As BaseTrx) As TSummary
         Dim objSummary As TSummary = Nothing
-        Dim strNameKey As String = objTrx.strDescription.ToUpper()
+        Dim strNameKey As String = objTrx.Description.ToUpper()
         If strNameKey.Length > 16 Then
             strNameKey = strNameKey.Substring(0, 16)
         End If
         If Not objDict.TryGetValue(strNameKey, objSummary) Then
             objSummary = New TSummary()
-            objSummary.strName = objTrx.strDescription
+            objSummary.strName = objTrx.Description
             objSummary.curBalance = 0D
             colSummary.Add(objSummary)
             objDict.Add(strNameKey, objSummary)

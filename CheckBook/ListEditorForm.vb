@@ -579,14 +579,14 @@ Friend Class ListEditorForm
 
             For Each objTrx In objReg.GetAllTrx(Of BaseTrx)()
                 If objTrx.GetType() Is GetType(BankTrx) Then
-                    For Each objSplit In DirectCast(objTrx, BankTrx).colSplits
+                    For Each objSplit In DirectCast(objTrx, BankTrx).Splits
                         If mlngListType = ListType.Category Then
-                            If objSplit.strCategoryKey = strKey Then
+                            If objSplit.CategoryKey = strKey Then
                                 blnElementIsUsedInRegister = True
                                 Exit Function
                             End If
                         ElseIf mlngListType = ListType.Budget Then
-                            If objSplit.strBudgetKey = strKey Then
+                            If objSplit.BudgetKey = strKey Then
                                 blnElementIsUsedInRegister = True
                                 Exit Function
                             End If
@@ -596,7 +596,7 @@ Friend Class ListEditorForm
                     Next
                 ElseIf mlngListType = ListType.Budget Then
                     If objTrx.GetType() Is GetType(BudgetTrx) Then
-                        If DirectCast(objTrx, BudgetTrx).strBudgetKey = strKey Then
+                        If DirectCast(objTrx, BudgetTrx).BudgetKey = strKey Then
                             blnElementIsUsedInRegister = True
                             Exit Function
                         End If

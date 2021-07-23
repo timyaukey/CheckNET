@@ -42,16 +42,16 @@ Public Class SearchCombineTool
             If objNewTrx Is Nothing Then
                 objNewTrx = New BankTrx(objHostSearchToolUI.objReg)
                 datToday = Today
-                objNewTrx.NewStartNormal(True, "", datToday, objOldTrx.strDescription, objOldTrx.strMemo, BaseTrx.TrxStatus.Unreconciled, New TrxGenImportData())
+                objNewTrx.NewStartNormal(True, "", datToday, objOldTrx.Description, objOldTrx.Memo, BaseTrx.TrxStatus.Unreconciled, New TrxGenImportData())
             End If
             'Remember the old BaseTrx to delete later if the new BaseTrx is saved.
             'Remember the BaseTrx object instead of its index because the index may change
             'as the result of saving the new BaseTrx or deleting other old ones.
             colOldTrx.Add(objOldTrx)
             'Clone all the splits in old trx and add them to new trx.
-            For Each objOldSplit In objOldTrx.colSplits
+            For Each objOldSplit In objOldTrx.Splits
                 With objOldSplit
-                    objNewTrx.AddSplit(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount)
+                    objNewTrx.AddSplit(.Memo, .CategoryKey, .PONumber, .InvoiceNum, .InvoiceDate, .DueDate, .Terms, .BudgetKey, .Amount)
                 End With
             Next objOldSplit
         Next

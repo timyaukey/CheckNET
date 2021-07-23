@@ -5,7 +5,7 @@ Public Class FilterNonReal
     Implements ISearchFilter
 
     Public Function blnInclude(objTrx As BaseTrx) As Boolean Implements ISearchFilter.blnInclude
-        Return objTrx.blnFake
+        Return objTrx.IsFake
     End Function
 
     Public Overrides Function ToString() As String

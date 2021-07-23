@@ -50,8 +50,8 @@ Public Class CategorySearchHandler
         Implements ISearchHandler.ProcessTrx
 
         If TypeOf (objTrx) Is BankTrx Then
-            For Each objSplit In DirectCast(objTrx, BankTrx).colSplits
-                If objComparer.blnCompare(mobjHostUI.objCompany.Categories.strKeyToValue1(objSplit.strCategoryKey), strParameter) Then
+            For Each objSplit In DirectCast(objTrx, BankTrx).Splits
+                If objComparer.blnCompare(mobjHostUI.objCompany.Categories.strKeyToValue1(objSplit.CategoryKey), strParameter) Then
                     dlgAddSplitResult(DirectCast(objTrx, BankTrx), objSplit)
                 End If
             Next

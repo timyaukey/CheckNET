@@ -25,7 +25,7 @@ Public Class RegReverse(Of TTrx As BaseTrx)
             If Not objTypedTrx Is Nothing Then
                 Yield objTypedTrx
             End If
-            objCurrentTrx = objCurrentTrx.objPrevious
+            objCurrentTrx = objCurrentTrx.PreviousTrx
         Loop
 
     End Function

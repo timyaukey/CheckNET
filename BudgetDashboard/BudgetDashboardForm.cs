@@ -252,18 +252,18 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                 Split = split;
             }
 
-            public DateTime Date => Split.objParent.datDate;
+            public DateTime Date => Split.Parent.TrxDate;
 
-            public string Number => Split.objParent.strNumber;
+            public string Number => Split.Parent.Number;
 
             public ListViewItem Build()
             {
                 ListViewItem item = new ListViewItem(new string[] {
                     Date.ToString("MM/dd/yy"),
                     Number,
-                    Split.objParent.strDescription,
-                    Split.curAmount.ToString("F2"),
-                    Split.objParent.objReg.Account.Title
+                    Split.Parent.Description,
+                    Split.Amount.ToString("F2"),
+                    Split.Parent.Register.Account.Title
                 });
                 item.Tag = Split;
                 return item;
@@ -279,18 +279,18 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                 Budget = budget;
             }
 
-            public DateTime Date => Budget.datDate;
+            public DateTime Date => Budget.TrxDate;
 
-            public string Number => Budget.strNumber;
+            public string Number => Budget.Number;
 
             public ListViewItem Build()
             {
                 ListViewItem item = new ListViewItem(new string[] {
                     Date.ToString("MM/dd/yy"),
                     Number,
-                    Budget.strDescription,
-                    Budget.curAmount.ToString("F2"),
-                    Budget.objReg.Account.Title
+                    Budget.Description,
+                    Budget.Amount.ToString("F2"),
+                    Budget.Register.Account.Title
                 });
                 item.Tag = Budget;
                 return item;
@@ -355,11 +355,11 @@ namespace Willowsoft.CheckBook.BudgetDashboard
             if (budgetTrx == null)
                 return;
             string moveMessage = "Moved " + mAmountToSubtract.ToString("F2") + " from" + Environment.NewLine + 
-                mBudgetToSubtractFrom.strSummary() + Environment.NewLine +
+                mBudgetToSubtractFrom.GetSummary() + Environment.NewLine +
                 "to" + Environment.NewLine + 
-                budgetTrx.strSummary() + ".";
-            SetBudgetAmount(mBudgetToSubtractFrom, mBudgetToSubtractFrom.curBudgetLimit - mAmountToSubtract);
-            SetBudgetAmount(budgetTrx, budgetTrx.curBudgetLimit + mAmountToSubtract);
+                budgetTrx.GetSummary() + ".";
+            SetBudgetAmount(mBudgetToSubtractFrom, mBudgetToSubtractFrom.BudgetLimit - mAmountToSubtract);
+            SetBudgetAmount(budgetTrx, budgetTrx.BudgetLimit + mAmountToSubtract);
             ClearPendingSubtraction();
             EnableAdjustmentButtons();
             RefreshGridTotals();
@@ -404,9 +404,9 @@ namespace Willowsoft.CheckBook.BudgetDashboard
             if (decimal.TryParse(txtAdjustment.Text, out adjAmount))
             {
                 // Amount should have the same sign as specified budget limit.
-                if (target.curBudgetLimit != 0m)
+                if (target.BudgetLimit != 0m)
                 {
-                    if ((target.curBudgetLimit < 0m) != (adjAmount < 0m))
+                    if ((target.BudgetLimit < 0m) != (adjAmount < 0m))
                         adjAmount = -adjAmount;
                 }
                 return true;
@@ -445,9 +445,9 @@ namespace Willowsoft.CheckBook.BudgetDashboard
         {
             BudgetTrxManager mgr = new BudgetTrxManager(budgetTrx);
             mgr.UpdateStart();
-            mgr.objTrx.UpdateStartBudget(budgetTrx.datDate, budgetTrx.strDescription, budgetTrx.strMemo,
-                budgetTrx.blnAwaitingReview, false, budgetTrx.intRepeatSeq, budgetTrx.strRepeatKey,
-                newAmount, budgetTrx.datBudgetStarts, budgetTrx.strBudgetKey);
+            mgr.Trx.UpdateStartBudget(budgetTrx.TrxDate, budgetTrx.Description, budgetTrx.Memo,
+                budgetTrx.IsAwaitingReview, false, budgetTrx.RepeatSeq, budgetTrx.RepeatKey,
+                newAmount, budgetTrx.BudgetStarts, budgetTrx.BudgetKey);
             mgr.UpdateEnd(new LogChange(), "BudgetDashboard.Adjustment");
         }
     }

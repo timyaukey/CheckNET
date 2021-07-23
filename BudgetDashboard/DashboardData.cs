@@ -110,24 +110,24 @@ namespace Willowsoft.CheckBook.BudgetDashboard
 
         private void LoadTrx(BaseTrx trx)
         {
-            int period = GetPeriod(trx.datDate);
+            int period = GetPeriod(trx.TrxDate);
             BankTrx normalTrx = trx as BankTrx;
             if (normalTrx != null)
             {
                 if (Handler.IncludeNormalTrx(normalTrx))
                 {
-                    foreach (TrxSplit split in normalTrx.colSplits)
+                    foreach (TrxSplit split in normalTrx.Splits)
                     {
                         if (Handler.IncludeSplit(split))
                         {
-                            if (split.objBudget == null)
+                            if (split.Budget == null)
                             {
                                 SplitDetailRow row = GetSplitDetailRow(split);
                                 row.Cells[period].Splits.Add(split);
                             }
                             else
                             {
-                                BudgetDetailRow budgetRow = GetBudgetDetailRow(split.objBudget);
+                                BudgetDetailRow budgetRow = GetBudgetDetailRow(split.Budget);
                                 budgetRow.Cells[period].Splits.Add(split);
                             }
                         }
@@ -158,16 +158,16 @@ namespace Willowsoft.CheckBook.BudgetDashboard
             // Unlike for BudgetTrx we do not incorporate repeat key in the row key,
             // because there are so many different generated BankTrx sequences it
             // would make the resulting grid unwieldy.
-            string rowKey = split.strCategoryKey;
+            string rowKey = split.CategoryKey;
             if (!SplitDetailRows.TryGetValue(rowKey, out SplitDetailRow row))
             {
                 string sequence = "";
-                if (!string.IsNullOrEmpty(split.objParent.strRepeatKey))
+                if (!string.IsNullOrEmpty(split.Parent.RepeatKey))
                 {
-                    sequence = split.objParent.objReg.Account.Repeats.strKeyToValue1(split.objParent.strRepeatKey);
+                    sequence = split.Parent.Register.Account.Repeats.strKeyToValue1(split.Parent.RepeatKey);
                 }
-                row = new SplitDetailRow(PeriodCount, split.strCategoryKey,
-                    Company.Categories.strKeyToValue1(split.strCategoryKey), sequence);
+                row = new SplitDetailRow(PeriodCount, split.CategoryKey,
+                    Company.Categories.strKeyToValue1(split.CategoryKey), sequence);
                 SplitDetailRows[rowKey] = row;
             }
             return row;
@@ -175,16 +175,16 @@ namespace Willowsoft.CheckBook.BudgetDashboard
 
         private BudgetDetailRow GetBudgetDetailRow(BudgetTrx budgetTrx)
         {
-            string rowKey = budgetTrx.strBudgetKey + ":" + budgetTrx.strRepeatKey;
+            string rowKey = budgetTrx.BudgetKey + ":" + budgetTrx.RepeatKey;
             if (!BudgetDetailRows.TryGetValue(rowKey, out BudgetDetailRow row))
             {
                 string sequence = "(none)";
-                if (!string.IsNullOrEmpty(budgetTrx.strRepeatKey))
+                if (!string.IsNullOrEmpty(budgetTrx.RepeatKey))
                 {
-                    sequence = budgetTrx.objReg.Account.Repeats.strKeyToValue1(budgetTrx.strRepeatKey);
+                    sequence = budgetTrx.Register.Account.Repeats.strKeyToValue1(budgetTrx.RepeatKey);
                 }
-                row = new BudgetDetailRow(PeriodCount, budgetTrx.strBudgetKey,
-                    Company.Budgets.strKeyToValue1(budgetTrx.strBudgetKey), sequence);
+                row = new BudgetDetailRow(PeriodCount, budgetTrx.BudgetKey,
+                    Company.Budgets.strKeyToValue1(budgetTrx.BudgetKey), sequence);
                 BudgetDetailRows[rowKey] = row;
             }
             return row;

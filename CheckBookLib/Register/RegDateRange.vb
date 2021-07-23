@@ -18,6 +18,6 @@ Public Class RegDateRange(Of TTrx As BaseTrx)
     End Function
 
     Protected Overrides Function IsAfterLast(objTrx As BaseTrx) As Boolean
-        Return objTrx.datDate > mdatEnd
+        Return objTrx.TrxDate > mdatEnd
     End Function
 End Class

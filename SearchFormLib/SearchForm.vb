@@ -235,7 +235,7 @@ Public Class SearchForm
         Dim strBudget As String = ""
         Dim curAvailable As Decimal
 
-        objItem = objAddNewMatch(objTrx, objTrx.curAmount)
+        objItem = objAddNewMatch(objTrx, objTrx.Amount)
         If objTrx.GetType() Is GetType(BankTrx) Then
             DirectCast(objTrx, BankTrx).SummarizeSplits(mobjCompany, strCategory, strPONumber, strInvoiceNum, strInvoiceDate, strDueDate, strTerms, strBudget, curAvailable)
             UITools.AddListSubItem(objItem, 4, Utilities.strFormatCurrency(curAvailable))
@@ -248,21 +248,21 @@ Public Class SearchForm
         Else
             UITools.AddListSubItem(objItem, 4, "")
             UITools.AddListSubItem(objItem, 5, "")
-            UITools.AddListSubItem(objItem, 6, objTrx.strPONumber)
-            UITools.AddListSubItem(objItem, 7, objTrx.strInvoiceNum)
+            UITools.AddListSubItem(objItem, 6, objTrx.PONumber)
+            UITools.AddListSubItem(objItem, 7, objTrx.InvoiceNum)
             UITools.AddListSubItem(objItem, 8, "")
             UITools.AddListSubItem(objItem, 9, "")
             UITools.AddListSubItem(objItem, 10, "")
         End If
-        UITools.AddListSubItem(objItem, 11, objTrx.strFakeStatus)
-        mcurAmountMatched = mcurAmountMatched + objTrx.curAmount
+        UITools.AddListSubItem(objItem, 11, objTrx.FakeStatusLabel)
+        mcurAmountMatched = mcurAmountMatched + objTrx.Amount
 
     End Sub
 
     Private Sub AddSearchMatchAllSplits(ByVal objTrx As BaseTrx)
 
         Dim objSplit As TrxSplit
-        For Each objSplit In DirectCast(objTrx, BankTrx).colSplits
+        For Each objSplit In DirectCast(objTrx, BankTrx).Splits
             AddSearchMatchSplit(objTrx, objSplit)
         Next
 
@@ -275,39 +275,39 @@ Public Class SearchForm
         Dim strDueDate As String
         Dim curAvailable As Decimal
 
-        objItem = objAddNewMatch(objTrx, objSplit.curAmount)
-        If objSplit.strBudgetKey = mobjCompany.PlaceholderBudgetKey Then
-            curAvailable = objSplit.curAmount
+        objItem = objAddNewMatch(objTrx, objSplit.Amount)
+        If objSplit.BudgetKey = mobjCompany.PlaceholderBudgetKey Then
+            curAvailable = objSplit.Amount
         Else
             curAvailable = 0
         End If
-        If objSplit.datInvoiceDate = Utilities.datEmpty Then
+        If objSplit.InvoiceDate = Utilities.datEmpty Then
             strInvoiceDate = ""
         Else
-            strInvoiceDate = Utilities.strFormatDate(objSplit.datInvoiceDate)
+            strInvoiceDate = Utilities.strFormatDate(objSplit.InvoiceDate)
         End If
-        If objSplit.datDueDate = Utilities.datEmpty Then
+        If objSplit.DueDate = Utilities.datEmpty Then
             strDueDate = ""
         Else
-            strDueDate = Utilities.strFormatDate(objSplit.datDueDate)
+            strDueDate = Utilities.strFormatDate(objSplit.DueDate)
         End If
         UITools.AddListSubItem(objItem, 4, Utilities.strFormatCurrency(curAvailable))
-        UITools.AddListSubItem(objItem, 5, mobjCompany.Categories.strTranslateKey(objSplit.strCategoryKey))
-        UITools.AddListSubItem(objItem, 6, objSplit.strPONumber)
-        UITools.AddListSubItem(objItem, 7, objSplit.strInvoiceNum)
+        UITools.AddListSubItem(objItem, 5, mobjCompany.Categories.strTranslateKey(objSplit.CategoryKey))
+        UITools.AddListSubItem(objItem, 6, objSplit.PONumber)
+        UITools.AddListSubItem(objItem, 7, objSplit.InvoiceNum)
         UITools.AddListSubItem(objItem, 8, strInvoiceDate)
         UITools.AddListSubItem(objItem, 9, strDueDate)
-        UITools.AddListSubItem(objItem, 10, objSplit.strTerms)
-        UITools.AddListSubItem(objItem, 11, objTrx.strFakeStatus)
-        mcurAmountMatched = mcurAmountMatched + objSplit.curAmount
+        UITools.AddListSubItem(objItem, 10, objSplit.Terms)
+        UITools.AddListSubItem(objItem, 11, objTrx.FakeStatusLabel)
+        mcurAmountMatched = mcurAmountMatched + objSplit.Amount
 
     End Sub
 
     Private Function objAddNewMatch(ByVal objTrx As BaseTrx, ByVal curMatchAmount As Decimal) As ListViewItem
         Dim objItem As ListViewItem = UITools.ListViewAdd(lvwMatches)
-        objItem.Text = Utilities.strFormatDate(objTrx.datDate)
-        UITools.AddListSubItem(objItem, 1, objTrx.strNumber)
-        UITools.AddListSubItem(objItem, 2, objTrx.strDescription)
+        objItem.Text = Utilities.strFormatDate(objTrx.TrxDate)
+        UITools.AddListSubItem(objItem, 1, objTrx.Number)
+        UITools.AddListSubItem(objItem, 2, objTrx.Description)
         UITools.AddListSubItem(objItem, 3, Utilities.strFormatCurrency(curMatchAmount))
         Dim objMatch As SearchMatch = New SearchMatch()
         objMatch.objTrx = objTrx
@@ -451,15 +451,15 @@ Public Class SearchForm
             mobjHostUI.ErrorMessageBox("Budgets and transfers may not be " & strOperation & ".")
             Exit Function
         End If
-        If Not objTrx.blnFake Then
+        If Not objTrx.IsFake Then
             mobjHostUI.ErrorMessageBox("Only fake transactions may be " & strOperation & ".")
             Exit Function
         End If
-        If objTrx.blnAutoGenerated Then
+        If objTrx.IsAutoGenerated Then
             mobjHostUI.ErrorMessageBox("Generated transactions may not be " & strOperation & ".")
             Exit Function
         End If
-        If objTrx.strRepeatKey <> "" Then
+        If objTrx.RepeatKey <> "" Then
             mobjHostUI.ErrorMessageBox("Transactions in a repeat sequence may not be " & strOperation & ".")
             Exit Function
         End If

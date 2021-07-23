@@ -28,7 +28,7 @@ Public Class RegIterator(Of TTrx As BaseTrx)
             If Not objTypedTrx Is Nothing Then
                 Yield objTypedTrx
             End If
-            objCurrentTrx = objCurrentTrx.objNext
+            objCurrentTrx = objCurrentTrx.NextTrx
         Loop
 
     End Function

@@ -126,12 +126,12 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                         bool fakeReportedInReg = false;
                         foreach (BaseTrx trx in reg.GetAllTrx<BaseTrx>())
                         {
-                            if (trx.datDate > EndDate)
+                            if (trx.TrxDate > EndDate)
                                 break;
                             BankTrx normalTrx = trx as BankTrx;
                             if (normalTrx != null)
                             {
-                                if (normalTrx.blnFake)
+                                if (normalTrx.IsFake)
                                 {
                                     if (!fakeReportedInReg)
                                     {
@@ -159,16 +159,16 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             normalTrxToAnalyze.Sort(
                 delegate (BankTrx trx1, BankTrx trx2)
                 {
-                    int result = trx1.datDate.CompareTo(trx2.datDate);
+                    int result = trx1.TrxDate.CompareTo(trx2.TrxDate);
                     if (result != 0)
                         return result;
-                    result = trx1.strNumber.CompareTo(trx2.strNumber);
+                    result = trx1.Number.CompareTo(trx2.Number);
                     if (result != 0)
                         return result;
-                    result = trx1.strDescription.CompareTo(trx2.strDescription);
+                    result = trx1.Description.CompareTo(trx2.Description);
                     if (result != 0)
                         return result;
-                    return trx1.curAmount.CompareTo(trx2.curAmount);
+                    return trx1.Amount.CompareTo(trx2.Amount);
                 }
                 );
             foreach(BankTrx trx in normalTrxToAnalyze)
@@ -199,14 +199,14 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         private void AnalyzeNormalTrx(BankTrx trx)
         {
             PayeeDef payee;
-            string trimmedPayee = TrimPayeeName(trx.strDescription);
+            string trimmedPayee = TrimPayeeName(trx.Description);
             string normalizedPayee = trimmedPayee.ToLower();
             if (!Payees.TryGetValue(normalizedPayee, out payee))
             {
                 payee = new PayeeDef(trimmedPayee, MakeUniquePayeeExportName(trimmedPayee));
                 Payees.Add(normalizedPayee, payee);
             }
-            if (trx.datDate >= StartDate)
+            if (trx.TrxDate >= StartDate)
             {
                 switch (GetPayeeUsage(trx))
                 {
@@ -218,21 +218,21 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                         break;
                 }
             }
-            foreach (TrxSplit split in trx.colSplits)
+            foreach (TrxSplit split in trx.Splits)
             {
                 CatDef cat;
                 // Create CatDef objects for balance sheet accounts as well as income/expense accounts.
-                string catExportKey = GetCatExportKey(split.strCategoryKey);
+                string catExportKey = GetCatExportKey(split.CategoryKey);
                 if (!Categories.TryGetValue(catExportKey, out cat))
                 {
-                    string catName = CatTrans.strKeyToValue1(split.strCategoryKey);
+                    string catName = CatTrans.strKeyToValue1(split.CategoryKey);
                     // Categories includes balance sheet accounts
-                    StringTransElement catElem = this.Company.Categories.get_objElement(this.Company.Categories.intLookupKey(split.strCategoryKey));
+                    StringTransElement catElem = this.Company.Categories.get_objElement(this.Company.Categories.intLookupKey(split.CategoryKey));
                     // A null intuitCatType value will cause this category to NOT be output to the IIF file.
                     // This is how we prevent categories that are actually asset, liability and equity accounts
                     // from being output to the IIF as income, expense or COGS account.
                     string intuitCatType;
-                    if (split.strCategoryKey.IndexOf('.') >= 0)
+                    if (split.CategoryKey.IndexOf('.') >= 0)
                     {
                         intuitCatType = null;
                     }
@@ -274,7 +274,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         private string MakeCatExportName(TrxSplit split, string catName)
         {
             string exportName;
-            int periodIndex = split.strCategoryKey.IndexOf('.');
+            int periodIndex = split.CategoryKey.IndexOf('.');
             if (periodIndex < 0)
             {
                 exportName = GetPreExistingIntuitCatName(catName);
@@ -283,7 +283,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             }
             else
             {
-                int acctKey = int.Parse(split.strCategoryKey.Substring(0, periodIndex));
+                int acctKey = int.Parse(split.CategoryKey.Substring(0, periodIndex));
                 Account matchingAcct = Company.Accounts.First(acct => acct.AccountKey == acctKey);
                 exportName = MakeBalanceSheetExportName(matchingAcct);
             }
@@ -554,7 +554,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                     {
                         foreach (BankTrx normalTrx in reg.GetDateRange<BankTrx>(StartDate, EndDate))
                         {
-                            if (!normalTrx.blnFake)
+                            if (!normalTrx.IsFake)
                                 OutputNormalTrx(normalTrx);
                         }
                     }
@@ -564,13 +564,13 @@ namespace Willowsoft.CheckBook.GeneralPlugins
 
         private void OutputNormalTrx(BankTrx trx)
         {
-            PayeeDef payee = Payees[TrimPayeeName(trx.strDescription).ToLower()];
+            PayeeDef payee = Payees[TrimPayeeName(trx.Description).ToLower()];
             TrxOutputType usage = GetPayeeUsage(trx);
-            string exportAccountName = Categories[GetBalanceSheetExportKey(trx.objReg.Account.AccountKey.ToString())].ExportName;
+            string exportAccountName = Categories[GetBalanceSheetExportKey(trx.Register.Account.AccountKey.ToString())].ExportName;
             switch (usage)
             {
                 case TrxOutputType.Check:
-                    if (ContainsPayablesSplit(trx.colSplits))
+                    if (ContainsPayablesSplit(trx.Splits))
                         OutputTransactionPerSplit(trx, exportAccountName, payee, "CHECK", usePayeeOnSplit: SplitIsToAccountsPayable);
                     else
                         OutputOneTransaction(trx, exportAccountName, payee, "CHECK", usePayeeOnTrx: true);
@@ -579,7 +579,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                     OutputOneTransaction(trx, exportAccountName, payee, "DEPOSIT", usePayeeOnTrx: false);
                     break;
                 case TrxOutputType.JournalEntry:
-                    if (ContainsPayablesSplit(trx.colSplits))
+                    if (ContainsPayablesSplit(trx.Splits))
                         OutputTransactionPerSplit(trx, exportAccountName, payee, "GENERAL JOURNAL", usePayeeOnSplit: SplitIsToAccountsPayable);
                     else
                         OutputOneTransaction(trx, exportAccountName, payee, "GENERAL JOURNAL", usePayeeOnTrx: true);
@@ -595,8 +595,8 @@ namespace Willowsoft.CheckBook.GeneralPlugins
 
         private void OutputOneTransaction(BankTrx trx, string exportAccountName, PayeeDef payee, string intuitTrxType, bool usePayeeOnTrx)
         {
-            OutputNormalTrx(trx, intuitTrxType, exportAccountName, usePayeeOnTrx ? payee.ExportName : "", trx.curAmount);
-            foreach (TrxSplit split in trx.colSplits)
+            OutputNormalTrx(trx, intuitTrxType, exportAccountName, usePayeeOnTrx ? payee.ExportName : "", trx.Amount);
+            foreach (TrxSplit split in trx.Splits)
             {
                 OutputSplit(split, intuitTrxType, "");
             }
@@ -606,11 +606,11 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         private void OutputTransactionPerSplit(BankTrx trx, string exportAccountName, PayeeDef payee, 
             string intuitTrxType, Func<TrxSplit, bool> usePayeeOnSplit)
         {
-            foreach (TrxSplit split in trx.colSplits)
+            foreach (TrxSplit split in trx.Splits)
             {
                 // Notice we pass the split amount instead of the trx amount, because every split
                 // of this transaction type must be a separate transaction in an IIF file.
-                OutputNormalTrx(trx, intuitTrxType, exportAccountName, payee.ExportName, split.curAmount);
+                OutputNormalTrx(trx, intuitTrxType, exportAccountName, payee.ExportName, split.Amount);
                 OutputSplit(split, intuitTrxType, usePayeeOnSplit(split) ? payee.ExportName : "");
                 OutputLine("ENDTRNS");
             }
@@ -623,39 +623,39 @@ namespace Willowsoft.CheckBook.GeneralPlugins
 
         private bool SplitIsToAccountsPayable(TrxSplit split)
         {
-            int dotIndex = split.strCategoryKey.IndexOf('.');
+            int dotIndex = split.CategoryKey.IndexOf('.');
             if (dotIndex < 0)
                 return false;
-            int acctKey = int.Parse(split.strCategoryKey.Substring(0, dotIndex));
+            int acctKey = int.Parse(split.CategoryKey.Substring(0, dotIndex));
             return Company.Accounts.First(acct => acct.AccountKey == acctKey).AcctSubType == Account.SubType.Liability_AccountsPayable;
         }
 
         private void OutputNormalTrx(BankTrx trx, string transType, string exportAccountName, string payeeName, decimal amount)
         {
-            OutputLine("TRNS\t\t" + transType + "\t" + trx.datDate.ToString("MM/dd/yyyy") + "\t" + exportAccountName +
+            OutputLine("TRNS\t\t" + transType + "\t" + trx.TrxDate.ToString("MM/dd/yyyy") + "\t" + exportAccountName +
                 "\t" + payeeName + "\t" + amount.ToString("##############0.00") +
-                "\t" + trx.strNumber + "\t" + trx.strMemo + "\tY\tN");
+                "\t" + trx.Number + "\t" + trx.Memo + "\tY\tN");
         }
 
         private void OutputSplit(TrxSplit split, string transType, string payeeName)
         {
-            CatDef cat = Categories[GetCatExportKey(split.strCategoryKey)];
-            OutputLine("SPL\t\t" + transType + "\t" + split.objParent.datDate.ToString("MM/dd/yyyy") +
-                "\t" + cat.ExportName + "\t" + payeeName + "\t" + (-split.curAmount).ToString("##############0.00") +
-                "\t\t" + split.strMemo + "\tY");
+            CatDef cat = Categories[GetCatExportKey(split.CategoryKey)];
+            OutputLine("SPL\t\t" + transType + "\t" + split.Parent.TrxDate.ToString("MM/dd/yyyy") +
+                "\t" + cat.ExportName + "\t" + payeeName + "\t" + (-split.Amount).ToString("##############0.00") +
+                "\t\t" + split.Memo + "\tY");
         }
 
         private TrxOutputType GetPayeeUsage(BankTrx trx)
         {
-            Account.SubType subType = trx.objReg.Account.AcctSubType;
+            Account.SubType subType = trx.Register.Account.AcctSubType;
             if (subType == Account.SubType.Asset_CheckingAccount ||
                 subType == Account.SubType.Asset_SavingsAccount)
             {
-                if (trx.curAmount < 0)
+                if (trx.Amount < 0)
                     return TrxOutputType.Check;
-                else if (trx.curAmount > 0)
+                else if (trx.Amount > 0)
                 {
-                    if (ContainsPayablesSplit(trx.colSplits))
+                    if (ContainsPayablesSplit(trx.Splits))
                         return TrxOutputType.JournalEntry;
                     else
                         return TrxOutputType.Deposit;
@@ -663,7 +663,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             }
             else if (subType == Account.SubType.Liability_AccountsPayable)
             {
-                if (trx.curAmount < 0)
+                if (trx.Amount < 0)
                     return TrxOutputType.Bill;
                 else
                     return TrxOutputType.BillCredit;

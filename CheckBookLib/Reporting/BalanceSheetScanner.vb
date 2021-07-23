@@ -10,11 +10,11 @@ Public NotInheritable Class BalanceSheetScanner
                 Dim objLine As ReportLineItem = objGroup.objGetItem(objManager, objAccount.AccountKey.ToString())
                 For Each objReg As Register In objAccount.Registers
                     For Each objTrx As BaseTrx In objReg.GetAllTrx(Of BaseTrx)()
-                        If objTrx.datDate > datEndDate Then
+                        If objTrx.TrxDate > datEndDate Then
                             Exit For
                         End If
-                        If Not objTrx.blnFake Then
-                            objLine.Add(objTrx.curAmount)
+                        If Not objTrx.IsFake Then
+                            objLine.Add(objTrx.Amount)
                         End If
                     Next
                 Next

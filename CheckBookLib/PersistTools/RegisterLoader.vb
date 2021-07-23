@@ -356,7 +356,7 @@ Public Class RegisterLoader
                                           mstrImportKey, mstrRepeatKey)
                     For Each objSplit In mcolSplits
                         With objSplit
-                            objNormalTrx.AddSplit(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount)
+                            objNormalTrx.AddSplit(.Memo, .CategoryKey, .PONumber, .InvoiceNum, .InvoiceDate, .DueDate, .Terms, .BudgetKey, .Amount)
                         End With
                     Next objSplit
                     objTargetReg.NewLoadEnd(objNormalTrx)

@@ -28,18 +28,18 @@ Friend Class RepeatSeqInfoForm
         Dim objRow As RptGridRow
 
         For Each objTrx In mobjReg.GetAllTrx(Of BaseTrx)()
-            If objTrx.strRepeatKey = mstrRepeatKey Then
+            If objTrx.RepeatKey = mstrRepeatKey Then
                 objRow = New RptGridRow
-                objRow.TrxDate = objTrx.datDate.ToString(Utilities.strDateWithTwoDigitYear)
-                objRow.Descr = objTrx.strDescription
-                objRow.Amount = Utilities.strFormatCurrency(objTrx.curAmount)
-                objRow.SeqNum = objTrx.intRepeatSeq.ToString()
+                objRow.TrxDate = objTrx.TrxDate.ToString(Utilities.strDateWithTwoDigitYear)
+                objRow.Descr = objTrx.Description
+                objRow.Amount = Utilities.strFormatCurrency(objTrx.Amount)
+                objRow.SeqNum = objTrx.RepeatSeq.ToString()
                 If TypeOf objTrx Is BankTrx Then
-                    objRow.DueDate = DirectCast(objTrx, BankTrx).strSummarizeDueDate()
+                    objRow.DueDate = DirectCast(objTrx, BankTrx).SummarizeDueDates()
                 Else
                     objRow.DueDate = ""
                 End If
-                objRow.Type = objTrx.strFakeStatus
+                objRow.Type = objTrx.FakeStatusLabel
                 colRows.Add(objRow)
             End If
         Next
