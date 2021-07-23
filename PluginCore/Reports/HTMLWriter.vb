@@ -54,21 +54,21 @@ Public Class HTMLWriter
     Public Sub OutputGroupItems(ByVal strTitleClass As String, ByVal strAmountClass As String,
                            ByVal strNegativeClass As String, ByVal objReportManager As ReportGroupManager,
                            ByVal strGroupKey As String, ByVal objAccum As ReportAccumulator)
-        Dim objGroup As LineItemGroup = objReportManager.objGetGroup(strGroupKey)
-        For Each objLine As ReportLineItem In objGroup.colItems
-            If objLine.curTotal <> 0D Then
-                OutputAmount(strTitleClass, objLine.strItemTitle, strAmountClass, strNegativeClass, objLine.curTotal, objAccum)
+        Dim objGroup As LineItemGroup = objReportManager.GetGroup(strGroupKey)
+        For Each objLine As ReportLineItem In objGroup.Items
+            If objLine.Total <> 0D Then
+                OutputAmount(strTitleClass, objLine.ItemTitle, strAmountClass, strNegativeClass, objLine.Total, objAccum)
             End If
-            objLine.blnPrinted = True
+            objLine.IsPrinted = True
         Next
     End Sub
 
     Public Sub OutputGroupSummary(ByVal strTitleClass As String, ByVal strTitle As String, ByVal strAmountClass As String,
                            ByVal strNegativeClass As String, ByVal objReportManager As ReportGroupManager,
                            ByVal strGroupKey As String, ByVal blnOmitIfZero As Boolean, ByVal objAccum As ReportAccumulator)
-        Dim objGroup As LineItemGroup = objReportManager.objGetGroup(strGroupKey)
-        If objGroup.curGroupTotal <> 0D Or Not blnOmitIfZero Then
-            OutputAmount(strTitleClass, strTitle, strAmountClass, strNegativeClass, objGroup.curGroupTotal, objAccum)
+        Dim objGroup As LineItemGroup = objReportManager.GetGroup(strGroupKey)
+        If objGroup.GroupTotal <> 0D Or Not blnOmitIfZero Then
+            OutputAmount(strTitleClass, strTitle, strAmountClass, strNegativeClass, objGroup.GroupTotal, objAccum)
         End If
         objGroup.blnPrinted = True
     End Sub
@@ -157,11 +157,11 @@ Public Class HTMLWriter
     End Sub
 
     Public Sub CheckPrinted(ByVal objReportManager As ReportGroupManager)
-        For Each objGroup As LineItemGroup In objReportManager.colGroups
+        For Each objGroup As LineItemGroup In objReportManager.Groups
             If Not objGroup.blnPrinted Then
-                For Each objItem As ReportLineItem In objGroup.colItems
-                    If Not objItem.blnPrinted Then
-                        mobjHostUI.InfoMessageBox("Report line item with key [" + objItem.strItemKey + "] was not printed")
+                For Each objItem As ReportLineItem In objGroup.Items
+                    If Not objItem.IsPrinted Then
+                        mobjHostUI.InfoMessageBox("Report line item with key [" + objItem.ItemKey + "] was not printed")
                     End If
                 Next
             End If

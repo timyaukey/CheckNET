@@ -2,9 +2,9 @@
 Option Explicit On
 
 Public Class DateRangeSummary
-    Public curDateTotal As Decimal = 0
+    Public DateTotal As Decimal = 0
 
     Public Sub Add(ByVal curAmount As Decimal)
-        curDateTotal += curAmount
+        DateTotal += curAmount
     End Sub
 End Class

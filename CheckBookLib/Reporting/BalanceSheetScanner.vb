@@ -2,12 +2,12 @@
 Option Explicit On
 
 Public NotInheritable Class BalanceSheetScanner
-    Public Shared Function objRun(ByVal objCompany As Company, ByVal datEndDate As DateTime) As AccountGroupManager
+    Public Shared Function Run(ByVal objCompany As Company, ByVal datEndDate As DateTime) As AccountGroupManager
         Dim objManager As AccountGroupManager = New AccountGroupManager(objCompany)
         For Each objAccount In objCompany.Accounts
             If objAccount.AcctType <> Account.AccountType.Personal Then
-                Dim objGroup As LineItemGroup = objManager.objGetGroup(objAccount.AcctSubType.ToString())
-                Dim objLine As ReportLineItem = objGroup.objGetItem(objManager, objAccount.AccountKey.ToString())
+                Dim objGroup As LineItemGroup = objManager.GetGroup(objAccount.AcctSubType.ToString())
+                Dim objLine As ReportLineItem = objGroup.GetItem(objManager, objAccount.AccountKey.ToString())
                 For Each objReg As Register In objAccount.Registers
                     For Each objTrx As BaseTrx In objReg.GetAllTrx(Of BaseTrx)()
                         If objTrx.TrxDate > datEndDate Then

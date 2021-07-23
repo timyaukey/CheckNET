@@ -10,13 +10,13 @@ Public MustInherit Class ReportGroupManager
         mobjCompany = objCompany_
     End Sub
 
-    Protected ReadOnly Property objCompany() As Company
+    Protected ReadOnly Property Company() As Company
         Get
             Return mobjCompany
         End Get
     End Property
 
-    Public Function objGetGroup(ByVal strGroupKey As String) As LineItemGroup
+    Public Function GetGroup(ByVal strGroupKey As String) As LineItemGroup
         Dim objGroup As LineItemGroup = Nothing
 
         If Not mobjDict.TryGetValue(strGroupKey, objGroup) Then
@@ -26,7 +26,7 @@ Public MustInherit Class ReportGroupManager
         Return objGroup
     End Function
 
-    Public ReadOnly Property colGroups() As IEnumerable(Of LineItemGroup)
+    Public ReadOnly Property Groups() As IEnumerable(Of LineItemGroup)
         Get
             Return mobjDict.Values
         End Get
@@ -36,13 +36,13 @@ Public MustInherit Class ReportGroupManager
         mcurGrandTotal += curAmount
     End Sub
 
-    Public ReadOnly Property curGrandTotal() As Decimal
+    Public ReadOnly Property GrandTotal() As Decimal
         Get
             Return mcurGrandTotal
         End Get
     End Property
 
-    Public MustOverride Function strGetGroupTitle(ByVal strGroupKey As String) As String
+    Public MustOverride Function GetGroupTitle(ByVal strGroupKey As String) As String
 
-    Public MustOverride Function objMakeLineItem(ByVal objParent As LineItemGroup, ByVal strItemKey As String) As ReportLineItem
+    Public MustOverride Function MakeLineItem(ByVal objParent As LineItemGroup, ByVal strItemKey As String) As ReportLineItem
 End Class

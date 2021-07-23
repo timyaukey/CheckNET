@@ -13,41 +13,41 @@ Public Class LineItemGroup
     Public Sub New(ByVal objParent_ As ReportGroupManager, ByVal strGroupKey_ As String)
         mobjParent = objParent_
         mstrGroupKey = strGroupKey_
-        mstrGroupTitle = mobjParent.strGetGroupTitle(mstrGroupKey)
+        mstrGroupTitle = mobjParent.GetGroupTitle(mstrGroupKey)
         blnPrinted = False
     End Sub
 
-    Public ReadOnly Property strGroupKey() As String
+    Public ReadOnly Property GroupKey() As String
         Get
             Return mstrGroupKey
         End Get
     End Property
 
-    Public ReadOnly Property strGroupTitle() As String
+    Public ReadOnly Property GroupTitle() As String
         Get
             Return mstrGroupTitle
         End Get
     End Property
 
-    Public ReadOnly Property colItems() As IEnumerable(Of ReportLineItem)
+    Public ReadOnly Property Items() As IEnumerable(Of ReportLineItem)
         Get
             Return mcolItems
         End Get
     End Property
 
-    Public Function objGetItem(ByVal objManager As ReportGroupManager, ByVal strItemKey As String) As ReportLineItem
+    Public Function GetItem(ByVal objManager As ReportGroupManager, ByVal strItemKey As String) As ReportLineItem
         Dim objItem As ReportLineItem = Nothing
         If Not mobjDict.TryGetValue(strItemKey, objItem) Then
-            objItem = objManager.objMakeLineItem(Me, strItemKey)
+            objItem = objManager.MakeLineItem(Me, strItemKey)
             mobjDict.Add(strItemKey, objItem)
             mcolItems.Add(objItem)
-            mcolItems.Sort(AddressOf intSorter)
+            mcolItems.Sort(AddressOf SortComparer)
         End If
         Return objItem
     End Function
 
-    Private Function intSorter(ByVal objItem1 As ReportLineItem, ByVal objItem2 As ReportLineItem) As Integer
-        Return objItem1.strItemTitle.CompareTo(objItem2.strItemTitle)
+    Private Function SortComparer(ByVal objItem1 As ReportLineItem, ByVal objItem2 As ReportLineItem) As Integer
+        Return objItem1.ItemTitle.CompareTo(objItem2.ItemTitle)
     End Function
 
     Public Sub Add(ByVal curAmount As Decimal)
@@ -55,7 +55,7 @@ Public Class LineItemGroup
         mobjParent.Add(curAmount)
     End Sub
 
-    Public ReadOnly Property curGroupTotal() As Decimal
+    Public ReadOnly Property GroupTotal() As Decimal
         Get
             Return mcurGroupTotal
         End Get

@@ -29,14 +29,14 @@ Public Class TrialBalanceForm
                 Return
             End If
             Dim objBalSheet As AccountGroupManager = objGetBalanceSheetData()
-            Dim objIncExp As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value.Date, True)
+            Dim objIncExp As CategoryGroupManager = IncomeExpenseScanner.Run(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value.Date, True)
             ShowInListView(lvwBalanceSheetAccounts, objBalSheet, "Balance Sheet Through End Date")
             ShowInListView(lvwIncExpAccounts, objIncExp, "Income/Expenses Through End Date")
             ConfigureStatementButtons(True)
-            Dim curBalanceError As Decimal = objBalSheet.curGrandTotal - objIncExp.curGrandTotal
+            Dim curBalanceError As Decimal = objBalSheet.GrandTotal - objIncExp.GrandTotal
             If curBalanceError <> 0D Then
                 lblResultSummary.Text = "Accounts out of balance by " + Utilities.strFormatCurrency(curBalanceError)
-            ElseIf objIncExp.curGrandTotal <> 0D Then
+            ElseIf objIncExp.GrandTotal <> 0D Then
                 lblResultSummary.Text = "Accounts balance, but update retained earnings"
             Else
                 lblResultSummary.Text = "Accounts are in balance, and inc/exp are cleared"
@@ -47,27 +47,27 @@ Public Class TrialBalanceForm
     End Sub
 
     Private Function objGetBalanceSheetData() As AccountGroupManager
-        Return BalanceSheetScanner.objRun(mobjCompany, ctlEndDate.Value.Date)
+        Return BalanceSheetScanner.Run(mobjCompany, ctlEndDate.Value.Date)
     End Function
 
     Private Sub ShowInListView(ByVal lvw As ListView, ByVal objData As ReportGroupManager, ByVal strGrandTotalPrefix As String)
         Dim lvwItem As ListViewItem
         lvw.Items.Clear()
-        For Each objGroup As LineItemGroup In objData.colGroups
-            lvwItem = New ListViewItem(objGroup.strGroupTitle)
-            lvwItem.SubItems.Add(Utilities.strFormatCurrency(objGroup.curGroupTotal))
+        For Each objGroup As LineItemGroup In objData.Groups
+            lvwItem = New ListViewItem(objGroup.GroupTitle)
+            lvwItem.SubItems.Add(Utilities.strFormatCurrency(objGroup.GroupTotal))
             lvwItem.BackColor = Color.LightGray
             lvw.Items.Add(lvwItem)
-            For Each objLine As ReportLineItem In objGroup.colItems
-                If objLine.curTotal <> 0D Then
-                    lvwItem = New ListViewItem("  " + objLine.strItemTitle)
-                    lvwItem.SubItems.Add(Utilities.strFormatCurrency(objLine.curTotal))
+            For Each objLine As ReportLineItem In objGroup.Items
+                If objLine.Total <> 0D Then
+                    lvwItem = New ListViewItem("  " + objLine.ItemTitle)
+                    lvwItem.SubItems.Add(Utilities.strFormatCurrency(objLine.Total))
                     lvw.Items.Add(lvwItem)
                 End If
             Next
         Next
         lvwItem = New ListViewItem(strGrandTotalPrefix)
-        lvwItem.SubItems.Add(Utilities.strFormatCurrency(objData.curGrandTotal))
+        lvwItem.SubItems.Add(Utilities.strFormatCurrency(objData.GrandTotal))
         lvwItem.BackColor = Color.LightGray
         lvw.Items.Add(lvwItem)
     End Sub
@@ -163,9 +163,9 @@ Public Class TrialBalanceForm
             objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
                 objBalSheet, Account.SubType.Equity_Capital.ToString(), objAccumEquity)
             Dim objNetIncome As CategoryGroupManager = objComputeRetainedEarningsTrxAmt()
-            If objNetIncome.curGrandTotal <> 0 Then
+            If objNetIncome.GrandTotal <> 0 Then
                 objWriter.OutputAmount(strLineTitleClass, "Net Income", strLineAmountClass, strMinusClass,
-                    -objNetIncome.curGrandTotal, objAccumEquity)
+                    -objNetIncome.GrandTotal, objAccumEquity)
             End If
             objWriter.OutputAmount(strLineFooterTitleClass, "Total Equity", strLineFooterAmountClass, strMinusClass, objAccumEquity.curTotal, objAccumTotal)
 
@@ -183,7 +183,7 @@ Public Class TrialBalanceForm
 
     Private Sub btnIncomeExpenseStatement_Click(sender As Object, e As EventArgs) Handles btnIncomeExpenseStatement.Click
         Try
-            Dim objIncExp As CategoryGroupManager = IncomeExpenseScanner.objRun(mobjCompany, ctlStartDate.Value.Date, ctlEndDate.Value.Date, False)
+            Dim objIncExp As CategoryGroupManager = IncomeExpenseScanner.Run(mobjCompany, ctlStartDate.Value.Date, ctlEndDate.Value.Date, False)
             Dim objWriter As HTMLWriter = New HTMLWriter(mobjHostUI, "ProfitAndLoss", True)
             Dim objAccumIncome As ReportAccumulator = New ReportAccumulator()
             Dim objAccumOperExp As ReportAccumulator = New ReportAccumulator()
@@ -268,10 +268,10 @@ Public Class TrialBalanceForm
             Dim objTrx As BankTrx = New BankTrx(objRegister)
             objTrx.NewStartNormal(True, "Pmt", ctlEndDate.Value.Date, "Post to retained earnings", "", BaseTrx.TrxStatus.Unreconciled,
                                   False, 0D, False, False, 0, "", "")
-            For Each objGroup As LineItemGroup In objIncExpTotal.colGroups
-                For Each objItem As ReportLineItem In objGroup.colItems
-                    If objItem.curTotal <> 0 Then
-                        objTrx.AddSplit("", objItem.strItemKey, "", "", Utilities.datEmpty, Utilities.datEmpty, "", "", -objItem.curTotal)
+            For Each objGroup As LineItemGroup In objIncExpTotal.Groups
+                For Each objItem As ReportLineItem In objGroup.Items
+                    If objItem.Total <> 0 Then
+                        objTrx.AddSplit("", objItem.ItemKey, "", "", Utilities.datEmpty, Utilities.datEmpty, "", "", -objItem.Total)
                     End If
                 Next
             Next
@@ -283,7 +283,7 @@ Public Class TrialBalanceForm
     End Sub
 
     Private Function objComputeRetainedEarningsTrxAmt() As CategoryGroupManager
-        Return IncomeExpenseScanner.objRun(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value.Date, True)
+        Return IncomeExpenseScanner.Run(mobjCompany, New DateTime(1900, 1, 1), ctlEndDate.Value.Date, True)
     End Function
 
 
@@ -324,10 +324,10 @@ Public Class TrialBalanceForm
         objWriter.BeginReport()
         objWriter.OutputHeader(strReportTitle, "As Of " + ctlEndDate.Value.Date.ToShortDateString())
 
-        Dim objLoanGroup As LineItemGroup = objBalSheet.objGetGroup(lngSubType.ToString())
-        For Each objItem As ReportLineItem In objLoanGroup.colItems
-            If objItem.curTotal <> 0D Then
-                objWriter.OutputAmount(strLineTitleClass, objItem.strItemTitle, strLineAmountClass, strMinusClass, objItem.curTotal, objAccumTotal)
+        Dim objLoanGroup As LineItemGroup = objBalSheet.GetGroup(lngSubType.ToString())
+        For Each objItem As ReportLineItem In objLoanGroup.Items
+            If objItem.Total <> 0D Then
+                objWriter.OutputAmount(strLineTitleClass, objItem.ItemTitle, strLineAmountClass, strMinusClass, objItem.Total, objAccumTotal)
             End If
         Next
 
@@ -372,9 +372,9 @@ Public Class TrialBalanceForm
         Dim strMinusClass As String = "Minus"
 
         Dim colSummary As List(Of TSummary) =
-            TrxNameSummary.colScanTrx(Of TSummary)(mobjCompany, ctlEndDate.Value.Date, ctlAgingDate.Value.Date, lngSubType)
+            TrxNameSummary.ScanTrx(Of TSummary)(mobjCompany, ctlEndDate.Value.Date, ctlAgingDate.Value.Date, lngSubType)
         Dim objTotals As TSummary = New TSummary()
-        objTotals.strName = "Total"
+        objTotals.TrxName = "Total"
 
         objWriter.BeginReport()
         objWriter.OutputHeader(strReportTitle, "As Of " + ctlEndDate.Value.Date.ToShortDateString())
@@ -395,17 +395,17 @@ Public Class TrialBalanceForm
         objWriter.OutputTableHeaderEnd()
 
         For Each objSummary As TSummary In colSummary
-            If objSummary.curBalance <> 0D Then
+            If objSummary.Balance <> 0D Then
                 OutputAccountRow(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass, objSummary)
             End If
-            objTotals.objCurrentCharges.curDateTotal += objSummary.objCurrentCharges.curDateTotal
-            objTotals.obj1To30Charges.curDateTotal += objSummary.obj1To30Charges.curDateTotal
-            objTotals.obj31To60Charges.curDateTotal += objSummary.obj31To60Charges.curDateTotal
-            objTotals.obj61To90Charges.curDateTotal += objSummary.obj61To90Charges.curDateTotal
-            objTotals.objOver90Charges.curDateTotal += objSummary.objOver90Charges.curDateTotal
-            objTotals.objFutureCharges.curDateTotal += objSummary.objFutureCharges.curDateTotal
-            objTotals.objPayments.curDateTotal += objSummary.objPayments.curDateTotal
-            objTotals.curBalance += objSummary.curBalance
+            objTotals.SummaryCurrentCharges.DateTotal += objSummary.SummaryCurrentCharges.DateTotal
+            objTotals.Summary1To30Charges.DateTotal += objSummary.Summary1To30Charges.DateTotal
+            objTotals.Summary31To60Charges.DateTotal += objSummary.Summary31To60Charges.DateTotal
+            objTotals.Summary61To90Charges.DateTotal += objSummary.Summary61To90Charges.DateTotal
+            objTotals.SummaryOver90Charges.DateTotal += objSummary.SummaryOver90Charges.DateTotal
+            objTotals.SummaryFutureCharges.DateTotal += objSummary.SummaryFutureCharges.DateTotal
+            objTotals.SummaryPayments.DateTotal += objSummary.SummaryPayments.DateTotal
+            objTotals.Balance += objSummary.Balance
         Next
         OutputAccountRow(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass, objTotals)
 
@@ -418,15 +418,15 @@ Public Class TrialBalanceForm
     Private Shared Sub OutputAccountRow(Of TSummary As {TrxNameSummary, New})(objWriter As HTMLWriter,
         strLineTitleClass As String, strLineAmountClass As String, strMinusClass As String, objSummary As TSummary)
         objWriter.OutputTableRowStart()
-        objWriter.OutputTableDataTitle(strLineTitleClass, objSummary.strName)
-        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.objCurrentCharges.curDateTotal)
-        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.obj1To30Charges.curDateTotal)
-        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.obj31To60Charges.curDateTotal)
-        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.obj61To90Charges.curDateTotal)
-        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.objOver90Charges.curDateTotal)
-        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.objFutureCharges.curDateTotal)
-        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.objPayments.curDateTotal)
-        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.curBalance)
+        objWriter.OutputTableDataTitle(strLineTitleClass, objSummary.TrxName)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.SummaryCurrentCharges.DateTotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.Summary1To30Charges.DateTotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.Summary31To60Charges.DateTotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.Summary61To90Charges.DateTotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.SummaryOver90Charges.DateTotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.SummaryFutureCharges.DateTotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.SummaryPayments.DateTotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.Balance)
         objWriter.OutputTableRowEnd()
     End Sub
 End Class

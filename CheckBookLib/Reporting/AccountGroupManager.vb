@@ -8,8 +8,8 @@ Public Class AccountGroupManager
         MyBase.New(objCompany_)
     End Sub
 
-    Public Overrides Function objMakeLineItem(ByVal objParent As LineItemGroup, strItemKey As String) As ReportLineItem
-        For Each objAccount As Account In objCompany.Accounts
+    Public Overrides Function MakeLineItem(ByVal objParent As LineItemGroup, strItemKey As String) As ReportLineItem
+        For Each objAccount As Account In Company.Accounts
             If objAccount.AccountKey.ToString() = strItemKey Then
                 Return New ReportLineItem(objParent, strItemKey, objAccount.Title)
             End If
@@ -17,7 +17,7 @@ Public Class AccountGroupManager
         Throw New Exception("Could not find matching account")
     End Function
 
-    Public Overrides Function strGetGroupTitle(strGroupKey As String) As String
+    Public Overrides Function GetGroupTitle(strGroupKey As String) As String
         For Each objDef As Account.SubTypeDef In Account.SubTypeDefs
             If objDef.lngSubType.ToString() = strGroupKey Then
                 Return objDef.strName

@@ -2,7 +2,7 @@
 Option Explicit On
 
 Public NotInheritable Class IncomeExpenseScanner
-    Public Shared Function objRun(ByVal objCompany As Company, ByVal datStartDate As DateTime,
+    Public Shared Function Run(ByVal objCompany As Company, ByVal datStartDate As DateTime,
                                   ByVal datEndDate As DateTime, ByVal blnIncludeRetainedEarnings As Boolean) As CategoryGroupManager
         Dim objManager As CategoryGroupManager = New CategoryGroupManager(objCompany)
         Dim objCategories As CategoryTranslator = objCompany.Categories
@@ -20,8 +20,8 @@ Public NotInheritable Class IncomeExpenseScanner
                                         If Not objTransElem.colValues.TryGetValue(CategoryTranslator.strTypeKey, strGroupKey) Then
                                             strGroupKey = CategoryTranslator.strTypeOperatingExpenses
                                         End If
-                                        Dim objGroup As LineItemGroup = objManager.objGetGroup(strGroupKey)
-                                        Dim objLine As ReportLineItem = objGroup.objGetItem(objManager, objSplit.CategoryKey)
+                                        Dim objGroup As LineItemGroup = objManager.GetGroup(strGroupKey)
+                                        Dim objLine As ReportLineItem = objGroup.GetItem(objManager, objSplit.CategoryKey)
                                         objLine.Add(objSplit.Amount)
                                     End If
                                 Next

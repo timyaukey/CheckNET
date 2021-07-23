@@ -8,15 +8,15 @@ Public Class CategoryGroupManager
         MyBase.New(objCompany_)
     End Sub
 
-    Public Overrides Function objMakeLineItem(ByVal objParent As LineItemGroup, strItemKey As String) As ReportLineItem
-        Dim intIndex As Integer = objCompany.Categories.intLookupKey(strItemKey)
+    Public Overrides Function MakeLineItem(ByVal objParent As LineItemGroup, strItemKey As String) As ReportLineItem
+        Dim intIndex As Integer = Company.Categories.intLookupKey(strItemKey)
         If intIndex = 0 Then
             Throw New Exception("Could not find category")
         End If
-        Return New ReportLineItem(objParent, strItemKey, objCompany.Categories.strValue2(intIndex).TrimStart(" "c))
+        Return New ReportLineItem(objParent, strItemKey, Company.Categories.strValue2(intIndex).TrimStart(" "c))
     End Function
 
-    Public Overrides Function strGetGroupTitle(strGroupKey As String) As String
+    Public Overrides Function GetGroupTitle(strGroupKey As String) As String
         Select Case strGroupKey
             Case CategoryTranslator.strTypeSales : Return "Sales"
             Case CategoryTranslator.strTypeReturns : Return "Returns"

@@ -2,29 +2,29 @@
 Option Explicit On
 
 Public MustInherit Class TrxNameSummary
-    Public strName As String
-    Public curBalance As Decimal
+    Public TrxName As String
+    Public Balance As Decimal
 
-    Public objCurrentCharges As DateRangeSummary
-    Public obj1To30Charges As DateRangeSummary
-    Public obj31To60Charges As DateRangeSummary
-    Public obj61To90Charges As DateRangeSummary
-    Public objOver90Charges As DateRangeSummary
-    Public objFutureCharges As DateRangeSummary
-    Public objPayments As DateRangeSummary
+    Public SummaryCurrentCharges As DateRangeSummary
+    Public Summary1To30Charges As DateRangeSummary
+    Public Summary31To60Charges As DateRangeSummary
+    Public Summary61To90Charges As DateRangeSummary
+    Public SummaryOver90Charges As DateRangeSummary
+    Public SummaryFutureCharges As DateRangeSummary
+    Public SummaryPayments As DateRangeSummary
 
     Public Sub New()
-        curBalance = 0
-        objCurrentCharges = New DateRangeSummary()
-        obj1To30Charges = New DateRangeSummary()
-        obj31To60Charges = New DateRangeSummary()
-        obj61To90Charges = New DateRangeSummary()
-        objOver90Charges = New DateRangeSummary()
-        objFutureCharges = New DateRangeSummary()
-        objPayments = New DateRangeSummary()
+        Balance = 0
+        SummaryCurrentCharges = New DateRangeSummary()
+        Summary1To30Charges = New DateRangeSummary()
+        Summary31To60Charges = New DateRangeSummary()
+        Summary61To90Charges = New DateRangeSummary()
+        SummaryOver90Charges = New DateRangeSummary()
+        SummaryFutureCharges = New DateRangeSummary()
+        SummaryPayments = New DateRangeSummary()
     End Sub
 
-    Public Shared Function colScanTrx(Of TSummary As {TrxNameSummary, New})(ByVal objCompany As Company, ByVal datEnd As DateTime,
+    Public Shared Function ScanTrx(Of TSummary As {TrxNameSummary, New})(ByVal objCompany As Company, ByVal datEnd As DateTime,
                                           ByVal datAging As DateTime, ByVal lngSubType As Account.SubType) As List(Of TSummary)
         Dim colSummary As List(Of TSummary) = New List(Of TSummary)()
         Dim objDict As Dictionary(Of String, TSummary) = New Dictionary(Of String, TSummary)()
@@ -36,14 +36,14 @@ Public MustInherit Class TrxNameSummary
                         If Not objTrx.IsFake Then
                             Dim objNormalTrx As BankTrx = TryCast(objTrx, BankTrx)
                             If Not objNormalTrx Is Nothing Then
-                                Dim objSummary As TSummary = objGetSummary(colSummary, objDict, objTrx)
+                                Dim objSummary As TSummary = GetSummary(colSummary, objDict, objTrx)
                                 For Each objSplit As TrxSplit In objNormalTrx.Splits
                                     objSummary.AddAmountToCorrectAge(objSplit.Amount, objSplit.DueDateEffective, datAging)
                                 Next
                             Else
                                 Dim objReplicaTrx As ReplicaTrx = TryCast(objTrx, ReplicaTrx)
                                 If Not objReplicaTrx Is Nothing Then
-                                    Dim objSummary As TSummary = objGetSummary(colSummary, objDict, objTrx)
+                                    Dim objSummary As TSummary = GetSummary(colSummary, objDict, objTrx)
                                     objSummary.AddAmountToCorrectAge(objReplicaTrx.Amount, objReplicaTrx.TrxDate, datAging)
                                 End If
                             End If
@@ -55,12 +55,12 @@ Public MustInherit Class TrxNameSummary
         For Each objSummary As TSummary In colSummary
             objSummary.ApplyPayments()
         Next
-        colSummary.Sort(AddressOf intNameComparer)
+        colSummary.Sort(AddressOf NameComparer)
 
         Return colSummary
     End Function
 
-    Private Shared Function objGetSummary(Of TSummary As {TrxNameSummary, New})(ByVal colSummary As List(Of TSummary),
+    Private Shared Function GetSummary(Of TSummary As {TrxNameSummary, New})(ByVal colSummary As List(Of TSummary),
                                          ByVal objDict As Dictionary(Of String, TSummary),
                                          ByVal objTrx As BaseTrx) As TSummary
         Dim objSummary As TSummary = Nothing
@@ -70,49 +70,49 @@ Public MustInherit Class TrxNameSummary
         End If
         If Not objDict.TryGetValue(strNameKey, objSummary) Then
             objSummary = New TSummary()
-            objSummary.strName = objTrx.Description
-            objSummary.curBalance = 0D
+            objSummary.TrxName = objTrx.Description
+            objSummary.Balance = 0D
             colSummary.Add(objSummary)
             objDict.Add(strNameKey, objSummary)
         End If
         Return objSummary
     End Function
 
-    Private Shared Function intNameComparer(Of TSummary As TrxNameSummary)(ByVal objSummary1 As TSummary, ByVal objSummary2 As TSummary) As Integer
-        Return objSummary1.strName.CompareTo(objSummary2.strName)
+    Private Shared Function NameComparer(Of TSummary As TrxNameSummary)(ByVal objSummary1 As TSummary, ByVal objSummary2 As TSummary) As Integer
+        Return objSummary1.TrxName.CompareTo(objSummary2.TrxName)
     End Function
 
-    Protected MustOverride Function blnIsCharge(ByVal curAmount As Decimal) As Boolean
+    Protected MustOverride Function IsCharge(ByVal curAmount As Decimal) As Boolean
 
     Protected Sub AddAmountToCorrectAge(ByVal curAmount As Decimal, ByVal datDue As Date, ByVal datAging As Date)
-        Me.curBalance += curAmount
-        If blnIsCharge(curAmount) Then
+        Me.Balance += curAmount
+        If IsCharge(curAmount) Then
             Dim intAge As Integer = CInt(datAging.Subtract(datDue).TotalDays)
             If intAge <= -30 Then
-                objFutureCharges.Add(curAmount)
+                SummaryFutureCharges.Add(curAmount)
             ElseIf intAge <= 0 Then
-                objCurrentCharges.Add(curAmount)
+                SummaryCurrentCharges.Add(curAmount)
             ElseIf intAge <= 30 Then
-                obj1To30Charges.Add(curAmount)
+                Summary1To30Charges.Add(curAmount)
             ElseIf intAge <= 60 Then
-                obj31To60Charges.Add(curAmount)
+                Summary31To60Charges.Add(curAmount)
             ElseIf intAge <= 90 Then
-                obj61To90Charges.Add(curAmount)
+                Summary61To90Charges.Add(curAmount)
             Else
-                objOver90Charges.Add(curAmount)
+                SummaryOver90Charges.Add(curAmount)
             End If
         Else
-            objPayments.Add(curAmount)
+            SummaryPayments.Add(curAmount)
         End If
     End Sub
 
     Private Sub ApplyPayments()
-        If blnApplyPayments(objOver90Charges, objPayments) Then
-            If blnApplyPayments(obj61To90Charges, objPayments) Then
-                If blnApplyPayments(obj31To60Charges, objPayments) Then
-                    If blnApplyPayments(obj1To30Charges, objPayments) Then
-                        If blnApplyPayments(objCurrentCharges, objPayments) Then
-                            blnApplyPayments(objFutureCharges, objPayments)
+        If ApplyPayments(SummaryOver90Charges, SummaryPayments) Then
+            If ApplyPayments(Summary61To90Charges, SummaryPayments) Then
+                If ApplyPayments(Summary31To60Charges, SummaryPayments) Then
+                    If ApplyPayments(Summary1To30Charges, SummaryPayments) Then
+                        If ApplyPayments(SummaryCurrentCharges, SummaryPayments) Then
+                            ApplyPayments(SummaryFutureCharges, SummaryPayments)
                         End If
                     End If
                 End If
@@ -120,15 +120,15 @@ Public MustInherit Class TrxNameSummary
         End If
     End Sub
 
-    Private Function blnApplyPayments(ByVal objCharges As DateRangeSummary, ByVal objPayments As DateRangeSummary) As Boolean
-        Dim curNetBalance As Decimal = objCharges.curDateTotal + objPayments.curDateTotal
-        If blnIsCharge(curNetBalance) Or curNetBalance = 0 Then
-            objCharges.curDateTotal = curNetBalance
-            objPayments.curDateTotal = 0
+    Private Function ApplyPayments(ByVal objCharges As DateRangeSummary, ByVal objPayments As DateRangeSummary) As Boolean
+        Dim curNetBalance As Decimal = objCharges.DateTotal + objPayments.DateTotal
+        If IsCharge(curNetBalance) Or curNetBalance = 0 Then
+            objCharges.DateTotal = curNetBalance
+            objPayments.DateTotal = 0
             Return False
         Else
-            objPayments.curDateTotal = curNetBalance
-            objCharges.curDateTotal = 0
+            objPayments.DateTotal = curNetBalance
+            objCharges.DateTotal = 0
             Return True
         End If
     End Function
