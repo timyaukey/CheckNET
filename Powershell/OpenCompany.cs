@@ -21,9 +21,9 @@ namespace Willowsoft.CheckBook.Powershell
         protected override void BeginProcessing()
         {
             Company company = new Company(Path);
-            var error = CompanyLoader.objLoad(company, (account) => { }, authenticate);
+            var error = CompanyLoader.Load(company, (account) => { }, authenticate);
             if (error != null)
-                ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation(error.strMessage, "CompanyLoadFailure"));
+                ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation(error.Message, "CompanyLoadFailure"));
             WriteObject(company);
         }
 

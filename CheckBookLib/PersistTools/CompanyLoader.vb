@@ -32,7 +32,7 @@ Public Class CompanyLoader
     ''' user name and password if that is required.
     ''' </param>
     ''' <returns></returns>
-    Public Shared Function objLoad(ByVal objCompany As Company,
+    Public Shared Function Load(ByVal objCompany As Company,
         ByVal showAccount As Action(Of Account),
         ByVal authenticator As Func(Of Company, CompanyLoadError)) As CompanyLoadError
 
@@ -92,13 +92,13 @@ Public Class CompanyLoader
                 Next
             End If
         Next
-        objCats.Sort(AddressOf intCategoryComparer)
+        objCats.Sort(AddressOf CategoryComparer)
         For Each elm In objCats
             objCompany.Categories.Add(elm)
         Next
     End Sub
 
-    Private Shared Function intCategoryComparer(ByVal cat1 As StringTransElement, ByVal cat2 As StringTransElement) As Integer
+    Private Shared Function CategoryComparer(ByVal cat1 As StringTransElement, ByVal cat2 As StringTransElement) As Integer
         Return cat1.strValue1.CompareTo(cat2.strValue1)
     End Function
 
@@ -153,7 +153,7 @@ Public Class CompanyLoader
 
             'Load generated transactions for all of them.
             For Each objLoader In colLoaders
-                showAccount(objLoader.objAccount)
+                showAccount(objLoader.Account)
                 objLoader.LoadGenerated(datCutoff)
                 showAccount(Nothing)
             Next
@@ -167,7 +167,7 @@ Public Class CompanyLoader
             'Call BaseTrx.Apply() for all BaseTrx loaded above.
             'This will create ReplicaTrx.
             For Each objLoader In colLoaders
-                showAccount(objLoader.objAccount)
+                showAccount(objLoader.Account)
                 objLoader.LoadApply()
                 showAccount(Nothing)
             Next
@@ -177,13 +177,13 @@ Public Class CompanyLoader
 
             'Perform final steps after all BaseTrx exist, including computing running balances.
             For Each objLoader In colLoaders
-                showAccount(objLoader.objAccount)
+                showAccount(objLoader.Account)
                 objLoader.LoadFinish()
                 showAccount(Nothing)
             Next
         Catch ex As Exception
             For Each objLoader In colLoaders
-                objLoader.objAccount.HasUnsavedChanges = False
+                objLoader.Account.HasUnsavedChanges = False
             Next
             gNestedException(ex)
         End Try
@@ -228,7 +228,7 @@ Public Class CompanyLoader
 
     Private Shared Sub SortAllRegisters(ByVal colLoaders As List(Of AccountLoader))
         For Each objLoader In colLoaders
-            For Each objReg In objLoader.objAccount.Registers
+            For Each objReg In objLoader.Account.Registers
                 objReg.Sort()
             Next
         Next
@@ -243,7 +243,7 @@ Public MustInherit Class CompanyLoadError
         mstrMessage = strMessage_
     End Sub
 
-    Public ReadOnly Property strMessage() As String
+    Public ReadOnly Property Message() As String
         Get
             Return mstrMessage
         End Get

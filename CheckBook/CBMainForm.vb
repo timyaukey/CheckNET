@@ -63,10 +63,10 @@ Friend Class CBMainForm
             mobjCompany = New Company(strDataPathValue)
             mobjSecurity = mobjCompany.SecData
 
-            Dim objError As CompanyLoadError = CompanyLoader.objLoad(mobjCompany,
+            Dim objError As CompanyLoadError = CompanyLoader.Load(mobjCompany,
                 AddressOf frmStartup.Configure, AddressOf objAuthenticate)
             If Not objError Is Nothing Then
-                mobjHostUI.InfoMessageBox(objError.strMessage)
+                mobjHostUI.InfoMessageBox(objError.Message)
                 frmStartup.Close()
                 Me.Close()
                 Exit Sub
@@ -132,7 +132,7 @@ Friend Class CBMainForm
             If objCompany.SecData.blnAuthenticate(strLogin, strPassword) Then
                 Return Nothing
             End If
-            mobjHostUI.ErrorMessageBox((New CompanyLoadNotAuthorized()).strMessage)
+            mobjHostUI.ErrorMessageBox((New CompanyLoadNotAuthorized()).Message)
         Loop
     End Function
 

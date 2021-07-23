@@ -62,7 +62,7 @@ Public Class RegisterLoader
 
             Do
                 mstrLine = objLoadFile.ReadLine()
-                If blnLoadLine(lngLinesRead) Then
+                If LoadLine(lngLinesRead) Then
                     Exit Sub
                 End If
             Loop
@@ -82,17 +82,17 @@ Public Class RegisterLoader
         ClearTrxData()
     End Sub
 
-    Private Function blnLoadLine(ByRef lngLinesRead As Integer) As Boolean
+    Private Function LoadLine(ByRef lngLinesRead As Integer) As Boolean
         Dim objSplit As TrxSplit
 
-        blnLoadLine = False
+        LoadLine = False
         mlngLinesRead = mlngLinesRead + 1
         lngLinesRead = mlngLinesRead
         'TN, TB or TT line is required, and must precede any line which needs
         'to know the type of transaction.
         Select Case Left(mstrLine, 2)
             Case ".R" 'End of register.
-                blnLoadLine = True
+                LoadLine = True
                 Exit Function
             Case "TN" 'Normal transaction header.
                 mobjTrxType = GetType(BankTrx)
@@ -122,7 +122,7 @@ Public Class RegisterLoader
             Case "N#"
                 mstrNumber = Mid(mstrLine, 3)
             Case "DT"
-                mdatDate = datConvertInput(Mid(mstrLine, 3), "transaction")
+                mdatDate = ConvertInputDate(Mid(mstrLine, 3), "transaction")
             Case "ME"
                 mstrMemo = Mid(mstrLine, 3)
             Case "A$"
@@ -147,7 +147,7 @@ Public Class RegisterLoader
                 If mobjTrxType <> GetType(BudgetTrx) Then
                     RaiseErrorInLoad("BE line only allowed for budget Trx")
                 End If
-                mdatBudgetStarts = datConvertInput(Mid(mstrLine, 3), "budget ending")
+                mdatBudgetStarts = ConvertInputDate(Mid(mstrLine, 3), "budget ending")
             Case "KI"
                 If mobjTrxType <> GetType(BankTrx) Then
                     RaiseErrorInLoad("KI line only allowed for normal Trx")
@@ -203,12 +203,12 @@ Public Class RegisterLoader
                 If mobjTrxType <> GetType(BankTrx) Then
                     RaiseErrorInLoad("SI only allowed for normal Trx")
                 End If
-                mdatSInvoiceDate = datConvertInput(Mid(mstrLine, 3), "invoice")
+                mdatSInvoiceDate = ConvertInputDate(Mid(mstrLine, 3), "invoice")
             Case "SD"
                 If mobjTrxType <> GetType(BankTrx) Then
                     RaiseErrorInLoad("SD only allowed for normal Trx")
                 End If
-                mdatSDueDate = datConvertInput(Mid(mstrLine, 3), "due")
+                mdatSDueDate = ConvertInputDate(Mid(mstrLine, 3), "due")
             Case "ST"
                 If mobjTrxType <> GetType(BankTrx) Then
                     RaiseErrorInLoad("ST only allowed for normal Trx")
@@ -283,7 +283,7 @@ Public Class RegisterLoader
         RaiseError("blnLoadLine", strMsg)
     End Sub
 
-    Private Function datConvertInput(ByVal strInput As String, ByVal strContext As String) As Date
+    Private Function ConvertInputDate(ByVal strInput As String, ByVal strContext As String) As Date
 
         Dim datOutput As Date
         If Utilities.blnTryParseUniversalDate(strInput, datOutput) Then
@@ -297,17 +297,17 @@ Public Class RegisterLoader
 
     End Function
 
-    Private Function lngConvertRepeatUnit(ByVal strInput As String, ByVal strContext As String) As BaseTrx.RepeatUnit
+    Private Function ConvertRepeatUnit(ByVal strInput As String, ByVal strContext As String) As BaseTrx.RepeatUnit
 
         Dim lngResult As BaseTrx.RepeatUnit
         lngResult = glngConvertRepeatUnit(strInput)
         If lngResult = BaseTrx.RepeatUnit.Missing Then
             RaiseErrorInLoad("Unrecognized unit name in " & strContext)
         End If
-        lngConvertRepeatUnit = lngResult
+        ConvertRepeatUnit = lngResult
     End Function
 
-    Private Function intConvertRepeatCount(ByVal strInput As String, ByVal strContext As String) As Short
+    Private Function ConvertRepeatCount(ByVal strInput As String, ByVal strContext As String) As Short
 
         Dim intResult As Short
 
@@ -315,7 +315,7 @@ Public Class RegisterLoader
         If intResult = 0 Then
             RaiseErrorInLoad(strContext & " has non-numeric or non-positive value")
         End If
-        intConvertRepeatCount = intResult
+        ConvertRepeatCount = intResult
     End Function
 
     Private Sub CreateTrx()

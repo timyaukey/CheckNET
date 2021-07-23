@@ -15,7 +15,7 @@ Public Class AccountSaver
         mobjCompany = mobjAccount.Company
     End Sub
 
-    Public ReadOnly Property objAccount As Account
+    Public ReadOnly Property Account As Account
         Get
             Return mobjAccount
         End Get

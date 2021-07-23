@@ -123,15 +123,15 @@ Public Class RegisterSaver
         End With
     End Sub
 
-    Private Function strConvertRepeatUnit(ByVal lngUnit As BaseTrx.RepeatUnit) As String
-        strConvertRepeatUnit = ""
+    Private Function ConvertRepeatUnit(ByVal lngUnit As BaseTrx.RepeatUnit) As String
+        ConvertRepeatUnit = ""
         Select Case lngUnit
             Case BaseTrx.RepeatUnit.Day
-                strConvertRepeatUnit = "DAY"
+                ConvertRepeatUnit = "DAY"
             Case BaseTrx.RepeatUnit.Week
-                strConvertRepeatUnit = "WEEK"
+                ConvertRepeatUnit = "WEEK"
             Case BaseTrx.RepeatUnit.Month
-                strConvertRepeatUnit = "MONTH"
+                ConvertRepeatUnit = "MONTH"
             Case Else
                 gRaiseError("Unrecognized repeat unit: " & lngUnit)
         End Select

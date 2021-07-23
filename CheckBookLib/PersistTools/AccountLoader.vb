@@ -22,7 +22,7 @@ Public Class AccountLoader
         mobjCompany = mobjAccount.Company
     End Sub
 
-    Public ReadOnly Property objAccount As Account
+    Public ReadOnly Property Account As Account
         Get
             Return mobjAccount
         End Get
@@ -91,13 +91,13 @@ Public Class AccountLoader
                     Case "AR"
                         Select Case Mid(strLine, 3, 1)
                             Case "1"
-                                mintRelatedKey1 = intLoadParseRelatedAccountKey(strLine)
+                                mintRelatedKey1 = LoadParseRelatedAccountKey(strLine)
                             Case "2"
-                                mintRelatedKey2 = intLoadParseRelatedAccountKey(strLine)
+                                mintRelatedKey2 = LoadParseRelatedAccountKey(strLine)
                             Case "3"
-                                mintRelatedKey3 = intLoadParseRelatedAccountKey(strLine)
+                                mintRelatedKey3 = LoadParseRelatedAccountKey(strLine)
                             Case "4"
-                                mintRelatedKey4 = intLoadParseRelatedAccountKey(strLine)
+                                mintRelatedKey4 = LoadParseRelatedAccountKey(strLine)
                             Case Else
                                 Throw New Exception("Invalid related account selector")
                         End Select
@@ -148,7 +148,7 @@ Public Class AccountLoader
         End Try
     End Sub
 
-    Private Function intLoadParseRelatedAccountKey(ByVal strLine As String) As Integer
+    Private Function LoadParseRelatedAccountKey(ByVal strLine As String) As Integer
         Dim intRelatedKey As Integer
         If Int32.TryParse(strLine.Substring(4), intRelatedKey) Then
             Return intRelatedKey
@@ -190,10 +190,10 @@ Public Class AccountLoader
     Public Sub LoadFinish()
         Try
             'This has to happen after all Account objects are loaded, not when the "AR" lines are read.
-            mobjAccount.RelatedAcct1 = objLoadResolveRelatedAccount(mintRelatedKey1)
-            mobjAccount.RelatedAcct2 = objLoadResolveRelatedAccount(mintRelatedKey2)
-            mobjAccount.RelatedAcct3 = objLoadResolveRelatedAccount(mintRelatedKey3)
-            mobjAccount.RelatedAcct4 = objLoadResolveRelatedAccount(mintRelatedKey4)
+            mobjAccount.RelatedAcct1 = LoadResolveRelatedAccount(mintRelatedKey1)
+            mobjAccount.RelatedAcct2 = LoadResolveRelatedAccount(mintRelatedKey2)
+            mobjAccount.RelatedAcct3 = LoadResolveRelatedAccount(mintRelatedKey3)
+            mobjAccount.RelatedAcct4 = LoadResolveRelatedAccount(mintRelatedKey4)
 
             'Construct repeat key StringTranslator from actual transaction
             'data and info in .GEN files.
@@ -212,7 +212,7 @@ Public Class AccountLoader
         End Try
     End Sub
 
-    Private Function objLoadResolveRelatedAccount(ByVal intRelatedKey As Integer) As Account
+    Private Function LoadResolveRelatedAccount(ByVal intRelatedKey As Integer) As Account
         If intRelatedKey = 0 Then
             Return Nothing
         End If
