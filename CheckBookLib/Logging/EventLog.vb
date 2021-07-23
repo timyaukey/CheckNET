@@ -29,7 +29,6 @@ Public Class EventLog
     Public Sub Init(ByVal objReg As Register, ByVal strLogin As String)
         mcolLoggers = New List(Of ILogger)
         mcolGroups = New List(Of ILogGroupStart)
-        'UPGRADE_NOTE: Object mdomOutput may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
         mdomOutput = Nothing
         mstrLogin = strLogin
         mobjReg = objReg
@@ -37,7 +36,7 @@ Public Class EventLog
         mdatStart = Now
     End Sub
 
-    Public ReadOnly Property objCompany() As Company
+    Public ReadOnly Property Company() As Company
         Get
             Return mobjCompany
         End Get
@@ -53,7 +52,7 @@ Public Class EventLog
         'Some events don't require a log to be written, like saving a register,
         'unless other events for the same register do require it.
         For Each objLogger In mcolLoggers
-            If objLogger.blnRequiresLog Then
+            If objLogger.RequiresLog Then
                 blnRequired = True
             End If
         Next objLogger

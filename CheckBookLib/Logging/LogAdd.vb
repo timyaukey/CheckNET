@@ -15,9 +15,9 @@ Public Class LogAdd
         mdatTimestamp = Now
     End Sub
 
-    Private ReadOnly Property ILogger_blnRequiresLog() As Boolean Implements ILogger.blnRequiresLog
+    Private ReadOnly Property ILogger_RequiresLog() As Boolean Implements ILogger.RequiresLog
         Get
-            ILogger_blnRequiresLog = True
+            ILogger_RequiresLog = True
         End Get
     End Property
 

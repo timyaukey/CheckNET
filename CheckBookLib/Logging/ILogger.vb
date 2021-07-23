@@ -3,5 +3,5 @@ Option Explicit On
 
 Public Interface ILogger
     Sub WriteLog(ByVal objLog As EventLog)
-    ReadOnly Property blnRequiresLog As Boolean
+    ReadOnly Property RequiresLog As Boolean
 End Interface
