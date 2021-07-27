@@ -30,9 +30,9 @@ Public Class Company
     Public Info As CompanyInfo
 
     'Table with memorized payees.
-    Public MemorizedTransXml As VB6XmlDocument
+    Public MemorizedTransXml As CBXmlDocument
     'Above with Output attributes of Payee elements converted to upper case.
-    Public MemorizedTransXmlUCS As VB6XmlDocument
+    Public MemorizedTransXmlUCS As CBXmlDocument
     'Same as MemorizedTransXml, but strongly typed.
     Public MemorizedTrans As PayeeList
 
@@ -271,13 +271,13 @@ Public Class Company
     '   resulting DOM is temporary, and never saved to an XML file.
 
     Public Sub CreateMemorizedTransXmlUCS()
-        Dim colPayees As VB6XmlNodeList
-        Dim elmPayee As VB6XmlElement
+        Dim colPayees As CBXmlNodeList
+        Dim elmPayee As CBXmlElement
         Dim vntOutput As Object
 
         Try
 
-            MemorizedTransXmlUCS = DirectCast(MemorizedTransXml.CloneNode(True), VB6XmlDocument)
+            MemorizedTransXmlUCS = DirectCast(MemorizedTransXml.CloneNode(True), CBXmlDocument)
             colPayees = MemorizedTransXmlUCS.DocumentElement.SelectNodes("Payee")
             For Each elmPayee In colPayees
                 vntOutput = elmPayee.GetAttribute("Output")
@@ -292,7 +292,7 @@ Public Class Company
         End Try
     End Sub
 
-    Public Function FindPayeeMatches(ByRef strRawInput As String) As VB6XmlNodeList
+    Public Function FindPayeeMatches(ByRef strRawInput As String) As CBXmlNodeList
         Dim strInput As String
         Dim strXPath As String
 
@@ -312,14 +312,14 @@ Public Class Company
 
     '$Description Load an XML file into a new DOM and return it.
 
-    Public Function LoadXmlFile(ByVal strFile As String) As VB6XmlDocument
-        Dim dom As VB6XmlDocument
-        Dim objParseError As VB6XmlParseError
+    Public Function LoadXmlFile(ByVal strFile As String) As CBXmlDocument
+        Dim dom As CBXmlDocument
+        Dim objParseError As CBXmlParseError
 
         LoadXmlFile = Nothing
         Try
 
-            dom = New VB6XmlDocument
+            dom = New CBXmlDocument
             With dom
                 .Load(strFile)
                 objParseError = .ParseError

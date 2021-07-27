@@ -15,12 +15,12 @@ Public Class TrxGenPeriod
     Private mintStartRepeatSeq As Integer
     Private mdblDOWUsage(7) As Double 'vbSunday to vbSaturday
 
-    Public Overrides Function Load(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String
+    Public Overrides Function Load(ByVal domDoc As CBXmlDocument, ByVal objAccount As Account) As String
 
         Dim strError As String
-        Dim elmFirst As VB6XmlElement
-        Dim elmDOWUsage As VB6XmlElement
-        Dim elmScaling As VB6XmlElement
+        Dim elmFirst As CBXmlElement
+        Dim elmDOWUsage As CBXmlElement
+        Dim elmScaling As CBXmlElement
         Dim dblTotalDOWWeights As Double
         Dim intIndex As Integer
         Dim vntAttrib As Object
@@ -36,7 +36,7 @@ Public Class TrxGenPeriod
         End If
 
         'Load <dowusage> element.
-        elmDOWUsage = DirectCast(domDoc.DocumentElement.SelectSingleNode("dowusage"), VB6XmlElement)
+        elmDOWUsage = DirectCast(domDoc.DocumentElement.SelectSingleNode("dowusage"), CBXmlElement)
         If elmDOWUsage Is Nothing Then
             Return "Missing <dowusage> element"
         End If
@@ -77,7 +77,7 @@ Public Class TrxGenPeriod
         Next
 
         'Load first period start date.
-        elmFirst = DirectCast(domDoc.DocumentElement.SelectSingleNode("firstperiodstarts"), VB6XmlElement)
+        elmFirst = DirectCast(domDoc.DocumentElement.SelectSingleNode("firstperiodstarts"), CBXmlElement)
         If elmFirst Is Nothing Then
             Return "Missing <firstperiodstarts> element"
         End If
@@ -91,7 +91,7 @@ Public Class TrxGenPeriod
         mdatFirstPeriodStarts = CDate(vntAttrib)
 
         'Load default amount scaling percentage.
-        elmScaling = DirectCast(domDoc.DocumentElement.SelectSingleNode("scaling"), VB6XmlElement)
+        elmScaling = DirectCast(domDoc.DocumentElement.SelectSingleNode("scaling"), CBXmlElement)
         If elmScaling Is Nothing Then
             mdblDefaultPercentIncrease = 0.0#
         Else
@@ -115,7 +115,7 @@ Public Class TrxGenPeriod
         Return GetTrxGenTemplate(objAccount.Company, domDoc, mstrRepeatKey, 0, mdatTrxTemplate)
     End Function
 
-    Private Function dblGetWeight(ByVal elmDOWUsage As VB6XmlElement, ByVal strName As String, ByRef strError As String, ByRef dblTotalDOWUsage As Double) As Double
+    Private Function dblGetWeight(ByVal elmDOWUsage As CBXmlElement, ByVal strName As String, ByRef strError As String, ByRef dblTotalDOWUsage As Double) As Double
 
         Dim vntAttrib As Object
         Dim dblResult As Double

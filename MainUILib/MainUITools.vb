@@ -36,13 +36,13 @@ Public Module MainUITools
         UITools.SetListViewSortColumn(lvwPayees, 1)
     End Sub
 
-    Public Function gobjCreatePayeeListItem(ByVal elmPayee As VB6XmlElement, ByVal lvwPayees As System.Windows.Forms.ListView, ByVal intIndex As Short) As System.Windows.Forms.ListViewItem
+    Public Function gobjCreatePayeeListItem(ByVal elmPayee As CBXmlElement, ByVal lvwPayees As System.Windows.Forms.ListView, ByVal intIndex As Short) As System.Windows.Forms.ListViewItem
 
         Dim objItem As System.Windows.Forms.ListViewItem
-        Dim elmNum As VB6XmlElement
+        Dim elmNum As CBXmlElement
         Dim strNum As String
 
-        elmNum = DirectCast(elmPayee.SelectSingleNode("Num"), VB6XmlElement)
+        elmNum = DirectCast(elmPayee.SelectSingleNode("Num"), CBXmlElement)
         If elmNum Is Nothing Then
             strNum = ""
         Else
@@ -63,12 +63,12 @@ Public Module MainUITools
         gobjCreatePayeeListItem = objItem
     End Function
 
-    Private Sub SetPayeeSubItem(ByVal objItem As System.Windows.Forms.ListViewItem, ByVal intSubItem As Short, ByVal elmPayee As VB6XmlElement, ByVal strChildName As String)
+    Private Sub SetPayeeSubItem(ByVal objItem As System.Windows.Forms.ListViewItem, ByVal intSubItem As Short, ByVal elmPayee As CBXmlElement, ByVal strChildName As String)
 
-        Dim elmChild As VB6XmlElement
+        Dim elmChild As CBXmlElement
         Dim strText As String
 
-        elmChild = DirectCast(elmPayee.SelectSingleNode(strChildName), VB6XmlElement)
+        elmChild = DirectCast(elmPayee.SelectSingleNode(strChildName), CBXmlElement)
         If elmChild Is Nothing Then
             strText = ""
         Else

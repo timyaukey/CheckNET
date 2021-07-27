@@ -11,8 +11,8 @@ Public Class Security
 
     Private mobjCompany As Company
     Private mstrFilePath As String
-    Private mdomSecurity As VB6XmlDocument
-    Private melmUser As VB6XmlElement
+    Private mdomSecurity As CBXmlDocument
+    Private melmUser As CBXmlElement
     Private mstrLoginSaved As String
     Private mstrLogin As String
     Private mblnNoFile As Boolean
@@ -51,7 +51,7 @@ Public Class Security
     Public Sub CreateEmpty()
         Init()
         MakePath()
-        mdomSecurity = New VB6XmlDocument
+        mdomSecurity = New CBXmlDocument
         mdomSecurity.LoadXml("<security>" & vbCrLf & "</security>")
         mstrLogin = ""
     End Sub
@@ -89,15 +89,15 @@ Public Class Security
     End Property
 
     'Strictly for debugging use
-    Public ReadOnly Property elmDbgUser() As VB6XmlElement
+    Public ReadOnly Property elmDbgUser() As CBXmlElement
         Get
             elmDbgUser = melmUser
         End Get
     End Property
 
     Public Sub CreateSignatures()
-        Dim colUsers As VB6XmlNodeList
-        Dim elmUser As VB6XmlElement
+        Dim colUsers As CBXmlNodeList
+        Dim elmUser As CBXmlElement
         Dim strSignature As String
 
         colUsers = mdomSecurity.DocumentElement.SelectNodes("user")
@@ -107,7 +107,7 @@ Public Class Security
         Next elmUser
     End Sub
 
-    Private Function strCreateUserSignature(ByVal elmUser As VB6XmlElement) As String
+    Private Function strCreateUserSignature(ByVal elmUser As CBXmlElement) As String
         strCreateUserSignature = strMakeHash(CStr(elmUser.GetAttribute("login")) & CStr(elmUser.GetAttribute("name")) & ":isadmin=" & CStr(elmUser.GetAttribute("isadmin")))
     End Function
 
@@ -120,14 +120,14 @@ Public Class Security
         melmUser.SetAttribute("login", strLogin)
         melmUser.SetAttribute("name", strName)
         mdomSecurity.DocumentElement.AppendChild(melmUser)
-        Dim objText As VB6XmlText
+        Dim objText As CBXmlText
         objText = mdomSecurity.CreateTextNode(vbCrLf)
         mdomSecurity.DocumentElement.AppendChild(objText)
         mstrLogin = strLogin
     End Sub
 
     Public Function blnFindUser(ByVal strLogin As String) As Boolean
-        melmUser = DirectCast(mdomSecurity.DocumentElement.SelectSingleNode("user[@login=""" & strLogin & """]"), VB6XmlElement)
+        melmUser = DirectCast(mdomSecurity.DocumentElement.SelectSingleNode("user[@login=""" & strLogin & """]"), CBXmlElement)
         mstrLogin = strLogin
         blnFindUser = blnHaveUser
     End Function

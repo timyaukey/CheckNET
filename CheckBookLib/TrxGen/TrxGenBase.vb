@@ -16,9 +16,9 @@ Public MustInherit Class TrxGenBase
     Public MustOverride ReadOnly Property Description As String Implements ITrxGenerator.Description
     Public MustOverride ReadOnly Property RepeatKey As String Implements ITrxGenerator.RepeatKey
     Public MustOverride Function CreateTrx(objReg As Register, datRptEndMax As Date) As ICollection(Of TrxToCreate) Implements ITrxGenerator.CreateTrx
-    Public MustOverride Function Load(domDoc As VB6XmlDocument, objAccount As Account) As String Implements ITrxGenerator.Load
+    Public MustOverride Function Load(domDoc As CBXmlDocument, objAccount As Account) As String Implements ITrxGenerator.Load
 
-    Protected Function LoadCore(ByVal domDoc As VB6XmlDocument) As String
+    Protected Function LoadCore(ByVal domDoc As CBXmlDocument) As String
         Dim vntAttrib As Object = domDoc.DocumentElement.GetAttribute("maxdaysold")
         Dim intMax As Integer
         If gblnXmlAttributeMissing(vntAttrib) Then

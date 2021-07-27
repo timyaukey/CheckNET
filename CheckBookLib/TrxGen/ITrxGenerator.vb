@@ -9,7 +9,7 @@ Public Interface ITrxGenerator
     '$Description Read parameters from the XML document describing this instance.
     '$Param objDoc The XML document with parameter information.
 
-    Function Load(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String
+    Function Load(ByVal domDoc As CBXmlDocument, ByVal objAccount As Account) As String
 
     '$Description Description of this generator.
 

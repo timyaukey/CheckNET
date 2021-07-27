@@ -36,7 +36,7 @@ Public Class ImportUtilities
     Private mblnAllowAutoBatchUpdate As Boolean
 
     'Table with trx type translation information.
-    Private mdomTrxTypes As VB6XmlDocument
+    Private mdomTrxTypes As CBXmlDocument
 
     Public Sub Init(ByVal objAccount_ As Account)
         mobjAccount = objAccount_
@@ -215,8 +215,8 @@ Public Class ImportUtilities
     Private Sub ConvertTransaction()
         Try
 
-            Dim objTrxTypes As VB6XmlNodeList
-            Dim elmTrxType As VB6XmlElement
+            Dim objTrxTypes As CBXmlNodeList
+            Dim elmTrxType As CBXmlElement
             Dim strSqueezedInput As String
             Dim strNormalizedInput As String
             Dim blnFailMatch As Boolean

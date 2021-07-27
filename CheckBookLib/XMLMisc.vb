@@ -8,7 +8,7 @@ Public Module XMLMisc
     'Description:
     '   Return a standard text description of an XML parse error.
 
-    Public Function gstrXMLParseErrorText(ByVal objParseError As VB6XmlParseError) As String
+    Public Function gstrXMLParseErrorText(ByVal objParseError As CBXmlParseError) As String
         With objParseError
             gstrXMLParseErrorText = "Line=" & .line & ", Message=" & .Message
         End With
@@ -17,9 +17,9 @@ Public Module XMLMisc
     'Description:
     '   Return the text of the named child element of the element passed in.
 
-    Public Function gstrGetXMLChildText(ByVal objParent As VB6XmlElement, ByVal strChild As String) As String
-        Dim objChild As VB6XmlElement
-        objChild = DirectCast(objParent.SelectSingleNode(strChild), VB6XmlElement)
+    Public Function gstrGetXMLChildText(ByVal objParent As CBXmlElement, ByVal strChild As String) As String
+        Dim objChild As CBXmlElement
+        objChild = DirectCast(objParent.SelectSingleNode(strChild), CBXmlElement)
         If objChild Is Nothing Then
             gstrGetXMLChildText = Nothing
             Exit Function

@@ -7,14 +7,14 @@ Friend Class TrxTypeListForm
 
     Private mobjHostUI As IHostUI
     Private mobjCompany As Company
-    Private mdomTypeTable As VB6XmlDocument
+    Private mdomTypeTable As CBXmlDocument
     'This is the <Table> element that will be modified.
-    Private melmTypeTable As VB6XmlElement
+    Private melmTypeTable As CBXmlElement
     'Results of searching for all <TrxType> in melmTypeTable. Must be recreated
     'when <TrxType> nodes are added or deleted in melmTypeTable.
-    Private mcolTrxTypes As VB6XmlNodeList
+    Private mcolTrxTypes As CBXmlNodeList
     'If a TrxType is displayed in the controls, this is the <TrxType> element it came from.
-    Private melmTrxTypeToSave As VB6XmlElement
+    Private melmTrxTypeToSave As CBXmlElement
     'If a TrxType is displayed in the controls, this is it ListItem.
     Private mobjDisplayedTrxType As System.Windows.Forms.ListViewItem
     'True iff Form_Activate event has fired.
@@ -122,7 +122,7 @@ Friend Class TrxTypeListForm
     End Sub
 
     Private Sub cmdNewTrxType_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewTrxType.Click
-        Dim elmTrxType As VB6XmlElement
+        Dim elmTrxType As CBXmlElement
         Dim objNewItem As System.Windows.Forms.ListViewItem
 
         Try
@@ -207,7 +207,7 @@ Friend Class TrxTypeListForm
     End Sub
 
     Private Sub ShowTrxTypeList()
-        Dim elmTrxType As VB6XmlElement
+        Dim elmTrxType As CBXmlElement
         Dim intIndex As Integer
         Dim objFirst As System.Windows.Forms.ListViewItem
 
@@ -216,7 +216,7 @@ Friend Class TrxTypeListForm
             lvwTrxTypes.Items.Clear()
             mcolTrxTypes = melmTypeTable.SelectNodes("TrxType")
             For intIndex = 1 To mcolTrxTypes.Length
-                elmTrxType = DirectCast(mcolTrxTypes.Item(intIndex - 1), VB6XmlElement)
+                elmTrxType = DirectCast(mcolTrxTypes.Item(intIndex - 1), CBXmlElement)
                 objCreateTrxTypeListItem(elmTrxType, intIndex - 1)
             Next
             System.Windows.Forms.Application.DoEvents()
@@ -260,7 +260,7 @@ Friend Class TrxTypeListForm
         Try
 
             mobjDisplayedTrxType = lvwTrxTypes.FocusedItem
-            melmTrxTypeToSave = DirectCast(mcolTrxTypes.Item(CShort(mobjDisplayedTrxType.Tag)), VB6XmlElement)
+            melmTrxTypeToSave = DirectCast(mcolTrxTypes.Item(CShort(mobjDisplayedTrxType.Tag)), CBXmlElement)
             txtNumber.Text = strTrxTypeAttrib(melmTrxTypeToSave, "Number")
             txtBefore.Text = strTrxTypeAttrib(melmTrxTypeToSave, "Before")
             txtAfter.Text = strTrxTypeAttrib(melmTrxTypeToSave, "After")
@@ -272,7 +272,7 @@ Friend Class TrxTypeListForm
         End Try
     End Sub
 
-    Private Function strTrxTypeAttrib(ByVal elm As VB6XmlElement, ByVal strName As String) As String
+    Private Function strTrxTypeAttrib(ByVal elm As CBXmlElement, ByVal strName As String) As String
 
         Dim vstrValue As Object
 
@@ -375,7 +375,7 @@ Friend Class TrxTypeListForm
         End Try
     End Sub
 
-    Private Function objCreateTrxTypeListItem(ByVal elmTrxType As VB6XmlElement, ByVal intDOMIndex As Integer) As System.Windows.Forms.ListViewItem
+    Private Function objCreateTrxTypeListItem(ByVal elmTrxType As CBXmlElement, ByVal intDOMIndex As Integer) As System.Windows.Forms.ListViewItem
         Dim objItem As System.Windows.Forms.ListViewItem
 
         objCreateTrxTypeListItem = Nothing

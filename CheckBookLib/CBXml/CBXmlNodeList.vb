@@ -3,13 +3,13 @@ Option Explicit On
 
 Imports System.Xml
 
-Public Class VB6XmlNodeList
-    Inherits System.Collections.Generic.List(Of VB6XmlNode)
+Public Class CBXmlNodeList
+    Inherits System.Collections.Generic.List(Of CBXmlNode)
 
     Public Sub New(ByVal list As XmlNodeList)
         Dim node As XmlNode
         For Each node In list
-            Me.Add(VB6XmlNode.Create(node))
+            Me.Add(CBXmlNode.Create(node))
         Next
     End Sub
 

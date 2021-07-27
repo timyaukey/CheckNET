@@ -3,12 +3,12 @@ Option Explicit On
 
 Imports System.Xml
 
-Public Class VB6XmlDocument
-    Inherits VB6XmlNode
+Public Class CBXmlDocument
+    Inherits CBXmlNode
 
     Private mDoc As XmlDocument
     Private mstrFullPath As String
-    Private mParseError As VB6XmlParseError
+    Private mParseError As CBXmlParseError
 
     Public Sub New()
         Me.New(New XmlDocument())
@@ -19,8 +19,8 @@ Public Class VB6XmlDocument
         mDoc = DirectCast(doc, XmlDocument)
     End Sub
 
-    Public Function CreateElement(ByVal strElementName As String) As VB6XmlElement
-        Return DirectCast(VB6XmlNode.Create(mDoc.CreateElement(strElementName)), VB6XmlElement)
+    Public Function CreateElement(ByVal strElementName As String) As CBXmlElement
+        Return DirectCast(CBXmlNode.Create(mDoc.CreateElement(strElementName)), CBXmlElement)
     End Function
 
     Public Sub Load(ByVal strFullPath As String)
@@ -29,7 +29,7 @@ Public Class VB6XmlDocument
         Try
             mDoc.Load(strFullPath)
         Catch ex As XmlException
-            mParseError = New VB6XmlParseError(ex)
+            mParseError = New CBXmlParseError(ex)
         End Try
     End Sub
 
@@ -41,7 +41,7 @@ Public Class VB6XmlDocument
         mDoc.Save(strFullPath)
     End Sub
 
-    Public ReadOnly Property ParseError() As VB6XmlParseError
+    Public ReadOnly Property ParseError() As CBXmlParseError
         Get
             ParseError = mParseError
         End Get
@@ -57,13 +57,13 @@ Public Class VB6XmlDocument
         'mDoc.setProperty(strName, strValue)
     End Sub
 
-    Public ReadOnly Property DocumentElement() As VB6XmlElement
+    Public ReadOnly Property DocumentElement() As CBXmlElement
         Get
-            DocumentElement = New VB6XmlElement(mDoc.DocumentElement)
+            DocumentElement = New CBXmlElement(mDoc.DocumentElement)
         End Get
     End Property
 
-    Public Function CreateTextNode(ByVal strText As String) As VB6XmlText
-        CreateTextNode = New VB6XmlText(mDoc.CreateTextNode(strText))
+    Public Function CreateTextNode(ByVal strText As String) As CBXmlText
+        CreateTextNode = New CBXmlText(mDoc.CreateTextNode(strText))
     End Function
 End Class

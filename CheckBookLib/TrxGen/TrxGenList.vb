@@ -11,11 +11,11 @@ Public Class TrxGenList
     Private mintStartRepeatSeq As Integer
     Private maudtTrx() As TrxToCreate
 
-    Public Overrides Function Load(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String
+    Public Overrides Function Load(ByVal domDoc As CBXmlDocument, ByVal objAccount As Account) As String
 
         Dim strError As String
-        Dim nodeTrx As VB6XmlNode
-        Dim elmTrx As VB6XmlElement
+        Dim nodeTrx As CBXmlNode
+        Dim elmTrx As CBXmlElement
         Dim udtTrx As TrxToCreate = New TrxToCreate()
         Dim datDate As Date
         Dim curAmount As Decimal
@@ -38,8 +38,8 @@ Public Class TrxGenList
         intNextRepeatSeq = mintStartRepeatSeq
         ReDim maudtTrx(1)
         For Each nodeTrx In domDoc.DocumentElement.ChildNodes
-            If TypeOf nodeTrx Is VB6XmlElement Then
-                elmTrx = DirectCast(nodeTrx, VB6XmlElement)
+            If TypeOf nodeTrx Is CBXmlElement Then
+                elmTrx = DirectCast(nodeTrx, CBXmlElement)
                 blnAddTrx = False
                 'To allow budget and xfer trx all that should be necessary
                 'is to clone the "If" statement below for the appropriate element
@@ -70,7 +70,7 @@ Public Class TrxGenList
         Return ""
     End Function
 
-    Private Function strGetCommonFields(ByVal elmTrx As VB6XmlElement, ByRef datDate As Date, ByRef curAmount As Decimal) As String
+    Private Function strGetCommonFields(ByVal elmTrx As CBXmlElement, ByRef datDate As Date, ByRef curAmount As Decimal) As String
 
         Dim vntAttrib As Object
 

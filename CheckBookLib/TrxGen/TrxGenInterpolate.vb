@@ -13,10 +13,10 @@ Public Class TrxGenInterpolate
     Private mstrRepeatKey As String
     Private mintStartRepeatSeq As Integer
 
-    Public Overrides Function Load(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String
+    Public Overrides Function Load(ByVal domDoc As CBXmlDocument, ByVal objAccount As Account) As String
 
         Dim strError As String
-        Dim elmRepeat As VB6XmlElement = Nothing
+        Dim elmRepeat As CBXmlElement = Nothing
 
         strError = LoadCore(domDoc)
         If strError <> "" Then

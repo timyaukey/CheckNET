@@ -3,7 +3,7 @@ Option Explicit On
 
 Imports System.Xml
 
-Public Class VB6XmlParseError
+Public Class CBXmlParseError
     Private mError As XmlException
 
     Public Sub New(ByVal parseError As XmlException)

@@ -10,14 +10,14 @@ Friend Class PayeeListForm
     Private mobjHostUI As IHostUI
     Private mobjCompany As Company
     'A deep clone of gdomTransTable.
-    Private mdomNewTransTable As VB6XmlDocument
+    Private mdomNewTransTable As CBXmlDocument
     'This is the <Table> element that will be modified, mdomNewTransTable.documentElement.
-    Private melmTransTable As VB6XmlElement
+    Private melmTransTable As CBXmlElement
     'Results of searching for all <Payee> in melmTransTable. Must be recreated
     'when <Payee> nodes are added or deleted in melmTransTable.
-    Private mcolPayees As VB6XmlNodeList
+    Private mcolPayees As CBXmlNodeList
     'If a payee is displayed in the controls, this is the <Payee> element it came from.
-    Private melmPayeeToSave As VB6XmlElement
+    Private melmPayeeToSave As CBXmlElement
     'If a payee is displayed in the controls, this is it ListItem.
     Private mobjDisplayedPayee As System.Windows.Forms.ListViewItem
     'True iff Form_Activate event has fired.
@@ -86,7 +86,7 @@ Friend Class PayeeListForm
     End Sub
 
     Private Sub cmdNewPayee_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewPayee.Click
-        Dim elmPayee As VB6XmlElement
+        Dim elmPayee As CBXmlElement
         Dim objNewItem As System.Windows.Forms.ListViewItem
 
         Try
@@ -163,7 +163,7 @@ Friend Class PayeeListForm
     End Sub
 
     Private Sub ShowPayeeList()
-        Dim elmPayee As VB6XmlElement
+        Dim elmPayee As CBXmlElement
         Dim intIndex As Short
         Dim objFirst As System.Windows.Forms.ListViewItem
 
@@ -269,7 +269,7 @@ Friend Class PayeeListForm
     End Function
 
     Private Function strPayeeChild(ByVal strName As String) As String
-        Dim elmChild As VB6XmlElement
+        Dim elmChild As CBXmlElement
 
         elmChild = melmPayeeToSave.SelectSingleNode(strName)
         If elmChild Is Nothing Then
@@ -436,7 +436,7 @@ Friend Class PayeeListForm
     End Sub
 
     Private Sub SaveChildElement(ByVal strValue As String, ByVal strChildName As String)
-        Dim elmChild As VB6XmlElement
+        Dim elmChild As CBXmlElement
         elmChild = melmPayeeToSave.SelectSingleNode(strChildName)
         If elmChild Is Nothing Then
             elmChild = mdomNewTransTable.CreateElement(strChildName)

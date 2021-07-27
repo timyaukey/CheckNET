@@ -3,8 +3,8 @@ Option Explicit On
 
 Imports System.Xml
 
-Public Class VB6XmlText
-    Inherits VB6XmlNode
+Public Class CBXmlText
+    Inherits CBXmlNode
 
     Private mText As XmlText
 

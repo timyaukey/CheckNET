@@ -6,12 +6,12 @@ Friend Class PayeeMatchForm
     Inherits System.Windows.Forms.Form
 
     Private mobjHostUI As IHostUI
-    Private mcolPayees As VB6XmlNodeList
-    Private melmSelect As VB6XmlElement
+    Private mcolPayees As CBXmlNodeList
+    Private melmSelect As CBXmlElement
     Private mblnActivated As Boolean
 
-    Public Function elmSelect(ByVal objHostUI As IHostUI, ByVal colPayees As VB6XmlNodeList) As VB6XmlElement
-        Dim elmPayee As VB6XmlElement
+    Public Function elmSelect(ByVal objHostUI As IHostUI, ByVal colPayees As CBXmlNodeList) As CBXmlElement
+        Dim elmPayee As CBXmlElement
         Dim intIndex As Short
 
         mobjHostUI = objHostUI

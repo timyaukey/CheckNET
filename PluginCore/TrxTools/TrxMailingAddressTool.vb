@@ -22,8 +22,8 @@ Public Class TrxMailingAddressTool
 
     Public Sub Run(objHostTrxToolUI As IHostTrxToolUI) Implements ITrxTool.Run
 
-        Dim colPayees As VB6XmlNodeList
-        Dim objPayee As VB6XmlElement
+        Dim colPayees As CBXmlNodeList
+        Dim objPayee As CBXmlElement
         Dim strMsg As String
         Dim strPayee As String
         Dim strAddress2 As String

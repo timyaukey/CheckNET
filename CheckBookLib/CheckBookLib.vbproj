@@ -201,12 +201,12 @@
     <Compile Include="UITypeEditors\StringTranslatorUIEditor.vb" />
     <Compile Include="MainLicenseValidator.vb" />
     <Compile Include="Utilities.vb" />
-    <Compile Include="VB6Xml\VB6XmlDocument.vb" />
-    <Compile Include="VB6Xml\VB6XmlElement.vb" />
-    <Compile Include="VB6Xml\VB6XmlNode.vb" />
-    <Compile Include="VB6Xml\VB6XmlNodeList.vb" />
-    <Compile Include="VB6Xml\VB6XmlParseError.vb" />
-    <Compile Include="VB6Xml\VB6XmlText.vb" />
+    <Compile Include="CBXml\CBXmlDocument.vb" />
+    <Compile Include="CBXml\CBXmlElement.vb" />
+    <Compile Include="CBXml\CBXmlNode.vb" />
+    <Compile Include="CBXml\CBXmlNodeList.vb" />
+    <Compile Include="CBXml\CBXmlParseError.vb" />
+    <Compile Include="CBXml\CBXmlText.vb" />
     <Compile Include="XMLMisc.vb" />
   </ItemGroup>
   <ItemGroup>

@@ -1630,11 +1630,11 @@ Public Class TrxForm
     Private Function blnFindPayee(ByRef strPayee As String, ByRef strCategory As String, ByRef strNumber As String,
                                   ByRef strBudget As String, ByRef strAmount As String, ByRef strMemo As String) As Boolean
 
-        Dim colPayees As VB6XmlNodeList
+        Dim colPayees As CBXmlNodeList
         'Dim strInput As String
         'Dim strXPath As String
-        Dim elmPayee As VB6XmlElement
-        Dim elmChild As VB6XmlElement
+        Dim elmPayee As CBXmlElement
+        Dim elmChild As CBXmlElement
         Dim frm As PayeeMatchForm
 
         Try
@@ -1647,7 +1647,7 @@ Public Class TrxForm
                 Exit Function
             End If
             If colPayees.Length = 1 Then
-                elmPayee = DirectCast(colPayees.Item(0), VB6XmlElement)
+                elmPayee = DirectCast(colPayees.Item(0), CBXmlElement)
             Else
                 frm = New PayeeMatchForm
                 elmPayee = frm.elmSelect(mobjHostUI, colPayees)
@@ -1656,23 +1656,23 @@ Public Class TrxForm
                 End If
             End If
             strPayee = CStr(elmPayee.GetAttribute("Output"))
-            elmChild = DirectCast(elmPayee.SelectSingleNode("Cat"), VB6XmlElement)
+            elmChild = DirectCast(elmPayee.SelectSingleNode("Cat"), CBXmlElement)
             If Not elmChild Is Nothing Then
                 strCategory = elmChild.Text
             End If
-            elmChild = DirectCast(elmPayee.SelectSingleNode("Num"), VB6XmlElement)
+            elmChild = DirectCast(elmPayee.SelectSingleNode("Num"), CBXmlElement)
             If Not elmChild Is Nothing Then
                 strNumber = elmChild.Text
             End If
-            elmChild = DirectCast(elmPayee.SelectSingleNode("Amount"), VB6XmlElement)
+            elmChild = DirectCast(elmPayee.SelectSingleNode("Amount"), CBXmlElement)
             If Not elmChild Is Nothing Then
                 strAmount = elmChild.Text
             End If
-            elmChild = DirectCast(elmPayee.SelectSingleNode("Budget"), VB6XmlElement)
+            elmChild = DirectCast(elmPayee.SelectSingleNode("Budget"), CBXmlElement)
             If Not elmChild Is Nothing Then
                 strBudget = elmChild.Text
             End If
-            elmChild = DirectCast(elmPayee.SelectSingleNode("Memo"), VB6XmlElement)
+            elmChild = DirectCast(elmPayee.SelectSingleNode("Memo"), CBXmlElement)
             If Not elmChild Is Nothing Then
                 strMemo = elmChild.Text
             End If

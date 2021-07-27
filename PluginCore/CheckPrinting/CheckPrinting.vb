@@ -13,7 +13,7 @@ Public Class CheckPrinting
     Private mdblMarginTop As Double
     Private mdblCurrentX As Double
     Private mdblCurrentY As Double
-    Private mdomCheckFormat As VB6XmlDocument
+    Private mdomCheckFormat As CBXmlDocument
     Private mobjTrx As BankTrx
     Private mobjFont As Font
 
@@ -61,9 +61,9 @@ Public Class CheckPrinting
     Private Function blnGetCheckFormat() As Boolean
 
         Dim strCheckFormatFile As String
-        Dim objParseError As VB6XmlParseError
+        Dim objParseError As CBXmlParseError
 
-        mdomCheckFormat = New VB6XmlDocument
+        mdomCheckFormat = New CBXmlDocument
         strCheckFormatFile = mobjHostUI.objCompany.CheckFormatFilePath()
         mdomCheckFormat.Load(strCheckFormatFile)
         objParseError = mdomCheckFormat.ParseError
@@ -112,8 +112,8 @@ Public Class CheckPrinting
     End Function
 
     Private Sub pd_PrintPage(ByVal sender As Object, ByVal ev As PrintPageEventArgs)
-        Dim colPayees As VB6XmlNodeList
-        Dim objPayee As VB6XmlElement
+        Dim colPayees As CBXmlNodeList
+        Dim objPayee As CBXmlElement
         Dim strMailName As String = ""
         Dim strMailAddr As String = ""
         Dim strMailAddr2 As String = ""
@@ -122,7 +122,7 @@ Public Class CheckPrinting
         Dim strAccountNumber As String = ""
         Dim intPayeeIndex As Integer
         Dim intSemiPos As Integer
-        Dim elmItem As VB6XmlElement = Nothing
+        Dim elmItem As CBXmlElement = Nothing
         Dim dblX As Double
         Dim dblY As Double
         Dim dblLineHeight As Double
@@ -143,7 +143,7 @@ Public Class CheckPrinting
             If intPayeeIndex >= colPayees.Length Then
                 Exit Do
             End If
-            objPayee = DirectCast(colPayees(intPayeeIndex), VB6XmlElement)
+            objPayee = DirectCast(colPayees(intPayeeIndex), CBXmlElement)
             strMailAddr = gstrGetXMLChildText(objPayee, "Address1")
             strMailAddr2 = gstrGetXMLChildText(objPayee, "Address2")
             strMailCityStateZip = gstrGetXMLChildText(objPayee, "City") & ", " & gstrGetXMLChildText(objPayee, "State") & " " & gstrGetXMLChildText(objPayee, "Zip")
@@ -204,7 +204,7 @@ Public Class CheckPrinting
 
     Private Sub PrintInvoiceNumbers(ByVal strItemName As String, ByVal objTrx As BankTrx, ByVal dblLineHeight As Double, ByVal ev As PrintPageEventArgs)
 
-        Dim elmInvoiceList As VB6XmlElement
+        Dim elmInvoiceList As CBXmlElement
         Dim dblX As Double
         Dim dblY As Double
         Dim dblStartY As Double
@@ -279,7 +279,7 @@ Public Class CheckPrinting
 
     Private Sub PrintCheckText(ByVal strItemName As String, ByVal strValue As String, ByVal ev As PrintPageEventArgs)
 
-        Dim elmItem As VB6XmlElement = Nothing
+        Dim elmItem As CBXmlElement = Nothing
         Dim dblX As Double
         Dim dblY As Double
 
@@ -300,7 +300,7 @@ Public Class CheckPrinting
 
     Private Sub PrintOptionalCheckText(ByVal strItemName As String, ByVal strValue As String, ByVal ev As PrintPageEventArgs)
 
-        Dim elmItem As VB6XmlElement
+        Dim elmItem As CBXmlElement
         Dim dblX As Double
         Dim dblY As Double
 
@@ -339,7 +339,7 @@ Public Class CheckPrinting
         mdblCurrentY = dblY - mdblMarginTop
     End Sub
 
-    Private Sub GetCheckPrintPos(ByVal strItemName As String, ByRef elmItem As VB6XmlElement, ByRef dblX As Double, ByRef dblY As Double)
+    Private Sub GetCheckPrintPos(ByVal strItemName As String, ByRef elmItem As CBXmlElement, ByRef dblX As Double, ByRef dblY As Double)
 
         elmItem = objGetCheckPrintPos(strItemName, dblX, dblY)
         If elmItem Is Nothing Then
@@ -348,14 +348,14 @@ Public Class CheckPrinting
         End If
     End Sub
 
-    Private Function objGetCheckPrintPos(ByVal strItemName As String, ByRef dblX As Double, ByRef dblY As Double) As VB6XmlElement
+    Private Function objGetCheckPrintPos(ByVal strItemName As String, ByRef dblX As Double, ByRef dblY As Double) As CBXmlElement
 
-        Dim elmItem As VB6XmlElement
+        Dim elmItem As CBXmlElement
         Dim vntAttrib As Object
 
         objGetCheckPrintPos = Nothing
 
-        elmItem = DirectCast(mdomCheckFormat.DocumentElement.SelectSingleNode(strItemName), VB6XmlElement)
+        elmItem = DirectCast(mdomCheckFormat.DocumentElement.SelectSingleNode(strItemName), CBXmlElement)
         If elmItem Is Nothing Then
             Exit Function
         End If

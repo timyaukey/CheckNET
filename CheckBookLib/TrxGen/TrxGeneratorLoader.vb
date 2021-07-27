@@ -12,7 +12,7 @@ Public Module TrxGeneratorLoader
     '   Load() for it. Displays a diagnostic error if bad or missing data in XML document.
     '$Returns The ITrxGenerator created if successful, or Nothing.
 
-    Private Function CreateTrxGenerator(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As ITrxGenerator
+    Private Function CreateTrxGenerator(ByVal domDoc As CBXmlDocument, ByVal objAccount As Account) As ITrxGenerator
 
         Dim vntClassName As Object
         Dim strClassName As String
@@ -59,8 +59,8 @@ Public Module TrxGeneratorLoader
 
         Dim strPath As String
         Dim strFullXMLFile As String
-        Dim domDoc As VB6XmlDocument
-        Dim objParseError As VB6XmlParseError
+        Dim domDoc As CBXmlDocument
+        Dim objParseError As CBXmlParseError
         Dim objGenerator As ITrxGenerator
         Dim colResults As ICollection(Of ITrxGenerator)
         Dim strRepeatKeysUsed As String = ""
@@ -71,7 +71,7 @@ Public Module TrxGeneratorLoader
         If IO.Directory.Exists(strPath) Then
             For Each strFullXMLFile In IO.Directory.EnumerateFiles(strPath, "*.gen")
                 Try
-                    domDoc = New VB6XmlDocument
+                    domDoc = New CBXmlDocument
                     domDoc.Load(strFullXMLFile)
                     objParseError = domDoc.ParseError
                     If Not objParseError Is Nothing Then
@@ -107,7 +107,7 @@ Public Module TrxGeneratorLoader
 
     '$Description Report an error detected while loading a transaction generator file.
 
-    Public Sub ShowTrxGeneratorLoadError(ByVal domDoc As VB6XmlDocument, ByVal strError As String)
+    Public Sub ShowTrxGeneratorLoadError(ByVal domDoc As CBXmlDocument, ByVal strError As String)
         Dim strDescription As String
         Dim vntDescription As Object
         vntDescription = domDoc.DocumentElement.GetAttribute("description")
@@ -171,7 +171,7 @@ Public Module TrxGeneratorLoader
     '$Returns A non-empty error message if bad or missing data was encountered,
     '   else an empty string.
 
-    Public Function LoadTrxGeneratorCore(ByVal domDoc As VB6XmlDocument, ByRef blnEnabled As Boolean, ByRef strRepeatKey As String, ByRef intStartRepeatSeq As Integer, ByRef strDescription As String, ByVal objAccount As Account) As String
+    Public Function LoadTrxGeneratorCore(ByVal domDoc As CBXmlDocument, ByRef blnEnabled As Boolean, ByRef strRepeatKey As String, ByRef intStartRepeatSeq As Integer, ByRef strDescription As String, ByVal objAccount As Account) As String
 
         Dim vntAttrib As Object
 
@@ -230,13 +230,13 @@ Public Module TrxGeneratorLoader
     '$Returns A non-empty error message if bad or missing data was encountered,
     '   else an empty string.
 
-    Public Function GetTrxGenDateSequenceParams(ByVal elmParent As VB6XmlElement, ByVal strChildName As String, ByRef elmChild As VB6XmlElement, ByRef datParams As DateSequenceParams) As String
+    Public Function GetTrxGenDateSequenceParams(ByVal elmParent As CBXmlElement, ByVal strChildName As String, ByRef elmChild As CBXmlElement, ByRef datParams As DateSequenceParams) As String
 
         Dim vntAttrib As Object
 
         GetTrxGenDateSequenceParams = ""
 
-        elmChild = DirectCast(elmParent.SelectSingleNode(strChildName), VB6XmlElement)
+        elmChild = DirectCast(elmParent.SelectSingleNode(strChildName), CBXmlElement)
         If elmChild Is Nothing Then
             GetTrxGenDateSequenceParams = "Could not find <" & strChildName & "> element"
             Exit Function
@@ -301,10 +301,10 @@ Public Module TrxGeneratorLoader
     '   This allows a "for" loop from 1 to UBound(array) to interate the
     '   elements even if no SequencedTrx were created.
 
-    Public Function LoadTrxGenSequencedTrx(ByVal elmParent As VB6XmlElement, ByVal strChildName As String, ByVal dblDefaultPercentIncrease As Double, ByVal intStartRepeatSeq As Integer, ByRef strError As String) As SequencedTrx()
+    Public Function LoadTrxGenSequencedTrx(ByVal elmParent As CBXmlElement, ByVal strChildName As String, ByVal dblDefaultPercentIncrease As Double, ByVal intStartRepeatSeq As Integer, ByRef strError As String) As SequencedTrx()
 
-        Dim colSeq As VB6XmlNodeList
-        Dim elmSeq As VB6XmlElement
+        Dim colSeq As CBXmlNodeList
+        Dim elmSeq As CBXmlElement
         Dim datResults() As SequencedTrx
         Dim intResultIndex As Integer
         Dim strErrorEnding As String
@@ -343,7 +343,7 @@ Public Module TrxGeneratorLoader
 
     '$Description Create one SequencedTrx from attributes of an XML element.
 
-    Public Function CreateOneSequencedTrx(ByVal elmSeq As VB6XmlElement, ByVal dblDefaultPercentIncrease As Double, ByVal intRepeatSeq As Integer, ByVal strErrorEnding As String, ByRef strError As String) As SequencedTrx
+    Public Function CreateOneSequencedTrx(ByVal elmSeq As CBXmlElement, ByVal dblDefaultPercentIncrease As Double, ByVal intRepeatSeq As Integer, ByVal strErrorEnding As String, ByRef strError As String) As SequencedTrx
 
         Dim vntAttrib As Object
         Dim curAmount As Decimal
@@ -511,19 +511,19 @@ Public Module TrxGeneratorLoader
     '$Returns A non-empty error message if bad or missing data was encountered,
     '   else an empty string.
 
-    Public Function GetTrxGenTemplate(ByVal objCompany As Company, ByRef domDoc As VB6XmlDocument, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
+    Public Function GetTrxGenTemplate(ByVal objCompany As Company, ByRef domDoc As CBXmlDocument, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
-        Dim elmTrxTpt As VB6XmlElement
+        Dim elmTrxTpt As CBXmlElement
 
         'Clear everything.
         'LSet datTrxTemplate = mdatNullTrxToCreate
         datTrxTemplate = CopyTrxToCreate(mdatNullTrxToCreate)
 
-        elmTrxTpt = DirectCast(domDoc.DocumentElement.SelectSingleNode("normaltrx"), VB6XmlElement)
+        elmTrxTpt = DirectCast(domDoc.DocumentElement.SelectSingleNode("normaltrx"), CBXmlElement)
         If elmTrxTpt Is Nothing Then
-            elmTrxTpt = DirectCast(domDoc.DocumentElement.SelectSingleNode("budgettrx"), VB6XmlElement)
+            elmTrxTpt = DirectCast(domDoc.DocumentElement.SelectSingleNode("budgettrx"), CBXmlElement)
             If elmTrxTpt Is Nothing Then
-                elmTrxTpt = DirectCast(domDoc.DocumentElement.SelectSingleNode("transfertrx"), VB6XmlElement)
+                elmTrxTpt = DirectCast(domDoc.DocumentElement.SelectSingleNode("transfertrx"), CBXmlElement)
                 If elmTrxTpt Is Nothing Then
                     GetTrxGenTemplate = "Unable to find <normaltrx>, <budgettrx> or <transfertrx> element"
                     Exit Function
@@ -545,7 +545,7 @@ Public Module TrxGeneratorLoader
     '$Description Set fields of a TrxToCreate structure that are used by a transfer BaseTrx,
     '   from the arguments passed in.
 
-    Public Function GetTrxGenTemplateTransfer(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
+    Public Function GetTrxGenTemplateTransfer(ByVal elmTrxTpt As CBXmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim vntAttrib As Object
 
@@ -569,7 +569,7 @@ Public Module TrxGeneratorLoader
     '$Description Set fields of a TrxToCreate structure that are used by a budget BaseTrx,
     '   from the arguments passed in.
 
-    Public Function GetTrxGenTemplateBudget(ByVal objCompany As Company, ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
+    Public Function GetTrxGenTemplateBudget(ByVal objCompany As Company, ByVal elmTrxTpt As CBXmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim vntAttrib As Object
 
@@ -619,7 +619,7 @@ Public Module TrxGeneratorLoader
     '$Description Set fields of a TrxToCreate structure that are used by a normal BaseTrx,
     '   from the arguments passed in.
 
-    Public Function GetTrxGenTemplateBank(ByVal objCompany As Company, ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
+    Public Function GetTrxGenTemplateBank(ByVal objCompany As Company, ByVal elmTrxTpt As CBXmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim vntAttrib As Object
         Dim datSplit As SplitToCreate = Nothing
@@ -681,7 +681,7 @@ Public Module TrxGeneratorLoader
     '$Description Set fields of a TrxToCreate structure that are common to all BaseTrx
     '   types, from the arguments passed in.
 
-    Public Function GetTrxGenTemplateShared(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByRef datTrxTemplate As TrxToCreate) As String
+    Public Function GetTrxGenTemplateShared(ByVal elmTrxTpt As CBXmlElement, ByVal strRepeatKey As String, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim vntAttrib As Object
 

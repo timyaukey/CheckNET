@@ -10,11 +10,11 @@ Public Class EventLog
     'Collection of ILogGroupStart objects for open groups.
     Private mcolGroups As List(Of ILogGroupStart)
     'The XML document used to build log output.
-    Private mdomOutput As VB6XmlDocument
+    Private mdomOutput As CBXmlDocument
     'Element to add events to.
-    Private melmEventContainer As VB6XmlElement
+    Private melmEventContainer As CBXmlElement
     'Current event element.
-    Private melmEvent As VB6XmlElement
+    Private melmEvent As CBXmlElement
     'Register this log is for.
     Private mobjReg As Register
     'Company this log is for.
@@ -44,7 +44,7 @@ Public Class EventLog
 
     Public Sub WriteAll(ByVal strAccountTitle As String, ByVal objRepeats As IStringTranslator)
         Dim objLogger As ILogger
-        Dim objParseError As VB6XmlParseError
+        Dim objParseError As CBXmlParseError
         Dim strLogFolder As String
         Dim strLogFile As String
         Dim blnRequired As Boolean
@@ -61,7 +61,7 @@ Public Class EventLog
             Exit Sub
         End If
 
-        mdomOutput = New VB6XmlDocument
+        mdomOutput = New CBXmlDocument
         mdomOutput.LoadXml("<Activity Login=""" & mstrLogin & """ SessionStart=""" & Utilities.strFormatDate(mdatStart, "G") & """></Activity>")
         objParseError = mdomOutput.ParseError
         If Not objParseError Is Nothing Then
@@ -143,9 +143,9 @@ Public Class EventLog
 
     'Called by ILogger objects.
     Public Sub WriteTrx(ByVal strName As String, ByVal objTrx As BaseTrx)
-        Dim elmTrx As VB6XmlElement
+        Dim elmTrx As CBXmlElement
         Dim objSplit As TrxSplit
-        Dim elmSplitParent As VB6XmlElement
+        Dim elmSplitParent As CBXmlElement
         Dim objNormalTrx As BankTrx
         elmTrx = mdomOutput.CreateElement(strName)
         melmEvent.AppendChild(elmTrx)
@@ -211,7 +211,7 @@ Public Class EventLog
 
     'Called by ILogger objects.
     Public Sub GroupStart(ByVal strTitle As String)
-        Dim elmNewGroup As VB6XmlElement
+        Dim elmNewGroup As CBXmlElement
         elmNewGroup = mdomOutput.CreateElement("Group")
         elmNewGroup.SetAttribute("Title", strTitle)
         melmEventContainer.AppendChild(elmNewGroup)
@@ -220,6 +220,6 @@ Public Class EventLog
 
     'Called by ILogger objects.
     Public Sub GroupEnd()
-        melmEventContainer = DirectCast(melmEventContainer.ParentNode, VB6XmlElement)
+        melmEventContainer = DirectCast(melmEventContainer.ParentNode, CBXmlElement)
     End Sub
 End Class
