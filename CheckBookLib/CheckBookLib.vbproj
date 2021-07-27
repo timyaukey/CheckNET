@@ -83,7 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.vb" />
-    <Compile Include="BooleanStringTypeConverter.vb" />
+    <Compile Include="UITypeEditors\BooleanStringTypeConverter.vb" />
     <Compile Include="BudgetTranslator.vb" />
     <Compile Include="CategoryTranslator.vb" />
     <Compile Include="AgingUtils.vb" />
