@@ -9,7 +9,7 @@ Imports System.Windows.Forms.Design
 Public MustInherit Class StringTranslatorUIEditor
     Inherits UITypeEditor
 
-    Public Shared objCompany As Company
+    Public Shared Company As Company
 
     Public Overrides Function GetEditStyle(context As ITypeDescriptorContext) As UITypeEditorEditStyle
         Return UITypeEditorEditStyle.DropDown
@@ -55,7 +55,7 @@ Public Class CategoryUIEditor
     Inherits StringTranslatorUIEditor
 
     Protected Overrides Function GetStringTranslator() As IStringTranslator
-        Return objCompany.Categories
+        Return Company.Categories
     End Function
 End Class
 
@@ -63,7 +63,7 @@ Public Class BudgetUIEditor
     Inherits StringTranslatorUIEditor
 
     Protected Overrides Function GetStringTranslator() As IStringTranslator
-        Return objCompany.Budgets
+        Return Company.Budgets
     End Function
 End Class
 
@@ -94,7 +94,7 @@ Public Class CategoryConverter
 
     Public Overrides Function ConvertTo(context As ITypeDescriptorContext, culture As Globalization.CultureInfo, value As Object, destinationType As Type) As Object
         If destinationType Is GetType(String) And TypeOf value Is String Then
-            Return StringTranslatorUIEditor.objCompany.Categories.strKeyToValue1(CType(value, String))
+            Return StringTranslatorUIEditor.Company.Categories.strKeyToValue1(CType(value, String))
         End If
 
         Return MyBase.ConvertTo(context, culture, value, destinationType)
@@ -113,7 +113,7 @@ Public Class BudgetConverter
 
     Public Overrides Function ConvertTo(context As ITypeDescriptorContext, culture As Globalization.CultureInfo, value As Object, destinationType As Type) As Object
         If destinationType Is GetType(String) And TypeOf value Is String Then
-            Return StringTranslatorUIEditor.objCompany.Budgets.strKeyToValue1(CType(value, String))
+            Return StringTranslatorUIEditor.Company.Budgets.strKeyToValue1(CType(value, String))
         End If
 
         Return MyBase.ConvertTo(context, culture, value, destinationType)

@@ -10,7 +10,7 @@ Public Class ObjectEditorForm
     Public Function ShowEditor(ByVal objHostUI As IHostUI, ByVal objData As IFilePersistable, ByVal strTitle As String) As Boolean
         Dim result As DialogResult
         mobjHostUI = objHostUI
-        StringTranslatorUIEditor.objCompany = mobjHostUI.objCompany
+        StringTranslatorUIEditor.Company = mobjHostUI.objCompany
         mobjData = objData
         grdData.SelectedObject = mobjData
         Me.Text = strTitle
