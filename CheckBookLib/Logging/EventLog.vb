@@ -65,7 +65,7 @@ Public Class EventLog
         mdomOutput.LoadXml("<Activity Login=""" & mstrLogin & """ SessionStart=""" & Utilities.strFormatDate(mdatStart, "G") & """></Activity>")
         objParseError = mdomOutput.ParseError
         If Not objParseError Is Nothing Then
-            ShowTrxGenLoadError("", gstrXMLParseErrorText(objParseError))
+            ShowTrxGeneratorLoadError("", gstrXMLParseErrorText(objParseError))
             Exit Sub
         End If
         mdomOutput.SetProperty("SelectionLanguage", "XPath")

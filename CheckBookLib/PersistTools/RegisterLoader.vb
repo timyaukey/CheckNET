@@ -300,7 +300,7 @@ Public Class RegisterLoader
     Private Function ConvertRepeatUnit(ByVal strInput As String, ByVal strContext As String) As BaseTrx.RepeatUnit
 
         Dim lngResult As BaseTrx.RepeatUnit
-        lngResult = glngConvertRepeatUnit(strInput)
+        lngResult = ConvertTrxGenRepeatUnit(strInput)
         If lngResult = BaseTrx.RepeatUnit.Missing Then
             RaiseErrorInLoad("Unrecognized unit name in " & strContext)
         End If
@@ -311,7 +311,7 @@ Public Class RegisterLoader
 
         Dim intResult As Short
 
-        intResult = gintConvertRepeatCount(strInput)
+        intResult = ConvertTrxGenRepeatCount(strInput)
         If intResult = 0 Then
             RaiseErrorInLoad(strContext & " has non-numeric or non-positive value")
         End If

@@ -26,12 +26,12 @@ Public Class TGETemplateBase
         Return Nothing
     End Function
 
-    Public Overridable Function blnIsEmpty() As Boolean
+    Public Overridable Function IsEmpty() As Boolean
         Return String.IsNullOrEmpty(Number) And String.IsNullOrEmpty(Description)
     End Function
 
     Public Overrides Function ToString() As String
-        If blnIsEmpty() Then
+        If IsEmpty() Then
             Return "(empty)"
         Else
             Return "(expand)"

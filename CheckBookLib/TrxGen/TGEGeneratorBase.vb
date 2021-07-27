@@ -67,12 +67,12 @@ Public MustInherit Class TGEGeneratorBase
         Dim result As String
         Dim intTemplateCount As Integer = 0
         If Not NormalTrx Is Nothing Then
-            If Not NormalTrx.blnIsEmpty Then
+            If Not NormalTrx.IsEmpty Then
                 intTemplateCount = intTemplateCount + 1
             End If
         End If
         If Not BudgetTrx Is Nothing Then
-            If Not BudgetTrx.blnIsEmpty() Then
+            If Not BudgetTrx.IsEmpty() Then
                 intTemplateCount = intTemplateCount + 1
             End If
         End If
@@ -80,7 +80,7 @@ Public MustInherit Class TGEGeneratorBase
             Return "Either normal or budget template transaction is required, but not both"
         End If
         If Not NormalTrx Is Nothing Then
-            If Not NormalTrx.blnIsEmpty() Then
+            If Not NormalTrx.IsEmpty() Then
                 result = NormalTrx.Validate()
                 If Not result Is Nothing Then
                     Return result
@@ -88,7 +88,7 @@ Public MustInherit Class TGEGeneratorBase
             End If
         End If
         If Not BudgetTrx Is Nothing Then
-            If Not BudgetTrx.blnIsEmpty() Then
+            If Not BudgetTrx.IsEmpty() Then
                 result = BudgetTrx.Validate()
                 If Not result Is Nothing Then
                     Return result
@@ -110,12 +110,12 @@ Public MustInherit Class TGEGeneratorBase
 
     Public Overridable Sub CleanForSave() Implements IFilePersistable.CleanForSave
         If Not NormalTrx Is Nothing Then
-            If NormalTrx.blnIsEmpty() Then
+            If NormalTrx.IsEmpty() Then
                 NormalTrx = Nothing
             End If
         End If
         If Not BudgetTrx Is Nothing Then
-            If BudgetTrx.blnIsEmpty() Then
+            If BudgetTrx.IsEmpty() Then
                 BudgetTrx = Nothing
             End If
         End If

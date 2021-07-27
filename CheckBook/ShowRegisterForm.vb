@@ -383,7 +383,7 @@ Friend Class ShowRegisterForm
         With maudtElement(lstRegisters.SelectedIndex)
 
             Using frm As New FileListEditorForm
-                frm.ShowDialogForPath(mobjHostUI, "Transaction Generators", gstrGeneratorPath(.objAccount, .objSelectedReg),
+                frm.ShowDialogForPath(mobjHostUI, "Transaction Generators", TrxGeneratorPath(.objAccount, .objSelectedReg),
                     "gen", New TrxGenFilePersister())
             End Using
         End With

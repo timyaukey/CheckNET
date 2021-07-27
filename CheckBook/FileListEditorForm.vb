@@ -102,7 +102,7 @@ Public Class FileListEditorForm
         If Not CheckNewFileName(strFile) Then
             Exit Sub
         End If
-        objData = mobjPersister.Create(DirectCast(cboNewType.SelectedItem, FilePersistableType).strType, strFile)
+        objData = mobjPersister.Create(DirectCast(cboNewType.SelectedItem, FilePersistableType).PersistType, strFile)
         Using frm As New ObjectEditorForm
             If frm.ShowEditor(mobjHostUI, objData, Path.GetFileNameWithoutExtension(strFile)) Then
                 objData.CleanForSave()

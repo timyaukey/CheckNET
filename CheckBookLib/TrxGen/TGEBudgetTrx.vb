@@ -46,7 +46,7 @@ Public Class TGEBudgetTrx
     <Description("The number of units in the budget period")>
     Public Property Interval As Integer
 
-    Public Overrides Function blnIsEmpty() As Boolean
-        Return MyBase.blnIsEmpty() And String.IsNullOrEmpty(BudgetKey) And String.IsNullOrEmpty(Unit) And (Interval = 0)
+    Public Overrides Function IsEmpty() As Boolean
+        Return MyBase.IsEmpty() And String.IsNullOrEmpty(BudgetKey) And String.IsNullOrEmpty(Unit) And (Interval = 0)
     End Function
 End Class

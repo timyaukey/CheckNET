@@ -167,7 +167,7 @@ Public Class AccountLoader
             'because generating a transfer adds BaseTrx to two registers.
             mobjAccount.RaiseLoadStatus("Generate for " + mobjAccount.Title)
             For Each objReg In mobjAccount.Registers
-                gCreateGeneratedTrx(mobjAccount, objReg, datRegisterEndDate, datCutoff)
+                CreateAllGeneratedTrx(mobjAccount, objReg, datRegisterEndDate, datCutoff)
             Next objReg
         Catch ex As Exception
             Throw New Exception("Error in Account.LoadGenerated(" & mobjAccount.FileNameRoot & ")", ex)
@@ -243,7 +243,7 @@ Public Class AccountLoader
         'in this routine. The rest is divided fairly evenly between
         'LoadPostProcessing() and FireRedisplayTrx().
         For Each objReg In mobjAccount.Registers
-            gCreateGeneratedTrx(mobjAccount, objReg, datRegisterEndDate, datCutoff)
+            CreateAllGeneratedTrx(mobjAccount, objReg, datRegisterEndDate, datCutoff)
         Next objReg
 
         'In case trx generators have been edited.

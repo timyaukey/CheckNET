@@ -34,7 +34,7 @@ Public Class TGENormalTrx
     <XmlAttribute("memo")>
     Public Property Memo As String
 
-    Public Overrides Function blnIsEmpty() As Boolean
-        Return MyBase.blnIsEmpty() And String.IsNullOrEmpty(CatKey) And String.IsNullOrEmpty(Memo)
+    Public Overrides Function IsEmpty() As Boolean
+        Return MyBase.IsEmpty() And String.IsNullOrEmpty(CatKey) And String.IsNullOrEmpty(Memo)
     End Function
 End Class

@@ -15,7 +15,7 @@ Public Class TrxGenPeriod
     Private mintStartRepeatSeq As Integer
     Private mdblDOWUsage(7) As Double 'vbSunday to vbSaturday
 
-    Public Overrides Function strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String
+    Public Overrides Function Load(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String
 
         Dim strError As String
         Dim elmFirst As VB6XmlElement
@@ -25,12 +25,12 @@ Public Class TrxGenPeriod
         Dim intIndex As Integer
         Dim vntAttrib As Object
 
-        strError = strLoadCore(domDoc)
+        strError = LoadCore(domDoc)
         If strError <> "" Then
             Return strError
         End If
 
-        strError = gstrLoadTrxGeneratorCore(domDoc, mblnEnabled, mstrRepeatKey, mintStartRepeatSeq, mstrDescription, objAccount)
+        strError = LoadTrxGeneratorCore(domDoc, mblnEnabled, mstrRepeatKey, mintStartRepeatSeq, mstrDescription, objAccount)
         If strError <> "" Then
             Return strError
         End If
@@ -107,12 +107,12 @@ Public Class TrxGenPeriod
         End If
 
         'Load period ending dates and amounts.
-        mdatPeriodEndings = gdatLoadSequencedTrx(domDoc.DocumentElement, "periodends", mdblDefaultPercentIncrease, 0, strError)
+        mdatPeriodEndings = LoadTrxGenSequencedTrx(domDoc.DocumentElement, "periodends", mdblDefaultPercentIncrease, 0, strError)
         If strError <> "" Then
             Return strError
         End If
 
-        Return gstrGetTrxGenTemplate(objAccount.Company, domDoc, mstrRepeatKey, 0, mdatTrxTemplate)
+        Return GetTrxGenTemplate(objAccount.Company, domDoc, mstrRepeatKey, 0, mdatTrxTemplate)
     End Function
 
     Private Function dblGetWeight(ByVal elmDOWUsage As VB6XmlElement, ByVal strName As String, ByRef strError As String, ByRef dblTotalDOWUsage As Double) As Double
@@ -138,25 +138,25 @@ Public Class TrxGenPeriod
         dblGetWeight = dblResult
     End Function
 
-    Public Overrides ReadOnly Property strDescription() As String
+    Public Overrides ReadOnly Property Description() As String
         Get
             Return mstrDescription
         End Get
     End Property
 
-    Public Overrides ReadOnly Property blnEnabled() As Boolean
+    Public Overrides ReadOnly Property IsEnabled() As Boolean
         Get
             Return mblnEnabled
         End Get
     End Property
 
-    Public Overrides ReadOnly Property strRepeatKey() As String
+    Public Overrides ReadOnly Property RepeatKey() As String
         Get
-            Return mdatTrxTemplate.strRepeatKey
+            Return mdatTrxTemplate.RepeatKey
         End Get
     End Property
 
-    Public Overrides Function colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As ICollection(Of TrxToCreate)
+    Public Overrides Function CreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As ICollection(Of TrxToCreate)
 
         Dim datNewTrx() As SequencedTrx
         Dim intLongestOutputPeriod As Integer
@@ -175,7 +175,7 @@ Public Class TrxGenPeriod
         'datNewTrx = VB6.CopyArray(mdatPeriodEndings)
         datNewTrx = DirectCast(mdatPeriodEndings.Clone(), SequencedTrx())
         Do
-            datNewTrx = gdatSplitSequencedTrx(mdatFirstPeriodStarts, datNewTrx, intLongestOutputPeriod)
+            datNewTrx = SubdivideSequencedTrx(mdatFirstPeriodStarts, datNewTrx, intLongestOutputPeriod)
             If intLongestOutputPeriod = 1 Then
                 Exit Do
             End If
@@ -184,13 +184,13 @@ Public Class TrxGenPeriod
         'Assign repeast seq values now that all the SequencedTrx have been generated
         intRepeatSeq = mintStartRepeatSeq
         For intIndex = 1 To UBound(datNewTrx)
-            datNewTrx(intIndex).intRepeatSeq = intRepeatSeq
+            datNewTrx(intIndex).RepeatSeq = intRepeatSeq
             intRepeatSeq = intRepeatSeq + 1
         Next
 
         'Redistribute amounts among days of the week.
         intStartIndex = 1
-        intStartDOW = DatePart(Microsoft.VisualBasic.DateInterval.Weekday, datNewTrx(intStartIndex).datDate, FirstDayOfWeek.Sunday)
+        intStartDOW = DatePart(Microsoft.VisualBasic.DateInterval.Weekday, datNewTrx(intStartIndex).TrxDate, FirstDayOfWeek.Sunday)
         Do
             'Is there a full week remaining?
             If (intStartIndex + 6) > UBound(datNewTrx) Then
@@ -199,7 +199,7 @@ Public Class TrxGenPeriod
             'Compute curWeekTotal.
             curWeekTotal = 0
             For intIndex = intStartIndex To intStartIndex + 6
-                curWeekTotal = curWeekTotal + datNewTrx(intIndex).curAmount
+                curWeekTotal = curWeekTotal + datNewTrx(intIndex).Amount
             Next
             'Distribute curWeekTotal among days of the week according to weights.
             curWeekRemainder = curWeekTotal
@@ -212,7 +212,7 @@ Public Class TrxGenPeriod
                 Else
                     intCurrentDOW = intCurrentDOW + 1
                 End If
-                datNewTrx(intIndex).curAmount = curDayAmount
+                datNewTrx(intIndex).Amount = curDayAmount
                 curWeekRemainder = curWeekRemainder - curDayAmount
                 If curDayAmount <> 0 Then
                     intRemainderIndex = intIndex
@@ -220,10 +220,10 @@ Public Class TrxGenPeriod
             Next
             'Add any unused amount to the last trx with a non-zero amount.
             'There may be a leftover amount because of rounding.
-            datNewTrx(intRemainderIndex).curAmount = datNewTrx(intRemainderIndex).curAmount + curWeekRemainder
+            datNewTrx(intRemainderIndex).Amount = datNewTrx(intRemainderIndex).Amount + curWeekRemainder
             'Skip trx with zero amount.
             For intIndex = intStartIndex To intStartIndex + 6
-                datNewTrx(intIndex).blnSkip = (datNewTrx(intIndex).curAmount = 0)
+                datNewTrx(intIndex).SkipSeqNum = (datNewTrx(intIndex).Amount = 0)
             Next
             'Go to next week.
             intStartIndex = intStartIndex + 7
@@ -231,16 +231,16 @@ Public Class TrxGenPeriod
 
         'Only make BaseTrx after the starting date and on or before the ending date.
         For intIndex = 1 To UBound(datNewTrx)
-            If (datNewTrx(intIndex).datDate < mdatFirstPeriodStarts) Or (datNewTrx(intIndex).datDate > datRegisterEndDate) Then
+            If (datNewTrx(intIndex).TrxDate < mdatFirstPeriodStarts) Or (datNewTrx(intIndex).TrxDate > datRegisterEndDate) Then
                 'Don't set to "false" in "else", because may have been
                 'set to "true" earlier.
-                datNewTrx(intIndex).blnSkip = True
+                datNewTrx(intIndex).SkipSeqNum = True
             End If
         Next
 
         'Combine datNewTrx with mdatTrxTemplate to create TrxToCreate
         'array to return.
-        Return gcolTrxToCreateFromSeqTrx(datNewTrx, mdatTrxTemplate)
+        Return ConvertSeqTrxToTrxToCreate(datNewTrx, mdatTrxTemplate)
 
     End Function
 End Class

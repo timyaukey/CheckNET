@@ -12,21 +12,21 @@ Public Module TrxGeneratorLoader
     '   Load() for it. Displays a diagnostic error if bad or missing data in XML document.
     '$Returns The ITrxGenerator created if successful, or Nothing.
 
-    Private Function objCreateTrxGenerator(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As ITrxGenerator
+    Private Function CreateTrxGenerator(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As ITrxGenerator
 
         Dim vntClassName As Object
         Dim strClassName As String
         Dim objGenerator As ITrxGenerator
         Dim strError As String
 
-        objCreateTrxGenerator = Nothing
+        CreateTrxGenerator = Nothing
         If domDoc.DocumentElement.Name <> "generator" Then
-            gShowTrxGenLoadError(domDoc, "Document element is not <generator>")
+            ShowTrxGeneratorLoadError(domDoc, "Document element is not <generator>")
             Exit Function
         End If
         vntClassName = domDoc.DocumentElement.GetAttribute("class")
         If gblnXmlAttributeMissing(vntClassName) Then
-            gShowTrxGenLoadError(domDoc, "Missing class attribute")
+            ShowTrxGeneratorLoadError(domDoc, "Missing class attribute")
             Exit Function
         End If
         strClassName = CStr(vntClassName)
@@ -39,14 +39,14 @@ Public Module TrxGeneratorLoader
         ElseIf strClassName = "wccheckbook.interpolate" Then
             objGenerator = New TrxGenInterpolate
         Else
-            gShowTrxGenLoadError(domDoc, "Unrecognized class " & strClassName)
+            ShowTrxGeneratorLoadError(domDoc, "Unrecognized class " & strClassName)
             Exit Function
         End If
-        strError = objGenerator.strLoad(domDoc, objAccount)
+        strError = objGenerator.Load(domDoc, objAccount)
         If strError = "" Then
-            objCreateTrxGenerator = objGenerator
+            CreateTrxGenerator = objGenerator
         Else
-            gShowTrxGenLoadError(domDoc, strError)
+            ShowTrxGeneratorLoadError(domDoc, strError)
         End If
 
     End Function
@@ -55,7 +55,7 @@ Public Module TrxGeneratorLoader
     '   is encountered will display a message and not create that object.
     '$Returns The Collection of ITrxGenerator objects created.
 
-    Public Function gcolCreateTrxGenerators(ByVal objAccount As Account, ByVal objReg As Register) As ICollection(Of ITrxGenerator)
+    Public Function CreateTrxGenerators(ByVal objAccount As Account, ByVal objReg As Register) As ICollection(Of ITrxGenerator)
 
         Dim strPath As String
         Dim strFullXMLFile As String
@@ -67,7 +67,7 @@ Public Module TrxGeneratorLoader
         Dim strThisRepeatKey As String
 
         colResults = New List(Of ITrxGenerator)
-        strPath = gstrGeneratorPath(objAccount, objReg)
+        strPath = TrxGeneratorPath(objAccount, objReg)
         If IO.Directory.Exists(strPath) Then
             For Each strFullXMLFile In IO.Directory.EnumerateFiles(strPath, "*.gen")
                 Try
@@ -75,17 +75,17 @@ Public Module TrxGeneratorLoader
                     domDoc.Load(strFullXMLFile)
                     objParseError = domDoc.ParseError
                     If Not objParseError Is Nothing Then
-                        ShowTrxGenLoadError(strFullXMLFile, gstrXMLParseErrorText(objParseError))
+                        ShowTrxGeneratorLoadError(strFullXMLFile, gstrXMLParseErrorText(objParseError))
                     Else
                         domDoc.SetProperty("SelectionLanguage", "XPath")
-                        objGenerator = objCreateTrxGenerator(domDoc, objAccount)
+                        objGenerator = CreateTrxGenerator(domDoc, objAccount)
                         If Not objGenerator Is Nothing Then
-                            strThisRepeatKey = "|" & objGenerator.strRepeatKey & "|"
+                            strThisRepeatKey = "|" & objGenerator.RepeatKey & "|"
                             If InStr(strRepeatKeysUsed, strThisRepeatKey) = 0 Then
                                 colResults.Add(objGenerator)
                                 strRepeatKeysUsed = strRepeatKeysUsed & strThisRepeatKey
                             Else
-                                gShowTrxGenLoadError(domDoc, "Repeat key used by another generator")
+                                ShowTrxGeneratorLoadError(domDoc, "Repeat key used by another generator")
                             End If
                         End If
                     End If
@@ -101,13 +101,13 @@ Public Module TrxGeneratorLoader
     '$Description Path to folder with *.gen (transaction generators) for specified 
     '   register in specified account.
 
-    Public Function gstrGeneratorPath(ByVal objAccount As Account, ByVal objReg As Register) As String
-        gstrGeneratorPath = objAccount.Company.AccountsFolderPath() & "\" & objAccount.FileNameRoot & ".gen\" & objReg.RegisterKey
+    Public Function TrxGeneratorPath(ByVal objAccount As Account, ByVal objReg As Register) As String
+        TrxGeneratorPath = objAccount.Company.AccountsFolderPath() & "\" & objAccount.FileNameRoot & ".gen\" & objReg.RegisterKey
     End Function
 
     '$Description Report an error detected while loading a transaction generator file.
 
-    Public Sub gShowTrxGenLoadError(ByVal domDoc As VB6XmlDocument, ByVal strError As String)
+    Public Sub ShowTrxGeneratorLoadError(ByVal domDoc As VB6XmlDocument, ByVal strError As String)
         Dim strDescription As String
         Dim vntDescription As Object
         vntDescription = domDoc.DocumentElement.GetAttribute("description")
@@ -119,50 +119,50 @@ Public Module TrxGeneratorLoader
         Else
             strDescription = CStr(vntDescription)
         End If
-        ShowTrxGenLoadError(strDescription, strError)
+        ShowTrxGeneratorLoadError(strDescription, strError)
     End Sub
 
-    Public Sub ShowTrxGenLoadError(ByVal strDescription As String, ByVal strError As String)
+    Public Sub ShowTrxGeneratorLoadError(ByVal strDescription As String, ByVal strError As String)
         MsgBox("Error loading transaction generator [" & strDescription & "]:" & vbCrLf & strError, MsgBoxStyle.OkOnly Or MsgBoxStyle.Critical, "Checkbook")
     End Sub
 
-    Public Function gdatIncrementDate(ByVal datStart As Date, ByVal lngUnit As BaseTrx.RepeatUnit, ByVal intNumber As Integer) As Date
+    Public Function GetNextDateInTrxGenSequence(ByVal datStart As Date, ByVal lngUnit As BaseTrx.RepeatUnit, ByVal intNumber As Integer) As Date
 
         Select Case lngUnit
             Case BaseTrx.RepeatUnit.Day
-                gdatIncrementDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intNumber, datStart)
+                GetNextDateInTrxGenSequence = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intNumber, datStart)
             Case BaseTrx.RepeatUnit.Week
-                gdatIncrementDate = DateAdd(Microsoft.VisualBasic.DateInterval.WeekOfYear, intNumber, datStart)
+                GetNextDateInTrxGenSequence = DateAdd(Microsoft.VisualBasic.DateInterval.WeekOfYear, intNumber, datStart)
             Case BaseTrx.RepeatUnit.Month
-                gdatIncrementDate = DateAdd(Microsoft.VisualBasic.DateInterval.Month, intNumber, datStart)
+                GetNextDateInTrxGenSequence = DateAdd(Microsoft.VisualBasic.DateInterval.Month, intNumber, datStart)
         End Select
     End Function
 
-    Public Function glngConvertRepeatUnit(ByVal strInput As String) As BaseTrx.RepeatUnit
+    Public Function ConvertTrxGenRepeatUnit(ByVal strInput As String) As BaseTrx.RepeatUnit
         Select Case strInput
             Case "DAY"
-                glngConvertRepeatUnit = BaseTrx.RepeatUnit.Day
+                ConvertTrxGenRepeatUnit = BaseTrx.RepeatUnit.Day
             Case "WEEK"
-                glngConvertRepeatUnit = BaseTrx.RepeatUnit.Week
+                ConvertTrxGenRepeatUnit = BaseTrx.RepeatUnit.Week
             Case "MONTH"
-                glngConvertRepeatUnit = BaseTrx.RepeatUnit.Month
+                ConvertTrxGenRepeatUnit = BaseTrx.RepeatUnit.Month
             Case Else
-                glngConvertRepeatUnit = BaseTrx.RepeatUnit.Missing
+                ConvertTrxGenRepeatUnit = BaseTrx.RepeatUnit.Missing
         End Select
     End Function
 
-    Public Function gintConvertRepeatCount(ByVal strInput As String) As Short
+    Public Function ConvertTrxGenRepeatCount(ByVal strInput As String) As Short
         Dim intResult As Short
 
         If IsNumeric(strInput) Then
             intResult = CShort(strInput)
             If intResult < 1 Then
-                gintConvertRepeatCount = 0
+                ConvertTrxGenRepeatCount = 0
             Else
-                gintConvertRepeatCount = intResult
+                ConvertTrxGenRepeatCount = intResult
             End If
         Else
-            gintConvertRepeatCount = 0
+            ConvertTrxGenRepeatCount = 0
         End If
     End Function
 
@@ -171,25 +171,25 @@ Public Module TrxGeneratorLoader
     '$Returns A non-empty error message if bad or missing data was encountered,
     '   else an empty string.
 
-    Public Function gstrLoadTrxGeneratorCore(ByVal domDoc As VB6XmlDocument, ByRef blnEnabled As Boolean, ByRef strRepeatKey As String, ByRef intStartRepeatSeq As Integer, ByRef strDescription As String, ByVal objAccount As Account) As String
+    Public Function LoadTrxGeneratorCore(ByVal domDoc As VB6XmlDocument, ByRef blnEnabled As Boolean, ByRef strRepeatKey As String, ByRef intStartRepeatSeq As Integer, ByRef strDescription As String, ByVal objAccount As Account) As String
 
         Dim vntAttrib As Object
 
-        gstrLoadTrxGeneratorCore = ""
+        LoadTrxGeneratorCore = ""
         vntAttrib = domDoc.DocumentElement.GetAttribute("enabled")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            gstrLoadTrxGeneratorCore = "Missing [enabled] attribute"
+            LoadTrxGeneratorCore = "Missing [enabled] attribute"
             Exit Function
         End If
         If CStr(vntAttrib) <> "true" And CStr(vntAttrib) <> "false" Then
-            gstrLoadTrxGeneratorCore = "[enabled] attribute must be ""true"" or ""false"""
+            LoadTrxGeneratorCore = "[enabled] attribute must be ""true"" or ""false"""
             Exit Function
         End If
         blnEnabled = CBool(vntAttrib)
 
         vntAttrib = domDoc.DocumentElement.GetAttribute("repeatkey")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            gstrLoadTrxGeneratorCore = "Missing [repeatkey] attribute"
+            LoadTrxGeneratorCore = "Missing [repeatkey] attribute"
             Exit Function
         End If
         strRepeatKey = CStr(vntAttrib)
@@ -200,22 +200,22 @@ Public Module TrxGeneratorLoader
 
         vntAttrib = domDoc.DocumentElement.GetAttribute("description")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            gstrLoadTrxGeneratorCore = "Missing [description] attribute"
+            LoadTrxGeneratorCore = "Missing [description] attribute"
             Exit Function
         End If
         If Len(vntAttrib) = 0 Then
-            gstrLoadTrxGeneratorCore = "Empty [description] attribute"
+            LoadTrxGeneratorCore = "Empty [description] attribute"
             Exit Function
         End If
         strDescription = CStr(vntAttrib)
 
         vntAttrib = domDoc.DocumentElement.GetAttribute("startseq")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            gstrLoadTrxGeneratorCore = "Missing [startseq] attribute"
+            LoadTrxGeneratorCore = "Missing [startseq] attribute"
             Exit Function
         End If
         If Not IsNumeric(vntAttrib) Then
-            gstrLoadTrxGeneratorCore = "Invalid [startseq] attribute"
+            LoadTrxGeneratorCore = "Invalid [startseq] attribute"
             Exit Function
         End If
         intStartRepeatSeq = CShort(vntAttrib)
@@ -230,60 +230,60 @@ Public Module TrxGeneratorLoader
     '$Returns A non-empty error message if bad or missing data was encountered,
     '   else an empty string.
 
-    Public Function gstrGetDateSequenceParams(ByVal elmParent As VB6XmlElement, ByVal strChildName As String, ByRef elmChild As VB6XmlElement, ByRef datParams As DateSequenceParams) As String
+    Public Function GetTrxGenDateSequenceParams(ByVal elmParent As VB6XmlElement, ByVal strChildName As String, ByRef elmChild As VB6XmlElement, ByRef datParams As DateSequenceParams) As String
 
         Dim vntAttrib As Object
 
-        gstrGetDateSequenceParams = ""
+        GetTrxGenDateSequenceParams = ""
 
         elmChild = DirectCast(elmParent.SelectSingleNode(strChildName), VB6XmlElement)
         If elmChild Is Nothing Then
-            gstrGetDateSequenceParams = "Could not find <" & strChildName & "> element"
+            GetTrxGenDateSequenceParams = "Could not find <" & strChildName & "> element"
             Exit Function
         End If
 
         vntAttrib = elmChild.GetAttribute("unit")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            gstrGetDateSequenceParams = "Missing [unit] attribute"
+            GetTrxGenDateSequenceParams = "Missing [unit] attribute"
             Exit Function
         End If
-        datParams.lngRptUnit = glngConvertRepeatUnit(UCase(CStr(vntAttrib)))
-        If datParams.lngRptUnit = BaseTrx.RepeatUnit.Missing Then
-            gstrGetDateSequenceParams = "Invalid [unit] attribute"
+        datParams.RptUnit = ConvertTrxGenRepeatUnit(UCase(CStr(vntAttrib)))
+        If datParams.RptUnit = BaseTrx.RepeatUnit.Missing Then
+            GetTrxGenDateSequenceParams = "Invalid [unit] attribute"
             Exit Function
         End If
 
         vntAttrib = elmChild.GetAttribute("interval")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            gstrGetDateSequenceParams = "Missing [interval] attribute"
+            GetTrxGenDateSequenceParams = "Missing [interval] attribute"
             Exit Function
         End If
-        datParams.intRptNumber = gintConvertRepeatCount(CStr(vntAttrib))
-        If datParams.intRptNumber = 0 Then
-            gstrGetDateSequenceParams = "Invalid [interval] attribute"
+        datParams.RptNumber = ConvertTrxGenRepeatCount(CStr(vntAttrib))
+        If datParams.RptNumber = 0 Then
+            GetTrxGenDateSequenceParams = "Invalid [interval] attribute"
             Exit Function
         End If
 
         vntAttrib = elmChild.GetAttribute("startdate")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            gstrGetDateSequenceParams = "Missing [startdate] attribute"
+            GetTrxGenDateSequenceParams = "Missing [startdate] attribute"
             Exit Function
         End If
         If Utilities.blnIsValidDate(CStr(vntAttrib)) Then
-            datParams.datNominalStartDate = CDate(vntAttrib)
+            datParams.NominalStartDate = CDate(vntAttrib)
         Else
-            gstrGetDateSequenceParams = "Invalid [startdate] attribute"
+            GetTrxGenDateSequenceParams = "Invalid [startdate] attribute"
             Exit Function
         End If
 
         vntAttrib = elmChild.GetAttribute("enddate")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            datParams.vntNominalEndDate = vntAttrib
+            datParams.NominalEndDate = vntAttrib
         Else
             If Utilities.blnIsValidDate(CStr(vntAttrib)) Then
-                datParams.vntNominalEndDate = CDate(vntAttrib)
+                datParams.NominalEndDate = CDate(vntAttrib)
             Else
-                gstrGetDateSequenceParams = "Invalid [enddate] attribute"
+                GetTrxGenDateSequenceParams = "Invalid [enddate] attribute"
                 Exit Function
             End If
         End If
@@ -301,7 +301,7 @@ Public Module TrxGeneratorLoader
     '   This allows a "for" loop from 1 to UBound(array) to interate the
     '   elements even if no SequencedTrx were created.
 
-    Public Function gdatLoadSequencedTrx(ByVal elmParent As VB6XmlElement, ByVal strChildName As String, ByVal dblDefaultPercentIncrease As Double, ByVal intStartRepeatSeq As Integer, ByRef strError As String) As SequencedTrx()
+    Public Function LoadTrxGenSequencedTrx(ByVal elmParent As VB6XmlElement, ByVal strChildName As String, ByVal dblDefaultPercentIncrease As Double, ByVal intStartRepeatSeq As Integer, ByRef strError As String) As SequencedTrx()
 
         Dim colSeq As VB6XmlNodeList
         Dim elmSeq As VB6XmlElement
@@ -310,7 +310,7 @@ Public Module TrxGeneratorLoader
         Dim strErrorEnding As String
         Dim intRepeatSeq As Integer
 
-        ReDim gdatLoadSequencedTrx(0)
+        ReDim LoadTrxGenSequencedTrx(0)
         strError = ""
         intRepeatSeq = intStartRepeatSeq
         colSeq = elmParent.SelectNodes(strChildName)
@@ -322,13 +322,13 @@ Public Module TrxGeneratorLoader
         intResultIndex = 1
         For Each elmSeq In colSeq
             strErrorEnding = " in [" & strChildName & "] element #" & intResultIndex
-            datResults(intResultIndex) = gdatCreateOneSequencedTrx(elmSeq, dblDefaultPercentIncrease, intRepeatSeq, strErrorEnding, strError)
+            datResults(intResultIndex) = CreateOneSequencedTrx(elmSeq, dblDefaultPercentIncrease, intRepeatSeq, strErrorEnding, strError)
             If strError <> "" Then
                 Exit Function
             End If
             intRepeatSeq = intRepeatSeq + 1
             If intResultIndex > 1 Then
-                If datResults(intResultIndex).datDate <= datResults(intResultIndex - 1).datDate Then
+                If datResults(intResultIndex).TrxDate <= datResults(intResultIndex - 1).TrxDate Then
                     strError = "Date is not greater than the preceding entry" & strErrorEnding
                     Exit Function
                 End If
@@ -343,7 +343,7 @@ Public Module TrxGeneratorLoader
 
     '$Description Create one SequencedTrx from attributes of an XML element.
 
-    Public Function gdatCreateOneSequencedTrx(ByVal elmSeq As VB6XmlElement, ByVal dblDefaultPercentIncrease As Double, ByVal intRepeatSeq As Integer, ByVal strErrorEnding As String, ByRef strError As String) As SequencedTrx
+    Public Function CreateOneSequencedTrx(ByVal elmSeq As VB6XmlElement, ByVal dblDefaultPercentIncrease As Double, ByVal intRepeatSeq As Integer, ByVal strErrorEnding As String, ByRef strError As String) As SequencedTrx
 
         Dim vntAttrib As Object
         Dim curAmount As Decimal
@@ -351,7 +351,7 @@ Public Module TrxGeneratorLoader
         Dim datTrxDate As Date
         Dim objSeq As SequencedTrx
 
-        gdatCreateOneSequencedTrx = Nothing
+        CreateOneSequencedTrx = Nothing
         vntAttrib = elmSeq.GetAttribute("date")
         If gblnXmlAttributeMissing(vntAttrib) Then
             strError = "Missing [date] attribute" & strErrorEnding
@@ -387,7 +387,7 @@ Public Module TrxGeneratorLoader
         objSeq = New SequencedTrx
         objSeq.Init(datTrxDate, curAmount, intRepeatSeq)
 
-        gdatCreateOneSequencedTrx = objSeq
+        CreateOneSequencedTrx = objSeq
 
     End Function
 
@@ -401,7 +401,7 @@ Public Module TrxGeneratorLoader
     '$Param The number of days in the longest period returned.
     '$Returns The new period and amount list.
 
-    Public Function gdatSplitSequencedTrx(ByVal datFirstPeriodStarts As Date, ByRef datPeriodEndings() As SequencedTrx, ByRef intLongestOutputPeriod As Integer) As SequencedTrx()
+    Public Function SubdivideSequencedTrx(ByVal datFirstPeriodStarts As Date, ByRef datPeriodEndings() As SequencedTrx, ByRef intLongestOutputPeriod As Integer) As SequencedTrx()
 
         Dim datResults() As SequencedTrx
         Dim intInPeriods As Integer
@@ -429,7 +429,7 @@ Public Module TrxGeneratorLoader
         datPeriodStarts = datFirstPeriodStarts
         intOutIndex = 1
         For intInIndex = 1 To intInPeriods
-            intOldDays = CInt(datPeriodEndings(intInIndex).datDate.ToOADate - datPeriodStarts.ToOADate + 1)
+            intOldDays = CInt(datPeriodEndings(intInIndex).TrxDate.ToOADate - datPeriodStarts.ToOADate + 1)
             'Can old period be divided?
             If intOldDays > 1 Then
                 'Yes - so divide it.
@@ -448,7 +448,7 @@ Public Module TrxGeneratorLoader
                 'Compute new sub-period amounts.
                 'First divide the amount of the old period proportionally
                 'to the number of days in each sub-period.
-                curOldAmount = datPeriodEndings(intInIndex).curAmount
+                curOldAmount = datPeriodEndings(intInIndex).Amount
                 curFirstNewAmount = CDec(System.Math.Round(curOldAmount * CDbl(intFirstHalfDays) / CDbl(intOldDays), 2))
                 curSecondNewAmount = curOldAmount - curFirstNewAmount
                 'Then move amount from one new split to the other based on
@@ -457,12 +457,12 @@ Public Module TrxGeneratorLoader
                 If intInIndex = 1 Then
                     curDiffBefore = 0
                 Else
-                    curDiffBefore = curOldAmount - datPeriodEndings(intInIndex - 1).curAmount
+                    curDiffBefore = curOldAmount - datPeriodEndings(intInIndex - 1).Amount
                 End If
                 If intInIndex = intInPeriods Then
                     curDiffAfter = 0
                 Else
-                    curDiffAfter = datPeriodEndings(intInIndex + 1).curAmount - curOldAmount
+                    curDiffAfter = datPeriodEndings(intInIndex + 1).Amount - curOldAmount
                 End If
                 If (curDiffBefore + curDiffAfter) = 0 Then
                     curNetMove = 0
@@ -483,7 +483,7 @@ Public Module TrxGeneratorLoader
                 objFirstNew.Init(datNewEndDate, curFirstNewAmount, 0)
                 datResults(intOutIndex) = objFirstNew
                 objSecondNew = New SequencedTrx
-                objSecondNew.Init(datPeriodEndings(intInIndex).datDate, curSecondNewAmount, 0)
+                objSecondNew.Init(datPeriodEndings(intInIndex).TrxDate, curSecondNewAmount, 0)
                 datResults(intOutIndex + 1) = objSecondNew
                 intOutIndex = intOutIndex + 2
             Else
@@ -492,7 +492,7 @@ Public Module TrxGeneratorLoader
                 intOutIndex = intOutIndex + 1
             End If
             'Prepare for next iteration.
-            datPeriodStarts = System.DateTime.FromOADate(datPeriodEndings(intInIndex).datDate.ToOADate + 1)
+            datPeriodStarts = System.DateTime.FromOADate(datPeriodEndings(intInIndex).TrxDate.ToOADate + 1)
         Next
 
         ReDim Preserve datResults(intOutIndex - 1)
@@ -511,13 +511,13 @@ Public Module TrxGeneratorLoader
     '$Returns A non-empty error message if bad or missing data was encountered,
     '   else an empty string.
 
-    Public Function gstrGetTrxGenTemplate(ByVal objCompany As Company, ByRef domDoc As VB6XmlDocument, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
+    Public Function GetTrxGenTemplate(ByVal objCompany As Company, ByRef domDoc As VB6XmlDocument, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim elmTrxTpt As VB6XmlElement
 
         'Clear everything.
         'LSet datTrxTemplate = mdatNullTrxToCreate
-        datTrxTemplate = gdatCopyTrxToCreate(mdatNullTrxToCreate)
+        datTrxTemplate = CopyTrxToCreate(mdatNullTrxToCreate)
 
         elmTrxTpt = DirectCast(domDoc.DocumentElement.SelectSingleNode("normaltrx"), VB6XmlElement)
         If elmTrxTpt Is Nothing Then
@@ -525,19 +525,19 @@ Public Module TrxGeneratorLoader
             If elmTrxTpt Is Nothing Then
                 elmTrxTpt = DirectCast(domDoc.DocumentElement.SelectSingleNode("transfertrx"), VB6XmlElement)
                 If elmTrxTpt Is Nothing Then
-                    gstrGetTrxGenTemplate = "Unable to find <normaltrx>, <budgettrx> or <transfertrx> element"
+                    GetTrxGenTemplate = "Unable to find <normaltrx>, <budgettrx> or <transfertrx> element"
                     Exit Function
                 Else
                     'Set transfer trx fields.
-                    gstrGetTrxGenTemplate = gstrGetTrxGenTemplateShared(elmTrxTpt, strRepeatKey, datTrxTemplate)
+                    GetTrxGenTemplate = GetTrxGenTemplateShared(elmTrxTpt, strRepeatKey, datTrxTemplate)
                 End If
             Else
                 'Set budget trx fields.
-                gstrGetTrxGenTemplate = gstrGetTrxGenTemplateBudget(objCompany, elmTrxTpt, strRepeatKey, curAmount, datTrxTemplate)
+                GetTrxGenTemplate = GetTrxGenTemplateBudget(objCompany, elmTrxTpt, strRepeatKey, curAmount, datTrxTemplate)
             End If
         Else
             'Set normal trx fields.
-            gstrGetTrxGenTemplate = gstrGetTrxGenTemplateNormal(objCompany, elmTrxTpt, strRepeatKey, curAmount, datTrxTemplate)
+            GetTrxGenTemplate = GetTrxGenTemplateBank(objCompany, elmTrxTpt, strRepeatKey, curAmount, datTrxTemplate)
         End If
 
     End Function
@@ -545,134 +545,134 @@ Public Module TrxGeneratorLoader
     '$Description Set fields of a TrxToCreate structure that are used by a transfer BaseTrx,
     '   from the arguments passed in.
 
-    Public Function gstrGetTrxGenTemplateTransfer(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
+    Public Function GetTrxGenTemplateTransfer(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim vntAttrib As Object
 
-        datTrxTemplate.objTrxType = GetType(TransferTrx)
-        datTrxTemplate.lngStatus = BaseTrx.TrxStatus.NonBank
+        datTrxTemplate.TrxType = GetType(TransferTrx)
+        datTrxTemplate.Status = BaseTrx.TrxStatus.NonBank
         'Amount.
-        datTrxTemplate.curAmount = curAmount
+        datTrxTemplate.Amount = curAmount
         'AccountKey of other register.
         vntAttrib = elmTrxTpt.GetAttribute("transferkey")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            gstrGetTrxGenTemplateTransfer = "Missing [transferkey] attribute"
+            GetTrxGenTemplateTransfer = "Missing [transferkey] attribute"
             Exit Function
         End If
-        datTrxTemplate.strTransferKey = CStr(vntAttrib)
+        datTrxTemplate.TransferKey = CStr(vntAttrib)
 
         'Set shared fields.
-        gstrGetTrxGenTemplateTransfer = gstrGetTrxGenTemplateShared(elmTrxTpt, strRepeatKey, datTrxTemplate)
+        GetTrxGenTemplateTransfer = GetTrxGenTemplateShared(elmTrxTpt, strRepeatKey, datTrxTemplate)
 
     End Function
 
     '$Description Set fields of a TrxToCreate structure that are used by a budget BaseTrx,
     '   from the arguments passed in.
 
-    Public Function gstrGetTrxGenTemplateBudget(ByVal objCompany As Company, ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
+    Public Function GetTrxGenTemplateBudget(ByVal objCompany As Company, ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim vntAttrib As Object
 
-        datTrxTemplate.objTrxType = GetType(BudgetTrx)
-        datTrxTemplate.lngStatus = BaseTrx.TrxStatus.NonBank
+        datTrxTemplate.TrxType = GetType(BudgetTrx)
+        datTrxTemplate.Status = BaseTrx.TrxStatus.NonBank
         'Budget key.
         vntAttrib = elmTrxTpt.GetAttribute("budgetkey")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            gstrGetTrxGenTemplateBudget = "Missing [budgetkey] attribute"
+            GetTrxGenTemplateBudget = "Missing [budgetkey] attribute"
             Exit Function
         End If
         If objCompany.Budgets.intLookupKey(CStr(vntAttrib)) = 0 Then
-            gstrGetTrxGenTemplateBudget = "Invalid [budgetkey] attribute"
+            GetTrxGenTemplateBudget = "Invalid [budgetkey] attribute"
             Exit Function
         End If
-        datTrxTemplate.strBudgetKey = CStr(vntAttrib)
+        datTrxTemplate.BudgetKey = CStr(vntAttrib)
         'Budget unit.
         vntAttrib = elmTrxTpt.GetAttribute("budgetunit")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            gstrGetTrxGenTemplateBudget = "Missing [budgetunit] attribute"
+            GetTrxGenTemplateBudget = "Missing [budgetunit] attribute"
             Exit Function
         End If
-        datTrxTemplate.lngBudgetUnit = glngConvertRepeatUnit(UCase(CStr(vntAttrib)))
-        If datTrxTemplate.lngBudgetUnit = BaseTrx.RepeatUnit.Missing Then
-            gstrGetTrxGenTemplateBudget = "Invalid [budgetunit] attribute"
+        datTrxTemplate.BudgetUnit = ConvertTrxGenRepeatUnit(UCase(CStr(vntAttrib)))
+        If datTrxTemplate.BudgetUnit = BaseTrx.RepeatUnit.Missing Then
+            GetTrxGenTemplateBudget = "Invalid [budgetunit] attribute"
             Exit Function
         End If
         'Budget number.
         vntAttrib = elmTrxTpt.GetAttribute("budgetnumber")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            gstrGetTrxGenTemplateBudget = "Missing [budgetnumber] attribute"
+            GetTrxGenTemplateBudget = "Missing [budgetnumber] attribute"
             Exit Function
         End If
-        datTrxTemplate.intBudgetNumber = gintConvertRepeatCount(CStr(vntAttrib))
-        If datTrxTemplate.intBudgetNumber = 0 Then
-            gstrGetTrxGenTemplateBudget = "Invalid [budgetnumber] attribute"
+        datTrxTemplate.BudgetNumber = ConvertTrxGenRepeatCount(CStr(vntAttrib))
+        If datTrxTemplate.BudgetNumber = 0 Then
+            GetTrxGenTemplateBudget = "Invalid [budgetnumber] attribute"
             Exit Function
         End If
         'Amount
-        datTrxTemplate.curAmount = curAmount
+        datTrxTemplate.Amount = curAmount
 
         'Set shared fields.
-        gstrGetTrxGenTemplateBudget = gstrGetTrxGenTemplateShared(elmTrxTpt, strRepeatKey, datTrxTemplate)
+        GetTrxGenTemplateBudget = GetTrxGenTemplateShared(elmTrxTpt, strRepeatKey, datTrxTemplate)
 
     End Function
 
     '$Description Set fields of a TrxToCreate structure that are used by a normal BaseTrx,
     '   from the arguments passed in.
 
-    Public Function gstrGetTrxGenTemplateNormal(ByVal objCompany As Company, ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
+    Public Function GetTrxGenTemplateBank(ByVal objCompany As Company, ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByVal curAmount As Decimal, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim vntAttrib As Object
         Dim datSplit As SplitToCreate = Nothing
         Dim strError As String
 
         'Set shared fields.
-        strError = gstrGetTrxGenTemplateShared(elmTrxTpt, strRepeatKey, datTrxTemplate)
+        strError = GetTrxGenTemplateShared(elmTrxTpt, strRepeatKey, datTrxTemplate)
         If strError <> "" Then
             Return strError
         End If
 
-        datTrxTemplate.objTrxType = GetType(BankTrx)
-        datTrxTemplate.lngStatus = BaseTrx.TrxStatus.Unreconciled
+        datTrxTemplate.TrxType = GetType(BankTrx)
+        datTrxTemplate.Status = BaseTrx.TrxStatus.Unreconciled
         'Transaction number.
         vntAttrib = elmTrxTpt.GetAttribute("number")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            gstrGetTrxGenTemplateNormal = "Missing [number] attribute"
+            GetTrxGenTemplateBank = "Missing [number] attribute"
             Exit Function
         End If
         If InStr("|pmt|ord|inv|dep|xfr|eft|crm|card|", "|" & LCase(CStr(vntAttrib)) & "|") = 0 Then
-            gstrGetTrxGenTemplateNormal = "Invalid [number] attribute"
+            GetTrxGenTemplateBank = "Invalid [number] attribute"
             Exit Function
         End If
-        datTrxTemplate.strNumber = CStr(vntAttrib) '
+        datTrxTemplate.Number = CStr(vntAttrib) '
         'Category key.
         vntAttrib = elmTrxTpt.GetAttribute("catkey")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            gstrGetTrxGenTemplateNormal = "Missing [catkey] attribute"
+            GetTrxGenTemplateBank = "Missing [catkey] attribute"
             Exit Function
         End If
         If objCompany.Categories.intLookupKey(CStr(vntAttrib)) = 0 Then
-            gstrGetTrxGenTemplateNormal = "Invalid [catkey] attribute"
+            GetTrxGenTemplateBank = "Invalid [catkey] attribute"
             Exit Function
         End If
-        datSplit.strCategoryKey = CStr(vntAttrib)
+        datSplit.CategoryKey = CStr(vntAttrib)
         'Budget key.
         vntAttrib = elmTrxTpt.GetAttribute("budgetkey")
         If Not gblnXmlAttributeMissing(vntAttrib) Then
             If objCompany.Budgets.intLookupKey(CStr(vntAttrib)) = 0 Then
-                gstrGetTrxGenTemplateNormal = "Invalid [budgetkey] attribute"
+                GetTrxGenTemplateBank = "Invalid [budgetkey] attribute"
                 Exit Function
             End If
-            datSplit.strBudgetKey = CStr(vntAttrib)
+            datSplit.BudgetKey = CStr(vntAttrib)
         End If
         'Amount.
-        datSplit.curAmount = curAmount
+        datSplit.Amount = curAmount
         'No dates.
-        datSplit.datInvoiceDate = Utilities.datEmpty
-        datSplit.datDueDate = Utilities.datEmpty
+        datSplit.InvoiceDate = Utilities.datEmpty
+        datSplit.DueDate = Utilities.datEmpty
         'Add to splits collection.
-        datTrxTemplate.intSplits = 1
-        ReDim datTrxTemplate.adatSplits(1)
-        datTrxTemplate.adatSplits(1) = datSplit
+        datTrxTemplate.SplitCount = 1
+        ReDim datTrxTemplate.Splits(1)
+        datTrxTemplate.Splits(1) = datSplit
 
         Return ""
 
@@ -681,45 +681,45 @@ Public Module TrxGeneratorLoader
     '$Description Set fields of a TrxToCreate structure that are common to all BaseTrx
     '   types, from the arguments passed in.
 
-    Public Function gstrGetTrxGenTemplateShared(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByRef datTrxTemplate As TrxToCreate) As String
+    Public Function GetTrxGenTemplateShared(ByVal elmTrxTpt As VB6XmlElement, ByVal strRepeatKey As String, ByRef datTrxTemplate As TrxToCreate) As String
 
         Dim vntAttrib As Object
 
-        gstrGetTrxGenTemplateShared = ""
+        GetTrxGenTemplateShared = ""
         'Description.
         vntAttrib = elmTrxTpt.GetAttribute("description")
         If gblnXmlAttributeMissing(vntAttrib) Then
-            gstrGetTrxGenTemplateShared = "Missing [description] attribute"
+            GetTrxGenTemplateShared = "Missing [description] attribute"
             Exit Function
         End If
         If Len(vntAttrib) = 0 Then
-            gstrGetTrxGenTemplateShared = "Empty [description] attribute"
+            GetTrxGenTemplateShared = "Empty [description] attribute"
             Exit Function
         End If
-        datTrxTemplate.strDescription = CStr(vntAttrib)
+        datTrxTemplate.Description = CStr(vntAttrib)
         'Memo.
         vntAttrib = elmTrxTpt.GetAttribute("memo")
         If Not gblnXmlAttributeMissing(vntAttrib) Then
-            datTrxTemplate.strMemo = CStr(vntAttrib)
+            datTrxTemplate.Memo = CStr(vntAttrib)
         End If
         'Other.
-        datTrxTemplate.blnFake = True
-        datTrxTemplate.blnAutoGenerated = True
-        datTrxTemplate.strRepeatKey = strRepeatKey
+        datTrxTemplate.IsFake = True
+        datTrxTemplate.IsAutoGenerated = True
+        datTrxTemplate.RepeatKey = strRepeatKey
 
     End Function
 
-    Public Function gdatCopyTrxToCreate(ByRef datInput As TrxToCreate) As TrxToCreate
-        gdatCopyTrxToCreate = datInput
+    Public Function CopyTrxToCreate(ByRef datInput As TrxToCreate) As TrxToCreate
+        CopyTrxToCreate = datInput
         'Necessary for .NET compatibility, because .NET adatSplits is an object
         'and the code converter doesn't notice so all copies share the same array.
         'By doing it explicitly the code converter treats the copy with value semantics
         'instead of reference semantics.
         'gdatCopyTrxToCreate.adatSplits = VB6.CopyArray(datInput.adatSplits)
-        If datInput.adatSplits Is Nothing Then
-            gdatCopyTrxToCreate.adatSplits = Nothing
+        If datInput.Splits Is Nothing Then
+            CopyTrxToCreate.Splits = Nothing
         Else
-            gdatCopyTrxToCreate.adatSplits = DirectCast(datInput.adatSplits.Clone(), SplitToCreate())
+            CopyTrxToCreate.Splits = DirectCast(datInput.Splits.Clone(), SplitToCreate())
         End If
     End Function
 End Module

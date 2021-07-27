@@ -12,7 +12,7 @@ Public Module TrxGenerator
     '$Param objReg The Register to generate BaseTrx in.
     '$Param datRptEndMax Latest date to create BaseTrx for.
 
-    Public Sub gCreateGeneratedTrx(ByVal objAccount As Account, ByVal objReg As Register, ByVal datRptEndMax As Date, ByVal datCutoff As Date)
+    Public Sub CreateAllGeneratedTrx(ByVal objAccount As Account, ByVal objReg As Register, ByVal datRptEndMax As Date, ByVal datCutoff As Date)
 
         Dim colGenerators As ICollection(Of ITrxGenerator)
         Dim objGenerator As ITrxGenerator
@@ -29,42 +29,42 @@ Public Module TrxGenerator
             colReg.Add(objReg2)
         Next objReg2
 
-        colGenerators = gcolCreateTrxGenerators(objAccount, objReg)
+        colGenerators = CreateTrxGenerators(objAccount, objReg)
         For Each objGenerator In colGenerators
-            If objGenerator.blnEnabled Then
-                objAccount.RaiseLoadStatus("Generate " + objGenerator.strDescription)
-                objAccount.RepeatSummarizer.Define(objGenerator.strRepeatKey, objGenerator.strDescription, True)
-                If objGenerator.intMaxDaysOld.HasValue Then
-                    datOldestTrxDate = datCutoff.AddDays(-CDbl(objGenerator.intMaxDaysOld.Value))
+            If objGenerator.IsEnabled Then
+                objAccount.RaiseLoadStatus("Generate " + objGenerator.Description)
+                objAccount.RepeatSummarizer.Define(objGenerator.RepeatKey, objGenerator.Description, True)
+                If objGenerator.MaxDaysOld.HasValue Then
+                    datOldestTrxDate = datCutoff.AddDays(-CDbl(objGenerator.MaxDaysOld.Value))
                 Else
                     datOldestTrxDate = New DateTime(1900, 1, 1)
                 End If
                 Try
-                    colTrx = objGenerator.colCreateTrx(objReg, datRptEndMax)
+                    colTrx = objGenerator.CreateTrx(objReg, datRptEndMax)
                     For Each datTrxToCreate In colTrx
 
-                        objRepeatTrx = objReg.FindRepeatTrx(datTrxToCreate.strRepeatKey, datTrxToCreate.intRepeatSeq)
-                        If datTrxToCreate.datDate >= datOldestTrxDate Then
+                        objRepeatTrx = objReg.FindRepeatTrx(datTrxToCreate.RepeatKey, datTrxToCreate.RepeatSeq)
+                        If datTrxToCreate.TrxDate >= datOldestTrxDate Then
                             'Only create BaseTrx for seq numbers we don't already have in reg.
                             If objRepeatTrx Is Nothing Then
                                 'Create the BaseTrx.
-                                strError = gstrCreateOneTrx(datTrxToCreate, objReg, colReg)
+                                strError = CreateOneGeneratedTrx(datTrxToCreate, objReg, colReg)
                                 If strError <> "" Then
-                                    MsgBox("Error using transaction generator [" & objGenerator.strDescription & "]:" & vbCrLf & strError, MsgBoxStyle.OkOnly Or MsgBoxStyle.Critical, "Checkbook")
+                                    MsgBox("Error using transaction generator [" & objGenerator.Description & "]:" & vbCrLf & strError, MsgBoxStyle.OkOnly Or MsgBoxStyle.Critical, "Checkbook")
                                     Exit For
                                 End If
                             End If
                         End If
                         If Not objRepeatTrx Is Nothing Then
                             If datTrxToCreate.GetType() Is GetType(BankTrx) Then
-                                objRepeatTrx.GeneratedAmount = datTrxToCreate.adatSplits(1).curAmount
+                                objRepeatTrx.GeneratedAmount = datTrxToCreate.Splits(1).Amount
                             Else
-                                objRepeatTrx.GeneratedAmount = datTrxToCreate.curAmount
+                                objRepeatTrx.GeneratedAmount = datTrxToCreate.Amount
                             End If
                         End If
                     Next
                 Catch ex As Exception
-                    Throw New Exception("Error generating trx for [" + objGenerator.strDescription + "]", ex)
+                    Throw New Exception("Error generating trx for [" + objGenerator.Description + "]", ex)
                 End Try
             End If
         Next objGenerator
@@ -78,64 +78,64 @@ Public Module TrxGenerator
     '$Returns A string with a diagnostic message if there was a problem,
     '   else an empty string.
 
-    Public Function gstrCreateOneTrx(ByRef c As TrxToCreate, ByVal objTargetReg As Register, ByVal colRegisters As ICollection(Of Register)) As String
+    Public Function CreateOneGeneratedTrx(ByRef c As TrxToCreate, ByVal objTargetReg As Register, ByVal colRegisters As ICollection(Of Register)) As String
 
         Dim objOtherReg As Register
         Dim objCompareReg As Register
         Dim objTransferMgr As TransferManager
         Dim intSplitIndex As Integer
 
-        gstrCreateOneTrx = ""
+        CreateOneGeneratedTrx = ""
 
-        Select Case c.objTrxType
+        Select Case c.TrxType
             Case GetType(BankTrx)
                 Dim objNormalTrx As BankTrx = New BankTrx(objTargetReg)
-                If c.intSplits = 0 Then
-                    gstrCreateOneTrx = "No splits for normal Trx"
+                If c.SplitCount = 0 Then
+                    CreateOneGeneratedTrx = "No splits for normal Trx"
                     Exit Function
                 End If
-                objNormalTrx.NewStartNormal(True, c.strNumber, c.datDate, c.strDescription, c.strMemo, c.lngStatus, c.blnFake,
-                                      c.curNormalMatchRange, c.blnAwaitingReview, c.blnAutoGenerated, c.intRepeatSeq,
-                                      c.strImportKey, c.strRepeatKey)
-                For intSplitIndex = 1 To c.intSplits
-                    With c.adatSplits(intSplitIndex)
-                        objNormalTrx.AddSplit(.strMemo, .strCategoryKey, .strPONumber, .strInvoiceNum, .datInvoiceDate, .datDueDate, .strTerms, .strBudgetKey, .curAmount)
+                objNormalTrx.NewStartNormal(True, c.Number, c.TrxDate, c.Description, c.Memo, c.Status, c.IsFake,
+                                      c.NormalMatchRange, c.IsAwaitingReview, c.IsAutoGenerated, c.RepeatSeq,
+                                      c.ImportKey, c.RepeatKey)
+                For intSplitIndex = 1 To c.SplitCount
+                    With c.Splits(intSplitIndex)
+                        objNormalTrx.AddSplit(.Memo, .CategoryKey, .PONumber, .InvoiceNum, .InvoiceDate, .DueDate, .Terms, .BudgetKey, .Amount)
                     End With
                 Next
-                objNormalTrx.GeneratedAmount = c.adatSplits(1).curAmount
+                objNormalTrx.GeneratedAmount = c.Splits(1).Amount
                 objTargetReg.NewLoadEnd(objNormalTrx)
             Case GetType(BudgetTrx)
-                If c.strBudgetKey = "" Then
-                    gstrCreateOneTrx = "No budget key for budget Trx"
+                If c.BudgetKey = "" Then
+                    CreateOneGeneratedTrx = "No budget key for budget Trx"
                     Exit Function
                 End If
-                If c.lngBudgetUnit <> BaseTrx.RepeatUnit.Missing Then
-                    If c.intBudgetNumber = 0 Then
-                        gstrCreateOneTrx = "Missing budget number"
+                If c.BudgetUnit <> BaseTrx.RepeatUnit.Missing Then
+                    If c.BudgetNumber = 0 Then
+                        CreateOneGeneratedTrx = "Missing budget number"
                         Exit Function
                     End If
-                    c.datBudgetStarts = DateAdd(Microsoft.VisualBasic.DateInterval.Day, 1, gdatIncrementDate(c.datDate, c.lngBudgetUnit, -c.intBudgetNumber))
+                    c.BudgetStarts = DateAdd(Microsoft.VisualBasic.DateInterval.Day, 1, GetNextDateInTrxGenSequence(c.TrxDate, c.BudgetUnit, -c.BudgetNumber))
                 End If
-                If c.datBudgetStarts = Utilities.datEmpty Then
-                    gstrCreateOneTrx = "No budget ending date"
+                If c.BudgetStarts = Utilities.datEmpty Then
+                    CreateOneGeneratedTrx = "No budget ending date"
                     Exit Function
                 End If
                 Dim objBudgetTrx As BudgetTrx = New BudgetTrx(objTargetReg)
-                objBudgetTrx.NewStartBudget(True, c.datDate, c.strDescription, c.strMemo, c.blnAwaitingReview, c.blnAutoGenerated, c.intRepeatSeq, c.strRepeatKey, c.curAmount, c.datBudgetStarts, c.strBudgetKey)
-                objBudgetTrx.GeneratedAmount = c.curAmount
+                objBudgetTrx.NewStartBudget(True, c.TrxDate, c.Description, c.Memo, c.IsAwaitingReview, c.IsAutoGenerated, c.RepeatSeq, c.RepeatKey, c.Amount, c.BudgetStarts, c.BudgetKey)
+                objBudgetTrx.GeneratedAmount = c.Amount
                 objTargetReg.NewLoadEnd(objBudgetTrx)
             Case GetType(TransferTrx)
-                If c.strTransferKey = "" Then
-                    gstrCreateOneTrx = "No register key for other register for transfer Trx"
+                If c.TransferKey = "" Then
+                    CreateOneGeneratedTrx = "No register key for other register for transfer Trx"
                     Exit Function
                 End If
-                If c.blnAutoGenerated Then
+                If c.IsAutoGenerated Then
                     'UPGRADE_NOTE: Object objOtherReg may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
                     objOtherReg = Nothing
                     For Each objCompareReg In colRegisters
-                        If objCompareReg.RegisterKey = c.strTransferKey Then
+                        If objCompareReg.RegisterKey = c.TransferKey Then
                             If objCompareReg Is objTargetReg Then
-                                gstrCreateOneTrx = "Cannot transfer to the same register in transfer trx"
+                                CreateOneGeneratedTrx = "Cannot transfer to the same register in transfer trx"
                                 Exit Function
                             End If
                             objOtherReg = objCompareReg
@@ -143,16 +143,16 @@ Public Module TrxGenerator
                         End If
                     Next objCompareReg
                     If objOtherReg Is Nothing Then
-                        gstrCreateOneTrx = "Could not find other register in transfer trx"
+                        CreateOneGeneratedTrx = "Could not find other register in transfer trx"
                         Exit Function
                     End If
                     'Don't have to set repeat properties in this case, because these two
                     'registers are always normal registers. Just for the heck of it though...
                     objTransferMgr = New TransferManager
-                    objTransferMgr.LoadGeneratedTransfer(objTargetReg, objOtherReg, c.datDate, c.strDescription, c.strMemo, True, c.curAmount, c.strRepeatKey, c.blnAwaitingReview, c.blnAutoGenerated, c.intRepeatSeq)
+                    objTransferMgr.LoadGeneratedTransfer(objTargetReg, objOtherReg, c.TrxDate, c.Description, c.Memo, True, c.Amount, c.RepeatKey, c.IsAwaitingReview, c.IsAutoGenerated, c.RepeatSeq)
                 Else
                     Dim objXfrTrx As TransferTrx = New TransferTrx(objTargetReg)
-                    objXfrTrx.NewStartTransfer(True, c.datDate, c.strDescription, c.strMemo, c.blnFake, c.blnAwaitingReview, c.blnAutoGenerated, c.intRepeatSeq, c.strRepeatKey, c.strTransferKey, c.curAmount)
+                    objXfrTrx.NewStartTransfer(True, c.TrxDate, c.Description, c.Memo, c.IsFake, c.IsAwaitingReview, c.IsAutoGenerated, c.RepeatSeq, c.RepeatKey, c.TransferKey, c.Amount)
                     objTargetReg.NewLoadEnd(objXfrTrx)
                 End If
         End Select
@@ -179,7 +179,7 @@ Public Module TrxGenerator
     '   unused. This allows "for" loops from index 1 to UBound(array)
     '   even if no SequencedTrx created.
 
-    Public Function gdatGenerateSeqTrxForDates(ByVal datNominalStartDate As Date, ByVal vntNominalEndDate As Object, ByVal datRegisterEndDate As Date, ByVal lngRptUnit As BaseTrx.RepeatUnit, ByVal intRptNumber As Integer, ByVal curAmount As Decimal, ByVal intStartRepeatSeq As Integer) As SequencedTrx()
+    Public Function GenerateSeqTrxForDates(ByVal datNominalStartDate As Date, ByVal vntNominalEndDate As Object, ByVal datRegisterEndDate As Date, ByVal lngRptUnit As BaseTrx.RepeatUnit, ByVal intRptNumber As Integer, ByVal curAmount As Decimal, ByVal intStartRepeatSeq As Integer) As SequencedTrx()
 
         Dim datTrxDate As Date
         Dim colResults As ICollection(Of SequencedTrx)
@@ -205,7 +205,7 @@ Public Module TrxGenerator
             objSeqTrx.Init(datTrxDate, curAmount, intRepeatSeq)
             colResults.Add(objSeqTrx)
             intRepeatSeq = intRepeatSeq + 1
-            datTrxDate = gdatIncrementDate(datTrxDate, lngRptUnit, intRptNumber)
+            datTrxDate = GetNextDateInTrxGenSequence(datTrxDate, lngRptUnit, intRptNumber)
         Loop
 
         Dim datResults(colResults.Count()) As SequencedTrx
@@ -226,7 +226,7 @@ Public Module TrxGenerator
     '$Param datNewTrx The SequencedTrx whose .curAmount values will be set.
     '$Param datSamples The SequencedTrx whose elements are used as samples.
 
-    Public Sub gInterpolateAmountsFromSamples(ByRef datNewTrx() As SequencedTrx, ByRef datSamples() As SequencedTrx)
+    Public Sub InterpolateGeneratedTrxAmountsFromSamples(ByRef datNewTrx() As SequencedTrx, ByRef datSamples() As SequencedTrx)
 
         Dim intNewIndex As Integer
         Dim intSampleIndex As Integer
@@ -238,28 +238,28 @@ Public Module TrxGenerator
 
         'For each trx whose .curAmount value to set.
         For intNewIndex = 1 To UBound(datNewTrx)
-            datNewDate = datNewTrx(intNewIndex).datDate
+            datNewDate = datNewTrx(intNewIndex).TrxDate
             'Find the sample pair to interpolate between.
             'Assumes the samples are in ascending date order.
             blnAmountSet = False
             datSampleDate = Utilities.datEmpty
             For intSampleIndex = 1 To UBound(datSamples)
                 datPrevSampleDate = datSampleDate
-                datSampleDate = datSamples(intSampleIndex).datDate
+                datSampleDate = datSamples(intSampleIndex).TrxDate
                 'Is this the closest sample after the date of the transaction to create?
                 If datSampleDate >= datNewDate Then
                     'Is there a sample before it, to make a pair to interpolate between?
                     If intSampleIndex > 1 Then
                         'Compute the amount by interpolating between the sample amounts.
                         dblFraction = (datNewDate.ToOADate - datPrevSampleDate.ToOADate) / (datSampleDate.ToOADate - datPrevSampleDate.ToOADate)
-                        datNewTrx(intNewIndex).curAmount = CDec(System.Math.Round(datSamples(intSampleIndex - 1).curAmount + (datSamples(intSampleIndex).curAmount - datSamples(intSampleIndex - 1).curAmount) * dblFraction, 2))
+                        datNewTrx(intNewIndex).Amount = CDec(System.Math.Round(datSamples(intSampleIndex - 1).Amount + (datSamples(intSampleIndex).Amount - datSamples(intSampleIndex - 1).Amount) * dblFraction, 2))
                         blnAmountSet = True
                         'We don't need a date before the trx date if the trx date *IS* the
                         'sample date, because in that case we don't have to interpolate
                         'at all. This allows us to create a trx on the date of the first
                         'sample.
                     ElseIf datSampleDate = datNewDate Then
-                        datNewTrx(intNewIndex).curAmount = datSamples(intSampleIndex).curAmount
+                        datNewTrx(intNewIndex).Amount = datSamples(intSampleIndex).Amount
                         blnAmountSet = True
                     End If
                     Exit For
@@ -268,7 +268,7 @@ Public Module TrxGenerator
             If Not blnAmountSet Then
                 'datNewDate is before the earliest sample date or after the latest,
                 'so it is impossible to interpolate.
-                datNewTrx(intNewIndex).blnSkip = True
+                datNewTrx(intNewIndex).SkipSeqNum = True
             End If
         Next
 
@@ -281,7 +281,7 @@ Public Module TrxGenerator
     '   than the date and amount will be taken.
     '$Returns The new collection of TrxToCreate.
 
-    Public Function gcolTrxToCreateFromSeqTrx(ByRef datSeqTrx() As SequencedTrx, ByRef datTrxTemplate As TrxToCreate) As ICollection(Of TrxToCreate)
+    Public Function ConvertSeqTrxToTrxToCreate(ByRef datSeqTrx() As SequencedTrx, ByRef datTrxTemplate As TrxToCreate) As ICollection(Of TrxToCreate)
 
         Dim colResults As ICollection(Of TrxToCreate)
         Dim intIndex As Integer
@@ -293,16 +293,16 @@ Public Module TrxGenerator
 
         colResults = New List(Of TrxToCreate)
         For intIndex = 1 To UBound(datSeqTrx)
-            If Not datSeqTrx(intIndex).blnSkip Then
+            If Not datSeqTrx(intIndex).SkipSeqNum Then
                 'LSet datTrxTmp = datTrxTemplate
-                datTrxTmp = gdatCopyTrxToCreate(datTrxTemplate)
-                datTrxTmp.datDate = datSeqTrx(intIndex).datDate
-                If datTrxTemplate.objTrxType = GetType(BankTrx) Then
-                    datTrxTmp.adatSplits(1).curAmount = datSeqTrx(intIndex).curAmount
+                datTrxTmp = CopyTrxToCreate(datTrxTemplate)
+                datTrxTmp.TrxDate = datSeqTrx(intIndex).TrxDate
+                If datTrxTemplate.TrxType = GetType(BankTrx) Then
+                    datTrxTmp.Splits(1).Amount = datSeqTrx(intIndex).Amount
                     'If the memo says "due [on |by ][the ]nn???" then use "nn" as the day of the month in split due date.
-                    If datTrxTemplate.strMemo <> Nothing Then
-                        If datTrxTemplate.strMemo.StartsWith("due ", StringComparison.InvariantCultureIgnoreCase) Then
-                            strDueDayOfMonth = datTrxTemplate.strMemo.Substring(4)
+                    If datTrxTemplate.Memo <> Nothing Then
+                        If datTrxTemplate.Memo.StartsWith("due ", StringComparison.InvariantCultureIgnoreCase) Then
+                            strDueDayOfMonth = datTrxTemplate.Memo.Substring(4)
                             If strDueDayOfMonth.StartsWith("on ", StringComparison.InvariantCultureIgnoreCase) Then
                                 strDueDayOfMonth = strDueDayOfMonth.Substring(3)
                             End If
@@ -314,11 +314,11 @@ Public Module TrxGenerator
                             End If
                             intDueDayOfMonth = CInt(Val(strDueDayOfMonth))
                             If intDueDayOfMonth > 0 Then
-                                intDueYear = datTrxTmp.datDate.Year
-                                intDueMonth = datTrxTmp.datDate.Month
+                                intDueYear = datTrxTmp.TrxDate.Year
+                                intDueMonth = datTrxTmp.TrxDate.Month
                                 'If the due day of month is less than the day of month of the transaction that would put
                                 'the due date in the past, so assume the due date is in the following month.
-                                If intDueDayOfMonth < datTrxTmp.datDate.Day Then
+                                If intDueDayOfMonth < datTrxTmp.TrxDate.Day Then
                                     If intDueMonth = 12 Then
                                         intDueYear = intDueYear + 1
                                         intDueMonth = 1
@@ -329,18 +329,18 @@ Public Module TrxGenerator
                                 If intDueDayOfMonth > DateTime.DaysInMonth(intDueYear, intDueMonth) Then
                                     intDueDayOfMonth = DateTime.DaysInMonth(intDueYear, intDueMonth)
                                 End If
-                                datTrxTmp.adatSplits(1).datDueDate = New DateTime(intDueYear, intDueMonth, intDueDayOfMonth)
+                                datTrxTmp.Splits(1).DueDate = New DateTime(intDueYear, intDueMonth, intDueDayOfMonth)
                             End If
                         End If
                     End If
                 Else
-                    datTrxTmp.curAmount = datSeqTrx(intIndex).curAmount
+                    datTrxTmp.Amount = datSeqTrx(intIndex).Amount
                 End If
-                datTrxTmp.intRepeatSeq = datSeqTrx(intIndex).intRepeatSeq
+                datTrxTmp.RepeatSeq = datSeqTrx(intIndex).RepeatSeq
                 colResults.Add(datTrxTmp)
             End If
         Next
-        gcolTrxToCreateFromSeqTrx = colResults
+        ConvertSeqTrxToTrxToCreate = colResults
 
     End Function
 End Module

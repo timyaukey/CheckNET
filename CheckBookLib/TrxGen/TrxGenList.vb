@@ -11,7 +11,7 @@ Public Class TrxGenList
     Private mintStartRepeatSeq As Integer
     Private maudtTrx() As TrxToCreate
 
-    Public Overrides Function strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String
+    Public Overrides Function Load(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String
 
         Dim strError As String
         Dim nodeTrx As VB6XmlNode
@@ -24,12 +24,12 @@ Public Class TrxGenList
         Dim blnAddTrx As Boolean
         Dim intNextRepeatSeq As Integer
 
-        strError = strLoadCore(domDoc)
+        strError = LoadCore(domDoc)
         If strError <> "" Then
             Return strError
         End If
 
-        strError = gstrLoadTrxGeneratorCore(domDoc, mblnEnabled, mstrRepeatKey, mintStartRepeatSeq, mstrDescription, objAccount)
+        strError = LoadTrxGeneratorCore(domDoc, mblnEnabled, mstrRepeatKey, mintStartRepeatSeq, mstrDescription, objAccount)
         If strError <> "" Then
             Return strError
         End If
@@ -49,16 +49,16 @@ Public Class TrxGenList
                     If strMsg <> "" Then
                         Return strMsg
                     End If
-                    strMsg = gstrGetTrxGenTemplateNormal(objAccount.Company, elmTrx, mstrRepeatKey, curAmount, udtTrx)
+                    strMsg = GetTrxGenTemplateBank(objAccount.Company, elmTrx, mstrRepeatKey, curAmount, udtTrx)
                     If strMsg <> "" Then
                         Return strMsg
                     End If
                     blnAddTrx = True
                 End If
                 If blnAddTrx Then
-                    udtTrx.datDate = datDate
-                    udtTrx.curAmount = curAmount
-                    udtTrx.intRepeatSeq = intNextRepeatSeq
+                    udtTrx.TrxDate = datDate
+                    udtTrx.Amount = curAmount
+                    udtTrx.RepeatSeq = intNextRepeatSeq
                     intNextRepeatSeq = intNextRepeatSeq + 1
                     intCount = intCount + 1
                     ReDim Preserve maudtTrx(intCount)
@@ -98,25 +98,25 @@ Public Class TrxGenList
         curAmount = CDec(vntAttrib)
     End Function
 
-    Public Overrides ReadOnly Property strDescription() As String
+    Public Overrides ReadOnly Property Description() As String
         Get
             Return mstrDescription
         End Get
     End Property
 
-    Public Overrides ReadOnly Property blnEnabled() As Boolean
+    Public Overrides ReadOnly Property IsEnabled() As Boolean
         Get
             Return mblnEnabled
         End Get
     End Property
 
-    Public Overrides ReadOnly Property strRepeatKey() As String
+    Public Overrides ReadOnly Property RepeatKey() As String
         Get
             Return mstrRepeatKey
         End Get
     End Property
 
-    Public Overrides Function colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As ICollection(Of TrxToCreate)
+    Public Overrides Function CreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As ICollection(Of TrxToCreate)
 
         Dim colResults As ICollection(Of TrxToCreate)
         Dim lngIndex As Integer
@@ -125,7 +125,7 @@ Public Class TrxGenList
         colResults = New List(Of TrxToCreate)
         lngCount = UBound(maudtTrx)
         For lngIndex = Utilities.intLBOUND1 To lngCount
-            If maudtTrx(lngIndex).datDate <= datRegisterEndDate Then
+            If maudtTrx(lngIndex).TrxDate <= datRegisterEndDate Then
                 colResults.Add(maudtTrx(lngIndex))
             End If
         Next

@@ -4,21 +4,21 @@ Option Explicit On
 Public MustInherit Class TrxGenBase
     Implements ITrxGenerator
 
-    Public MustOverride ReadOnly Property blnEnabled As Boolean Implements ITrxGenerator.blnEnabled
+    Public MustOverride ReadOnly Property IsEnabled As Boolean Implements ITrxGenerator.IsEnabled
     Private mintMaxDaysOld As Integer?
 
-    Public ReadOnly Property intMaxDaysOld() As Integer? Implements ITrxGenerator.intMaxDaysOld
+    Public ReadOnly Property MaxDaysOld() As Integer? Implements ITrxGenerator.MaxDaysOld
         Get
             Return mintMaxDaysOld
         End Get
     End Property
 
-    Public MustOverride ReadOnly Property strDescription As String Implements ITrxGenerator.strDescription
-    Public MustOverride ReadOnly Property strRepeatKey As String Implements ITrxGenerator.strRepeatKey
-    Public MustOverride Function colCreateTrx(objReg As Register, datRptEndMax As Date) As ICollection(Of TrxToCreate) Implements ITrxGenerator.colCreateTrx
-    Public MustOverride Function strLoad(domDoc As VB6XmlDocument, objAccount As Account) As String Implements ITrxGenerator.strLoad
+    Public MustOverride ReadOnly Property Description As String Implements ITrxGenerator.Description
+    Public MustOverride ReadOnly Property RepeatKey As String Implements ITrxGenerator.RepeatKey
+    Public MustOverride Function CreateTrx(objReg As Register, datRptEndMax As Date) As ICollection(Of TrxToCreate) Implements ITrxGenerator.CreateTrx
+    Public MustOverride Function Load(domDoc As VB6XmlDocument, objAccount As Account) As String Implements ITrxGenerator.Load
 
-    Protected Function strLoadCore(ByVal domDoc As VB6XmlDocument) As String
+    Protected Function LoadCore(ByVal domDoc As VB6XmlDocument) As String
         Dim vntAttrib As Object = domDoc.DocumentElement.GetAttribute("maxdaysold")
         Dim intMax As Integer
         If gblnXmlAttributeMissing(vntAttrib) Then

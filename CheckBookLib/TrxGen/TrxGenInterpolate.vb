@@ -13,68 +13,68 @@ Public Class TrxGenInterpolate
     Private mstrRepeatKey As String
     Private mintStartRepeatSeq As Integer
 
-    Public Overrides Function strLoad(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String
+    Public Overrides Function Load(ByVal domDoc As VB6XmlDocument, ByVal objAccount As Account) As String
 
         Dim strError As String
         Dim elmRepeat As VB6XmlElement = Nothing
 
-        strError = strLoadCore(domDoc)
+        strError = LoadCore(domDoc)
         If strError <> "" Then
             Return strError
         End If
 
-        strError = gstrLoadTrxGeneratorCore(domDoc, mblnEnabled, mstrRepeatKey, mintStartRepeatSeq, mstrDescription, objAccount)
+        strError = LoadTrxGeneratorCore(domDoc, mblnEnabled, mstrRepeatKey, mintStartRepeatSeq, mstrDescription, objAccount)
         If strError <> "" Then
             Return strError
         End If
 
-        strError = gstrGetDateSequenceParams(domDoc.DocumentElement, "schedule", elmRepeat, mdatSequence)
+        strError = GetTrxGenDateSequenceParams(domDoc.DocumentElement, "schedule", elmRepeat, mdatSequence)
         If strError <> "" Then
             Return strError
         End If
 
-        mdatSamples = gdatLoadSequencedTrx(domDoc.DocumentElement, "sample", 0, 0, strError)
+        mdatSamples = LoadTrxGenSequencedTrx(domDoc.DocumentElement, "sample", 0, 0, strError)
         If strError <> "" Then
             Return strError
         End If
 
-        Return gstrGetTrxGenTemplate(objAccount.Company, domDoc, mstrRepeatKey, 0, mdatTrxTemplate)
+        Return GetTrxGenTemplate(objAccount.Company, domDoc, mstrRepeatKey, 0, mdatTrxTemplate)
     End Function
 
-    Public Overrides ReadOnly Property strDescription() As String
+    Public Overrides ReadOnly Property Description() As String
         Get
             Return mstrDescription
         End Get
     End Property
 
-    Public Overrides ReadOnly Property blnEnabled() As Boolean
+    Public Overrides ReadOnly Property IsEnabled() As Boolean
         Get
             Return mblnEnabled
         End Get
     End Property
 
-    Public Overrides ReadOnly Property strRepeatKey() As String
+    Public Overrides ReadOnly Property RepeatKey() As String
         Get
-            Return mdatTrxTemplate.strRepeatKey
+            Return mdatTrxTemplate.RepeatKey
         End Get
     End Property
 
-    Public Overrides Function colCreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As ICollection(Of TrxToCreate)
+    Public Overrides Function CreateTrx(ByVal objReg As Register, ByVal datRegisterEndDate As Date) As ICollection(Of TrxToCreate)
 
         Dim datNewTrx() As SequencedTrx
 
         'Get SequencedTrx to create BaseTrx for.
         'Their .curAmount values will be initialized to zero.
-        datNewTrx = gdatGenerateSeqTrxForDates(mdatSequence.datNominalStartDate, mdatSequence.vntNominalEndDate, datRegisterEndDate, mdatSequence.lngRptUnit, mdatSequence.intRptNumber, 0, mintStartRepeatSeq)
+        datNewTrx = GenerateSeqTrxForDates(mdatSequence.NominalStartDate, mdatSequence.NominalEndDate, datRegisterEndDate, mdatSequence.RptUnit, mdatSequence.RptNumber, 0, mintStartRepeatSeq)
 
         'Set the .curAmount values for datNewTrx by interpolating from
         'date/amount pairs in mdatSamples, and skip datNewTrx elements
         'outside the sample date range.
-        gInterpolateAmountsFromSamples(datNewTrx, mdatSamples)
+        InterpolateGeneratedTrxAmountsFromSamples(datNewTrx, mdatSamples)
 
         'Combine datNewTrx with mdatTrxTemplate to create TrxToCreate
         'array to return.
-        Return gcolTrxToCreateFromSeqTrx(datNewTrx, mdatTrxTemplate)
+        Return ConvertSeqTrxToTrxToCreate(datNewTrx, mdatTrxTemplate)
 
     End Function
 End Class
