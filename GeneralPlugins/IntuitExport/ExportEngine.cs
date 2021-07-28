@@ -225,9 +225,9 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 string catExportKey = GetCatExportKey(split.CategoryKey);
                 if (!Categories.TryGetValue(catExportKey, out cat))
                 {
-                    string catName = CatTrans.strKeyToValue1(split.CategoryKey);
+                    string catName = CatTrans.KeyToValue1(split.CategoryKey);
                     // Categories includes balance sheet accounts
-                    StringTransElement catElem = this.Company.Categories.get_objElement(this.Company.Categories.intLookupKey(split.CategoryKey));
+                    StringTransElement catElem = this.Company.Categories.get_GetElement(this.Company.Categories.FindIndexOfKey(split.CategoryKey));
                     // A null intuitCatType value will cause this category to NOT be output to the IIF file.
                     // This is how we prevent categories that are actually asset, liability and equity accounts
                     // from being output to the IIF as income, expense or COGS account.
@@ -240,15 +240,15 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                     {
                         string catType;
                         intuitCatType = null;
-                        if (!catElem.colValues.TryGetValue(CategoryTranslator.strTypeKey, out catType))
-                            catType = CategoryTranslator.strTypeOfficeExpense;
-                        if (catType == CategoryTranslator.strTypeCOGS)
+                        if (!catElem.ExtraValues.TryGetValue(CategoryTranslator.TypeKey, out catType))
+                            catType = CategoryTranslator.TypeOfficeExpense;
+                        if (catType == CategoryTranslator.TypeCOGS)
                             intuitCatType = "COGS";
-                        else if (catType == CategoryTranslator.strTypeOtherIncome)
+                        else if (catType == CategoryTranslator.TypeOtherIncome)
                             intuitCatType = "EXINC";
-                        else if (catType == CategoryTranslator.strTypeOtherExpense)
+                        else if (catType == CategoryTranslator.TypeOtherExpense)
                             intuitCatType = "EXEXP";
-                        else if (catType == CategoryTranslator.strTypeTaxes)
+                        else if (catType == CategoryTranslator.TypeTaxes)
                             intuitCatType = "EXEXP";
                         else if (catName.ToUpper().StartsWith("E:"))
                             intuitCatType = "EXP";

@@ -403,7 +403,7 @@ Public Class TrxForm
                             objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(objSplit.Amount)))
                             curTotalApplied = curTotalApplied + objSplit.Amount
                             objItem.SubItems.Insert(6, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing,
-                                mobjCompany.Categories.strTranslateKey(objSplit.CategoryKey)))
+                                mobjCompany.Categories.TranslateKey(objSplit.CategoryKey)))
                         End With
                     End If
                 Next objSplit
@@ -535,7 +535,7 @@ Public Class TrxForm
         Dim intIndex As Integer
         'Apparently you cannot assign a zero length string to a combo box
         'even if there is an empty element in the list.
-        strValue1 = objList.strKeyToValue1(strKey)
+        strValue1 = objList.KeyToValue1(strKey)
         If strValue1 = "" Then
             cbo.SelectedIndex = -1
             'In case there is actually a blank element in the list.
@@ -1041,7 +1041,7 @@ Public Class TrxForm
                                 Exit Function
                             End If
                         Else
-                            If blnAccountIsPersonal <> CategoryTranslator.blnIsPersonal(mobjCompany.Categories.strKeyToValue1(.CategoryKey)) Then
+                            If blnAccountIsPersonal <> CategoryTranslator.IsPersonal(mobjCompany.Categories.KeyToValue1(.CategoryKey)) Then
                                 ValidationError("Personal category may not be used in a non-personal account, or visa versa")
                                 Exit Function
                             End If
@@ -2078,7 +2078,7 @@ Public Class TrxForm
             If lngItemData = 0 Then
                 strGetStringTranslatorKeyFromCombo = ""
             Else
-                strGetStringTranslatorKeyFromCombo = objList.strKey(lngItemData)
+                strGetStringTranslatorKeyFromCombo = objList.GetKey(lngItemData)
             End If
         End If
     End Function

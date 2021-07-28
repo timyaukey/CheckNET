@@ -581,7 +581,7 @@ Public Module TrxGeneratorLoader
             GetTrxGenTemplateBudget = "Missing [budgetkey] attribute"
             Exit Function
         End If
-        If objCompany.Budgets.intLookupKey(CStr(vntAttrib)) = 0 Then
+        If objCompany.Budgets.FindIndexOfKey(CStr(vntAttrib)) = 0 Then
             GetTrxGenTemplateBudget = "Invalid [budgetkey] attribute"
             Exit Function
         End If
@@ -650,7 +650,7 @@ Public Module TrxGeneratorLoader
             GetTrxGenTemplateBank = "Missing [catkey] attribute"
             Exit Function
         End If
-        If objCompany.Categories.intLookupKey(CStr(vntAttrib)) = 0 Then
+        If objCompany.Categories.FindIndexOfKey(CStr(vntAttrib)) = 0 Then
             GetTrxGenTemplateBank = "Invalid [catkey] attribute"
             Exit Function
         End If
@@ -658,7 +658,7 @@ Public Module TrxGeneratorLoader
         'Budget key.
         vntAttrib = elmTrxTpt.GetAttribute("budgetkey")
         If Not gblnXmlAttributeMissing(vntAttrib) Then
-            If objCompany.Budgets.intLookupKey(CStr(vntAttrib)) = 0 Then
+            If objCompany.Budgets.FindIndexOfKey(CStr(vntAttrib)) = 0 Then
                 GetTrxGenTemplateBank = "Invalid [budgetkey] attribute"
                 Exit Function
             End If

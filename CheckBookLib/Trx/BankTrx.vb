@@ -206,7 +206,7 @@ Public Class BankTrx
                     Return "(mixed)"
                 End If
             Next objSplit
-            Return RegisterInternal.Account.Company.Categories.strTranslateKey(strCategoryKey)
+            Return RegisterInternal.Account.Company.Categories.TranslateKey(strCategoryKey)
         End Get
     End Property
 
@@ -328,7 +328,7 @@ Public Class BankTrx
                 strTerms2 = objSplit.Terms
                 strBudgetKey = objSplit.BudgetKey
                 'Format fields from the first split.
-                strCategory = objCompany.Categories.strTranslateKey(strCatKey)
+                strCategory = objCompany.Categories.TranslateKey(strCatKey)
                 strInvoiceNum = strInvoiceNum2
                 strPONumber = strPONumber2
                 If datInvoiceDate = Utilities.datEmpty Then
@@ -342,7 +342,7 @@ Public Class BankTrx
                     strDueDate = Utilities.strFormatDate(datDueDate)
                 End If
                 strTerms = strTerms2
-                strBudget = objCompany.Budgets.strTranslateKey(strBudgetKey)
+                strBudget = objCompany.Budgets.TranslateKey(strBudgetKey)
                 blnFirstSplit = False
             Else
                 If strCatKey <> objSplit.CategoryKey Then
@@ -609,7 +609,7 @@ Public Class BankTrx
                         Register.FireValidationError(Me, "Split applied to budget trx has wrong budget key")
                     End If
                 End If
-                If blnAccountIsPersonal <> CategoryTranslator.blnIsPersonal(objCategories.strKeyToValue1(objSplit.CategoryKey)) Then
+                If blnAccountIsPersonal <> CategoryTranslator.IsPersonal(objCategories.KeyToValue1(objSplit.CategoryKey)) Then
                     Register.FireValidationError(Me, "Split category mixes personal and business")
                 End If
                 Dim intDotOffset As Integer = objSplit.CategoryKey.IndexOf("."c)

@@ -14,11 +14,11 @@ Public NotInheritable Class IncomeExpenseScanner
                             If Not objNormalTrx.IsFake Then
                                 For Each objSplit As TrxSplit In objNormalTrx.Splits
                                     If Not objSplit.HasReplicaTrx Then
-                                        Dim intCatIndex As Integer = objCategories.intLookupKey(objSplit.CategoryKey)
-                                        Dim objTransElem As StringTransElement = objCategories.objElement(intCatIndex)
+                                        Dim intCatIndex As Integer = objCategories.FindIndexOfKey(objSplit.CategoryKey)
+                                        Dim objTransElem As StringTransElement = objCategories.GetElement(intCatIndex)
                                         Dim strGroupKey As String = Nothing
-                                        If Not objTransElem.colValues.TryGetValue(CategoryTranslator.strTypeKey, strGroupKey) Then
-                                            strGroupKey = CategoryTranslator.strTypeOperatingExpenses
+                                        If Not objTransElem.ExtraValues.TryGetValue(CategoryTranslator.TypeKey, strGroupKey) Then
+                                            strGroupKey = CategoryTranslator.TypeOperatingExpenses
                                         End If
                                         Dim objGroup As LineItemGroup = objManager.GetGroup(strGroupKey)
                                         Dim objLine As ReportLineItem = objGroup.GetItem(objManager, objSplit.CategoryKey)

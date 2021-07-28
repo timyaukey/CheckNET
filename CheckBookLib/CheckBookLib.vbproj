@@ -84,8 +84,8 @@
   <ItemGroup>
     <Compile Include="Account.vb" />
     <Compile Include="UITypeEditors\BooleanStringTypeConverter.vb" />
-    <Compile Include="BudgetTranslator.vb" />
-    <Compile Include="CategoryTranslator.vb" />
+    <Compile Include="StringTrans\BudgetTranslator.vb" />
+    <Compile Include="StringTrans\CategoryTranslator.vb" />
     <Compile Include="AgingUtils.vb" />
     <Compile Include="CBListBoxItem.vb" />
     <Compile Include="CompanyInfo.vb" />
@@ -94,8 +94,8 @@
     <Compile Include="FilePersisterExceptions.vb" />
     <Compile Include="IFilePersister.vb" />
     <Compile Include="IFilePersistable.vb" />
-    <Compile Include="IStringTranslator.vb" />
-    <Compile Include="LineStringTranslator.vb" />
+    <Compile Include="StringTrans\IStringTranslator.vb" />
+    <Compile Include="StringTrans\LineStringTranslator.vb" />
     <Compile Include="ListViewSorter.vb" />
     <Compile Include="Logging\LogAddNull.vb" />
     <Compile Include="Logging\LogDeleteNull.vb" />
@@ -136,8 +136,8 @@
     <Compile Include="Reporting\TrxNameSummary.vb" />
     <Compile Include="Reporting\VendorSummary.vb" />
     <Compile Include="SearchUtilities.vb" />
-    <Compile Include="StringTransElement.vb" />
-    <Compile Include="SimpleStringTranslator.vb" />
+    <Compile Include="StringTrans\StringTransElement.vb" />
+    <Compile Include="StringTrans\SimpleStringTranslator.vb" />
     <Compile Include="TrxGen\FilePersistableType.vb" />
     <Compile Include="TrxGen\TGEBudgetTrx.vb" />
     <Compile Include="TrxGen\TGEGeneratorInterpolate.vb" />
@@ -184,7 +184,7 @@
     <Compile Include="Trx\ReplicaTrx.vb" />
     <Compile Include="Trx\Split.vb" />
     <Compile Include="Trx\SplitData.vb" />
-    <Compile Include="StringTranslator.vb" />
+    <Compile Include="StringTrans\StringTranslator.vb" />
     <Compile Include="TransferManager.vb" />
     <Compile Include="Trx\TransferTrx.vb" />
     <Compile Include="Trx\BaseTrx.vb" />

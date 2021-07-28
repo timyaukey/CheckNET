@@ -138,7 +138,7 @@ Friend Class RptScanSplitsForm
                     'MsgBox "You must select a category.", vbCritical
                     'Exit Function
                 Else
-                    mstrCatKey = mobjCompany.Categories.strKey(UITools.GetItemData(cboCategory, cboCategory.SelectedIndex))
+                    mstrCatKey = mobjCompany.Categories.GetKey(UITools.GetItemData(cboCategory, cboCategory.SelectedIndex))
                 End If
             End If
 
@@ -168,9 +168,9 @@ Friend Class RptScanSplitsForm
 
         Try
 
-            ReDim maudtCatTotals(mobjCompany.Categories.intElements)
-            For intCatIndex = 1 To mobjCompany.Categories.intElements
-                strCatName = mobjCompany.Categories.strValue1(intCatIndex)
+            ReDim maudtCatTotals(mobjCompany.Categories.ElementCount)
+            For intCatIndex = 1 To mobjCompany.Categories.ElementCount
+                strCatName = mobjCompany.Categories.GetValue1(intCatIndex)
                 For intCharPos = 1 To Len(strCatName)
                     If Mid(strCatName, intCharPos, 1) = ":" Then
                         maudtCatTotals(intCatIndex).intNestingLevel = maudtCatTotals(intCatIndex).intNestingLevel + 1
@@ -265,7 +265,7 @@ Friend Class RptScanSplitsForm
 
             Select Case mlngRptType
                 Case SplitReportType.Totals
-                    intCatIndex = mobjCompany.Categories.intLookupKey(objSplit.CategoryKey)
+                    intCatIndex = mobjCompany.Categories.FindIndexOfKey(objSplit.CategoryKey)
                     If intCatIndex = 0 Then
                         mobjHostUI.InfoMessageBox("Could not find category key " & objSplit.CategoryKey & " for " & "trx dated " & Utilities.strFormatDate(objTrx.TrxDate) & " " & "in register " & objReg.Title)
                     Else

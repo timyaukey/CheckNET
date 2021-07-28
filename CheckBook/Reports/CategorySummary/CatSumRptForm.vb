@@ -132,7 +132,7 @@ Friend Class CatSumRptForm
 
             mintMaxCatNameWidth = 0
             For intCatIndex = 1 To UBound(maudtCatTotals)
-                intCatNameWidth = Len(mobjCats.strValue1(intCatIndex))
+                intCatNameWidth = Len(mobjCats.GetValue1(intCatIndex))
                 If intCatNameWidth > mintMaxCatNameWidth Then
                     mintMaxCatNameWidth = intCatNameWidth
                 End If
@@ -179,7 +179,7 @@ Friend Class CatSumRptForm
                 If maudtCatTotals(intCatIndex).intNestingLevel < intNestingLevel Then
                     Exit Do
                 ElseIf maudtCatTotals(intCatIndex).intNestingLevel = intNestingLevel Then
-                    strCatName = mobjCats.strValue1(intCatIndex)
+                    strCatName = mobjCats.GetValue1(intCatIndex)
                     curAmount = maudtCatTotals(intCatIndex).curAmount
                     curChildTotal = curChildTotal + curAmount
                     AddOutputRow(strCatName, curAmount, intNestingLevel)
@@ -253,8 +253,8 @@ Friend Class CatSumRptForm
             Dim strLine As String
 
             For intIndex = Utilities.intLBOUND1 To UBound(maudtCatTotals)
-                strCatCode = mobjCats.strKey(intIndex)
-                strCatName = mobjCats.strValue1(intIndex)
+                strCatCode = mobjCats.GetKey(intIndex)
+                strCatName = mobjCats.GetValue1(intIndex)
                 strLine = strCatName & vbTab & maudtCatTotals(intIndex).curAmount & vbTab & strCatCode
                 strResult = strResult & strLine & vbCrLf
             Next

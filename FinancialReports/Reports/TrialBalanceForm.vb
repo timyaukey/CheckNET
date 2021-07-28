@@ -203,35 +203,35 @@ Public Class TrialBalanceForm
 
             objWriter.OutputText(strLineHeaderClass, "Income")
             objWriter.OutputGroupSummary(strLineTitleClass, "Sales", strLineAmountClass, strMinusClass,
-                objIncExp, CategoryTranslator.strTypeSales, False, objAccumIncome)
+                objIncExp, CategoryTranslator.TypeSales, False, objAccumIncome)
             objWriter.OutputGroupSummary(strLineTitleClass, "Returns", strLineAmountClass, strMinusClass,
-                objIncExp, CategoryTranslator.strTypeReturns, False, objAccumIncome)
+                objIncExp, CategoryTranslator.TypeReturns, False, objAccumIncome)
             objWriter.OutputGroupSummary(strLineTitleClass, "Cost of Goods Sold", strLineAmountClass, strMinusClass,
-                objIncExp, CategoryTranslator.strTypeCOGS, False, objAccumIncome)
+                objIncExp, CategoryTranslator.TypeCOGS, False, objAccumIncome)
             objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
-                objIncExp, CategoryTranslator.strTypeOtherIncome, objAccumIncome)
+                objIncExp, CategoryTranslator.TypeOtherIncome, objAccumIncome)
             objWriter.OutputAmount(strLineFooterTitleClass, "Net Income", strLineFooterAmountClass, strMinusClass, objAccumIncome.curTotal, objAccumTotal)
 
             objWriter.OutputText(strLineHeaderClass, "Operating Expenses")
             objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
-                objIncExp, CategoryTranslator.strTypeOperatingExpenses, objAccumOperExp)
+                objIncExp, CategoryTranslator.TypeOperatingExpenses, objAccumOperExp)
             objWriter.OutputGroupSummary(strLineTitleClass, "Office Expense", strLineAmountClass, strMinusClass,
-                objIncExp, CategoryTranslator.strTypeOfficeExpense, False, objAccumOperExp)
+                objIncExp, CategoryTranslator.TypeOfficeExpense, False, objAccumOperExp)
             objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
-                objIncExp, CategoryTranslator.strTypePayroll, objAccumOperExp)
+                objIncExp, CategoryTranslator.TypePayroll, objAccumOperExp)
             objWriter.OutputGroupSummary(strLineTitleClass, "Rental Income", strLineAmountClass, strMinusClass,
-                objIncExp, CategoryTranslator.strTypeRentInc, True, objAccumOperExp)
+                objIncExp, CategoryTranslator.TypeRentInc, True, objAccumOperExp)
             objWriter.OutputGroupSummary(strLineTitleClass, "Rental Expense", strLineAmountClass, strMinusClass,
-                objIncExp, CategoryTranslator.strTypeRentExp, True, objAccumOperExp)
+                objIncExp, CategoryTranslator.TypeRentExp, True, objAccumOperExp)
             objWriter.OutputAmount(strLineFooterTitleClass, "Total Operating Expenses", strLineFooterAmountClass, strMinusClass, objAccumOperExp.curTotal, objAccumTotal)
 
             objWriter.OutputText(strLineHeaderClass, "Other Expenses")
             objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
-                objIncExp, CategoryTranslator.strTypeOtherExpense, objAccumOtherExp)
+                objIncExp, CategoryTranslator.TypeOtherExpense, objAccumOtherExp)
             objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
-                objIncExp, CategoryTranslator.strTypeTaxes, objAccumOtherExp)
+                objIncExp, CategoryTranslator.TypeTaxes, objAccumOtherExp)
             objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
-                objIncExp, CategoryTranslator.strTypeDepreciation, objAccumOtherExp)
+                objIncExp, CategoryTranslator.TypeDepreciation, objAccumOtherExp)
             objWriter.OutputAmount(strLineFooterTitleClass, "Total Other Expenses", strLineFooterAmountClass, strMinusClass, objAccumOtherExp.curTotal, objAccumTotal)
 
             objWriter.OutputText(strLineHeaderClass, "Grand Total Income/Expense")

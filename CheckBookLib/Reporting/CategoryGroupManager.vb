@@ -9,27 +9,27 @@ Public Class CategoryGroupManager
     End Sub
 
     Public Overrides Function MakeLineItem(ByVal objParent As LineItemGroup, strItemKey As String) As ReportLineItem
-        Dim intIndex As Integer = Company.Categories.intLookupKey(strItemKey)
+        Dim intIndex As Integer = Company.Categories.FindIndexOfKey(strItemKey)
         If intIndex = 0 Then
             Throw New Exception("Could not find category")
         End If
-        Return New ReportLineItem(objParent, strItemKey, Company.Categories.strValue2(intIndex).TrimStart(" "c))
+        Return New ReportLineItem(objParent, strItemKey, Company.Categories.GetValue2(intIndex).TrimStart(" "c))
     End Function
 
     Public Overrides Function GetGroupTitle(strGroupKey As String) As String
         Select Case strGroupKey
-            Case CategoryTranslator.strTypeSales : Return "Sales"
-            Case CategoryTranslator.strTypeReturns : Return "Returns"
-            Case CategoryTranslator.strTypeCOGS : Return "Cost of Goods Sold"
-            Case CategoryTranslator.strTypeOperatingExpenses : Return "Operating Expenses"
-            Case CategoryTranslator.strTypeOfficeExpense : Return "Office Expense"
-            Case CategoryTranslator.strTypePayroll : Return "Payroll"
-            Case CategoryTranslator.strTypeRentInc : Return "Rental Income"
-            Case CategoryTranslator.strTypeRentExp : Return "Rental Expense"
-            Case CategoryTranslator.strTypeOtherIncome : Return "Other Income"
-            Case CategoryTranslator.strTypeOtherExpense : Return "Other Expense"
-            Case CategoryTranslator.strTypeTaxes : Return "Taxes"
-            Case CategoryTranslator.strTypeDepreciation : Return "Depreciation"
+            Case CategoryTranslator.TypeSales : Return "Sales"
+            Case CategoryTranslator.TypeReturns : Return "Returns"
+            Case CategoryTranslator.TypeCOGS : Return "Cost of Goods Sold"
+            Case CategoryTranslator.TypeOperatingExpenses : Return "Operating Expenses"
+            Case CategoryTranslator.TypeOfficeExpense : Return "Office Expense"
+            Case CategoryTranslator.TypePayroll : Return "Payroll"
+            Case CategoryTranslator.TypeRentInc : Return "Rental Income"
+            Case CategoryTranslator.TypeRentExp : Return "Rental Expense"
+            Case CategoryTranslator.TypeOtherIncome : Return "Other Income"
+            Case CategoryTranslator.TypeOtherExpense : Return "Other Expense"
+            Case CategoryTranslator.TypeTaxes : Return "Taxes"
+            Case CategoryTranslator.TypeDepreciation : Return "Depreciation"
             Case Else : Return strGroupKey
         End Select
         Throw New NotImplementedException()

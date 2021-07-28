@@ -157,7 +157,7 @@ Friend Class ExportForm
             End If
 
             strLine = Utilities.strFormatDate(objTrx.TrxDate) & "," & objTrx.Number & ",""" & objTrx.Description & """," _
-                & Utilities.strFormatCurrency(objSplit.Amount) & ",""" & mobjCompany.Categories.strKeyToValue1(objSplit.CategoryKey) _
+                & Utilities.strFormatCurrency(objSplit.Amount) & ",""" & mobjCompany.Categories.KeyToValue1(objSplit.CategoryKey) _
                 & """," & strDueDate & "," & Utilities.strFormatDate(datDueToUse) & "," & strInvDate & "," _
                 & Utilities.strFormatDate(datInvToUse) & ",""" & objSplit.PONumber & """,""" & objSplit.InvoiceNum & """,""" & objSplit.Terms & """"
 

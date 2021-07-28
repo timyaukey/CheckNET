@@ -47,10 +47,10 @@ Friend Class ChangeCategoryForm
         End If
 
         lngItemData = UITools.GetItemData(cboOldCategory, cboOldCategory.SelectedIndex)
-        mstrOldCatKey = mobjCompany.Categories.strKey(lngItemData)
+        mstrOldCatKey = mobjCompany.Categories.GetKey(lngItemData)
 
         lngItemData = UITools.GetItemData(cboNewCategory, cboNewCategory.SelectedIndex)
-        mstrNewCatKey = mobjCompany.Categories.strKey(lngItemData)
+        mstrNewCatKey = mobjCompany.Categories.GetKey(lngItemData)
 
         mblnSuccess = True
 		Me.Close()

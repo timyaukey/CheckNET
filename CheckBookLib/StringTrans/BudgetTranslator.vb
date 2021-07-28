@@ -4,16 +4,16 @@ Option Explicit On
 Public Class BudgetTranslator
     Inherits SimpleStringTranslator
 
-    Public Function strTranslateKey(ByVal strKey As String) As String
+    Public Function TranslateKey(ByVal strKey As String) As String
         Dim strName As String
-        strTranslateKey = ""
+        TranslateKey = ""
         If strKey <> "" Then
-            strName = Me.strKeyToValue1(strKey)
+            strName = Me.KeyToValue1(strKey)
             If strName = "" Then
                 strName = "TmpBud#" & strKey
                 Me.Add(New StringTransElement(Me, strKey, strName, strName))
             End If
-            strTranslateKey = strName
+            TranslateKey = strName
         End If
     End Function
 

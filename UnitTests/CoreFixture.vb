@@ -547,17 +547,17 @@ Public Class CoreFixture
 
         gUTSetSubTest("Verify")
 
-        gUTAssert(objString.intElements = 4, "Wrong number of elements")
-        gUTAssert(objString.intLookupKey("asdf") = 0, "Did not expect to find asdf")
-        gUTAssert(objString.intLookupKey("v1") = 1, "Did not found v1")
-        gUTAssert(objString.intLookupKey("2") = 2, "Did not find 2")
-        gUTAssert(objString.intLookupKey("third") = 3, "Did not find third")
-        gUTAssert(objString.intLookupKey("Last") = 4, "Did not find last")
-        gUTAssert(objString.strKey(2) = "2", "Wrong strKey(2)")
-        gUTAssert(objString.strValue1(1) = "value1", "Wrong strValue1(1)")
-        gUTAssert(objString.strValue2(3) = "THIRD line.", "Wrong strValue2(3)")
-        gUTAssert(objString.strKeyToValue1("v1") = "value1", "Wrong strKeyToValue1(v1)")
-        gUTAssert(objString.strKeyToValue1("zzz") = "", "Wrong strKeyToValue1(zzz)")
+        gUTAssert(objString.ElementCount = 4, "Wrong number of elements")
+        gUTAssert(objString.FindIndexOfKey("asdf") = 0, "Did not expect to find asdf")
+        gUTAssert(objString.FindIndexOfKey("v1") = 1, "Did not found v1")
+        gUTAssert(objString.FindIndexOfKey("2") = 2, "Did not find 2")
+        gUTAssert(objString.FindIndexOfKey("third") = 3, "Did not find third")
+        gUTAssert(objString.FindIndexOfKey("Last") = 4, "Did not find last")
+        gUTAssert(objString.GetKey(2) = "2", "Wrong strKey(2)")
+        gUTAssert(objString.GetValue1(1) = "value1", "Wrong strValue1(1)")
+        gUTAssert(objString.GetValue2(3) = "THIRD line.", "Wrong strValue2(3)")
+        gUTAssert(objString.KeyToValue1("v1") = "value1", "Wrong strKeyToValue1(v1)")
+        gUTAssert(objString.KeyToValue1("zzz") = "", "Wrong strKeyToValue1(zzz)")
 
     End Sub
 

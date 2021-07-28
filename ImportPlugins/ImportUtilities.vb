@@ -159,15 +159,15 @@ Public Class ImportUtilities
             datSplitInvoiceDate = Utilities.datEmpty
             datSplitDueDate = Utilities.datEmpty
             With mobjCompany.Categories
-                intCatIndex = .intLookupValue1(mstrTrxCategory)
+                intCatIndex = .FindIndexOfValue1(mstrTrxCategory)
                 If intCatIndex > 0 Then
-                    strCatKey = .strKey(intCatIndex)
+                    strCatKey = .GetKey(intCatIndex)
                 End If
             End With
             With mobjCompany.Budgets
-                intBudIndex = .intLookupValue1(mstrTrxBudget)
+                intBudIndex = .FindIndexOfValue1(mstrTrxBudget)
                 If intBudIndex > 0 Then
-                    strBudKey = .strKey(intBudIndex)
+                    strBudKey = .GetKey(intBudIndex)
                 End If
             End With
             If mblnMakeFakeTrx Or mblnNoImportKey Then

@@ -206,8 +206,8 @@ Public Class Company
         Dim blnPossibleUtility As Boolean
 
         ShortTermsCatKeys = ""
-        For intCatIndex = 1 To Categories.intElements
-            strCatName = LCase(Categories.strValue1(intCatIndex))
+        For intCatIndex = 1 To Categories.ElementCount
+            strCatName = LCase(Categories.GetValue1(intCatIndex))
 
             blnPossibleUtility = CatNameHasWord(strCatName, "util") Or CatNameHasWord(strCatName, "phone") Or
                 CatNameHasWord(strCatName, "trash") Or CatNameHasWord(strCatName, "garbage") Or
@@ -222,7 +222,7 @@ Public Class Company
                 CatNameHasWord(strCatName, "mortgage") Or CatNameHasWord(strCatName, "house")
 
             If blnPossibleCredit Or blnPossibleUtility Then
-                ShortTermsCatKeys = ShortTermsCatKeys & EncodeCatKey(Categories.strKey(intCatIndex))
+                ShortTermsCatKeys = ShortTermsCatKeys & EncodeCatKey(Categories.GetKey(intCatIndex))
             End If
         Next
 

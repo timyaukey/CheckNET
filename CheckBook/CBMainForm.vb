@@ -497,11 +497,11 @@ Friend Class CBMainForm
 
     Private Function blnEditStringTransElem(ByVal objTransElem As StringTransElement, ByVal blnNew As Boolean) As Boolean
         Dim strNewValue1 As String
-        strNewValue1 = InputBox("Name: ", "", objTransElem.strValue1)
-        If strNewValue1 = "" Or strNewValue1 = objTransElem.strValue1 Then
+        strNewValue1 = InputBox("Name: ", "", objTransElem.Value1)
+        If strNewValue1 = "" Or strNewValue1 = objTransElem.Value1 Then
             Return False
         End If
-        objTransElem.strValue1 = strNewValue1
+        objTransElem.Value1 = strNewValue1
         Return True
     End Function
 

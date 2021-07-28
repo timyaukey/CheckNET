@@ -3,33 +3,33 @@ Option Explicit On
 
 Public Class StringTransElement
     Public Sub New(ByVal objTrans_ As IStringTranslator, ByVal strKey_ As String, ByVal strValue1_ As String, ByVal strValue2_ As String)
-        objTrans = objTrans_
-        If objTrans Is Nothing Then
+        Translator = objTrans_
+        If Translator Is Nothing Then
             Throw New NullReferenceException("Null IStringTranslator passed to StringTransElement()")
         End If
-        strKey = strKey_
-        strValue1 = strValue1_
-        strValue2 = strValue2_
+        Key = strKey_
+        Value1 = strValue1_
+        Value2 = strValue2_
     End Sub
 
-    Public ReadOnly objTrans As IStringTranslator
+    Public ReadOnly Translator As IStringTranslator
     'Unique identifier in the list.
     'This is what is stored in the database.
-    Public ReadOnly strKey As String
+    Public ReadOnly Key As String
     'Unique name of list element.
-    Public strValue1 As String
+    Public Value1 As String
     'Alternate name of list element, not suitable for searching.
-    Public strValue2 As String
+    Public Value2 As String
     'Additional values to associate with element.
-    Public colValues As Dictionary(Of String, String) = New Dictionary(Of String, String)()
+    Public ExtraValues As Dictionary(Of String, String) = New Dictionary(Of String, String)()
 
-    Public Function objClone() As StringTransElement
-        Dim objNew = New StringTransElement(objTrans, strKey, strValue1, strValue2)
-        objNew.colValues = New Dictionary(Of String, String)(colValues)
+    Public Function CloneElement() As StringTransElement
+        Dim objNew = New StringTransElement(Translator, Key, Value1, Value2)
+        objNew.ExtraValues = New Dictionary(Of String, String)(ExtraValues)
         Return objNew
     End Function
 
     Public Overrides Function ToString() As String
-        Return objTrans.strFormatElement(Me)
+        Return Translator.FormatElement(Me)
     End Function
 End Class

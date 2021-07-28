@@ -40,8 +40,8 @@ Public MustInherit Class StringTranslator(Of TElement As StringTransElement)
         mintElements = mintElements + 1
         ReDim Preserve maudtElement(mintElements)
         maudtElement(mintElements) = elm
-        mdictKeyIndices.Add("#" & elm.strKey, mintElements)
-        mdictValue1Indices.Add("#" & elm.strValue1, mintElements)
+        mdictKeyIndices.Add("#" & elm.Key, mintElements)
+        mdictValue1Indices.Add("#" & elm.Value1, mintElements)
     End Sub
 
     '$Description Search the list for the specified key string. Search is case
@@ -51,7 +51,7 @@ Public MustInherit Class StringTranslator(Of TElement As StringTransElement)
     '   This may be passed to the strValue1() or strValue2() properties
     '   to retrieve values for that key string.
 
-    Public Function intLookupKey(ByVal strKey_ As String) As Integer Implements IStringTranslator.intLookupKey
+    Public Function FindIndexOfKey(ByVal strKey_ As String) As Integer Implements IStringTranslator.FindIndexOfKey
         Dim result As Integer
         If mdictKeyIndices.TryGetValue("#" & strKey_, result) Then
             Return result
@@ -66,10 +66,10 @@ Public MustInherit Class StringTranslator(Of TElement As StringTransElement)
     '$Returns The strValue1 of the matched entry, or an empty string if
     '   the key was not found.
 
-    Public Function strKeyToValue1(ByVal strKey_ As String) As String Implements IStringTranslator.strKeyToValue1
+    Public Function KeyToValue1(ByVal strKey_ As String) As String Implements IStringTranslator.KeyToValue1
         Dim idx As Integer
         If mdictKeyIndices.TryGetValue("#" & strKey_, idx) Then
-            Return maudtElement(idx).strValue1
+            Return maudtElement(idx).Value1
         Else
             Return ""
         End If
@@ -77,31 +77,31 @@ Public MustInherit Class StringTranslator(Of TElement As StringTransElement)
 
     '$Description The number of key strings in the list.
 
-    Public ReadOnly Property intElements() As Integer Implements IStringTranslator.intElements
+    Public ReadOnly Property ElementCount() As Integer Implements IStringTranslator.ElementCount
         Get
             Return mintElements
         End Get
     End Property
 
-    Public ReadOnly Property strKey(ByVal intIndex As Integer) As String Implements IStringTranslator.strKey
+    Public ReadOnly Property GetKey(ByVal intIndex As Integer) As String Implements IStringTranslator.GetKey
         Get
-            Return maudtElement(intIndex).strKey
+            Return maudtElement(intIndex).Key
         End Get
     End Property
 
-    Public ReadOnly Property strValue1(ByVal intIndex As Integer) As String Implements IStringTranslator.strValue1
+    Public ReadOnly Property GetValue1(ByVal intIndex As Integer) As String Implements IStringTranslator.GetValue1
         Get
-            Return maudtElement(intIndex).strValue1
+            Return maudtElement(intIndex).Value1
         End Get
     End Property
 
-    Public ReadOnly Property strValue2(ByVal intIndex As Integer) As String Implements IStringTranslator.strValue2
+    Public ReadOnly Property GetValue2(ByVal intIndex As Integer) As String Implements IStringTranslator.GetValue2
         Get
-            Return maudtElement(intIndex).strValue2
+            Return maudtElement(intIndex).Value2
         End Get
     End Property
 
-    Public ReadOnly Property objElement(ByVal intIndex As Integer) As TElement
+    Public ReadOnly Property GetElement(ByVal intIndex As Integer) As TElement
         Get
             Return maudtElement(intIndex)
         End Get
@@ -109,7 +109,7 @@ Public MustInherit Class StringTranslator(Of TElement As StringTransElement)
 
     '$Description Like intLookupKey(), but searches for a strValue1 match.
 
-    Public Function intLookupValue1(ByVal strValue1_ As String) As Integer Implements IStringTranslator.intLookupValue1
+    Public Function FindIndexOfValue1(ByVal strValue1_ As String) As Integer Implements IStringTranslator.FindIndexOfValue1
         Dim result As Integer
         If mdictValue1Indices.TryGetValue("#" & strValue1_, result) Then
             Return result
@@ -118,7 +118,7 @@ Public MustInherit Class StringTranslator(Of TElement As StringTransElement)
         End If
     End Function
 
-    Public Overridable Function strFormatElement(ByVal objElement As StringTransElement) As String Implements IStringTranslator.strFormatElement
-        Return objElement.strValue1
+    Public Overridable Function FormatElement(ByVal objElement As StringTransElement) As String Implements IStringTranslator.FormatElement
+        Return objElement.Value1
     End Function
 End Class

@@ -70,8 +70,8 @@ Public Class CompanyLoader
     Public Shared Sub LoadCategories(ByVal objCompany As Company)
         Dim intIndex As Integer
         objCompany.Categories.Init()
-        For intIndex = 1 To objCompany.IncExpAccounts.intElements
-            objCompany.Categories.Add(objCompany.IncExpAccounts.objElement(intIndex))
+        For intIndex = 1 To objCompany.IncExpAccounts.ElementCount
+            objCompany.Categories.Add(objCompany.IncExpAccounts.GetElement(intIndex))
         Next
         AddAccountTypeToCategories(objCompany, Account.AccountType.Asset)
         AddAccountTypeToCategories(objCompany, Account.AccountType.Liability)
@@ -99,16 +99,16 @@ Public Class CompanyLoader
     End Sub
 
     Private Shared Function CategoryComparer(ByVal cat1 As StringTransElement, ByVal cat2 As StringTransElement) As Integer
-        Return cat1.strValue1.CompareTo(cat2.strValue1)
+        Return cat1.Value1.CompareTo(cat2.Value1)
     End Function
 
     'Set gstrPlaceholderBudgetKey to the key of the budget whose name
     'is "(budget)", or set it to "---" if there is no such budget.
     Public Shared Sub FindPlaceholderBudget(ByVal objCompany As Company)
         Dim intPlaceholderIndex As Integer
-        intPlaceholderIndex = objCompany.Budgets.intLookupValue1("(placeholder)")
+        intPlaceholderIndex = objCompany.Budgets.FindIndexOfValue1("(placeholder)")
         If intPlaceholderIndex > 0 Then
-            objCompany.PlaceholderBudgetKey = objCompany.Budgets.strKey(intPlaceholderIndex)
+            objCompany.PlaceholderBudgetKey = objCompany.Budgets.GetKey(intPlaceholderIndex)
         Else
             'Don't use empty string, because that's the key used
             'if a split doesn't use a budget.

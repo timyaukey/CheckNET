@@ -42,15 +42,15 @@ Public Class AdjustPersonalBusinessForm
         mstrLoanToPersonKey = mobjLoanToAccount.Registers(0).CatKey
         txtLoanToAccount.Text = mobjLoanToAccount.Title
 
-        For intCatIndex As Integer = 1 To mobjCompany.Categories.intElements
-            Dim strCatName As String = mobjCompany.Categories.strValue1(intCatIndex)
+        For intCatIndex As Integer = 1 To mobjCompany.Categories.ElementCount
+            Dim strCatName As String = mobjCompany.Categories.GetValue1(intCatIndex)
             If strCatName.Contains("Personal") Then
                 If strCatName.Contains("Expense") Then
-                    mstrPersonalExpenseKey = mobjCompany.Categories.strKey(intCatIndex)
-                    txtPersonalExpenses.Text = mobjCompany.Categories.strValue1(intCatIndex)
+                    mstrPersonalExpenseKey = mobjCompany.Categories.GetKey(intCatIndex)
+                    txtPersonalExpenses.Text = mobjCompany.Categories.GetValue1(intCatIndex)
                 ElseIf strCatName.Contains("Payment") Then
-                    mstrPersonalPaymentKey = mobjCompany.Categories.strKey(intCatIndex)
-                    txtPersonalPayments.Text = mobjCompany.Categories.strValue1(intCatIndex)
+                    mstrPersonalPaymentKey = mobjCompany.Categories.GetKey(intCatIndex)
+                    txtPersonalPayments.Text = mobjCompany.Categories.GetValue1(intCatIndex)
                 End If
             End If
         Next

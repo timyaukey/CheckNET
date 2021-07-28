@@ -41,17 +41,17 @@ namespace Willowsoft.CheckBook.Powershell
             
         protected override void BeginProcessing()
         {
-            int catIndex = Company.Categories.intLookupValue1(Category);
+            int catIndex = Company.Categories.FindIndexOfValue1(Category);
             if (catIndex == 0)
                 ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation("Invalid category name [" + Category + "]", "CategoryNameFailure"));
-            string catKey = Company.Categories.get_strKey(catIndex);
+            string catKey = Company.Categories.get_GetKey(catIndex);
             string budgetKey;
             if (!string.IsNullOrEmpty(Budget))
             {
-                int budIndex = Company.Budgets.intLookupValue1(Budget);
+                int budIndex = Company.Budgets.FindIndexOfValue1(Budget);
                 if (budIndex == 0)
                     ThrowTerminatingError(ErrorUtilities.CreateInvalidOperation("Invalid budget name [" + Budget + "]", "BudgetNameFailure"));
-                budgetKey = Company.Budgets.get_strKey(budIndex);
+                budgetKey = Company.Budgets.get_GetKey(budIndex);
             }
             else
                 budgetKey = "";

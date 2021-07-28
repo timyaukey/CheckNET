@@ -69,8 +69,8 @@ Public Class UITools
                 If blnAddEmpty Then
                     .Items.Add(UITools.CreateListBoxItem("", 0))
                 End If
-                For intIndex = 1 To objList.intElements
-                    .Items.Add(UITools.CreateListBoxItem(objList.strValue1(intIndex), intIndex))
+                For intIndex = 1 To objList.ElementCount
+                    .Items.Add(UITools.CreateListBoxItem(objList.GetValue1(intIndex), intIndex))
                 Next
             End With
 

@@ -159,7 +159,7 @@ Public Class EventLog
                 .SetAttribute("TrxMemo", objTrx.Memo)
             End If
             If objTrx.RepeatKey <> "" Then
-                .SetAttribute("RptName", mobjRepeats.strKeyToValue1(objTrx.RepeatKey))
+                .SetAttribute("RptName", mobjRepeats.KeyToValue1(objTrx.RepeatKey))
                 .SetAttribute("RptSeq", CStr(objTrx.RepeatSeq))
             End If
             If TypeOf objTrx Is BankTrx Then
@@ -172,7 +172,7 @@ Public Class EventLog
                         elmTrx.AppendChild(elmSplitParent)
                     End If
                     With elmSplitParent
-                        .SetAttribute("CatName", mobjCompany.Categories.strKeyToValue1(objSplit.CategoryKey))
+                        .SetAttribute("CatName", mobjCompany.Categories.KeyToValue1(objSplit.CategoryKey))
                         If objNormalTrx.SplitCount > 1 Then
                             .SetAttribute("Amount", Utilities.strFormatCurrency(objSplit.Amount))
                         End If
@@ -192,7 +192,7 @@ Public Class EventLog
                             .SetAttribute("Terms", objSplit.Terms)
                         End If
                         If objSplit.BudgetKey <> "" Then
-                            .SetAttribute("BudgetName", mobjCompany.Budgets.strKeyToValue1(objSplit.BudgetKey))
+                            .SetAttribute("BudgetName", mobjCompany.Budgets.KeyToValue1(objSplit.BudgetKey))
                         End If
                     End With
                 Next objSplit
@@ -200,7 +200,7 @@ Public Class EventLog
                 Dim objBudgetTrx As BudgetTrx = DirectCast(objTrx, BudgetTrx)
                 .SetAttribute("Type", "Budget")
                 .SetAttribute("BudgetLimit", Utilities.strFormatCurrency(objBudgetTrx.BudgetLimit))
-                .SetAttribute("BudgetName", mobjCompany.Budgets.strKeyToValue1(objBudgetTrx.BudgetKey))
+                .SetAttribute("BudgetName", mobjCompany.Budgets.KeyToValue1(objBudgetTrx.BudgetKey))
             ElseIf TypeOf objTrx Is TransferTrx Then
                 .SetAttribute("Type", "Transfer")
             Else

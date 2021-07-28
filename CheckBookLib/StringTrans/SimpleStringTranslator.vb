@@ -54,7 +54,7 @@ Public Class SimpleStringTranslator
             For Each strExtraPair As String In strExtraPairs
                 Dim strPairParts() As String = strExtraPair.Split(":"c)
                 If UBound(strPairParts) = 1 Then
-                    objNew.colValues.Add(strPairParts(0), strPairParts(1))
+                    objNew.ExtraValues.Add(strPairParts(0), strPairParts(1))
                 End If
             Next
         End If

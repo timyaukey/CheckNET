@@ -46,9 +46,9 @@ Friend Class LiveBudgetListForm
                         End If
 
                         If objItem.SubItems.Count > 2 Then
-                            objItem.SubItems(2).Text = mobjBudgets.strKeyToValue1(.BudgetKey)
+                            objItem.SubItems(2).Text = mobjBudgets.KeyToValue1(.BudgetKey)
                         Else
-                            objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, mobjBudgets.strKeyToValue1(.BudgetKey)))
+                            objItem.SubItems.Insert(2, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, mobjBudgets.KeyToValue1(.BudgetKey)))
                         End If
 
                         If objItem.SubItems.Count > 3 Then

@@ -292,7 +292,7 @@ Public Class SearchForm
             strDueDate = Utilities.strFormatDate(objSplit.DueDate)
         End If
         UITools.AddListSubItem(objItem, 4, Utilities.strFormatCurrency(curAvailable))
-        UITools.AddListSubItem(objItem, 5, mobjCompany.Categories.strTranslateKey(objSplit.CategoryKey))
+        UITools.AddListSubItem(objItem, 5, mobjCompany.Categories.TranslateKey(objSplit.CategoryKey))
         UITools.AddListSubItem(objItem, 6, objSplit.PONumber)
         UITools.AddListSubItem(objItem, 7, objSplit.InvoiceNum)
         UITools.AddListSubItem(objItem, 8, strInvoiceDate)

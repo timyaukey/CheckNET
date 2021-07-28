@@ -34,14 +34,14 @@ Public MustInherit Class StringTranslatorUIEditor
         objTranslator = GetStringTranslator()
         selectionControl = New ListBoxUIEditor(editorService)
         selectionControl.Items.Add("")
-        For i = 1 To objTranslator.intElements
-            selectionControl.Items.Add(objTranslator.strValue1(CShort(i)))
+        For i = 1 To objTranslator.ElementCount
+            selectionControl.Items.Add(objTranslator.GetValue1(CShort(i)))
         Next
         editorService.DropDownControl(selectionControl)
         strCatName = CType(selectionControl.SelectedItem, String)
-        For i = 1 To objTranslator.intElements
-            If strCatName = objTranslator.strValue1(CShort(i)) Then
-                Return objTranslator.strKey(CShort(i))
+        For i = 1 To objTranslator.ElementCount
+            If strCatName = objTranslator.GetValue1(CShort(i)) Then
+                Return objTranslator.GetKey(CShort(i))
             End If
         Next
         Return String.Empty
@@ -94,7 +94,7 @@ Public Class CategoryConverter
 
     Public Overrides Function ConvertTo(context As ITypeDescriptorContext, culture As Globalization.CultureInfo, value As Object, destinationType As Type) As Object
         If destinationType Is GetType(String) And TypeOf value Is String Then
-            Return StringTranslatorUIEditor.Company.Categories.strKeyToValue1(CType(value, String))
+            Return StringTranslatorUIEditor.Company.Categories.KeyToValue1(CType(value, String))
         End If
 
         Return MyBase.ConvertTo(context, culture, value, destinationType)
@@ -113,7 +113,7 @@ Public Class BudgetConverter
 
     Public Overrides Function ConvertTo(context As ITypeDescriptorContext, culture As Globalization.CultureInfo, value As Object, destinationType As Type) As Object
         If destinationType Is GetType(String) And TypeOf value Is String Then
-            Return StringTranslatorUIEditor.Company.Budgets.strKeyToValue1(CType(value, String))
+            Return StringTranslatorUIEditor.Company.Budgets.KeyToValue1(CType(value, String))
         End If
 
         Return MyBase.ConvertTo(context, culture, value, destinationType)

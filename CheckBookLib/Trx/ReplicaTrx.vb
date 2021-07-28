@@ -14,7 +14,7 @@ Public Class ReplicaTrx
 
     Public Overrides ReadOnly Property CategoryLabel As String
         Get
-            Return RegisterInternal.Account.Company.Categories.strTranslateKey(mstrCatKey)
+            Return RegisterInternal.Account.Company.Categories.TranslateKey(mstrCatKey)
         End Get
     End Property
 

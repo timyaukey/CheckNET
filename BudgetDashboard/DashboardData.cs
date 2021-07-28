@@ -164,10 +164,10 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                 string sequence = "";
                 if (!string.IsNullOrEmpty(split.Parent.RepeatKey))
                 {
-                    sequence = split.Parent.Register.Account.Repeats.strKeyToValue1(split.Parent.RepeatKey);
+                    sequence = split.Parent.Register.Account.Repeats.KeyToValue1(split.Parent.RepeatKey);
                 }
                 row = new SplitDetailRow(PeriodCount, split.CategoryKey,
-                    Company.Categories.strKeyToValue1(split.CategoryKey), sequence);
+                    Company.Categories.KeyToValue1(split.CategoryKey), sequence);
                 SplitDetailRows[rowKey] = row;
             }
             return row;
@@ -181,10 +181,10 @@ namespace Willowsoft.CheckBook.BudgetDashboard
                 string sequence = "(none)";
                 if (!string.IsNullOrEmpty(budgetTrx.RepeatKey))
                 {
-                    sequence = budgetTrx.Register.Account.Repeats.strKeyToValue1(budgetTrx.RepeatKey);
+                    sequence = budgetTrx.Register.Account.Repeats.KeyToValue1(budgetTrx.RepeatKey);
                 }
                 row = new BudgetDetailRow(PeriodCount, budgetTrx.BudgetKey,
-                    Company.Budgets.strKeyToValue1(budgetTrx.BudgetKey), sequence);
+                    Company.Budgets.KeyToValue1(budgetTrx.BudgetKey), sequence);
                 BudgetDetailRows[rowKey] = row;
             }
             return row;
