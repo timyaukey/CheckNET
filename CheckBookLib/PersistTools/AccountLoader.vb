@@ -58,7 +58,7 @@ Public Class AccountLoader
             'file (acctfilename).rep instead of getting the file names from FC, FB and FR
             'lines in the .act file.
             If strLine <> "FHCKBK2" Then
-                gRaiseError("Invalid header line")
+                RaiseErrorMsg("Invalid header line")
             End If
 
             mobjAccount.InitForLoad()
@@ -137,7 +137,7 @@ Public Class AccountLoader
                     Case ".A"
                         Exit Do
                     Case Else
-                        gRaiseError("Unrecognized line in account file: " & strLine)
+                        RaiseErrorMsg("Unrecognized line in account file: " & strLine)
                 End Select
             Loop
         Catch ex As Exception
@@ -264,7 +264,7 @@ Public Class AccountLoader
         strSearchRegKey = Mid(strLine, 3)
         objReg = mobjAccount.FindRegister(strSearchRegKey)
         If objReg Is Nothing Then
-            gRaiseError("Register key " & strSearchRegKey & " not found in " & Left(strLine, 2) & " line")
+            RaiseErrorMsg("Register key " & strSearchRegKey & " not found in " & Left(strLine, 2) & " line")
         Else
             mobjLoader = New RegisterLoader
             mobjLoader.LoadFile(mobjLoadFile, objReg, mobjAccount.RepeatSummarizer, blnFake, lngLinesRead)

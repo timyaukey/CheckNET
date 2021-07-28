@@ -69,7 +69,7 @@ Public Class RegisterLoader
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -276,7 +276,7 @@ Public Class RegisterLoader
     End Sub
 
     Private Sub RaiseError(ByVal strRoutine As String, ByVal strMsg As String)
-        gRaiseError("Error in RegisterLoader." & strRoutine & vbCrLf & "Line " & mlngLinesRead & " in register file: " & mstrLine & vbCrLf & strMsg)
+        RaiseErrorMsg("Error in RegisterLoader." & strRoutine & vbCrLf & "Line " & mlngLinesRead & " in register file: " & mstrLine & vbCrLf & strMsg)
     End Sub
 
     Private Sub RaiseErrorInLoad(ByVal strMsg As String)
@@ -381,7 +381,7 @@ Public Class RegisterLoader
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 End Class

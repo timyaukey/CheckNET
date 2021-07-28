@@ -53,7 +53,7 @@ Public Class ImportUtilities
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -205,7 +205,7 @@ Public Class ImportUtilities
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -275,7 +275,7 @@ Public Class ImportUtilities
                 End If
                 'Sanity check.
                 If gblnXmlAttributeMissing(vstrBefore) And gblnXmlAttributeMissing(vstrAfter) Then
-                    gRaiseError("Neither Before= or After= specified for TrxType element")
+                    RaiseErrorMsg("Neither Before= or After= specified for TrxType element")
                 End If
                 'We matched whichever of Before= and After= were specified.
                 If Not blnFailMatch Then
@@ -327,7 +327,7 @@ Public Class ImportUtilities
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -397,7 +397,7 @@ Public Class ImportUtilities
                                 Case "closest date"
                                     mlngNarrowMethod = ImportMatchNarrowMethod.ClosestDate
                                 Case Else
-                                    gRaiseError("Unrecognized narrow method")
+                                    RaiseErrorMsg("Unrecognized narrow method")
                             End Select
                         End If
                         mblnAllowAutoBatchNew = objPayee.blnIsAllowAutoBatchNew
@@ -414,7 +414,7 @@ Public Class ImportUtilities
             mstrTrxPayee = strOutputPayee
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -469,7 +469,7 @@ Public Class ImportUtilities
             Case ImportMatchNarrowMethod.None
                 Return colInputMatches
             Case Else
-                gRaiseError("Unrecognized narrowing method")
+                RaiseErrorMsg("Unrecognized narrowing method")
         End Select
 
         blnHaveFirstMatch = False

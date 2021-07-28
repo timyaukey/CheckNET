@@ -35,7 +35,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             }
             catch (Exception ex)
             {
-                ErrorHandling.gTopException(ex);
+                ErrorHandling.TopException(ex);
             }
         }
     }

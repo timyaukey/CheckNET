@@ -49,7 +49,7 @@ Public Class ReadBankQIF
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -93,13 +93,13 @@ Public Class ReadBankQIF
                     Case "N"
                         mobjUtil.strTrxNumber = Mid(strLine, 2)
                     Case Else
-                        gRaiseError("Unrecognized input line: " & strLine)
+                        RaiseErrorMsg("Unrecognized input line: " & strLine)
                 End Select
             Loop
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 

@@ -154,7 +154,7 @@ Public Class SearchForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -335,7 +335,7 @@ Public Class SearchForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -348,7 +348,7 @@ Public Class SearchForm
             RememberCheckedTrx()
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -364,7 +364,7 @@ Public Class SearchForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -388,7 +388,7 @@ Public Class SearchForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -402,7 +402,7 @@ Public Class SearchForm
             mobjReg.ValidateRegister()
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -438,7 +438,7 @@ Public Class SearchForm
             objTool.Run(Me)
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
 
     End Sub

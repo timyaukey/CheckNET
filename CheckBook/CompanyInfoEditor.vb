@@ -28,7 +28,7 @@ Public Class CompanyInfoEditor
                 Me.Close()
             End Using
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 End Class

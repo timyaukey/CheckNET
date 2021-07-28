@@ -94,7 +94,7 @@ Public Class TrxForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -128,7 +128,7 @@ Public Class TrxForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -156,7 +156,7 @@ Public Class TrxForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -183,7 +183,7 @@ Public Class TrxForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -223,7 +223,7 @@ Public Class TrxForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -317,7 +317,7 @@ Public Class TrxForm
             Exit Sub
         Catch ex As Exception
             mblnInSetNormalControls = False
-            gNestedException(ex)
+            NestedException(ex)
         Finally
             mblnInSetNormalControls = False
             mblnLoadingControls = False
@@ -646,7 +646,7 @@ Public Class TrxForm
             Exit Sub
         Catch ex As Exception
             mblnInDisplaySplits = False
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -821,7 +821,7 @@ Public Class TrxForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -838,7 +838,7 @@ Public Class TrxForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1137,7 +1137,7 @@ Public Class TrxForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -1264,7 +1264,7 @@ Public Class TrxForm
             End If
             objTrxTool.Run(Me)
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1414,7 +1414,7 @@ Public Class TrxForm
             End If
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1425,7 +1425,7 @@ Public Class TrxForm
             DisplaySplits(mintSplitOffset + 1)
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1438,7 +1438,7 @@ Public Class TrxForm
             End If
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1550,7 +1550,7 @@ Public Class TrxForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1573,7 +1573,7 @@ Public Class TrxForm
             End If
             eventArgs.Handled = True
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1623,7 +1623,7 @@ Public Class TrxForm
             End If
 
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1680,7 +1680,7 @@ Public Class TrxForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -1699,7 +1699,7 @@ Public Class TrxForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1733,7 +1733,7 @@ Public Class TrxForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1937,7 +1937,7 @@ Public Class TrxForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -2121,7 +2121,7 @@ Public Class TrxForm
                 End If
                 Exit Sub
             Catch ex As Exception
-                gTopException(ex)
+                TopException(ex)
             End Try
         End If
     End Sub
@@ -2167,7 +2167,7 @@ Public Class TrxForm
                 End If
                 Exit Sub
             Catch ex As Exception
-                gTopException(ex)
+                TopException(ex)
             End Try
         End If
     End Sub
@@ -2194,7 +2194,7 @@ Public Class TrxForm
                 End If
                 Exit Sub
             Catch ex As Exception
-                gTopException(ex)
+                TopException(ex)
             End Try
         End If
     End Sub
@@ -2240,7 +2240,7 @@ Public Class TrxForm
                 End If
                 Exit Sub
             Catch ex As Exception
-                gTopException(ex)
+                TopException(ex)
             End Try
         End If
     End Sub

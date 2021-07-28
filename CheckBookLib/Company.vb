@@ -242,7 +242,7 @@ Public Class Company
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -288,7 +288,7 @@ Public Class Company
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -306,7 +306,7 @@ Public Class Company
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -324,7 +324,7 @@ Public Class Company
                 .Load(strFile)
                 objParseError = .ParseError
                 If Not objParseError Is Nothing Then
-                    gRaiseError("XML parse error loading file: " & gstrXMLParseErrorText(objParseError))
+                    RaiseErrorMsg("XML parse error loading file: " & gstrXMLParseErrorText(objParseError))
                 End If
                 .SetProperty("SelectionLanguage", "XPath")
             End With
@@ -332,7 +332,7 @@ Public Class Company
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -445,7 +445,7 @@ Public Class Company
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -528,7 +528,7 @@ Public Class Company
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 

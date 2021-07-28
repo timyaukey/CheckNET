@@ -54,7 +54,7 @@ Friend Class ListEditorForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -73,7 +73,7 @@ Friend Class ListEditorForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -94,7 +94,7 @@ Friend Class ListEditorForm
             Exit Sub
         Catch ex As Exception
             eventArgs.Cancel = True
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -129,7 +129,7 @@ Friend Class ListEditorForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -187,7 +187,7 @@ Friend Class ListEditorForm
                         objScanTransElem.Value1 = strNewValue1 & ":" & Mid(objScanTransElem.Value1, intMatchLen + 1)
                         DeleteElement(intIndex)
                         If blnInsertElement(objScanTransElem, False, strError) Then
-                            gRaiseError("Unexpected error renaming children: " & strError)
+                            RaiseErrorMsg("Unexpected error renaming children: " & strError)
                         End If
                         blnFoundChild = True
                         Exit For
@@ -201,7 +201,7 @@ Friend Class ListEditorForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -242,7 +242,7 @@ Friend Class ListEditorForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -297,7 +297,7 @@ Friend Class ListEditorForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -393,7 +393,7 @@ Friend Class ListEditorForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -468,7 +468,7 @@ Friend Class ListEditorForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -520,7 +520,7 @@ Friend Class ListEditorForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -547,7 +547,7 @@ Friend Class ListEditorForm
 
             Return isUsed
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -566,7 +566,7 @@ Friend Class ListEditorForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -591,7 +591,7 @@ Friend Class ListEditorForm
                                 Exit Function
                             End If
                         Else
-                            gRaiseError("Unsupported list type")
+                            RaiseErrorMsg("Unsupported list type")
                         End If
                     Next
                 ElseIf mlngListType = ListType.Budget Then
@@ -606,7 +606,7 @@ Friend Class ListEditorForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 

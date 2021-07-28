@@ -56,7 +56,7 @@ Public Class SelectCompanyForm
             Me.Close()
         Catch ex As Exception
             CBMainForm.blnCancelStart = True
-            gTopException(ex)
+            TopException(ex)
             Me.Close()
         End Try
     End Sub
@@ -82,7 +82,7 @@ Public Class SelectCompanyForm
             End Using
         Catch ex As Exception
             CBMainForm.blnCancelStart = True
-            gTopException(ex)
+            TopException(ex)
             Me.Close()
         End Try
     End Sub
@@ -106,7 +106,7 @@ Public Class SelectCompanyForm
             End If
         Catch ex As Exception
             CBMainForm.blnCancelStart = True
-            gTopException(ex)
+            TopException(ex)
             Me.Close()
         End Try
     End Sub

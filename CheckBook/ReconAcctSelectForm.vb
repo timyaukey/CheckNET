@@ -34,7 +34,7 @@ Friend Class ReconAcctSelectForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -45,7 +45,7 @@ Friend Class ReconAcctSelectForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 

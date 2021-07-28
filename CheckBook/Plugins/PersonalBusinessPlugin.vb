@@ -19,7 +19,7 @@ Public Class PersonalBusinessPlugin
             frmAdjust.ShowModal(HostUI, e.objReg.Account)
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 End Class

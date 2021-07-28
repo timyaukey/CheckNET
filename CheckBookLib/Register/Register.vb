@@ -98,7 +98,7 @@ Public Class Register
         mlngAllocationUnit = lngAllocationUnit_
         mblnShowInitially = blnShowInitially_
         If mstrRegisterKey = "" Then
-            gRaiseError("Missing register key in Register.Init")
+            RaiseErrorMsg("Missing register key in Register.Init")
         End If
         mdatOldestBudgetEndAllowed = DateTime.MinValue
         mcolRepeatTrx = New Dictionary(Of String, BaseTrx)
@@ -143,7 +143,7 @@ Public Class Register
 
         BeginCriticalOperation()
         If objNew Is Nothing Then
-            gRaiseError("objNew is Nothing in Register.NewAddEnd")
+            RaiseErrorMsg("objNew is Nothing in Register.NewAddEnd")
         End If
         NewInsert(objNew)
         objNew.Apply(False)
@@ -196,7 +196,7 @@ Public Class Register
         Dim lngFirstLesser As Integer
         Dim lngMoveIndex As Integer
         If lngEndIndex < 0 Or lngEndIndex > (mlngTrxUsed - 1) Then
-            gRaiseError("Register.lngMoveUp passed invalid lngEndIndex=" & lngEndIndex)
+            RaiseErrorMsg("Register.lngMoveUp passed invalid lngEndIndex=" & lngEndIndex)
         End If
         'When the loop is done, lngFirstLesser will equal the largest index whose BaseTrx
         'sort key is less than objNew.strSortKey, or zero if there is none.
@@ -206,10 +206,10 @@ Public Class Register
             End If
         Next
         If (lngFirstLesser + 1) < 1 Then
-            gRaiseError("Register.lngMoveUp moved too far")
+            RaiseErrorMsg("Register.lngMoveUp moved too far")
         End If
         If lngFirstLesser > lngEndIndex Then
-            gRaiseError("Register.lngMoveUp did not move far enough")
+            RaiseErrorMsg("Register.lngMoveUp did not move far enough")
         End If
         For lngMoveIndex = lngEndIndex To lngFirstLesser + 1 Step -1
             SetTrx(lngMoveIndex + 1, maobjTrx(lngMoveIndex))
@@ -227,7 +227,7 @@ Public Class Register
         Dim lngFirstGreater As Integer
         Dim lngMoveIndex As Integer
         If lngStartIndex < 2 Or lngStartIndex > mlngTrxUsed Then
-            gRaiseError("Register.lngMoveDown passed invalid lngStartIndex " & lngStartIndex)
+            RaiseErrorMsg("Register.lngMoveDown passed invalid lngStartIndex " & lngStartIndex)
         End If
         'When the loop is done, lngFirstGreater will equal the smallest index whose BaseTrx
         'sort key is greater than objNew.strSortKey, or zero if there is none.
@@ -237,10 +237,10 @@ Public Class Register
             End If
         Next
         If (lngFirstGreater - 1) > mlngTrxUsed Then
-            gRaiseError("Register.lngMoveDown lngFirstGreater-1=" & lngFirstGreater - 1 & " is greater than mlngTrxUsed=" & mlngTrxUsed)
+            RaiseErrorMsg("Register.lngMoveDown lngFirstGreater-1=" & lngFirstGreater - 1 & " is greater than mlngTrxUsed=" & mlngTrxUsed)
         End If
         If lngFirstGreater < lngStartIndex Then
-            gRaiseError("Register.lngMoveDown lngFirstGreater=" & lngFirstGreater & " is smaller than lngStartIndex=" & lngStartIndex)
+            RaiseErrorMsg("Register.lngMoveDown lngFirstGreater=" & lngFirstGreater & " is smaller than lngStartIndex=" & lngStartIndex)
         End If
         For lngMoveIndex = lngStartIndex To lngFirstGreater - 1
             SetTrx(lngMoveIndex - 1, maobjTrx(lngMoveIndex))
@@ -273,7 +273,7 @@ Public Class Register
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -487,7 +487,7 @@ Public Class Register
         Dim lngIndex As Integer
         Dim lngLastChange As Integer
         If lngStartIndex < 1 Or (lngStartIndex > mlngTrxUsed And mlngTrxUsed > 0) Then
-            gRaiseError("Register.lngFixBalances passed invalid lngStartIndex=" & lngStartIndex)
+            RaiseErrorMsg("Register.lngFixBalances passed invalid lngStartIndex=" & lngStartIndex)
         End If
         If lngStartIndex = 1 Then
             curBalance = 0
@@ -1033,7 +1033,7 @@ Public Class Register
             'maobjTrx() is to make inserts and deletions much more efficient away from
             'the end of the register.
             If lngIndex < 1 Or lngIndex > mlngTrxUsed Then
-                gRaiseError("Invalid index " & lngIndex & " in Register.GetTrx")
+                RaiseErrorMsg("Invalid index " & lngIndex & " in Register.GetTrx")
             End If
             Return maobjTrx(lngIndex)
         End Get

@@ -89,7 +89,7 @@ Public Class CompanySaver
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 

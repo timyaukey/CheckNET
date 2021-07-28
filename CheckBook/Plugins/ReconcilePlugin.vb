@@ -20,7 +20,7 @@ Public Class ReconcilePlugin
             frm.ShowDialog()
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 End Class

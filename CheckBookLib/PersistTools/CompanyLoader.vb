@@ -63,7 +63,7 @@ Public Class CompanyLoader
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -185,7 +185,7 @@ Public Class CompanyLoader
             For Each objLoader In colLoaders
                 objLoader.Account.HasUnsavedChanges = False
             Next
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 

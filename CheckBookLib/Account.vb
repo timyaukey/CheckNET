@@ -287,13 +287,13 @@ Public Class Account
         Dim objReg As Register
 
         If strRegKey = "" Then
-            gRaiseError("Missing RK line before RI line")
+            RaiseErrorMsg("Missing RK line before RI line")
         End If
         If strRegTitle = "" Then
-            gRaiseError("Missing RT line before RI line")
+            RaiseErrorMsg("Missing RT line before RI line")
         End If
         If Not FindRegister(strRegKey) Is Nothing Then
-            gRaiseError("Reg key already used in RI line")
+            RaiseErrorMsg("Reg key already used in RI line")
         End If
         objReg = New Register
         objReg.Init(Me, strRegTitle, strRegKey, blnRegShow, 128)
@@ -366,7 +366,7 @@ Public Class Account
             objAccount.Title = "Checking Account"
             objAccount.Create()
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -407,7 +407,7 @@ Public Class Account
                 objRepeatWriter.WriteLine("dummy line")
             End Using
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 

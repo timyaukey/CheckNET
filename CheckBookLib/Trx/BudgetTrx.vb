@@ -183,13 +183,13 @@ Public Class BudgetTrx
 
     Protected Sub RaiseErrorOnBadBudget(ByVal strRoutine As String)
         If mstrBudgetKey = "" Then
-            gRaiseError("Missing budget key in " & strRoutine)
+            RaiseErrorMsg("Missing budget key in " & strRoutine)
         End If
         If mdatBudgetEnds = Utilities.datEmpty Then
-            gRaiseError("Missing budget end date in " & strRoutine)
+            RaiseErrorMsg("Missing budget end date in " & strRoutine)
         End If
         If mdatBudgetEnds < mdatBudgetStarts Then
-            gRaiseError("Budget period ends before it begins")
+            RaiseErrorMsg("Budget period ends before it begins")
         End If
     End Sub
 
@@ -274,7 +274,7 @@ Public Class BudgetTrx
 
     Public Sub UnApplyFromThisBudget(ByVal objSplit As TrxSplit)
         If Not mcolAppliedSplits.Remove(objSplit) Then
-            gRaiseError("Could not find split in Trx.UnApplyFromThisBudget")
+            RaiseErrorMsg("Could not find split in Trx.UnApplyFromThisBudget")
         End If
         mcurBudgetApplied = mcurBudgetApplied - objSplit.Amount
         SetAmountForBudget()

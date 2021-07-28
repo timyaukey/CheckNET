@@ -55,7 +55,7 @@ Friend Class RptScanSplitsForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -71,12 +71,12 @@ Friend Class RptScanSplitsForm
                 Case SplitReportType.Totals
                     Me.Text = "Report of Totals By Category"
                 Case Else
-                    gRaiseError("Unrecognized category report type")
+                    RaiseErrorMsg("Unrecognized category report type")
             End Select
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -100,7 +100,7 @@ Friend Class RptScanSplitsForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -157,7 +157,7 @@ Friend Class RptScanSplitsForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -180,7 +180,7 @@ Friend Class RptScanSplitsForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -207,7 +207,7 @@ Friend Class RptScanSplitsForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -254,7 +254,7 @@ Friend Class RptScanSplitsForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -275,12 +275,12 @@ Friend Class RptScanSplitsForm
                         End With
                     End If
                 Case Else
-                    gRaiseError("Unrecognized report type")
+                    RaiseErrorMsg("Unrecognized report type")
             End Select
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -295,12 +295,12 @@ Friend Class RptScanSplitsForm
                     frmSumRpt.ShowMe(mobjHostUI, maudtCatTotals, mcolSelectAccounts, mobjCompany.Categories, mdatStart, mdatEnd,
                                      mblnIncludeFake, mblnIncludeGenerated)
                 Case Else
-                    gRaiseError("Unrecognized category report type")
+                    RaiseErrorMsg("Unrecognized category report type")
             End Select
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 End Class

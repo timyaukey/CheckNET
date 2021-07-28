@@ -105,7 +105,7 @@ Public Class LicenseForm
                 Return
             End If
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -118,7 +118,7 @@ Public Class LicenseForm
                 mobjHostUI.InfoMessageBox("License removed.")
             End If
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -145,7 +145,7 @@ Public Class LicenseForm
             objStartInfo.UseShellExecute = True
             System.Diagnostics.Process.Start(objStartInfo)
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 

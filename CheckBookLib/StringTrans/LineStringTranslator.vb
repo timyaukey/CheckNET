@@ -31,7 +31,7 @@ Public MustInherit Class LineStringTranslator(Of TElement As StringTransElement)
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 

@@ -42,7 +42,7 @@ Public Class TrialBalanceForm
                 lblResultSummary.Text = "Accounts are in balance, and inc/exp are cleared"
             End If
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -111,17 +111,17 @@ Public Class TrialBalanceForm
             objWriter.OutputGroupSummary(strLineTitleClass, "Accounts Receivable", strLineAmountClass, strMinusClass,
                 objBalSheet, Account.SubType.Asset_AccountsReceivable.ToString(), False, objAccumAssets)
 
-            If objConfig.blnLoansReceivableSummaryOnly Then
+            If objConfig.IsLoansReceivableSummaryOnly Then
                 objWriter.OutputGroupSummary(strLineTitleClass, "Loans Receivable", strLineAmountClass, strMinusClass,
-                    objBalSheet, Account.SubType.Asset_LoanReceivable.ToString(), objConfig.blnLoansReceivableSuppressZero, objAccumAssets)
+                    objBalSheet, Account.SubType.Asset_LoanReceivable.ToString(), objConfig.IsLoansReceivableSuppressZero, objAccumAssets)
             Else
                 objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
                     objBalSheet, Account.SubType.Asset_LoanReceivable.ToString(), objAccumAssets)
             End If
 
-            If objConfig.blnRealPropertySummaryOnly Then
+            If objConfig.IsRealPropertySummaryOnly Then
                 objWriter.OutputGroupSummary(strLineTitleClass, "Real Property", strLineAmountClass, strMinusClass,
-                    objBalSheet, Account.SubType.Asset_RealProperty.ToString(), objConfig.blnRealPropertySuppressZero, objAccumAssets)
+                    objBalSheet, Account.SubType.Asset_RealProperty.ToString(), objConfig.IsRealPropertySuppressZero, objAccumAssets)
             Else
                 objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
                     objBalSheet, Account.SubType.Asset_RealProperty.ToString(), objAccumAssets)
@@ -139,9 +139,9 @@ Public Class TrialBalanceForm
 
             objWriter.OutputText(strLineHeaderClass, "Liabilities")
 
-            If objConfig.blnLoansPayableSummaryOnly Then
+            If objConfig.IsLoansPayableSummaryOnly Then
                 objWriter.OutputGroupSummary(strLineTitleClass, "Loans Payable", strLineAmountClass, strMinusClass,
-                    objBalSheet, Account.SubType.Liability_LoanPayable.ToString(), objConfig.blnLoansPayableSuppressZero, objAccumLiabilities)
+                    objBalSheet, Account.SubType.Liability_LoanPayable.ToString(), objConfig.IsLoansPayableSuppressZero, objAccumLiabilities)
             Else
                 objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
                     objBalSheet, Account.SubType.Liability_LoanPayable.ToString(), objAccumLiabilities)
@@ -177,7 +177,7 @@ Public Class TrialBalanceForm
             objWriter.CheckPrinted(objBalSheet)
             objWriter.ShowReport()
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -242,7 +242,7 @@ Public Class TrialBalanceForm
             mobjHostUI.InfoMessageBox("Net profit bottom line is: " + Utilities.strFormatCurrency(objAccumTotal.curTotal))
             objWriter.ShowReport()
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -278,7 +278,7 @@ Public Class TrialBalanceForm
             objRegister.NewAddEnd(objTrx, New LogAdd(), "PostRetainedEarnings.AddTrx")
             mobjHostUI.InfoMessageBox("Income and expenses posted to retained earnings.")
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -292,7 +292,7 @@ Public Class TrialBalanceForm
             OutputLoansPayableOrReceivable(Account.SubType.Liability_LoanPayable,
                 "LoansPayable", "Loans Payable Balances", "Total Loans Payable Balance")
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -301,7 +301,7 @@ Public Class TrialBalanceForm
             OutputLoansPayableOrReceivable(Account.SubType.Asset_LoanReceivable,
                 "LoansReceivable", "Loans Receivable Balances", "Total Loans Receivable Balance")
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -343,7 +343,7 @@ Public Class TrialBalanceForm
             OutputAccounts(Of VendorSummary)(Account.SubType.Liability_AccountsPayable,
                 "AccountsPayable", "Accounts Payable", "Total Accounts Payable")
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -352,7 +352,7 @@ Public Class TrialBalanceForm
             OutputAccounts(Of CustomerSummary)(Account.SubType.Asset_AccountsReceivable,
                 "AccountsReceivable", "Accounts Receivable", "Total Accounts Receivable")
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 

@@ -136,7 +136,7 @@ Public Class TransferTrx
 
     Protected Sub RaiseErrorOnBadTransfer(ByVal strRoutine As String)
         If mstrTransferKey = "" Then
-            gRaiseError("Missing transfer key in " & strRoutine)
+            RaiseErrorMsg("Missing transfer key in " & strRoutine)
         End If
     End Sub
 End Class

@@ -41,7 +41,7 @@ Public Class CombinedBalancePlugin
             HostUI.InfoMessageBox("Combined personal and business balance as of " & datEndDate.ToShortDateString() & " is " & Utilities.strFormatCurrency(curCombinedBalance) & ".")
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 End Class

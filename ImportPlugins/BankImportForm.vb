@@ -155,7 +155,7 @@ Public Class BankImportForm
             Exit Sub
         Catch ex As Exception
             Me.Close()
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -175,7 +175,7 @@ Public Class BankImportForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -244,7 +244,7 @@ Public Class BankImportForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -311,7 +311,7 @@ Public Class BankImportForm
             Exit Sub
         Catch ex As Exception
             EndProgress()
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -721,7 +721,7 @@ Public Class BankImportForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -794,7 +794,7 @@ Public Class BankImportForm
             Exit Sub
         Catch ex As Exception
             EndProgress()
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -888,7 +888,7 @@ Public Class BankImportForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -938,7 +938,7 @@ Public Class BankImportForm
             Exit Function
         Catch ex As Exception
             mobjTrxReader.CloseSource()
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -1008,7 +1008,7 @@ Public Class BankImportForm
             Exit Sub
         Catch ex As Exception
             mblnIgnoreItemCheckedEvents = False
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -1024,7 +1024,7 @@ Public Class BankImportForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -1061,7 +1061,7 @@ Public Class BankImportForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -1107,7 +1107,7 @@ Public Class BankImportForm
                 End If
 
             Catch ex As Exception
-                gTopException(ex)
+                TopException(ex)
             End Try
         End If
     End Sub
@@ -1176,7 +1176,7 @@ Public Class BankImportForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1192,7 +1192,7 @@ Public Class BankImportForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1269,7 +1269,7 @@ Public Class BankImportForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -1306,7 +1306,7 @@ Public Class BankImportForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -1394,7 +1394,7 @@ Public Class BankImportForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1426,7 +1426,7 @@ Public Class BankImportForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1459,7 +1459,7 @@ Public Class BankImportForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1479,7 +1479,7 @@ Public Class BankImportForm
                     Exit Function
                 End If
             Case Else
-                gRaiseError("Unexpected import status in blnValidImportItemSelected")
+                RaiseErrorMsg("Unexpected import status in blnValidImportItemSelected")
         End Select
         blnValidImportItemSelected = True
     End Function
@@ -1510,7 +1510,7 @@ Public Class BankImportForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -1521,7 +1521,7 @@ Public Class BankImportForm
             ClearCurrentItemMatches()
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 

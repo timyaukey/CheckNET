@@ -303,13 +303,13 @@ Public MustInherit Class BaseTrx
 
     Protected Sub RaiseErrorOnBadData(ByVal strRoutine As String)
         If TrxDateInternal = Utilities.datEmpty Then
-            gRaiseError("Missing date in " & strRoutine)
+            RaiseErrorMsg("Missing date in " & strRoutine)
         End If
         If DescriptionInternal = "" Then
-            gRaiseError("Missing description in " & strRoutine)
+            RaiseErrorMsg("Missing description in " & strRoutine)
         End If
         If StatusInternal = TrxStatus.Missing Then
-            gRaiseError("Missing status in " & strRoutine)
+            RaiseErrorMsg("Missing status in " & strRoutine)
         End If
     End Sub
 

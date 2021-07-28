@@ -133,7 +133,7 @@ Public Class RegisterSaver
             Case BaseTrx.RepeatUnit.Month
                 ConvertRepeatUnit = "MONTH"
             Case Else
-                gRaiseError("Unrecognized repeat unit: " & lngUnit)
+                RaiseErrorMsg("Unrecognized repeat unit: " & lngUnit)
         End Select
     End Function
 

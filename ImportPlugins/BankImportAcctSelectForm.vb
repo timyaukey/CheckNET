@@ -25,7 +25,7 @@ Public Class BankImportAcctSelectForm
             End If
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -44,7 +44,7 @@ Public Class BankImportAcctSelectForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 

@@ -69,7 +69,7 @@ Public Class ReadBankOFX
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -97,7 +97,7 @@ Public Class ReadBankOFX
             Do
                 strToken = strGetToken()
                 If mblnInputEOF Then
-                    gRaiseError("Unexpected EOF in OFX file")
+                    RaiseErrorMsg("Unexpected EOF in OFX file")
                 End If
                 Select Case strToken
                     Case "</OFX>"
@@ -147,7 +147,7 @@ Public Class ReadBankOFX
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 

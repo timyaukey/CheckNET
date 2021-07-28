@@ -129,7 +129,7 @@ Public Class RegisterForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -138,7 +138,7 @@ Public Class RegisterForm
             EditTrx()
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -169,7 +169,7 @@ Public Class RegisterForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -189,7 +189,7 @@ Public Class RegisterForm
             EditTrx()
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -210,7 +210,7 @@ Public Class RegisterForm
             DiagnosticValidate()
             Exit Sub
         Catch ex As Exception
-            gTopException(ex) : End Try
+            TopException(ex) : End Try
     End Sub
 
     Private Sub cmdNewBudget_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewBudget.Click
@@ -221,7 +221,7 @@ Public Class RegisterForm
             DiagnosticValidate()
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -233,7 +233,7 @@ Public Class RegisterForm
             DiagnosticValidate()
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -247,7 +247,7 @@ Public Class RegisterForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -393,7 +393,7 @@ Public Class RegisterForm
             grdReg.Invalidate()
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -402,7 +402,7 @@ Public Class RegisterForm
             grdReg.Invalidate()
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -415,7 +415,7 @@ Public Class RegisterForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -428,7 +428,7 @@ Public Class RegisterForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -442,7 +442,7 @@ Public Class RegisterForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -454,7 +454,7 @@ Public Class RegisterForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -466,7 +466,7 @@ Public Class RegisterForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -481,7 +481,7 @@ Public Class RegisterForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -506,7 +506,7 @@ Public Class RegisterForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 

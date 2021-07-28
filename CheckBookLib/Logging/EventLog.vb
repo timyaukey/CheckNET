@@ -116,7 +116,7 @@ Public Class EventLog
         Dim objTopGroup As ILogGroupStart
         objTopGroup = mcolGroups.Item(mcolGroups.Count() - 1)
         If Not objTopGroup Is objStartLogger Then
-            gRaiseError("Invalid log group nesting")
+            RaiseErrorMsg("Invalid log group nesting")
         End If
         mcolGroups.RemoveAt(mcolGroups.Count() - 1)
         mcolLoggers.Add(objEndLogger)
@@ -204,7 +204,7 @@ Public Class EventLog
             ElseIf TypeOf objTrx Is TransferTrx Then
                 .SetAttribute("Type", "Transfer")
             Else
-                gRaiseError("Unsupported trx type")
+                RaiseErrorMsg("Unsupported trx type")
             End If
         End With
     End Sub

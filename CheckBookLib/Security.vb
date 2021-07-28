@@ -44,7 +44,7 @@ Public Class Security
         End If
         mdomSecurity = mobjCompany.LoadXmlFile(mstrFilePath)
         If mdomSecurity.DocumentElement.Name <> "security" Then
-            gRaiseError("Invalid security file document element")
+            RaiseErrorMsg("Invalid security file document element")
         End If
     End Sub
 

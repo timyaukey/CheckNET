@@ -63,7 +63,7 @@ Friend Class CatSumRptForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -82,7 +82,7 @@ Friend Class CatSumRptForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -120,7 +120,7 @@ Friend Class CatSumRptForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -152,7 +152,7 @@ Friend Class CatSumRptForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -187,7 +187,7 @@ Friend Class CatSumRptForm
                 ElseIf maudtCatTotals(intCatIndex).intNestingLevel = intNestingLevel + 1 Then
                     curChildTotal = curChildTotal + curProcessChildren(intCatIndex, intNestingLevel + 1, "-- Total -- " & strCatName, curAmount)
                 Else
-                    gRaiseError("Improper nesting of categories")
+                    RaiseErrorMsg("Improper nesting of categories")
                 End If
             Loop
             'Output cumulative total
@@ -196,7 +196,7 @@ Friend Class CatSumRptForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -266,7 +266,7 @@ Friend Class CatSumRptForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 End Class

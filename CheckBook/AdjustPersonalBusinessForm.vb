@@ -78,7 +78,7 @@ Public Class AdjustPersonalBusinessForm
                 intDeleteAdjustments(mobjPersonalAccount)
             mobjHostUI.InfoMessageBox(intDeleteCount.ToString() + " adjustment transactions deleted")
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -96,7 +96,7 @@ Public Class AdjustPersonalBusinessForm
             Dim intAdjustCount As Integer = intCreateAdjustments()
             mobjHostUI.InfoMessageBox(intDeleteCount.ToString() + " adjustments transactions deleted, " + intAdjustCount.ToString() + " adjustment transactions created")
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 

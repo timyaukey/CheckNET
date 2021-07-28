@@ -31,11 +31,11 @@ Public Class SimpleStringTranslator
         strSeparator = Left(strLine, 1)
         intPos1 = InStr(2, strLine, strSeparator)
         If intPos1 = 0 Then
-            gRaiseError("Cannot find second separator " & strLine)
+            RaiseErrorMsg("Cannot find second separator " & strLine)
         End If
         intPos2 = InStr(intPos1 + 1, strLine, strSeparator)
         If intPos2 = 0 Then
-            gRaiseError("Cannot find third separator " & strLine)
+            RaiseErrorMsg("Cannot find third separator " & strLine)
         End If
         intPos3 = InStr(intPos2 + 1, strLine, strSeparator)
         If intPos3 = 0 Then

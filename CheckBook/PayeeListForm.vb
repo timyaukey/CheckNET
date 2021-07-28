@@ -39,7 +39,7 @@ Friend Class PayeeListForm
             Exit Sub
         Catch ex As Exception
             Me.Close()
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -58,7 +58,7 @@ Friend Class PayeeListForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -77,7 +77,7 @@ Friend Class PayeeListForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -106,7 +106,7 @@ Friend Class PayeeListForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -123,7 +123,7 @@ Friend Class PayeeListForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -158,7 +158,7 @@ Friend Class PayeeListForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -209,7 +209,7 @@ Friend Class PayeeListForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -224,7 +224,7 @@ Friend Class PayeeListForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -254,7 +254,7 @@ Friend Class PayeeListForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 
@@ -306,7 +306,7 @@ Friend Class PayeeListForm
 
             Exit Function
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Function
 
@@ -431,7 +431,7 @@ Friend Class PayeeListForm
 
             Exit Sub
         Catch ex As Exception
-            gNestedException(ex)
+            NestedException(ex)
         End Try
     End Sub
 

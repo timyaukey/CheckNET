@@ -111,7 +111,7 @@ Friend Class CBMainForm
             frmStartup.Close()
 
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
             Me.Close()
         End Try
     End Sub
@@ -318,7 +318,7 @@ Friend Class CBMainForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -459,7 +459,7 @@ Friend Class CBMainForm
             objProcessInfo.UseShellExecute = True
             System.Diagnostics.Process.Start(objProcessInfo)
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -474,7 +474,7 @@ Friend Class CBMainForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -491,7 +491,7 @@ Friend Class CBMainForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -516,7 +516,7 @@ Friend Class CBMainForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -530,7 +530,7 @@ Friend Class CBMainForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -546,7 +546,7 @@ Friend Class CBMainForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -568,7 +568,7 @@ Friend Class CBMainForm
 
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -590,7 +590,7 @@ Friend Class CBMainForm
             mobjHostUI.InfoMessageBox("User logins enabled. Added administrator login """ & mobjSecurity.strLogin & """, with empty password.")
             Exit Sub
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -601,7 +601,7 @@ Friend Class CBMainForm
             mobjSecurity.RestoreUserContext()
         Catch ex As Exception
             mobjSecurity.RestoreUserContext()
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -635,7 +635,7 @@ Friend Class CBMainForm
             mobjSecurity.RestoreUserContext()
         Catch ex As Exception
             mobjSecurity.RestoreUserContext()
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -656,7 +656,7 @@ Friend Class CBMainForm
             mobjSecurity.RestoreUserContext()
         Catch ex As Exception
             mobjSecurity.RestoreUserContext()
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -699,7 +699,7 @@ Friend Class CBMainForm
             mobjSecurity.RestoreUserContext()
         Catch ex As Exception
             mobjSecurity.RestoreUserContext()
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -738,7 +738,7 @@ Friend Class CBMainForm
             mobjSecurity.Save()
             mobjHostUI.InfoMessageBox("User login database repaired.")
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -748,7 +748,7 @@ Friend Class CBMainForm
                 frm.ShowMe(Me)
             End Using
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -758,7 +758,7 @@ Friend Class CBMainForm
                 frm.ShowMe(mobjCompany)
             End Using
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -768,7 +768,7 @@ Friend Class CBMainForm
                 frm.ShowMe(Me)
             End Using
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -781,7 +781,7 @@ Friend Class CBMainForm
                 frm.ShowMe(mobjHostUI)
             End Using
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 End Class

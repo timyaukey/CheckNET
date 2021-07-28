@@ -25,7 +25,7 @@ Public Class CheckFormatEditor
             prpDetails.SelectedObject = New CheckFormat()
             mobjHostUI.InfoMessageBox("Creating default check format. You will need to fix it to match your check stock, and then save it.")
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 
@@ -41,7 +41,7 @@ Public Class CheckFormatEditor
                 Me.Close()
             End Using
         Catch ex As Exception
-            gTopException(ex)
+            TopException(ex)
         End Try
     End Sub
 End Class
