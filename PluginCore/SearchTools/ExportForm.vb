@@ -165,22 +165,22 @@ Friend Class ExportForm
             'are added in OpenOutput().
 
             If mblnIncludeAging Then
-                strBracket = AgingUtils.strMakeAgeBracket(mdatAgingDate, mintAgingDays, objTrx.IsFake, objTrx.TrxDate, datInvToUse, datDueToUse)
+                strBracket = AgingUtils.MakeAgeBracket(mdatAgingDate, mintAgingDays, objTrx.IsFake, objTrx.TrxDate, datInvToUse, datDueToUse)
                 strLine = strLine & ",""" & strBracket & """"
             End If
 
             If mblnIncludeTrans Then
-                strBracket = AgingUtils.strMakeDateBracket(objTrx.TrxDate, mintTransDays, mdatTransDate)
+                strBracket = AgingUtils.MakeDateBracket(objTrx.TrxDate, mintTransDays, mdatTransDate)
                 strLine = strLine & ",""" & strBracket & """"
             End If
 
             If mblnIncludeDue Then
-                strBracket = AgingUtils.strMakeDateBracket(datDueToUse, mintDueDays, mdatDueDate)
+                strBracket = AgingUtils.MakeDateBracket(datDueToUse, mintDueDays, mdatDueDate)
                 strLine = strLine & ",""" & strBracket & """"
             End If
 
             If mblnIncludeInv Then
-                strBracket = AgingUtils.strMakeDateBracket(datInvToUse, mintInvDays, mdatInvDate)
+                strBracket = AgingUtils.MakeDateBracket(datInvToUse, mintInvDays, mdatInvDate)
                 strLine = strLine & ",""" & strBracket & """"
             End If
 

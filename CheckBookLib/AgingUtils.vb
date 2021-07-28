@@ -3,10 +3,10 @@ Option Explicit On
 
 Public Class AgingUtils
 
-    Public Shared Function strMakeAgeBracket(ByVal datAgingDate As Date, ByVal intBracketSize As Short, ByVal blnFake As Boolean, ByVal datTrxDate As Date, ByVal datInvDate As Date, ByVal datDueDate As Date) As String
+    Public Shared Function MakeAgeBracket(ByVal datAgingDate As Date, ByVal intBracketSize As Short, ByVal blnFake As Boolean, ByVal datTrxDate As Date, ByVal datInvDate As Date, ByVal datDueDate As Date) As String
         Dim strBracket As String
 
-        strBracket = strNotInvoicedLabel()
+        strBracket = NotInvoicedLabel()
         'If item was invoiced as of report date.
         Dim intAgeInDays As Long
         Dim intAgeBracket As Long
@@ -24,65 +24,65 @@ Public Class AgingUtils
                 intStartingAge = 1 + (intAgeBracket * intBracketSize)
                 intEndingAge = intStartingAge + intBracketSize - 1
                 If intAgeBracket = -1 Then
-                    strBracket = strCurrentLabel()
+                    strBracket = CurrentLabel()
                 ElseIf intAgeBracket >= 0 Then
-                    strBracket = strPastDueLabel(intStartingAge, intEndingAge)
+                    strBracket = PastDueLabel(intStartingAge, intEndingAge)
                 Else
-                    strBracket = strFutureLabel(intStartingAge, intEndingAge)
+                    strBracket = FutureLabel(intStartingAge, intEndingAge)
                 End If
             Else
-                strBracket = strPaidLabel()
+                strBracket = PaidLabel()
             End If
         End If
-        strMakeAgeBracket = strBracket
+        MakeAgeBracket = strBracket
 
     End Function
 
-    Public Shared Function strMakeDateBracket(ByVal datInputDate As Date, ByVal intBracketSize As Short, ByVal datBaseDate As Date) As String
+    Public Shared Function MakeDateBracket(ByVal datInputDate As Date, ByVal intBracketSize As Short, ByVal datBaseDate As Date) As String
 
         Dim intOffsetDays As Long
         Dim intMonthPart As Integer
         Dim datBracketDate As Date
 
-        strMakeDateBracket = ""
+        MakeDateBracket = ""
         If intBracketSize < 0 Then
             If intBracketSize = -1 Then
-                strMakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/01")
+                MakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/01")
             ElseIf intBracketSize = -2 Then
                 intMonthPart = CInt(Int((Microsoft.VisualBasic.Day(datInputDate) - 1) / 15))
                 If intMonthPart > 1 Then
                     intMonthPart = 1
                 End If
-                strMakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/") & Utilities.strFormatInteger(1 + intMonthPart * 15, "0#")
+                MakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/") & Utilities.strFormatInteger(1 + intMonthPart * 15, "0#")
             ElseIf intBracketSize = -4 Then
                 intMonthPart = CInt(Int((Microsoft.VisualBasic.Day(datInputDate) - 1) / 8))
-                strMakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/") & Utilities.strFormatInteger(1 + intMonthPart * 8, "0#")
+                MakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/") & Utilities.strFormatInteger(1 + intMonthPart * 8, "0#")
             End If
         Else
             intOffsetDays = DateDiff(Microsoft.VisualBasic.DateInterval.Day, datBaseDate, datInputDate)
             datBracketDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, Int(intOffsetDays / intBracketSize) * intBracketSize, datBaseDate)
-            strMakeDateBracket = Utilities.strFormatDate(datBracketDate, "yyyy/MM/dd")
+            MakeDateBracket = Utilities.strFormatDate(datBracketDate, "yyyy/MM/dd")
         End If
 
     End Function
 
-    Public Shared Function strNotInvoicedLabel() As String
+    Public Shared Function NotInvoicedLabel() As String
         Return "Not Invoiced"
     End Function
 
-    Public Shared Function strCurrentLabel() As String
+    Public Shared Function CurrentLabel() As String
         Return "Current"
     End Function
 
-    Public Shared Function strPaidLabel() As String
+    Public Shared Function PaidLabel() As String
         Return "Paid"
     End Function
 
-    Public Shared Function strFutureLabel(ByVal intStartingAge As Long, ByVal intEndingAge As Long) As String
+    Public Shared Function FutureLabel(ByVal intStartingAge As Long, ByVal intEndingAge As Long) As String
         Return "Due In " & Utilities.strFormatInteger(-intEndingAge, "000") & "-" & Utilities.strFormatInteger(-intStartingAge, "000") & " Days"
     End Function
 
-    Public Shared Function strPastDueLabel(ByVal intStartingAge As Long, ByVal intEndingAge As Long) As String
+    Public Shared Function PastDueLabel(ByVal intStartingAge As Long, ByVal intEndingAge As Long) As String
         Return "Due " & Utilities.strFormatInteger(intStartingAge, "000") & "-" & Utilities.strFormatInteger(intEndingAge, "000") & " Days Ago"
     End Function
 End Class

@@ -95,72 +95,72 @@ Public Class MiscFunctionsFixture
     Public Sub AgingBrackets()
         gUTSetSubTest("Current")
 
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #6/10/2009#, #5/10/2009#, #6/20/2009#) = AgingUtils.strCurrentLabel(), "not paid, invoiced, due in 20 days")
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, True, #6/10/2009#, #5/10/2009#, #6/20/2009#) = AgingUtils.strCurrentLabel(), "not paid, fake, invoiced, due in 20 days")
+        gUTAssert(AgingUtils.MakeAgeBracket(#6/1/2009#, 30, False, #6/10/2009#, #5/10/2009#, #6/20/2009#) = AgingUtils.CurrentLabel(), "not paid, invoiced, due in 20 days")
+        gUTAssert(AgingUtils.MakeAgeBracket(#6/1/2009#, 30, True, #6/10/2009#, #5/10/2009#, #6/20/2009#) = AgingUtils.CurrentLabel(), "not paid, fake, invoiced, due in 20 days")
 
         gUTSetSubTest("Not invoiced")
 
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #7/5/2009#, #6/10/2009#, #7/10/2009#) = AgingUtils.strNotInvoicedLabel(), "future invoice date")
+        gUTAssert(AgingUtils.MakeAgeBracket(#6/1/2009#, 30, False, #7/5/2009#, #6/10/2009#, #7/10/2009#) = AgingUtils.NotInvoicedLabel(), "future invoice date")
 
         gUTSetSubTest("Paid")
 
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #5/30/2009#, #5/10/2009#, #5/20/2009#) = AgingUtils.strPaidLabel(), "paid before aging date")
-        gUTAssert(AgingUtils.strMakeAgeBracket(#9/1/2009#, 30, False, #5/30/2009#, #5/10/2009#, #5/20/2009#) = AgingUtils.strPaidLabel(), "paid WAY before aging date")
+        gUTAssert(AgingUtils.MakeAgeBracket(#6/1/2009#, 30, False, #5/30/2009#, #5/10/2009#, #5/20/2009#) = AgingUtils.PaidLabel(), "paid before aging date")
+        gUTAssert(AgingUtils.MakeAgeBracket(#9/1/2009#, 30, False, #5/30/2009#, #5/10/2009#, #5/20/2009#) = AgingUtils.PaidLabel(), "paid WAY before aging date")
 
         gUTSetSubTest("Past Due")
 
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #8/30/2009#, #5/10/2009#, #5/20/2009#) = AgingUtils.strPastDueLabel(1, 30), "unpaid 11 days after due date")
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #8/30/2009#, #4/10/2009#, #4/20/2009#) = AgingUtils.strPastDueLabel(31, 60), "unpaid ~40 days after due date")
+        gUTAssert(AgingUtils.MakeAgeBracket(#6/1/2009#, 30, False, #8/30/2009#, #5/10/2009#, #5/20/2009#) = AgingUtils.PastDueLabel(1, 30), "unpaid 11 days after due date")
+        gUTAssert(AgingUtils.MakeAgeBracket(#6/1/2009#, 30, False, #8/30/2009#, #4/10/2009#, #4/20/2009#) = AgingUtils.PastDueLabel(31, 60), "unpaid ~40 days after due date")
 
         gUTSetSubTest("Future")
 
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #10/30/2009#, #5/10/2009#, #7/10/2009#) = AgingUtils.strFutureLabel(-59, -30), "due ~40 days after aging date")
-        gUTAssert(AgingUtils.strMakeAgeBracket(#6/1/2009#, 30, False, #10/30/2009#, #5/10/2009#, #8/10/2009#) = AgingUtils.strFutureLabel(-89, -60), "due ~70 days after aging date")
+        gUTAssert(AgingUtils.MakeAgeBracket(#6/1/2009#, 30, False, #10/30/2009#, #5/10/2009#, #7/10/2009#) = AgingUtils.FutureLabel(-59, -30), "due ~40 days after aging date")
+        gUTAssert(AgingUtils.MakeAgeBracket(#6/1/2009#, 30, False, #10/30/2009#, #5/10/2009#, #8/10/2009#) = AgingUtils.FutureLabel(-89, -60), "due ~70 days after aging date")
     End Sub
 
     <Test>
     Public Sub DateBrackets()
         gUTSetSubTest("Day count")
 
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/1/2009#, 10, #6/1/2009#) = "2009/06/01", "equal to base date")
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/2/2009#, 10, #6/1/2009#) = "2009/06/01", "day after base date")
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/10/2009#, 10, #6/1/2009#) = "2009/06/01", "end of base bracket")
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/11/2009#, 10, #6/1/2009#) = "2009/06/11", "start of next bracket")
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/14/2009#, 10, #6/1/2009#) = "2009/06/11", "middle of next bracket")
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/20/2009#, 10, #6/1/2009#) = "2009/06/11", "end of next bracket")
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/21/2009#, 10, #6/1/2009#) = "2009/06/21", "start of next bracket")
-        gUTAssert(AgingUtils.strMakeDateBracket(#5/31/2009#, 10, #6/1/2009#) = "2009/05/22", "end of previous bracket")
-        gUTAssert(AgingUtils.strMakeDateBracket(#5/24/2009#, 10, #6/1/2009#) = "2009/05/22", "middle of previous bracket")
-        gUTAssert(AgingUtils.strMakeDateBracket(#5/22/2009#, 10, #6/1/2009#) = "2009/05/22", "start of previous bracket")
-        gUTAssert(AgingUtils.strMakeDateBracket(#5/21/2009#, 10, #6/1/2009#) = "2009/05/12", "start of second previous bracket")
+        gUTAssert(AgingUtils.MakeDateBracket(#6/1/2009#, 10, #6/1/2009#) = "2009/06/01", "equal to base date")
+        gUTAssert(AgingUtils.MakeDateBracket(#6/2/2009#, 10, #6/1/2009#) = "2009/06/01", "day after base date")
+        gUTAssert(AgingUtils.MakeDateBracket(#6/10/2009#, 10, #6/1/2009#) = "2009/06/01", "end of base bracket")
+        gUTAssert(AgingUtils.MakeDateBracket(#6/11/2009#, 10, #6/1/2009#) = "2009/06/11", "start of next bracket")
+        gUTAssert(AgingUtils.MakeDateBracket(#6/14/2009#, 10, #6/1/2009#) = "2009/06/11", "middle of next bracket")
+        gUTAssert(AgingUtils.MakeDateBracket(#6/20/2009#, 10, #6/1/2009#) = "2009/06/11", "end of next bracket")
+        gUTAssert(AgingUtils.MakeDateBracket(#6/21/2009#, 10, #6/1/2009#) = "2009/06/21", "start of next bracket")
+        gUTAssert(AgingUtils.MakeDateBracket(#5/31/2009#, 10, #6/1/2009#) = "2009/05/22", "end of previous bracket")
+        gUTAssert(AgingUtils.MakeDateBracket(#5/24/2009#, 10, #6/1/2009#) = "2009/05/22", "middle of previous bracket")
+        gUTAssert(AgingUtils.MakeDateBracket(#5/22/2009#, 10, #6/1/2009#) = "2009/05/22", "start of previous bracket")
+        gUTAssert(AgingUtils.MakeDateBracket(#5/21/2009#, 10, #6/1/2009#) = "2009/05/12", "start of second previous bracket")
 
         gUTSetSubTest("Whole month")
 
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/1/2009#, -1, #1/1/2001#) = "2009/06/01", "first day of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#6/2/2009#, -1, #1/1/2001#) = "2009/06/01", "second day of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/31/2009#, -1, #1/1/2001#) = "2009/07/01", "last day of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#6/1/2009#, -1, #1/1/2001#) = "2009/06/01", "first day of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#6/2/2009#, -1, #1/1/2001#) = "2009/06/01", "second day of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/31/2009#, -1, #1/1/2001#) = "2009/07/01", "last day of month")
 
         gUTSetSubTest("Half month")
 
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/1/2009#, -2, #1/1/2001#) = "2009/07/01", "first day of first half of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/5/2009#, -2, #1/1/2001#) = "2009/07/01", "middle of first half of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/15/2009#, -2, #1/1/2001#) = "2009/07/01", "end of first half of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/16/2009#, -2, #1/1/2001#) = "2009/07/16", "first day of second half of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/21/2009#, -2, #1/1/2001#) = "2009/07/16", "middle of second half of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/31/2009#, -2, #1/1/2001#) = "2009/07/16", "last day of second half of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/1/2009#, -2, #1/1/2001#) = "2009/07/01", "first day of first half of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/5/2009#, -2, #1/1/2001#) = "2009/07/01", "middle of first half of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/15/2009#, -2, #1/1/2001#) = "2009/07/01", "end of first half of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/16/2009#, -2, #1/1/2001#) = "2009/07/16", "first day of second half of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/21/2009#, -2, #1/1/2001#) = "2009/07/16", "middle of second half of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/31/2009#, -2, #1/1/2001#) = "2009/07/16", "last day of second half of month")
 
         gUTSetSubTest("Quarter month")
 
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/1/2009#, -4, #1/1/2001#) = "2009/07/01", "first day of first quarter of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/5/2009#, -4, #1/1/2001#) = "2009/07/01", "middle of first quarter of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/8/2009#, -4, #1/1/2001#) = "2009/07/01", "end of first quarter of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/9/2009#, -4, #1/1/2001#) = "2009/07/09", "first day of second quarter of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/12/2009#, -4, #1/1/2001#) = "2009/07/09", "middle of second quarter of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/16/2009#, -4, #1/1/2001#) = "2009/07/09", "last day of second quarter of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/17/2009#, -4, #1/1/2001#) = "2009/07/17", "first day of third quarter of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/24/2009#, -4, #1/1/2001#) = "2009/07/17", "last day of third quarter of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/25/2009#, -4, #1/1/2001#) = "2009/07/25", "first day of last quarter of month")
-        gUTAssert(AgingUtils.strMakeDateBracket(#7/31/2009#, -4, #1/1/2001#) = "2009/07/25", "last day of last quarter of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/1/2009#, -4, #1/1/2001#) = "2009/07/01", "first day of first quarter of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/5/2009#, -4, #1/1/2001#) = "2009/07/01", "middle of first quarter of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/8/2009#, -4, #1/1/2001#) = "2009/07/01", "end of first quarter of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/9/2009#, -4, #1/1/2001#) = "2009/07/09", "first day of second quarter of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/12/2009#, -4, #1/1/2001#) = "2009/07/09", "middle of second quarter of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/16/2009#, -4, #1/1/2001#) = "2009/07/09", "last day of second quarter of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/17/2009#, -4, #1/1/2001#) = "2009/07/17", "first day of third quarter of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/24/2009#, -4, #1/1/2001#) = "2009/07/17", "last day of third quarter of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/25/2009#, -4, #1/1/2001#) = "2009/07/25", "first day of last quarter of month")
+        gUTAssert(AgingUtils.MakeDateBracket(#7/31/2009#, -4, #1/1/2001#) = "2009/07/25", "last day of last quarter of month")
 
     End Sub
 

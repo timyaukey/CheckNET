@@ -37,7 +37,7 @@ Public Class CategorySearchHandler
         End If
 
         objComparer = DirectCast(objHostSearchUI.objGetSearchType(), SearchComparer)
-        Dim lngItemData As Integer = DirectCast(objHostSearchUI.objGetComboBoxSearchFor(), CBListBoxItem).intValue
+        Dim lngItemData As Integer = DirectCast(objHostSearchUI.objGetComboBoxSearchFor(), CBListBoxItem).LBValue
         strParameter = mobjHostUI.objCompany.Categories.GetKey(lngItemData)
         strParameter = mobjHostUI.objCompany.Categories.KeyToValue1(strParameter)
         Return True

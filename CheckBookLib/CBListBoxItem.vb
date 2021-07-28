@@ -2,15 +2,15 @@
 Option Explicit On
 
 Public Class CBListBoxItem
-    Public Property intValue As Integer
-    Public Property strName As String
+    Public Property LBValue As Integer
+    Public Property LBName As String
 
     Public Sub New(ByVal _strName As String, ByVal _intValue As Integer)
-        strName = _strName
-        intValue = _intValue
+        LBName = _strName
+        LBValue = _intValue
     End Sub
 
     Public Overrides Function ToString() As String
-        Return strName
+        Return LBName
     End Function
 End Class

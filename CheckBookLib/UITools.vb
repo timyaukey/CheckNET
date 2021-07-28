@@ -10,11 +10,11 @@ Public Class UITools
     End Function
 
     Public Shared Function GetItemString(ctl As ComboBox, intIndex As Integer) As String
-        Return DirectCast(ctl.Items(intIndex), CBListBoxItem).strName
+        Return DirectCast(ctl.Items(intIndex), CBListBoxItem).LBName
     End Function
 
     Public Shared Function GetItemData(ctl As ComboBox, intIndex As Integer) As Integer
-        Return DirectCast(ctl.Items(intIndex), CBListBoxItem).intValue
+        Return DirectCast(ctl.Items(intIndex), CBListBoxItem).LBValue
     End Function
 
     Public Shared Function ListViewAdd(ByVal lvw As ListView) As ListViewItem
