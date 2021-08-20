@@ -123,7 +123,7 @@
     <Compile Include="Register\RegIterator.vb" />
     <Compile Include="Register\RegReverse.vb" />
     <Compile Include="RepeatSummarizer.vb" />
-    <Compile Include="RepeatUnitTypeConverter.vb" />
+    <Compile Include="UITypeEditors\RepeatUnitTypeConverter.vb" />
     <Compile Include="Reporting\AccountGroupManager.vb" />
     <Compile Include="Reporting\BalanceSheetScanner.vb" />
     <Compile Include="Reporting\CategoryGroupManager.vb" />

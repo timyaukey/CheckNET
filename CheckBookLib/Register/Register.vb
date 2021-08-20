@@ -110,7 +110,7 @@ Public Class Register
         mblnInCriticalOperation = False
         mblnCriticalOperationFailed = False
         mobjLog = New EventLog
-        mobjLog.Init(Me, mobjAccount.Company.SecData.strLogin)
+        mobjLog.Init(Me, mobjAccount.Company.SecData.LoginName)
 
     End Sub
 

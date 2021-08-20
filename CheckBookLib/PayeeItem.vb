@@ -59,7 +59,7 @@ Public Class PayeeItem
     Public Property AllowAutoBatchNew As String
     Public Property AllowAutoBatchUpdate As String
 
-    Public ReadOnly Property blnIsAllowAutoBatchNew() As Boolean
+    Public ReadOnly Property IsAllowAutoBatchNew() As Boolean
         Get
             If Not String.IsNullOrEmpty(AllowAutoBatchNew) Then
                 If AllowAutoBatchNew.ToLower() = PayeeItem.Yes Then
@@ -70,7 +70,7 @@ Public Class PayeeItem
         End Get
     End Property
 
-    Public ReadOnly Property blnIsAllowAutoBatchUpdate() As Boolean
+    Public ReadOnly Property IsAllowAutoBatchUpdate() As Boolean
         Get
             If Not String.IsNullOrEmpty(AllowAutoBatchUpdate) Then
                 If AllowAutoBatchUpdate.ToLower() = PayeeItem.Yes Then

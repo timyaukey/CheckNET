@@ -28,7 +28,7 @@ Public Class Security
         mblnNoFile = False
     End Sub
 
-    Public ReadOnly Property strAdminLogin() As String
+    Public ReadOnly Property AdminLogin() As String
         Get
             Return "admin"
         End Get
@@ -60,38 +60,38 @@ Public Class Security
         mstrFilePath = mobjCompany.AddNameToDataPath("Security.xml")
     End Sub
 
-    Public ReadOnly Property blnNoFile() As Boolean
+    Public ReadOnly Property NoFile() As Boolean
         Get
             Return mblnNoFile
         End Get
     End Property
 
-    Public ReadOnly Property blnHaveUser() As Boolean
+    Public ReadOnly Property HaveUser() As Boolean
         Get
             If melmUser Is Nothing Then
-                blnHaveUser = False
+                HaveUser = False
             Else
-                blnHaveUser = True
+                HaveUser = True
             End If
         End Get
     End Property
 
-    Public ReadOnly Property strLogin() As String
+    Public ReadOnly Property LoginName() As String
         Get
-            strLogin = mstrLogin
+            LoginName = mstrLogin
         End Get
     End Property
 
-    Public ReadOnly Property blnIsAdministrator() As Boolean
+    Public ReadOnly Property IsAdministrator() As Boolean
         Get
-            blnIsAdministrator = (mstrLogin = "admin") Or blnUserBoolean("isadmin") Or mblnNoFile
+            IsAdministrator = (mstrLogin = "admin") Or UserAttributeIsTrue("isadmin") Or mblnNoFile
         End Get
     End Property
 
     'Strictly for debugging use
-    Public ReadOnly Property elmDbgUser() As CBXmlElement
+    Public ReadOnly Property DbgUserXmlElement() As CBXmlElement
         Get
-            elmDbgUser = melmUser
+            DbgUserXmlElement = melmUser
         End Get
     End Property
 
@@ -102,13 +102,13 @@ Public Class Security
 
         colUsers = mdomSecurity.DocumentElement.SelectNodes("user")
         For Each elmUser In colUsers
-            strSignature = strCreateUserSignature(elmUser)
+            strSignature = CreateUserSignature(elmUser)
             elmUser.SetAttribute("signhash", strSignature)
         Next elmUser
     End Sub
 
-    Private Function strCreateUserSignature(ByVal elmUser As CBXmlElement) As String
-        strCreateUserSignature = strMakeHash(CStr(elmUser.GetAttribute("login")) & CStr(elmUser.GetAttribute("name")) & ":isadmin=" & CStr(elmUser.GetAttribute("isadmin")))
+    Private Function CreateUserSignature(ByVal elmUser As CBXmlElement) As String
+        CreateUserSignature = MakeHash(CStr(elmUser.GetAttribute("login")) & CStr(elmUser.GetAttribute("name")) & ":isadmin=" & CStr(elmUser.GetAttribute("isadmin")))
     End Function
 
     Public Sub Save()
@@ -126,38 +126,38 @@ Public Class Security
         mstrLogin = strLogin
     End Sub
 
-    Public Function blnFindUser(ByVal strLogin As String) As Boolean
+    Public Function FindUser(ByVal strLogin As String) As Boolean
         melmUser = DirectCast(mdomSecurity.DocumentElement.SelectSingleNode("user[@login=""" & strLogin & """]"), CBXmlElement)
         mstrLogin = strLogin
-        blnFindUser = blnHaveUser
+        FindUser = HaveUser
     End Function
 
-    Public Function blnUserSignatureIsValid() As Boolean
+    Public Function IsUserSignatureValid() As Boolean
         Dim strComputedSignature As String
-        strComputedSignature = strCreateUserSignature(melmUser)
-        blnUserSignatureIsValid = (strComputedSignature = CStr(melmUser.GetAttribute("signhash")))
+        strComputedSignature = CreateUserSignature(melmUser)
+        IsUserSignatureValid = (strComputedSignature = CStr(melmUser.GetAttribute("signhash")))
     End Function
 
-    Public Function blnPasswordMatches(ByVal strPassword As String) As Boolean
-        blnPasswordMatches = (CStr(melmUser.GetAttribute("passwordhash")) = strMakeHash(strPassword))
+    Public Function PasswordMatches(ByVal strPassword As String) As Boolean
+        PasswordMatches = (CStr(melmUser.GetAttribute("passwordhash")) = MakeHash(strPassword))
     End Function
 
-    Public Function blnAuthenticate(ByVal strLogin As String, ByVal strPassword As String) As Boolean
-        If Not blnFindUser(strLogin) Then
+    Public Function Authenticate(ByVal strLogin As String, ByVal strPassword As String) As Boolean
+        If Not FindUser(strLogin) Then
             Return False
         End If
-        If Not blnPasswordMatches(strPassword) Then
+        If Not PasswordMatches(strPassword) Then
             Return False
         End If
-        If Not blnUserSignatureIsValid() Then
+        If Not IsUserSignatureValid() Then
             Return False
         End If
         Return True
     End Function
 
     Public Sub SetPassword(ByVal strPassword As String)
-        melmUser.SetAttribute("passwordhash", strMakeHash(strPassword))
-        Dim strSignature As String = strCreateUserSignature(melmUser)
+        melmUser.SetAttribute("passwordhash", MakeHash(strPassword))
+        Dim strSignature As String = CreateUserSignature(melmUser)
         melmUser.SetAttribute("signhash", strSignature)
     End Sub
 
@@ -165,25 +165,25 @@ Public Class Security
         mdomSecurity.DocumentElement.RemoveChild(melmUser)
     End Sub
 
-    Private Function blnUserBoolean(ByVal strAttrib As String) As Boolean
+    Private Function UserAttributeIsTrue(ByVal strAttrib As String) As Boolean
         Dim strValue As String
-        If blnHaveUser Then
-            strValue = LCase(strUserValue(strAttrib))
-            blnUserBoolean = (strValue = "yes") Or (strValue = "true")
+        If HaveUser Then
+            strValue = LCase(GetUserAttributeValue(strAttrib))
+            UserAttributeIsTrue = (strValue = "yes") Or (strValue = "true")
         End If
     End Function
 
-    Private Function strUserValue(ByVal strAttrib As String) As String
+    Private Function GetUserAttributeValue(ByVal strAttrib As String) As String
         Dim vstrValue As Object
         vstrValue = melmUser.GetAttribute(strAttrib)
         If gblnXmlAttributeMissing(vstrValue) Then
-            strUserValue = ""
+            GetUserAttributeValue = ""
         Else
-            strUserValue = CStr(vstrValue)
+            GetUserAttributeValue = CStr(vstrValue)
         End If
     End Function
 
-    Private Function strMakeHash(ByVal strInput As String) As String
+    Private Function MakeHash(ByVal strInput As String) As String
         Dim lngHash As Integer
         Dim intIndex As Short
         Dim strChar As String
@@ -198,7 +198,7 @@ Public Class Security
             lngHash = (lngHash + 1) * (Asc(strChar) + 1)
             lngHash = lngHash And &HFFFFFF
         Loop
-        strMakeHash = Hex(lngHash)
+        MakeHash = Hex(lngHash)
     End Function
 
     Public Sub SaveUserContext()
@@ -206,6 +206,6 @@ Public Class Security
     End Sub
 
     Public Sub RestoreUserContext()
-        blnFindUser(mstrLoginSaved)
+        FindUser(mstrLoginSaved)
     End Sub
 End Class

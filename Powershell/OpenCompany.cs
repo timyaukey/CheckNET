@@ -29,9 +29,9 @@ namespace Willowsoft.CheckBook.Powershell
 
         private CompanyLoadError authenticate(Company company)
         {
-            if (company.SecData.blnNoFile)
+            if (company.SecData.NoFile)
                 return null;
-            if (company.SecData.blnAuthenticate(UserName, Password))
+            if (company.SecData.Authenticate(UserName, Password))
                 return null;
             return new CompanyLoadNotAuthorized();
         }

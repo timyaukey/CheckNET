@@ -78,7 +78,7 @@ Friend Class CBMainForm
                         My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build &
                         " [" & LCase(mobjCompany.DataFolderPath()) & "]"
 
-            If mobjSecurity.blnNoFile Then
+            If mobjSecurity.NoFile Then
                 mnuEnableUserAccounts.Enabled = True
                 mnuAddUserAccount.Enabled = False
                 mnuDeleteUserAccount.Enabled = False
@@ -87,11 +87,11 @@ Friend Class CBMainForm
                 mnuRepairUserAccounts.Enabled = False
             Else
                 mnuEnableUserAccounts.Enabled = False
-                mnuAddUserAccount.Enabled = mobjSecurity.blnIsAdministrator
-                mnuDeleteUserAccount.Enabled = mobjSecurity.blnIsAdministrator
+                mnuAddUserAccount.Enabled = mobjSecurity.IsAdministrator
+                mnuDeleteUserAccount.Enabled = mobjSecurity.IsAdministrator
                 mnuChangeCurrentPassword.Enabled = True
-                mnuChangeOtherPassword.Enabled = mobjSecurity.blnIsAdministrator
-                mnuRepairUserAccounts.Enabled = mobjSecurity.blnIsAdministrator
+                mnuChangeOtherPassword.Enabled = mobjSecurity.IsAdministrator
+                mnuRepairUserAccounts.Enabled = mobjSecurity.IsAdministrator
             End If
 
             If Company.AnyNonActiveLicenses Then
@@ -117,7 +117,7 @@ Friend Class CBMainForm
     End Sub
 
     Private Function objAuthenticate(ByVal objCompany As Company) As CompanyLoadError
-        If objCompany.SecData.blnNoFile Then
+        If objCompany.SecData.NoFile Then
             Return Nothing
         End If
         Do
@@ -129,7 +129,7 @@ Friend Class CBMainForm
                     Return New CompanyLoadCanceled()
                 End If
             End Using
-            If objCompany.SecData.blnAuthenticate(strLogin, strPassword) Then
+            If objCompany.SecData.Authenticate(strLogin, strPassword) Then
                 Return Nothing
             End If
             mobjHostUI.ErrorMessageBox((New CompanyLoadNotAuthorized()).Message)
@@ -582,12 +582,12 @@ Friend Class CBMainForm
         Try
             Dim strPassword As String = ""
             mobjSecurity.CreateEmpty()
-            mobjSecurity.CreateUser(mobjSecurity.strAdminLogin, "Administrator")
+            mobjSecurity.CreateUser(mobjSecurity.AdminLogin, "Administrator")
             mobjSecurity.SetPassword(strPassword)
             mobjSecurity.Save()
-            mobjSecurity.blnFindUser(mobjSecurity.strAdminLogin)
-            mobjSecurity.blnPasswordMatches(strPassword)
-            mobjHostUI.InfoMessageBox("User logins enabled. Added administrator login """ & mobjSecurity.strLogin & """, with empty password.")
+            mobjSecurity.FindUser(mobjSecurity.AdminLogin)
+            mobjSecurity.PasswordMatches(strPassword)
+            mobjHostUI.InfoMessageBox("User logins enabled. Added administrator login """ & mobjSecurity.LoginName & """, with empty password.")
             Exit Sub
         Catch ex As Exception
             TopException(ex)
@@ -610,7 +610,7 @@ Friend Class CBMainForm
         If strLogin = "" Then
             Exit Sub
         End If
-        If mobjSecurity.blnFindUser(strLogin) Then
+        If mobjSecurity.FindUser(strLogin) Then
             mobjHostUI.InfoMessageBox("Login name already exists.")
             Exit Sub
         End If
@@ -640,7 +640,7 @@ Friend Class CBMainForm
     End Sub
 
     Private Sub ChangeCurrentPassword()
-        Dim strPassword As String = strAskNewPassword(mobjSecurity.strLogin)
+        Dim strPassword As String = strAskNewPassword(mobjSecurity.LoginName)
         If strPassword = Nothing Then
             Exit Sub
         End If
@@ -666,7 +666,7 @@ Friend Class CBMainForm
         If strLogin = "" Then
             Exit Sub
         End If
-        If Not mobjSecurity.blnFindUser(strLogin) Then
+        If Not mobjSecurity.FindUser(strLogin) Then
             mobjHostUI.InfoMessageBox("Login name does not exist.")
             Exit Sub
         End If
@@ -709,17 +709,17 @@ Friend Class CBMainForm
             mobjSecurity.RestoreUserContext()
             Exit Sub
         End If
-        If LCase(strDeleteLogin) = mobjSecurity.strAdminLogin Then
-            mobjHostUI.InfoMessageBox("Cannot delete the """ + mobjSecurity.strAdminLogin + """ login.")
+        If LCase(strDeleteLogin) = mobjSecurity.AdminLogin Then
+            mobjHostUI.InfoMessageBox("Cannot delete the """ + mobjSecurity.AdminLogin + """ login.")
             mobjSecurity.RestoreUserContext()
             Exit Sub
         End If
-        If LCase(strDeleteLogin) = LCase(mobjSecurity.strLogin) Then
+        If LCase(strDeleteLogin) = LCase(mobjSecurity.LoginName) Then
             mobjHostUI.InfoMessageBox("Cannot delete the login you are currently using.")
             mobjSecurity.RestoreUserContext()
             Exit Sub
         End If
-        If Not mobjSecurity.blnFindUser(strDeleteLogin) Then
+        If Not mobjSecurity.FindUser(strDeleteLogin) Then
             mobjHostUI.InfoMessageBox("No such login.")
             mobjSecurity.RestoreUserContext()
             Exit Sub

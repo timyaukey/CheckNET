@@ -400,8 +400,8 @@ Public Class ImportUtilities
                                     RaiseErrorMsg("Unrecognized narrow method")
                             End Select
                         End If
-                        mblnAllowAutoBatchNew = objPayee.blnIsAllowAutoBatchNew
-                        mblnAllowAutoBatchUpdate = objPayee.blnIsAllowAutoBatchUpdate
+                        mblnAllowAutoBatchNew = objPayee.IsAllowAutoBatchNew
+                        mblnAllowAutoBatchUpdate = objPayee.IsAllowAutoBatchUpdate
                         If mstrTrxNumber = "" Then
                             If Not String.IsNullOrEmpty(objPayee.Num) Then
                                 mstrTrxNumber = objPayee.Num
