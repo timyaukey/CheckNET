@@ -352,7 +352,7 @@ Public Class MiscFunctionsFixture
     Private Sub TestOneAmountToWords(ByVal curInput As Decimal, ByVal strExpectedOutput As String)
 
         Dim strActualOutput As String
-        strActualOutput = MoneyFormat.strAmountToWords(curInput)
+        strActualOutput = MoneyFormat.AmountToWords(curInput)
         gUTAssert(strExpectedOutput = strActualOutput, curInput & " yields <" & strActualOutput & "> instead of <" & strExpectedOutput & ">")
     End Sub
 

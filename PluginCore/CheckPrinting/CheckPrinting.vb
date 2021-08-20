@@ -171,7 +171,7 @@ Public Class CheckPrinting
         Dim intPennies As Integer
         intPennies = CInt(Fix(curAmount * 100.0#) - Fix(curAmount) * 100.0#)
         Dim strDollars As String
-        strDollars = MoneyFormat.strAmountToWords(curAmount)
+        strDollars = MoneyFormat.AmountToWords(curAmount)
         strDollars = UCase(Left(strDollars, 1)) & Mid(strDollars, 2)
         PrintCheckText("LongAmount", strDollars & " and " & Utilities.strFormatInteger(intPennies, "00") & "/100", ev)
         If strAccountNumber <> "" Then

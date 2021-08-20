@@ -3,7 +3,7 @@ Option Explicit On
 
 Public Class MoneyFormat
 
-    Public Shared Function strAmountToWords(ByVal curAmount As Decimal) As String
+    Public Shared Function AmountToWords(ByVal curAmount As Decimal) As String
         '1 = one
         '19 = nineteen
         '20 = twenty
@@ -31,87 +31,87 @@ Public Class MoneyFormat
 
         Dim strResult As String = ""
         If intRemainder > 0 Or (intMillions = 0 And intThousands = 0) Then
-            strResult = strWordsLessThan1000(intRemainder)
+            strResult = WordsLessThan1000(intRemainder)
         End If
         If intThousands > 0 Then
-            strResult = strWordsLessThan1000(intThousands) & " thousand " & strResult
+            strResult = WordsLessThan1000(intThousands) & " thousand " & strResult
         End If
         If intMillions > 0 Then
-            strResult = strWordsLessThan1000(intMillions) & " million " & strResult
+            strResult = WordsLessThan1000(intMillions) & " million " & strResult
         End If
 
-        strAmountToWords = Trim(strResult)
+        AmountToWords = Trim(strResult)
     End Function
 
-    Private Shared Function strWordsLessThan1000(ByVal intNumber As Integer) As String
+    Private Shared Function WordsLessThan1000(ByVal intNumber As Integer) As String
         Dim intHundredMult As Integer
         Dim intRemainder As Integer
         intHundredMult = CInt(Fix(intNumber / 100))
         intRemainder = intNumber Mod 100
         If intHundredMult > 0 Then
             If intRemainder = 0 Then
-                strWordsLessThan1000 = strWordLessThan20(intHundredMult) & " hundred"
+                WordsLessThan1000 = WordLessThan20(intHundredMult) & " hundred"
             Else
-                strWordsLessThan1000 = strWordLessThan20(intHundredMult) & " hundred " & strWordLessThan100(intRemainder)
+                WordsLessThan1000 = WordLessThan20(intHundredMult) & " hundred " & WordLessThan100(intRemainder)
             End If
         Else
-            strWordsLessThan1000 = strWordLessThan100(intNumber)
+            WordsLessThan1000 = WordLessThan100(intNumber)
         End If
     End Function
 
-    Private Shared Function strWordLessThan100(ByVal intNumber As Integer) As String
+    Private Shared Function WordLessThan100(ByVal intNumber As Integer) As String
         Dim intTenMult As Integer
         Dim intRemainder As Integer
         If intNumber < 20 Then
-            strWordLessThan100 = strWordLessThan20(intNumber)
+            WordLessThan100 = WordLessThan20(intNumber)
         Else
             intTenMult = CInt(Fix(intNumber / 10))
             intRemainder = intNumber Mod 10
             If intRemainder > 0 Then
-                strWordLessThan100 = strWordMultipliedByTen(intTenMult) & " " & strWordLessThan20(intRemainder)
+                WordLessThan100 = WordMultipliedByTen(intTenMult) & " " & WordLessThan20(intRemainder)
             Else
-                strWordLessThan100 = strWordMultipliedByTen(intTenMult)
+                WordLessThan100 = WordMultipliedByTen(intTenMult)
             End If
         End If
     End Function
 
-    Private Shared Function strWordLessThan20(ByVal intNumber As Integer) As String
+    Private Shared Function WordLessThan20(ByVal intNumber As Integer) As String
         Select Case intNumber
-            Case 0 : strWordLessThan20 = "zero"
-            Case 1 : strWordLessThan20 = "one"
-            Case 2 : strWordLessThan20 = "two"
-            Case 3 : strWordLessThan20 = "three"
-            Case 4 : strWordLessThan20 = "four"
-            Case 5 : strWordLessThan20 = "five"
-            Case 6 : strWordLessThan20 = "six"
-            Case 7 : strWordLessThan20 = "seven"
-            Case 8 : strWordLessThan20 = "eight"
-            Case 9 : strWordLessThan20 = "nine"
-            Case 10 : strWordLessThan20 = "ten"
-            Case 11 : strWordLessThan20 = "eleven"
-            Case 12 : strWordLessThan20 = "twelve"
-            Case 13 : strWordLessThan20 = "thirteen"
-            Case 14 : strWordLessThan20 = "fourteen"
-            Case 15 : strWordLessThan20 = "fifteen"
-            Case 16 : strWordLessThan20 = "sixteen"
-            Case 17 : strWordLessThan20 = "seventeen"
-            Case 18 : strWordLessThan20 = "eighteen"
-            Case 19 : strWordLessThan20 = "nineteen"
-            Case Else : strWordLessThan20 = ""
+            Case 0 : WordLessThan20 = "zero"
+            Case 1 : WordLessThan20 = "one"
+            Case 2 : WordLessThan20 = "two"
+            Case 3 : WordLessThan20 = "three"
+            Case 4 : WordLessThan20 = "four"
+            Case 5 : WordLessThan20 = "five"
+            Case 6 : WordLessThan20 = "six"
+            Case 7 : WordLessThan20 = "seven"
+            Case 8 : WordLessThan20 = "eight"
+            Case 9 : WordLessThan20 = "nine"
+            Case 10 : WordLessThan20 = "ten"
+            Case 11 : WordLessThan20 = "eleven"
+            Case 12 : WordLessThan20 = "twelve"
+            Case 13 : WordLessThan20 = "thirteen"
+            Case 14 : WordLessThan20 = "fourteen"
+            Case 15 : WordLessThan20 = "fifteen"
+            Case 16 : WordLessThan20 = "sixteen"
+            Case 17 : WordLessThan20 = "seventeen"
+            Case 18 : WordLessThan20 = "eighteen"
+            Case 19 : WordLessThan20 = "nineteen"
+            Case Else : WordLessThan20 = ""
         End Select
     End Function
 
-    Private Shared Function strWordMultipliedByTen(ByVal intNumber As Integer) As String
+    Private Shared Function WordMultipliedByTen(ByVal intNumber As Integer) As String
         Select Case intNumber
-            Case 2 : strWordMultipliedByTen = "twenty"
-            Case 3 : strWordMultipliedByTen = "thirty"
-            Case 4 : strWordMultipliedByTen = "forty"
-            Case 5 : strWordMultipliedByTen = "fifty"
-            Case 6 : strWordMultipliedByTen = "sixty"
-            Case 7 : strWordMultipliedByTen = "seventy"
-            Case 8 : strWordMultipliedByTen = "eighty"
-            Case 9 : strWordMultipliedByTen = "ninety"
-            Case Else : strWordMultipliedByTen = ""
+            Case 2 : WordMultipliedByTen = "twenty"
+            Case 3 : WordMultipliedByTen = "thirty"
+            Case 4 : WordMultipliedByTen = "forty"
+            Case 5 : WordMultipliedByTen = "fifty"
+            Case 6 : WordMultipliedByTen = "sixty"
+            Case 7 : WordMultipliedByTen = "seventy"
+            Case 8 : WordMultipliedByTen = "eighty"
+            Case 9 : WordMultipliedByTen = "ninety"
+            Case Else : WordMultipliedByTen = ""
         End Select
     End Function
 
