@@ -35,14 +35,14 @@ Public Class AccountSaver
             End If
             SaveLine("AK" & CStr(mobjAccount.AccountKey))
             For Each objSubType As Account.SubTypeDef In Account.SubTypeDefs
-                If objSubType.lngSubType = mobjAccount.AcctSubType Then
+                If objSubType.AcctSubType = mobjAccount.AcctSubType Then
                     objSubTypeMatched = objSubType
                 End If
             Next
             If objSubTypeMatched Is Nothing Then
                 Throw New Exception("Could not match account subtype in save for " + mobjAccount.Title)
             End If
-            SaveLine("AY" & objSubTypeMatched.strSaveCode)
+            SaveLine("AY" & objSubTypeMatched.SaveCode)
             'Define each register at the top of the file.
             For Each objReg In mobjAccount.Registers
                 If Not objReg.IsDeleted Then

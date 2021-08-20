@@ -70,7 +70,7 @@ Public Class HTMLWriter
         If objGroup.GroupTotal <> 0D Or Not blnOmitIfZero Then
             OutputAmount(strTitleClass, strTitle, strAmountClass, strNegativeClass, objGroup.GroupTotal, objAccum)
         End If
-        objGroup.blnPrinted = True
+        objGroup.IsPrinted = True
     End Sub
 
     Public Sub OutputText(ByVal strClass As String, ByVal strContent As String)
@@ -158,7 +158,7 @@ Public Class HTMLWriter
 
     Public Sub CheckPrinted(ByVal objReportManager As ReportGroupManager)
         For Each objGroup As LineItemGroup In objReportManager.Groups
-            If Not objGroup.blnPrinted Then
+            If Not objGroup.IsPrinted Then
                 For Each objItem As ReportLineItem In objGroup.Items
                     If Not objItem.IsPrinted Then
                         mobjHostUI.InfoMessageBox("Report line item with key [" + objItem.ItemKey + "] was not printed")

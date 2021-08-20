@@ -17,7 +17,7 @@ Public Class AccountForm
             cboAccountType.Items.Add(objSubType)
         Next
         For Each objItem As Account.SubTypeDef In cboAccountType.Items
-            If objItem.lngSubType = objAccount.AcctSubType Then
+            If objItem.AcctSubType = objAccount.AcctSubType Then
                 cboAccountType.SelectedItem = objItem
                 Exit For
             End If
@@ -33,7 +33,7 @@ Public Class AccountForm
         Dim result As DialogResult = Me.ShowDialog()
         If result = DialogResult.OK Then
             objAccount.Title = txtAccountName.Text
-            objAccount.AcctSubType = DirectCast(cboAccountType.SelectedItem, Account.SubTypeDef).lngSubType
+            objAccount.AcctSubType = DirectCast(cboAccountType.SelectedItem, Account.SubTypeDef).AcctSubType
             objAccount.RelatedAcct1 = DirectCast(cboRelated1.SelectedItem, AccountItem).objAccount
             objAccount.RelatedAcct2 = DirectCast(cboRelated2.SelectedItem, AccountItem).objAccount
             objAccount.RelatedAcct3 = DirectCast(cboRelated3.SelectedItem, AccountItem).objAccount

@@ -19,8 +19,8 @@ Public Class AccountGroupManager
 
     Public Overrides Function GetGroupTitle(strGroupKey As String) As String
         For Each objDef As Account.SubTypeDef In Account.SubTypeDefs
-            If objDef.lngSubType.ToString() = strGroupKey Then
-                Return objDef.strName
+            If objDef.AcctSubType.ToString() = strGroupKey Then
+                Return objDef.Name
             End If
         Next
         Throw New Exception("Unrecognized account group")

@@ -1219,7 +1219,7 @@ Public Class TrxForm
     End Function
 
     Private Function blnSplitUsed(ByVal intSplit As Integer) As Boolean
-        blnSplitUsed = maudtSplits(intSplit).blnUsed
+        blnSplitUsed = maudtSplits(intSplit).IsUsed
     End Function
 
     Private Function blnInvalidDate(ByVal datCheck As Date, ByVal datAnchor As Date, ByVal intWeeksBefore As Short, ByVal intWeeksAfter As Short, ByVal strCheckLabel As String, ByVal strAnchorLabel As String) As Boolean

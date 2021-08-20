@@ -42,7 +42,7 @@ Public Class CompanySaver
             For intIndex = LBound(adatDays) To UBound(adatDays)
                 Dim backupPurgeDay As BackupPurgeDay = New BackupPurgeDay()
                 adatDays(intIndex) = backupPurgeDay
-                adatDays(intIndex).colInstances = New List(Of BackupInstance)
+                adatDays(intIndex).Instances = New List(Of BackupInstance)
             Next
 
             strBackup = Dir(objAccount.Company.BackupsFolderPath() & "\" & objAccount.FileNameRoot & ".*", FileAttribute.Normal)
@@ -53,10 +53,10 @@ Public Class CompanySaver
                 intAgeInDays = CInt(DateDiff(Microsoft.VisualBasic.DateInterval.Day, datCreateDate, Today))
                 If intAgeInDays <= UBound(adatDays) Then
                     Dim inst As BackupInstance = New BackupInstance With {
-                        .datCreate = datCreateDate,
-                        .strName = strBackup
+                        .CreateDate = datCreateDate,
+                        .Name = strBackup
                     }
-                    adatDays(intAgeInDays).colInstances.Add(inst)
+                    adatDays(intAgeInDays).Instances.Add(inst)
                 Else
                     colOlderFiles.Add(strBackup)
                 End If
@@ -79,10 +79,10 @@ Public Class CompanySaver
                     intBackupsToKeep = 1
                 End If
 
-                colInstances = adatDays(intAgeInDays).colInstances
+                colInstances = adatDays(intAgeInDays).Instances
                 colInstances.Sort(AddressOf BackupInstanceComparer)
                 For intIndex = 1 To colInstances.Count() - intBackupsToKeep
-                    strBackup = colInstances(intIndex - 1).strName
+                    strBackup = colInstances(intIndex - 1).Name
                     Kill(objAccount.Company.BackupsFolderPath() & "\" & strBackup)
                 Next
             Next
@@ -94,16 +94,16 @@ Public Class CompanySaver
     End Sub
 
     Private Shared Function BackupInstanceComparer(ByVal i1 As BackupInstance, ByVal i2 As BackupInstance) As Integer
-        Return i1.datCreate.CompareTo(i2.datCreate)
+        Return i1.CreateDate.CompareTo(i2.CreateDate)
     End Function
 
     Private Class BackupPurgeDay
-        Public colInstances As List(Of BackupInstance)
+        Public Instances As List(Of BackupInstance)
     End Class
 
     Private Class BackupInstance
-        Public datCreate As Date
-        Public strName As String
+        Public CreateDate As Date
+        Public Name As String
     End Class
 
 End Class

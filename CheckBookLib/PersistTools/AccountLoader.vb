@@ -79,15 +79,15 @@ Public Class AccountLoader
                     Case "AY"
                         Dim objSubTypeMatched As Account.SubTypeDef = Nothing
                         For Each objSubType In Account.SubTypeDefs
-                            If objSubType.strSaveCode = Mid(strLine, 3) Then
+                            If objSubType.SaveCode = Mid(strLine, 3) Then
                                 objSubTypeMatched = objSubType
                             End If
                         Next
                         If objSubTypeMatched Is Nothing Then
                             Throw New Exception("Unrecognized account subtype")
                         End If
-                        mobjAccount.AcctType = objSubTypeMatched.lngType
-                        mobjAccount.AcctSubType = objSubTypeMatched.lngSubType
+                        mobjAccount.AcctType = objSubTypeMatched.AcctType
+                        mobjAccount.AcctSubType = objSubTypeMatched.AcctSubType
                     Case "AR"
                         Select Case Mid(strLine, 3, 1)
                             Case "1"

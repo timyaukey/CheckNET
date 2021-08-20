@@ -8,7 +8,7 @@ Imports System.Xml.Serialization
 Public Class TrxGenFilePersister
     Implements IFilePersister
 
-    Private mobjSerializer As XmlSerializer
+    Private Serializer As XmlSerializer
 
     Public Const TypeRepeat As String = "wccheckbook.repeat"
     Public Const TypeInterpolate As String = "wccheckbook.interpolate"
@@ -32,12 +32,12 @@ Public Class TrxGenFilePersister
                 Throw New InvalidDataException("Missing second quote in ""class"" attribute value in " + strFile)
             End If
             strClassName = strFirstLine.Substring(classIndex + 7, secondQuoteIndex - classIndex - 7)
-            mobjSerializer = objGetSerializer(strClassName, strFile)
+            Serializer = GetSerializer(strClassName, strFile)
         End Using
         Using inputStream As New FileStream(strFile, FileMode.Open)
             Dim objData As Object
             TGEGeneratorBase.SetGroupReadOnly(True)
-            objData = mobjSerializer.Deserialize(inputStream)
+            objData = Serializer.Deserialize(inputStream)
             Return DirectCast(objData, IFilePersistable)
         End Using
     End Function
@@ -69,7 +69,7 @@ Public Class TrxGenFilePersister
         TGEGeneratorBase.SetGroupReadOnly(True)
         objResult.Enabled = "true"
         objResult.RepeatKey = DateTime.Now.ToString("yyyyMMdd-HHmmss")
-        mobjSerializer = objGetSerializer(objResult.ClassName, strFile)
+        Serializer = GetSerializer(objResult.ClassName, strFile)
         Return objResult
     End Function
 
@@ -84,7 +84,7 @@ Public Class TrxGenFilePersister
         objSettings.OmitXmlDeclaration = True
         objSettings.ConformanceLevel = ConformanceLevel.Auto
         Using writer As XmlWriter = XmlWriter.Create(strNewFile, objSettings)
-            mobjSerializer.Serialize(writer, content, ns)
+            Serializer.Serialize(writer, content, ns)
         End Using
     End Sub
 
@@ -96,7 +96,7 @@ Public Class TrxGenFilePersister
 
     End Sub
 
-    Private Function objGetSerializer(ByVal strClassName As String, ByVal strFile As String) As XmlSerializer
+    Private Function GetSerializer(ByVal strClassName As String, ByVal strFile As String) As XmlSerializer
         If strClassName = TypeRepeat Then
             Return New XmlSerializer(GetType(TGEGeneratorRepeat))
         ElseIf strClassName = TypeInterpolate Then

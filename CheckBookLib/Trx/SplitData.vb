@@ -15,9 +15,9 @@ Public Class SplitData
     Public Amount As String
     Public Selected As Boolean
 
-    Public ReadOnly Property blnUsed() As Boolean
+    Public ReadOnly Property IsUsed() As Boolean
         Get
-            blnUsed = (CategoryKey <> "") Or (PONumber <> "") Or (InvoiceNum <> "") Or (InvoiceDate <> "") Or (DueDate <> "") Or (Terms <> "") Or (Memo <> "") Or (BudgetKey <> "") Or (Amount <> "")
+            IsUsed = (CategoryKey <> "") Or (PONumber <> "") Or (InvoiceNum <> "") Or (InvoiceDate <> "") Or (DueDate <> "") Or (Terms <> "") Or (Memo <> "") Or (BudgetKey <> "") Or (Amount <> "")
         End Get
     End Property
 End Class

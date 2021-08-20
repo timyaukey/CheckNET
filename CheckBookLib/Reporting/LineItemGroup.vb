@@ -8,13 +8,13 @@ Public Class LineItemGroup
     Private mobjDict As Dictionary(Of String, ReportLineItem) = New Dictionary(Of String, ReportLineItem)()
     Private mcolItems As List(Of ReportLineItem) = New List(Of ReportLineItem)()
     Private mcurGroupTotal As Decimal = 0D
-    Public blnPrinted As Boolean
+    Public IsPrinted As Boolean
 
     Public Sub New(ByVal objParent_ As ReportGroupManager, ByVal strGroupKey_ As String)
         mobjParent = objParent_
         mstrGroupKey = strGroupKey_
         mstrGroupTitle = mobjParent.GetGroupTitle(mstrGroupKey)
-        blnPrinted = False
+        IsPrinted = False
     End Sub
 
     Public ReadOnly Property GroupKey() As String

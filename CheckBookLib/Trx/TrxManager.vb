@@ -18,16 +18,16 @@ Option Explicit On
 Public MustInherit Class TrxManager(Of TTrx As BaseTrx)
 
     Public ReadOnly Trx As TTrx
-    Protected ReadOnly mOriginalLogTrx As TTrx
-    Protected mHasUpdateStarted As Boolean
+    Protected ReadOnly OriginalLogTrx As TTrx
+    Protected HasUpdateStarted As Boolean
 
     Public Sub New(ByVal objTrx_ As TTrx)
         If Not objTrx_ Is objTrx_.Register.GetTrx(objTrx_.RegIndex) Then
             Throw New Exception("Trx passed to TrxManager must be at the specified index of the Register passed")
         End If
         Trx = objTrx_
-        mOriginalLogTrx = DirectCast(objTrx_.CloneTrx(blnWillAddToRegister:=False), TTrx)
-        mHasUpdateStarted = False
+        OriginalLogTrx = DirectCast(objTrx_.CloneTrx(blnWillAddToRegister:=False), TTrx)
+        HasUpdateStarted = False
     End Sub
 
     Public Sub Update(ByVal objBuilder As Action(Of TTrx), ByVal objLogger As ILogChange, ByVal strTitle As String)
@@ -45,14 +45,14 @@ Public MustInherit Class TrxManager(Of TTrx As BaseTrx)
         'the original BaseTrx object whose contents may have been changed by then.
         Trx.UnApply()
         Trx.ClearRepeatTrx()
-        mHasUpdateStarted = True
+        HasUpdateStarted = True
     End Sub
 
     Public Sub UpdateEnd(ByVal objLogger As ILogChange, ByVal strTitle As String)
-        If Not mHasUpdateStarted Then
+        If Not HasUpdateStarted Then
             Throw New Exception("TrxManager.UpdateStart() not called before UpdateEnd()")
         End If
-        Trx.Register.UpdateEnd(Trx, objLogger, strTitle, mOriginalLogTrx)
+        Trx.Register.UpdateEnd(Trx, objLogger, strTitle, OriginalLogTrx)
         Trx.Register.EndCriticalOperation()
     End Sub
 End Class

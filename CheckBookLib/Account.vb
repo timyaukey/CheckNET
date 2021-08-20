@@ -71,38 +71,38 @@ Public Class Account
     End Enum
 
     Public Class SubTypeDef
-        Public lngType As AccountType
-        Public lngSubType As SubType
-        Public strName As String
-        Public strSaveCode As String
+        Public AcctType As AccountType
+        Public AcctSubType As SubType
+        Public Name As String
+        Public SaveCode As String
 
         Public Overrides Function ToString() As String
-            Return strName
+            Return Name
         End Function
     End Class
 
     Public Shared SubTypeDefs() As SubTypeDef =
     {
-        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_CheckingAccount, .strName = "Asset - Checking Account", .strSaveCode = "A"},
-        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_SavingsAccount, .strName = "Asset - Savings Account", .strSaveCode = "ASA"},
-        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_AccountsReceivable, .strName = "Asset - Accounts Receivable", .strSaveCode = "AAR"},
-        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_Inventory, .strName = "Asset - Inventory", .strSaveCode = "AIV"},
-        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_LoanReceivable, .strName = "Asset - Loan Receivable", .strSaveCode = "ALR"},
-        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_RealProperty, .strName = "Asset - Real Property", .strSaveCode = "ARP"},
-        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_OtherProperty, .strName = "Asset - Other Property", .strSaveCode = "AOP"},
-        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_Investment, .strName = "Asset - Investment", .strSaveCode = "AIN"},
-        New SubTypeDef() With {.lngType = AccountType.Asset, .lngSubType = SubType.Asset_Other, .strName = "Asset - Other", .strSaveCode = "AOT"},
-        New SubTypeDef() With {.lngType = AccountType.Liability, .lngSubType = SubType.Liability_LoanPayable, .strName = "Liability - Loan Payable", .strSaveCode = "L"},
-        New SubTypeDef() With {.lngType = AccountType.Liability, .lngSubType = SubType.Liability_AccountsPayable, .strName = "Liability - Accounts Payable", .strSaveCode = "LAP"},
-        New SubTypeDef() With {.lngType = AccountType.Liability, .lngSubType = SubType.Liability_Taxes, .strName = "Liability - Taxes", .strSaveCode = "LTX"},
-        New SubTypeDef() With {.lngType = AccountType.Liability, .lngSubType = SubType.Liability_Other, .strName = "Liability - Other", .strSaveCode = "LOT"},
-        New SubTypeDef() With {.lngType = AccountType.Equity, .lngSubType = SubType.Equity_RetainedEarnings, .strName = "Equity - Retained Earnings", .strSaveCode = "ERE"},
-        New SubTypeDef() With {.lngType = AccountType.Equity, .lngSubType = SubType.Equity_Stock, .strName = "Equity - Stock", .strSaveCode = "EST"},
-        New SubTypeDef() With {.lngType = AccountType.Equity, .lngSubType = SubType.Equity_Capital, .strName = "Equity - Capital", .strSaveCode = "E"},
-        New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_LiabilityLoan, .strName = "Personal - Liability Loan", .strSaveCode = "PLL"},
-        New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_AssetLoan, .strName = "Personal - Asset Loan", .strSaveCode = "PAL"},
-        New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_BankAccount, .strName = "Personal - Bank Account", .strSaveCode = "PBA"},
-        New SubTypeDef() With {.lngType = AccountType.Personal, .lngSubType = SubType.Personal_Other, .strName = "Personal - Other", .strSaveCode = "POT"}
+        New SubTypeDef() With {.AcctType = AccountType.Asset, .AcctSubType = SubType.Asset_CheckingAccount, .Name = "Asset - Checking Account", .SaveCode = "A"},
+        New SubTypeDef() With {.AcctType = AccountType.Asset, .AcctSubType = SubType.Asset_SavingsAccount, .Name = "Asset - Savings Account", .SaveCode = "ASA"},
+        New SubTypeDef() With {.AcctType = AccountType.Asset, .AcctSubType = SubType.Asset_AccountsReceivable, .Name = "Asset - Accounts Receivable", .SaveCode = "AAR"},
+        New SubTypeDef() With {.AcctType = AccountType.Asset, .AcctSubType = SubType.Asset_Inventory, .Name = "Asset - Inventory", .SaveCode = "AIV"},
+        New SubTypeDef() With {.AcctType = AccountType.Asset, .AcctSubType = SubType.Asset_LoanReceivable, .Name = "Asset - Loan Receivable", .SaveCode = "ALR"},
+        New SubTypeDef() With {.AcctType = AccountType.Asset, .AcctSubType = SubType.Asset_RealProperty, .Name = "Asset - Real Property", .SaveCode = "ARP"},
+        New SubTypeDef() With {.AcctType = AccountType.Asset, .AcctSubType = SubType.Asset_OtherProperty, .Name = "Asset - Other Property", .SaveCode = "AOP"},
+        New SubTypeDef() With {.AcctType = AccountType.Asset, .AcctSubType = SubType.Asset_Investment, .Name = "Asset - Investment", .SaveCode = "AIN"},
+        New SubTypeDef() With {.AcctType = AccountType.Asset, .AcctSubType = SubType.Asset_Other, .Name = "Asset - Other", .SaveCode = "AOT"},
+        New SubTypeDef() With {.AcctType = AccountType.Liability, .AcctSubType = SubType.Liability_LoanPayable, .Name = "Liability - Loan Payable", .SaveCode = "L"},
+        New SubTypeDef() With {.AcctType = AccountType.Liability, .AcctSubType = SubType.Liability_AccountsPayable, .Name = "Liability - Accounts Payable", .SaveCode = "LAP"},
+        New SubTypeDef() With {.AcctType = AccountType.Liability, .AcctSubType = SubType.Liability_Taxes, .Name = "Liability - Taxes", .SaveCode = "LTX"},
+        New SubTypeDef() With {.AcctType = AccountType.Liability, .AcctSubType = SubType.Liability_Other, .Name = "Liability - Other", .SaveCode = "LOT"},
+        New SubTypeDef() With {.AcctType = AccountType.Equity, .AcctSubType = SubType.Equity_RetainedEarnings, .Name = "Equity - Retained Earnings", .SaveCode = "ERE"},
+        New SubTypeDef() With {.AcctType = AccountType.Equity, .AcctSubType = SubType.Equity_Stock, .Name = "Equity - Stock", .SaveCode = "EST"},
+        New SubTypeDef() With {.AcctType = AccountType.Equity, .AcctSubType = SubType.Equity_Capital, .Name = "Equity - Capital", .SaveCode = "E"},
+        New SubTypeDef() With {.AcctType = AccountType.Personal, .AcctSubType = SubType.Personal_LiabilityLoan, .Name = "Personal - Liability Loan", .SaveCode = "PLL"},
+        New SubTypeDef() With {.AcctType = AccountType.Personal, .AcctSubType = SubType.Personal_AssetLoan, .Name = "Personal - Asset Loan", .SaveCode = "PAL"},
+        New SubTypeDef() With {.AcctType = AccountType.Personal, .AcctSubType = SubType.Personal_BankAccount, .Name = "Personal - Bank Account", .SaveCode = "PBA"},
+        New SubTypeDef() With {.AcctType = AccountType.Personal, .AcctSubType = SubType.Personal_Other, .Name = "Personal - Other", .SaveCode = "POT"}
     }
 
     'Fired when ChangeMade() is called. Used by clients
@@ -375,7 +375,7 @@ Public Class Account
             Dim objSubTypeMatched As Account.SubTypeDef = Nothing
 
             For Each objSubType As Account.SubTypeDef In Account.SubTypeDefs
-                If objSubType.lngSubType = AcctSubType Then
+                If objSubType.AcctSubType = AcctSubType Then
                     objSubTypeMatched = objSubType
                 End If
             Next
@@ -388,7 +388,7 @@ Public Class Account
                 objAcctWriter.WriteLine("FHCKBK2")
                 objAcctWriter.WriteLine("AT" & Title)
                 objAcctWriter.WriteLine("AK" & CStr(AccountKey))
-                objAcctWriter.WriteLine("AY" & objSubTypeMatched.strSaveCode)
+                objAcctWriter.WriteLine("AY" & objSubTypeMatched.SaveCode)
                 objAcctWriter.WriteLine("RK1")
                 objAcctWriter.WriteLine("RT" & Title)
                 objAcctWriter.WriteLine("RS")
