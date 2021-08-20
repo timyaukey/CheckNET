@@ -53,7 +53,7 @@ Public Class BankImportForm
 
         Public Overrides Function ToString() As String
             With objImportedTrx
-                Return Utilities.strFormatDate(.TrxDate) + " " + .Description + " " + Utilities.strFormatCurrency(.Amount)
+                Return Utilities.FormatDate(.TrxDate) + " " + .Description + " " + Utilities.FormatCurrency(.Amount)
             End With
         End Function
     End Class
@@ -79,7 +79,7 @@ Public Class BankImportForm
         Public Function strSummary() As String
             Return " a multi-part match of " + colImports.Count.ToString() +
                 " import items to " + colMatches.Count.ToString() +
-                " matches for $" + Utilities.strFormatCurrency(colImports.curTotal)
+                " matches for $" + Utilities.FormatCurrency(colImports.curTotal)
         End Function
     End Class
 
@@ -206,7 +206,7 @@ Public Class BankImportForm
                                 strMultiPartNote = ", in a " + .objMultiPart.strSummary()
                             End If
                             With .objMatchedTrx
-                                strTip = "Matched to " + Utilities.strFormatDate(.TrxDate) + " " + .Description + " " + Utilities.strFormatCurrency(.Amount) +
+                                strTip = "Matched to " + Utilities.FormatDate(.TrxDate) + " " + .Description + " " + Utilities.FormatCurrency(.Amount) +
                                     strMultiPartNote + "."
                             End With
                             objItem.ToolTipText = strTip
@@ -216,22 +216,22 @@ Public Class BankImportForm
                             Dim curImportTotal As Decimal = 0D
                             objExplain.AppendLine("Import Items:")
                             For Each objImport As ImportItem In .objMultiPart.colImports
-                                objExplain.AppendLine(" " + Utilities.strFormatDate(objImport.objImportedTrx.TrxDate) + " " +
+                                objExplain.AppendLine(" " + Utilities.FormatDate(objImport.objImportedTrx.TrxDate) + " " +
                                                           objImport.objImportedTrx.Description + " " +
-                                                          Utilities.strFormatCurrency(objImport.objImportedTrx.Amount))
+                                                          Utilities.FormatCurrency(objImport.objImportedTrx.Amount))
                                 curImportTotal = curImportTotal + objImport.objImportedTrx.Amount
                             Next
-                            objExplain.AppendLine("Import Total Amount: " + Utilities.strFormatCurrency(curImportTotal))
+                            objExplain.AppendLine("Import Total Amount: " + Utilities.FormatCurrency(curImportTotal))
                             objExplain.AppendLine()
                             objExplain.AppendLine("Matched Transactions:")
                             Dim curMatchTotal As Decimal = 0D
                             For Each objNormalTrx As BankTrx In .objMultiPart.colMatches
-                                objExplain.AppendLine(" " + Utilities.strFormatDate(objNormalTrx.TrxDate) + " " +
+                                objExplain.AppendLine(" " + Utilities.FormatDate(objNormalTrx.TrxDate) + " " +
                                                           objNormalTrx.Description + " " +
-                                                          Utilities.strFormatCurrency(objNormalTrx.Amount))
+                                                          Utilities.FormatCurrency(objNormalTrx.Amount))
                                 curMatchTotal = curMatchTotal + objNormalTrx.Amount
                             Next
-                            objExplain.AppendLine("Match Total Amount: " + Utilities.strFormatCurrency(curImportTotal))
+                            objExplain.AppendLine("Match Total Amount: " + Utilities.FormatCurrency(curImportTotal))
                             MsgBox(objExplain.ToString(), MsgBoxStyle.Information, "Multi-Part Match")
                         End If
                     End With
@@ -375,7 +375,7 @@ Public Class BankImportForm
                             blnNonExactConfirmed = True
                         End If
                     End If
-                    objPossibleMatchTrx = Utilities.objFirstElement(colUnusedMatches)
+                    objPossibleMatchTrx = Utilities.GetFirstElement(colUnusedMatches)
                     blnCheckWithoutAmount = False
                     'A check in the register with a zero amount means we didn't know the amount when we entered it, or imported it.
                     If Val(objPossibleMatchTrx.Number) > 0 And objPossibleMatchTrx.Amount = 0.0# Then
@@ -1046,10 +1046,10 @@ Public Class BankImportForm
                     strStatus = "Update"
             End Select
             With objItem
-                .Text = Utilities.strFormatDate(objTrx.TrxDate)
+                .Text = Utilities.FormatDate(objTrx.TrxDate)
                 .SubItems.Insert(1, New ListViewItem.ListViewSubItem(Nothing, objTrx.Number))
                 .SubItems.Insert(2, New ListViewItem.ListViewSubItem(Nothing, objTrx.Description))
-                .SubItems.Insert(3, New ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(objTrx.Amount)))
+                .SubItems.Insert(3, New ListViewItem.ListViewSubItem(Nothing, Utilities.FormatCurrency(objTrx.Amount)))
                 .SubItems.Insert(4, New ListViewItem.ListViewSubItem(Nothing, strSummarizeTrxCat(objTrx)))
                 .SubItems.Insert(5, New ListViewItem.ListViewSubItem(Nothing, strStatus))
                 If Not objReg Is Nothing Then
@@ -1133,7 +1133,7 @@ Public Class BankImportForm
             End If
             intItemArrayIndex = CShort(lvwTrx.Items.Item(intListItemIndex).SubItems(mintITMCOL_INDEX).Text)
             With maudtItem(intItemArrayIndex).objImportedTrx
-                If StrComp(.Number.ToLower(), mstrImportSearchText, CompareMethod.Text) = 0 Or Utilities.strFormatCurrency(.Amount) = mstrImportSearchText Or InStr(1, .Description.ToLower(), mstrImportSearchText, CompareMethod.Text) > 0 Then
+                If StrComp(.Number.ToLower(), mstrImportSearchText, CompareMethod.Text) = 0 Or Utilities.FormatCurrency(.Amount) = mstrImportSearchText Or InStr(1, .Description.ToLower(), mstrImportSearchText, CompareMethod.Text) > 0 Then
                     lvwTrx.SelectedItems.Clear()
                     lvwTrx.FocusedItem = lvwTrx.Items.Item(intListItemIndex)
                     lvwTrx.FocusedItem.Selected = True
@@ -1344,10 +1344,10 @@ Public Class BankImportForm
             strImport = "Y"
         End If
         With objItem
-            .Text = Utilities.strFormatDate(objTrx.TrxDate)
+            .Text = Utilities.FormatDate(objTrx.TrxDate)
             .SubItems.Insert(1, New ListViewItem.ListViewSubItem(Nothing, objTrx.Number))
             .SubItems.Insert(2, New ListViewItem.ListViewSubItem(Nothing, objTrx.Description))
-            .SubItems.Insert(3, New ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(objTrx.Amount)))
+            .SubItems.Insert(3, New ListViewItem.ListViewSubItem(Nothing, Utilities.FormatCurrency(objTrx.Amount)))
             .SubItems.Insert(4, New ListViewItem.ListViewSubItem(Nothing, strSummarizeTrxCat(objTrx)))
             .SubItems.Insert(5, New ListViewItem.ListViewSubItem(Nothing, objTrx.SummarizeDueDates()))
             .SubItems.Insert(6, New ListViewItem.ListViewSubItem(Nothing, strFake))
@@ -1530,7 +1530,7 @@ Public Class BankImportForm
     End Function
 
     Private Function strDescribeTrx(ByRef objTrx As ImportedTrx) As String
-        strDescribeTrx = "[ " & Utilities.strFormatDate(objTrx.TrxDate) & " " & objTrx.Description & " $" & Utilities.strFormatCurrency(objTrx.Amount) & " ]"
+        strDescribeTrx = "[ " & Utilities.FormatDate(objTrx.TrxDate) & " " & objTrx.Description & " $" & Utilities.FormatCurrency(objTrx.Amount) & " ]"
     End Function
 
     Private Sub lvwTrx_ItemChecked(sender As Object, e As ItemCheckedEventArgs) Handles lvwTrx.ItemChecked

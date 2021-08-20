@@ -23,7 +23,7 @@ Friend Class ReconAcctSelectForm
 
         Try
 
-            objAccount = UITools.objGetSelectedAccountAndUnload(lstAccounts, Me, mobjCompany)
+            objAccount = UITools.GetSelectedAccountAndUnload(lstAccounts, Me, mobjCompany)
             If objAccount Is Nothing Then
                 mobjHostUI.ErrorMessageBox("Please select the account to reconcile.")
                 Exit Sub

@@ -94,9 +94,9 @@ Friend Class ReconcileForm
             Next
         Next objReg
 
-        txtStartingBalance.Text = Utilities.strFormatCurrency(curStartingBalance)
+        txtStartingBalance.Text = Utilities.FormatCurrency(curStartingBalance)
         mcurClearedBalance = curStartingBalance + curSelectedTotal
-        txtClearedBalance.Text = Utilities.strFormatCurrency(mcurClearedBalance)
+        txtClearedBalance.Text = Utilities.FormatCurrency(mcurClearedBalance)
         UITools.SetListViewSortColumn(lvwTrx, mintCOL_SORTABLE_NUMBER)
 
     End Sub
@@ -112,10 +112,10 @@ Friend Class ReconcileForm
         objItem = UITools.ListViewAdd(lvwTrx)
         maudtTrx(lngTrxIndex).objLvwItem = objItem
         With objItem
-            AddSubItem(objItem, mintCOL_DATE, Utilities.strFormatDate(objTrx.TrxDate))
+            AddSubItem(objItem, mintCOL_DATE, Utilities.FormatDate(objTrx.TrxDate))
             AddSubItem(objItem, mintCOL_NUMBER, objTrx.Number)
             AddSubItem(objItem, mintCOL_DESCRIPTION, objTrx.Description)
-            AddSubItem(objItem, mintCOL_AMOUNT, Utilities.strFormatCurrency(objTrx.Amount))
+            AddSubItem(objItem, mintCOL_AMOUNT, Utilities.FormatCurrency(objTrx.Amount))
             AddSubItem(objItem, mintCOL_IMPORTED, CStr(IIf(objTrx.ImportKey = "", "", "Y")))
             intPipe2 = InStr(2, objTrx.ImportKey, "|")
             strSortableBankDate = ""
@@ -123,7 +123,7 @@ Friend Class ReconcileForm
             If intPipe2 > 0 Then
                 strBankDate = Mid(objTrx.ImportKey, 2, intPipe2 - 2)
                 If DateTime.TryParse(strBankDate, datBankDate) Then
-                    strSortableBankDate = Utilities.strFormatDate(datBankDate)
+                    strSortableBankDate = Utilities.FormatDate(datBankDate)
                     maudtTrx(lngTrxIndex).datBankDate = datBankDate
                 End If
             Else
@@ -196,7 +196,7 @@ Friend Class ReconcileForm
                     .blnSelected = False
                 End If
             End With
-            txtClearedBalance.Text = Utilities.strFormatCurrency(mcurClearedBalance)
+            txtClearedBalance.Text = Utilities.FormatCurrency(mcurClearedBalance)
 
             Exit Sub
         Catch ex As Exception

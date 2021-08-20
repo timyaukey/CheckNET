@@ -62,10 +62,10 @@ Public Class EventLog
         End If
 
         mdomOutput = New CBXmlDocument
-        mdomOutput.LoadXml("<Activity Login=""" & mstrLogin & """ SessionStart=""" & Utilities.strFormatDate(mdatStart, "G") & """></Activity>")
+        mdomOutput.LoadXml("<Activity Login=""" & mstrLogin & """ SessionStart=""" & Utilities.FormatDate(mdatStart, "G") & """></Activity>")
         objParseError = mdomOutput.ParseError
         If Not objParseError Is Nothing Then
-            ShowTrxGeneratorLoadError("", gstrXMLParseErrorText(objParseError))
+            ShowTrxGeneratorLoadError("", XMLMisc.GetParseErrorText(objParseError))
             Exit Sub
         End If
         mdomOutput.SetProperty("SelectionLanguage", "XPath")
@@ -78,11 +78,11 @@ Public Class EventLog
         If Dir(strLogFolder, FileAttribute.Directory) = "" Then
             MkDir(strLogFolder)
         End If
-        strLogFolder = strLogFolder & "\" & Utilities.strFormatDate(Today, "yyyy-MMM")
+        strLogFolder = strLogFolder & "\" & Utilities.FormatDate(Today, "yyyy-MMM")
         If Dir(strLogFolder, FileAttribute.Directory) = "" Then
             MkDir(strLogFolder)
         End If
-        strLogFile = strLogFolder & "\" & strAccountTitle & "_R" & mobjReg.RegisterKey & "_" & Utilities.strFormatDate(mdatStart, "yyyy-MMM-dd-HH-mm-ss") & ".xml"
+        strLogFile = strLogFolder & "\" & strAccountTitle & "_R" & mobjReg.RegisterKey & "_" & Utilities.FormatDate(mdatStart, "yyyy-MMM-dd-HH-mm-ss") & ".xml"
         mdomOutput.Save(strLogFile)
     End Sub
 
@@ -126,7 +126,7 @@ Public Class EventLog
     Public Sub EventStart(ByVal strTitle As String, ByVal datTimestamp As Date)
         melmEvent = mdomOutput.CreateElement("Event")
         melmEvent.SetAttribute("Title", strTitle)
-        melmEvent.SetAttribute("When", Utilities.strFormatDate(datTimestamp, "G"))
+        melmEvent.SetAttribute("When", Utilities.FormatDate(datTimestamp, "G"))
         melmEventContainer.AppendChild(melmEvent)
     End Sub
 
@@ -150,10 +150,10 @@ Public Class EventLog
         elmTrx = mdomOutput.CreateElement(strName)
         melmEvent.AppendChild(elmTrx)
         With elmTrx
-            .SetAttribute("Date", Utilities.strFormatDate(objTrx.TrxDate))
+            .SetAttribute("Date", Utilities.FormatDate(objTrx.TrxDate))
             .SetAttribute("Number", objTrx.Number)
             .SetAttribute("Payee", objTrx.Description)
-            .SetAttribute("Amount", Utilities.strFormatCurrency(objTrx.Amount))
+            .SetAttribute("Amount", Utilities.FormatCurrency(objTrx.Amount))
             .SetAttribute("FakeStatus", objTrx.FakeStatusLabel)
             If objTrx.Memo <> "" Then
                 .SetAttribute("TrxMemo", objTrx.Memo)
@@ -174,7 +174,7 @@ Public Class EventLog
                     With elmSplitParent
                         .SetAttribute("CatName", mobjCompany.Categories.KeyToValue1(objSplit.CategoryKey))
                         If objNormalTrx.SplitCount > 1 Then
-                            .SetAttribute("Amount", Utilities.strFormatCurrency(objSplit.Amount))
+                            .SetAttribute("Amount", Utilities.FormatCurrency(objSplit.Amount))
                         End If
                         If objSplit.PONumber <> "" Then
                             .SetAttribute("PONum", objSplit.PONumber)
@@ -182,11 +182,11 @@ Public Class EventLog
                         If objSplit.InvoiceNum <> "" Then
                             .SetAttribute("InvNum", objSplit.InvoiceNum)
                         End If
-                        If objSplit.InvoiceDate <> Utilities.datEmpty Then
-                            .SetAttribute("InvDate", Utilities.strFormatDate(objSplit.InvoiceDate))
+                        If objSplit.InvoiceDate <> Utilities.EmptyDate Then
+                            .SetAttribute("InvDate", Utilities.FormatDate(objSplit.InvoiceDate))
                         End If
-                        If objSplit.DueDate <> Utilities.datEmpty Then
-                            .SetAttribute("DueDate", Utilities.strFormatDate(objSplit.DueDate))
+                        If objSplit.DueDate <> Utilities.EmptyDate Then
+                            .SetAttribute("DueDate", Utilities.FormatDate(objSplit.DueDate))
                         End If
                         If objSplit.Terms <> "" Then
                             .SetAttribute("Terms", objSplit.Terms)
@@ -199,7 +199,7 @@ Public Class EventLog
             ElseIf TypeOf objTrx Is BudgetTrx Then
                 Dim objBudgetTrx As BudgetTrx = DirectCast(objTrx, BudgetTrx)
                 .SetAttribute("Type", "Budget")
-                .SetAttribute("BudgetLimit", Utilities.strFormatCurrency(objBudgetTrx.BudgetLimit))
+                .SetAttribute("BudgetLimit", Utilities.FormatCurrency(objBudgetTrx.BudgetLimit))
                 .SetAttribute("BudgetName", mobjCompany.Budgets.KeyToValue1(objBudgetTrx.BudgetKey))
             ElseIf TypeOf objTrx Is TransferTrx Then
                 .SetAttribute("Type", "Transfer")

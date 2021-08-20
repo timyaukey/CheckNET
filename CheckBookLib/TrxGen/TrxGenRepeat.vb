@@ -35,10 +35,10 @@ Public Class TrxGenRepeat
         End If
 
         vntAttrib = elmRepeat.GetAttribute("amount")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             Return "Missing [amount] attribute"
         End If
-        If Not Utilities.blnIsValidAmount(CStr(vntAttrib)) Then
+        If Not Utilities.IsValidAmount(CStr(vntAttrib)) Then
             Return "Invalid [amount] attribute"
         End If
         mcurAmount = CDec(vntAttrib)

@@ -76,22 +76,22 @@ Public Class TrxGenList
 
         strGetCommonFields = ""
         vntAttrib = elmTrx.GetAttribute("date")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             strGetCommonFields = "Missing [date] attribute"
             Exit Function
         End If
-        If Not Utilities.blnIsValidDate(CStr(vntAttrib)) Then
+        If Not Utilities.IsValidDate(CStr(vntAttrib)) Then
             strGetCommonFields = "Invalid [date] attribute"
             Exit Function
         End If
         datDate = CDate(vntAttrib)
 
         vntAttrib = elmTrx.GetAttribute("amount")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             strGetCommonFields = "Missing [amount] attribute"
             Exit Function
         End If
-        If Not Utilities.blnIsValidAmount(CStr(vntAttrib)) Then
+        If Not Utilities.IsValidAmount(CStr(vntAttrib)) Then
             strGetCommonFields = "Invalid [amount] attribute"
             Exit Function
         End If
@@ -124,7 +124,7 @@ Public Class TrxGenList
 
         colResults = New List(Of TrxToCreate)
         lngCount = UBound(maudtTrx)
-        For lngIndex = Utilities.intLBOUND1 To lngCount
+        For lngIndex = Utilities.LowerBound1 To lngCount
             If maudtTrx(lngIndex).TrxDate <= datRegisterEndDate Then
                 colResults.Add(maudtTrx(lngIndex))
             End If

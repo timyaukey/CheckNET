@@ -30,9 +30,9 @@ Friend Class RepeatSeqInfoForm
         For Each objTrx In mobjReg.GetAllTrx(Of BaseTrx)()
             If objTrx.RepeatKey = mstrRepeatKey Then
                 objRow = New RptGridRow
-                objRow.TrxDate = objTrx.TrxDate.ToString(Utilities.strDateWithTwoDigitYear)
+                objRow.TrxDate = objTrx.TrxDate.ToString(Utilities.DateFormatWithTwoDigitYear)
                 objRow.Descr = objTrx.Description
-                objRow.Amount = Utilities.strFormatCurrency(objTrx.Amount)
+                objRow.Amount = Utilities.FormatCurrency(objTrx.Amount)
                 objRow.SeqNum = objTrx.RepeatSeq.ToString()
                 If TypeOf objTrx Is BankTrx Then
                     objRow.DueDate = DirectCast(objTrx, BankTrx).SummarizeDueDates()

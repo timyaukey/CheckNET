@@ -115,13 +115,13 @@ Friend Class RptScanSplitsForm
                 Exit Function
             End If
 
-            If Not Utilities.blnIsValidDate(txtStartDate.Text) Then
+            If Not Utilities.IsValidDate(txtStartDate.Text) Then
                 mobjHostUI.ErrorMessageBox("Invalid transaction starting date.")
                 Exit Function
             End If
             mdatStart = CDate(txtStartDate.Text)
 
-            If Not Utilities.blnIsValidDate(txtEndDate.Text) Then
+            If Not Utilities.IsValidDate(txtEndDate.Text) Then
                 mobjHostUI.ErrorMessageBox("Invalid transaction ending date.")
                 Exit Function
             End If
@@ -143,7 +143,7 @@ Friend Class RptScanSplitsForm
             End If
 
             If txtReportDate.Visible Then
-                If Not Utilities.blnIsValidDate(txtReportDate.Text) Then
+                If Not Utilities.IsValidDate(txtReportDate.Text) Then
                     mobjHostUI.ErrorMessageBox("Invalid report date.")
                     Exit Function
                 End If
@@ -226,7 +226,7 @@ Friend Class RptScanSplitsForm
                 With objTrx
                     datDate = .TrxDate
                     If datDate <> datLastProgress Then
-                        lblProgress.Text = strRegTitle & "  " & Utilities.strFormatDate(datDate)
+                        lblProgress.Text = strRegTitle & "  " & Utilities.FormatDate(datDate)
                         System.Windows.Forms.Application.DoEvents()
                         datLastProgress = datDate
                     End If
@@ -267,7 +267,7 @@ Friend Class RptScanSplitsForm
                 Case SplitReportType.Totals
                     intCatIndex = mobjCompany.Categories.FindIndexOfKey(objSplit.CategoryKey)
                     If intCatIndex = 0 Then
-                        mobjHostUI.InfoMessageBox("Could not find category key " & objSplit.CategoryKey & " for " & "trx dated " & Utilities.strFormatDate(objTrx.TrxDate) & " " & "in register " & objReg.Title)
+                        mobjHostUI.InfoMessageBox("Could not find category key " & objSplit.CategoryKey & " for " & "trx dated " & Utilities.FormatDate(objTrx.TrxDate) & " " & "in register " & objReg.Title)
                     Else
                         With maudtCatTotals(intCatIndex)
                             .lngCount = .lngCount + 1

@@ -70,7 +70,7 @@ Public Class ImportHandlerInvoices
         Dim colMatches As ICollection(Of BankTrx) = Nothing
         objReg.MatchInvoice(objImportedTrx.TrxDate, 120, objImportedTrx.Description, objImportedTrx.FirstSplit.InvoiceNum, colMatches)
         If colMatches.Count() > 0 Then
-            Return Utilities.objFirstElement(colMatches)
+            Return Utilities.GetFirstElement(colMatches)
         End If
         Return Nothing
     End Function

@@ -25,7 +25,7 @@ Public Module TrxGeneratorLoader
             Exit Function
         End If
         vntClassName = domDoc.DocumentElement.GetAttribute("class")
-        If gblnXmlAttributeMissing(vntClassName) Then
+        If XMLMisc.IsAttributeMissing(vntClassName) Then
             ShowTrxGeneratorLoadError(domDoc, "Missing class attribute")
             Exit Function
         End If
@@ -75,7 +75,7 @@ Public Module TrxGeneratorLoader
                     domDoc.Load(strFullXMLFile)
                     objParseError = domDoc.ParseError
                     If Not objParseError Is Nothing Then
-                        ShowTrxGeneratorLoadError(strFullXMLFile, gstrXMLParseErrorText(objParseError))
+                        ShowTrxGeneratorLoadError(strFullXMLFile, XMLMisc.GetParseErrorText(objParseError))
                     Else
                         domDoc.SetProperty("SelectionLanguage", "XPath")
                         objGenerator = CreateTrxGenerator(domDoc, objAccount)
@@ -111,7 +111,7 @@ Public Module TrxGeneratorLoader
         Dim strDescription As String
         Dim vntDescription As Object
         vntDescription = domDoc.DocumentElement.GetAttribute("description")
-        If gblnXmlAttributeMissing(vntDescription) Then
+        If XMLMisc.IsAttributeMissing(vntDescription) Then
             vntDescription = ""
         End If
         If Len(vntDescription) = 0 Then
@@ -177,7 +177,7 @@ Public Module TrxGeneratorLoader
 
         LoadTrxGeneratorCore = ""
         vntAttrib = domDoc.DocumentElement.GetAttribute("enabled")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             LoadTrxGeneratorCore = "Missing [enabled] attribute"
             Exit Function
         End If
@@ -188,7 +188,7 @@ Public Module TrxGeneratorLoader
         blnEnabled = CBool(vntAttrib)
 
         vntAttrib = domDoc.DocumentElement.GetAttribute("repeatkey")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             LoadTrxGeneratorCore = "Missing [repeatkey] attribute"
             Exit Function
         End If
@@ -199,7 +199,7 @@ Public Module TrxGeneratorLoader
         'End If
 
         vntAttrib = domDoc.DocumentElement.GetAttribute("description")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             LoadTrxGeneratorCore = "Missing [description] attribute"
             Exit Function
         End If
@@ -210,7 +210,7 @@ Public Module TrxGeneratorLoader
         strDescription = CStr(vntAttrib)
 
         vntAttrib = domDoc.DocumentElement.GetAttribute("startseq")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             LoadTrxGeneratorCore = "Missing [startseq] attribute"
             Exit Function
         End If
@@ -243,7 +243,7 @@ Public Module TrxGeneratorLoader
         End If
 
         vntAttrib = elmChild.GetAttribute("unit")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             GetTrxGenDateSequenceParams = "Missing [unit] attribute"
             Exit Function
         End If
@@ -254,7 +254,7 @@ Public Module TrxGeneratorLoader
         End If
 
         vntAttrib = elmChild.GetAttribute("interval")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             GetTrxGenDateSequenceParams = "Missing [interval] attribute"
             Exit Function
         End If
@@ -265,11 +265,11 @@ Public Module TrxGeneratorLoader
         End If
 
         vntAttrib = elmChild.GetAttribute("startdate")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             GetTrxGenDateSequenceParams = "Missing [startdate] attribute"
             Exit Function
         End If
-        If Utilities.blnIsValidDate(CStr(vntAttrib)) Then
+        If Utilities.IsValidDate(CStr(vntAttrib)) Then
             datParams.NominalStartDate = CDate(vntAttrib)
         Else
             GetTrxGenDateSequenceParams = "Invalid [startdate] attribute"
@@ -277,10 +277,10 @@ Public Module TrxGeneratorLoader
         End If
 
         vntAttrib = elmChild.GetAttribute("enddate")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             datParams.NominalEndDate = vntAttrib
         Else
-            If Utilities.blnIsValidDate(CStr(vntAttrib)) Then
+            If Utilities.IsValidDate(CStr(vntAttrib)) Then
                 datParams.NominalEndDate = CDate(vntAttrib)
             Else
                 GetTrxGenDateSequenceParams = "Invalid [enddate] attribute"
@@ -353,32 +353,32 @@ Public Module TrxGeneratorLoader
 
         CreateOneSequencedTrx = Nothing
         vntAttrib = elmSeq.GetAttribute("date")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             strError = "Missing [date] attribute" & strErrorEnding
             Exit Function
         End If
-        If Utilities.blnIsValidDate(CStr(vntAttrib)) Then
+        If Utilities.IsValidDate(CStr(vntAttrib)) Then
             datTrxDate = CDate(vntAttrib)
         Else
             strError = "Invalid [date] attribute" & strErrorEnding
             Exit Function
         End If
         vntAttrib = elmSeq.GetAttribute("increasepercent")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             dblPercentIncrease = dblDefaultPercentIncrease
         Else
-            If Not Utilities.blnIsValidAmount(CStr(vntAttrib)) Then
+            If Not Utilities.IsValidAmount(CStr(vntAttrib)) Then
                 strError = "Invalid [increasepercent] attribute" & strErrorEnding
                 Exit Function
             End If
             dblPercentIncrease = CDbl(vntAttrib) / 100.0#
         End If
         vntAttrib = elmSeq.GetAttribute("amount")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             strError = "Missing [amount] attribute" & strErrorEnding
             Exit Function
         End If
-        If Utilities.blnIsValidAmount(CStr(vntAttrib)) Then
+        If Utilities.IsValidAmount(CStr(vntAttrib)) Then
             curAmount = CDec(vntAttrib) * CDec((1.0# + dblPercentIncrease))
         Else
             strError = "Invalid [amount] attribute" & strErrorEnding
@@ -555,7 +555,7 @@ Public Module TrxGeneratorLoader
         datTrxTemplate.Amount = curAmount
         'AccountKey of other register.
         vntAttrib = elmTrxTpt.GetAttribute("transferkey")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             GetTrxGenTemplateTransfer = "Missing [transferkey] attribute"
             Exit Function
         End If
@@ -577,7 +577,7 @@ Public Module TrxGeneratorLoader
         datTrxTemplate.Status = BaseTrx.TrxStatus.NonBank
         'Budget key.
         vntAttrib = elmTrxTpt.GetAttribute("budgetkey")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             GetTrxGenTemplateBudget = "Missing [budgetkey] attribute"
             Exit Function
         End If
@@ -588,7 +588,7 @@ Public Module TrxGeneratorLoader
         datTrxTemplate.BudgetKey = CStr(vntAttrib)
         'Budget unit.
         vntAttrib = elmTrxTpt.GetAttribute("budgetunit")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             GetTrxGenTemplateBudget = "Missing [budgetunit] attribute"
             Exit Function
         End If
@@ -599,7 +599,7 @@ Public Module TrxGeneratorLoader
         End If
         'Budget number.
         vntAttrib = elmTrxTpt.GetAttribute("budgetnumber")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             GetTrxGenTemplateBudget = "Missing [budgetnumber] attribute"
             Exit Function
         End If
@@ -635,7 +635,7 @@ Public Module TrxGeneratorLoader
         datTrxTemplate.Status = BaseTrx.TrxStatus.Unreconciled
         'Transaction number.
         vntAttrib = elmTrxTpt.GetAttribute("number")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             GetTrxGenTemplateBank = "Missing [number] attribute"
             Exit Function
         End If
@@ -646,7 +646,7 @@ Public Module TrxGeneratorLoader
         datTrxTemplate.Number = CStr(vntAttrib) '
         'Category key.
         vntAttrib = elmTrxTpt.GetAttribute("catkey")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             GetTrxGenTemplateBank = "Missing [catkey] attribute"
             Exit Function
         End If
@@ -657,7 +657,7 @@ Public Module TrxGeneratorLoader
         datSplit.CategoryKey = CStr(vntAttrib)
         'Budget key.
         vntAttrib = elmTrxTpt.GetAttribute("budgetkey")
-        If Not gblnXmlAttributeMissing(vntAttrib) Then
+        If Not XMLMisc.IsAttributeMissing(vntAttrib) Then
             If objCompany.Budgets.FindIndexOfKey(CStr(vntAttrib)) = 0 Then
                 GetTrxGenTemplateBank = "Invalid [budgetkey] attribute"
                 Exit Function
@@ -667,8 +667,8 @@ Public Module TrxGeneratorLoader
         'Amount.
         datSplit.Amount = curAmount
         'No dates.
-        datSplit.InvoiceDate = Utilities.datEmpty
-        datSplit.DueDate = Utilities.datEmpty
+        datSplit.InvoiceDate = Utilities.EmptyDate
+        datSplit.DueDate = Utilities.EmptyDate
         'Add to splits collection.
         datTrxTemplate.SplitCount = 1
         ReDim datTrxTemplate.Splits(1)
@@ -688,7 +688,7 @@ Public Module TrxGeneratorLoader
         GetTrxGenTemplateShared = ""
         'Description.
         vntAttrib = elmTrxTpt.GetAttribute("description")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             GetTrxGenTemplateShared = "Missing [description] attribute"
             Exit Function
         End If
@@ -699,7 +699,7 @@ Public Module TrxGeneratorLoader
         datTrxTemplate.Description = CStr(vntAttrib)
         'Memo.
         vntAttrib = elmTrxTpt.GetAttribute("memo")
-        If Not gblnXmlAttributeMissing(vntAttrib) Then
+        If Not XMLMisc.IsAttributeMissing(vntAttrib) Then
             datTrxTemplate.Memo = CStr(vntAttrib)
         End If
         'Other.

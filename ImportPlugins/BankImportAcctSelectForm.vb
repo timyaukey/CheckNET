@@ -36,7 +36,7 @@ Public Class BankImportAcctSelectForm
     Private Sub cmdOkay_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdOkay.Click
         Try
 
-            mobjAccount = UITools.objGetSelectedAccountAndUnload(lstAccounts, Me, mobjCompany)
+            mobjAccount = UITools.GetSelectedAccountAndUnload(lstAccounts, Me, mobjCompany)
             If mobjAccount Is Nothing Then
                 mobjHostUI.ErrorMessageBox("Please select the account to import into.")
                 Exit Sub

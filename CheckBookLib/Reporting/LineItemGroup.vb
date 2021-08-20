@@ -62,6 +62,6 @@ Public Class LineItemGroup
     End Property
 
     Public Overrides Function ToString() As String
-        Return mstrGroupTitle + " " + Utilities.strFormatCurrency(mcurGroupTotal)
+        Return mstrGroupTitle + " " + Utilities.FormatCurrency(mcurGroupTotal)
     End Function
 End Class

@@ -104,7 +104,7 @@ Public Class TrxSplit
             Dim datEffective As Date = mdatInvoiceDate
             Dim intDaysBack As Integer
             Dim strTermsNormalized As String
-            If datEffective = Utilities.datEmpty Then
+            If datEffective = Utilities.EmptyDate Then
                 'Estimate invoice date from due date.
                 strTermsNormalized = LCase(mstrTerms)
                 strTermsNormalized = Replace(strTermsNormalized, " ", "")
@@ -144,7 +144,7 @@ Public Class TrxSplit
     Public ReadOnly Property DueDateEffective() As Date
         Get
             Dim datEffective = mdatDueDate
-            If datEffective = Utilities.datEmpty Then
+            If datEffective = Utilities.EmptyDate Then
                 datEffective = mobjParent.TrxDate
             End If
             Return datEffective

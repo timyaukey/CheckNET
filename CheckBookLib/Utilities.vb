@@ -3,11 +3,11 @@ Option Explicit On
 
 Public Class Utilities
     'Lower bound of many arrays
-    Public Const intLBOUND1 As Short = 1
+    Public Const LowerBound1 As Short = 1
 
-    Public Shared ReadOnly datEmpty As DateTime = System.DateTime.FromOADate(0)
+    Public Shared ReadOnly EmptyDate As DateTime = System.DateTime.FromOADate(0)
 
-    Public Const strDateWithTwoDigitYear As String = "MM/dd/yy"
+    Public Const DateFormatWithTwoDigitYear As String = "MM/dd/yy"
 
     Public Shared Function Split(ByVal strInput As String, ByVal strSeparator As String) As String()
         Dim sep(1) As String
@@ -16,17 +16,17 @@ Public Class Utilities
         Return tmp
     End Function
 
-    Public Shared Function blnIsValidDate(ByVal strDate As String) As Boolean
+    Public Shared Function IsValidDate(ByVal strDate As String) As Boolean
         If strDate Like "*#/*#/*##" Then
             If IsDate(strDate) Then
-                blnIsValidDate = True
+                IsValidDate = True
                 Exit Function
             End If
         End If
-        blnIsValidDate = False
+        IsValidDate = False
     End Function
 
-    Public Shared Function blnTryParseUniversalDate(ByVal strInput As String, ByRef datOutput As DateTime) As Boolean
+    Public Shared Function TryParseUniversalDate(ByVal strInput As String, ByRef datOutput As DateTime) As Boolean
         Dim intMonth As Integer
         Dim intDay As Integer
         Dim intYear As Integer
@@ -99,9 +99,9 @@ Public Class Utilities
         Return True
     End Function
 
-    Public Shared Function blnIsValidAmount(ByVal strAmount As String) As Boolean
+    Public Shared Function IsValidAmount(ByVal strAmount As String) As Boolean
         Dim intDotPos As Integer
-        blnIsValidAmount = False
+        IsValidAmount = False
         If Not IsNumeric(strAmount) Then
             Exit Function
         End If
@@ -111,43 +111,43 @@ Public Class Utilities
                 Exit Function
             End If
         End If
-        blnIsValidAmount = True
+        IsValidAmount = True
     End Function
 
-    Public Shared Function strFormatInteger(input As Long, style As String) As String
+    Public Shared Function FormatInteger(input As Long, style As String) As String
         Dim result As String = input.ToString(style)
         Return result
     End Function
 
-    Public Shared Function strFormatCurrency(input As Decimal) As String
-        Dim result As String = input.ToString("#######0.00") ' VB6.Format(input, "" + gstrFORMAT_CURRENCY)
+    Public Shared Function FormatCurrency(input As Decimal) As String
+        Dim result As String = input.ToString("#######0.00")
         Return result
     End Function
 
-    Public Shared Function strFormatDate(input As Date) As String
-        Dim result As String = input.ToString("MM/dd/yy") ' VB6.Format(input, "" + gstrFORMAT_DATE)
+    Public Shared Function FormatDate(input As Date) As String
+        Dim result As String = input.ToString("MM/dd/yy")
         Return result
     End Function
 
-    Public Shared Function strFormatDate(input As Date, style As String) As String
+    Public Shared Function FormatDate(input As Date, style As String) As String
         Dim result As String = input.ToString(style)
         Return result
     End Function
 
-    Public Shared Function objClipboardReader() As System.IO.TextReader
+    Public Shared Function GetClipboardReader() As System.IO.TextReader
         Dim strData As String
         strData = Trim(My.Computer.Clipboard.GetText())
-        objClipboardReader = New System.IO.StringReader(strData)
+        GetClipboardReader = New System.IO.StringReader(strData)
     End Function
 
-    Public Shared Function objFirstElement(Of T)(enumerable As IEnumerable(Of T)) As T
+    Public Shared Function GetFirstElement(Of T)(enumerable As IEnumerable(Of T)) As T
         Using enumerator As IEnumerator(Of T) = enumerable.GetEnumerator()
             enumerator.MoveNext()
             Return enumerator.Current
         End Using
     End Function
 
-    Public Shared Function objSecondElement(Of T)(enumerable As IEnumerable(Of T)) As T
+    Public Shared Function GetSecondElement(Of T)(enumerable As IEnumerable(Of T)) As T
         Using enumerator As IEnumerator(Of T) = enumerable.GetEnumerator()
             enumerator.MoveNext()
             enumerator.MoveNext()

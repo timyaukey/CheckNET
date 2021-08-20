@@ -38,7 +38,7 @@ Public Class CombinedBalancePlugin
             For Each objPersonalReg As Register In objPersonalAcct.Registers
                 curCombinedBalance = curCombinedBalance + objPersonalReg.EndingBalance(datEndDate)
             Next
-            HostUI.InfoMessageBox("Combined personal and business balance as of " & datEndDate.ToShortDateString() & " is " & Utilities.strFormatCurrency(curCombinedBalance) & ".")
+            HostUI.InfoMessageBox("Combined personal and business balance as of " & datEndDate.ToShortDateString() & " is " & Utilities.FormatCurrency(curCombinedBalance) & ".")
             Exit Sub
         Catch ex As Exception
             TopException(ex)

@@ -156,8 +156,8 @@ Public Class ImportUtilities
             strDescription = mstrTrxPayee
             curAmount = CDec(mstrTrxAmount)
             strMemo = Trim(mstrTrxMemo)
-            datSplitInvoiceDate = Utilities.datEmpty
-            datSplitDueDate = Utilities.datEmpty
+            datSplitInvoiceDate = Utilities.EmptyDate
+            datSplitDueDate = Utilities.EmptyDate
             With mobjCompany.Categories
                 intCatIndex = .FindIndexOfValue1(mstrTrxCategory)
                 If intCatIndex > 0 Then
@@ -185,11 +185,11 @@ Public Class ImportUtilities
                     'in the download file. I believe the actual safe characters to use is
                     '20, based on the max blanks it inserts, but 16 is nice and pessimistic
                     'and ought to be enough to recognize the payee.
-                    strUniqueKey = strNumber & "|" & Left(mstrTrxPayeeTrimmed, 16) & "|" & Utilities.strFormatCurrency(curAmount)
+                    strUniqueKey = strNumber & "|" & Left(mstrTrxPayeeTrimmed, 16) & "|" & Utilities.FormatCurrency(curAmount)
                 End If
                 'NOTE: Date must stay in the same place, because statement reconciliation
                 'parses it out to show.
-                strImportKey = strSqueezeInput("|" & Utilities.strFormatDate(datDate) & "|" & strUniqueKey)
+                strImportKey = strSqueezeInput("|" & Utilities.FormatDate(datDate) & "|" & strUniqueKey)
             End If
 
             objTrx = New ImportedTrx(Nothing)
@@ -243,7 +243,7 @@ Public Class ImportUtilities
                 blnFailMatch = False
                 'Check if starts with the ENTIRE  "Before" attribute.
                 vstrBefore = CType(elmTrxType.GetAttribute("Before"), String)
-                If Not gblnXmlAttributeMissing(vstrBefore) Then
+                If Not XMLMisc.IsAttributeMissing(vstrBefore) Then
                     vstrBefore = strNormalizeInput(vstrBefore)
                     If Left(strNormalizedInput, Len(vstrBefore)) <> vstrBefore Then
                         blnFailMatch = True
@@ -251,9 +251,9 @@ Public Class ImportUtilities
                 End If
                 'Check if ends with at least "n" characters from the start of the "After" attrib.
                 vstrAfter = CType(elmTrxType.GetAttribute("After"), String)
-                If Not gblnXmlAttributeMissing(vstrAfter) Then
+                If Not XMLMisc.IsAttributeMissing(vstrAfter) Then
                     vintMinAfter = Integer.Parse(CType(elmTrxType.GetAttribute("MinAfter"), String))
-                    If gblnXmlAttributeMissing(vintMinAfter) Then
+                    If XMLMisc.IsAttributeMissing(vintMinAfter) Then
                         vintMinAfter = 3
                     End If
                     vstrAfter = strNormalizeInput(vstrAfter)
@@ -274,7 +274,7 @@ Public Class ImportUtilities
                     End If
                 End If
                 'Sanity check.
-                If gblnXmlAttributeMissing(vstrBefore) And gblnXmlAttributeMissing(vstrAfter) Then
+                If XMLMisc.IsAttributeMissing(vstrBefore) And XMLMisc.IsAttributeMissing(vstrAfter) Then
                     RaiseErrorMsg("Neither Before= or After= specified for TrxType element")
                 End If
                 'We matched whichever of Before= and After= were specified.
@@ -283,10 +283,10 @@ Public Class ImportUtilities
                     'We used the squeezed version, not the fully normalized, so
                     'we get the original case information.
                     strPayeeTrimmed = mstrTrxPayeeTrimmed
-                    If Not gblnXmlAttributeMissing(vstrBefore) Then
+                    If Not XMLMisc.IsAttributeMissing(vstrBefore) Then
                         strPayeeTrimmed = Mid(strPayeeTrimmed, Len(vstrBefore) + 1)
                     End If
-                    If Not gblnXmlAttributeMissing(vstrAfter) Then
+                    If Not XMLMisc.IsAttributeMissing(vstrAfter) Then
                         strPayeeTrimmed = Left(strPayeeTrimmed, Len(strPayeeTrimmed) - Len(vstrAfter))
                     End If
                     'Remove blanks here so we don't have to include them in the trx type specs.
@@ -298,7 +298,7 @@ Public Class ImportUtilities
                     'If Number=(number), then the trimmed input is really a check
                     'number and we perform a sanity check to insure it really is a number.
                     vstrNumber = CType(elmTrxType.GetAttribute("Number"), String)
-                    If gblnXmlAttributeMissing(vstrNumber) Then
+                    If XMLMisc.IsAttributeMissing(vstrNumber) Then
                         vstrNumber = ""
                     End If
                     If vstrNumber = "(number)" Then

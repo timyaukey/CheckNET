@@ -95,7 +95,7 @@ Friend Class CatSumRptForm
             WriteRptLine("Totals By Category Report")
             WriteRptLine("-------------------------")
             WriteRptLine("")
-            WriteRptLine("Printed On: " & Utilities.strFormatDate(Now, "MM/dd/yyyy hh:mmtt"))
+            WriteRptLine("Printed On: " & Utilities.FormatDate(Now, "MM/dd/yyyy hh:mmtt"))
             WriteRptLine("")
             WriteRptLine("Accounts Included:")
 
@@ -108,13 +108,13 @@ Friend Class CatSumRptForm
             End With
             WriteRptLine("")
 
-            txtStartDate.Text = Utilities.strFormatDate(datStart)
-            txtEndDate.Text = Utilities.strFormatDate(datEnd)
+            txtStartDate.Text = Utilities.FormatDate(datStart)
+            txtEndDate.Text = Utilities.FormatDate(datEnd)
             chkIncludeFake.CheckState = IIf(blnIncludeFake, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
             chkIncludeGenerated.CheckState = IIf(blnIncludeGenerated, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked)
 
-            WriteRptLine("Start Date:    " & Utilities.strFormatDate(datStart))
-            WriteRptLine("End Date:      " & Utilities.strFormatDate(datEnd))
+            WriteRptLine("Start Date:    " & Utilities.FormatDate(datStart))
+            WriteRptLine("End Date:      " & Utilities.FormatDate(datEnd))
             WriteRptLine("Fake Trx:      " & IIf(blnIncludeFake, "Yes", "No"))
             WriteRptLine("Generated Trx: " & IIf(blnIncludeGenerated, "Yes", "No"))
 
@@ -210,7 +210,7 @@ Friend Class CatSumRptForm
 
         strRightPad = New String(" ", intNestingLevel + 1)
         objResultRow.Label = strRightPad & strRightPad & strRightPad & strLabel
-        strAmount = Utilities.strFormatCurrency(curAmount)
+        strAmount = Utilities.FormatCurrency(curAmount)
         objResultRow.Amount = strAmount & strRightPad & strRightPad & strRightPad
         mcolResultRows.Add(objResultRow)
 
@@ -252,7 +252,7 @@ Friend Class CatSumRptForm
             Dim strCatName As String
             Dim strLine As String
 
-            For intIndex = Utilities.intLBOUND1 To UBound(maudtCatTotals)
+            For intIndex = Utilities.LowerBound1 To UBound(maudtCatTotals)
                 strCatCode = mobjCats.GetKey(intIndex)
                 strCatName = mobjCats.GetValue1(intIndex)
                 strLine = strCatName & vbTab & maudtCatTotals(intIndex).curAmount & vbTab & strCatCode

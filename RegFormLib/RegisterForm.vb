@@ -103,7 +103,7 @@ Public Class RegisterForm
                     MsgBox("You can delete this transaction, but it has a repeat key " & "so the software will probably just recreate it." & vbCrLf &
                            "If you don't want to use this transaction it is much better " & "to change the amount to zero than to delete it.", MsgBoxStyle.Critical)
                 End If
-                If mobjHostUI.OkCancelMessageBox("Do you really want to delete the transaction dated " & Utilities.strFormatDate(.TrxDate) & " for $" & Utilities.strFormatCurrency(.Amount) & " made out to " & .Description & "?") <> DialogResult.OK Then
+                If mobjHostUI.OkCancelMessageBox("Do you really want to delete the transaction dated " & Utilities.FormatDate(.TrxDate) & " for $" & Utilities.FormatCurrency(.Amount) & " made out to " & .Description & "?") <> DialogResult.OK Then
                     Exit Sub
                 End If
                 If .Status = BaseTrx.TrxStatus.Reconciled Then
@@ -261,15 +261,15 @@ Public Class RegisterForm
         Dim intCol As Integer
 
         ConfigGridCol(intCol, mintColDate, "Date", 700,
-            Function(objTrx As BaseTrx) objTrx.TrxDate.ToString(Utilities.strDateWithTwoDigitYear))
+            Function(objTrx As BaseTrx) objTrx.TrxDate.ToString(Utilities.DateFormatWithTwoDigitYear))
         ConfigGridCol(intCol, mintColNumber, "Number", 700,
             Function(objTrx As BaseTrx) objTrx.Number)
         ConfigGridCol(intCol, mintColDescr, "Description", 3000,
             Function(objTrx As BaseTrx) objTrx.Description)
         ConfigGridCol(intCol, mintColAmount, "Amount", 900,
-            Function(objTrx As BaseTrx) Utilities.strFormatCurrency(objTrx.Amount), True)
+            Function(objTrx As BaseTrx) Utilities.FormatCurrency(objTrx.Amount), True)
         ConfigGridCol(intCol, mintColBalance, "Balance", 900,
-            Function(objTrx As BaseTrx) Utilities.strFormatCurrency(objTrx.Balance), True)
+            Function(objTrx As BaseTrx) Utilities.FormatCurrency(objTrx.Balance), True)
         ConfigGridCol(intCol, mintColCategory, "Category", 1800,
             Function(objTrx As BaseTrx) objTrx.CategoryLabel)
         ConfigGridCol(intCol, mintColPONumber, "PO#", 900,
@@ -511,7 +511,7 @@ Public Class RegisterForm
     End Sub
 
     Private Function strTrxSummaryForMsg(ByVal objTrx As BaseTrx) As String
-        strTrxSummaryForMsg = Utilities.strFormatDate(objTrx.TrxDate) & " " & objTrx.Description & " $" & Utilities.strFormatCurrency(objTrx.Amount)
+        strTrxSummaryForMsg = Utilities.FormatDate(objTrx.TrxDate) & " " & objTrx.Description & " $" & Utilities.FormatCurrency(objTrx.Amount)
     End Function
 
     Private Sub DiagnosticValidate()

@@ -45,8 +45,8 @@ Public Class SearchForm
         mcurAmountTotal = 0
         mdatDefaultDate = Today
         Me.Text = "Search " & mobjReg.Title
-        txtStartDate.Text = Utilities.strFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Month, -2, Today))
-        txtEndDate.Text = Utilities.strFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Month, 6, Today))
+        txtStartDate.Text = Utilities.FormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Month, -2, Today))
+        txtEndDate.Text = Utilities.FormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Month, 6, Today))
         LoadSearchIn()
         LoadSearchType()
         LoadSearchFilter()
@@ -123,12 +123,12 @@ Public Class SearchForm
                 Exit Sub
             End If
 
-            If Not Utilities.blnIsValidDate(txtStartDate.Text) Then
+            If Not Utilities.IsValidDate(txtStartDate.Text) Then
                 mobjHostUI.ErrorMessageBox("Invalid starting date.")
                 Exit Sub
             End If
 
-            If Not Utilities.blnIsValidDate(txtEndDate.Text) Then
+            If Not Utilities.IsValidDate(txtEndDate.Text) Then
                 mobjHostUI.ErrorMessageBox("Invalid ending date.")
                 Exit Sub
             End If
@@ -216,11 +216,11 @@ Public Class SearchForm
     End Sub
 
     Private Sub cmdTotalToClipboard_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdTotalToClipboard.Click
-        My.Computer.Clipboard.SetText(Utilities.strFormatCurrency(mcurAmountTotal))
+        My.Computer.Clipboard.SetText(Utilities.FormatCurrency(mcurAmountTotal))
     End Sub
 
     Private Sub ShowTotals()
-        lblTotalDollars.Text = "Matched $" & Utilities.strFormatCurrency(mcurAmountMatched) & "    Total $" & Utilities.strFormatCurrency(mcurAmountTotal)
+        lblTotalDollars.Text = "Matched $" & Utilities.FormatCurrency(mcurAmountMatched) & "    Total $" & Utilities.FormatCurrency(mcurAmountTotal)
     End Sub
 
     Private Sub AddSearchMatchTrx(ByVal objTrx As BaseTrx)
@@ -238,7 +238,7 @@ Public Class SearchForm
         objItem = objAddNewMatch(objTrx, objTrx.Amount)
         If objTrx.GetType() Is GetType(BankTrx) Then
             DirectCast(objTrx, BankTrx).SummarizeSplits(mobjCompany, strCategory, strPONumber, strInvoiceNum, strInvoiceDate, strDueDate, strTerms, strBudget, curAvailable)
-            UITools.AddListSubItem(objItem, 4, Utilities.strFormatCurrency(curAvailable))
+            UITools.AddListSubItem(objItem, 4, Utilities.FormatCurrency(curAvailable))
             UITools.AddListSubItem(objItem, 5, strCategory)
             UITools.AddListSubItem(objItem, 6, strPONumber)
             UITools.AddListSubItem(objItem, 7, strInvoiceNum)
@@ -281,17 +281,17 @@ Public Class SearchForm
         Else
             curAvailable = 0
         End If
-        If objSplit.InvoiceDate = Utilities.datEmpty Then
+        If objSplit.InvoiceDate = Utilities.EmptyDate Then
             strInvoiceDate = ""
         Else
-            strInvoiceDate = Utilities.strFormatDate(objSplit.InvoiceDate)
+            strInvoiceDate = Utilities.FormatDate(objSplit.InvoiceDate)
         End If
-        If objSplit.DueDate = Utilities.datEmpty Then
+        If objSplit.DueDate = Utilities.EmptyDate Then
             strDueDate = ""
         Else
-            strDueDate = Utilities.strFormatDate(objSplit.DueDate)
+            strDueDate = Utilities.FormatDate(objSplit.DueDate)
         End If
-        UITools.AddListSubItem(objItem, 4, Utilities.strFormatCurrency(curAvailable))
+        UITools.AddListSubItem(objItem, 4, Utilities.FormatCurrency(curAvailable))
         UITools.AddListSubItem(objItem, 5, mobjCompany.Categories.TranslateKey(objSplit.CategoryKey))
         UITools.AddListSubItem(objItem, 6, objSplit.PONumber)
         UITools.AddListSubItem(objItem, 7, objSplit.InvoiceNum)
@@ -305,10 +305,10 @@ Public Class SearchForm
 
     Private Function objAddNewMatch(ByVal objTrx As BaseTrx, ByVal curMatchAmount As Decimal) As ListViewItem
         Dim objItem As ListViewItem = UITools.ListViewAdd(lvwMatches)
-        objItem.Text = Utilities.strFormatDate(objTrx.TrxDate)
+        objItem.Text = Utilities.FormatDate(objTrx.TrxDate)
         UITools.AddListSubItem(objItem, 1, objTrx.Number)
         UITools.AddListSubItem(objItem, 2, objTrx.Description)
-        UITools.AddListSubItem(objItem, 3, Utilities.strFormatCurrency(curMatchAmount))
+        UITools.AddListSubItem(objItem, 3, Utilities.FormatCurrency(curMatchAmount))
         Dim objMatch As SearchMatch = New SearchMatch()
         objMatch.objTrx = objTrx
         objItem.Tag = objMatch

@@ -262,7 +262,7 @@ Friend Class PayeeListForm
         Dim vstrValue As Object
 
         vstrValue = melmPayeeToSave.GetAttribute(strName)
-        If gblnXmlAttributeMissing(vstrValue) Then
+        If XMLMisc.IsAttributeMissing(vstrValue) Then
             vstrValue = ""
         End If
         strPayeeAttrib = Trim(vstrValue)

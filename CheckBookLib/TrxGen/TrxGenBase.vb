@@ -21,7 +21,7 @@ Public MustInherit Class TrxGenBase
     Protected Function LoadCore(ByVal domDoc As CBXmlDocument) As String
         Dim vntAttrib As Object = domDoc.DocumentElement.GetAttribute("maxdaysold")
         Dim intMax As Integer
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             mintMaxDaysOld = Nothing
             Return ""
         End If

@@ -302,7 +302,7 @@ Public MustInherit Class BaseTrx
     End Property
 
     Protected Sub RaiseErrorOnBadData(ByVal strRoutine As String)
-        If TrxDateInternal = Utilities.datEmpty Then
+        If TrxDateInternal = Utilities.EmptyDate Then
             RaiseErrorMsg("Missing date in " & strRoutine)
         End If
         If DescriptionInternal = "" Then
@@ -351,7 +351,7 @@ Public MustInherit Class BaseTrx
                 RegisterInternal.FireValidationError(Me, "lngIndex is wrong")
             End If
         End If
-        If TrxDateInternal = Utilities.datEmpty Then
+        If TrxDateInternal = Utilities.EmptyDate Then
             RegisterInternal.FireValidationError(Me, "Missing date")
         End If
         If RepeatKeyInternal <> "" Then

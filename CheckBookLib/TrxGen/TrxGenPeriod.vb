@@ -72,7 +72,7 @@ Public Class TrxGenPeriod
         If dblTotalDOWWeights <= 0 Then
             Return "DOW weights must add up to a positive number"
         End If
-        For intIndex = Utilities.intLBOUND1 To UBound(mdblDOWUsage)
+        For intIndex = Utilities.LowerBound1 To UBound(mdblDOWUsage)
             mdblDOWUsage(intIndex) = mdblDOWUsage(intIndex) / dblTotalDOWWeights
         Next
 
@@ -82,10 +82,10 @@ Public Class TrxGenPeriod
             Return "Missing <firstperiodstarts> element"
         End If
         vntAttrib = elmFirst.GetAttribute("date")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             Return "Missing [date] attribute of <firstperiodstarts> element"
         End If
-        If Not Utilities.blnIsValidDate(CStr(vntAttrib)) Then
+        If Not Utilities.IsValidDate(CStr(vntAttrib)) Then
             Return "Invalid [date] attribute of <firstperiodstarts> element"
         End If
         mdatFirstPeriodStarts = CDate(vntAttrib)
@@ -96,10 +96,10 @@ Public Class TrxGenPeriod
             mdblDefaultPercentIncrease = 0.0#
         Else
             vntAttrib = elmScaling.GetAttribute("increasepercent")
-            If gblnXmlAttributeMissing(vntAttrib) Then
+            If XMLMisc.IsAttributeMissing(vntAttrib) Then
                 Return "Missing [increasepercent] attribute of <scaling> element"
             End If
-            If Utilities.blnIsValidAmount(CStr(vntAttrib)) Then
+            If Utilities.IsValidAmount(CStr(vntAttrib)) Then
                 mdblDefaultPercentIncrease = CDbl(vntAttrib) / 100.0#
             Else
                 Return "Invalid [increasepercent] attribute of <scaling> element"
@@ -121,7 +121,7 @@ Public Class TrxGenPeriod
         Dim dblResult As Double
 
         vntAttrib = elmDOWUsage.GetAttribute(strName)
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             strError = "Missing [" & strName & "] attribute of <dowusage> element"
             Exit Function
         End If

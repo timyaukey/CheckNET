@@ -186,7 +186,7 @@ Friend Class CBMainForm
         Yield New MemoSearchHandler(Me, "Memo")
         Yield New CategorySearchHandler(Me, "Category")
         Yield New TrxSearchHandler(Me, "Number", Function(ByVal objTrx As BaseTrx) objTrx.Number)
-        Yield New TrxSearchHandler(Me, "Amount", Function(ByVal objTrx As BaseTrx) Utilities.strFormatCurrency(objTrx.Amount))
+        Yield New TrxSearchHandler(Me, "Amount", Function(ByVal objTrx As BaseTrx) Utilities.FormatCurrency(objTrx.Amount))
         Yield New InvoiceSearchHandler(Me, "Invoice #")
         Yield New PurOrdSearchHandler(Me, "PO #")
     End Function

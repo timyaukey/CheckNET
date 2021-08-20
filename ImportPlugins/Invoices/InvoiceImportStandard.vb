@@ -18,6 +18,6 @@ Public Class InvoiceImportStandard
     End Function
 
     Public Overrides Function GetTrxReader() As ITrxReader
-        Return New ReadInvoices(HostUI.objCompany, Utilities.objClipboardReader(), "(clipboard)")
+        Return New ReadInvoices(HostUI.objCompany, Utilities.GetClipboardReader(), "(clipboard)")
     End Function
 End Class

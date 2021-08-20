@@ -342,9 +342,9 @@ Public Class MiscFunctionsFixture
     Private Sub AssertParseUniversalDate(ByVal strInput As String, ByVal intMonth As Integer, ByVal intDay As Integer, ByVal intYear As Integer)
         Dim datOutput As DateTime
         If intMonth = 0 Then
-            gUTAssert(Not Utilities.blnTryParseUniversalDate(strInput, datOutput), "Unexpectedly was able to parse date [" + strInput + "]")
+            gUTAssert(Not Utilities.TryParseUniversalDate(strInput, datOutput), "Unexpectedly was able to parse date [" + strInput + "]")
         Else
-            gUTAssert(Utilities.blnTryParseUniversalDate(strInput, datOutput), "Unable to parse date [" + strInput + "]")
+            gUTAssert(Utilities.TryParseUniversalDate(strInput, datOutput), "Unable to parse date [" + strInput + "]")
             gUTAssert(datOutput = New DateTime(intYear, intMonth, intDay), "Wrong parsed values for [" + strInput + "]")
         End If
     End Sub

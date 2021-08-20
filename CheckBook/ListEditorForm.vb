@@ -649,9 +649,9 @@ Friend Class ListEditorForm
             strMakeKey = ""
         Else
             If mlngListType = ListType.Category Or intKey > 99 Then
-                strMakeKey = Utilities.strFormatInteger(intKey, "000")
+                strMakeKey = Utilities.FormatInteger(intKey, "000")
             Else
-                strMakeKey = Utilities.strFormatInteger(intKey, "00")
+                strMakeKey = Utilities.FormatInteger(intKey, "00")
             End If
         End If
     End Function

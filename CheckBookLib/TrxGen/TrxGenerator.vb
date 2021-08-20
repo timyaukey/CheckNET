@@ -116,7 +116,7 @@ Public Module TrxGenerator
                     End If
                     c.BudgetStarts = DateAdd(Microsoft.VisualBasic.DateInterval.Day, 1, GetNextDateInTrxGenSequence(c.TrxDate, c.BudgetUnit, -c.BudgetNumber))
                 End If
-                If c.BudgetStarts = Utilities.datEmpty Then
+                If c.BudgetStarts = Utilities.EmptyDate Then
                     CreateOneGeneratedTrx = "No budget ending date"
                     Exit Function
                 End If
@@ -193,7 +193,7 @@ Public Module TrxGenerator
 
         Do
             'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
-            If Not gblnXmlAttributeMissing(vntNominalEndDate) Then
+            If Not XMLMisc.IsAttributeMissing(vntNominalEndDate) Then
                 If datTrxDate > CDate(vntNominalEndDate) Then
                     Exit Do
                 End If
@@ -242,7 +242,7 @@ Public Module TrxGenerator
             'Find the sample pair to interpolate between.
             'Assumes the samples are in ascending date order.
             blnAmountSet = False
-            datSampleDate = Utilities.datEmpty
+            datSampleDate = Utilities.EmptyDate
             For intSampleIndex = 1 To UBound(datSamples)
                 datPrevSampleDate = datSampleDate
                 datSampleDate = datSamples(intSampleIndex).TrxDate

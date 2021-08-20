@@ -47,21 +47,21 @@ Public Class AgingUtils
         MakeDateBracket = ""
         If intBracketSize < 0 Then
             If intBracketSize = -1 Then
-                MakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/01")
+                MakeDateBracket = Utilities.FormatDate(datInputDate, "yyyy/MM/01")
             ElseIf intBracketSize = -2 Then
                 intMonthPart = CInt(Int((Microsoft.VisualBasic.Day(datInputDate) - 1) / 15))
                 If intMonthPart > 1 Then
                     intMonthPart = 1
                 End If
-                MakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/") & Utilities.strFormatInteger(1 + intMonthPart * 15, "0#")
+                MakeDateBracket = Utilities.FormatDate(datInputDate, "yyyy/MM/") & Utilities.FormatInteger(1 + intMonthPart * 15, "0#")
             ElseIf intBracketSize = -4 Then
                 intMonthPart = CInt(Int((Microsoft.VisualBasic.Day(datInputDate) - 1) / 8))
-                MakeDateBracket = Utilities.strFormatDate(datInputDate, "yyyy/MM/") & Utilities.strFormatInteger(1 + intMonthPart * 8, "0#")
+                MakeDateBracket = Utilities.FormatDate(datInputDate, "yyyy/MM/") & Utilities.FormatInteger(1 + intMonthPart * 8, "0#")
             End If
         Else
             intOffsetDays = DateDiff(Microsoft.VisualBasic.DateInterval.Day, datBaseDate, datInputDate)
             datBracketDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, Int(intOffsetDays / intBracketSize) * intBracketSize, datBaseDate)
-            MakeDateBracket = Utilities.strFormatDate(datBracketDate, "yyyy/MM/dd")
+            MakeDateBracket = Utilities.FormatDate(datBracketDate, "yyyy/MM/dd")
         End If
 
     End Function
@@ -79,10 +79,10 @@ Public Class AgingUtils
     End Function
 
     Public Shared Function FutureLabel(ByVal intStartingAge As Long, ByVal intEndingAge As Long) As String
-        Return "Due In " & Utilities.strFormatInteger(-intEndingAge, "000") & "-" & Utilities.strFormatInteger(-intStartingAge, "000") & " Days"
+        Return "Due In " & Utilities.FormatInteger(-intEndingAge, "000") & "-" & Utilities.FormatInteger(-intStartingAge, "000") & " Days"
     End Function
 
     Public Shared Function PastDueLabel(ByVal intStartingAge As Long, ByVal intEndingAge As Long) As String
-        Return "Due " & Utilities.strFormatInteger(intStartingAge, "000") & "-" & Utilities.strFormatInteger(intEndingAge, "000") & " Days Ago"
+        Return "Due " & Utilities.FormatInteger(intStartingAge, "000") & "-" & Utilities.FormatInteger(intEndingAge, "000") & " Days Ago"
     End Function
 End Class

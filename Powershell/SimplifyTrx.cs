@@ -16,7 +16,7 @@ namespace Willowsoft.CheckBook.Powershell
             ShortTrx shortTrx = new ShortTrx
             {
                 Type = Input.GetType().Name,
-                Date = Utilities.strFormatDate(Input.TrxDate),
+                Date = Utilities.FormatDate(Input.TrxDate),
                 Number = Input.Number,
                 Description = Input.Description,
                 Category = Input.CategoryLabel,

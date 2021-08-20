@@ -35,7 +35,7 @@ Public Class ImportHandlerDeposits
         Dim objNormalTrx As BankTrx
         objReg.MatchPayee(objImportedTrx.TrxDate, 7, objImportedTrx.Description, True, colMatches, blnExactMatch)
         If colMatches.Count > 0 Then
-            objNormalTrx = Utilities.objFirstElement(colMatches)
+            objNormalTrx = Utilities.GetFirstElement(colMatches)
             If Not objNormalTrx.IsFake Then
                 Return objNormalTrx
             End If

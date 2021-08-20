@@ -45,6 +45,6 @@ Public Class ReportLineItem
     End Property
 
     Public Overrides Function ToString() As String
-        Return mstrItemTitle + " " + Utilities.strFormatCurrency(mcurTotal)
+        Return mstrItemTitle + " " + Utilities.FormatCurrency(mcurTotal)
     End Function
 End Class

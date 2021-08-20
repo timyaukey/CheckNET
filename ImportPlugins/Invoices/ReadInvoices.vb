@@ -81,7 +81,7 @@ Public Class ReadInvoices
         End If
         strPONumber = Trim(astrParts(1))
         strDate = Trim(astrParts(2))
-        If Not Utilities.blnIsValidDate(strDate) Then
+        If Not Utilities.IsValidDate(strDate) Then
             Throw New ImportReadException("Invalid invoice date in column 3")
         End If
         datInvDate = CDate(strDate)
@@ -90,15 +90,15 @@ Public Class ReadInvoices
         strTerms = Trim(astrParts(4))
         strDueDate = Trim(astrParts(5))
         If String.IsNullOrEmpty(strDueDate) Then
-            datDueDate = Utilities.datEmpty
+            datDueDate = Utilities.EmptyDate
         Else
-            If Not Utilities.blnIsValidDate(strDueDate) Then
+            If Not Utilities.IsValidDate(strDueDate) Then
                 Throw New ImportReadException("Invalid due date in column 6")
             End If
             datDueDate = CDate(strDueDate)
         End If
         strAmount = Trim(astrParts(6))
-        If Not Utilities.blnIsValidAmount(strAmount) Then
+        If Not Utilities.IsValidAmount(strAmount) Then
             Throw New ImportReadException("Invalid amount in column 7")
         End If
         curAmount = CDec(strAmount)

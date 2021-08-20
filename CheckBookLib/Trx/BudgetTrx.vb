@@ -185,7 +185,7 @@ Public Class BudgetTrx
         If mstrBudgetKey = "" Then
             RaiseErrorMsg("Missing budget key in " & strRoutine)
         End If
-        If mdatBudgetEnds = Utilities.datEmpty Then
+        If mdatBudgetEnds = Utilities.EmptyDate Then
             RaiseErrorMsg("Missing budget end date in " & strRoutine)
         End If
         If mdatBudgetEnds < mdatBudgetStarts Then

@@ -75,7 +75,7 @@ Friend Class ExportForm
 
         blnValidControls = False
         If chkInclude.CheckState = System.Windows.Forms.CheckState.Checked Then
-            If Not Utilities.blnIsValidDate(txtDate.Text) Then
+            If Not Utilities.IsValidDate(txtDate.Text) Then
                 If blnAllowMonthPart Then
                     If LCase(txtDate.Text) = "whole month" Then
                         intDays = -1
@@ -149,17 +149,17 @@ Friend Class ExportForm
 
             datInvToUse = objSplit.InvoiceDateEffective
             datDueToUse = objSplit.DueDateEffective
-            If objSplit.InvoiceDate > Utilities.datEmpty Then
-                strInvDate = Utilities.strFormatDate(objSplit.InvoiceDate)
+            If objSplit.InvoiceDate > Utilities.EmptyDate Then
+                strInvDate = Utilities.FormatDate(objSplit.InvoiceDate)
             End If
-            If objSplit.DueDate > Utilities.datEmpty Then
-                strDueDate = Utilities.strFormatDate(objSplit.DueDate)
+            If objSplit.DueDate > Utilities.EmptyDate Then
+                strDueDate = Utilities.FormatDate(objSplit.DueDate)
             End If
 
-            strLine = Utilities.strFormatDate(objTrx.TrxDate) & "," & objTrx.Number & ",""" & objTrx.Description & """," _
-                & Utilities.strFormatCurrency(objSplit.Amount) & ",""" & mobjCompany.Categories.KeyToValue1(objSplit.CategoryKey) _
-                & """," & strDueDate & "," & Utilities.strFormatDate(datDueToUse) & "," & strInvDate & "," _
-                & Utilities.strFormatDate(datInvToUse) & ",""" & objSplit.PONumber & """,""" & objSplit.InvoiceNum & """,""" & objSplit.Terms & """"
+            strLine = Utilities.FormatDate(objTrx.TrxDate) & "," & objTrx.Number & ",""" & objTrx.Description & """," _
+                & Utilities.FormatCurrency(objSplit.Amount) & ",""" & mobjCompany.Categories.KeyToValue1(objSplit.CategoryKey) _
+                & """," & strDueDate & "," & Utilities.FormatDate(datDueToUse) & "," & strInvDate & "," _
+                & Utilities.FormatDate(datInvToUse) & ",""" & objSplit.PONumber & """,""" & objSplit.InvoiceNum & """,""" & objSplit.Terms & """"
 
             'The order of these extra fields must match the order they
             'are added in OpenOutput().

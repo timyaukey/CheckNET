@@ -18,6 +18,6 @@ Public Class CheckImportStandard
     End Function
 
     Public Overrides Function GetTrxReader() As ITrxReader
-        Return New ReadChecks(Utilities.objClipboardReader(), "(clipboard)", New ReadChecksSpec(1, 0, 2, 3, -1))
+        Return New ReadChecks(Utilities.GetClipboardReader(), "(clipboard)", New ReadChecksSpec(1, 0, 2, 3, -1))
     End Function
 End Class

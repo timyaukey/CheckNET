@@ -149,17 +149,17 @@ Public Class RegisterSearchFixture
 
             .objReg.MatchPayee(#4/3/2000#, 1, "company2", True, colMatches, blnExactMatch)
             gUTAssert(colMatches.Count() = 1, "company2 fail")
-            objTrx = Utilities.objFirstElement(colMatches)
-            gUTAssert(Utilities.objFirstElement(colMatches).RegIndex = 2, "company2 index fail")
+            objTrx = Utilities.GetFirstElement(colMatches)
+            gUTAssert(Utilities.GetFirstElement(colMatches).RegIndex = 2, "company2 index fail")
             gUTAssert(objTrx.Description = "company2", "company2 name fail")
             gUTAssert(objTrx.TrxDate = #4/3/2000#, "company2 date fail")
             gUTAssert(blnExactMatch = True, "company2 exact fail")
 
             .objReg.MatchPayee(#4/6/2000#, 1, "payee1", True, colMatches, blnExactMatch)
             gUTAssert(colMatches.Count() = 2, "payee1 fail")
-            objTrx = Utilities.objFirstElement(colMatches)
-            gUTAssert(Utilities.objFirstElement(colMatches).RegIndex = 3, "payee1#1 index fail")
-            gUTAssert(Utilities.objSecondElement(colMatches).RegIndex = 4, "payee1#2 index fail")
+            objTrx = Utilities.GetFirstElement(colMatches)
+            gUTAssert(Utilities.GetFirstElement(colMatches).RegIndex = 3, "payee1#1 index fail")
+            gUTAssert(Utilities.GetSecondElement(colMatches).RegIndex = 4, "payee1#2 index fail")
             gUTAssert(blnExactMatch = False, "payee#1 exact fail")
         End With
 
@@ -181,11 +181,11 @@ Public Class RegisterSearchFixture
 
             .objReg.MatchInvoice(#4/3/2000#, 10, "company2", "I1000", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 I1000 fail")
-            gUTAssert(Utilities.objFirstElement(colMatches).RegIndex = 2, "company2 I1000 index fail")
+            gUTAssert(Utilities.GetFirstElement(colMatches).RegIndex = 2, "company2 I1000 index fail")
 
             .objReg.MatchInvoice(#4/3/2000#, 10, "company2", "I1001", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 I1001 fail")
-            gUTAssert(Utilities.objFirstElement(colMatches).RegIndex = 2, "company2 I1001 index fail")
+            gUTAssert(Utilities.GetFirstElement(colMatches).RegIndex = 2, "company2 I1001 index fail")
 
             .objReg.MatchInvoice(#4/5/2000#, 1, "company2", "I1000", colMatches)
             gUTAssert(colMatches.Count() = 0, "company2 I1000 -2 fail")
@@ -215,11 +215,11 @@ Public Class RegisterSearchFixture
 
             .objReg.MatchPONumber(#4/3/2000#, 10, "company2", "P1", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 P1 fail")
-            gUTAssert(Utilities.objFirstElement(colMatches).RegIndex = 2, "company2 P1 index fail")
+            gUTAssert(Utilities.GetFirstElement(colMatches).RegIndex = 2, "company2 P1 index fail")
 
             .objReg.MatchPONumber(#4/3/2000#, 10, "company2", "P2", colMatches)
             gUTAssert(colMatches.Count() = 1, "company2 P2 fail")
-            gUTAssert(Utilities.objFirstElement(colMatches).RegIndex = 2, "company2 I1001 index fail")
+            gUTAssert(Utilities.GetFirstElement(colMatches).RegIndex = 2, "company2 I1001 index fail")
 
             .objReg.MatchPONumber(#4/5/2000#, 1, "company2", "P1", colMatches)
             gUTAssert(colMatches.Count() = 0, "company2 P1 -2 fail")

@@ -213,19 +213,19 @@ Public Class BankTrx
     Public Function SummarizeDueDates() As String
 
         Dim objSplit As TrxSplit
-        Dim datDueDate As Date = Utilities.datEmpty
+        Dim datDueDate As Date = Utilities.EmptyDate
 
         For Each objSplit In Me.Splits
-            If datDueDate = Utilities.datEmpty Then
+            If datDueDate = Utilities.EmptyDate Then
                 datDueDate = objSplit.DueDate
-            ElseIf datDueDate <> objSplit.DueDate And objSplit.DueDate <> Utilities.datEmpty Then
+            ElseIf datDueDate <> objSplit.DueDate And objSplit.DueDate <> Utilities.EmptyDate Then
                 Return "(mixed)"
             End If
         Next objSplit
-        If datDueDate = Utilities.datEmpty Then
+        If datDueDate = Utilities.EmptyDate Then
             Return ""
         Else
-            Return datDueDate.ToString(Utilities.strDateWithTwoDigitYear)
+            Return datDueDate.ToString(Utilities.DateFormatWithTwoDigitYear)
         End If
 
     End Function
@@ -233,19 +233,19 @@ Public Class BankTrx
     Public Function SummarizeInvoiceDates() As String
 
         Dim objSplit As TrxSplit
-        Dim datInvoiceDate As Date = Utilities.datEmpty
+        Dim datInvoiceDate As Date = Utilities.EmptyDate
 
         For Each objSplit In Me.Splits
-            If datInvoiceDate = Utilities.datEmpty Then
+            If datInvoiceDate = Utilities.EmptyDate Then
                 datInvoiceDate = objSplit.InvoiceDate
-            ElseIf datInvoiceDate <> objSplit.InvoiceDate And objSplit.InvoiceDate <> Utilities.datEmpty Then
+            ElseIf datInvoiceDate <> objSplit.InvoiceDate And objSplit.InvoiceDate <> Utilities.EmptyDate Then
                 Return "(mixed)"
             End If
         Next objSplit
-        If datInvoiceDate = Utilities.datEmpty Then
+        If datInvoiceDate = Utilities.EmptyDate Then
             Return ""
         Else
-            Return datInvoiceDate.ToString(Utilities.strDateWithTwoDigitYear)
+            Return datInvoiceDate.ToString(Utilities.DateFormatWithTwoDigitYear)
         End If
 
     End Function
@@ -331,15 +331,15 @@ Public Class BankTrx
                 strCategory = objCompany.Categories.TranslateKey(strCatKey)
                 strInvoiceNum = strInvoiceNum2
                 strPONumber = strPONumber2
-                If datInvoiceDate = Utilities.datEmpty Then
+                If datInvoiceDate = Utilities.EmptyDate Then
                     strInvoiceDate = ""
                 Else
-                    strInvoiceDate = Utilities.strFormatDate(datInvoiceDate)
+                    strInvoiceDate = Utilities.FormatDate(datInvoiceDate)
                 End If
-                If datDueDate = Utilities.datEmpty Then
+                If datDueDate = Utilities.EmptyDate Then
                     strDueDate = ""
                 Else
-                    strDueDate = Utilities.strFormatDate(datDueDate)
+                    strDueDate = Utilities.FormatDate(datDueDate)
                 End If
                 strTerms = strTerms2
                 strBudget = objCompany.Budgets.TranslateKey(strBudgetKey)

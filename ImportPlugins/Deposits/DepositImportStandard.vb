@@ -18,6 +18,6 @@ Public Class DepositImportStandard
     End Function
 
     Public Overrides Function GetTrxReader() As ITrxReader
-        Return New ReadDeposits(Utilities.objClipboardReader(), "(clipboard)")
+        Return New ReadDeposits(Utilities.GetClipboardReader(), "(clipboard)")
     End Function
 End Class

@@ -247,12 +247,12 @@ Public Class RegisterLoader
         mlngStatus = BaseTrx.TrxStatus.Missing
         mobjTrxType = Nothing
         mstrNumber = ""
-        mdatDate = Utilities.datEmpty
+        mdatDate = Utilities.EmptyDate
         mstrMemo = ""
         mcurAmount = 0
         mcurNormalMatchRange = 0
         mblnAwaitingReview = False
-        mdatBudgetStarts = Utilities.datEmpty
+        mdatBudgetStarts = Utilities.EmptyDate
         mstrImportKey = ""
         mstrTransferKey = ""
         mstrBudgetKey = ""
@@ -268,8 +268,8 @@ Public Class RegisterLoader
         mstrSCategoryKey = ""
         mstrSPONumber = ""
         mstrSInvoiceNum = ""
-        mdatSInvoiceDate = Utilities.datEmpty
-        mdatSDueDate = Utilities.datEmpty
+        mdatSInvoiceDate = Utilities.EmptyDate
+        mdatSDueDate = Utilities.EmptyDate
         mstrSTerms = ""
         mstrSBudgetKey = ""
         mcurSAmount = 0
@@ -286,7 +286,7 @@ Public Class RegisterLoader
     Private Function ConvertInputDate(ByVal strInput As String, ByVal strContext As String) As Date
 
         Dim datOutput As Date
-        If Utilities.blnTryParseUniversalDate(strInput, datOutput) Then
+        If Utilities.TryParseUniversalDate(strInput, datOutput) Then
             Return datOutput
         End If
         'If Utilities.blnIsValidDate(strInput) Then
@@ -322,7 +322,7 @@ Public Class RegisterLoader
         If mobjTrxType Is Nothing Then
             RaiseError("CreateTrx", "No TN, TB or TT line before TZ")
         End If
-        If mdatDate = Utilities.datEmpty Then
+        If mdatDate = Utilities.EmptyDate Then
             RaiseError("CreateTrx", "No DT line for Trx")
         End If
         CreateOneTrx(mobjReg, mblnFake)
@@ -364,7 +364,7 @@ Public Class RegisterLoader
                     If mstrBudgetKey = "" Then
                         RaiseError("CreateTrx", "No KB line for budget Trx")
                     End If
-                    If mdatBudgetStarts = Utilities.datEmpty Then
+                    If mdatBudgetStarts = Utilities.EmptyDate Then
                         RaiseError("CreateTrx", "No budget starting date")
                     End If
                     Dim objBudgetTrx As BudgetTrx = New BudgetTrx(objTargetReg)

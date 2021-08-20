@@ -26,7 +26,7 @@ Friend Class LiveBudgetListForm
 
         Try
 
-            If Not Utilities.blnIsValidDate(txtTargetDate.Text) Then
+            If Not Utilities.IsValidDate(txtTargetDate.Text) Then
                 mobjHostUI.ErrorMessageBox("Invalid target date.")
                 Exit Sub
             End If
@@ -37,7 +37,7 @@ Friend Class LiveBudgetListForm
                 With objTrx
                     If .InBudgetPeriod(datTarget) Then
                         objItem = UITools.ListViewAdd(lvwMatches)
-                        objItem.Text = Utilities.strFormatDate(.TrxDate)
+                        objItem.Text = Utilities.FormatDate(.TrxDate)
 
                         If objItem.SubItems.Count > 1 Then
                             objItem.SubItems(1).Text = .Description
@@ -52,21 +52,21 @@ Friend Class LiveBudgetListForm
                         End If
 
                         If objItem.SubItems.Count > 3 Then
-                            objItem.SubItems(3).Text = Utilities.strFormatCurrency(.BudgetLimit)
+                            objItem.SubItems(3).Text = Utilities.FormatCurrency(.BudgetLimit)
                         Else
-                            objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(.BudgetLimit)))
+                            objItem.SubItems.Insert(3, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Utilities.FormatCurrency(.BudgetLimit)))
                         End If
 
                         If objItem.SubItems.Count > 4 Then
-                            objItem.SubItems(4).Text = Utilities.strFormatCurrency(.BudgetApplied)
+                            objItem.SubItems(4).Text = Utilities.FormatCurrency(.BudgetApplied)
                         Else
-                            objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(.BudgetApplied)))
+                            objItem.SubItems.Insert(4, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Utilities.FormatCurrency(.BudgetApplied)))
                         End If
 
                         If objItem.SubItems.Count > 5 Then
-                            objItem.SubItems(5).Text = Utilities.strFormatCurrency(.Amount)
+                            objItem.SubItems(5).Text = Utilities.FormatCurrency(.Amount)
                         Else
-                            objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Utilities.strFormatCurrency(.Amount)))
+                            objItem.SubItems.Insert(5, New System.Windows.Forms.ListViewItem.ListViewSubItem(Nothing, Utilities.FormatCurrency(.Amount)))
                         End If
                     End If
                 End With

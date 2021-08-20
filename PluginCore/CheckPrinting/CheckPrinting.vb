@@ -68,7 +68,7 @@ Public Class CheckPrinting
         mdomCheckFormat.Load(strCheckFormatFile)
         objParseError = mdomCheckFormat.ParseError
         If Not objParseError Is Nothing Then
-            mobjHostUI.InfoMessageBox("Error loading check format file: " & gstrXMLParseErrorText(objParseError))
+            mobjHostUI.InfoMessageBox("Error loading check format file: " & XMLMisc.GetParseErrorText(objParseError))
             Return False
         End If
 
@@ -144,10 +144,10 @@ Public Class CheckPrinting
                 Exit Do
             End If
             objPayee = DirectCast(colPayees(intPayeeIndex), CBXmlElement)
-            strMailAddr = gstrGetXMLChildText(objPayee, "Address1")
-            strMailAddr2 = gstrGetXMLChildText(objPayee, "Address2")
-            strMailCityStateZip = gstrGetXMLChildText(objPayee, "City") & ", " & gstrGetXMLChildText(objPayee, "State") & " " & gstrGetXMLChildText(objPayee, "Zip")
-            strAccountNumber = gstrGetXMLChildText(objPayee, "Account")
+            strMailAddr = XMLMisc.GetChildText(objPayee, "Address1")
+            strMailAddr2 = XMLMisc.GetChildText(objPayee, "Address2")
+            strMailCityStateZip = XMLMisc.GetChildText(objPayee, "City") & ", " & XMLMisc.GetChildText(objPayee, "State") & " " & XMLMisc.GetChildText(objPayee, "Zip")
+            strAccountNumber = XMLMisc.GetChildText(objPayee, "Account")
             intSemiPos = InStr(strMailAddr, ";")
             If intSemiPos = 0 Then
                 strMailName = mobjTrx.Description
@@ -165,15 +165,15 @@ Public Class CheckPrinting
             intPayeeIndex = intPayeeIndex + 1
         Loop
 
-        PrintCheckText("Date", Utilities.strFormatDate(mobjTrx.TrxDate), ev)
-        PrintCheckText("ShortAmount", Utilities.strFormatCurrency(curAmount), ev)
+        PrintCheckText("Date", Utilities.FormatDate(mobjTrx.TrxDate), ev)
+        PrintCheckText("ShortAmount", Utilities.FormatCurrency(curAmount), ev)
         PrintCheckText("Payee", mobjTrx.Description, ev)
         Dim intPennies As Integer
         intPennies = CInt(Fix(curAmount * 100.0#) - Fix(curAmount) * 100.0#)
         Dim strDollars As String
         strDollars = MoneyFormat.AmountToWords(curAmount)
         strDollars = UCase(Left(strDollars, 1)) & Mid(strDollars, 2)
-        PrintCheckText("LongAmount", strDollars & " and " & Utilities.strFormatInteger(intPennies, "00") & "/100", ev)
+        PrintCheckText("LongAmount", strDollars & " and " & Utilities.FormatInteger(intPennies, "00") & "/100", ev)
         If strAccountNumber <> "" Then
             PrintCheckText("AccountNumber", "Account #: " & strAccountNumber, ev)
         End If
@@ -191,8 +191,8 @@ Public Class CheckPrinting
         'is printed elsewhere.
 
         PrintOptionalCheckText("Payee2", strMailName, ev)
-        PrintOptionalCheckText("Amount2", "$" & Utilities.strFormatCurrency(curAmount), ev)
-        PrintOptionalCheckText("Date2", Utilities.strFormatDate(mobjTrx.TrxDate), ev)
+        PrintOptionalCheckText("Amount2", "$" & Utilities.FormatCurrency(curAmount), ev)
+        PrintOptionalCheckText("Date2", Utilities.FormatDate(mobjTrx.TrxDate), ev)
         PrintOptionalCheckText("Number2", "#" & mobjTrx.Number, ev)
 
         PrintInvoiceNumbers("InvoiceList1", mobjTrx, dblLineHeight, ev)
@@ -229,21 +229,21 @@ Public Class CheckPrinting
         End If
 
         vntAttrib = elmInvoiceList.GetAttribute("rows")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             mobjHostUI.InfoMessageBox("Could not find ""rows"" attribute of <" & strItemName & "> in check format file")
             Exit Sub
         End If
         intMaxRows = CInt(Val(vntAttrib))
 
         vntAttrib = elmInvoiceList.GetAttribute("cols")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             mobjHostUI.InfoMessageBox("Could not find ""cols"" attribute of <" & strItemName & "> in check format file")
             Exit Sub
         End If
         intMaxCols = CInt(Val(vntAttrib))
 
         vntAttrib = elmInvoiceList.GetAttribute("colwidth")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             mobjHostUI.InfoMessageBox("Could not find ""colwidth"" attribute of <" & strItemName & "> in check format file")
             Exit Sub
         End If
@@ -361,14 +361,14 @@ Public Class CheckPrinting
         End If
 
         vntAttrib = elmItem.GetAttribute("x")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             mobjHostUI.InfoMessageBox("Could not find ""x"" attribute of <" & strItemName & "> in check format file")
             Exit Function
         End If
         dblX = Val(vntAttrib)
 
         vntAttrib = elmItem.GetAttribute("y")
-        If gblnXmlAttributeMissing(vntAttrib) Then
+        If XMLMisc.IsAttributeMissing(vntAttrib) Then
             mobjHostUI.InfoMessageBox("Could not find ""y"" attribute of <" & strItemName & "> in check format file")
             Exit Function
         End If

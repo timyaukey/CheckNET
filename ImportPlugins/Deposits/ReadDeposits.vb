@@ -58,7 +58,7 @@ Public Class ReadDeposits
         End If
 
         strDate = Trim(astrParts(0))
-        If Not Utilities.blnIsValidDate(strDate) Then
+        If Not Utilities.IsValidDate(strDate) Then
             Throw New ImportReadException("Invalid deposit date in column 1")
         End If
         datDate = CDate(strDate)
@@ -69,14 +69,14 @@ Public Class ReadDeposits
         End If
 
         strAmount = Trim(astrParts(2))
-        If Not Utilities.blnIsValidAmount(strAmount) Then
+        If Not Utilities.IsValidAmount(strAmount) Then
             Throw New ImportReadException("Invalid deposit amount in column 3")
         End If
         curAmount = CDec(strAmount)
 
         objTrx = New ImportedTrx(Nothing)
 
-        datNull = Utilities.datEmpty
+        datNull = Utilities.EmptyDate
         objTrx.NewStartNormal(False, "", datDate, strDescription, "", BaseTrx.TrxStatus.Unreconciled, New TrxGenImportData())
         objTrx.AddSplit("", "", "", "", datNull, datNull, "", "", curAmount)
 

@@ -281,7 +281,7 @@ Public Class Company
             colPayees = MemorizedTransXmlUCS.DocumentElement.SelectNodes("Payee")
             For Each elmPayee In colPayees
                 vntOutput = elmPayee.GetAttribute("Output")
-                If Not gblnXmlAttributeMissing(vntOutput) Then
+                If Not XMLMisc.IsAttributeMissing(vntOutput) Then
                     elmPayee.SetAttribute("OutputUCS", UCase(CStr(vntOutput)))
                 End If
             Next elmPayee
@@ -324,7 +324,7 @@ Public Class Company
                 .Load(strFile)
                 objParseError = .ParseError
                 If Not objParseError Is Nothing Then
-                    RaiseErrorMsg("XML parse error loading file: " & gstrXMLParseErrorText(objParseError))
+                    RaiseErrorMsg("XML parse error loading file: " & XMLMisc.GetParseErrorText(objParseError))
                 End If
                 .SetProperty("SelectionLanguage", "XPath")
             End With

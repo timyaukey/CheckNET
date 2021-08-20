@@ -290,13 +290,13 @@ Friend Class ShowRegisterForm
         Try
 
             Dim strRegisterEndDate As String = InputBox("Enter ending date to generate transactions through:",
-                "Ending Date", Utilities.strFormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, 90, Now)))
+                "Ending Date", Utilities.FormatDate(DateAdd(Microsoft.VisualBasic.DateInterval.Day, 90, Now)))
             If strRegisterEndDate <> "" Then
-                If Utilities.blnIsValidDate(strRegisterEndDate) Then
-                    Dim strCutoffDate As String = Utilities.strFormatDate(mobjCompany.LastReconciledDate().AddDays(1D))
+                If Utilities.IsValidDate(strRegisterEndDate) Then
+                    Dim strCutoffDate As String = Utilities.FormatDate(mobjCompany.LastReconciledDate().AddDays(1D))
                     strCutoffDate = InputBox("Enter cutoff date for transaction generators that do not " +
                         "generate transactions older than some number of days relative to a cutoff date:", "Cutoff Date", strCutoffDate)
-                    If Utilities.blnIsValidDate(strCutoffDate) Then
+                    If Utilities.IsValidDate(strCutoffDate) Then
                         CompanyLoader.RecreateGeneratedTrx(mobjCompany, CDate(strRegisterEndDate), CDate(strCutoffDate))
                     Else
                         mobjHostUI.InfoMessageBox("Invalid cutoff date.")

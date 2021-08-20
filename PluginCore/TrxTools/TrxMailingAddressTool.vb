@@ -40,14 +40,14 @@ Public Class TrxMailingAddressTool
         Else
             strMsg = "Matching Memorized Transaction(s):"
             For Each objPayee In colPayees
-                strPayee = CStr(objPayee.GetAttribute("Output")) & vbCrLf & gstrGetXMLChildText(objPayee, "Address1")
-                strAddress2 = gstrGetXMLChildText(objPayee, "Address2")
+                strPayee = CStr(objPayee.GetAttribute("Output")) & vbCrLf & XMLMisc.GetChildText(objPayee, "Address1")
+                strAddress2 = XMLMisc.GetChildText(objPayee, "Address2")
                 If Len(strAddress2) > 0 Then
                     strPayee = strPayee & vbCrLf & strAddress2
                 End If
-                strPayee = strPayee & vbCrLf & gstrGetXMLChildText(objPayee, "City") & " " &
-                    gstrGetXMLChildText(objPayee, "State") & " " & gstrGetXMLChildText(objPayee, "Zip") & vbCrLf &
-                    "Account #: " & gstrGetXMLChildText(objPayee, "Account")
+                strPayee = strPayee & vbCrLf & XMLMisc.GetChildText(objPayee, "City") & " " &
+                    XMLMisc.GetChildText(objPayee, "State") & " " & XMLMisc.GetChildText(objPayee, "Zip") & vbCrLf &
+                    "Account #: " & XMLMisc.GetChildText(objPayee, "Account")
                 strMsg = strMsg & vbCrLf & vbCrLf & strPayee
             Next objPayee
         End If

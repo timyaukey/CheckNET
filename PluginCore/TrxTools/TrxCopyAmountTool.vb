@@ -26,6 +26,6 @@ Public Class TrxCopyAmountTool
             Return
         End If
         My.Computer.Clipboard.Clear()
-        My.Computer.Clipboard.SetText(Utilities.strFormatCurrency(System.Math.Abs(objNormalTrx.Amount)))
+        My.Computer.Clipboard.SetText(Utilities.FormatCurrency(System.Math.Abs(objNormalTrx.Amount)))
     End Sub
 End Class

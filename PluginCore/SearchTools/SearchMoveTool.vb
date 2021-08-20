@@ -50,7 +50,7 @@ Public Class SearchMoveTool
                                       objHostSearchToolUI.objReg, strNewDate, objNewReg) Then
             Exit Sub
         End If
-        If Utilities.blnIsValidDate(strNewDate) Then
+        If Utilities.IsValidDate(strNewDate) Then
             datExplicitDate = CDate(strNewDate)
             blnUseDayOffset = False
         ElseIf IsNumeric(strNewDate) Or strNewDate = "" Then

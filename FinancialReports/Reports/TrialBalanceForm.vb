@@ -35,7 +35,7 @@ Public Class TrialBalanceForm
             ConfigureStatementButtons(True)
             Dim curBalanceError As Decimal = objBalSheet.GrandTotal - objIncExp.GrandTotal
             If curBalanceError <> 0D Then
-                lblResultSummary.Text = "Accounts out of balance by " + Utilities.strFormatCurrency(curBalanceError)
+                lblResultSummary.Text = "Accounts out of balance by " + Utilities.FormatCurrency(curBalanceError)
             ElseIf objIncExp.GrandTotal <> 0D Then
                 lblResultSummary.Text = "Accounts balance, but update retained earnings"
             Else
@@ -55,19 +55,19 @@ Public Class TrialBalanceForm
         lvw.Items.Clear()
         For Each objGroup As LineItemGroup In objData.Groups
             lvwItem = New ListViewItem(objGroup.GroupTitle)
-            lvwItem.SubItems.Add(Utilities.strFormatCurrency(objGroup.GroupTotal))
+            lvwItem.SubItems.Add(Utilities.FormatCurrency(objGroup.GroupTotal))
             lvwItem.BackColor = Color.LightGray
             lvw.Items.Add(lvwItem)
             For Each objLine As ReportLineItem In objGroup.Items
                 If objLine.Total <> 0D Then
                     lvwItem = New ListViewItem("  " + objLine.ItemTitle)
-                    lvwItem.SubItems.Add(Utilities.strFormatCurrency(objLine.Total))
+                    lvwItem.SubItems.Add(Utilities.FormatCurrency(objLine.Total))
                     lvw.Items.Add(lvwItem)
                 End If
             Next
         Next
         lvwItem = New ListViewItem(strGrandTotalPrefix)
-        lvwItem.SubItems.Add(Utilities.strFormatCurrency(objData.GrandTotal))
+        lvwItem.SubItems.Add(Utilities.FormatCurrency(objData.GrandTotal))
         lvwItem.BackColor = Color.LightGray
         lvw.Items.Add(lvwItem)
     End Sub
@@ -239,7 +239,7 @@ Public Class TrialBalanceForm
 
             objWriter.EndReport()
             objWriter.CheckPrinted(objIncExp)
-            mobjHostUI.InfoMessageBox("Net profit bottom line is: " + Utilities.strFormatCurrency(objAccumTotal.curTotal))
+            mobjHostUI.InfoMessageBox("Net profit bottom line is: " + Utilities.FormatCurrency(objAccumTotal.curTotal))
             objWriter.ShowReport()
         Catch ex As Exception
             TopException(ex)
@@ -271,7 +271,7 @@ Public Class TrialBalanceForm
             For Each objGroup As LineItemGroup In objIncExpTotal.Groups
                 For Each objItem As ReportLineItem In objGroup.Items
                     If objItem.Total <> 0 Then
-                        objTrx.AddSplit("", objItem.ItemKey, "", "", Utilities.datEmpty, Utilities.datEmpty, "", "", -objItem.Total)
+                        objTrx.AddSplit("", objItem.ItemKey, "", "", Utilities.EmptyDate, Utilities.EmptyDate, "", "", -objItem.Total)
                     End If
                 Next
             Next

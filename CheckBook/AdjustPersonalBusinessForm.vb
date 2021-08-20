@@ -262,7 +262,7 @@ Public Class AdjustPersonalBusinessForm
                                     ByVal strCatKey As String, ByVal curAmount As Decimal)
         Dim objTrx As BankTrx = New BankTrx(objRegister)
         objTrx.NewStartNormal(True, "Pmt", datDate, strDescription, "", BaseTrx.TrxStatus.Unreconciled, False, 0D, False, False, 0, "", "")
-        objTrx.AddSplit("", strCatKey, "", "", Utilities.datEmpty, Utilities.datEmpty, "", "", curAmount)
+        objTrx.AddSplit("", strCatKey, "", "", Utilities.EmptyDate, Utilities.EmptyDate, "", "", curAmount)
         objRegister.NewAddEnd(objTrx, New LogAdd(), "AdjustPersonalBusiness.AddTrx")
     End Sub
 

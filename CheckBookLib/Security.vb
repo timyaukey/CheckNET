@@ -176,7 +176,7 @@ Public Class Security
     Private Function GetUserAttributeValue(ByVal strAttrib As String) As String
         Dim vstrValue As Object
         vstrValue = melmUser.GetAttribute(strAttrib)
-        If gblnXmlAttributeMissing(vstrValue) Then
+        If XMLMisc.IsAttributeMissing(vstrValue) Then
             GetUserAttributeValue = ""
         Else
             GetUserAttributeValue = CStr(vstrValue)

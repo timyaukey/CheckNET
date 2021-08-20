@@ -48,13 +48,13 @@ Public Class UITools
         End With
     End Sub
 
-    Public Shared Function objGetSelectedAccountAndUnload(ByVal lst As ListBox, ByVal frm As Form, ByVal objCompany As Company) As Account
+    Public Shared Function GetSelectedAccountAndUnload(ByVal lst As ListBox, ByVal frm As Form, ByVal objCompany As Company) As Account
 
         If lst.SelectedIndex = -1 Then
-            objGetSelectedAccountAndUnload = Nothing
+            GetSelectedAccountAndUnload = Nothing
             Exit Function
         End If
-        objGetSelectedAccountAndUnload = objCompany.Accounts.Item(lst.SelectedIndex)
+        GetSelectedAccountAndUnload = objCompany.Accounts.Item(lst.SelectedIndex)
         frm.Close()
         Application.DoEvents()
     End Function

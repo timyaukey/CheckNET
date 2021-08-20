@@ -277,7 +277,7 @@ Friend Class TrxTypeListForm
         Dim vstrValue As Object
 
         vstrValue = elm.GetAttribute(strName)
-        If gblnXmlAttributeMissing(vstrValue) Then
+        If XMLMisc.IsAttributeMissing(vstrValue) Then
             vstrValue = ""
         End If
         strTrxTypeAttrib = CStr(vstrValue)
