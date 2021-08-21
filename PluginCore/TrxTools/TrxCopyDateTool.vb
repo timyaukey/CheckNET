@@ -10,14 +10,14 @@ Public Class TrxCopyDateTool
         mobjHostUI = objHostUI
     End Sub
 
-    Public ReadOnly Property strTitle As String Implements ITrxTool.strTitle
+    Public ReadOnly Property Title As String Implements ITrxTool.Title
         Get
             Return "Copy Transaction Date To Clipboard"
         End Get
     End Property
 
     Public Overrides Function ToString() As String
-        Return strTitle
+        Return Title
     End Function
 
     Public Sub Run(objHostTrxToolUI As IHostTrxToolUI) Implements ITrxTool.Run
