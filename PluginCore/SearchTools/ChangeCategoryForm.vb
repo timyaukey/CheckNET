@@ -11,7 +11,7 @@ Friend Class ChangeCategoryForm
     Private mstrOldCatKey As String
 	Private mstrNewCatKey As String
 
-    Public Function blnGetCategories(ByVal objHostUI As IHostUI, ByRef strOldCatKey As String, ByRef strNewCatKey As String) As Boolean
+    Public Function GetCategories(ByVal objHostUI As IHostUI, ByRef strOldCatKey As String, ByRef strNewCatKey As String) As Boolean
 
         mobjHostUI = objHostUI
         mobjCompany = mobjHostUI.objCompany
@@ -21,7 +21,7 @@ Friend Class ChangeCategoryForm
         ShowDialog()
         strOldCatKey = mstrOldCatKey
         strNewCatKey = mstrNewCatKey
-        blnGetCategories = mblnSuccess
+        GetCategories = mblnSuccess
 
     End Function
 

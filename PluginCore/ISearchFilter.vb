@@ -2,5 +2,5 @@
 Option Explicit On
 
 Public Interface ISearchFilter
-    Function blnInclude(ByVal objTrx As BaseTrx) As Boolean
+    Function IsIncluded(ByVal objTrx As BaseTrx) As Boolean
 End Interface

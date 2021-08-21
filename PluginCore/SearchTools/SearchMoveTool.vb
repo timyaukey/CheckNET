@@ -11,14 +11,14 @@ Public Class SearchMoveTool
         mobjHostUI = objHostUI
     End Sub
 
-    Public ReadOnly Property strTitle As String Implements ISearchTool.strTitle
+    Public ReadOnly Property Title As String Implements ISearchTool.Title
         Get
             Return "Move"
         End Get
     End Property
 
     Public Overrides Function ToString() As String
-        Return strTitle
+        Return Title
     End Function
 
     Public Sub Run(objHostSearchToolUI As IHostSearchToolUI) Implements ISearchTool.Run
@@ -46,7 +46,7 @@ Public Class SearchMoveTool
         End If
 
         frmMoveTo = New MoveDstForm
-        If Not frmMoveTo.blnShowModal(mobjHostUI, objHostSearchToolUI.objReg.Account.Registers,
+        If Not frmMoveTo.ShowModal(mobjHostUI, objHostSearchToolUI.objReg.Account.Registers,
                                       objHostSearchToolUI.objReg, strNewDate, objNewReg) Then
             Exit Sub
         End If

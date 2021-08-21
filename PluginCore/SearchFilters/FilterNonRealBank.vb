@@ -4,7 +4,7 @@ Option Explicit On
 Public Class FilterNonRealBank
     Implements ISearchFilter
 
-    Public Function blnInclude(objTrx As BaseTrx) As Boolean Implements ISearchFilter.blnInclude
+    Public Function IsIncluded(objTrx As BaseTrx) As Boolean Implements ISearchFilter.IsIncluded
         Return objTrx.IsFake And (objTrx.GetType() Is GetType(BankTrx))
     End Function
 

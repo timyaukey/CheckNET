@@ -12,7 +12,7 @@ Friend Class MoveDstForm
     Private mstrNewDate As String
     Private mobjNewReg As Register
 
-    Public Function blnShowModal(ByVal objHostUI As IHostUI, ByVal colRegisters As List(Of Register), ByVal objOldReg As Register, ByRef strNewDate As String, ByRef objNewReg As Register) As Boolean
+    Public Function ShowModal(ByVal objHostUI As IHostUI, ByVal colRegisters As List(Of Register), ByVal objOldReg As Register, ByRef strNewDate As String, ByRef objNewReg As Register) As Boolean
 
         Dim objReg As Register
         Dim intRegIdx As Short
@@ -28,7 +28,7 @@ Friend Class MoveDstForm
         Next
         cboRegister.SelectedIndex = 0
         Me.ShowDialog()
-        blnShowModal = mblnSuccess
+        ShowModal = mblnSuccess
         If mblnSuccess Then
             strNewDate = mstrNewDate
             objNewReg = mobjNewReg

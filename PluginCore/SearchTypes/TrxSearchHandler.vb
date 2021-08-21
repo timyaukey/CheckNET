@@ -15,15 +15,15 @@ Public Class TrxSearchHandler
         ByVal dlgGetTrxData_ As GetTrxSearchDataDelegate)
 
         mobjHostUI = objHostUI_
-        strName = strName_
+        Name = strName_
         dlgGetTrxData = dlgGetTrxData_
     End Sub
 
-    Public ReadOnly Property strName As String _
-        Implements ISearchHandler.strName
+    Public ReadOnly Property Name As String _
+        Implements ISearchHandler.Name
 
     Public Overrides Function ToString() As String
-        Return Me.strName
+        Return Me.Name
     End Function
 
     Public Sub HandlerSelected(ByVal objHostSearchUI As IHostSearchUI) _
@@ -31,8 +31,8 @@ Public Class TrxSearchHandler
         objHostSearchUI.UseTextCriteria()
     End Sub
 
-    Public Function blnPrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean _
-        Implements ISearchHandler.blnPrepareSearch
+    Public Function PrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean _
+        Implements ISearchHandler.PrepareSearch
         objComparer = DirectCast(objHostSearchUI.objGetSearchType(), SearchComparer)
         strParameter = objHostSearchUI.strGetTextSearchFor()
         Return True
@@ -44,7 +44,7 @@ Public Class TrxSearchHandler
         ByVal dlgAddSplitResult As AddSearchMatchSplitDelegate) _
         Implements ISearchHandler.ProcessTrx
 
-        If objComparer.blnCompare(dlgGetTrxData(objTrx), strParameter) Then
+        If objComparer.Compare(dlgGetTrxData(objTrx), strParameter) Then
             dlgAddTrxResult(objTrx)
         End If
     End Sub

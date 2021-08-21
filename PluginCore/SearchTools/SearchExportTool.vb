@@ -11,14 +11,14 @@ Public Class SearchExportTool
         mobjHostUI = objHostUI
     End Sub
 
-    Public ReadOnly Property strTitle As String Implements ISearchTool.strTitle
+    Public ReadOnly Property Title As String Implements ISearchTool.Title
         Get
             Return "Export"
         End Get
     End Property
 
     Public Overrides Function ToString() As String
-        Return strTitle
+        Return Title
     End Function
 
     Public Sub Run(objHostSearchToolUI As IHostSearchToolUI) Implements ISearchTool.Run
@@ -28,7 +28,7 @@ Public Class SearchExportTool
             Dim objSplit As TrxSplit
             Dim lngExportCount As Integer
 
-            If Not frmExport.blnGetSettings(mobjHostUI) Then
+            If Not frmExport.GetSettings(mobjHostUI) Then
                 mobjHostUI.InfoMessageBox("Export canceled.")
                 Exit Sub
             End If

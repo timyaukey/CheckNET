@@ -13,23 +13,23 @@ Public Class CategorySearchHandler
         ByVal strName_ As String)
 
         mobjHostUI = objHostUI_
-        strName = strName_
+        Name = strName_
     End Sub
 
-    Public ReadOnly Property strName As String _
-        Implements ISearchHandler.strName
+    Public ReadOnly Property Name As String _
+        Implements ISearchHandler.Name
 
     Public Overrides Function ToString() As String
-        Return Me.strName
+        Return Me.Name
     End Function
 
     Public Sub HandlerSelected(ByVal objHostSearchUI As IHostSearchUI) _
         Implements ISearchHandler.HandlerSelected
-        objHostSearchUI.UseComboBoxCriteria(objGetCategories(mobjHostUI.objCompany))
+        objHostSearchUI.UseComboBoxCriteria(GetCategories(mobjHostUI.objCompany))
     End Sub
 
-    Public Function blnPrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean _
-        Implements ISearchHandler.blnPrepareSearch
+    Public Function PrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean _
+        Implements ISearchHandler.PrepareSearch
 
         If objHostSearchUI.objGetComboBoxSearchFor() Is Nothing Then
             mobjHostUI.ErrorMessageBox("Please select a category to search for.")
@@ -51,14 +51,14 @@ Public Class CategorySearchHandler
 
         If TypeOf (objTrx) Is BankTrx Then
             For Each objSplit In DirectCast(objTrx, BankTrx).Splits
-                If objComparer.blnCompare(mobjHostUI.objCompany.Categories.KeyToValue1(objSplit.CategoryKey), strParameter) Then
+                If objComparer.Compare(mobjHostUI.objCompany.Categories.KeyToValue1(objSplit.CategoryKey), strParameter) Then
                     dlgAddSplitResult(DirectCast(objTrx, BankTrx), objSplit)
                 End If
             Next
         End If
     End Sub
 
-    Private Iterator Function objGetCategories(ByVal objCompany As Company) As IEnumerable(Of Object)
+    Private Iterator Function GetCategories(ByVal objCompany As Company) As IEnumerable(Of Object)
         Dim objList As IStringTranslator = objCompany.Categories
         Dim intIndex As Integer
         For intIndex = 1 To objList.ElementCount

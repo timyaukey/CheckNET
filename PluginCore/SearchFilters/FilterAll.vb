@@ -4,7 +4,7 @@ Option Explicit On
 Public Class FilterAll
     Implements ISearchFilter
 
-    Public Function blnInclude(objTrx As BaseTrx) As Boolean Implements ISearchFilter.blnInclude
+    Public Function IsIncluded(objTrx As BaseTrx) As Boolean Implements ISearchFilter.IsIncluded
         Return True
     End Function
 

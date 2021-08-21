@@ -13,7 +13,7 @@ Public Interface ISearchHandler
     ''' Name to show for this search method in the UI.
     ''' </summary>
     ''' <returns></returns>
-    ReadOnly Property strName As String
+    ReadOnly Property Name As String
 
     ''' <summary>
     ''' Called with the user picks this handler in the search user interface.
@@ -31,7 +31,7 @@ Public Interface ISearchHandler
     ''' retrieved by blnPrepareSearch().
     ''' </summary>
     ''' <returns>Return true iff parameters are valid and search may proceed.</returns>
-    Function blnPrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean
+    Function PrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean
 
     ''' <summary>
     ''' Evaluate one BaseTrx for the search, and if the BaseTrx meets the conditions

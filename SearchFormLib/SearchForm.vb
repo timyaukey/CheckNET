@@ -133,7 +133,7 @@ Public Class SearchForm
                 Exit Sub
             End If
 
-            If Not mobjSelectedSearchHandler.blnPrepareSearch(Me) Then
+            If Not mobjSelectedSearchHandler.PrepareSearch(Me) Then
                 Exit Sub
             End If
 
@@ -165,7 +165,7 @@ Public Class SearchForm
             mblnSkipRemember = True
             If Not mobjLastSearchHandler Is Nothing Then
                 For Each objTrx As BaseTrx In mobjReg.GetDateRange(Of BaseTrx)(mdatLastStart, mdatLastEnd)
-                    If mobjLastSearchFilter.blnInclude(objTrx) Then
+                    If mobjLastSearchFilter.IsIncluded(objTrx) Then
                         If chkShowAllSplits.Checked And objTrx.GetType() Is GetType(BankTrx) Then
                             dlgTrx = AddressOf AddSearchMatchAllSplits
                         Else

@@ -13,14 +13,14 @@ Public MustInherit Class CustomSearchHandler
         ByVal strName_ As String)
 
         mobjHostUI = objHostUI_
-        strName = strName_
+        Name = strName_
     End Sub
 
-    Public ReadOnly Property strName As String _
-        Implements ISearchHandler.strName
+    Public ReadOnly Property Name As String _
+        Implements ISearchHandler.Name
 
     Public Overrides Function ToString() As String
-        Return Me.strName
+        Return Me.Name
     End Function
 
     Public Sub HandlerSelected(ByVal objHostSearchUI As IHostSearchUI) _
@@ -28,8 +28,8 @@ Public MustInherit Class CustomSearchHandler
         objHostSearchUI.UseTextCriteria()
     End Sub
 
-    Public Function blnPrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean _
-        Implements ISearchHandler.blnPrepareSearch
+    Public Function PrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean _
+        Implements ISearchHandler.PrepareSearch
         objComparer = DirectCast(objHostSearchUI.objGetSearchType(), SearchComparer)
         strParameter = objHostSearchUI.strGetTextSearchFor()
         Return True

@@ -15,15 +15,15 @@ Public Class SplitSearchHandler
         ByVal dlgGetSplitData_ As GetSplitSearchDataDelegate)
 
         mobjHostUI = objHostUI_
-        strName = strName_
+        Name = strName_
         dlgGetSplitData = dlgGetSplitData_
     End Sub
 
-    Public ReadOnly Property strName As String _
-        Implements ISearchHandler.strName
+    Public ReadOnly Property Name As String _
+        Implements ISearchHandler.Name
 
     Public Overrides Function ToString() As String
-        Return Me.strName
+        Return Me.Name
     End Function
 
     Public Sub HandlerSelected(ByVal objHostSearchUI As IHostSearchUI) _
@@ -31,8 +31,8 @@ Public Class SplitSearchHandler
         objHostSearchUI.UseTextCriteria()
     End Sub
 
-    Public Function blnPrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean _
-        Implements ISearchHandler.blnPrepareSearch
+    Public Function PrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean _
+        Implements ISearchHandler.PrepareSearch
         objComparer = DirectCast(objHostSearchUI.objGetSearchType(), SearchComparer)
         strParameter = objHostSearchUI.strGetTextSearchFor()
         Return True
@@ -46,7 +46,7 @@ Public Class SplitSearchHandler
 
         If TypeOf (objTrx) Is BankTrx Then
             For Each objSplit In DirectCast(objTrx, BankTrx).Splits
-                If objComparer.blnCompare(dlgGetSplitData(objSplit), strParameter) Then
+                If objComparer.Compare(dlgGetSplitData(objSplit), strParameter) Then
                     dlgAddSplitResult(DirectCast(objTrx, BankTrx), objSplit)
                 End If
             Next

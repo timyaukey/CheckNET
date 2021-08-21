@@ -29,14 +29,14 @@ Friend Class ExportForm
     Private mdatInvDate As Date
     Private mintInvDays As Short
 
-    Public Function blnGetSettings(ByVal objHostUI As IHostUI) As Boolean
+    Public Function GetSettings(ByVal objHostUI As IHostUI) As Boolean
         mobjHostUI = objHostUI
         mobjCompany = mobjHostUI.objCompany
         mblnCancel = True
         mstrOutputFile = mobjCompany.ReportsFolderPath() & "\ExportSplits.csv"
         lblOutputFile.Text = "Will output to " & mstrOutputFile
         Me.ShowDialog()
-        blnGetSettings = Not mblnCancel
+        GetSettings = Not mblnCancel
     End Function
 
     Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCancel.Click
@@ -46,19 +46,19 @@ Friend Class ExportForm
     Private Sub cmdOkay_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdOkay.Click
         Try
 
-            If Not blnValidControls(chkIncludeAging, txtAgingDate, txtAgingDays, "aging", mblnIncludeAging, mdatAgingDate, mintAgingDays, False) Then
+            If Not IsValidControls(chkIncludeAging, txtAgingDate, txtAgingDays, "aging", mblnIncludeAging, mdatAgingDate, mintAgingDays, False) Then
                 Exit Sub
             End If
 
-            If Not blnValidControls(chkIncludeTransDate, txtTransDate, txtTransDays, "transaction", mblnIncludeTrans, mdatTransDate, mintTransDays, True) Then
+            If Not IsValidControls(chkIncludeTransDate, txtTransDate, txtTransDays, "transaction", mblnIncludeTrans, mdatTransDate, mintTransDays, True) Then
                 Exit Sub
             End If
 
-            If Not blnValidControls(chkIncludeDueDate, txtDueDate, txtDueDays, "due", mblnIncludeDue, mdatDueDate, mintDueDays, True) Then
+            If Not IsValidControls(chkIncludeDueDate, txtDueDate, txtDueDays, "due", mblnIncludeDue, mdatDueDate, mintDueDays, True) Then
                 Exit Sub
             End If
 
-            If Not blnValidControls(chkIncludeInvDate, txtInvDate, txtInvDays, "invoice", mblnIncludeInv, mdatInvDate, mintInvDays, True) Then
+            If Not IsValidControls(chkIncludeInvDate, txtInvDate, txtInvDays, "invoice", mblnIncludeInv, mdatInvDate, mintInvDays, True) Then
                 Exit Sub
             End If
 
@@ -71,27 +71,27 @@ Friend Class ExportForm
         End Try
     End Sub
 
-    Private Function blnValidControls(ByVal chkInclude As System.Windows.Forms.CheckBox, ByVal txtDate As System.Windows.Forms.TextBox, ByVal txtDays As System.Windows.Forms.TextBox, ByVal strLabel As String, ByRef blnInclude As Boolean, ByRef datDate As Date, ByRef intDays As Short, ByVal blnAllowMonthPart As Boolean) As Boolean
+    Private Function IsValidControls(ByVal chkInclude As System.Windows.Forms.CheckBox, ByVal txtDate As System.Windows.Forms.TextBox, ByVal txtDays As System.Windows.Forms.TextBox, ByVal strLabel As String, ByRef blnInclude As Boolean, ByRef datDate As Date, ByRef intDays As Short, ByVal blnAllowMonthPart As Boolean) As Boolean
 
-        blnValidControls = False
+        IsValidControls = False
         If chkInclude.CheckState = System.Windows.Forms.CheckState.Checked Then
             If Not Utilities.IsValidDate(txtDate.Text) Then
                 If blnAllowMonthPart Then
                     If LCase(txtDate.Text) = "whole month" Then
                         intDays = -1
-                        blnValidControls = True
+                        IsValidControls = True
                         blnInclude = True
                         Exit Function
                     End If
                     If LCase(txtDate.Text) = "half month" Then
                         intDays = -2
-                        blnValidControls = True
+                        IsValidControls = True
                         blnInclude = True
                         Exit Function
                     End If
                     If LCase(txtDate.Text) = "quarter month" Then
                         intDays = -4
-                        blnValidControls = True
+                        IsValidControls = True
                         blnInclude = True
                         Exit Function
                     End If
@@ -113,7 +113,7 @@ Friend Class ExportForm
         Else
             blnInclude = False
         End If
-        blnValidControls = True
+        IsValidControls = True
 
     End Function
 
