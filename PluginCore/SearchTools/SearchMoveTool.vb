@@ -34,8 +34,8 @@ Public Class SearchMoveTool
         Dim frmMoveTo As MoveDstForm
 
         colTrx = New List(Of BankTrx)
-        For Each objTrxSrc In objHostSearchToolUI.objAllSelectedTrx()
-            If Not objHostSearchToolUI.blnValidTrxForBulkOperation(objTrxSrc, "moved") Then
+        For Each objTrxSrc In objHostSearchToolUI.GetAllSelectedTrx()
+            If Not objHostSearchToolUI.IsValidTrxForBulkOperation(objTrxSrc, "moved") Then
                 Exit Sub
             End If
             colTrx.Add(objTrxSrc)
@@ -46,8 +46,8 @@ Public Class SearchMoveTool
         End If
 
         frmMoveTo = New MoveDstForm
-        If Not frmMoveTo.ShowModal(mobjHostUI, objHostSearchToolUI.objReg.Account.Registers,
-                                      objHostSearchToolUI.objReg, strNewDate, objNewReg) Then
+        If Not frmMoveTo.ShowModal(mobjHostUI, objHostSearchToolUI.Reg.Account.Registers,
+                                      objHostSearchToolUI.Reg, strNewDate, objNewReg) Then
             Exit Sub
         End If
         If Utilities.IsValidDate(strNewDate) Then
@@ -63,7 +63,7 @@ Public Class SearchMoveTool
         End If
 
         Dim objStartLogger As ILogGroupStart
-        objStartLogger = objHostSearchToolUI.objReg.LogGroupStart("SearchForm.Move")
+        objStartLogger = objHostSearchToolUI.Reg.LogGroupStart("SearchForm.Move")
         For Each objTrxSrc In colTrx
             If blnUseDayOffset Then
                 datNewDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, intDayOffset, objTrxSrc.TrxDate)
@@ -94,12 +94,12 @@ Public Class SearchMoveTool
                 End If
             End With
         Next objTrxSrc
-        objHostSearchToolUI.objReg.LogGroupEnd(objStartLogger)
+        objHostSearchToolUI.Reg.LogGroupEnd(objStartLogger)
 
         If Not objTrxFirst Is Nothing Then
             If objNewReg Is Nothing Then
-                objHostSearchToolUI.objReg.SetCurrent(objTrxFirst)
-                objHostSearchToolUI.objReg.FireShowCurrent()
+                objHostSearchToolUI.Reg.SetCurrent(objTrxFirst)
+                objHostSearchToolUI.Reg.FireShowCurrent()
             Else
                 objNewReg.SetCurrent(objTrxFirst)
                 objNewReg.FireShowCurrent()

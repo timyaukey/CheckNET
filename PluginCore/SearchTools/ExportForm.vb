@@ -31,7 +31,7 @@ Friend Class ExportForm
 
     Public Function GetSettings(ByVal objHostUI As IHostUI) As Boolean
         mobjHostUI = objHostUI
-        mobjCompany = mobjHostUI.objCompany
+        mobjCompany = mobjHostUI.Company
         mblnCancel = True
         mstrOutputFile = mobjCompany.ReportsFolderPath() & "\ExportSplits.csv"
         lblOutputFile.Text = "Will output to " & mstrOutputFile

@@ -10,7 +10,7 @@ Public Class CheckImportCompuPay
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.objCheckImportMenu.Add(New MenuElementAction("CompuPay Payroll Clipboard", StandardSortCode(), AddressOf ClickHandler, GetPluginPath()))
+        setup.CheckImportMenu.Add(New MenuElementAction("CompuPay Payroll Clipboard", StandardSortCode(), AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String

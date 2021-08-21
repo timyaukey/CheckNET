@@ -2,10 +2,10 @@
 Option Explicit On
 
 Public Interface IHostTrxToolUI
-    ReadOnly Property objReg() As Register
+    ReadOnly Property Reg() As Register
     Sub SetNumber(ByVal strNumber As String)
     Sub SetDate(ByVal datDate As DateTime)
     Sub SetFake(ByVal blnFake As Boolean)
-    Function objGetTrxCopy() As BankTrx
+    Function GetTrxCopy() As BankTrx
     Sub SaveAndClose()
 End Interface

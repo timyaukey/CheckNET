@@ -10,13 +10,13 @@ Public Class PersonalBusinessPlugin
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.objToolMenu.Add(New MenuElementRegister(HostUI, "Adjust Account For Personal Use", 110, AddressOf ClickHandler, GetPluginPath()))
+        setup.ToolMenu.Add(New MenuElementRegister(HostUI, "Adjust Account For Personal Use", 110, AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
     Private Sub ClickHandler(sender As Object, e As RegisterEventArgs)
         Try
             Dim frmAdjust As AdjustPersonalBusinessForm = New AdjustPersonalBusinessForm
-            frmAdjust.ShowModal(HostUI, e.objReg.Account)
+            frmAdjust.ShowModal(HostUI, e.Reg.Account)
             Exit Sub
         Catch ex As Exception
             TopException(ex)

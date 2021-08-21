@@ -11,7 +11,7 @@ Public Class HTMLWriter
 
     Public Sub New(ByVal objHostUI As IHostUI, ByVal strFileNameRoot As String, ByVal blnLocalStylesheet As Boolean)
         mobjHostUI = objHostUI
-        mobjCompany = mobjHostUI.objCompany
+        mobjCompany = mobjHostUI.Company
         mstrFileNameRoot = strFileNameRoot
         mblnLocalStylesheet = blnLocalStylesheet
         mobjBuilder = New System.Text.StringBuilder()

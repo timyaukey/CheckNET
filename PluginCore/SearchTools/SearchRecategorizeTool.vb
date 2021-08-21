@@ -41,7 +41,7 @@ Public Class SearchRecategorizeTool
         End Using
 
         colTrx = New List(Of BankTrx)
-        For Each objCheckedTrx In objHostSearchToolUI.objAllSelectedTrx()
+        For Each objCheckedTrx In objHostSearchToolUI.GetAllSelectedTrx()
             If objCheckedTrx.GetType() IsNot GetType(BankTrx) Then
                 mobjHostUI.ErrorMessageBox("Budgets and transfers may not be recategorized.")
                 Exit Sub
@@ -65,7 +65,7 @@ Public Class SearchRecategorizeTool
             Exit Sub
         End If
 
-        objStartLogger = objHostSearchToolUI.objReg.LogGroupStart("SearchForm.Recategorize")
+        objStartLogger = objHostSearchToolUI.Reg.LogGroupStart("SearchForm.Recategorize")
         For Each objNormalTrx In colTrx
             objTrxManager = New NormalTrxManager(objNormalTrx)
             colSplits = objNormalTrx.Splits
@@ -83,7 +83,7 @@ Public Class SearchRecategorizeTool
             objTrxManager.UpdateEnd(New LogChange, "SearchForm.Recategorize")
             lngChgCount = lngChgCount + 1
         Next
-        objHostSearchToolUI.objReg.LogGroupEnd(objStartLogger)
+        objHostSearchToolUI.Reg.LogGroupEnd(objStartLogger)
 
         mobjHostUI.InfoMessageBox("Changed category of " & lngChgCount & " transactions.")
 

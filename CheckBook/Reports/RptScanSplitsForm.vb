@@ -40,15 +40,15 @@ Friend Class RptScanSplitsForm
 
     Public Sub ShowMe(ByVal lngType As SplitReportType, ByVal objHostUI As IHostUI)
         Try
-            mobjCompany = objHostUI.objCompany
+            mobjCompany = objHostUI.Company
             mlngRptType = lngType
             'This form is an MDI child.
             'This code simulates the VB6 
             ' functionality of automatically
             ' loading and showing an MDI child's parent.
             mobjHostUI = objHostUI
-            Me.MdiParent = mobjHostUI.objGetMainForm()
-            mobjHostUI.objGetMainForm().Show()
+            Me.MdiParent = mobjHostUI.GetMainForm()
+            mobjHostUI.GetMainForm().Show()
             CustomizeForm()
             UITools.LoadAccountListBox(lstAccounts, mobjCompany)
             Me.Show()

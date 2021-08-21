@@ -46,9 +46,9 @@ Public Class RegisterForm
         mobjHostUI = objHostUI_
         mobjAccount = objReg_.Account
         mobjReg = objReg_
-        mobjCompany = mobjHostUI.objCompany
+        mobjCompany = mobjHostUI.Company
         mdatDefaultNewDate = Today
-        Me.MdiParent = mobjHostUI.objGetMainForm()
+        Me.MdiParent = mobjHostUI.GetMainForm()
         Me.Show()
 
     End Sub
@@ -58,9 +58,9 @@ Public Class RegisterForm
         Me.Activate()
     End Sub
 
-    Public ReadOnly Property objReg() As Register Implements IRegisterForm.objReg
+    Public ReadOnly Property Reg() As Register Implements IRegisterForm.Reg
         Get
-            objReg = mobjReg
+            Reg = mobjReg
         End Get
     End Property
 
@@ -152,7 +152,7 @@ Public Class RegisterForm
             mobjHostUI.ErrorMessageBox("You may not edit a replica transaction directly. Instead edit the split it was created from in another transaction.")
             Exit Sub
         End If
-        If mobjHostUI.blnUpdateTrx(objTrx, mdatDefaultNewDate, "RegForm.Edit") Then
+        If mobjHostUI.UpdateTrx(objTrx, mdatDefaultNewDate, "RegForm.Edit") Then
             Exit Sub
         End If
         DiagnosticValidate()
@@ -161,7 +161,7 @@ Public Class RegisterForm
     Private Sub cmdSearch_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSearch.Click
         Try
             If mfrmSearch Is Nothing Then
-                mfrmSearch = mobjHostUI.objMakeSearchForm()
+                mfrmSearch = mobjHostUI.MakeSearchForm()
                 mfrmSearch.ShowMe(mobjHostUI, mobjReg)
             Else
                 mfrmSearch.ShowMeAgain()
@@ -204,7 +204,7 @@ Public Class RegisterForm
         Try
             Dim objTrx As BankTrx = New BankTrx(mobjReg)
             objTrx.NewEmptyNormal(mdatDefaultNewDate)
-            If mobjHostUI.blnAddNormalTrx(objTrx, mdatDefaultNewDate, True, "RegForm.NewNormal") Then
+            If mobjHostUI.AddNormalTrx(objTrx, mdatDefaultNewDate, True, "RegForm.NewNormal") Then
                 mobjHostUI.ErrorMessageBox("Canceled.")
             End If
             DiagnosticValidate()
@@ -215,7 +215,7 @@ Public Class RegisterForm
 
     Private Sub cmdNewBudget_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewBudget.Click
         Try
-            If mobjHostUI.blnAddBudgetTrx(mobjReg, mdatDefaultNewDate, "RegForm.NewBudget") Then
+            If mobjHostUI.AddBudgetTrx(mobjReg, mdatDefaultNewDate, "RegForm.NewBudget") Then
                 mobjHostUI.ErrorMessageBox("Canceled.")
             End If
             DiagnosticValidate()
@@ -227,7 +227,7 @@ Public Class RegisterForm
 
     Private Sub cmdNewXfer_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdNewXfer.Click
         Try
-            If mobjHostUI.blnAddTransferTrx(mobjReg, mdatDefaultNewDate, "RegForm.NewXfer") Then
+            If mobjHostUI.AddTransferTrx(mobjReg, mdatDefaultNewDate, "RegForm.NewXfer") Then
                 mobjHostUI.ErrorMessageBox("Canceled.")
             End If
             DiagnosticValidate()

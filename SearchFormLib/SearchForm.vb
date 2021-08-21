@@ -38,8 +38,8 @@ Public Class SearchForm
         mobjHostUI = objHostUI_
         mobjReg = objReg_
         mobjAccount = mobjReg.Account
-        mobjCompany = mobjHostUI.objCompany
-        Me.MdiParent = mobjHostUI.objGetMainForm()
+        mobjCompany = mobjHostUI.Company
+        Me.MdiParent = mobjHostUI.GetMainForm()
         colCheckedTrx = New List(Of BaseTrx)
         mcurAmountMatched = 0
         mcurAmountTotal = 0
@@ -79,7 +79,7 @@ Public Class SearchForm
 
     Private Sub LoadSearchIn()
         cboSearchIn.Items.Clear()
-        For Each objHandler As ISearchHandler In mobjHostUI.objSearchHandlers
+        For Each objHandler As ISearchHandler In mobjHostUI.GetSearchHandlers
             cboSearchIn.Items.Add(objHandler)
         Next
         mobjLastSearchHandler = Nothing
@@ -94,14 +94,14 @@ Public Class SearchForm
 
     Private Sub LoadSearchFilter()
         cboFilterType.Items.Clear()
-        For Each objFilter As ISearchFilter In mobjHostUI.objSearchFilters
+        For Each objFilter As ISearchFilter In mobjHostUI.GetSearchFilters
             cboFilterType.Items.Add(objFilter)
         Next
     End Sub
 
     Private Sub LoadTools()
         cboTools.Items.Clear()
-        For Each objTool As ISearchTool In mobjHostUI.objSearchTools
+        For Each objTool As ISearchTool In mobjHostUI.GetSearchTools
             cboTools.Items.Add(objTool)
         Next
     End Sub
@@ -381,7 +381,7 @@ Public Class SearchForm
                 mobjHostUI.ErrorMessageBox("You may not edit a replica transaction directly. Instead edit the split it was created from in another transaction.")
                 Exit Sub
             End If
-            If mobjHostUI.blnUpdateTrx(objTrx, mdatDefaultDate, "SearchForm.Edit") Then
+            If mobjHostUI.UpdateTrx(objTrx, mdatDefaultDate, "SearchForm.Edit") Then
                 Exit Sub
             End If
             mobjReg.ValidateRegister()
@@ -396,7 +396,7 @@ Public Class SearchForm
         Try
             Dim objTrx As BankTrx = New BankTrx(mobjReg)
             objTrx.NewEmptyNormal(mdatDefaultDate)
-            If mobjHostUI.blnAddNormalTrx(objTrx, mdatDefaultDate, True, "SearchForm.NewNormal") Then
+            If mobjHostUI.AddNormalTrx(objTrx, mdatDefaultDate, True, "SearchForm.NewNormal") Then
                 mobjHostUI.InfoMessageBox("Canceled.")
             End If
             mobjReg.ValidateRegister()
@@ -443,10 +443,10 @@ Public Class SearchForm
 
     End Sub
 
-    Private Function blnValidTrxForBulkOperation(ByVal objTrx As BaseTrx, ByVal strOperation As String) As Boolean _
-        Implements IHostSearchToolUI.blnValidTrxForBulkOperation
+    Private Function IsValidTrxForBulkOperation(ByVal objTrx As BaseTrx, ByVal strOperation As String) As Boolean _
+        Implements IHostSearchToolUI.IsValidTrxForBulkOperation
 
-        blnValidTrxForBulkOperation = False
+        IsValidTrxForBulkOperation = False
         If objTrx.GetType() IsNot GetType(BankTrx) Then
             mobjHostUI.ErrorMessageBox("Budgets and transfers may not be " & strOperation & ".")
             Exit Function
@@ -463,7 +463,7 @@ Public Class SearchForm
             mobjHostUI.ErrorMessageBox("Transactions in a repeat sequence may not be " & strOperation & ".")
             Exit Function
         End If
-        blnValidTrxForBulkOperation = True
+        IsValidTrxForBulkOperation = True
 
     End Function
 
@@ -560,19 +560,19 @@ Public Class SearchForm
         End With
     End Sub
 
-    Public Function strGetTextSearchFor() As String Implements IHostSearchUI.strGetTextSearchFor
+    Public Function GetTextSearchFor() As String Implements IHostSearchUI.GetTextSearchFor
         Return txtSearchFor.Text
     End Function
 
-    Public Function objGetComboBoxSearchFor() As Object Implements IHostSearchUI.objGetComboBoxSearchFor
+    Public Function GetComboBoxSearchFor() As Object Implements IHostSearchUI.GetComboBoxSearchFor
         Return cboSearchCats.SelectedItem
     End Function
 
-    Public Function objGetSearchType() As Object Implements IHostSearchUI.objGetSearchType
+    Public Function GetSearchType() As Object Implements IHostSearchUI.GetSearchType
         Return cboSearchType.SelectedItem
     End Function
 
-    Public Iterator Function objAllSelectedTrx() As IEnumerable(Of BaseTrx) Implements IHostSearchToolUI.objAllSelectedTrx
+    Public Iterator Function GetAllSelectedTrx() As IEnumerable(Of BaseTrx) Implements IHostSearchToolUI.GetAllSelectedTrx
         'Make a copy to iterate, in case the caller modifies a trx which causes the search to refresh.
         Dim objSelected As List(Of BaseTrx) = New List(Of BaseTrx)(colGetCheckedTrx())
         For Each objTrx As BaseTrx In objSelected
@@ -580,7 +580,7 @@ Public Class SearchForm
         Next
     End Function
 
-    Public ReadOnly Property objReg() As Register Implements IHostSearchToolUI.objReg
+    Public ReadOnly Property Reg() As Register Implements IHostSearchToolUI.Reg
         Get
             Return mobjReg
         End Get

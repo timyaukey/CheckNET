@@ -29,7 +29,7 @@ Friend Class ShowRegisterForm
 
     Public Sub ShowWindow(ByVal objHostUI As IHostUI)
         mobjHostUI = objHostUI
-        mobjCompany = mobjHostUI.objCompany
+        mobjCompany = mobjHostUI.Company
         Me.Show()
     End Sub
 

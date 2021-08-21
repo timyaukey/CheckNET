@@ -14,7 +14,7 @@ Public Class BankImportAcctSelectForm
         Dim frm As BankImportForm
         Try
             mobjHostUI = objHostUI
-            mobjCompany = mobjHostUI.objCompany
+            mobjCompany = mobjHostUI.Company
             mobjAccount = Nothing
             UITools.LoadAccountListBox(lstAccounts, mobjCompany)
             Me.ShowDialog()

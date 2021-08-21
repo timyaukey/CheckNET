@@ -10,7 +10,7 @@ Friend Class ReconAcctSelectForm
 
     Public Sub Init(ByVal objHostUI As IHostUI)
         mobjHostUI = objHostUI
-        mobjCompany = mobjHostUI.objCompany
+        mobjCompany = mobjHostUI.Company
     End Sub
 
     Private Sub cmdCancel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCancel.Click

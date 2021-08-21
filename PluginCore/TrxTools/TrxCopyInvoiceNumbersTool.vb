@@ -22,7 +22,7 @@ Public Class TrxCopyInvoiceNumbersTool
 
     Public Sub Run(objHostTrxToolUI As IHostTrxToolUI) Implements ITrxTool.Run
         Dim strNumbers As String = ""
-        Dim objNormalTrx As BankTrx = objHostTrxToolUI.objGetTrxCopy()
+        Dim objNormalTrx As BankTrx = objHostTrxToolUI.GetTrxCopy()
         If objNormalTrx Is Nothing Then
             Return
         End If

@@ -10,13 +10,13 @@ Public Class FindLiveBudgetsPlugin
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.objReportMenu.Add(New MenuElementRegister(HostUI, "Find Live Budgets", 100, AddressOf ClickHandler, GetPluginPath()))
+        setup.ReportMenu.Add(New MenuElementRegister(HostUI, "Find Live Budgets", 100, AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
     Private Sub ClickHandler(sender As Object, e As RegisterEventArgs)
         Try
             Dim frmFind As LiveBudgetListForm = New LiveBudgetListForm
-            frmFind.ShowModal(HostUI, e.objReg, HostUI.objCompany.Budgets)
+            frmFind.ShowModal(HostUI, e.Reg, HostUI.Company.Budgets)
             Exit Sub
         Catch ex As Exception
             TopException(ex)

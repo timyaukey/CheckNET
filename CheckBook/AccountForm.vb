@@ -10,7 +10,7 @@ Public Class AccountForm
     Public Overloads Function ShowDialog(ByVal objHostUI As IHostUI, ByRef objAccount As Account, ByVal blnUpdateMode As Boolean, ByVal blnReadOnly As Boolean) As DialogResult
         mblnUpdateMode = blnUpdateMode
         mobjHostUI = objHostUI
-        mobjCompany = mobjHostUI.objCompany
+        mobjCompany = mobjHostUI.Company
         txtAccountName.Text = objAccount.Title
         txtFileName.Text = objAccount.FileNameRoot
         For Each objSubType As Account.SubTypeDef In Account.SubTypeDefs

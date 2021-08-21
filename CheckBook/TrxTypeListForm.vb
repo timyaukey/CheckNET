@@ -25,7 +25,7 @@ Friend Class TrxTypeListForm
 
         Try
             mobjHostUI = objHostUI
-            mobjCompany = mobjHostUI.objCompany
+            mobjCompany = mobjHostUI.Company
             strTableFile = mobjCompany.TrxTypeFilePath()
             mdomTypeTable = mobjCompany.LoadXmlFile(strTableFile)
             melmTypeTable = mdomTypeTable.DocumentElement

@@ -36,7 +36,7 @@ Public Class SearchExportTool
             frmExport.OpenOutput()
 
             lngExportCount = 0
-            For Each objTrx In objHostSearchToolUI.objAllSelectedTrx()
+            For Each objTrx In objHostSearchToolUI.GetAllSelectedTrx()
                 'Ignore budgets and transfers instead of showing an error, because
                 'it is common to export all trx in a date range except these.
                 If TypeOf objTrx Is BankTrx Then

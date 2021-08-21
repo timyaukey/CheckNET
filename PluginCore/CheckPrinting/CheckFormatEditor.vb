@@ -10,7 +10,7 @@ Public Class CheckFormatEditor
 
     Public Sub ShowMe(ByVal objHostUI As IHostUI)
         mobjHostUI = objHostUI
-        mobjCompany = mobjHostUI.objCompany
+        mobjCompany = mobjHostUI.Company
         Me.ShowDialog()
     End Sub
 

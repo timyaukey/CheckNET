@@ -29,7 +29,7 @@ Friend Class PayeeListForm
         Try
 
             mobjHostUI = objHostUI
-            mobjCompany = mobjHostUI.objCompany
+            mobjCompany = mobjHostUI.Company
             LoadSharedDocument()
             UITools.LoadComboFromStringTranslator(cboCategory, mobjCompany.Categories, True)
             UITools.LoadComboFromStringTranslator(cboBudget, mobjCompany.Budgets, True)

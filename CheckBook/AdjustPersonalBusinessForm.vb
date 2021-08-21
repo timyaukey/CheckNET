@@ -19,7 +19,7 @@ Public Class AdjustPersonalBusinessForm
 
     Public Sub ShowModal(ByVal objHostUI As IHostUI, ByVal objBusinessAccount As Account)
         mobjHostUI = objHostUI
-        mobjCompany = mobjHostUI.objCompany
+        mobjCompany = mobjHostUI.Company
         mobjBusinessAccount = objBusinessAccount
 
         If objBusinessAccount.AcctType <> Account.AccountType.Liability Then

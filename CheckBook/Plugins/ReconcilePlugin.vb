@@ -10,7 +10,7 @@ Public Class ReconcilePlugin
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.objToolMenu.Add(New MenuElementAction("Reconcile", 1, AddressOf ClickHandler, GetPluginPath()))
+        setup.ToolMenu.Add(New MenuElementAction("Reconcile", 1, AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
     Private Sub ClickHandler(sender As Object, e As EventArgs)

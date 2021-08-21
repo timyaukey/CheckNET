@@ -8,8 +8,8 @@ Public Class TrialBalanceForm
 
     Public Sub ShowWindow(ByVal objHostUI As IHostUI)
         mobjHostUI = objHostUI
-        mobjCompany = mobjHostUI.objCompany
-        Me.MdiParent = mobjHostUI.objGetMainForm()
+        mobjCompany = mobjHostUI.Company
+        Me.MdiParent = mobjHostUI.GetMainForm()
         ConfigureStatementButtons(False)
         Me.Show()
     End Sub

@@ -7,14 +7,14 @@ Option Explicit On
 ''' </summary>
 
 Public Interface IHostSetup
-    Property objFileMenu As MenuBuilder
-    Property objBankImportMenu As MenuBuilder
-    Property objCheckImportMenu As MenuBuilder
-    Property objDepositImportMenu As MenuBuilder
-    Property objInvoiceImportMenu As MenuBuilder
-    Property objReportMenu As MenuBuilder
-    Property objToolMenu As MenuBuilder
-    Property objHelpMenu As MenuBuilder
+    Property FileMenu As MenuBuilder
+    Property BankImportMenu As MenuBuilder
+    Property CheckImportMenu As MenuBuilder
+    Property DepositImportMenu As MenuBuilder
+    Property InvoiceImportMenu As MenuBuilder
+    Property ReportMenu As MenuBuilder
+    Property ToolMenu As MenuBuilder
+    Property HelpMenu As MenuBuilder
 
     Sub SetTrxFormFactory(ByVal objFactory As Func(Of ITrxForm))
     Sub SetRegisterFormFactory(ByVal objFactory As Func(Of IRegisterForm))

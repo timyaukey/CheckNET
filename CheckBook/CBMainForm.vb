@@ -144,14 +144,14 @@ Friend Class CBMainForm
         mobjHostUI.InfoMessageBox(strMessage)
     End Sub
 
-    Private Property objFileMenu As MenuBuilder Implements IHostSetup.objFileMenu
-    Private Property objBankImportMenu As MenuBuilder Implements IHostSetup.objBankImportMenu
-    Private Property objCheckImportMenu As MenuBuilder Implements IHostSetup.objCheckImportMenu
-    Private Property objDepositImportMenu As MenuBuilder Implements IHostSetup.objDepositImportMenu
-    Private Property objInvoiceImportMenu As MenuBuilder Implements IHostSetup.objInvoiceImportMenu
-    Private Property objReportMenu As MenuBuilder Implements IHostSetup.objReportMenu
-    Private Property objToolMenu As MenuBuilder Implements IHostSetup.objToolMenu
-    Private Property objHelpMenu As MenuBuilder Implements IHostSetup.objHelpMenu
+    Private Property FileMenu As MenuBuilder Implements IHostSetup.FileMenu
+    Private Property BankImportMenu As MenuBuilder Implements IHostSetup.BankImportMenu
+    Private Property CheckImportMenu As MenuBuilder Implements IHostSetup.CheckImportMenu
+    Private Property DepositImportMenu As MenuBuilder Implements IHostSetup.DepositImportMenu
+    Private Property InvoiceImportMenu As MenuBuilder Implements IHostSetup.InvoiceImportMenu
+    Private Property ReportMenu As MenuBuilder Implements IHostSetup.ReportMenu
+    Private Property ToolMenu As MenuBuilder Implements IHostSetup.ToolMenu
+    Private Property HelpMenu As MenuBuilder Implements IHostSetup.HelpMenu
 
     Private Sub SetTrxFormFactory(ByVal objFactory As Func(Of ITrxForm)) Implements IHostSetup.SetTrxFormFactory
         objTrxFormFactory = objFactory
@@ -169,19 +169,19 @@ Friend Class CBMainForm
     Private objRegisterFormFactory As Func(Of IRegisterForm)
     Private objSearchFormFactory As Func(Of ISearchForm)
 
-    Private Function objMakeTrxForm() As ITrxForm Implements IHostUI.objMakeTrxForm
+    Private Function MakeTrxForm() As ITrxForm Implements IHostUI.MakeTrxForm
         Return objTrxFormFactory()
     End Function
 
-    Private Function objMakeRegisterForm() As IRegisterForm Implements IHostUI.objMakeRegisterForm
+    Private Function MakeRegisterForm() As IRegisterForm Implements IHostUI.MakeRegisterForm
         Return objRegisterFormFactory()
     End Function
 
-    Private Function objMakeSearchForm() As ISearchForm Implements IHostUI.objMakeSearchForm
+    Private Function MakeSearchForm() As ISearchForm Implements IHostUI.MakeSearchForm
         Return objSearchFormFactory()
     End Function
 
-    Public Iterator Function objSearchHandlers() As IEnumerable(Of ISearchHandler) Implements IHostUI.objSearchHandlers
+    Public Iterator Function GetSearchHandlers() As IEnumerable(Of ISearchHandler) Implements IHostUI.GetSearchHandlers
         Yield New TrxSearchHandler(Me, "Description", Function(ByVal objTrx As BaseTrx) objTrx.Description)
         Yield New MemoSearchHandler(Me, "Memo")
         Yield New CategorySearchHandler(Me, "Category")
@@ -191,7 +191,7 @@ Friend Class CBMainForm
         Yield New PurOrdSearchHandler(Me, "PO #")
     End Function
 
-    Public Iterator Function objSearchFilters() As IEnumerable(Of ISearchFilter) Implements IHostUI.objSearchFilters
+    Public Iterator Function GetSearchFilters() As IEnumerable(Of ISearchFilter) Implements IHostUI.GetSearchFilters
         Yield New FilterAll()
         Yield New FilterNonGenerated()
         Yield New FilterFakeOnly()
@@ -201,14 +201,14 @@ Friend Class CBMainForm
         Yield New FilterNonImportedBank()
     End Function
 
-    Public Iterator Function objSearchTools() As IEnumerable(Of ISearchTool) Implements IHostUI.objSearchTools
+    Public Iterator Function GetSearchTools() As IEnumerable(Of ISearchTool) Implements IHostUI.GetSearchTools
         Yield New SearchCombineTool(Me)
         Yield New SearchMoveTool(Me)
         Yield New SearchExportTool(Me)
         Yield New SearchRecategorizeTool(Me)
     End Function
 
-    Public Iterator Function objTrxTools() As IEnumerable(Of ITrxTool) Implements IHostUI.objTrxTools
+    Public Iterator Function GetTrxTools() As IEnumerable(Of ITrxTool) Implements IHostUI.GetTrxTools
         Yield New TrxPrintCheckTool(Me)
         Yield New TrxMailingAddressTool(Me)
         Yield New TrxCopyAmountTool(Me)
@@ -217,44 +217,44 @@ Friend Class CBMainForm
     End Function
 
     Private Sub LoadPlugins()
-        objFileMenu = New MenuBuilder(mnuFile)
-        objBankImportMenu = New MenuBuilder(mnuImportBank)
-        objCheckImportMenu = New MenuBuilder(mnuImportChecks)
-        objDepositImportMenu = New MenuBuilder(mnuImportDeposits)
-        objInvoiceImportMenu = New MenuBuilder(mnuImportInvoices)
-        objReportMenu = New MenuBuilder(mnuRpt)
-        objToolMenu = New MenuBuilder(mnuTools)
-        objHelpMenu = New MenuBuilder(mnuHelp)
+        FileMenu = New MenuBuilder(mnuFile)
+        BankImportMenu = New MenuBuilder(mnuImportBank)
+        CheckImportMenu = New MenuBuilder(mnuImportChecks)
+        DepositImportMenu = New MenuBuilder(mnuImportDeposits)
+        InvoiceImportMenu = New MenuBuilder(mnuImportInvoices)
+        ReportMenu = New MenuBuilder(mnuRpt)
+        ToolMenu = New MenuBuilder(mnuTools)
+        HelpMenu = New MenuBuilder(mnuHelp)
 
         Dim strPlugInPath As String = System.IO.Path.GetFileName(Me.GetType().Assembly.Location)
 
-        objFileMenu.Add(New MenuElementAction("Registers and Accounts", 100, AddressOf mnuFileShowReg_Click, strPlugInPath))
+        FileMenu.Add(New MenuElementAction("Registers and Accounts", 100, AddressOf mnuFileShowReg_Click, strPlugInPath))
         Dim saveAction As MenuElementAction = New MenuElementAction("Save", 200, AddressOf mnuFileSave_Click, strPlugInPath)
-        objFileMenu.Add(saveAction)
-        objFileMenu.Add(New MenuElementAction("Plugin List", 300, AddressOf mnuFilePlugins_Click, strPlugInPath))
-        objFileMenu.Add(New MenuElementAction("Exit", 400, AddressOf mnuFileExit_Click, strPlugInPath))
+        FileMenu.Add(saveAction)
+        FileMenu.Add(New MenuElementAction("Plugin List", 300, AddressOf mnuFilePlugins_Click, strPlugInPath))
+        FileMenu.Add(New MenuElementAction("Exit", 400, AddressOf mnuFileExit_Click, strPlugInPath))
 
-        objHelpMenu.Add(New MenuElementAction("Introduction", 1,
+        HelpMenu.Add(New MenuElementAction("Introduction", 1,
                         Sub(sender As Object, e As EventArgs)
                             HelpShowFile("Intro.html")
                         End Sub, strPlugInPath))
-        objHelpMenu.Add(New MenuElementAction("Setup and Configuration", 2,
+        HelpMenu.Add(New MenuElementAction("Setup and Configuration", 2,
                         Sub(sender As Object, e As EventArgs)
                             HelpShowFile("Setup.html")
                         End Sub, strPlugInPath))
-        objHelpMenu.Add(New MenuElementAction("Importing Transactions", 100,
+        HelpMenu.Add(New MenuElementAction("Importing Transactions", 100,
                         Sub(sender As Object, e As EventArgs)
                             HelpShowFile("Importing.html")
                         End Sub, strPlugInPath))
-        objHelpMenu.Add(New MenuElementAction("Budgeting Tools", 200,
+        HelpMenu.Add(New MenuElementAction("Budgeting Tools", 200,
                         Sub(sender As Object, e As EventArgs)
                             HelpShowFile("Budget.html")
                         End Sub, strPlugInPath))
-        objHelpMenu.Add(New MenuElementAction("Reporting and Searching", 300,
+        HelpMenu.Add(New MenuElementAction("Reporting and Searching", 300,
                         Sub(sender As Object, e As EventArgs)
                             HelpShowFile("Reporting.html")
                         End Sub, strPlugInPath))
-        objHelpMenu.Add(New MenuElementAction("Technical Notes", 10000,
+        HelpMenu.Add(New MenuElementAction("Technical Notes", 10000,
                         Sub(sender As Object, e As EventArgs)
                             HelpShowFile("Technical.html")
                         End Sub, strPlugInPath))
@@ -266,16 +266,16 @@ Friend Class CBMainForm
             Dim assembly As Assembly = Assembly.LoadFrom(strFile)
             LoadPluginsFromAssembly(assembly)
         Next
-        objFileMenu.AddElementsToMenu()
+        FileMenu.AddElementsToMenu()
         mnuFileSave = saveAction.MenuItemControl
         mnuFileSave.Enabled = False
-        objBankImportMenu.AddElementsToMenu()
-        objCheckImportMenu.AddElementsToMenu()
-        objDepositImportMenu.AddElementsToMenu()
-        objInvoiceImportMenu.AddElementsToMenu()
-        objReportMenu.AddElementsToMenu()
-        objToolMenu.AddElementsToMenu()
-        objHelpMenu.AddElementsToMenu()
+        BankImportMenu.AddElementsToMenu()
+        CheckImportMenu.AddElementsToMenu()
+        DepositImportMenu.AddElementsToMenu()
+        InvoiceImportMenu.AddElementsToMenu()
+        ReportMenu.AddElementsToMenu()
+        ToolMenu.AddElementsToMenu()
+        HelpMenu.AddElementsToMenu()
     End Sub
 
     Private Sub LoadPluginsFromAssembly(ByVal objAssembly As Assembly)
@@ -322,23 +322,23 @@ Friend Class CBMainForm
         End Try
     End Sub
 
-    Private Function strChooseFile(strWindowCaption As String, strFileType As String, strSettingsKey As String) _
-        As String Implements IHostUI.strChooseFile
+    Private Function ChooseFile(strWindowCaption As String, strFileType As String, strSettingsKey As String) _
+        As String Implements IHostUI.ChooseFile
         Return CommonDialogControlForm.strChooseFile(strWindowCaption, strFileType, strSettingsKey)
     End Function
 
-    Private Function objGetCurrentRegister() As Register Implements IHostUI.objGetCurrentRegister
+    Private Function GetCurrentRegister() As Register Implements IHostUI.GetCurrentRegister
         If Not TypeOf Me.ActiveMdiChild Is IRegisterForm Then
             Return Nothing
         End If
-        Return CType(Me.ActiveMdiChild, IRegisterForm).objReg
+        Return CType(Me.ActiveMdiChild, IRegisterForm).Reg
     End Function
 
-    Private Function objGetMainForm() As Form Implements IHostUI.objGetMainForm
+    Private Function GetMainForm() As Form Implements IHostUI.GetMainForm
         Return Me
     End Function
 
-    Private ReadOnly Property objCompany() As Company Implements IHostUI.objCompany
+    Private ReadOnly Property Company() As Company Implements IHostUI.Company
         Get
             Return mobjCompany
         End Get
@@ -348,52 +348,52 @@ Friend Class CBMainForm
         Company.AddExtraLicense(objLicense)
     End Sub
 
-    Private Function blnAddNormalTrx(ByVal objTrx As BankTrx,
+    Private Function AddNormalTrx(ByVal objTrx As BankTrx,
                                     ByRef datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
-                                    ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrx
-        Using frm As ITrxForm = mobjHostUI.objMakeTrxForm()
-            If frm.blnAddNormal(Me, objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
+                                    ByVal strLogTitle As String) As Boolean Implements IHostUI.AddNormalTrx
+        Using frm As ITrxForm = mobjHostUI.MakeTrxForm()
+            If frm.AddNormal(Me, objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
                 Return True
             End If
             Return False
         End Using
     End Function
 
-    Private Function blnAddNormalTrxSilent(ByVal objTrx As BankTrx,
+    Private Function AddNormalTrxSilent(ByVal objTrx As BankTrx,
                                     ByRef datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
-                                    ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddNormalTrxSilent
-        Using frm As ITrxForm = mobjHostUI.objMakeTrxForm()
-            If frm.blnAddNormalSilent(Me, objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
+                                    ByVal strLogTitle As String) As Boolean Implements IHostUI.AddNormalTrxSilent
+        Using frm As ITrxForm = mobjHostUI.MakeTrxForm()
+            If frm.AddNormalSilent(Me, objTrx, datDefaultDate, blnCheckInvoiceNum, strLogTitle) Then
                 Return True
             End If
             Return False
         End Using
     End Function
 
-    Private Function blnAddBudgetTrx(ByVal objReg As Register, ByRef datDefaultDate As DateTime,
-                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddBudgetTrx
-        Using frm As ITrxForm = mobjHostUI.objMakeTrxForm()
-            If frm.blnAddBudget(Me, objReg, datDefaultDate, strLogTitle) Then
+    Private Function AddBudgetTrx(ByVal objReg As Register, ByRef datDefaultDate As DateTime,
+                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.AddBudgetTrx
+        Using frm As ITrxForm = mobjHostUI.MakeTrxForm()
+            If frm.AddBudget(Me, objReg, datDefaultDate, strLogTitle) Then
                 Return True
             End If
         End Using
         Return False
     End Function
 
-    Private Function blnAddTransferTrx(ByVal objReg As Register, ByRef datDefaultDate As DateTime,
-                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.blnAddTransferTrx
-        Using frm As ITrxForm = mobjHostUI.objMakeTrxForm()
-            If frm.blnAddTransfer(Me, objReg, datDefaultDate, strLogTitle) Then
+    Private Function AddTransferTrx(ByVal objReg As Register, ByRef datDefaultDate As DateTime,
+                                     ByVal strLogTitle As String) As Boolean Implements IHostUI.AddTransferTrx
+        Using frm As ITrxForm = mobjHostUI.MakeTrxForm()
+            If frm.AddTransfer(Me, objReg, datDefaultDate, strLogTitle) Then
                 Return True
             End If
         End Using
         Return False
     End Function
 
-    Private Function blnUpdateTrx(ByVal objTrx As BaseTrx, ByRef datDefaultDate As Date,
-                                  ByVal strLogTitle As String) As Boolean Implements IHostUI.blnUpdateTrx
-        Using frmEdit As ITrxForm = mobjHostUI.objMakeTrxForm()
-            If frmEdit.blnUpdate(Me, objTrx, datDefaultDate, strLogTitle) Then
+    Private Function UpdateTrx(ByVal objTrx As BaseTrx, ByRef datDefaultDate As Date,
+                                  ByVal strLogTitle As String) As Boolean Implements IHostUI.UpdateTrx
+        Using frmEdit As ITrxForm = mobjHostUI.MakeTrxForm()
+            If frmEdit.UpdateTrx(Me, objTrx, datDefaultDate, strLogTitle) Then
                 Return True
             End If
         End Using
@@ -408,14 +408,14 @@ Friend Class CBMainForm
         For Each frm In gcolForms()
             If TypeOf frm Is IRegisterForm Then
                 frmReg = DirectCast(frm, IRegisterForm)
-                If frmReg.objReg Is objReg Then
+                If frmReg.Reg Is objReg Then
                     frmReg.ShowMeAgain()
                     Exit Sub
                 End If
             End If
         Next frm
 
-        frmReg = mobjHostUI.objMakeRegisterForm()
+        frmReg = mobjHostUI.MakeRegisterForm()
         frmReg.ShowMe(Me, objReg)
     End Sub
 
@@ -432,13 +432,13 @@ Friend Class CBMainForm
         Return res
     End Function
 
-    Private ReadOnly Property strSoftwareTitle() As String Implements IHostUI.strSoftwareName
+    Private ReadOnly Property strSoftwareTitle() As String Implements IHostUI.SoftwareName
         Get
             Return "Willow Creek Checkbook"
         End Get
     End Property
 
-    Private ReadOnly Property strSplashImagePath() As String Implements IHostUI.strSplashImagePath
+    Private ReadOnly Property SplashImagePath() As String Implements IHostUI.SplashImagePath
         Get
             Dim objAssembly As Assembly = Assembly.GetEntryAssembly()
             Dim strFolder As String = Path.GetDirectoryName(objAssembly.Location)

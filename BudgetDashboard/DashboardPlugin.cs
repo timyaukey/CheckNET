@@ -19,8 +19,8 @@ namespace Willowsoft.CheckBook.BudgetDashboard
 
         public override void Register(IHostSetup setup)
         {
-            setup.objReportMenu.Add(new MenuElementAction("Budget Dashboard", 300, ClickHandler, GetPluginPath()));
-            setup.objHelpMenu.Add(new MenuElementAction("Budget Dashboard", 220, HelpHandler, GetPluginPath()));
+            setup.ReportMenu.Add(new MenuElementAction("Budget Dashboard", 300, ClickHandler, GetPluginPath()));
+            setup.HelpMenu.Add(new MenuElementAction("Budget Dashboard", 220, HelpHandler, GetPluginPath()));
             Willowsoft.TamperProofData.IStandardLicense license = new BudgetDashboardLicense();
             license.Load(Company.LicenseFolderPath());
             setup.AddExtraLicense(license);
@@ -32,7 +32,7 @@ namespace Willowsoft.CheckBook.BudgetDashboard
             {
                 if (specsForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    DashboardData data = new DashboardData(HostUI.objCompany, specsForm.Handler, specsForm.PeriodDays, specsForm.PeriodCount, specsForm.StartDate);
+                    DashboardData data = new DashboardData(HostUI.Company, specsForm.Handler, specsForm.PeriodDays, specsForm.PeriodCount, specsForm.StartDate);
                     var budgetForm = new BudgetDashboardForm();
                     budgetForm.Show(HostUI, data);
                 }

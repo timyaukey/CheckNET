@@ -10,7 +10,7 @@ Public Class CheckImportInsight
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.objCheckImportMenu.Add(New MenuElementAction("Digital Insight Clipboard", StandardSortCode(), AddressOf ClickHandler, GetPluginPath()))
+        setup.CheckImportMenu.Add(New MenuElementAction("Digital Insight Clipboard", StandardSortCode(), AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String

@@ -47,7 +47,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 HostUI.ErrorMessageBox("Invalid amount to add to each check number.");
                 return;
             }
-            Register reg = HostUI.objGetCurrentRegister();
+            Register reg = HostUI.GetCurrentRegister();
             foreach (var objNormal in reg.GetDateRange<BankTrx>(ctlStartDate.Value, ctlEndDate.Value))
             {
                 if (Int32.TryParse(objNormal.Number, out int checkNumber))

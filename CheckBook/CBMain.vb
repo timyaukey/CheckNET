@@ -27,13 +27,13 @@ Public Module CBMain
         Dim strFile As String
 
         objAccount = New Account()
-        objAccount.Init(objHostUI.objCompany)
-        objAccount.AccountKey = objHostUI.objCompany.GetUnusedAccountKey()
+        objAccount.Init(objHostUI.Company)
+        objAccount.AccountKey = objHostUI.Company.GetUnusedAccountKey()
         objAccount.AcctSubType = Account.SubType.Liability_LoanPayable
 
         Using frm As AccountForm = New AccountForm()
             If frm.ShowDialog(objHostUI, objAccount, False, False) = DialogResult.OK Then
-                strFile = objHostUI.objCompany.AccountsFolderPath() & "\" & objAccount.FileNameRoot & ".act"
+                strFile = objHostUI.Company.AccountsFolderPath() & "\" & objAccount.FileNameRoot & ".act"
                 If Dir(strFile) <> "" Then
                     objHostUI.ErrorMessageBox("Account file already exists with that name.")
                     Exit Function

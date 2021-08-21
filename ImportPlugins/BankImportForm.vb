@@ -134,8 +134,8 @@ Public Class BankImportForm
             ' functionality of automatically
             ' loading and showing an MDI
             ' child's parent.
-            Me.MdiParent = objHostUI.objGetMainForm()
-            objHostUI.objGetMainForm().Show()
+            Me.MdiParent = objHostUI.GetMainForm()
+            objHostUI.GetMainForm().Show()
 
             mstrImportSearchText = ""
             mintNextImportToSearch = 0
@@ -283,7 +283,7 @@ Public Class BankImportForm
                                 'Insert .objImportedTrx in .objMatchedReg with .objImportedTrx.strImportKey
                                 Dim datDummy As DateTime
                                 .objImportedTrx.Register = .objMatchedReg
-                                If mobjHostUI.blnAddNormalTrxSilent(.objImportedTrx, datDummy, True, "ImportAutoBatch") Then
+                                If mobjHostUI.AddNormalTrxSilent(.objImportedTrx, datDummy, True, "ImportAutoBatch") Then
                                     MsgBox("Failed to insert transaction " + strDescribeItem(intItemIndex) + " required as part of a multi-part match.")
                                 End If
                                 .lngStatus = ImportStatus.mlngIMPSTS_NEW
@@ -771,7 +771,7 @@ Public Class BankImportForm
                     'If we did not use alternate handling.
                     If Not blnItemImported Then
                         objImportedTrx.Register = mobjSelectedRegister
-                        If Not mobjHostUI.blnAddNormalTrxSilent(objImportedTrx, datDummy, True, "ImportNewBatch") Then
+                        If Not mobjHostUI.AddNormalTrxSilent(objImportedTrx, datDummy, True, "ImportNewBatch") Then
                             blnItemImported = True
                         End If
                     End If
@@ -1384,7 +1384,7 @@ Public Class BankImportForm
 
             With maudtItem(intSelectedItemIndex())
                 .objImportedTrx.Register = mobjSelectedRegister
-                If mobjHostUI.blnAddNormalTrx(.objImportedTrx, datDummy, True, "Import.CreateNew") Then
+                If mobjHostUI.AddNormalTrx(.objImportedTrx, datDummy, True, "Import.CreateNew") Then
                     Exit Sub
                 End If
                 .lngStatus = ImportStatus.mlngIMPSTS_NEW
@@ -1416,7 +1416,7 @@ Public Class BankImportForm
                     Exit Sub
                 End If
                 .objImportedTrx.Register = mobjSelectedRegister
-                If mobjHostUI.blnAddNormalTrxSilent(.objImportedTrx, datDummy, True, "ImportNewSilent") Then
+                If mobjHostUI.AddNormalTrxSilent(.objImportedTrx, datDummy, True, "ImportNewSilent") Then
                     Exit Sub
                 End If
                 .lngStatus = ImportStatus.mlngIMPSTS_NEW

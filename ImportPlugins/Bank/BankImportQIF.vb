@@ -11,7 +11,7 @@ Public Class BankImportQIF
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.objBankImportMenu.Add(New MenuElementAction("QIF File", StandardSortCode(), AddressOf ClickHandler, GetPluginPath()))
+        setup.BankImportMenu.Add(New MenuElementAction("QIF File", StandardSortCode(), AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String

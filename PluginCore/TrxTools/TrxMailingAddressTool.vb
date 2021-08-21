@@ -29,12 +29,12 @@ Public Class TrxMailingAddressTool
         Dim strAddress2 As String
         Dim objNormalTrx As BankTrx
 
-        objNormalTrx = objHostTrxToolUI.objGetTrxCopy()
+        objNormalTrx = objHostTrxToolUI.GetTrxCopy()
         If objNormalTrx Is Nothing Then
             Exit Sub
         End If
 
-        colPayees = mobjHostUI.objCompany.FindPayeeMatches(objNormalTrx.Description)
+        colPayees = mobjHostUI.Company.FindPayeeMatches(objNormalTrx.Description)
         If colPayees.Length = 0 Then
             strMsg = "No matching memorized transactions."
         Else

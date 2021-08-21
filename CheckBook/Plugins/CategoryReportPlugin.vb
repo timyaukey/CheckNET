@@ -10,7 +10,7 @@ Public Class CategoryReportPlugin
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.objReportMenu.Add(New MenuElementAction("Totals By Category", 200, AddressOf ClickHandler, GetPluginPath()))
+        setup.ReportMenu.Add(New MenuElementAction("Totals By Category", 200, AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
     Private Sub ClickHandler(sender As Object, e As EventArgs)

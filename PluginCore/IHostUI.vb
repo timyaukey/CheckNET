@@ -8,46 +8,46 @@ Option Explicit On
 ''' </summary>
 
 Public Interface IHostUI
-    ReadOnly Property objCompany() As Company
+    ReadOnly Property Company() As Company
 
-    Function objSearchTools() As IEnumerable(Of ISearchTool)
+    Function GetSearchTools() As IEnumerable(Of ISearchTool)
 
-    Function objTrxTools() As IEnumerable(Of ITrxTool)
+    Function GetTrxTools() As IEnumerable(Of ITrxTool)
 
-    Function objSearchHandlers() As IEnumerable(Of ISearchHandler)
+    Function GetSearchHandlers() As IEnumerable(Of ISearchHandler)
 
-    Function objSearchFilters() As IEnumerable(Of ISearchFilter)
+    Function GetSearchFilters() As IEnumerable(Of ISearchFilter)
 
     Sub ShowRegister(ByVal objReg As Register)
 
-    Function strChooseFile(ByVal strWindowCaption As String, ByVal strFileType As String,
+    Function ChooseFile(ByVal strWindowCaption As String, ByVal strFileType As String,
         ByVal strSettingsKey As String) As String
 
-    Function objGetCurrentRegister() As Register
+    Function GetCurrentRegister() As Register
 
-    Function objGetMainForm() As System.Windows.Forms.Form
+    Function GetMainForm() As System.Windows.Forms.Form
 
-    Function objMakeRegisterForm() As IRegisterForm
+    Function MakeRegisterForm() As IRegisterForm
 
-    Function objMakeSearchForm() As ISearchForm
+    Function MakeSearchForm() As ISearchForm
 
-    Function objMakeTrxForm() As ITrxForm
+    Function MakeTrxForm() As ITrxForm
 
-    Function blnAddNormalTrx(ByVal objTrx As BankTrx,
+    Function AddNormalTrx(ByVal objTrx As BankTrx,
                              ByRef datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                              ByVal strLogTitle As String) As Boolean
 
-    Function blnAddNormalTrxSilent(ByVal objTrx As BankTrx,
+    Function AddNormalTrxSilent(ByVal objTrx As BankTrx,
                              ByRef datDefaultDate As DateTime, ByVal blnCheckInvoiceNum As Boolean,
                              ByVal strLogTitle As String) As Boolean
 
-    Function blnAddBudgetTrx(ByVal objReg As Register, ByRef datDefaultDate As DateTime,
+    Function AddBudgetTrx(ByVal objReg As Register, ByRef datDefaultDate As DateTime,
                              ByVal strLogTitle As String) As Boolean
 
-    Function blnAddTransferTrx(ByVal objReg As Register, ByRef datDefaultDate As DateTime,
+    Function AddTransferTrx(ByVal objReg As Register, ByRef datDefaultDate As DateTime,
                                ByVal strLogTitle As String) As Boolean
 
-    Function blnUpdateTrx(ByVal objTrx As BaseTrx, ByRef datDefaultDate As Date,
+    Function UpdateTrx(ByVal objTrx As BaseTrx, ByRef datDefaultDate As Date,
                           ByVal strLogTitle As String) As Boolean
 
     Sub InfoMessageBox(ByVal strMessage As String)
@@ -58,12 +58,12 @@ Public Interface IHostUI
 
     Function OkCancelMessageBox(ByVal strMessage As String) As System.Windows.Forms.DialogResult
 
-    ReadOnly Property strSoftwareName() As String
+    ReadOnly Property SoftwareName() As String
 
     ''' <summary>
     ''' Image to display on splash form at startup.
     ''' Image will be stretched to 4:3 (width:height).
     ''' </summary>
     ''' <returns></returns>
-    ReadOnly Property strSplashImagePath() As String
+    ReadOnly Property SplashImagePath() As String
 End Interface

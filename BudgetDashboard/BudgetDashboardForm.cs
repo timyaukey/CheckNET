@@ -33,12 +33,12 @@ namespace Willowsoft.CheckBook.BudgetDashboard
         public void Show(IHostUI hostUI, DashboardData data)
         {
             mHostUI = hostUI;
-            mCompany = mHostUI.objCompany;
+            mCompany = mHostUI.Company;
             mData = data;
             mData.Load();
             DisplayData();
             SetCellDetailVisiblity(false);
-            this.MdiParent = mHostUI.objGetMainForm();
+            this.MdiParent = mHostUI.GetMainForm();
             this.Show();
         }
 

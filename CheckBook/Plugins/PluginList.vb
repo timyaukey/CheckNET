@@ -5,14 +5,14 @@ Public Class PluginList
 
     Public Sub ShowMe(ByVal objHostSetup As IHostSetup)
         lvwPlugins.Items.Clear()
-        AddPlugins("File", objHostSetup.objFileMenu)
-        AddPlugins("Bank Import", objHostSetup.objBankImportMenu)
-        AddPlugins("Check Import", objHostSetup.objCheckImportMenu)
-        AddPlugins("Deposit Import", objHostSetup.objDepositImportMenu)
-        AddPlugins("Invoice Import", objHostSetup.objInvoiceImportMenu)
-        AddPlugins("Reports", objHostSetup.objReportMenu)
-        AddPlugins("Tools", objHostSetup.objToolMenu)
-        AddPlugins("Help", objHostSetup.objHelpMenu)
+        AddPlugins("File", objHostSetup.FileMenu)
+        AddPlugins("Bank Import", objHostSetup.BankImportMenu)
+        AddPlugins("Check Import", objHostSetup.CheckImportMenu)
+        AddPlugins("Deposit Import", objHostSetup.DepositImportMenu)
+        AddPlugins("Invoice Import", objHostSetup.InvoiceImportMenu)
+        AddPlugins("Reports", objHostSetup.ReportMenu)
+        AddPlugins("Tools", objHostSetup.ToolMenu)
+        AddPlugins("Help", objHostSetup.HelpMenu)
         Me.ShowDialog()
     End Sub
 

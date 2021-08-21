@@ -28,7 +28,7 @@ Friend Class ListEditorForm
 
         Dim frm As System.Windows.Forms.Form
         mobjHostUI = objHostUI
-        mobjCompany = mobjHostUI.objCompany
+        mobjCompany = mobjHostUI.Company
 
         Try
             For Each frm In gcolForms()
@@ -61,7 +61,7 @@ Friend Class ListEditorForm
     Private Sub cmdSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSave.Click
         Try
 
-            CompanySaver.SaveChangedAccounts(mobjHostUI.objCompany)
+            CompanySaver.SaveChangedAccounts(mobjHostUI.Company)
             RebuildTranslator()
             WriteFile()
             mobjCompany.BuildShortTermsCatKeys()

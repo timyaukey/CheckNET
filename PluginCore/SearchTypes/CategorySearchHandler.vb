@@ -25,21 +25,21 @@ Public Class CategorySearchHandler
 
     Public Sub HandlerSelected(ByVal objHostSearchUI As IHostSearchUI) _
         Implements ISearchHandler.HandlerSelected
-        objHostSearchUI.UseComboBoxCriteria(GetCategories(mobjHostUI.objCompany))
+        objHostSearchUI.UseComboBoxCriteria(GetCategories(mobjHostUI.Company))
     End Sub
 
     Public Function PrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean _
         Implements ISearchHandler.PrepareSearch
 
-        If objHostSearchUI.objGetComboBoxSearchFor() Is Nothing Then
+        If objHostSearchUI.GetComboBoxSearchFor() Is Nothing Then
             mobjHostUI.ErrorMessageBox("Please select a category to search for.")
             Return False
         End If
 
-        objComparer = DirectCast(objHostSearchUI.objGetSearchType(), SearchComparer)
-        Dim lngItemData As Integer = DirectCast(objHostSearchUI.objGetComboBoxSearchFor(), CBListBoxItem).LBValue
-        strParameter = mobjHostUI.objCompany.Categories.GetKey(lngItemData)
-        strParameter = mobjHostUI.objCompany.Categories.KeyToValue1(strParameter)
+        objComparer = DirectCast(objHostSearchUI.GetSearchType(), SearchComparer)
+        Dim lngItemData As Integer = DirectCast(objHostSearchUI.GetComboBoxSearchFor(), CBListBoxItem).LBValue
+        strParameter = mobjHostUI.Company.Categories.GetKey(lngItemData)
+        strParameter = mobjHostUI.Company.Categories.KeyToValue1(strParameter)
         Return True
     End Function
 
@@ -51,7 +51,7 @@ Public Class CategorySearchHandler
 
         If TypeOf (objTrx) Is BankTrx Then
             For Each objSplit In DirectCast(objTrx, BankTrx).Splits
-                If objComparer.Compare(mobjHostUI.objCompany.Categories.KeyToValue1(objSplit.CategoryKey), strParameter) Then
+                If objComparer.Compare(mobjHostUI.Company.Categories.KeyToValue1(objSplit.CategoryKey), strParameter) Then
                     dlgAddSplitResult(DirectCast(objTrx, BankTrx), objSplit)
                 End If
             Next

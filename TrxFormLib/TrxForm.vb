@@ -73,9 +73,9 @@ Public Class TrxForm
     '$Description Enter a new normal BaseTrx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddNormal(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As BankTrx,
+    Public Function AddNormal(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As BankTrx,
         ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean,
-        ByVal strLogTitle As String) As Boolean Implements ITrxForm.blnAddNormal
+        ByVal strLogTitle As String) As Boolean Implements ITrxForm.AddNormal
 
         Try
 
@@ -90,7 +90,7 @@ Public Class TrxForm
             If Not mblnCancel Then
                 datDefaultDate_ = mdatDefaultDate
             End If
-            blnAddNormal = mblnCancel
+            AddNormal = mblnCancel
 
             Exit Function
         Catch ex As Exception
@@ -102,9 +102,9 @@ Public Class TrxForm
     '   has validation errors.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddNormalSilent(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As BankTrx,
+    Public Function AddNormalSilent(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As BankTrx,
         ByRef datDefaultDate_ As Date, ByVal blnCheckInvoiceNum_ As Boolean,
-        ByVal strLogTitle As String) As Boolean Implements ITrxForm.blnAddNormalSilent
+        ByVal strLogTitle As String) As Boolean Implements ITrxForm.AddNormalSilent
 
         Try
 
@@ -124,7 +124,7 @@ Public Class TrxForm
             If Not mblnCancel Then
                 datDefaultDate_ = mdatDefaultDate
             End If
-            blnAddNormalSilent = mblnCancel
+            AddNormalSilent = mblnCancel
 
             Exit Function
         Catch ex As Exception
@@ -135,8 +135,8 @@ Public Class TrxForm
     '$Description Enter a new budget BaseTrx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddBudget(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date,
-        ByVal strLogTitle As String) As Boolean Implements ITrxForm.blnAddBudget
+    Public Function AddBudget(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date,
+        ByVal strLogTitle As String) As Boolean Implements ITrxForm.AddBudget
 
         Try
 
@@ -152,7 +152,7 @@ Public Class TrxForm
             If Not mblnCancel Then
                 datDefaultDate_ = mdatDefaultDate
             End If
-            blnAddBudget = mblnCancel
+            AddBudget = mblnCancel
 
             Exit Function
         Catch ex As Exception
@@ -163,8 +163,8 @@ Public Class TrxForm
     '$Description Enter a new transfer BaseTrx and add it to a Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnAddTransfer(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date,
-        ByVal strLogTitle As String) As Boolean Implements ITrxForm.blnAddTransfer
+    Public Function AddTransfer(ByVal objHostUI_ As IHostUI, ByVal objReg_ As Register, ByRef datDefaultDate_ As Date,
+        ByVal strLogTitle As String) As Boolean Implements ITrxForm.AddTransfer
 
         Try
 
@@ -179,7 +179,7 @@ Public Class TrxForm
             If Not mblnCancel Then
                 datDefaultDate_ = mdatDefaultDate
             End If
-            blnAddTransfer = mblnCancel
+            AddTransfer = mblnCancel
 
             Exit Function
         Catch ex As Exception
@@ -190,8 +190,8 @@ Public Class TrxForm
     '$Description Edit and existing BaseTrx in the Register.
     '$Returns True iff the operator cancelled.
 
-    Public Function blnUpdate(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As BaseTrx, ByRef datDefaultDate_ As Date,
-        ByVal strLogTitle As String) As Boolean Implements ITrxForm.blnUpdate
+    Public Function UpdateTrx(ByVal objHostUI_ As IHostUI, ByVal objTrx_ As BaseTrx, ByRef datDefaultDate_ As Date,
+        ByVal strLogTitle As String) As Boolean Implements ITrxForm.UpdateTrx
 
         Try
 
@@ -219,7 +219,7 @@ Public Class TrxForm
             If Not mblnCancel Then
                 datDefaultDate_ = mdatDefaultDate
             End If
-            blnUpdate = mblnCancel
+            UpdateTrx = mblnCancel
 
             Exit Function
         Catch ex As Exception
@@ -278,7 +278,7 @@ Public Class TrxForm
         cmdRunTool.Visible = True
         cboToolList.Visible = True
         cboToolList.Items.Clear()
-        For Each objTool As ITrxTool In mobjHostUI.objTrxTools()
+        For Each objTool As ITrxTool In mobjHostUI.GetTrxTools()
             cboToolList.Items.Add(objTool)
         Next
         For intIndex = 0 To mintSPLIT_CTRL_ARRAY_SIZE - 1
@@ -468,7 +468,7 @@ Public Class TrxForm
         mobjHostUI = objHostUI_
         mobjReg = objReg_
         mobjAccount = mobjReg.Account
-        mobjCompany = mobjHostUI.objCompany
+        mobjCompany = mobjHostUI.Company
         mblnEditMode = blnEditMode_
         mlngIndex = lngIndex_
         mobjTrxType = objTrxType_
@@ -2245,7 +2245,7 @@ Public Class TrxForm
         End If
     End Sub
 
-    Public ReadOnly Property objReg As Register Implements IHostTrxToolUI.objReg
+    Public ReadOnly Property Reg As Register Implements IHostTrxToolUI.Reg
         Get
             Return mobjReg
         End Get
@@ -2268,7 +2268,7 @@ Public Class TrxForm
         chkAutoGenerated.CheckState = CheckState.Unchecked
     End Sub
 
-    Public Function objGetTrxCopy() As BankTrx Implements IHostTrxToolUI.objGetTrxCopy
+    Public Function GetTrxCopy() As BankTrx Implements IHostTrxToolUI.GetTrxCopy
         If blnValidateShared() Then
             Return Nothing
         End If

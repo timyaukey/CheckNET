@@ -10,7 +10,7 @@ Public Class InvoiceImportStandard
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.objInvoiceImportMenu.Add(New MenuElementAction("Standard Clipboard", 1, AddressOf ClickHandler, GetPluginPath()))
+        setup.InvoiceImportMenu.Add(New MenuElementAction("Standard Clipboard", 1, AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String
@@ -18,6 +18,6 @@ Public Class InvoiceImportStandard
     End Function
 
     Public Overrides Function GetTrxReader() As ITrxReader
-        Return New ReadInvoices(HostUI.objCompany, Utilities.GetClipboardReader(), "(clipboard)")
+        Return New ReadInvoices(HostUI.Company, Utilities.GetClipboardReader(), "(clipboard)")
     End Function
 End Class

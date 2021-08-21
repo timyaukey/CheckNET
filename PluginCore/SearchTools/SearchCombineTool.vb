@@ -34,13 +34,13 @@ Public Class SearchCombineTool
         'Use the first BaseTrx for BaseTrx level data, and clone the splits of all BaseTrx.
         'Keep a collection of the chosen BaseTrx, to delete them at the end.
         colOldTrx = New List(Of BaseTrx)
-        For Each objOldTrx In objHostSearchToolUI.objAllSelectedTrx()
-            If Not objHostSearchToolUI.blnValidTrxForBulkOperation(objOldTrx, "combined") Then
+        For Each objOldTrx In objHostSearchToolUI.GetAllSelectedTrx()
+            If Not objHostSearchToolUI.IsValidTrxForBulkOperation(objOldTrx, "combined") Then
                 Exit Sub
             End If
             'If we do not yet have a new trx, create it.
             If objNewTrx Is Nothing Then
-                objNewTrx = New BankTrx(objHostSearchToolUI.objReg)
+                objNewTrx = New BankTrx(objHostSearchToolUI.Reg)
                 datToday = Today
                 objNewTrx.NewStartNormal(True, "", datToday, objOldTrx.Description, objOldTrx.Memo, BaseTrx.TrxStatus.Unreconciled, New TrxGenImportData())
             End If
@@ -61,25 +61,25 @@ Public Class SearchCombineTool
         End If
 
         'Now let them edit it and possibly save it.
-        If mobjHostUI.blnAddNormalTrx(objNewTrx, datResult, False, "SearchForm.CombineNew") Then
+        If mobjHostUI.AddNormalTrx(objNewTrx, datResult, False, "SearchForm.CombineNew") Then
             'They did not save it.
             mobjHostUI.InfoMessageBox("Canceled.")
             Exit Sub
         End If
-        objNewTrx = DirectCast(objHostSearchToolUI.objReg.CurrentTrx, BankTrx)
+        objNewTrx = DirectCast(objHostSearchToolUI.Reg.CurrentTrx, BankTrx)
 
         'Now delete old trx.
         'Because we start from the BaseTrx object instead of its index, we don't need
         'to worry if saving the new trx or a prior delete changed the index of a BaseTrx.
-        objStartLogger = objHostSearchToolUI.objReg.LogGroupStart("SearchForm.CombineDelete")
+        objStartLogger = objHostSearchToolUI.Reg.LogGroupStart("SearchForm.CombineDelete")
         For Each objOldTrx In colOldTrx
             objOldTrx.Delete(New LogDelete, "SearchForm.CombineDeleteTrx")
         Next
-        objHostSearchToolUI.objReg.LogGroupEnd(objStartLogger)
+        objHostSearchToolUI.Reg.LogGroupEnd(objStartLogger)
 
         'Have to do this because deleting the original trx changes current.
-        objHostSearchToolUI.objReg.SetCurrent(objNewTrx)
-        objHostSearchToolUI.objReg.FireShowCurrent()
+        objHostSearchToolUI.Reg.SetCurrent(objNewTrx)
+        objHostSearchToolUI.Reg.FireShowCurrent()
 
     End Sub
 End Class

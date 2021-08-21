@@ -26,14 +26,14 @@ Public Class MenuElementRegister
     End Sub
 
     Private Sub ClickHandler(sender As Object, e As EventArgs)
-        Dim objReg As Register = HostUI.objGetCurrentRegister()
+        Dim objReg As Register = HostUI.GetCurrentRegister()
         If objReg Is Nothing Then
             HostUI.ErrorMessageBox("This option is not available, because I don't know which register" &
                 " or account to use. The register form for the desired register must be the current window.")
             Exit Sub
         End If
         Dim objRegArgs As RegisterEventArgs = New RegisterEventArgs()
-        objRegArgs.objReg = objReg
+        objRegArgs.Reg = objReg
         RegisterClickHandler(sender, objRegArgs)
     End Sub
 End Class
@@ -41,5 +41,5 @@ End Class
 Public Class RegisterEventArgs
     Inherits EventArgs
 
-    Public objReg As Register
+    Public Reg As Register
 End Class

@@ -17,7 +17,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
 
         public override void Register(IHostSetup setup)
         {
-            setup.objToolMenu.Add(new MenuElementAction("Intuit Export (IIF Format)", 102, ClickHandler, GetPluginPath()));
+            setup.ToolMenu.Add(new MenuElementAction("Intuit Export (IIF Format)", 102, ClickHandler, GetPluginPath()));
         }
 
         private void ClickHandler(object sender, EventArgs e)

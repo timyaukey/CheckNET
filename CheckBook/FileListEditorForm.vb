@@ -14,7 +14,7 @@ Public Class FileListEditorForm
     Public Sub ShowDialogForPath(ByVal objHostUI As IHostUI, ByVal strTitle As String, ByVal strFolder As String,
         ByVal strFileType As String, ByVal objPersister As IFilePersister)
         mobjHostUI = objHostUI
-        mobjCompany = mobjHostUI.objCompany
+        mobjCompany = mobjHostUI.Company
         Me.Text = strTitle
         mstrFolder = strFolder
         mstrFileType = strFileType

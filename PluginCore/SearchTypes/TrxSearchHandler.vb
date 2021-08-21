@@ -33,8 +33,8 @@ Public Class TrxSearchHandler
 
     Public Function PrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean _
         Implements ISearchHandler.PrepareSearch
-        objComparer = DirectCast(objHostSearchUI.objGetSearchType(), SearchComparer)
-        strParameter = objHostSearchUI.strGetTextSearchFor()
+        objComparer = DirectCast(objHostSearchUI.GetSearchType(), SearchComparer)
+        strParameter = objHostSearchUI.GetTextSearchFor()
         Return True
     End Function
 

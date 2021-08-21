@@ -56,7 +56,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         private void btnBalSheetTranslatorHelp_Click(object sender, EventArgs e)
         {
             HostUI.InfoMessageBox("A new balance sheet account will be be created in QuickBooks " +
-                "for every balance sheet account in " + HostUI.strSoftwareName + 
+                "for every balance sheet account in " + HostUI.SoftwareName + 
                 ", unless you use a balance sheet translation file to specify " +
                 "existing QuickBooks accounts to use instead " +
                 "for some of your accounts." +
@@ -67,7 +67,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 "You cannot use Microsoft Word, or any other word processing software, " + 
                 "because these do not create a simple text file! " +
                 Environment.NewLine + Environment.NewLine +
-                "Each line starts with the " + HostUI.strSoftwareName + " account file name (e.g. \"Checking.act\"), " +
+                "Each line starts with the " + HostUI.SoftwareName + " account file name (e.g. \"Checking.act\"), " +
                 "then a tab, and ends with the equivalent QuickBooks account name (e.g. \"Checking\"). " +
                 "Two names, separated by a tab, no quotes. " +
                 "You do not have to add a line for every account - any accounts you do not " +
@@ -86,7 +86,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         private void btnCatTranslatorHelp_Click(object sender, EventArgs e)
         {
             HostUI.InfoMessageBox("A new income or expense account will be created in QuickBooks " +
-                "for every income and expense category in " + HostUI.strSoftwareName +
+                "for every income and expense category in " + HostUI.SoftwareName +
                 ", unless you use a category translation file to specify " +
                 "existing QuickBooks income or expense accounts to use instead " + 
                 "for some of your categories. " +
@@ -97,7 +97,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                 "You cannot use Microsoft Word, or any other word processing software, " +
                 "because these do not create a simple text file! " +
                 Environment.NewLine + Environment.NewLine +
-                "Each line starts with the " + HostUI.strSoftwareName + " category name (e.g. \"E:Advertising\"), " +
+                "Each line starts with the " + HostUI.SoftwareName + " category name (e.g. \"E:Advertising\"), " +
                 "then a tab, and ends with the QuickBooks income or expense account name (e.g. \"Advertising\"). " +
                 "Two names, separated by a tab, no quotes. " +
                 "You do not have to add a line for every category - any categories you do not " +
@@ -135,12 +135,12 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                         }
                         if (tabIndex == 0)
                         {
-                            HostUI.ErrorMessageBox(HostUI.strSoftwareName + " account name is empty in translation file line.");
+                            HostUI.ErrorMessageBox(HostUI.SoftwareName + " account name is empty in translation file line.");
                             return false;
                         }
                         if (tabIndex == line.Length - 1)
                         {
-                            HostUI.ErrorMessageBox(HostUI.strSoftwareName + " account name is empty in translation file line.");
+                            HostUI.ErrorMessageBox(HostUI.SoftwareName + " account name is empty in translation file line.");
                             return false;
                         }
                         TElement elm = new TElement();

@@ -50,7 +50,7 @@ Public MustInherit Class TrxImportPlugin
     Protected Function objAskForFile(ByVal strWindowCaption As String, ByVal strFileType As String,
         ByVal strSettingsKey As String) As InputFile
 
-        Dim strFile As String = HostUI.strChooseFile(strWindowCaption, strFileType, strSettingsKey)
+        Dim strFile As String = HostUI.ChooseFile(strWindowCaption, strFileType, strSettingsKey)
         If strFile <> "" Then
             Return New InputFile(New StreamReader(strFile), strFile)
         End If

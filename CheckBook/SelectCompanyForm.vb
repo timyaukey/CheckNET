@@ -12,7 +12,7 @@ Public Class SelectCompanyForm
     Public Function ShowCompanyDialog(ByVal objHostUI As IHostUI, ByVal objShowMessage As Action(Of String)) As DialogResult
         mobjHostUI = objHostUI
         mobjShowMessage = objShowMessage
-        mstrDefaultRootFolder = Company.DefaultRootFolder(mobjHostUI.strSoftwareName)
+        mstrDefaultRootFolder = Company.DefaultRootFolder(mobjHostUI.SoftwareName)
         mblnNewOnEmptyAsked = False
         If My.Settings.CompanyList Is Nothing Then
             My.Settings.CompanyList = New Specialized.StringCollection()

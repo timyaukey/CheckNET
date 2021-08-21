@@ -17,7 +17,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
 
         public override void Register(IHostSetup setup)
         {
-            setup.objToolMenu.Add(new MenuElementRegister(HostUI, "Renumber Checks", 103, ClickHandler, GetPluginPath()));
+            setup.ToolMenu.Add(new MenuElementRegister(HostUI, "Renumber Checks", 103, ClickHandler, GetPluginPath()));
         }
 
         private void ClickHandler(object sender, RegisterEventArgs e)

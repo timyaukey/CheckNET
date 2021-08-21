@@ -40,7 +40,7 @@ Public Class CheckPrinting
 
     Public Function PrepareForFirstCheck() As Boolean
 
-        If Not System.IO.File.Exists(mobjHostUI.objCompany.CheckFormatFilePath()) Then
+        If Not System.IO.File.Exists(mobjHostUI.Company.CheckFormatFilePath()) Then
             mobjHostUI.InfoMessageBox("You must set up your check format first, using the option on the ""Setup"" menu.")
             Return False
         End If
@@ -64,7 +64,7 @@ Public Class CheckPrinting
         Dim objParseError As CBXmlParseError
 
         mdomCheckFormat = New CBXmlDocument
-        strCheckFormatFile = mobjHostUI.objCompany.CheckFormatFilePath()
+        strCheckFormatFile = mobjHostUI.Company.CheckFormatFilePath()
         mdomCheckFormat.Load(strCheckFormatFile)
         objParseError = mdomCheckFormat.ParseError
         If Not objParseError Is Nothing Then
@@ -81,7 +81,7 @@ Public Class CheckPrinting
         Dim objPrintDoc As PrintDocument
         Dim blnPreview As Boolean = False
 
-        mobjCompany = mobjHostUI.objCompany
+        mobjCompany = mobjHostUI.Company
         If Not GetCheckFormat() Then
             Return False
         End If

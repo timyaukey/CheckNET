@@ -11,7 +11,7 @@ Public Class BankImportOFX
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.objBankImportMenu.Add(New MenuElementAction("OFX File", StandardSortCode(), AddressOf ClickHandler, GetPluginPath()))
+        setup.BankImportMenu.Add(New MenuElementAction("OFX File", StandardSortCode(), AddressOf ClickHandler, GetPluginPath()))
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String

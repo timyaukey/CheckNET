@@ -28,7 +28,7 @@ Friend Class CatSumRptForm
                       ByVal blnIncludeFake As Boolean, ByVal blnIncludeGenerated As Boolean)
 
         mobjHostUI = objHostUI
-        mobjCompany = mobjHostUI.objCompany
+        mobjCompany = mobjHostUI.Company
         maudtCatTotals = audtCatTotals.Clone()
         mcolSelectedAccounts = colSelectedAccounts
         mobjCats = objCats
@@ -41,8 +41,8 @@ Friend Class CatSumRptForm
         ' functionality of automatically
         ' loading and showing an MDI
         ' child's parent.
-        Me.MdiParent = objHostUI.objGetMainForm()
-        mobjHostUI.objGetMainForm().Show()
+        Me.MdiParent = objHostUI.GetMainForm()
+        mobjHostUI.GetMainForm().Show()
 
         Me.Show()
 

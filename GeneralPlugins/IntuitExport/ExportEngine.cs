@@ -69,12 +69,12 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         public ExportEngine(IHostUI hostUI)
         {
             HostUI = hostUI;
-            Company = HostUI.objCompany;
+            Company = HostUI.Company;
             BalanceSheetMaps = null;
             CategoryMaps = null;
             Payees = new Dictionary<string, PayeeDef>();
             Categories = new Dictionary<string, CatDef>();
-            CatTrans = HostUI.objCompany.Categories;
+            CatTrans = HostUI.Company.Categories;
         }
 
         /// <summary>

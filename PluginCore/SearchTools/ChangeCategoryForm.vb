@@ -14,7 +14,7 @@ Friend Class ChangeCategoryForm
     Public Function GetCategories(ByVal objHostUI As IHostUI, ByRef strOldCatKey As String, ByRef strNewCatKey As String) As Boolean
 
         mobjHostUI = objHostUI
-        mobjCompany = mobjHostUI.objCompany
+        mobjCompany = mobjHostUI.Company
         UITools.LoadComboFromStringTranslator(cboOldCategory, mobjCompany.Categories, True)
         UITools.LoadComboFromStringTranslator(cboNewCategory, mobjCompany.Categories, True)
         mblnSuccess = False
