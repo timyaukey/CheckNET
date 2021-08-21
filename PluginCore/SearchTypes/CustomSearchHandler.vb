@@ -4,15 +4,15 @@ Option Explicit On
 Public MustInherit Class CustomSearchHandler
     Implements ISearchHandler
 
-    Protected mobjHostUI As IHostUI
-    Protected objComparer As SearchComparer
-    Protected strParameter As String
+    Protected HostUI As IHostUI
+    Protected Comparer As SearchComparer
+    Protected SearchParam As String
 
     Public Sub New(
         ByVal objHostUI_ As IHostUI,
         ByVal strName_ As String)
 
-        mobjHostUI = objHostUI_
+        HostUI = objHostUI_
         Name = strName_
     End Sub
 
@@ -30,8 +30,8 @@ Public MustInherit Class CustomSearchHandler
 
     Public Function PrepareSearch(ByVal objHostSearchUI As IHostSearchUI) As Boolean _
         Implements ISearchHandler.PrepareSearch
-        objComparer = DirectCast(objHostSearchUI.GetSearchType(), SearchComparer)
-        strParameter = objHostSearchUI.GetTextSearchFor()
+        Comparer = DirectCast(objHostSearchUI.GetSearchType(), SearchComparer)
+        SearchParam = objHostSearchUI.GetTextSearchFor()
         Return True
     End Function
 

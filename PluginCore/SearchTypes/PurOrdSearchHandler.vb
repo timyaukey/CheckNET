@@ -18,12 +18,12 @@ Public Class PurOrdSearchHandler
 
         If TypeOf (objTrx) Is BankTrx Then
             For Each objSplit In DirectCast(objTrx, BankTrx).Splits
-                If objComparer.Compare(objSplit.PONumber, strParameter) Then
+                If Comparer.Compare(objSplit.PONumber, SearchParam) Then
                     dlgAddSplitResult(DirectCast(objTrx, BankTrx), objSplit)
                 End If
             Next
         ElseIf TypeOf (objTrx) Is ReplicaTrx Then
-            If objComparer.Compare(DirectCast(objTrx, ReplicaTrx).PONumber, strParameter) Then
+            If Comparer.Compare(DirectCast(objTrx, ReplicaTrx).PONumber, SearchParam) Then
                 dlgAddTrxResult(objTrx)
             End If
         End If
