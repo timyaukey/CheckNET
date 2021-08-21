@@ -8,7 +8,7 @@ Public Class ReportAccumulator
         mcurTotal += curAmount
     End Sub
 
-    Public ReadOnly Property curTotal() As Decimal
+    Public ReadOnly Property Total() As Decimal
         Get
             Return mcurTotal
         End Get

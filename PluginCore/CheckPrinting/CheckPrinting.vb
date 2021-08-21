@@ -5,7 +5,7 @@ Imports System.Drawing.Printing
 
 Public Class CheckPrinting
 
-    Public Shared strNextCheckNumToPrint As String
+    Public Shared NextCheckNumToPrint As String
 
     Private mobjHostUI As IHostUI
     Private mobjCompany As Company
@@ -21,7 +21,7 @@ Public Class CheckPrinting
         mobjHostUI = objHostUI
     End Sub
 
-    Public Function blnAllowedToPrintCheck(ByVal objTestTrx As BankTrx) As Boolean
+    Public Function IsAllowedToPrintCheck(ByVal objTestTrx As BankTrx) As Boolean
 
         If objTestTrx.Amount >= 0 Then
             mobjHostUI.ErrorMessageBox("You may only print a check for a debit transaction.")
@@ -38,15 +38,15 @@ Public Class CheckPrinting
 
     End Function
 
-    Public Function blnPrepareForFirstCheck() As Boolean
+    Public Function PrepareForFirstCheck() As Boolean
 
         If Not System.IO.File.Exists(mobjHostUI.objCompany.CheckFormatFilePath()) Then
             mobjHostUI.InfoMessageBox("You must set up your check format first, using the option on the ""Setup"" menu.")
             Return False
         End If
 
-        CheckPrinting.strNextCheckNumToPrint = InputBox("Please enter the check number to use:", "Check Number", CheckPrinting.strNextCheckNumToPrint)
-        If CheckPrinting.strNextCheckNumToPrint = "" Then
+        CheckPrinting.NextCheckNumToPrint = InputBox("Please enter the check number to use:", "Check Number", CheckPrinting.NextCheckNumToPrint)
+        If CheckPrinting.NextCheckNumToPrint = "" Then
             Return False
         End If
 
@@ -55,10 +55,10 @@ Public Class CheckPrinting
     End Function
 
     Private Sub IncrementCheckNumber()
-        CheckPrinting.strNextCheckNumToPrint = CStr(Val(CheckPrinting.strNextCheckNumToPrint) + 1)
+        CheckPrinting.NextCheckNumToPrint = CStr(Val(CheckPrinting.NextCheckNumToPrint) + 1)
     End Sub
 
-    Private Function blnGetCheckFormat() As Boolean
+    Private Function GetCheckFormat() As Boolean
 
         Dim strCheckFormatFile As String
         Dim objParseError As CBXmlParseError
@@ -77,12 +77,12 @@ Public Class CheckPrinting
 
     End Function
 
-    Public Function blnPrintCheck(ByVal objTrx_ As BankTrx) As Boolean
+    Public Function PrintCheck(ByVal objTrx_ As BankTrx) As Boolean
         Dim objPrintDoc As PrintDocument
         Dim blnPreview As Boolean = False
 
         mobjCompany = mobjHostUI.objCompany
-        If Not blnGetCheckFormat() Then
+        If Not GetCheckFormat() Then
             Return False
         End If
         mobjTrx = objTrx_
@@ -220,7 +220,7 @@ Public Class CheckPrinting
         '<InvoiceList1 x="2.0" y="4.0" rows="3" cols="2" colwidth="1.5" />
 
         'Does the check format include a place to print invoice numbers?
-        elmInvoiceList = objGetCheckPrintPos(strItemName, dblX, dblY)
+        elmInvoiceList = GetCheckPrintPosElement(strItemName, dblX, dblY)
         If elmInvoiceList Is Nothing Then
             Exit Sub
         End If
@@ -304,7 +304,7 @@ Public Class CheckPrinting
         Dim dblX As Double
         Dim dblY As Double
 
-        elmItem = objGetCheckPrintPos(strItemName, dblX, dblY)
+        elmItem = GetCheckPrintPosElement(strItemName, dblX, dblY)
         If elmItem Is Nothing Then
             Exit Sub
         End If
@@ -341,19 +341,19 @@ Public Class CheckPrinting
 
     Private Sub GetCheckPrintPos(ByVal strItemName As String, ByRef elmItem As CBXmlElement, ByRef dblX As Double, ByRef dblY As Double)
 
-        elmItem = objGetCheckPrintPos(strItemName, dblX, dblY)
+        elmItem = GetCheckPrintPosElement(strItemName, dblX, dblY)
         If elmItem Is Nothing Then
             mobjHostUI.InfoMessageBox("Could not find <" & strItemName & "> in check format file")
             Exit Sub
         End If
     End Sub
 
-    Private Function objGetCheckPrintPos(ByVal strItemName As String, ByRef dblX As Double, ByRef dblY As Double) As CBXmlElement
+    Private Function GetCheckPrintPosElement(ByVal strItemName As String, ByRef dblX As Double, ByRef dblY As Double) As CBXmlElement
 
         Dim elmItem As CBXmlElement
         Dim vntAttrib As Object
 
-        objGetCheckPrintPos = Nothing
+        GetCheckPrintPosElement = Nothing
 
         elmItem = DirectCast(mdomCheckFormat.DocumentElement.SelectSingleNode(strItemName), CBXmlElement)
         If elmItem Is Nothing Then
@@ -374,6 +374,6 @@ Public Class CheckPrinting
         End If
         dblY = Val(vntAttrib)
 
-        objGetCheckPrintPos = elmItem
+        GetCheckPrintPosElement = elmItem
     End Function
 End Class

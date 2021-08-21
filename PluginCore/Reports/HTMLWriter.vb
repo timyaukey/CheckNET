@@ -7,7 +7,7 @@ Public Class HTMLWriter
     Private ReadOnly mstrFileNameRoot As String
     Private ReadOnly mblnLocalStylesheet As Boolean
     Private ReadOnly mobjBuilder As System.Text.StringBuilder
-    Public blnUseMinusNumbers As Boolean
+    Public UseMinusNumbers As Boolean
 
     Public Sub New(ByVal objHostUI As IHostUI, ByVal strFileNameRoot As String, ByVal blnLocalStylesheet As Boolean)
         mobjHostUI = objHostUI
@@ -15,7 +15,7 @@ Public Class HTMLWriter
         mstrFileNameRoot = strFileNameRoot
         mblnLocalStylesheet = blnLocalStylesheet
         mobjBuilder = New System.Text.StringBuilder()
-        blnUseMinusNumbers = False
+        UseMinusNumbers = False
     End Sub
 
     Public Sub BeginReport()
@@ -85,7 +85,7 @@ Public Class HTMLWriter
                           ByVal strNegativeClass As String, ByVal curAmount As Decimal, objAccum As ReportAccumulator)
         Dim strExtraClass As String = ""
         Dim curOutputAmount As Decimal = curAmount
-        If blnUseMinusNumbers Then
+        If UseMinusNumbers Then
             curOutputAmount = -curOutputAmount
         End If
         If curOutputAmount < 0 Then

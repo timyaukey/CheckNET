@@ -133,9 +133,9 @@ Public Class TrialBalanceForm
                 objBalSheet, Account.SubType.Asset_Investment.ToString(), True, objAccumAssets)
             objWriter.OutputGroupSummary(strLineTitleClass, "Other Assets", strLineAmountClass, strMinusClass,
                 objBalSheet, Account.SubType.Asset_Other.ToString(), True, objAccumAssets)
-            objWriter.OutputAmount(strLineFooterTitleClass, "Total Assets", strLineFooterAmountClass, strMinusClass, objAccumAssets.curTotal, objAccumTotal)
+            objWriter.OutputAmount(strLineFooterTitleClass, "Total Assets", strLineFooterAmountClass, strMinusClass, objAccumAssets.Total, objAccumTotal)
 
-            objWriter.blnUseMinusNumbers = True
+            objWriter.UseMinusNumbers = True
 
             objWriter.OutputText(strLineHeaderClass, "Liabilities")
 
@@ -153,7 +153,7 @@ Public Class TrialBalanceForm
                 objBalSheet, Account.SubType.Liability_Other.ToString(), True, objAccumLiabilities)
             objWriter.OutputGroupSummary(strLineTitleClass, "Taxes", strLineAmountClass, strMinusClass,
                 objBalSheet, Account.SubType.Liability_Taxes.ToString(), True, objAccumLiabilities)
-            objWriter.OutputAmount(strLineFooterTitleClass, "Total Liabilities", strLineFooterAmountClass, strMinusClass, objAccumLiabilities.curTotal, objAccumTotal)
+            objWriter.OutputAmount(strLineFooterTitleClass, "Total Liabilities", strLineFooterAmountClass, strMinusClass, objAccumLiabilities.Total, objAccumTotal)
 
             objWriter.OutputText(strLineHeaderClass, "Equity")
             objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
@@ -167,11 +167,11 @@ Public Class TrialBalanceForm
                 objWriter.OutputAmount(strLineTitleClass, "Net Income", strLineAmountClass, strMinusClass,
                     -objNetIncome.GrandTotal, objAccumEquity)
             End If
-            objWriter.OutputAmount(strLineFooterTitleClass, "Total Equity", strLineFooterAmountClass, strMinusClass, objAccumEquity.curTotal, objAccumTotal)
+            objWriter.OutputAmount(strLineFooterTitleClass, "Total Equity", strLineFooterAmountClass, strMinusClass, objAccumEquity.Total, objAccumTotal)
 
             objWriter.OutputText(strLineHeaderClass, " ")
             objWriter.OutputAmount(strLineFooterTitleClass, "Total Liabilities and Equity", strLineFooterAmountClass, strMinusClass,
-                                   objAccumLiabilities.curTotal + objAccumEquity.curTotal, objAccumTotal)
+                                   objAccumLiabilities.Total + objAccumEquity.Total, objAccumTotal)
 
             objWriter.EndReport()
             objWriter.CheckPrinted(objBalSheet)
@@ -210,7 +210,7 @@ Public Class TrialBalanceForm
                 objIncExp, CategoryTranslator.TypeCOGS, False, objAccumIncome)
             objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
                 objIncExp, CategoryTranslator.TypeOtherIncome, objAccumIncome)
-            objWriter.OutputAmount(strLineFooterTitleClass, "Net Income", strLineFooterAmountClass, strMinusClass, objAccumIncome.curTotal, objAccumTotal)
+            objWriter.OutputAmount(strLineFooterTitleClass, "Net Income", strLineFooterAmountClass, strMinusClass, objAccumIncome.Total, objAccumTotal)
 
             objWriter.OutputText(strLineHeaderClass, "Operating Expenses")
             objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
@@ -223,7 +223,7 @@ Public Class TrialBalanceForm
                 objIncExp, CategoryTranslator.TypeRentInc, True, objAccumOperExp)
             objWriter.OutputGroupSummary(strLineTitleClass, "Rental Expense", strLineAmountClass, strMinusClass,
                 objIncExp, CategoryTranslator.TypeRentExp, True, objAccumOperExp)
-            objWriter.OutputAmount(strLineFooterTitleClass, "Total Operating Expenses", strLineFooterAmountClass, strMinusClass, objAccumOperExp.curTotal, objAccumTotal)
+            objWriter.OutputAmount(strLineFooterTitleClass, "Total Operating Expenses", strLineFooterAmountClass, strMinusClass, objAccumOperExp.Total, objAccumTotal)
 
             objWriter.OutputText(strLineHeaderClass, "Other Expenses")
             objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
@@ -232,14 +232,14 @@ Public Class TrialBalanceForm
                 objIncExp, CategoryTranslator.TypeTaxes, objAccumOtherExp)
             objWriter.OutputGroupItems(strLineTitleClass, strLineAmountClass, strMinusClass,
                 objIncExp, CategoryTranslator.TypeDepreciation, objAccumOtherExp)
-            objWriter.OutputAmount(strLineFooterTitleClass, "Total Other Expenses", strLineFooterAmountClass, strMinusClass, objAccumOtherExp.curTotal, objAccumTotal)
+            objWriter.OutputAmount(strLineFooterTitleClass, "Total Other Expenses", strLineFooterAmountClass, strMinusClass, objAccumOtherExp.Total, objAccumTotal)
 
             objWriter.OutputText(strLineHeaderClass, "Grand Total Income/Expense")
-            objWriter.OutputAmount(strLineFooterTitleClass, "", strLineFooterAmountClass, strMinusClass, objAccumTotal.curTotal, objAccumDummy)
+            objWriter.OutputAmount(strLineFooterTitleClass, "", strLineFooterAmountClass, strMinusClass, objAccumTotal.Total, objAccumDummy)
 
             objWriter.EndReport()
             objWriter.CheckPrinted(objIncExp)
-            mobjHostUI.InfoMessageBox("Net profit bottom line is: " + Utilities.FormatCurrency(objAccumTotal.curTotal))
+            mobjHostUI.InfoMessageBox("Net profit bottom line is: " + Utilities.FormatCurrency(objAccumTotal.Total))
             objWriter.ShowReport()
         Catch ex As Exception
             TopException(ex)
@@ -332,7 +332,7 @@ Public Class TrialBalanceForm
         Next
 
         objWriter.OutputText(strLineHeaderClass, strReportTotalTag)
-        objWriter.OutputAmount(strLineFooterTitleClass, "", strLineFooterAmountClass, strMinusClass, objAccumTotal.curTotal, objAccumDummy)
+        objWriter.OutputAmount(strLineFooterTitleClass, "", strLineFooterAmountClass, strMinusClass, objAccumTotal.Total, objAccumDummy)
 
         objWriter.EndReport()
         objWriter.ShowReport()

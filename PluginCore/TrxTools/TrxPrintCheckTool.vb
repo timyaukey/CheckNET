@@ -28,14 +28,14 @@ Public Class TrxPrintCheckTool
         If objTestTrx Is Nothing Then
             Exit Sub
         End If
-        If Not objCheckPrinting.blnAllowedToPrintCheck(objTestTrx) Then
+        If Not objCheckPrinting.IsAllowedToPrintCheck(objTestTrx) Then
             Exit Sub
         End If
-        If Not objCheckPrinting.blnPrepareForFirstCheck() Then
+        If Not objCheckPrinting.PrepareForFirstCheck() Then
             Exit Sub
         End If
 
-        objHostTrxToolUI.SetNumber(CheckPrinting.strNextCheckNumToPrint)
+        objHostTrxToolUI.SetNumber(CheckPrinting.NextCheckNumToPrint)
         objHostTrxToolUI.SetDate(Today)
         objHostTrxToolUI.SetFake(False)
 
@@ -44,8 +44,8 @@ Public Class TrxPrintCheckTool
             Exit Sub
         End If
 
-        objHostTrxToolUI.objReg.LogAction("PrintCheck:" & CheckPrinting.strNextCheckNumToPrint)
-        If objCheckPrinting.blnPrintCheck(objTrx) Then
+        objHostTrxToolUI.objReg.LogAction("PrintCheck:" & CheckPrinting.NextCheckNumToPrint)
+        If objCheckPrinting.PrintCheck(objTrx) Then
             objHostTrxToolUI.SaveAndClose()
         End If
 
