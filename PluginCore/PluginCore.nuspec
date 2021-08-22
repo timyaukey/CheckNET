@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package >
-  <!-- To generate package run "nuget pack CheckBookLib.vbproj" from a command line. -->
+  <!-- To generate package run "nuget pack PluginCore.vbproj" from a command line. -->
   <metadata>
     <id>$id$</id>
     <version>$version$</version>
