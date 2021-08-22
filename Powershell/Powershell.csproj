@@ -42,6 +42,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Willowsoft.CheckBook.Lib, Version=2.12.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Willowsoft.CheckBook.Lib.2.12.0\lib\net472\Willowsoft.CheckBook.Lib.dll</HintPath>
+    </Reference>
+    <Reference Include="Willowsoft.TamperProofData, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Willowsoft.TamperProofData.1.2.0\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloseCompany.cs" />
@@ -59,12 +65,6 @@
     <Compile Include="SimplifyTrx.cs" />
     <Compile Include="SplitContent.cs" />
     <Compile Include="UpdateNormalTrx.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
-      <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
-      <Name>CheckBookLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

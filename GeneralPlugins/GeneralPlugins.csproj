@@ -42,6 +42,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Willowsoft.CheckBook.Lib, Version=2.12.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Willowsoft.CheckBook.Lib.2.12.0\lib\net472\Willowsoft.CheckBook.Lib.dll</HintPath>
+    </Reference>
+    <Reference Include="Willowsoft.CheckBook.PluginCore, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Willowsoft.CheckBook.PluginCore.1.5.0\lib\net472\Willowsoft.CheckBook.PluginCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Willowsoft.TamperProofData, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Willowsoft.TamperProofData.1.2.0\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IntuitExport\ExportEngine.cs" />
@@ -63,22 +72,18 @@
     <Compile Include="RenumberChecks\RenumberChecksPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
-      <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
-      <Name>CheckBookLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PluginCore\PluginCore.vbproj">
-      <Project>{df8c4177-36c2-414d-a363-09c33cb56fd4}</Project>
-      <Name>PluginCore</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="IntuitExport\ExportForm.resx">
       <DependentUpon>ExportForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RenumberChecks\RenumberChecksForm.resx">
       <DependentUpon>RenumberChecksForm.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\AllReports.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

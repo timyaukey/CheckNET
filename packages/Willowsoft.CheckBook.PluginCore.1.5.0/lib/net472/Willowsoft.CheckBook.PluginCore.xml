@@ -1,0 +1,107 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Willowsoft.CheckBook.PluginCore
+</name>
+</assembly>
+<members>
+<member name="T:Willowsoft.CheckBook.PluginCore.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:Willowsoft.CheckBook.PluginCore.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:Willowsoft.CheckBook.PluginCore.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="T:Willowsoft.CheckBook.PluginCore.IHostSearchUI">
+ <summary>
+ Implemented by search window to expose functionality
+ to ISearchHandler implementations.
+ </summary>
+</member>
+<member name="T:Willowsoft.CheckBook.PluginCore.IHostSetup">
+ <summary>
+ Passed to IPlugin.Register() to give plugins a way to
+ install themselves into the user interface.
+ </summary>
+</member>
+<member name="T:Willowsoft.CheckBook.PluginCore.IHostUI">
+ <summary>
+ Provide plugins a way to access to the user interface and other 
+ services of the main window.
+ An instance of this is passed to all plugin constructors, and many forms.
+ </summary>
+</member>
+<member name="P:Willowsoft.CheckBook.PluginCore.IHostUI.SplashImagePath">
+ <summary>
+ Image to display on splash form at startup.
+ Image will be stretched to 4:3 (width:height).
+ </summary>
+ <returns></returns>
+</member>
+<member name="T:Willowsoft.CheckBook.PluginCore.IPlugin">
+ <summary>
+ All plugins must implement this interface, and contain a constructor that
+ takes a single parameter of type IHostUI.
+ Every class meeting these conditions, if it is also in an assembly marked with the
+ "PluginAssembly" assembly level attribute and in the same folder as the main executing
+ program, will be loaded into the main AppDomain at program startup and its
+ Register() method called.
+ </summary>
+</member>
+<member name="M:Willowsoft.CheckBook.PluginCore.IPlugin.Register(Willowsoft.CheckBook.PluginCore.IHostSetup)">
+ <summary>
+ Called to let the plugin wire itself into the software.
+ </summary>
+</member>
+<member name="T:Willowsoft.CheckBook.PluginCore.PluginBase">
+ <summary>
+ A convenience implementation of IPlugin.
+ </summary>
+</member>
+<member name="P:Willowsoft.CheckBook.PluginCore.ISearchHandler.Name">
+ <summary>
+ Name to show for this search method in the UI.
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:Willowsoft.CheckBook.PluginCore.ISearchHandler.HandlerSelected(Willowsoft.CheckBook.PluginCore.IHostSearchUI)">
+ <summary>
+ Called with the user picks this handler in the search user interface.
+ Is responsible for configuring the UI for the selected type of search.
+ </summary>
+ <param name="objHostSearchUI"></param>
+</member>
+<member name="M:Willowsoft.CheckBook.PluginCore.ISearchHandler.PrepareSearch(Willowsoft.CheckBook.PluginCore.IHostSearchUI)">
+ <summary>
+ Read and validate all search parameters. Called by the UI
+ when the user explicitly requests a search, not when the UI
+ re-executes a search in response to an event such as changes
+ to a register. Such a re-execution bypasses the call to this
+ method and ProcessTrx() must use the same parameters last
+ retrieved by blnPrepareSearch().
+ </summary>
+ <returns>Return true iff parameters are valid and search may proceed.</returns>
+</member>
+<member name="M:Willowsoft.CheckBook.PluginCore.ISearchHandler.ProcessTrx(Willowsoft.CheckBook.Lib.BaseTrx,Willowsoft.CheckBook.PluginCore.AddSearchMatchTrxDelegate,Willowsoft.CheckBook.PluginCore.AddSearchMatchSplitDelegate)">
+ <summary>
+ Evaluate one BaseTrx for the search, and if the BaseTrx meets the conditions
+ for being included in the search results then call one of the two
+ delegates to include it. One delegate is used to report the BaseTrx as
+ a whole, the other to report a single split in the BaseTrx.
+ </summary>
+ <param name="objTrx"></param>
+ <param name="dlgAddTrxResult"></param>
+ <param name="dlgAddSplitResult"></param>
+</member>
+</members>
+</doc>
