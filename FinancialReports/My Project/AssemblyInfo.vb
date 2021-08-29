@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("FinancialReports")>
+<Assembly: AssemblyTitle("Willow Creek Checkbook Financial Reports")>
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("FinancialReports")>
-<Assembly: AssemblyCopyright("Copyright © 2018-2020 Willow Creek Software")>
+<Assembly: AssemblyProduct("Willow Creek Checkbook Financial Reports")>
+<Assembly: AssemblyCopyright("Copyright © 2018-2021 Willow Creek Software")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
@@ -30,5 +30,5 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers
 ' by using the '*' as shown below:
 
-<Assembly: AssemblyVersion("1.2.0.0")>
-<Assembly: AssemblyFileVersion("1.2.0.0")>
+<Assembly: AssemblyVersion("1.3.0.0")>
+<Assembly: AssemblyFileVersion("1.3.0.0")>
