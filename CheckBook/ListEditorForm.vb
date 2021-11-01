@@ -31,7 +31,7 @@ Friend Class ListEditorForm
         mobjCompany = mobjHostUI.Company
 
         Try
-            For Each frm In gcolForms()
+            For Each frm In mobjHostUI.GetChildForms()
                 If TypeOf frm Is IRegisterForm Then
                     '
                 ElseIf TypeOf frm Is CBMainForm Then

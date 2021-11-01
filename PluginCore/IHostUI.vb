@@ -10,6 +10,8 @@ Option Explicit On
 Public Interface IHostUI
     ReadOnly Property Company() As Company
 
+    ReadOnly Property GetChildForms() As IEnumerable(Of Form)
+
     Function GetSearchTools() As IEnumerable(Of ISearchTool)
 
     Function GetTrxTools() As IEnumerable(Of ITrxTool)

@@ -47,7 +47,7 @@ Friend Class ShowRegisterForm
                 Exit Sub
             End If
 
-            If gcolForms().Count() <> 1 Then
+            If mobjHostUI.GetChildForms().Count() <> 1 Then
                 mobjHostUI.ErrorMessageBox("You may not delete a register while other windows are open.")
                 Exit Sub
             End If
@@ -109,7 +109,7 @@ Friend Class ShowRegisterForm
                 Exit Sub
             End If
 
-            If gblnAskAndCreateAccount(mobjHostUI) Then
+            If blnAskAndCreateAccount(mobjHostUI) Then
                 mobjHostUI.InfoMessageBox("Account will appear the next time you start the software.")
             End If
 
@@ -118,6 +118,29 @@ Friend Class ShowRegisterForm
             TopException(ex)
         End Try
     End Sub
+
+    Private Function blnAskAndCreateAccount(ByVal objHostUI As IHostUI) As Boolean
+        Dim objAccount As Account
+        Dim strFile As String
+
+        objAccount = New Account()
+        objAccount.Init(objHostUI.Company)
+        objAccount.AccountKey = objHostUI.Company.GetUnusedAccountKey()
+        objAccount.AcctSubType = Account.SubType.Liability_LoanPayable
+
+        Using frm As AccountForm = New AccountForm()
+            If frm.ShowDialog(objHostUI, objAccount, False, False) = DialogResult.OK Then
+                strFile = objHostUI.Company.AccountsFolderPath() & "\" & objAccount.FileNameRoot & ".act"
+                If Dir(strFile) <> "" Then
+                    objHostUI.ErrorMessageBox("Account file already exists with that name.")
+                    Exit Function
+                End If
+                objAccount.Create()
+                Return True
+            End If
+        End Using
+        Return False
+    End Function
 
     Private Sub cmdDeleteAccount_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdDeleteAccount.Click
         Dim strNameRoot As String
@@ -129,7 +152,7 @@ Friend Class ShowRegisterForm
                 Exit Sub
             End If
 
-            If gcolForms().Count() <> 1 Then
+            If mobjHostUI.GetChildForms().Count() <> 1 Then
                 mobjHostUI.ErrorMessageBox("You may not delete an account while other windows are open.")
                 Exit Sub
             End If

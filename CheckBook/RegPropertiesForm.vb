@@ -11,7 +11,7 @@ Friend Class RegPropertiesForm
     Public Sub ShowModal(ByVal objHostUI As IHostUI, ByVal objReg As Register, ByVal blnReadOnly As Boolean)
         mobjHostUI = objHostUI
         Dim frm As System.Windows.Forms.Form
-        For Each frm In gcolForms()
+        For Each frm In mobjHostUI.GetChildForms()
             If Not (TypeOf frm Is ShowRegisterForm) And Not (TypeOf frm Is CBMainForm) Then
                 mobjHostUI.ErrorMessageBox("Register properties may not be edited if any other windows are open.")
                 Exit Sub

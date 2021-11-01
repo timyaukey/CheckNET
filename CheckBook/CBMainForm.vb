@@ -344,6 +344,18 @@ Friend Class CBMainForm
         End Get
     End Property
 
+    Private ReadOnly Property GetChildForms() As IEnumerable(Of Form) Implements IHostUI.GetChildForms
+        Get
+            Dim frm As System.Windows.Forms.Form
+            Dim colResult As List(Of Form)
+            colResult = New List(Of Form)
+            For Each frm In Me.MdiChildren
+                colResult.Add(frm)
+            Next frm
+            Return colResult
+        End Get
+    End Property
+
     Public Sub AddExtraLicense(objLicense As IStandardLicense) Implements IHostSetup.AddExtraLicense
         Company.AddExtraLicense(objLicense)
     End Sub
@@ -405,7 +417,7 @@ Friend Class CBMainForm
         Dim frm As System.Windows.Forms.Form
         Dim frmReg As IRegisterForm
 
-        For Each frm In gcolForms()
+        For Each frm In Me.GetChildForms()
             If TypeOf frm Is IRegisterForm Then
                 frmReg = DirectCast(frm, IRegisterForm)
                 If frmReg.Reg Is objReg Then
@@ -556,7 +568,7 @@ Friend Class CBMainForm
 
         Try
 
-            For Each frm2 In gcolForms()
+            For Each frm2 In Me.GetChildForms()
                 If TypeOf frm2 Is ShowRegisterForm Then
                     frm2.Activate()
                     Exit Sub
