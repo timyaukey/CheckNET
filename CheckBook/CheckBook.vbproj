@@ -208,9 +208,6 @@
     <Compile Include="Reports\CategorySummary\CatSumRptForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CBMain.vb">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CBMainForm.Designer.vb">
       <SubType>Code</SubType>
       <DependentUpon>CBMainForm.vb</DependentUpon>

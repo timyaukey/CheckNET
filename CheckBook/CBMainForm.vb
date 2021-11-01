@@ -18,6 +18,9 @@ Friend Class CBMainForm
     Private mobjHostUI As IHostUI
     Private mnuFileSave As ToolStripMenuItem
 
+    Private mobjCoreRef As AssemblyName
+    Private mobjLibRef As AssemblyName
+
     Public Shared blnCancelStart As Boolean
 
     Private Sub CBMainForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
@@ -259,6 +262,15 @@ Friend Class CBMainForm
                             HelpShowFile("Technical.html")
                         End Sub, strPlugInPath))
 
+        mobjCoreRef = GetAssemblyReference(Assembly.GetEntryAssembly(), "Willowsoft.CheckBook.PluginCore")
+        If mobjCoreRef Is Nothing Then
+            Throw New InvalidDataException("Could not find Willowsoft.CheckBook.PluginCore assembly")
+        End If
+        mobjLibRef = GetAssemblyReference(Assembly.GetEntryAssembly(), "Willowsoft.CheckBook.Lib")
+        If mobjLibRef Is Nothing Then
+            Throw New InvalidDataException("Could not find WillowSoft.CheckBook.Lib assembly")
+        End If
+
         LoadPluginsFromAssembly(Assembly.GetEntryAssembly())
         Dim strEntryAssembly As String = Assembly.GetEntryAssembly().Location
         Dim strEntryFolder As String = Path.GetDirectoryName(strEntryAssembly)
@@ -284,6 +296,41 @@ Friend Class CBMainForm
                 Dim objPluginType As Type = objType.GetInterface("IPlugin")
                 If Not objPluginType Is Nothing Then
                     If Not objType.IsAbstract Then
+                        'Check version compatibility of CheckBook.PluginCore.
+                        Dim objCoreRef As AssemblyName = GetAssemblyReference(objAssembly, "Willowsoft.CheckBook.PluginCore")
+                        If objCoreRef Is Nothing Then
+                            mobjHostUI.ErrorMessageBox("Plugin [" + objAssembly.FullName +
+                                                       "] is missing reference to Willowsoft.CheckBook.PluginCore")
+                            Return
+                        End If
+                        If objCoreRef.Version.Major <> mobjCoreRef.Version.Major Then
+                            mobjHostUI.ErrorMessageBox("Plugin [" + objAssembly.FullName +
+                                                       "] references wrong major version of Willowsoft.CheckBook.PluginCore")
+                            Return
+                        End If
+                        If objCoreRef.Version.Minor > mobjCoreRef.Version.Minor Then
+                            mobjHostUI.ErrorMessageBox("Plugin [" + objAssembly.FullName +
+                                                       "] references newer minor version of Willowsoft.CheckBook.PluginCore")
+                            Return
+                        End If
+                        'Check version compatibility of CheckBook.Lib.
+                        Dim objLibRef As AssemblyName = GetAssemblyReference(objAssembly, "Willowsoft.CheckBook.Lib")
+                        If objLibRef Is Nothing Then
+                            mobjHostUI.ErrorMessageBox("Plugin [" + objAssembly.FullName +
+                                                       "] is missing reference to Willowsoft.CheckBook.Lib")
+                            Return
+                        End If
+                        If objLibRef.Version.Major <> mobjLibRef.Version.Major Then
+                            mobjHostUI.ErrorMessageBox("Plugin [" + objAssembly.FullName +
+                                                       "] references wrong major version of Willowsoft.CheckBook.Lib")
+                            Return
+                        End If
+                        If objLibRef.Version.Minor > mobjLibRef.Version.Minor Then
+                            mobjHostUI.ErrorMessageBox("Plugin [" + objAssembly.FullName +
+                                                       "] references newer minor version of Willowsoft.CheckBook.Lib")
+                            Return
+                        End If
+                        'Create instance of plugin and call its Register() method.
                         Dim objConstructor As ConstructorInfo = objType.GetConstructor({GetType(IHostUI)})
                         If Not objConstructor Is Nothing Then
                             Dim objPlugin As IPlugin = DirectCast(objConstructor.Invoke({mobjHostUI}), IPlugin)
@@ -294,6 +341,19 @@ Friend Class CBMainForm
             Next
         Next
     End Sub
+
+    Private Function GetAssemblyReference(ByVal objAssembly As Assembly, ByVal strRefName As String) As AssemblyName
+        'Empirically, GetReferencedAssemblies() returns the references used to compile
+        'the assembly, not how those references were satisfied at runtime. For example,
+        'if two plugins were compiled against different versions of an assembly then
+        'they will have different AssemblyName.Version properties.
+        For Each objRefName As AssemblyName In objAssembly.GetReferencedAssemblies()
+            If objRefName.Name = strRefName Then
+                Return objRefName
+            End If
+        Next
+        Return Nothing
+    End Function
 
     Private Sub CBMainForm_Activated(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Activated
         If blnCancelStart Then
