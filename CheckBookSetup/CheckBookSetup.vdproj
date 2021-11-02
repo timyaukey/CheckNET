@@ -21,54 +21,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_17BDD9C246E60B30758887E8B4E8B95C"
-        "OwnerKey" = "8:_E165052A518E0F8AFA0EC42C25677191"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_17BDD9C246E60B30758887E8B4E8B95C"
-        "OwnerKey" = "8:_AE04C0D0587D4BE5E146675A74BF55AE"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_17BDD9C246E60B30758887E8B4E8B95C"
-        "OwnerKey" = "8:_8D25BD4EEB000CE7A283174AD809BDB9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_17BDD9C246E60B30758887E8B4E8B95C"
-        "OwnerKey" = "8:_46CF0CF5099999552C3DC52E48DFBFF8"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_17BDD9C246E60B30758887E8B4E8B95C"
-        "OwnerKey" = "8:_DD4A3B78A54D408F94C62917BA2964A2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_17BDD9C246E60B30758887E8B4E8B95C"
-        "OwnerKey" = "8:_2000E7DEBBF32B05B2E68554986A7B9C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_17BDD9C246E60B30758887E8B4E8B95C"
-        "OwnerKey" = "8:_D9510EAFDF0D9D311640A018A7F7B77F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_17BDD9C246E60B30758887E8B4E8B95C"
-        "OwnerKey" = "8:_F86CC279AF596DAA1B608C5CBEA68B63"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_2000E7DEBBF32B05B2E68554986A7B9C"
         "OwnerKey" = "8:_DD4A3B78A54D408F94C62917BA2964A2"
         "MsmSig" = "8:_UNDEFINED"
@@ -89,6 +41,12 @@
         {
         "MsmKey" = "8:_229A5659A703DA2B276140A3FCEBF3F5"
         "OwnerKey" = "8:_F86CC279AF596DAA1B608C5CBEA68B63"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_229A5659A703DA2B276140A3FCEBF3F5"
+        "OwnerKey" = "8:_A39E181FED408A4886A1DCD2F7BC9D3A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -130,7 +88,7 @@
         "Entry"
         {
         "MsmKey" = "8:_89671E5F6D597A771598BFF400A6FDC9"
-        "OwnerKey" = "8:_E165052A518E0F8AFA0EC42C25677191"
+        "OwnerKey" = "8:_B6DC6A858DEC984FEA0E97BAD5025077"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -178,13 +136,19 @@
         "Entry"
         {
         "MsmKey" = "8:_89671E5F6D597A771598BFF400A6FDC9"
+        "OwnerKey" = "8:_A39E181FED408A4886A1DCD2F7BC9D3A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_89671E5F6D597A771598BFF400A6FDC9"
         "OwnerKey" = "8:_F86CC279AF596DAA1B608C5CBEA68B63"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_89671E5F6D597A771598BFF400A6FDC9"
-        "OwnerKey" = "8:_17BDD9C246E60B30758887E8B4E8B95C"
+        "OwnerKey" = "8:_E165052A518E0F8AFA0EC42C25677191"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -201,7 +165,61 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_A39E181FED408A4886A1DCD2F7BC9D3A"
+        "OwnerKey" = "8:_F86CC279AF596DAA1B608C5CBEA68B63"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A39E181FED408A4886A1DCD2F7BC9D3A"
+        "OwnerKey" = "8:_DD4A3B78A54D408F94C62917BA2964A2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_AE04C0D0587D4BE5E146675A74BF55AE"
+        "OwnerKey" = "8:_DD4A3B78A54D408F94C62917BA2964A2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B6DC6A858DEC984FEA0E97BAD5025077"
+        "OwnerKey" = "8:_E165052A518E0F8AFA0EC42C25677191"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B6DC6A858DEC984FEA0E97BAD5025077"
+        "OwnerKey" = "8:_AE04C0D0587D4BE5E146675A74BF55AE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B6DC6A858DEC984FEA0E97BAD5025077"
+        "OwnerKey" = "8:_8D25BD4EEB000CE7A283174AD809BDB9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B6DC6A858DEC984FEA0E97BAD5025077"
+        "OwnerKey" = "8:_46CF0CF5099999552C3DC52E48DFBFF8"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B6DC6A858DEC984FEA0E97BAD5025077"
+        "OwnerKey" = "8:_2000E7DEBBF32B05B2E68554986A7B9C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B6DC6A858DEC984FEA0E97BAD5025077"
+        "OwnerKey" = "8:_D9510EAFDF0D9D311640A018A7F7B77F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B6DC6A858DEC984FEA0E97BAD5025077"
         "OwnerKey" = "8:_DD4A3B78A54D408F94C62917BA2964A2"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -298,13 +316,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_A39E181FED408A4886A1DCD2F7BC9D3A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_E165052A518E0F8AFA0EC42C25677191"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_17BDD9C246E60B30758887E8B4E8B95C"
+        "OwnerKey" = "8:_B6DC6A858DEC984FEA0E97BAD5025077"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -466,37 +490,6 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_17BDD9C246E60B30758887E8B4E8B95C"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.PluginCore, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_17BDD9C246E60B30758887E8B4E8B95C"
-                    {
-                    "Name" = "8:Willowsoft.CheckBook.PluginCore.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Willowsoft.CheckBook.PluginCore.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_084CDAC094364EC9B729E88A9AD06B5B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -748,6 +741,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A39E181FED408A4886A1DCD2F7BC9D3A"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.PluginCore, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_A39E181FED408A4886A1DCD2F7BC9D3A"
+                    {
+                    "Name" = "8:Willowsoft.CheckBook.PluginCore.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Willowsoft.CheckBook.PluginCore.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_084CDAC094364EC9B729E88A9AD06B5B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_AE04C0D0587D4BE5E146675A74BF55AE"
             {
             "AssemblyRegister" = "3:1"
@@ -762,6 +786,37 @@
                     }
                 }
             "SourcePath" = "8:Willowsoft.CheckBook.TrxFormLib.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_084CDAC094364EC9B729E88A9AD06B5B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B6DC6A858DEC984FEA0E97BAD5025077"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.PluginCore, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_B6DC6A858DEC984FEA0E97BAD5025077"
+                    {
+                    "Name" = "8:Willowsoft.CheckBook.PluginCore.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Willowsoft.CheckBook.PluginCore.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_084CDAC094364EC9B729E88A9AD06B5B"
@@ -876,7 +931,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.FinancialReports, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.FinancialReports, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_F86CC279AF596DAA1B608C5CBEA68B63"
@@ -990,15 +1045,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Willow Creek Checkbook"
-        "ProductCode" = "8:{95A9D638-E401-4966-A97A-7A4D8ACDA1D0}"
-        "PackageCode" = "8:{4FCA66D6-4BA2-4B3D-B242-233818DA7FA2}"
+        "ProductCode" = "8:{C7360C35-A95E-4440-ADDE-69031BA2409C}"
+        "PackageCode" = "8:{9AE96367-1AF2-40CC-A489-9C5DB3049D39}"
         "UpgradeCode" = "8:{4B1A022A-7B68-44D6-AB9F-9EE0B336EEF0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.12.0"
+        "ProductVersion" = "8:2.13.0"
         "Manufacturer" = "8:Willow Creek Software"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

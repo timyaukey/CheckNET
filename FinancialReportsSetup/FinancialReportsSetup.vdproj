@@ -15,12 +15,6 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_22B88E193B237A37E3189BED81DB3154"
-        "OwnerKey" = "8:_DF4C485620354D05AB03BF0FC96CE19E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_3A5436BFFC01A7C1184CC22191D05715"
         "OwnerKey" = "8:_F1FA439BC5FA738241AD5382F296B4F2"
         "MsmSig" = "8:_UNDEFINED"
@@ -28,6 +22,12 @@
         "Entry"
         {
         "MsmKey" = "8:_3C40D8542630620073D8A2052BC1DA6F"
+        "OwnerKey" = "8:_DF4C485620354D05AB03BF0FC96CE19E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ADF0DD2F65835195819767E076C4A901"
         "OwnerKey" = "8:_DF4C485620354D05AB03BF0FC96CE19E"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -75,6 +75,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_F0CB6CAF1566E7220D5877923C8DB8E8"
+        "OwnerKey" = "8:_ADF0DD2F65835195819767E076C4A901"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_F1EE0C175DB3D275D32459D9B9914A19"
         "OwnerKey" = "8:_DF4C485620354D05AB03BF0FC96CE19E"
         "MsmSig" = "8:_UNDEFINED"
@@ -82,7 +88,7 @@
         "Entry"
         {
         "MsmKey" = "8:_F1EE0C175DB3D275D32459D9B9914A19"
-        "OwnerKey" = "8:_22B88E193B237A37E3189BED81DB3154"
+        "OwnerKey" = "8:_ADF0DD2F65835195819767E076C4A901"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -95,6 +101,30 @@
         {
         "MsmKey" = "8:_F1FA439BC5FA738241AD5382F296B4F2"
         "OwnerKey" = "8:_F0CB6CAF1566E7220D5877923C8DB8E8"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_DF4C485620354D05AB03BF0FC96CE19E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_ADF0DD2F65835195819767E076C4A901"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F1EE0C175DB3D275D32459D9B9914A19"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_3C40D8542630620073D8A2052BC1DA6F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -127,30 +157,6 @@
         "OwnerKey" = "8:_BD18E73561FECE876CD7C2C7563E13D1"
         "MsmSig" = "8:_UNDEFINED"
         }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DF4C485620354D05AB03BF0FC96CE19E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_22B88E193B237A37E3189BED81DB3154"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F1EE0C175DB3D275D32459D9B9914A19"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_3C40D8542630620073D8A2052BC1DA6F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
     }
     "Configurations"
     {
@@ -169,6 +175,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -185,6 +199,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -214,37 +236,6 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_22B88E193B237A37E3189BED81DB3154"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.PluginCore, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_22B88E193B237A37E3189BED81DB3154"
-                    {
-                    "Name" = "8:Willowsoft.CheckBook.PluginCore.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Willowsoft.CheckBook.PluginCore.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_E60ED40A3A1347C18A535820D1926A55"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3A5436BFFC01A7C1184CC22191D05715"
             {
             "AssemblyRegister" = "3:1"
@@ -272,7 +263,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -290,6 +281,37 @@
                     }
                 }
             "SourcePath" = "8:System.Net.Http.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_E60ED40A3A1347C18A535820D1926A55"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_ADF0DD2F65835195819767E076C4A901"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.PluginCore, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_ADF0DD2F65835195819767E076C4A901"
+                    {
+                    "Name" = "8:Willowsoft.CheckBook.PluginCore.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Willowsoft.CheckBook.PluginCore.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E60ED40A3A1347C18A535820D1926A55"
@@ -549,15 +571,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Willow Creek Checkbook Financial Reports"
-        "ProductCode" = "8:{403A0734-CC5E-4EF0-996C-61A684DF4AAE}"
-        "PackageCode" = "8:{13D16A35-2D74-4607-96A1-DDEB47189304}"
+        "ProductCode" = "8:{3CB0DCCF-02CF-4BD5-A41B-E1DC0DCA10EE}"
+        "PackageCode" = "8:{224B3C6C-AA09-4AF8-AE39-D4EDABA14DF8}"
         "UpgradeCode" = "8:{72EB6BEF-DC10-4000-BF6E-F1305AA581D6}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.3.0"
+        "ProductVersion" = "8:1.3.1"
         "Manufacturer" = "8:Willow Creek Software"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
