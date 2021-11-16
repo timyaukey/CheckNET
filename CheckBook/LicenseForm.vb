@@ -12,7 +12,7 @@ Public Class LicenseForm
         Me.ShowDialog()
     End Sub
 
-    Private Sub SetControlValues()
+    Private Sub SetControlValues() '
         Try
             txtLicenseTitle.Text = mobjLicense.LicenseTitle
             If mobjLicense.Status = TamperProofData.LicenseStatus.Active Or
