@@ -10,7 +10,9 @@ Public Class PersonalBusinessPlugin
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.ToolMenu.Add(New MenuElementRegister(HostUI, "Adjust Account For Personal Use", 110, AddressOf ClickHandler, GetPluginPath()))
+        setup.ToolMenu.Add(New MenuElementRegister(HostUI, "Adjust Account For Personal Use", 110, AddressOf ClickHandler))
+        MetadataInternal = New PluginMetadata("Personal Business Adjustment", "Willow Creek Software",
+            Reflection.Assembly.GetExecutingAssembly(), Nothing, "", Nothing)
     End Sub
 
     Private Sub ClickHandler(sender As Object, e As RegisterEventArgs)

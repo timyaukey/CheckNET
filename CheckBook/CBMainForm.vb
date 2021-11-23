@@ -20,6 +20,7 @@ Friend Class CBMainForm
 
     Private mobjCoreRef As AssemblyName
     Private mobjLibRef As AssemblyName
+    Private mobjPlugins As List(Of IPlugin)
 
     Public Shared blnCancelStart As Boolean
 
@@ -65,6 +66,9 @@ Friend Class CBMainForm
             'The rest of this routine is load the UI (this program).
             mobjCompany = New Company(strDataPathValue)
             mobjSecurity = mobjCompany.SecData
+            For Each objPlugin As IPlugin In mobjPlugins
+                objPlugin.SetCompany(mobjCompany)
+            Next
 
             Dim objError As CompanyLoadError = CompanyLoader.Load(mobjCompany,
                 AddressOf frmStartup.Configure, AddressOf objAuthenticate)
@@ -220,6 +224,8 @@ Friend Class CBMainForm
     End Function
 
     Private Sub LoadPlugins()
+        mobjPlugins = New List(Of IPlugin)()
+
         FileMenu = New MenuBuilder(mnuFile)
         BankImportMenu = New MenuBuilder(mnuImportBank)
         CheckImportMenu = New MenuBuilder(mnuImportChecks)
@@ -229,38 +235,36 @@ Friend Class CBMainForm
         ToolMenu = New MenuBuilder(mnuTools)
         HelpMenu = New MenuBuilder(mnuHelp)
 
-        Dim strPlugInPath As String = System.IO.Path.GetFileName(Me.GetType().Assembly.Location)
-
-        FileMenu.Add(New MenuElementAction("Registers and Accounts", 100, AddressOf mnuFileShowReg_Click, strPlugInPath))
-        Dim saveAction As MenuElementAction = New MenuElementAction("Save", 200, AddressOf mnuFileSave_Click, strPlugInPath)
+        FileMenu.Add(New MenuElementAction("Registers and Accounts", 100, AddressOf mnuFileShowReg_Click))
+        Dim saveAction As MenuElementAction = New MenuElementAction("Save", 200, AddressOf mnuFileSave_Click)
         FileMenu.Add(saveAction)
-        FileMenu.Add(New MenuElementAction("Plugin List", 300, AddressOf mnuFilePlugins_Click, strPlugInPath))
-        FileMenu.Add(New MenuElementAction("Exit", 400, AddressOf mnuFileExit_Click, strPlugInPath))
+        FileMenu.Add(New MenuElementAction("Plugin List", 300, AddressOf mnuFilePlugins_Click))
+        FileMenu.Add(New MenuElementAction("Exit", 400, AddressOf mnuFileExit_Click))
 
         HelpMenu.Add(New MenuElementAction("Introduction", 1,
                         Sub(sender As Object, e As EventArgs)
                             HelpShowFile("Intro.html")
-                        End Sub, strPlugInPath))
+                        End Sub))
         HelpMenu.Add(New MenuElementAction("Setup and Configuration", 2,
                         Sub(sender As Object, e As EventArgs)
                             HelpShowFile("Setup.html")
-                        End Sub, strPlugInPath))
+                        End Sub))
         HelpMenu.Add(New MenuElementAction("Importing Transactions", 100,
                         Sub(sender As Object, e As EventArgs)
                             HelpShowFile("Importing.html")
-                        End Sub, strPlugInPath))
+                        End Sub))
         HelpMenu.Add(New MenuElementAction("Budgeting Tools", 200,
                         Sub(sender As Object, e As EventArgs)
                             HelpShowFile("Budget.html")
-                        End Sub, strPlugInPath))
+                        End Sub))
         HelpMenu.Add(New MenuElementAction("Reporting and Searching", 300,
                         Sub(sender As Object, e As EventArgs)
                             HelpShowFile("Reporting.html")
-                        End Sub, strPlugInPath))
+                        End Sub))
         HelpMenu.Add(New MenuElementAction("Technical Notes", 10000,
                         Sub(sender As Object, e As EventArgs)
                             HelpShowFile("Technical.html")
-                        End Sub, strPlugInPath))
+                        End Sub))
 
         mobjCoreRef = GetAssemblyReference(Assembly.GetEntryAssembly(), "Willowsoft.CheckBook.PluginCore")
         If mobjCoreRef Is Nothing Then
@@ -275,9 +279,17 @@ Friend Class CBMainForm
         Dim strEntryAssembly As String = Assembly.GetEntryAssembly().Location
         Dim strEntryFolder As String = Path.GetDirectoryName(strEntryAssembly)
         For Each strFile As String In Directory.EnumerateFiles(strEntryFolder, "*.dll")
-            Dim assembly As Assembly = Assembly.LoadFrom(strFile)
-            LoadPluginsFromAssembly(assembly)
+            Try
+                Dim assembly As Assembly = Assembly.LoadFrom(strFile)
+                LoadPluginsFromAssembly(assembly)
+            Catch ex As TypeLoadException
+                mobjHostUI.ErrorMessageBox("Could not load plugin file [" + strFile + "]")
+            End Try
         Next
+        For Each objPlugin As IPlugin In mobjPlugins
+            objPlugin.Register(Me)
+        Next
+
         FileMenu.AddElementsToMenu()
         mnuFileSave = saveAction.MenuItemControl
         mnuFileSave.Enabled = False
@@ -334,7 +346,7 @@ Friend Class CBMainForm
                         Dim objConstructor As ConstructorInfo = objType.GetConstructor({GetType(IHostUI)})
                         If Not objConstructor Is Nothing Then
                             Dim objPlugin As IPlugin = DirectCast(objConstructor.Invoke({mobjHostUI}), IPlugin)
-                            objPlugin.Register(Me)
+                            mobjPlugins.Add(objPlugin)
                         End If
                     End If
                 End If
@@ -837,7 +849,7 @@ Friend Class CBMainForm
     Private Sub mnuFilePlugins_Click(sender As Object, e As EventArgs)
         Try
             Using frm As PluginList = New PluginList()
-                frm.ShowMe(Me)
+                frm.ShowMe(Me, mobjPlugins)
             End Using
         Catch ex As Exception
             TopException(ex)

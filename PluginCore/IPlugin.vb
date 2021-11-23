@@ -15,4 +15,9 @@ Public Interface IPlugin
     ''' Called to let the plugin wire itself into the software.
     ''' </summary>
     Sub Register(ByVal setup As IHostSetup)
+
+    ReadOnly Property Metadata As PluginMetadata
+
+    'Inform the plugin of the Company object, after it is loaded.
+    Sub SetCompany(ByVal company As Company)
 End Interface

@@ -9,8 +9,8 @@ Public Class MenuElementAction
     Private ReadOnly ClickHandler As EventHandler
     Public MenuItemControl As ToolStripMenuItem
 
-    Public Sub New(ByVal title_ As String, ByVal sortCode_ As Integer, ByVal clickHandler_ As EventHandler, ByVal pluginPath_ As String)
-        MyBase.New(title_, sortCode_, pluginPath_)
+    Public Sub New(ByVal title_ As String, ByVal sortCode_ As Integer, ByVal clickHandler_ As EventHandler)
+        MyBase.New(title_, sortCode_)
         ClickHandler = clickHandler_
     End Sub
 

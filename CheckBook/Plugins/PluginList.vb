@@ -3,27 +3,38 @@ Option Explicit On
 
 Public Class PluginList
 
-    Public Sub ShowMe(ByVal objHostSetup As IHostSetup)
+    Public Sub ShowMe(ByVal objHostSetup As IHostSetup, ByVal objPlugins As IEnumerable(Of IPlugin))
+        Dim strName As String
+        Dim strVersion As String
+        Dim strManufacturer As String
+        Dim strPath As String
         lvwPlugins.Items.Clear()
-        AddPlugins("File", objHostSetup.FileMenu)
-        AddPlugins("Bank Import", objHostSetup.BankImportMenu)
-        AddPlugins("Check Import", objHostSetup.CheckImportMenu)
-        AddPlugins("Deposit Import", objHostSetup.DepositImportMenu)
-        AddPlugins("Invoice Import", objHostSetup.InvoiceImportMenu)
-        AddPlugins("Reports", objHostSetup.ReportMenu)
-        AddPlugins("Tools", objHostSetup.ToolMenu)
-        AddPlugins("Help", objHostSetup.HelpMenu)
-        Me.ShowDialog()
-    End Sub
-
-    Private Sub AddPlugins(ByVal strType As String, ByVal colPlugins As MenuBuilder)
-        For Each objPlugin As MenuElementBase In colPlugins.Elements
-            Dim item As ListViewItem = New ListViewItem(strType)
-            item.SubItems.Add(objPlugin.Title)
-            item.SubItems.Add(objPlugin.SortCode.ToString())
-            item.SubItems.Add(objPlugin.PluginPath)
+        For Each objPlugin As IPlugin In objPlugins
+            strName = "(none)"
+            strVersion = ""
+            strManufacturer = "(unknown)"
+            strPath = ""
+            If Not objPlugin.Metadata Is Nothing Then
+                If Not String.IsNullOrEmpty(objPlugin.Metadata.PluginName) Then
+                    strName = objPlugin.Metadata.PluginName
+                End If
+                If Not objPlugin.Metadata.Version Is Nothing Then
+                    strVersion = objPlugin.Metadata.Version.ToString()
+                End If
+                If Not String.IsNullOrEmpty(objPlugin.Metadata.Manufacturer) Then
+                    strManufacturer = objPlugin.Metadata.Manufacturer
+                End If
+                If Not objPlugin.Metadata.Assembly Is Nothing Then
+                    strPath = objPlugin.Metadata.Assembly.Location
+                End If
+            End If
+            Dim item As ListViewItem = New ListViewItem(strName)
+            item.SubItems.Add(strVersion)
+            item.SubItems.Add(strManufacturer)
+            item.SubItems.Add(strPath)
             lvwPlugins.Items.Add(item)
         Next
+        Me.ShowDialog()
     End Sub
 
 

@@ -10,7 +10,9 @@ Public Class CheckImportStandard
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.CheckImportMenu.Add(New MenuElementAction("Standard Clipboard", 1, AddressOf ClickHandler, GetPluginPath()))
+        setup.CheckImportMenu.Add(New MenuElementAction("Standard Clipboard", 1, AddressOf ClickHandler))
+        MetadataInternal = New PluginMetadata("Standard check clipboard import", "Willow Creek Software",
+                                    Reflection.Assembly.GetExecutingAssembly(), Nothing, "", Nothing)
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String

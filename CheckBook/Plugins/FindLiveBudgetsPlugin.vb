@@ -10,7 +10,9 @@ Public Class FindLiveBudgetsPlugin
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.ReportMenu.Add(New MenuElementRegister(HostUI, "Find Live Budgets", 100, AddressOf ClickHandler, GetPluginPath()))
+        setup.ReportMenu.Add(New MenuElementRegister(HostUI, "Find Live Budgets", 100, AddressOf ClickHandler))
+        MetadataInternal = New PluginMetadata("Find Live Budgets", "Willow Creek Software",
+            Reflection.Assembly.GetExecutingAssembly(), Nothing, "", Nothing)
     End Sub
 
     Private Sub ClickHandler(sender As Object, e As RegisterEventArgs)

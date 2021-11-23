@@ -11,8 +11,8 @@ Public Class MenuElementRegister
     Public MenuItemControl As ToolStripMenuItem
 
     Public Sub New(ByVal hostUI_ As IHostUI, ByVal title_ As String, ByVal sortCode_ As Integer,
-                   ByVal regClickHandler_ As Action(Of Object, RegisterEventArgs), ByVal pluginPath_ As String)
-        MyBase.New(title_, sortCode_, pluginPath_)
+                   ByVal regClickHandler_ As Action(Of Object, RegisterEventArgs))
+        MyBase.New(title_, sortCode_)
         HostUI = hostUI_
         RegisterClickHandler = regClickHandler_
     End Sub

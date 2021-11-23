@@ -17,7 +17,10 @@ namespace Willowsoft.CheckBook.GeneralPlugins
 
         public override void Register(IHostSetup setup)
         {
-            setup.ToolMenu.Add(new MenuElementAction("Intuit Export (IIF Format)", 102, ClickHandler, GetPluginPath()));
+            setup.ToolMenu.Add(new MenuElementAction("Intuit Export (IIF Format)", 102, ClickHandler));
+            MetadataInternal = new PluginMetadata("Intuit (IIF) format export", "Willow Creek Software",
+                System.Reflection.Assembly.GetExecutingAssembly(), null,
+                "Exports data in Intuit (IFF) format.", null);
         }
 
         private void ClickHandler(object sender, EventArgs e)

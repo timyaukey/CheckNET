@@ -23,9 +23,9 @@ Partial Class PluginList
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.lvwPlugins = New System.Windows.Forms.ListView()
-        Me.PluginType = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.PluginName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.PluginSort = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.PluginVersion = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.PluginManufacturer = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.PluginAssembly = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.SuspendLayout()
         '
@@ -34,7 +34,10 @@ Partial Class PluginList
         Me.lvwPlugins.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lvwPlugins.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.PluginType, Me.PluginName, Me.PluginSort, Me.PluginAssembly})
+        Me.lvwPlugins.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.PluginName, Me.PluginVersion, Me.PluginManufacturer, Me.PluginAssembly})
+        Me.lvwPlugins.FullRowSelect = True
+        Me.lvwPlugins.GridLines = True
+        Me.lvwPlugins.HideSelection = False
         Me.lvwPlugins.Location = New System.Drawing.Point(12, 12)
         Me.lvwPlugins.Name = "lvwPlugins"
         Me.lvwPlugins.Size = New System.Drawing.Size(742, 394)
@@ -42,24 +45,24 @@ Partial Class PluginList
         Me.lvwPlugins.UseCompatibleStateImageBehavior = False
         Me.lvwPlugins.View = System.Windows.Forms.View.Details
         '
-        'PluginType
-        '
-        Me.PluginType.Text = "Type"
-        Me.PluginType.Width = 100
-        '
         'PluginName
         '
         Me.PluginName.Text = "Plugin Name"
-        Me.PluginName.Width = 300
+        Me.PluginName.Width = 200
         '
-        'PluginSort
+        'PluginVersion
         '
-        Me.PluginSort.Text = "Sort Code"
+        Me.PluginVersion.Text = "Version"
+        '
+        'PluginManufacturer
+        '
+        Me.PluginManufacturer.Text = "Manufacturer"
+        Me.PluginManufacturer.Width = 200
         '
         'PluginAssembly
         '
         Me.PluginAssembly.Text = "Assembly"
-        Me.PluginAssembly.Width = 250
+        Me.PluginAssembly.Width = 1000
         '
         'PluginList
         '
@@ -76,8 +79,8 @@ Partial Class PluginList
     End Sub
 
     Friend WithEvents lvwPlugins As ListView
-    Friend WithEvents PluginType As ColumnHeader
+    Friend WithEvents PluginManufacturer As ColumnHeader
     Friend WithEvents PluginName As ColumnHeader
-    Friend WithEvents PluginSort As ColumnHeader
+    Friend WithEvents PluginVersion As ColumnHeader
     Friend WithEvents PluginAssembly As ColumnHeader
 End Class

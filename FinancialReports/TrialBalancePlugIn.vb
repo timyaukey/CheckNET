@@ -11,11 +11,15 @@ Public Class TrialBalancePlugIn
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.ReportMenu.Add(New MenuElementAction("Financial Statements", 400, AddressOf ClickHandler, GetPluginPath()))
-        setup.HelpMenu.Add(New MenuElementAction("Financial Statements", 350, AddressOf HelpHandler, GetPluginPath()))
+        setup.ReportMenu.Add(New MenuElementAction("Financial Statements", 400, AddressOf ClickHandler))
+        setup.HelpMenu.Add(New MenuElementAction("Financial Statements", 350, AddressOf HelpHandler))
         Dim objLicense As Willowsoft.TamperProofData.IStandardLicense = New FinancialReportsLicense()
         objLicense.Load(Company.LicenseFolderPath)
         setup.AddExtraLicense(objLicense)
+        MetadataInternal = New PluginMetadata("Financial Reports", "Willow Creek Software",
+            System.Reflection.Assembly.GetExecutingAssembly(), Nothing,
+            "A full set of standard financial reports including balance sheet, profit and loss, and more.",
+            objLicense)
     End Sub
 
     Private Sub ClickHandler(sender As Object, e As EventArgs)

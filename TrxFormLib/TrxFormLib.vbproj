@@ -63,9 +63,6 @@
     <Reference Include="Willowsoft.CheckBook.Lib, Version=2.12.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Willowsoft.CheckBook.Lib.2.12.0\lib\net472\Willowsoft.CheckBook.Lib.dll</HintPath>
     </Reference>
-    <Reference Include="Willowsoft.CheckBook.PluginCore, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Willowsoft.CheckBook.PluginCore.1.5.0\lib\net472\Willowsoft.CheckBook.PluginCore.dll</HintPath>
-    </Reference>
     <Reference Include="Willowsoft.TamperProofData, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Willowsoft.TamperProofData.1.2.0\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
     </Reference>
@@ -162,9 +159,13 @@
       <Project>{442df4fb-f71a-4c03-95dd-3224ee310375}</Project>
       <Name>MainUILib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PluginCore\PluginCore.vbproj">
+      <Project>{df8c4177-36c2-414d-a363-09c33cb56fd4}</Project>
+      <Name>PluginCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\AllReports.css" />
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

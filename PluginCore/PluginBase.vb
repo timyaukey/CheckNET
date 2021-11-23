@@ -8,6 +8,8 @@ Option Explicit On
 Public MustInherit Class PluginBase
     Implements IPlugin
     Protected ReadOnly HostUI As IHostUI
+    Protected Company As Company
+    Protected MetadataInternal As PluginMetadata
 
     Public Sub New(ByVal hostUI_ As IHostUI)
         HostUI = hostUI_
@@ -15,7 +17,13 @@ Public MustInherit Class PluginBase
 
     Public MustOverride Sub Register(ByVal setup As IHostSetup) Implements IPlugin.Register
 
-    Protected Function GetPluginPath() As String
-        Return System.IO.Path.GetFileName(Me.GetType().Assembly.Location)
-    End Function
+    Public ReadOnly Property Metadata As PluginMetadata Implements IPlugin.Metadata
+        Get
+            Return MetadataInternal
+        End Get
+    End Property
+
+    Public Sub SetCompany(ByVal company_ As Company) Implements IPlugin.SetCompany
+        Company = company_
+    End Sub
 End Class

@@ -10,7 +10,9 @@ Public Class CategoryReportPlugin
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.ReportMenu.Add(New MenuElementAction("Totals By Category", 200, AddressOf ClickHandler, GetPluginPath()))
+        setup.ReportMenu.Add(New MenuElementAction("Totals By Category", 200, AddressOf ClickHandler))
+        MetadataInternal = New PluginMetadata("Category Report", "Willow Creek Software",
+            Reflection.Assembly.GetExecutingAssembly(), Nothing, "", Nothing)
     End Sub
 
     Private Sub ClickHandler(sender As Object, e As EventArgs)

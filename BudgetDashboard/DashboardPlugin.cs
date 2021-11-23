@@ -19,11 +19,14 @@ namespace Willowsoft.CheckBook.BudgetDashboard
 
         public override void Register(IHostSetup setup)
         {
-            setup.ReportMenu.Add(new MenuElementAction("Budget Dashboard", 300, ClickHandler, GetPluginPath()));
-            setup.HelpMenu.Add(new MenuElementAction("Budget Dashboard", 220, HelpHandler, GetPluginPath()));
+            setup.ReportMenu.Add(new MenuElementAction("Budget Dashboard", 300, ClickHandler));
+            setup.HelpMenu.Add(new MenuElementAction("Budget Dashboard", 220, HelpHandler));
             Willowsoft.TamperProofData.IStandardLicense license = new BudgetDashboardLicense();
             license.Load(Company.LicenseFolderPath());
             setup.AddExtraLicense(license);
+            MetadataInternal = new PluginMetadata("Budget Dashboard", "Willow Creek Software", 
+                System.Reflection.Assembly.GetExecutingAssembly(), null,
+                "An easy way to manipulate large numbers of budgets.", license);
         }
 
         private void ClickHandler(object sender, EventArgs e)

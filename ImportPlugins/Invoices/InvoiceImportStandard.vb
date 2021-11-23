@@ -10,7 +10,9 @@ Public Class InvoiceImportStandard
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.InvoiceImportMenu.Add(New MenuElementAction("Standard Clipboard", 1, AddressOf ClickHandler, GetPluginPath()))
+        setup.InvoiceImportMenu.Add(New MenuElementAction("Standard Clipboard", 1, AddressOf ClickHandler))
+        MetadataInternal = New PluginMetadata("Standard invoice clipboard import", "Willow Creek Software",
+                                    Reflection.Assembly.GetExecutingAssembly(), Nothing, "", Nothing)
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String

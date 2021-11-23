@@ -17,7 +17,10 @@ namespace Willowsoft.CheckBook.GeneralPlugins
 
         public override void Register(IHostSetup setup)
         {
-            setup.ToolMenu.Add(new MenuElementRegister(HostUI, "Renumber Checks", 103, ClickHandler, GetPluginPath()));
+            setup.ToolMenu.Add(new MenuElementRegister(HostUI, "Renumber Checks", 103, ClickHandler));
+            MetadataInternal = new PluginMetadata("Renumber Checks", "Willow Creek Software",
+                System.Reflection.Assembly.GetExecutingAssembly(), null,
+                "", null);
         }
 
         private void ClickHandler(object sender, RegisterEventArgs e)

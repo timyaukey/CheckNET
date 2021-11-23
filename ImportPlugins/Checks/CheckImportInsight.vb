@@ -10,7 +10,9 @@ Public Class CheckImportInsight
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.CheckImportMenu.Add(New MenuElementAction("Digital Insight Clipboard", StandardSortCode(), AddressOf ClickHandler, GetPluginPath()))
+        setup.CheckImportMenu.Add(New MenuElementAction("Digital Insight Clipboard", StandardSortCode(), AddressOf ClickHandler))
+        MetadataInternal = New PluginMetadata("Digital Insight check import", "Willow Creek Software",
+                                    Reflection.Assembly.GetExecutingAssembly(), Nothing, "", Nothing)
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String

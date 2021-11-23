@@ -10,7 +10,9 @@ Public Class ReconcilePlugin
     End Sub
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
-        setup.ToolMenu.Add(New MenuElementAction("Reconcile", 1, AddressOf ClickHandler, GetPluginPath()))
+        setup.ToolMenu.Add(New MenuElementAction("Reconcile", 1, AddressOf ClickHandler))
+        MetadataInternal = New PluginMetadata("Bank Reconciliation", "Willow Creek Software",
+            Reflection.Assembly.GetExecutingAssembly(), Nothing, "", Nothing)
     End Sub
 
     Private Sub ClickHandler(sender As Object, e As EventArgs)

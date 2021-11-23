@@ -12,5 +12,7 @@ Public Class PluginMarker
 
     Public Overrides Sub Register(setup As IHostSetup)
         setup.SetRegisterFormFactory(Function() New RegisterForm)
+        MetadataInternal = New PluginMetadata("Register form plugin", "Willow Creek Software",
+                                    Reflection.Assembly.GetExecutingAssembly(), Nothing, "", Nothing)
     End Sub
 End Class
