@@ -4,16 +4,14 @@ Option Explicit On
 Imports System.IO
 
 Public Class BankImportQIF
-    Inherits BankImportPlugin
+    Inherits BankImportBuilder
 
     Public Sub New(ByVal hostUI_ As IHostUI)
         MyBase.New(hostUI_)
     End Sub
 
-    Public Overrides Sub Register(ByVal setup As IHostSetup)
+    Public Overrides Sub Build(ByVal setup As IHostSetup)
         setup.BankImportMenu.Add(New MenuElementAction("QIF File", StandardSortCode(), AddressOf ClickHandler))
-        MetadataInternal = New PluginMetadata("Bank QIF file import", "Willow Creek Software",
-                                    Reflection.Assembly.GetExecutingAssembly(), Nothing, "", Nothing)
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String
@@ -21,7 +19,7 @@ Public Class BankImportQIF
     End Function
 
     Public Overrides Function GetTrxReader() As ITrxReader
-        Dim objInput As TrxImportPlugin.InputFile = objAskForFile("Select QIF File From Bank To Import", "QIF", "BankQIFPath")
+        Dim objInput As TrxImportBuilder.InputFile = objAskForFile("Select QIF File From Bank To Import", "QIF", "BankQIFPath")
         If Not objInput Is Nothing Then
             Return New ReadBankQIF(HostUI, objInput.objFile, objInput.strFile)
         End If

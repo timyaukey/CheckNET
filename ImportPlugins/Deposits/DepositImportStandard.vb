@@ -1,18 +1,15 @@
 ﻿Option Strict On
 Option Explicit On
 
-
 Public Class DepositImportStandard
-    Inherits DepositImportPlugin
+    Inherits DepositImportBuilder
 
     Public Sub New(ByVal hostUI_ As IHostUI)
         MyBase.New(hostUI_)
     End Sub
 
-    Public Overrides Sub Register(ByVal setup As IHostSetup)
+    Public Overrides Sub Build(ByVal setup As IHostSetup)
         setup.DepositImportMenu.Add(New MenuElementAction("Standard Clipboard", 1, AddressOf ClickHandler))
-        MetadataInternal = New PluginMetadata("Standard deposit clipboard import", "Willow Creek Software",
-                                    Reflection.Assembly.GetExecutingAssembly(), Nothing, "", Nothing)
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String

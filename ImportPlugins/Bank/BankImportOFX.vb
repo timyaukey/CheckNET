@@ -4,16 +4,14 @@ Option Explicit On
 Imports System.IO
 
 Public Class BankImportOFX
-    Inherits BankImportPlugin
+    Inherits BankImportBuilder
 
     Public Sub New(ByVal hostUI_ As IHostUI)
         MyBase.New(hostUI_)
     End Sub
 
-    Public Overrides Sub Register(ByVal setup As IHostSetup)
+    Public Overrides Sub Build(ByVal setup As IHostSetup)
         setup.BankImportMenu.Add(New MenuElementAction("OFX File", StandardSortCode(), AddressOf ClickHandler))
-        MetadataInternal = New PluginMetadata("Bank OFX file import", "Willow Creek Software",
-                                    Reflection.Assembly.GetExecutingAssembly(), Nothing, "", Nothing)
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String
@@ -21,7 +19,7 @@ Public Class BankImportOFX
     End Function
 
     Public Overrides Function GetTrxReader() As ITrxReader
-        Dim objInput As TrxImportPlugin.InputFile = objAskForFile("Select OFX File From Bank To Import", "OFX", "BankOFXPath")
+        Dim objInput As TrxImportBuilder.InputFile = objAskForFile("Select OFX File From Bank To Import", "OFX", "BankOFXPath")
         If Not objInput Is Nothing Then
             Return New ReadBankOFX(HostUI, objInput.objFile, objInput.strFile)
         End If

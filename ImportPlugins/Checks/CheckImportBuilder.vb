@@ -3,18 +3,18 @@ Option Explicit On
 
 
 ''' <summary>
-''' All invoice import plugins must inherit from this.
+''' All check import builders must inherit from this.
 ''' </summary>
 
-Public MustInherit Class InvoiceImportPlugin
-    Inherits TrxImportPlugin
+Public MustInherit Class CheckImportBuilder
+    Inherits TrxImportBuilder
 
     Public Sub New(ByVal hostUI_ As IHostUI)
         MyBase.New(hostUI_)
     End Sub
 
     Public Overrides Function GetImportHandler() As IImportHandler
-        Return New ImportHandlerInvoices()
+        Return New ImportHandlerChecks()
     End Function
 
 End Class

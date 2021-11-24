@@ -3,18 +3,18 @@ Option Explicit On
 
 
 ''' <summary>
-''' All bank import plugins must inherit from this.
+''' All deposit import builders must inherit from this.
 ''' </summary>
 
-Public MustInherit Class BankImportPlugin
-    Inherits TrxImportPlugin
+Public MustInherit Class DepositImportBuilder
+    Inherits TrxImportBuilder
 
     Public Sub New(ByVal hostUI_ As IHostUI)
         MyBase.New(hostUI_)
     End Sub
 
     Public Overrides Function GetImportHandler() As IImportHandler
-        Return New ImportHandlerBank()
+        Return New ImportHandlerDeposits()
     End Function
 
 End Class

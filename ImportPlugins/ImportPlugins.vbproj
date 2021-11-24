@@ -91,15 +91,15 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Bank\BankImportOFX.vb" />
-    <Compile Include="Bank\BankImportPlugin.vb" />
+    <Compile Include="Bank\BankImportBuilder.vb" />
     <Compile Include="Bank\BankImportQIF.vb" />
     <Compile Include="Bank\ImportHandlerBank.vb" />
     <Compile Include="Checks\CheckImportCompuPay.vb" />
     <Compile Include="Checks\CheckImportInsight.vb" />
-    <Compile Include="Checks\CheckImportPlugin.vb" />
+    <Compile Include="Checks\CheckImportBuilder.vb" />
     <Compile Include="Checks\CheckImportStandard.vb" />
     <Compile Include="Checks\ImportHandlerChecks.vb" />
-    <Compile Include="Deposits\DepositImportPlugin.vb" />
+    <Compile Include="Deposits\DepositImportBuilder.vb" />
     <Compile Include="Deposits\DepositImportStandard.vb" />
     <Compile Include="Deposits\ImportHandlerDeposits.vb" />
     <Compile Include="IImportHandler.vb" />
@@ -107,7 +107,7 @@
     <Compile Include="ImportReadException.vb" />
     <Compile Include="ImportUtilities.vb" />
     <Compile Include="Invoices\ImportHandlerInvoices.vb" />
-    <Compile Include="Invoices\InvoiceImportPlugin.vb" />
+    <Compile Include="Invoices\InvoiceImportBuilder.vb" />
     <Compile Include="Invoices\InvoiceImportStandard.vb" />
     <Compile Include="ITrxReader.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -131,6 +131,7 @@
     <Compile Include="Checks\ReadChecksSpec.vb" />
     <Compile Include="Deposits\ReadDeposits.vb" />
     <Compile Include="Invoices\ReadInvoices.vb" />
+    <Compile Include="TrxImportBuilder.vb" />
     <Compile Include="TrxImportPlugin.vb" />
   </ItemGroup>
   <ItemGroup>

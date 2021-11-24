@@ -1,18 +1,15 @@
 ﻿Option Strict On
 Option Explicit On
 
-
 Public Class CheckImportInsight
-    Inherits CheckImportPlugin
+    Inherits CheckImportBuilder
 
     Public Sub New(ByVal hostUI_ As IHostUI)
         MyBase.New(hostUI_)
     End Sub
 
-    Public Overrides Sub Register(ByVal setup As IHostSetup)
+    Public Overrides Sub Build(ByVal setup As IHostSetup)
         setup.CheckImportMenu.Add(New MenuElementAction("Digital Insight Clipboard", StandardSortCode(), AddressOf ClickHandler))
-        MetadataInternal = New PluginMetadata("Digital Insight check import", "Willow Creek Software",
-                                    Reflection.Assembly.GetExecutingAssembly(), Nothing, "", Nothing)
     End Sub
 
     Public Overrides Function GetImportWindowCaption() As String
