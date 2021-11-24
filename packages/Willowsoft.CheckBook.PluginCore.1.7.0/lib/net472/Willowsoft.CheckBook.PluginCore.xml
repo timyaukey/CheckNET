@@ -22,6 +22,11 @@ Willowsoft.CheckBook.PluginCore
   resource lookups using this strongly typed resource class.
 </summary>
 </member>
+<member name="T:Willowsoft.CheckBook.PluginCore.PluginMetadata">
+ <summary>
+ Description of plugin. Returned by IPlugin.Register().
+ </summary>
+</member>
 <member name="T:Willowsoft.CheckBook.PluginCore.IHostSearchUI">
  <summary>
  Implemented by search window to expose functionality

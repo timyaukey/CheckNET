@@ -11,14 +11,14 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("UnitTests")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("UnitTests")> 
-<Assembly: AssemblyCopyright("Copyright ©  2015")> 
+<Assembly: AssemblyProduct("UnitTests")>
+<Assembly: AssemblyCopyright("Copyright ©  2015-2021 Willow Creek Software")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("0efc7ecc-a657-4153-b49f-c0695c575f1f")> 
+<Assembly: Guid("0efc7ecc-a657-4153-b49f-c0695c575f1f")>
 
 ' Version information for an assembly consists of the following four values:
 '
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.0.0")> 
-<Assembly: AssemblyFileVersion("1.0.0.0")> 
+<Assembly: AssemblyVersion("1.0.1.0")>
+<Assembly: AssemblyFileVersion("1.0.1.0")>
