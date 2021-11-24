@@ -17,8 +17,8 @@ Public Class BuiltInPlugins
         setup.ReportMenu.Add(New MenuElementRegister(HostUI, "Find Live Budgets", 100, AddressOf LiveBudgetClickHandler))
         setup.ToolMenu.Add(New MenuElementAction("Reconcile", 1, AddressOf ReconcileClickHandler))
 
-        MetadataInternal = New PluginMetadata("Built In Plugins", "Willow Creek Software",
-            Reflection.Assembly.GetExecutingAssembly(), Nothing, "Miscellaneous plugins built into the software.", Nothing)
+        MetadataInternal = New PluginMetadata("Built In Tools", "Willow Creek Software",
+            Reflection.Assembly.GetExecutingAssembly(), Nothing, "Miscellaneous tools built into the software.", Nothing)
     End Sub
 
     Private Sub CategoryReportClickHandler(sender As Object, e As EventArgs)

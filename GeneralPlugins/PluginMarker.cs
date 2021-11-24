@@ -22,9 +22,9 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             setup.ToolMenu.Add(new MenuElementAction("Intuit Export (IIF Format)", 102, IntuitExportClickHandler));
             setup.ToolMenu.Add(new MenuElementRegister(HostUI, "Renumber Checks", 103, RenumberChecksClickHandler));
 
-            MetadataInternal = new PluginMetadata("General Plugins", "Willow Creek Software",
+            MetadataInternal = new PluginMetadata("External Tools", "Willow Creek Software",
                 System.Reflection.Assembly.GetExecutingAssembly(), null,
-                "General plugins installed with the software.", null);
+                "Miscellaneous tools provided by plugin distributed with the software.", null);
         }
 
         private void IntuitExportClickHandler(object sender, EventArgs e)

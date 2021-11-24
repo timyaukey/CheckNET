@@ -20,8 +20,9 @@ Public Class TrxImportPlugin
         x = New DepositImportStandard(HostUI) : x.Build(setup)
         x = New InvoiceImportStandard(HostUI) : x.Build(setup)
 
-        MetadataInternal = New PluginMetadata("Transaction Import Handlers", "Willow Creek Software",
-            Reflection.Assembly.GetExecutingAssembly(), Nothing, "", Nothing)
+        MetadataInternal = New PluginMetadata("Transaction Import", "Willow Creek Software",
+            Reflection.Assembly.GetExecutingAssembly(), Nothing,
+            "Tools to import many different kinds of transactions from many different sources.", Nothing)
     End Sub
 
 End Class
