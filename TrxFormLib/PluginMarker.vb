@@ -13,6 +13,7 @@ Public Class PluginMarker
     Public Overrides Sub Register(setup As IHostSetup)
         setup.SetTrxFormFactory(Function() New TrxForm)
         MetadataInternal = New PluginMetadata("Transaction Form", "Willow Creek Software",
-            Reflection.Assembly.GetExecutingAssembly(), Nothing, "", Nothing)
+            Reflection.Assembly.GetExecutingAssembly(), Nothing,
+            "Standard transaction form handler.", Nothing)
     End Sub
 End Class

@@ -13,6 +13,7 @@ Public Class PluginMarker
     Public Overrides Sub Register(setup As IHostSetup)
         setup.SetSearchFormFactory(Function() New SearchForm)
         MetadataInternal = New PluginMetadata("Search Form", "Willow Creek Software",
-            Reflection.Assembly.GetExecutingAssembly(), Nothing, "", Nothing)
+            Reflection.Assembly.GetExecutingAssembly(), Nothing,
+            "Standard search form handler.", Nothing)
     End Sub
 End Class

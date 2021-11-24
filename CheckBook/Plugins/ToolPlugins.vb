@@ -18,7 +18,7 @@ Public Class BuiltInPlugins
         setup.ToolMenu.Add(New MenuElementAction("Reconcile", 1, AddressOf ReconcileClickHandler))
 
         MetadataInternal = New PluginMetadata("Built In Tools", "Willow Creek Software",
-            Reflection.Assembly.GetExecutingAssembly(), Nothing, "Miscellaneous tools built into the software.", Nothing)
+            Reflection.Assembly.GetExecutingAssembly(), Nothing, Nothing, Nothing)
     End Sub
 
     Private Sub CategoryReportClickHandler(sender As Object, e As EventArgs)

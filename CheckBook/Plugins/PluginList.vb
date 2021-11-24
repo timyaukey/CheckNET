@@ -32,10 +32,30 @@ Public Class PluginList
             item.SubItems.Add(strVersion)
             item.SubItems.Add(strManufacturer)
             item.SubItems.Add(strPath)
+            item.Tag = objPlugin
             lvwPlugins.Items.Add(item)
         Next
         Me.ShowDialog()
     End Sub
 
-
+    Private Sub lvwPlugins_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lvwPlugins.SelectedIndexChanged
+        If lvwPlugins.SelectedItems.Count > 0 Then
+            Dim objPlugin As IPlugin = DirectCast(lvwPlugins.SelectedItems(0).Tag, IPlugin)
+            Dim objMetadata As PluginMetadata = objPlugin.Metadata
+            If Not objMetadata Is Nothing Then
+                txtDescription.Text = objMetadata.Description
+                If String.IsNullOrEmpty(objMetadata.InfoURL) Then
+                    txtInfoURL.Text = "(none)"
+                Else
+                    txtInfoURL.Text = objMetadata.InfoURL
+                End If
+                If objMetadata.License Is Nothing Then
+                    txtLicense.Text = "(license not needed)"
+                Else
+                    txtLicense.Text = "Licensed To: " + objMetadata.License.LicensedTo + "; License Type: " +
+                        objMetadata.License.LicenseTitle + "; Serial: " + objMetadata.License.SerialNumber
+                End If
+            End If
+        End If
+    End Sub
 End Class

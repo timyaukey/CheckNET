@@ -17,8 +17,8 @@ Public Class TrialBalancePlugIn
         objLicense.Load(Company.LicenseFolderPath)
         setup.AddExtraLicense(objLicense)
         MetadataInternal = New PluginMetadata("Financial Reports", "Willow Creek Software",
-            System.Reflection.Assembly.GetExecutingAssembly(), Nothing,
-            "A full set of standard financial reports including balance sheet, profit and loss, and more.",
+            System.Reflection.Assembly.GetExecutingAssembly(), "https://nosuch_url.com",
+            "A full set of standard financial reports including balance sheet, profit and loss, payables, receivables, and more.",
             objLicense)
     End Sub
 
