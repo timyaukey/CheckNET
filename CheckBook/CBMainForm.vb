@@ -384,8 +384,7 @@ Friend Class CBMainForm
                 If Not blnCancelStart Then
                     CompanySaver.SaveChangedAccounts(mobjCompany)
                 End If
-                mobjCompany.Teardown()
-                mobjCompany.UnlockCompany()
+                CompanySaver.Unload(mobjCompany)
             End If
 
             Exit Sub

@@ -3,12 +3,20 @@ Option Explicit On
 
 Public Class CompanySaver
 
+    Public Shared Sub Unload(ByVal objCompany As Company)
+        objCompany.FireBeforeUnload()
+        objCompany.Teardown()
+        objCompany.UnlockCompany()
+        objCompany.FireAfterUnload()
+    End Sub
+
     Public Shared Sub SaveChangedAccounts(ByVal objCompany As Company)
         Dim objAccount As Account
         Dim strBackupFile As String
         If objCompany.AnyCriticalOperationFailed Then
             Throw New Register.CriticalOperationException("Unable to save company because a critical operation failed earlier")
         End If
+        objCompany.FireBeforeSaveCompany()
         For Each objAccount In objCompany.Accounts
             If objAccount.HasUnsavedChanges Then
                 strBackupFile = objCompany.BackupsFolderPath() & "\" & objAccount.FileNameRoot & "." & Now.ToString("MM$dd$yy$hh$mm")
@@ -22,6 +30,7 @@ Public Class CompanySaver
                 objCompany.FireSavedAccount(objAccount.Title)
             End If
         Next objAccount
+        objCompany.FireAfterSaveCompany()
     End Sub
 
     Private Shared Sub PurgeAccountBackups(ByVal objAccount As Account)

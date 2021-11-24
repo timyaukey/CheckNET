@@ -13,8 +13,7 @@ namespace Willowsoft.CheckBook.Powershell
 
         protected override void BeginProcessing()
         {
-            Company.Teardown();
-            Company.UnlockCompany();
+            CompanySaver.Unload(Company);
         }
     }
 }

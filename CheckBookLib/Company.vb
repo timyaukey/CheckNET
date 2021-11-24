@@ -21,6 +21,15 @@ Imports Willowsoft.TamperProofData
 Public Class Company
 
     Public Event SomethingModified()
+    Public Event SavedAccount(ByVal strAccountTitle As String)
+    Public Event BeforeSaveCompany()
+    Public Event AfterSaveCompany()
+    Public Event BeforeExpensiveOperation()
+    Public Event AfterExpensiveOperation()
+    Public Event BeforeLoad()
+    Public Event AfterLoad()
+    Public Event BeforeUnload()
+    Public Event AfterUnload()
 
     Public ReadOnly Accounts As List(Of Account)
     Public ReadOnly Categories As CategoryTranslator
@@ -68,6 +77,38 @@ Public Class Company
         Else
             Info = New CompanyInfo()
         End If
+    End Sub
+
+    Public Sub FireBeforeSaveCompany()
+        RaiseEvent BeforeSaveCompany()
+    End Sub
+
+    Public Sub FireAfterSaveCompany()
+        RaiseEvent AfterSaveCompany()
+    End Sub
+
+    Public Sub FireBeforeLoad()
+        RaiseEvent BeforeLoad()
+    End Sub
+
+    Public Sub FireAfterLoad()
+        RaiseEvent AfterLoad()
+    End Sub
+
+    Public Sub FireBeforeUnload()
+        RaiseEvent BeforeUnload()
+    End Sub
+
+    Public Sub FireAfterUnload()
+        RaiseEvent AfterUnload()
+    End Sub
+
+    Public Sub FireBeforeExpensiveOperation()
+        RaiseEvent BeforeExpensiveOperation()
+    End Sub
+
+    Public Sub FireAfterExpensiveOperation()
+        RaiseEvent AfterExpensiveOperation()
     End Sub
 
     Public Shared Function ExecutableFolder() As String
@@ -335,8 +376,6 @@ Public Class Company
             NestedException(ex)
         End Try
     End Function
-
-    Public Event SavedAccount(ByVal strAccountTitle As String)
 
     Public Sub FireSavedAccount(ByVal strAccountTitle As String)
         RaiseEvent SavedAccount(strAccountTitle)

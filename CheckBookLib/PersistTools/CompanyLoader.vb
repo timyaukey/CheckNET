@@ -36,6 +36,7 @@ Public Class CompanyLoader
         ByVal showAccount As Action(Of Account),
         ByVal authenticator As Func(Of Company, CompanyLoadError)) As CompanyLoadError
 
+        objCompany.FireBeforeLoad()
         If Not Company.IsDataPathValid(objCompany.DataFolderPath()) Then
             Return New CompanyLoadNotFound()
         End If
@@ -50,6 +51,7 @@ Public Class CompanyLoader
         LoadGlobalLists(objCompany)
         objCompany.LoadMemorizedTrans()
         LoadAccountFiles(objCompany, showAccount)
+        objCompany.FireAfterLoad()
         Return Nothing
     End Function
 
@@ -200,6 +202,7 @@ Public Class CompanyLoader
         Dim objAccount As Account
         Dim objReg As Register
 
+        objCompany.FireBeforeExpensiveOperation()
         For Each objAccount In objCompany.Accounts
             For Each objReg In objAccount.Registers
                 'Allow UI to hide all register windows for all accounts before
@@ -216,13 +219,16 @@ Public Class CompanyLoader
             objLoader.RecreateGeneratedTrx(datRegisterEndDate, datCutoff)
         Next
         For Each objAccount In objCompany.Accounts
-            'Tell all register windows to refresh themselves.
+            'Sort all the registers now that all trx have been added to them,
+            'and tell all register windows to refresh themselves.
             For Each objReg In objAccount.Registers
+                objReg.Sort()
                 'Recompute the running balances, because replica trx can be added anywhere.
                 objReg.LoadFinish()
                 objReg.FireEndRegenerating()
             Next objReg
         Next
+        objCompany.FireAfterExpensiveOperation()
 
     End Sub
 

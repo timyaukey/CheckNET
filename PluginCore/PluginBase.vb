@@ -23,7 +23,7 @@ Public MustInherit Class PluginBase
         End Get
     End Property
 
-    Public Sub SetCompany(ByVal company_ As Company) Implements IPlugin.SetCompany
+    Public Overridable Sub SetCompany(ByVal company_ As Company) Implements IPlugin.SetCompany
         Company = company_
     End Sub
 End Class

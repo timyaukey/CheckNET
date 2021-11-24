@@ -93,9 +93,6 @@
     <Reference Include="System.XML">
       <Name>System.XML</Name>
     </Reference>
-    <Reference Include="Willowsoft.CheckBook.Lib, Version=2.12.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Willowsoft.CheckBook.Lib.2.12.0\lib\net472\Willowsoft.CheckBook.Lib.dll</HintPath>
-    </Reference>
     <Reference Include="Willowsoft.TamperProofData, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Willowsoft.TamperProofData.1.2.0\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
     </Reference>
@@ -134,6 +131,12 @@
       <DependentUpon>CategoryEditorForm.vb</DependentUpon>
     </Compile>
     <Compile Include="CategoryEditorForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CompanyEventMonitorForm.Designer.vb">
+      <DependentUpon>CompanyEventMonitorForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CompanyEventMonitorForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="CompanyInfoEditor.Designer.vb">
@@ -337,6 +340,9 @@
     <EmbeddedResource Include="CategoryEditorForm.resx">
       <DependentUpon>CategoryEditorForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CompanyEventMonitorForm.resx">
+      <DependentUpon>CompanyEventMonitorForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CompanyInfoEditor.resx">
       <DependentUpon>CompanyInfoEditor.vb</DependentUpon>
     </EmbeddedResource>
@@ -433,6 +439,10 @@
     <ProjectReference Include="..\BudgetDashboard\BudgetDashboard.csproj">
       <Project>{050728f0-3aad-42fb-a8a8-9e23a5dc4d0e}</Project>
       <Name>BudgetDashboard</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
+      <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
+      <Name>CheckBookLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\FinancialReports\FinancialReports.vbproj">
       <Project>{081cd8c1-9ebf-4b8b-8353-ef6b4bd5b293}</Project>
