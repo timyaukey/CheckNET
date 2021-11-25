@@ -12,8 +12,10 @@ Public Class BuiltInPlugins
 
     Public Overrides Sub Register(ByVal setup As IHostSetup)
         setup.ReportMenu.Add(New MenuElementAction("Totals By Category", 200, AddressOf CategoryReportClickHandler))
-        setup.ToolMenu.Add(New MenuElementRegister(HostUI, "Combined Personal and Business Balance", 120, AddressOf CombinedBalanceClickHandler))
-        setup.ToolMenu.Add(New MenuElementRegister(HostUI, "Adjust Account For Personal Use", 110, AddressOf PersonalBusinessClickHandler))
+        Dim personalBuilder As MenuBuilder = New MenuBuilder()
+        setup.ToolMenu.Add(New MenuElementSubmenu("Business and Personal Use", 100, personalBuilder))
+        personalBuilder.Add(New MenuElementRegister(HostUI, "Combined Personal and Business Balance", 120, AddressOf CombinedBalanceClickHandler))
+        personalBuilder.Add(New MenuElementRegister(HostUI, "Adjust Account For Personal Use", 110, AddressOf PersonalBusinessClickHandler))
         setup.ReportMenu.Add(New MenuElementRegister(HostUI, "Find Live Budgets", 100, AddressOf LiveBudgetClickHandler))
         setup.ToolMenu.Add(New MenuElementAction("Reconcile", 1, AddressOf ReconcileClickHandler))
         setup.ToolMenu.Add(New MenuElementAction("Diagnostic Events", 999, AddressOf EventMonitorClick))

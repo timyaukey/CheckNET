@@ -8,7 +8,6 @@ Public Class MenuElementRegister
 
     Private HostUI As IHostUI
     Private ReadOnly RegisterClickHandler As Action(Of Object, RegisterEventArgs)
-    Public MenuItemControl As ToolStripMenuItem
 
     Public Sub New(ByVal hostUI_ As IHostUI, ByVal title_ As String, ByVal sortCode_ As Integer,
                    ByVal regClickHandler_ As Action(Of Object, RegisterEventArgs))
@@ -18,11 +17,8 @@ Public Class MenuElementRegister
     End Sub
 
     Public Overrides Sub CreateUIElement(ByVal mnuParent As ToolStripMenuItem)
-        Dim mnuNewItem As ToolStripMenuItem = New ToolStripMenuItem()
-        mnuNewItem.Text = Me.Title
-        AddHandler mnuNewItem.Click, AddressOf ClickHandler
-        mnuParent.DropDownItems.Add(mnuNewItem)
-        MenuItemControl = mnuNewItem
+        MyBase.CreateUIElement(mnuParent)
+        AddHandler MenuItemControl.Click, AddressOf ClickHandler
     End Sub
 
     Private Sub ClickHandler(sender As Object, e As EventArgs)

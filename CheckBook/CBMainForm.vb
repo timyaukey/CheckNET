@@ -78,6 +78,8 @@ Friend Class CBMainForm
                 Me.Close()
                 Exit Sub
             End If
+            'This gets enabled by Company events fired during account load
+            mnuFileSave.Enabled = False
 
             frmStartup.ShowStatus("Loading main window")
 
@@ -291,8 +293,6 @@ Friend Class CBMainForm
         Next
 
         FileMenu.AddElementsToMenu()
-        mnuFileSave = saveAction.MenuItemControl
-        mnuFileSave.Enabled = False
         BankImportMenu.AddElementsToMenu()
         CheckImportMenu.AddElementsToMenu()
         DepositImportMenu.AddElementsToMenu()
@@ -300,6 +300,8 @@ Friend Class CBMainForm
         ReportMenu.AddElementsToMenu()
         ToolMenu.AddElementsToMenu()
         HelpMenu.AddElementsToMenu()
+
+        mnuFileSave = saveAction.MenuItemControl
     End Sub
 
     Private Sub LoadPluginsFromAssembly(ByVal objAssembly As Assembly)

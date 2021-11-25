@@ -86,7 +86,8 @@
     <Compile Include="IRegisterForm.vb" />
     <Compile Include="ISearchForm.vb" />
     <Compile Include="ITrxForm.vb" />
-    <Compile Include="MenuElementRegister.vb" />
+    <Compile Include="MenuTools\MenuElementRegister.vb" />
+    <Compile Include="MenuTools\MenuElementSubmenu.vb" />
     <Compile Include="PluginMetadata.vb" />
     <Compile Include="SearchTypes\CategorySearchHandler.vb" />
     <Compile Include="SearchTypes\CustomSearchHandler.vb" />
@@ -100,9 +101,9 @@
     <Compile Include="ISearchTool.vb" />
     <Compile Include="ITrxTool.vb" />
     <Compile Include="SearchTypes\MemoSearchHandler.vb" />
-    <Compile Include="MenuBuilder.vb" />
-    <Compile Include="MenuElementAction.vb" />
-    <Compile Include="MenuElementBase.vb" />
+    <Compile Include="MenuTools\MenuBuilder.vb" />
+    <Compile Include="MenuTools\MenuElementAction.vb" />
+    <Compile Include="MenuTools\MenuElementBase.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

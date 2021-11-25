@@ -87,6 +87,7 @@
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
     </Reference>
@@ -95,9 +96,6 @@
     </Reference>
     <Reference Include="Willowsoft.CheckBook.Lib, Version=2.13.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Willowsoft.CheckBook.Lib.2.13.0\lib\net472\Willowsoft.CheckBook.Lib.dll</HintPath>
-    </Reference>
-    <Reference Include="Willowsoft.CheckBook.PluginCore, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Willowsoft.CheckBook.PluginCore.1.7.0\lib\net472\Willowsoft.CheckBook.PluginCore.dll</HintPath>
     </Reference>
     <Reference Include="Willowsoft.TamperProofData, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Willowsoft.TamperProofData.1.2.0\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
@@ -309,7 +307,6 @@
     <Compile Include="TrxTypeListForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Content Include="Reports\AllReports.css" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -462,6 +459,10 @@
     <ProjectReference Include="..\MainUILib\MainUILib.vbproj">
       <Project>{442df4fb-f71a-4c03-95dd-3224ee310375}</Project>
       <Name>MainUILib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PluginCore\PluginCore.vbproj">
+      <Project>{df8c4177-36c2-414d-a363-09c33cb56fd4}</Project>
+      <Name>PluginCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\RegFormLib\RegFormLib.vbproj">
       <Project>{74d15cdf-5d3c-4037-8f87-559535f3a406}</Project>

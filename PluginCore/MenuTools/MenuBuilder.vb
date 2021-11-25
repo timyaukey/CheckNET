@@ -5,7 +5,11 @@ Imports System.Windows.Forms
 
 Public Class MenuBuilder
     Public Elements As List(Of MenuElementBase) = New List(Of MenuElementBase)
-    Private ReadOnly MnuParent As ToolStripMenuItem
+    Protected Friend MnuParent As ToolStripMenuItem
+
+    Public Sub New()
+        Me.New(Nothing)
+    End Sub
 
     Public Sub New(ByVal mnuParent_ As ToolStripMenuItem)
         MnuParent = mnuParent_
