@@ -128,7 +128,7 @@
     <Compile Include="Reporting\BalanceSheetScanner.vb" />
     <Compile Include="Reporting\CategoryGroupManager.vb" />
     <Compile Include="Reporting\CustomerSummary.vb" />
-    <Compile Include="Reporting\DateRangeSummary.vb" />
+    <Compile Include="Reporting\SubtotalWithDetails.vb" />
     <Compile Include="Reporting\IncomeExpenseScanner.vb" />
     <Compile Include="Reporting\LineItemGroup.vb" />
     <Compile Include="Reporting\ReportGroupManager.vb" />
