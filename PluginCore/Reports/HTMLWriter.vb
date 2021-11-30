@@ -142,6 +142,10 @@ Public Class HTMLWriter
         OutputLine("<td class='" + strAmountClass + strExtraClass + "'>" + curAmount.ToString("###,###,###,##0.00") + "</td>")
     End Sub
 
+    Public Sub OutputTableDataText(ByVal strAmountClass As String, ByVal strNegativeClass As String, ByVal strValue As String)
+        OutputLine("<td class='" + strAmountClass + "'>" + strValue + "</td>")
+    End Sub
+
     Private Sub OutputLine(ByVal strLine As String)
         mobjBuilder.AppendLine(strLine)
     End Sub

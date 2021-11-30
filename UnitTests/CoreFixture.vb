@@ -150,10 +150,7 @@ Public Class CoreFixture
             objUTReg.LoadNormal("DEP", #4/19/2000#, 120D, strBudgetKey:="bud4", strDescr:="B")
             objUTReg.SetTrxAmount(15, 0.0D)
         End If
-        objUTReg.objReg.Sort()
-        objUTReg.objReg.LoadApply()
-        objUTReg.objReg.Sort()
-        objUTReg.objReg.LoadFinish()
+        objUTReg.LoadApplyFinish()
         objLoadBuild = objUTReg
 
     End Function
@@ -531,7 +528,9 @@ Public Class CoreFixture
         Finally
             objReader.Close()
         End Try
+        objReg.Sort()
         objReg.LoadApply()
+        objReg.Sort()
         objReg.LoadFinish()
         objLoadFile = objReg
     End Function
@@ -572,8 +571,7 @@ Public Class CoreFixture
         objUTReg = gobjUTNewReg()
         With objUTReg
             .LoadNormal("1500", #6/1/2000#, -50.75D, strRepeatKey:="r1", intRepeatSeq:=1)
-            .objReg.LoadApply()
-            .objReg.LoadFinish()
+            .LoadApplyFinish()
             .Validate("", 1)
             gUTAssert(.objReg.DbgRepeatTrx.Count() = 1, "count")
         End With
@@ -583,8 +581,7 @@ Public Class CoreFixture
         With objUTReg
             .LoadNormal("1500", #6/1/2000#, -50.75D, strRepeatKey:="r1", intRepeatSeq:=1)
             .LoadNormal("1501", #6/2/2000#, -10D, strRepeatKey:="r1", intRepeatSeq:=2)
-            .objReg.LoadApply()
-            .objReg.LoadFinish()
+            .LoadApplyFinish()
             .Validate("", 1, 2)
             gUTAssert(.objReg.DbgRepeatTrx.Count() = 2, "count")
         End With
@@ -596,8 +593,7 @@ Public Class CoreFixture
             .LoadNormal("1501", #6/2/2000#, -10D, strRepeatKey:="r1", intRepeatSeq:=2)
             .LoadNormal("1499", #6/30/2000#, -10D, strRepeatKey:="r2", intRepeatSeq:=1)
             .LoadNormal("1502", #7/1/2000#, -20D)
-            .objReg.LoadApply()
-            .objReg.LoadFinish()
+            .LoadApplyFinish()
             .Validate("", 1, 2, 3, 4)
             gUTAssert(.objReg.DbgRepeatTrx.Count() = 3, "count")
         End With
@@ -746,8 +742,7 @@ Public Class CoreFixture
             .LoadNormal("1501", #6/1/2000#, -20D, strRepeatKey:="r1", intRepeatSeq:=1)
             .LoadBudget(#6/10/2000#, -1000D, #5/15/2000#, "01")
             .LoadBudget(#6/12/2000#, -500D, #5/20/2000#, "02", strRepeatKey:="r2", intRepeatSeq:=1)
-            .objReg.LoadApply()
-            .objReg.LoadFinish()
+            .LoadApplyFinish()
             .Validate("", 1, 2, 3, 4)
             gUTAssert(.objReg.DbgRepeatTrx.Count() = 2, "count")
             .AddBudget(#6/20/2000#, -100D, #6/3/2000#, "03", "", 5, 5, 5, strRepeatKey:="r2", intRepeatSeq:=2)

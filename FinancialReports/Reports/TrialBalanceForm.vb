@@ -1,7 +1,6 @@
 ﻿Option Strict On
 Option Explicit On
 
-
 Public Class TrialBalanceForm
     Private mobjHostUI As IHostUI
     Private mobjCompany As Company
@@ -79,6 +78,8 @@ Public Class TrialBalanceForm
         btnLoansReceivable.Enabled = blnEnabled
         btnAccountsPayable.Enabled = blnEnabled
         btnAccountsReceivable.Enabled = blnEnabled
+        btnAPInvoices.Enabled = blnEnabled
+        btnARInvoices.Enabled = blnEnabled
         btnPostRetainedEarnings.Enabled = blnEnabled
     End Sub
 
@@ -341,7 +342,7 @@ Public Class TrialBalanceForm
     Private Sub btnAccountsPayable_Click(sender As Object, e As EventArgs) Handles btnAccountsPayable.Click
         Try
             OutputAccounts(Of VendorSummary)(Account.SubType.Liability_AccountsPayable,
-                "AccountsPayable", "Accounts Payable", "Total Accounts Payable")
+                "AccountsPayable", "A/P Age Summary", False)
         Catch ex As Exception
             TopException(ex)
         End Try
@@ -350,16 +351,32 @@ Public Class TrialBalanceForm
     Private Sub btnAccountsReceivable_Click(sender As Object, e As EventArgs) Handles btnAccountsReceivable.Click
         Try
             OutputAccounts(Of CustomerSummary)(Account.SubType.Asset_AccountsReceivable,
-                "AccountsReceivable", "Accounts Receivable", "Total Accounts Receivable")
+                "AccountsReceivable", "A/R Age Summary", False)
+        Catch ex As Exception
+            TopException(ex)
+        End Try
+    End Sub
+
+    Private Sub btnAPInvoices_Click(sender As Object, e As EventArgs) Handles btnAPInvoices.Click
+        Try
+            OutputAccounts(Of VendorSummary)(Account.SubType.Liability_AccountsPayable,
+                "APInvoices", "A/P Unpaid Invoices", True)
+        Catch ex As Exception
+            TopException(ex)
+        End Try
+    End Sub
+
+    Private Sub btnARInvoices_Click(sender As Object, e As EventArgs) Handles btnARInvoices.Click
+        Try
+            OutputAccounts(Of CustomerSummary)(Account.SubType.Asset_AccountsReceivable,
+                "ARInvoices", "A/R Unpaid Invoices", True)
         Catch ex As Exception
             TopException(ex)
         End Try
     End Sub
 
     Private Sub OutputAccounts(Of TSummary As {TrxNameSummary, New})(ByVal lngSubType As Account.SubType,
-                                            ByVal strReportFileName As String,
-                                            ByVal strReportTitle As String,
-                                            ByVal strReportTotalTag As String)
+            ByVal strReportFileName As String, ByVal strReportTitle As String, ByVal blnShowInvoices As Boolean)
 
         Dim objWriter As HTMLWriter = New HTMLWriter(mobjHostUI, strReportFileName, False)
         'Dim objAccumTotal As ReportAccumulator = New ReportAccumulator()
@@ -397,14 +414,17 @@ Public Class TrialBalanceForm
         For Each objSummary As TSummary In colSummary
             If objSummary.Balance <> 0D Then
                 OutputAccountRow(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass, objSummary)
+                If blnShowInvoices Then
+                    OutputAccountDetails(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass, objSummary)
+                End If
             End If
-            objTotals.SummaryCurrentCharges.DateTotal += objSummary.SummaryCurrentCharges.DateTotal
-            objTotals.Summary1To30Charges.DateTotal += objSummary.Summary1To30Charges.DateTotal
-            objTotals.Summary31To60Charges.DateTotal += objSummary.Summary31To60Charges.DateTotal
-            objTotals.Summary61To90Charges.DateTotal += objSummary.Summary61To90Charges.DateTotal
-            objTotals.SummaryOver90Charges.DateTotal += objSummary.SummaryOver90Charges.DateTotal
-            objTotals.SummaryFutureCharges.DateTotal += objSummary.SummaryFutureCharges.DateTotal
-            objTotals.SummaryPayments.DateTotal += objSummary.SummaryPayments.DateTotal
+            objTotals.SummaryCurrentCharges.Add(objSummary.SummaryCurrentCharges.Subtotal, "", DateTime.Today)
+            objTotals.Summary1To30Charges.Add(objSummary.Summary1To30Charges.Subtotal, "", DateTime.Today)
+            objTotals.Summary31To60Charges.Add(objSummary.Summary31To60Charges.Subtotal, "", DateTime.Today)
+            objTotals.Summary61To90Charges.Add(objSummary.Summary61To90Charges.Subtotal, "", DateTime.Today)
+            objTotals.SummaryOver90Charges.Add(objSummary.SummaryOver90Charges.Subtotal, "", DateTime.Today)
+            objTotals.SummaryFutureCharges.Add(objSummary.SummaryFutureCharges.Subtotal, "", DateTime.Today)
+            objTotals.SummaryPayments.Add(objSummary.SummaryPayments.Subtotal, "", DateTime.Today)
             objTotals.Balance += objSummary.Balance
         Next
         OutputAccountRow(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass, objTotals)
@@ -419,14 +439,66 @@ Public Class TrialBalanceForm
         strLineTitleClass As String, strLineAmountClass As String, strMinusClass As String, objSummary As TSummary)
         objWriter.OutputTableRowStart()
         objWriter.OutputTableDataTitle(strLineTitleClass, objSummary.TrxName)
-        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.SummaryCurrentCharges.DateTotal)
-        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.Summary1To30Charges.DateTotal)
-        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.Summary31To60Charges.DateTotal)
-        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.Summary61To90Charges.DateTotal)
-        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.SummaryOver90Charges.DateTotal)
-        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.SummaryFutureCharges.DateTotal)
-        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.SummaryPayments.DateTotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.SummaryCurrentCharges.Subtotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.Summary1To30Charges.Subtotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.Summary31To60Charges.Subtotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.Summary61To90Charges.Subtotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.SummaryOver90Charges.Subtotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.SummaryFutureCharges.Subtotal)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.SummaryPayments.Subtotal)
         objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, objSummary.Balance)
+        objWriter.OutputTableRowEnd()
+    End Sub
+
+    Private Shared Sub OutputAccountDetails(Of TSummary As {TrxNameSummary, New})(objWriter As HTMLWriter,
+        strLineTitleClass As String, strLineAmountClass As String, strMinusClass As String, objSummary As TSummary)
+
+        OutputInvoice(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass, objSummary.SummaryCurrentCharges, 0)
+        OutputInvoice(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass, objSummary.Summary1To30Charges, 1)
+        OutputInvoice(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass, objSummary.Summary31To60Charges, 2)
+        OutputInvoice(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass, objSummary.Summary61To90Charges, 3)
+        OutputInvoice(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass, objSummary.SummaryOver90Charges, 4)
+        OutputInvoice(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass, objSummary.SummaryFutureCharges, 5)
+        OutputInvoice(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass, objSummary.SummaryPayments, 6)
+    End Sub
+
+    Private Shared Sub OutputInvoice(objWriter As HTMLWriter,
+        strLineTitleClass As String, strLineAmountClass As String, strMinusClass As String,
+        objSubtotal As SubtotalWithDetails, intColIndex As Integer)
+
+        For Each dtl In objSubtotal.InvoiceDetails
+            If dtl.Amount <> 0 Then
+                Dim amounts(7) As Decimal
+                amounts(intColIndex) = dtl.Amount
+                OutputInvoice(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass,
+                              "&nbsp;&nbsp;" + dtl.TrxDate.ToShortDateString() + " Invoice #" + dtl.InvoiceNum, amounts)
+            End If
+        Next
+
+        For Each dtl In objSubtotal.NonInvoiceDetails
+            If dtl.Amount <> 0 Then
+                Dim amounts(6) As Decimal
+                amounts(intColIndex) = dtl.Amount
+                OutputInvoice(objWriter, strLineTitleClass, strLineAmountClass, strMinusClass,
+                              "&nbsp;&nbsp;" + dtl.TrxDate.ToShortDateString() + " (no invoice #)", amounts)
+            End If
+        Next
+    End Sub
+
+    Private Shared Sub OutputInvoice(objWriter As HTMLWriter,
+            strLineTitleClass As String, strLineAmountClass As String, strMinusClass As String,
+            strName As String, curAmounts() As Decimal)
+
+        objWriter.OutputTableRowStart()
+        objWriter.OutputTableDataTitle(strLineTitleClass, strName)
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, curAmounts(0))
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, curAmounts(1))
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, curAmounts(2))
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, curAmounts(3))
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, curAmounts(4))
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, curAmounts(5))
+        objWriter.OutputTableDataAmount(strLineAmountClass, strMinusClass, curAmounts(6))
+        objWriter.OutputTableDataText(strLineAmountClass, strMinusClass, "")
         objWriter.OutputTableRowEnd()
     End Sub
 End Class

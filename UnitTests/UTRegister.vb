@@ -45,15 +45,21 @@ Public Class UTRegister
 
     Public Sub Init(ByVal strRegisterKey As String)
         mobjCompany = New Company(My.Application.Info.DirectoryPath & "\Data")
-        mobjAccount = New Account()
-        mobjAccount.Init(mobjCompany)
-        mobjAccount.InitForLoad()
-        mobjCompany.Accounts.Add(mobjAccount)
-        mobjReg = New Register
-        mobjReg.Init(mobjAccount, "title", strRegisterKey, False, 3)
-        mobjReg.OldestBudgetEndAllowed = DateTime.Parse("1/1/1980")
-        mobjAccount.Registers.Add(mobjReg)
+        mobjAccount = AddAccount(strRegisterKey)
+        mobjReg = mobjAccount.Registers(0)
     End Sub
+
+    Public Function AddAccount(ByVal strRegisterKey As String) As Account
+        Dim objNewAcct As Account = New Account()
+        objNewAcct.Init(mobjCompany)
+        objNewAcct.InitForLoad()
+        mobjCompany.Accounts.Add(objNewAcct)
+        Dim objNewReg As Register = New Register()
+        objNewReg.Init(objNewAcct, "title", strRegisterKey, False, 3)
+        objNewReg.OldestBudgetEndAllowed = DateTime.Parse("1/1/1980")
+        objNewAcct.Registers.Add(objNewReg)
+        Return objNewAcct
+    End Function
 
     'The Register managed by this UTRegister.
 
@@ -62,6 +68,25 @@ Public Class UTRegister
             objReg = mobjReg
         End Get
     End Property
+
+    Public ReadOnly Property objAcct() As Account
+        Get
+            Return mobjAccount
+        End Get
+    End Property
+
+    Public ReadOnly Property objCompany() As Company
+        Get
+            Return mobjCompany
+        End Get
+    End Property
+
+    Public Sub LoadApplyFinish()
+        mobjReg.Sort()
+        mobjReg.LoadApply()
+        mobjReg.Sort()
+        mobjReg.LoadFinish()
+    End Sub
 
     Public ReadOnly Property strBudgetsChanged() As String
         Get

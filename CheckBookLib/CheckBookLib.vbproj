@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.vb" />
+    <Compile Include="Reporting\SubtotalDetail.vb" />
     <Compile Include="UITypeEditors\BooleanStringTypeConverter.vb" />
     <Compile Include="StringTrans\BudgetTranslator.vb" />
     <Compile Include="StringTrans\CategoryTranslator.vb" />

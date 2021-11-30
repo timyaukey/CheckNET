@@ -94,9 +94,6 @@
     <Reference Include="System.XML">
       <Name>System.XML</Name>
     </Reference>
-    <Reference Include="Willowsoft.CheckBook.Lib, Version=2.13.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Willowsoft.CheckBook.Lib.2.13.0\lib\net472\Willowsoft.CheckBook.Lib.dll</HintPath>
-    </Reference>
     <Reference Include="Willowsoft.TamperProofData, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Willowsoft.TamperProofData.1.2.0\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
     </Reference>
@@ -443,6 +440,10 @@
     <ProjectReference Include="..\BudgetDashboard\BudgetDashboard.csproj">
       <Project>{050728f0-3aad-42fb-a8a8-9e23a5dc4d0e}</Project>
       <Name>BudgetDashboard</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
+      <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
+      <Name>CheckBookLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\FinancialReports\FinancialReports.vbproj">
       <Project>{081cd8c1-9ebf-4b8b-8353-ef6b4bd5b293}</Project>

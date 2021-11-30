@@ -71,9 +71,6 @@
     <Reference Include="Microsoft.VisualBasic.Compatibility">
       <Name>Microsoft.VisualBasic.Compatibility</Name>
     </Reference>
-    <Reference Include="Willowsoft.CheckBook.Lib, Version=2.13.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Willowsoft.CheckBook.Lib.2.13.0\lib\net472\Willowsoft.CheckBook.Lib.dll</HintPath>
-    </Reference>
     <Reference Include="Willowsoft.TamperProofData, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Willowsoft.TamperProofData.1.2.0\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
     </Reference>
@@ -109,6 +106,7 @@
     </Compile>
     <Compile Include="CoreFixture.vb" />
     <Compile Include="RegisterSearchFixture.vb" />
+    <Compile Include="TrxNameSummaryFixture.vb" />
     <Compile Include="UTMisc.vb" />
     <Compile Include="UTRegister.vb" />
   </ItemGroup>
@@ -143,6 +141,12 @@
     <Content Include="Data\UTData\UTRegLoad1.txt" />
     <Content Include="Data\UTData\UTStringTran1.txt" />
     <Content Include="Data\UTSecurity.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
+      <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
+      <Name>CheckBookLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

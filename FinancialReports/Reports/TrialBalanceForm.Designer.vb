@@ -45,6 +45,8 @@ Partial Class TrialBalanceForm
         Me.btnLoansReceivable = New System.Windows.Forms.Button()
         Me.lblAgingDate = New System.Windows.Forms.Label()
         Me.ctlAgingDate = New System.Windows.Forms.DateTimePicker()
+        Me.btnARInvoices = New System.Windows.Forms.Button()
+        Me.btnAPInvoices = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'ctlEndDate
@@ -116,10 +118,10 @@ Partial Class TrialBalanceForm
         'btnTrialBalance
         '
         Me.btnTrialBalance.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnTrialBalance.Location = New System.Drawing.Point(399, 531)
+        Me.btnTrialBalance.Location = New System.Drawing.Point(399, 545)
         Me.btnTrialBalance.Name = "btnTrialBalance"
         Me.btnTrialBalance.Size = New System.Drawing.Size(150, 23)
-        Me.btnTrialBalance.TabIndex = 17
+        Me.btnTrialBalance.TabIndex = 19
         Me.btnTrialBalance.Text = "Trial Balance"
         Me.btnTrialBalance.UseVisualStyleBackColor = True
         '
@@ -160,7 +162,7 @@ Partial Class TrialBalanceForm
         'btnBalanceSheet
         '
         Me.btnBalanceSheet.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnBalanceSheet.Location = New System.Drawing.Point(12, 502)
+        Me.btnBalanceSheet.Location = New System.Drawing.Point(12, 487)
         Me.btnBalanceSheet.Name = "btnBalanceSheet"
         Me.btnBalanceSheet.Size = New System.Drawing.Size(150, 23)
         Me.btnBalanceSheet.TabIndex = 11
@@ -170,7 +172,7 @@ Partial Class TrialBalanceForm
         'btnIncomeExpenseStatement
         '
         Me.btnIncomeExpenseStatement.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnIncomeExpenseStatement.Location = New System.Drawing.Point(168, 502)
+        Me.btnIncomeExpenseStatement.Location = New System.Drawing.Point(168, 487)
         Me.btnIncomeExpenseStatement.Name = "btnIncomeExpenseStatement"
         Me.btnIncomeExpenseStatement.Size = New System.Drawing.Size(150, 23)
         Me.btnIncomeExpenseStatement.TabIndex = 12
@@ -189,47 +191,47 @@ Partial Class TrialBalanceForm
         'btnPostRetainedEarnings
         '
         Me.btnPostRetainedEarnings.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnPostRetainedEarnings.Location = New System.Drawing.Point(399, 560)
+        Me.btnPostRetainedEarnings.Location = New System.Drawing.Point(399, 574)
         Me.btnPostRetainedEarnings.Name = "btnPostRetainedEarnings"
         Me.btnPostRetainedEarnings.Size = New System.Drawing.Size(150, 23)
-        Me.btnPostRetainedEarnings.TabIndex = 18
+        Me.btnPostRetainedEarnings.TabIndex = 20
         Me.btnPostRetainedEarnings.Text = "Post Retained Earnings"
         Me.btnPostRetainedEarnings.UseVisualStyleBackColor = True
         '
         'btnAccountsPayable
         '
         Me.btnAccountsPayable.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnAccountsPayable.Location = New System.Drawing.Point(168, 560)
+        Me.btnAccountsPayable.Location = New System.Drawing.Point(168, 545)
         Me.btnAccountsPayable.Name = "btnAccountsPayable"
         Me.btnAccountsPayable.Size = New System.Drawing.Size(150, 23)
         Me.btnAccountsPayable.TabIndex = 16
-        Me.btnAccountsPayable.Text = "Accounts Payable"
+        Me.btnAccountsPayable.Text = "A/P Age Summary"
         Me.btnAccountsPayable.UseVisualStyleBackColor = True
         '
         'btnLoansPayable
         '
         Me.btnLoansPayable.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnLoansPayable.Location = New System.Drawing.Point(12, 560)
+        Me.btnLoansPayable.Location = New System.Drawing.Point(168, 516)
         Me.btnLoansPayable.Name = "btnLoansPayable"
         Me.btnLoansPayable.Size = New System.Drawing.Size(150, 23)
-        Me.btnLoansPayable.TabIndex = 15
+        Me.btnLoansPayable.TabIndex = 14
         Me.btnLoansPayable.Text = "Loans Payable"
         Me.btnLoansPayable.UseVisualStyleBackColor = True
         '
         'btnAccountsReceivable
         '
         Me.btnAccountsReceivable.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnAccountsReceivable.Location = New System.Drawing.Point(168, 531)
+        Me.btnAccountsReceivable.Location = New System.Drawing.Point(12, 545)
         Me.btnAccountsReceivable.Name = "btnAccountsReceivable"
         Me.btnAccountsReceivable.Size = New System.Drawing.Size(150, 23)
-        Me.btnAccountsReceivable.TabIndex = 14
-        Me.btnAccountsReceivable.Text = "Accounts Receivable"
+        Me.btnAccountsReceivable.TabIndex = 15
+        Me.btnAccountsReceivable.Text = "A/R Age Summary"
         Me.btnAccountsReceivable.UseVisualStyleBackColor = True
         '
         'btnLoansReceivable
         '
         Me.btnLoansReceivable.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnLoansReceivable.Location = New System.Drawing.Point(12, 531)
+        Me.btnLoansReceivable.Location = New System.Drawing.Point(12, 516)
         Me.btnLoansReceivable.Name = "btnLoansReceivable"
         Me.btnLoansReceivable.Size = New System.Drawing.Size(150, 23)
         Me.btnLoansReceivable.TabIndex = 13
@@ -252,11 +254,33 @@ Partial Class TrialBalanceForm
         Me.ctlAgingDate.Size = New System.Drawing.Size(200, 20)
         Me.ctlAgingDate.TabIndex = 5
         '
+        'btnARInvoices
+        '
+        Me.btnARInvoices.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnARInvoices.Location = New System.Drawing.Point(12, 574)
+        Me.btnARInvoices.Name = "btnARInvoices"
+        Me.btnARInvoices.Size = New System.Drawing.Size(150, 23)
+        Me.btnARInvoices.TabIndex = 17
+        Me.btnARInvoices.Text = "A/R Unpaid Invoices"
+        Me.btnARInvoices.UseVisualStyleBackColor = True
+        '
+        'btnAPInvoices
+        '
+        Me.btnAPInvoices.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnAPInvoices.Location = New System.Drawing.Point(168, 574)
+        Me.btnAPInvoices.Name = "btnAPInvoices"
+        Me.btnAPInvoices.Size = New System.Drawing.Size(150, 23)
+        Me.btnAPInvoices.TabIndex = 18
+        Me.btnAPInvoices.Text = "A/P Unpaid Invoices"
+        Me.btnAPInvoices.UseVisualStyleBackColor = True
+        '
         'TrialBalanceForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(561, 595)
+        Me.ClientSize = New System.Drawing.Size(561, 609)
+        Me.Controls.Add(Me.btnAPInvoices)
+        Me.Controls.Add(Me.btnARInvoices)
         Me.Controls.Add(Me.lblAgingDate)
         Me.Controls.Add(Me.ctlAgingDate)
         Me.Controls.Add(Me.btnLoansReceivable)
@@ -310,4 +334,6 @@ Partial Class TrialBalanceForm
     Friend WithEvents btnLoansReceivable As Button
     Friend WithEvents lblAgingDate As Label
     Friend WithEvents ctlAgingDate As DateTimePicker
+    Friend WithEvents btnARInvoices As Button
+    Friend WithEvents btnAPInvoices As Button
 End Class

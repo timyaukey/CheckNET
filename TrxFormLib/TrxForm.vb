@@ -1180,9 +1180,14 @@ Public Class TrxForm
                                 'the same (or a very similar) payee and there is an invoice number.
                                 For Each objSplit In DirectCast(objTrx, BankTrx).Splits
                                     If maudtSplits(intSplit).InvoiceNum = objSplit.InvoiceNum Then
-                                        ValidationError("Invoice number is already in use for this payee.")
-                                        blnExistsInRegister = True
-                                        Exit Function
+                                        Dim blnDeclineDupeInvoiceNum As Boolean =
+                                            MsgBox("Invoice number is already in use for this payee. " +
+                                                "Are you sure you want to use this invoice number?",
+                                                   MsgBoxStyle.YesNo, "Invoice Number Validation") <> MsgBoxResult.Yes
+                                        If blnDeclineDupeInvoiceNum Then
+                                            blnExistsInRegister = True
+                                            Exit Function
+                                        End If
                                     End If
                                     'They may have mistyped the invoice number, so check
                                     'for same split amount if split has invoice number.

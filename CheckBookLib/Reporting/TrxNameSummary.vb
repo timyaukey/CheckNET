@@ -5,23 +5,23 @@ Public MustInherit Class TrxNameSummary
     Public TrxName As String
     Public Balance As Decimal
 
-    Public SummaryCurrentCharges As DateRangeSummary
-    Public Summary1To30Charges As DateRangeSummary
-    Public Summary31To60Charges As DateRangeSummary
-    Public Summary61To90Charges As DateRangeSummary
-    Public SummaryOver90Charges As DateRangeSummary
-    Public SummaryFutureCharges As DateRangeSummary
-    Public SummaryPayments As DateRangeSummary
+    Public SummaryCurrentCharges As SubtotalWithDetails
+    Public Summary1To30Charges As SubtotalWithDetails
+    Public Summary31To60Charges As SubtotalWithDetails
+    Public Summary61To90Charges As SubtotalWithDetails
+    Public SummaryOver90Charges As SubtotalWithDetails
+    Public SummaryFutureCharges As SubtotalWithDetails
+    Public SummaryPayments As SubtotalWithDetails
 
     Public Sub New()
         Balance = 0
-        SummaryCurrentCharges = New DateRangeSummary()
-        Summary1To30Charges = New DateRangeSummary()
-        Summary31To60Charges = New DateRangeSummary()
-        Summary61To90Charges = New DateRangeSummary()
-        SummaryOver90Charges = New DateRangeSummary()
-        SummaryFutureCharges = New DateRangeSummary()
-        SummaryPayments = New DateRangeSummary()
+        SummaryCurrentCharges = New SubtotalWithDetails()
+        Summary1To30Charges = New SubtotalWithDetails()
+        Summary31To60Charges = New SubtotalWithDetails()
+        Summary61To90Charges = New SubtotalWithDetails()
+        SummaryOver90Charges = New SubtotalWithDetails()
+        SummaryFutureCharges = New SubtotalWithDetails()
+        SummaryPayments = New SubtotalWithDetails()
     End Sub
 
     Public Shared Function ScanTrx(Of TSummary As {TrxNameSummary, New})(ByVal objCompany As Company, ByVal datEnd As DateTime,
@@ -38,13 +38,15 @@ Public MustInherit Class TrxNameSummary
                             If Not objNormalTrx Is Nothing Then
                                 Dim objSummary As TSummary = GetSummary(colSummary, objDict, objTrx)
                                 For Each objSplit As TrxSplit In objNormalTrx.Splits
-                                    objSummary.AddAmountToCorrectAge(objSplit.Amount, objSplit.DueDateEffective, datAging)
+                                    objSummary.AddAmountToCorrectAge(objSplit.Amount, objTrx.TrxDate,
+                                        objSplit.DueDateEffective, datAging, objSplit.InvoiceNum)
                                 Next
                             Else
                                 Dim objReplicaTrx As ReplicaTrx = TryCast(objTrx, ReplicaTrx)
                                 If Not objReplicaTrx Is Nothing Then
                                     Dim objSummary As TSummary = GetSummary(colSummary, objDict, objTrx)
-                                    objSummary.AddAmountToCorrectAge(objReplicaTrx.Amount, objReplicaTrx.TrxDate, datAging)
+                                    objSummary.AddAmountToCorrectAge(objReplicaTrx.Amount, objReplicaTrx.TrxDate,
+                                        objReplicaTrx.TrxDate, datAging, objReplicaTrx.InvoiceNum)
                                 End If
                             End If
                         End If
@@ -84,53 +86,94 @@ Public MustInherit Class TrxNameSummary
 
     Protected MustOverride Function IsCharge(ByVal curAmount As Decimal) As Boolean
 
-    Protected Sub AddAmountToCorrectAge(ByVal curAmount As Decimal, ByVal datDue As Date, ByVal datAging As Date)
+    Protected Sub AddAmountToCorrectAge(ByVal curAmount As Decimal, ByVal datTrx As Date,
+                                        ByVal datDue As Date, ByVal datAging As Date,
+                                        ByVal strInvoiceNum As String)
         Me.Balance += curAmount
         If IsCharge(curAmount) Then
             Dim intAge As Integer = CInt(datAging.Subtract(datDue).TotalDays)
             If intAge <= -30 Then
-                SummaryFutureCharges.Add(curAmount)
+                SummaryFutureCharges.Add(curAmount, strInvoiceNum, datTrx)
             ElseIf intAge <= 0 Then
-                SummaryCurrentCharges.Add(curAmount)
+                SummaryCurrentCharges.Add(curAmount, strInvoiceNum, datTrx)
             ElseIf intAge <= 30 Then
-                Summary1To30Charges.Add(curAmount)
+                Summary1To30Charges.Add(curAmount, strInvoiceNum, datTrx)
             ElseIf intAge <= 60 Then
-                Summary31To60Charges.Add(curAmount)
+                Summary31To60Charges.Add(curAmount, strInvoiceNum, datTrx)
             ElseIf intAge <= 90 Then
-                Summary61To90Charges.Add(curAmount)
+                Summary61To90Charges.Add(curAmount, strInvoiceNum, datTrx)
             Else
-                SummaryOver90Charges.Add(curAmount)
+                SummaryOver90Charges.Add(curAmount, strInvoiceNum, datTrx)
             End If
         Else
-            SummaryPayments.Add(curAmount)
+            SummaryPayments.Add(curAmount, strInvoiceNum, datTrx)
         End If
     End Sub
 
     Private Sub ApplyPayments()
-        If ApplyPayments(SummaryOver90Charges, SummaryPayments) Then
-            If ApplyPayments(Summary61To90Charges, SummaryPayments) Then
-                If ApplyPayments(Summary31To60Charges, SummaryPayments) Then
-                    If ApplyPayments(Summary1To30Charges, SummaryPayments) Then
-                        If ApplyPayments(SummaryCurrentCharges, SummaryPayments) Then
-                            ApplyPayments(SummaryFutureCharges, SummaryPayments)
-                        End If
-                    End If
-                End If
-            End If
-        End If
+        'First apply payments applied to specific invoices
+        ApplyPaymentsToInvoiceNum(SummaryOver90Charges, SummaryPayments)
+        ApplyPaymentsToInvoiceNum(Summary61To90Charges, SummaryPayments)
+        ApplyPaymentsToInvoiceNum(Summary31To60Charges, SummaryPayments)
+        ApplyPaymentsToInvoiceNum(Summary1To30Charges, SummaryPayments)
+        ApplyPaymentsToInvoiceNum(SummaryCurrentCharges, SummaryPayments)
+        ApplyPaymentsToInvoiceNum(SummaryFutureCharges, SummaryPayments)
+        'Then apply to any charge any payments or parts of payments that are still left
+        ApplyPaymentsToAnyCharge(SummaryOver90Charges, SummaryPayments)
+        ApplyPaymentsToAnyCharge(Summary61To90Charges, SummaryPayments)
+        ApplyPaymentsToAnyCharge(Summary31To60Charges, SummaryPayments)
+        ApplyPaymentsToAnyCharge(Summary1To30Charges, SummaryPayments)
+        ApplyPaymentsToAnyCharge(SummaryCurrentCharges, SummaryPayments)
+        ApplyPaymentsToAnyCharge(SummaryFutureCharges, SummaryPayments)
     End Sub
 
-    Private Function ApplyPayments(ByVal objCharges As DateRangeSummary, ByVal objPayments As DateRangeSummary) As Boolean
-        Dim curNetBalance As Decimal = objCharges.DateTotal + objPayments.DateTotal
-        If IsCharge(curNetBalance) Or curNetBalance = 0 Then
-            objCharges.DateTotal = curNetBalance
-            objPayments.DateTotal = 0
-            Return False
+    Private Sub ApplyPaymentsToInvoiceNum(ByVal objCharges As SubtotalWithDetails, ByVal objPayments As SubtotalWithDetails)
+        For Each objChargeDetail As SubtotalDetail In objCharges.InvoiceDetails
+            For Each objPaymentDetail As SubtotalDetail In objPayments.InvoiceDetails
+                If objChargeDetail.InvoiceNum = objPaymentDetail.InvoiceNum Then
+                    ApplyPaymentToCharge(objChargeDetail, objPaymentDetail)
+                End If
+            Next
+        Next
+    End Sub
+
+    Private Sub ApplyPaymentsToAnyCharge(ByVal objCharges As SubtotalWithDetails, ByVal objPayments As SubtotalWithDetails)
+        For Each objPaymentDetail As SubtotalDetail In objPayments.InvoiceDetails
+            For Each objChargeDetail As SubtotalDetail In objCharges.InvoiceDetails
+                ApplyPaymentToCharge(objChargeDetail, objPaymentDetail)
+            Next
+            For Each objChargeDetail As SubtotalDetail In objCharges.NonInvoiceDetails
+                ApplyPaymentToCharge(objChargeDetail, objPaymentDetail)
+            Next
+        Next
+        For Each objPaymentDetail As SubtotalDetail In objPayments.NonInvoiceDetails
+            For Each objChargeDetail As SubtotalDetail In objCharges.InvoiceDetails
+                ApplyPaymentToCharge(objChargeDetail, objPaymentDetail)
+            Next
+            For Each objChargeDetail As SubtotalDetail In objCharges.NonInvoiceDetails
+                ApplyPaymentToCharge(objChargeDetail, objPaymentDetail)
+            Next
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Apply as much of a payment as possible to a charge.
+    ''' If the charge is larger than or equal to the payment, then apply the entire payment.
+    ''' Otherwise apply only the amount needed to pay off the charge.
+    ''' </summary>
+    ''' <param name="objCharge"></param>
+    ''' <param name="objPayment"></param>
+    Private Sub ApplyPaymentToCharge(ByVal objCharge As SubtotalDetail, ByVal objPayment As SubtotalDetail)
+        Dim curNewCharge As Decimal = objCharge.Amount + objPayment.Amount
+        If IsCharge(curNewCharge) Then
+            'Charge was NOT fully paid
+            objCharge.Amount = curNewCharge
+            objPayment.Amount = 0
         Else
-            objPayments.DateTotal = curNetBalance
-            objCharges.DateTotal = 0
-            Return True
+            'Charge WAS fully paid
+            objPayment.Amount = curNewCharge
+            objCharge.Amount = 0
         End If
-    End Function
+    End Sub
 
 End Class

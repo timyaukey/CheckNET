@@ -114,14 +114,14 @@ Public Class Register
 
     End Sub
 
-    '$Description Add a BaseTrx object to the register at the correct place in the sort order,
-    '   as part of a register loading operation.
-    '   Does not search for any kind of match to this BaseTrx, apply to budgets, or adjust
-    '   curBalance properties. Optimized for the case where objNew falls near or at the
-    '   end of the sort order.
-    '$Param objNew BaseTrx object to add. This actual object instance will
-    '   become the register entry, rather than making a copy of it.
-
+    ''' <summary>
+    ''' Add a BaseTrx object to the end of register, as part of a register loading operation.
+    ''' Does not search for any kind of match to this BaseTrx, apply to budgets, or adjust
+    ''' curBalance properties. The register must later be sorted to put all transactions
+    ''' in the correct order.
+    ''' </summary>
+    ''' <param name="objNew">BaseTrx object to add. This actual object instance will
+    ''' become the register entry, rather than making a copy of it.</param>
     Public Sub NewLoadEnd(ByVal objNew As BaseTrx)
         BeginCriticalOperation()
         ExpandTrxArray()
@@ -132,12 +132,13 @@ Public Class Register
         EndCriticalOperation()
     End Sub
 
-    '$Description Add a BaseTrx object to the register at the correct place in the sort order,
-    '   as part of adding a BaseTrx to an already loaded register. Optimized for the case
-    '   where objNew falls near or at the end of the sort order.
-    '$Param objNew BaseTrx object to add. This actual object instance will
-    '   become the register entry, rather than making a copy of it.
-
+    ''' <summary>
+    ''' Add a BaseTrx object to the register at the correct place in the sort order, as part of
+    ''' adding a BaseTrx to an already loaded register. Does not search for any kind of match to 
+    ''' this BaseTrx, apply to budgets, or adjust curBalance properties.
+    ''' </summary>
+    ''' <param name="objNew">BaseTrx object to add. This actual object instance will
+    ''' become the register entry, rather than making a copy of it.</param>
     Public Sub NewAddEnd(ByVal objNew As BaseTrx, ByVal objAddLogger As ILogAdd, ByVal strTitle As String,
                          Optional ByVal blnSetChanged As Boolean = True)
 
@@ -506,23 +507,33 @@ Public Class Register
         Next
     End Sub
 
-    '$Description Call BaseTrx.Apply() on all BaseTrx in this Register after this Register is
-    '   loaded with BaseTrx objects from an external database. This may create additional BaseTrx.
-    '   Must be done for all BaseTrx in all Registers in all Accounts before calling
-    '   LoadFinish() for any Registers in any Accounts.
-
+    ''' <summary>
+    ''' Call BaseTrx.Apply() on all BaseTrx in this Register after this Register is loaded
+    ''' with transactions from an external source. This may create additional BaseTrx.
+    ''' Must be done for all Registers in all Accounts before calling LoadFinish() for any 
+    ''' Registers in any Accounts. Must be preceded by a call to Register.Sort(), because
+    ''' transactions are not necessarily loaded in sorted order and Apply() may not find
+    ''' transactions it needs if the Register() is out of order.
+    ''' </summary>
     Public Sub LoadApply()
         BeginCriticalOperation()
-        For lngIndex As Integer = 1 To mlngTrxUsed
-            Me.GetTrx(lngIndex).Apply(True)
+        'For lngIndex As Integer = 1 To mlngTrxUsed
+        '    Me.GetTrx(lngIndex).Apply(True)
+        'Next
+        For Each objTrx As BaseTrx In GetAllTrx(Of BaseTrx)()
+            objTrx.Apply(True)
         Next
         EndCriticalOperation()
     End Sub
 
-    '$Description Perform final post processing steps after this Register is
-    '   loaded and LoadApply() is called. Computes balances.
-    '   The register is ready to display in a UI after this.
-
+    ''' <summary>
+    ''' Perform final post processing steps after this Register is loaded and LoadApply() is called.
+    ''' Computes balances. Must be preceded by a call to Register.Sort(), because Register.LoadApply()
+    ''' on a different register may have created ReplicaTrx in this Register. Thus each Register must
+    ''' have Register.Sort() called twice for it during load - once before LoadApply(), to put the 
+    ''' possibly unsorted input transactions into sorted order, and once before LoadFinish(), to
+    ''' put ReplicaTrx in the correct places. The register is ready to display in a UI after this.
+    ''' </summary>
     Public Sub LoadFinish()
         Dim curBalance As Decimal = 0
         BeginCriticalOperation()
