@@ -54,9 +54,6 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="Willowsoft.CheckBook.Lib, Version=2.13.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Willowsoft.CheckBook.Lib.2.13.0\lib\net472\Willowsoft.CheckBook.Lib.dll</HintPath>
-    </Reference>
     <Reference Include="Willowsoft.TamperProofData, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Willowsoft.TamperProofData.1.2.0\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
     </Reference>
@@ -204,6 +201,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
+      <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
+      <Name>CheckBookLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

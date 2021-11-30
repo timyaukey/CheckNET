@@ -60,9 +60,6 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="Willowsoft.CheckBook.Lib, Version=2.13.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Willowsoft.CheckBook.Lib.2.13.0\lib\net472\Willowsoft.CheckBook.Lib.dll</HintPath>
-    </Reference>
     <Reference Include="Willowsoft.TamperProofData, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Willowsoft.TamperProofData.1.2.0\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
     </Reference>
@@ -135,6 +132,10 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
+      <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
+      <Name>CheckBookLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MainUILib\MainUILib.vbproj">
       <Project>{442df4fb-f71a-4c03-95dd-3224ee310375}</Project>
       <Name>MainUILib</Name>

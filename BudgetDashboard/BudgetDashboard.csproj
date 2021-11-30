@@ -43,12 +43,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Willowsoft.CheckBook.Lib, Version=2.13.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Willowsoft.CheckBook.Lib.2.13.0\lib\net472\Willowsoft.CheckBook.Lib.dll</HintPath>
-    </Reference>
-    <Reference Include="Willowsoft.CheckBook.PluginCore, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Willowsoft.CheckBook.PluginCore.1.7.0\lib\net472\Willowsoft.CheckBook.PluginCore.dll</HintPath>
-    </Reference>
     <Reference Include="Willowsoft.TamperProofData, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Willowsoft.TamperProofData.1.2.0\lib\netstandard2.0\Willowsoft.TamperProofData.dll</HintPath>
     </Reference>
@@ -101,7 +95,16 @@
     <Content Include="Help\BudgetDashboard.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Reports\AllReports.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
+      <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
+      <Name>CheckBookLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PluginCore\PluginCore.vbproj">
+      <Project>{df8c4177-36c2-414d-a363-09c33cb56fd4}</Project>
+      <Name>PluginCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
