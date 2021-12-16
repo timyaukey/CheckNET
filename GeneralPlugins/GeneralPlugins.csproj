@@ -54,6 +54,12 @@
     <Compile Include="IntuitExport\ExportForm.Designer.cs">
       <DependentUpon>ExportForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MissingChecks\MissingChecksForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MissingChecks\MissingChecksForm.Designer.cs">
+      <DependentUpon>MissingChecksForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PluginMarker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RenumberChecks\RenumberChecksForm.cs">
@@ -66,6 +72,9 @@
   <ItemGroup>
     <EmbeddedResource Include="IntuitExport\ExportForm.resx">
       <DependentUpon>ExportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MissingChecks\MissingChecksForm.resx">
+      <DependentUpon>MissingChecksForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RenumberChecks\RenumberChecksForm.resx">
       <DependentUpon>RenumberChecksForm.cs</DependentUpon>

@@ -21,6 +21,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         {
             setup.ToolMenu.Add(new MenuElementAction("Intuit Export (IIF Format)", 102, IntuitExportClickHandler));
             setup.ToolMenu.Add(new MenuElementRegister(HostUI, "Renumber Checks", 103, RenumberChecksClickHandler));
+            setup.ToolMenu.Add(new MenuElementRegister(HostUI, "Find Missing Checks", 104, MissingChecksClickHandler));
 
             MetadataInternal = new PluginMetadata("External Tools", "Willow Creek Software",
                 System.Reflection.Assembly.GetExecutingAssembly(), null,
@@ -60,6 +61,25 @@ namespace Willowsoft.CheckBook.GeneralPlugins
                     if (frm.ShowDialog(HostUI) != System.Windows.Forms.DialogResult.OK)
                     {
                         HostUI.InfoMessageBox("Renumber checks canceled.");
+                        return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorHandling.TopException(ex);
+            }
+        }
+
+        private void MissingChecksClickHandler(object sender, RegisterEventArgs e)
+        {
+            try
+            {
+                using (MissingChecksForm frm = new MissingChecksForm())
+                {
+                    if (frm.ShowDialog(HostUI) != System.Windows.Forms.DialogResult.OK)
+                    {
+                        HostUI.InfoMessageBox("Find missing checks canceled.");
                         return;
                     }
                 }
