@@ -1,0 +1,72 @@
+FHCKBK2
+ATChecking Account
+AK1
+AYA
+RK1
+RTChecking Account
+RS
+RI
+RL1
+TNRTransfer from savings
+DT02/10/19
+N#Dep
+SC2.1
+SA500.00
+SZ
+.T
+TNRFred Meyer
+DT02/11/19
+N#20004
+SC020
+SA-34.95
+SZ
+SC017
+SA-194.50
+SZ
+.T
+TNUThriftway
+DT02/11/19
+MEshort trip
+N#Card
+SC020
+SB01
+SA-20.05
+SZ
+.T
+TNUComcast
+DT10/14/20
+N#Card
+SC024
+SA-230.01
+SZ
+.T
+TNUAmazon.com
+DT10/15/20
+N#404
+SC017
+SA-100.00
+SZ
+.T
+TNUtest
+DT07/23/21
+N#305
+SC006
+SA400.00
+SZ
+.T
+.R
+RF1
+TNUAmazon Warehouse
+DT02/10/19
+N#Card
+SC020
+SMyesdoit
+SPPO4000
+SNIN1001
+SI02/05/19
+SD03/01/19
+SA-100.00
+SZ
+.T
+.R
+.A

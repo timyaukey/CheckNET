@@ -64,14 +64,25 @@
     <Compile Include="UpdateNormalTrx.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Initialize.ps1">
+      <SubType>Component</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Test1.ps1" />
     <None Include="Test2.ps1" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="TestData\Accounts\Main.act" />
+    <None Include="TestData\Accounts\Main.rep" />
+    <None Include="TestData\Accounts\Savings.act" />
+    <None Include="TestData\Accounts\Savings.rep" />
+    <None Include="TestData\Shared.bud" />
+    <None Include="TestData\Shared.cat" />
     <None Include="TestLoadCompany.ps1" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestData\PayeeList.xml" />
+    <Content Include="TestData\QIFImportTrxTypes.xml" />
     <Content Include="Willowsoft.CheckBook.Powershell.dll-Help.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -81,6 +92,11 @@
       <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
       <Name>CheckBookLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestData\Backup\" />
+    <Folder Include="TestData\EventLogs\" />
+    <Folder Include="TestData\Reports\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

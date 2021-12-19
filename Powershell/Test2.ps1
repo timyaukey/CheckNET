@@ -1,5 +1,6 @@
 ﻿import-module .\bin\debug\Willowsoft.Checkbook.Powershell.dll
-$cmp = open-checkbookcompany -path "c:\programdata\Willow Creek Checkbook\Tim Test Company"
+& .\Initialize.ps1
+$cmp = open-checkbookcompany -path $companypath
 try
 {
 $acct = get-checkbookaccount -company $cmp -accountname "Checking Account"

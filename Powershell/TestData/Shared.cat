@@ -1,0 +1,43 @@
+Generated 7/27/2021 8:02:27 PM
+/001/I/Income
+/004/I:Bonus/ Bonus/Type:OTINC
+/007/I:Draw/ Draw/Type:OTINC
+/008/I:Gift/ Gift/Type:OTINC
+/002/I:Interest/ Interest/Type:OTINC
+/005/I:Other/ Other/Type:OTINC
+/006/I:Sales/ Sales/Type:SALES
+/003/I:Wages/ Wages/Type:OTINC
+/009/E/Expense
+/010/E:Cable TV/ Cable TV
+/011/E:Car/ Car
+/012/E:Car:Gasoline/  Gasoline
+/013/E:Car:Payment/  Car Payment
+/014/E:Car:Repair/  Car Repair
+/015/E:Charity/ Charity
+/016/E:Cleansing/ Cleansing
+/017/E:Clothing/ Clothing
+/018/E:Credit Cards/ Credit Cards
+/019/E:Entertainment/ Entertainment
+/020/E:Groceries/ Groceries
+/021/E:Home/ Home
+/022/E:Home:Mortgage/  Mortgage
+/023/E:Home:Repair/  Home Repair
+/024/E:Internet/ Internet
+/025/E:Medical/ Medical
+/026/E:Medical:Insurance/  Insurance
+/027/E:Medical:Office Visits/  Office Visits
+/028/E:Medical:Prescriptions/  Prescriptions
+/029/E:Miscellaneous/ Miscellaneous
+/030/E:Taxes/ Taxes/Type:TAXES
+/031/E:Taxes:Federal Income/  Federal Income/Type:TAXES
+/032/E:Taxes:Local Income/  Local Income/Type:TAXES
+/033/E:Taxes:Property/  Property/Type:TAXES
+/034/E:Taxes:State Income/  State Income/Type:TAXES
+/042/E:Truck/ Truck/Type:OTEXP
+/035/E:Util/ Utilities
+/036/E:Util:Electric/  Electricity
+/040/E:Util:Natural Gas/  Natural Gas
+/037/E:Util:Oil/  Fuel Oil
+/039/E:Util:Phone/  Phone
+/038/E:Util:Water/  Water
+/041/C/C
