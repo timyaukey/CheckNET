@@ -21,7 +21,25 @@ $split = new-checkbooksplit -company $cmp -category E:Groceries -amount -34.95
 $split2 = new-checkbooksplit -company $cmp -category E:Clothing -amount -194.500
 add-checkbooknormaltrx -register $reg -date 2/11/2019 -number 20004 -description "Fred Meyer" -status Reconciled -Splits ($split, $split2)
 
-get-checkbooktrx -register $reg -startdate 2/1/2019 -enddate 2/28/2019|get-checkbooksimpletrx|format-table
+$alltrx = get-checkbooktrx -register $reg -startdate 2/1/2019 -enddate 2/28/2019
+$formattedtrx=format-trxlist $alltrx
+Write-Host $formattedtrx
+$expected=@'
+02/10/2019 Dep {Transfer from savings} $500.00
+02/10/2019 Card {Amazon Warehouse} ($100.00)
+02/11/2019 20004 {Fred Meyer} ($229.45)
+02/11/2019 Card {Thriftway} ($20.05)
+
+'@
+if ($formattedtrx -ne $expected)
+{
+Write-Host "$expected"
+Write-Host "Data did not match expected results"
+}
+else
+{
+Write-Host "Data matches: Test successful"
+}
 
 save-checkbookcompany -company $cmp
 }

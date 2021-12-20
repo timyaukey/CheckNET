@@ -1,5 +1,18 @@
-﻿function global:format-trx
+﻿function global:format-trx($trx)
 {
+$trx.TrxDate.ToString("MM/dd/yyyy")+" "+$trx.Number+" {"+$trx.Description+"} "+$trx.Amount.ToString("C2")
+}
+
+function global:format-trxlist($list)
+{
+$result=""
+foreach($trx in $list)
+  {
+  $result=$result+(format-trx $trx)+@"
+`r`n
+"@
+  }
+  $result
 }
 
 #$global:companypath="c:\programdata\Willow Creek Checkbook\Tim Test Company"

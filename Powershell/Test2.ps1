@@ -24,7 +24,23 @@ if($matches.length -gt 0) {
 $matches = find-checkbooknormaltrx -register $reg -description "Thriftway" -date 2/11/2019 -daysbefore 2 -daysafter 2
 update-checkbooknormaltrx -normaltrx $matches[0] -description "Thrifty Plumbing"
 
-get-checkbooktrx -register $reg -startdate 2/1/2019 -enddate 2/28/2019|get-checkbooksimpletrx|format-table
+$alltrx = get-checkbooktrx -register $reg -startdate 2/1/2019 -enddate 2/28/2019
+$formattedtrx=format-trxlist $alltrx
+Write-Host $formattedtrx
+$expected=@'
+02/10/2019 Card {Thrifty Plumbing} ($100.00)
+02/11/2019 2042 {Safeway} ($400.00)
+
+'@
+if ($formattedtrx -ne $expected)
+{
+Write-Host "$expected"
+Write-Host "Data did not match expected results"
+}
+else
+{
+Write-Host "Data matches: Test successful"
+}
 
 save-checkbookcompany -company $cmp
 }
