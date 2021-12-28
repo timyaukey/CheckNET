@@ -20,6 +20,11 @@ Public Interface IHostSetup
     Sub SetRegisterFormFactory(ByVal objFactory As Func(Of IRegisterForm))
     Sub SetSearchFormFactory(ByVal objFactory As Func(Of ISearchForm))
 
+    Sub AddSearchHandler(ByVal objHandler As ISearchHandler)
+    Sub AddSearchTool(ByVal objTool As ISearchTool)
+    Sub AddSearchFilter(ByVal objFilter As ISearchFilter)
+    Sub AddTrxTool(ByVal objTool As ITrxTool)
+
     Sub AddExtraLicense(ByVal objLicense As Willowsoft.TamperProofData.IStandardLicense)
 
 End Interface

@@ -44,6 +44,10 @@ Friend Class CBMainForm
                 strUserLicenseStatement = "License file is missing"
             End If
 
+            AddStandardSearchHandlers()
+            AddStandardSearchTools()
+            AddStandardSearchFilters()
+            AddStandardTrxTools()
             LoadPlugins()
 
             Me.Text = strSoftwareTitle
@@ -190,39 +194,84 @@ Friend Class CBMainForm
         Return objSearchFormFactory()
     End Function
 
-    Public Iterator Function GetSearchHandlers() As IEnumerable(Of ISearchHandler) Implements IHostUI.GetSearchHandlers
-        Yield New TrxSearchHandler(Me, "Description", Function(ByVal objTrx As BaseTrx) objTrx.Description)
-        Yield New MemoSearchHandler(Me, "Memo")
-        Yield New CategorySearchHandler(Me, "Category")
-        Yield New TrxSearchHandler(Me, "Number", Function(ByVal objTrx As BaseTrx) objTrx.Number)
-        Yield New TrxSearchHandler(Me, "Amount", Function(ByVal objTrx As BaseTrx) Utilities.FormatCurrency(objTrx.Amount))
-        Yield New InvoiceSearchHandler(Me, "Invoice #")
-        Yield New PurOrdSearchHandler(Me, "PO #")
-    End Function
+    Private objSearchHandlers As List(Of ISearchHandler) = New List(Of ISearchHandler)()
+    Private objSearchTools As List(Of ISearchTool) = New List(Of ISearchTool)()
+    Private objSearchFilters As List(Of ISearchFilter) = New List(Of ISearchFilter)()
+    Private objTrxTools As List(Of ITrxTool) = New List(Of ITrxTool)()
 
-    Public Iterator Function GetSearchFilters() As IEnumerable(Of ISearchFilter) Implements IHostUI.GetSearchFilters
-        Yield New FilterAll()
-        Yield New FilterNonGenerated()
-        Yield New FilterFakeOnly()
-        Yield New FilterGeneratedOnly()
-        Yield New FilterNonReal()
-        Yield New FilterNonRealBank()
-        Yield New FilterNonImportedBank()
+    Private Sub AddSearchHandler(ByVal objHandler As ISearchHandler) Implements IHostSetup.AddSearchHandler
+        objSearchHandlers.Add(objHandler)
+    End Sub
+
+    Private Sub AddSearchTool(ByVal objTool As ISearchTool) Implements IHostSetup.AddSearchTool
+        objSearchTools.Add(objTool)
+    End Sub
+
+    Private Sub AddSearchFilter(ByVal objFilter As ISearchFilter) Implements IHostSetup.AddSearchFilter
+        objSearchFilters.Add(objFilter)
+    End Sub
+
+    Private Sub AddTrxTool(ByVal objTool As ITrxTool) Implements IHostSetup.AddTrxTool
+        objTrxTools.Add(objTool)
+    End Sub
+
+    Private Sub AddStandardSearchHandlers()
+        AddSearchHandler(New TrxSearchHandler(Me, "Description", Function(ByVal objTrx As BaseTrx) objTrx.Description))
+        AddSearchHandler(New MemoSearchHandler(Me, "Memo"))
+        AddSearchHandler(New CategorySearchHandler(Me, "Category"))
+        AddSearchHandler(New TrxSearchHandler(Me, "Number", Function(ByVal objTrx As BaseTrx) objTrx.Number))
+        AddSearchHandler(New TrxSearchHandler(Me, "Amount", Function(ByVal objTrx As BaseTrx) Utilities.FormatCurrency(objTrx.Amount)))
+        AddSearchHandler(New InvoiceSearchHandler(Me, "Invoice #"))
+        AddSearchHandler(New PurOrdSearchHandler(Me, "PO #"))
+    End Sub
+
+    Private Sub AddStandardSearchTools()
+        AddSearchTool(New SearchCombineTool(Me))
+        AddSearchTool(New SearchMoveTool(Me))
+        AddSearchTool(New SearchExportTool(Me))
+        AddSearchTool(New SearchRecategorizeTool(Me))
+    End Sub
+
+    Private Sub AddStandardSearchFilters()
+        AddSearchFilter(New FilterAll())
+        AddSearchFilter(New FilterNonGenerated())
+        AddSearchFilter(New FilterFakeOnly())
+        AddSearchFilter(New FilterGeneratedOnly())
+        AddSearchFilter(New FilterNonReal())
+        AddSearchFilter(New FilterNonRealBank())
+        AddSearchFilter(New FilterNonImportedBank())
+    End Sub
+
+    Private Sub AddStandardTrxTools()
+        AddTrxTool(New TrxPrintCheckTool(Me))
+        AddTrxTool(New TrxMailingAddressTool(Me))
+        AddTrxTool(New TrxCopyAmountTool(Me))
+        AddTrxTool(New TrxCopyDateTool(Me))
+        AddTrxTool(New TrxCopyInvoiceNumbersTool(Me))
+    End Sub
+
+    Public Iterator Function GetSearchHandlers() As IEnumerable(Of ISearchHandler) Implements IHostUI.GetSearchHandlers
+        For Each objHandler As ISearchHandler In objSearchHandlers
+            Yield objHandler
+        Next
     End Function
 
     Public Iterator Function GetSearchTools() As IEnumerable(Of ISearchTool) Implements IHostUI.GetSearchTools
-        Yield New SearchCombineTool(Me)
-        Yield New SearchMoveTool(Me)
-        Yield New SearchExportTool(Me)
-        Yield New SearchRecategorizeTool(Me)
+        For Each objTool As ISearchTool In objSearchTools
+            Yield objTool
+        Next
+    End Function
+
+    Public Iterator Function GetSearchFilters() As IEnumerable(Of ISearchFilter) Implements IHostUI.GetSearchFilters
+        For Each objFilter As ISearchFilter In objSearchFilters
+            Yield objFilter
+        Next
     End Function
 
     Public Iterator Function GetTrxTools() As IEnumerable(Of ITrxTool) Implements IHostUI.GetTrxTools
-        Yield New TrxPrintCheckTool(Me)
-        Yield New TrxMailingAddressTool(Me)
-        Yield New TrxCopyAmountTool(Me)
-        Yield New TrxCopyDateTool(Me)
-        Yield New TrxCopyInvoiceNumbersTool(Me)
+        For Each objTool As ITrxTool In objTrxTools
+            Yield objTool
+        Next
     End Function
 
     Private Sub LoadPlugins()
@@ -393,6 +442,10 @@ Friend Class CBMainForm
         Catch ex As Exception
             TopException(ex)
         End Try
+    End Sub
+
+    Private Sub CBMainForm_MdiChildActivate(sender As Object, e As EventArgs) Handles MyBase.MdiChildActivate
+        mobjCompany.FireChildFormActivated(Me.ActiveMdiChild)
     End Sub
 
     Private Function ChooseFile(strWindowCaption As String, strFileType As String, strSettingsKey As String) _
@@ -869,4 +922,5 @@ Friend Class CBMainForm
             TopException(ex)
         End Try
     End Sub
+
 End Class

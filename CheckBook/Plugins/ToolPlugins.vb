@@ -60,6 +60,10 @@ Public Class BuiltInPlugins
             Sub()
                 objEvents.Add(FormatEvent("AfterSaveCompany"))
             End Sub
+        AddHandler company_.ChildFormActivated,
+            Sub(ByVal objForm As System.Windows.Forms.Form)
+                objEvents.Add(FormatEvent("ChildFormActivated(" + objForm.GetType().Name + ", " + objForm.Text + ")"))
+            End Sub
     End Sub
 
     Private Function FormatEvent(ByVal strMsg As String) As String

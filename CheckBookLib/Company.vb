@@ -30,6 +30,7 @@ Public Class Company
     Public Event AfterLoad()
     Public Event BeforeUnload()
     Public Event AfterUnload()
+    Public Event ChildFormActivated(ByVal objForm As Windows.Forms.Form)
 
     Public ReadOnly Accounts As List(Of Account)
     Public ReadOnly Categories As CategoryTranslator
@@ -109,6 +110,10 @@ Public Class Company
 
     Public Sub FireAfterExpensiveOperation()
         RaiseEvent AfterExpensiveOperation()
+    End Sub
+
+    Public Sub FireChildFormActivated(ByVal objForm As System.Windows.Forms.Form)
+        RaiseEvent ChildFormActivated(objForm)
     End Sub
 
     Public Shared Function ExecutableFolder() As String
