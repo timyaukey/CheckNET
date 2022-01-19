@@ -68,6 +68,12 @@
     <Compile Include="RenumberChecks\RenumberChecksForm.Designer.cs">
       <DependentUpon>RenumberChecksForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SummarizeAllAccounts\SummarizeAllAccountsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SummarizeAllAccounts\SummarizeAllAccountsForm.Designer.cs">
+      <DependentUpon>SummarizeAllAccountsForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="IntuitExport\ExportForm.resx">
@@ -78,6 +84,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RenumberChecks\RenumberChecksForm.resx">
       <DependentUpon>RenumberChecksForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SummarizeAllAccounts\SummarizeAllAccountsForm.resx">
+      <DependentUpon>SummarizeAllAccountsForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

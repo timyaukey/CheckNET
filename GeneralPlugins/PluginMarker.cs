@@ -22,6 +22,7 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             setup.ToolMenu.Add(new MenuElementAction("Intuit Export (IIF Format)", 102, IntuitExportClickHandler));
             setup.ToolMenu.Add(new MenuElementRegister(HostUI, "Renumber Checks", 103, RenumberChecksClickHandler));
             setup.ToolMenu.Add(new MenuElementRegister(HostUI, "Find Missing Checks", 104, MissingChecksClickHandler));
+            setup.ReportMenu.Add(new MenuElementAction("Summarize All Accounts", 210, SummarizeAllClickHandler));
 
             MetadataInternal = new PluginMetadata("External Tools", "Willow Creek Software",
                 System.Reflection.Assembly.GetExecutingAssembly(), null,
@@ -77,11 +78,22 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             {
                 using (MissingChecksForm frm = new MissingChecksForm())
                 {
-                    if (frm.ShowDialog(HostUI) != System.Windows.Forms.DialogResult.OK)
-                    {
-                        HostUI.InfoMessageBox("Find missing checks canceled.");
-                        return;
-                    }
+                    frm.ShowDialog(HostUI);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorHandling.TopException(ex);
+            }
+        }
+
+        private void SummarizeAllClickHandler(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SummarizeAllAccountsForm frm = new SummarizeAllAccountsForm())
+                {
+                    frm.ShowDialog(HostUI);
                 }
             }
             catch (Exception ex)
