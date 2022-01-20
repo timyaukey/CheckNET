@@ -47,6 +47,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalculateInterest\CalculateInterestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CalculateInterest\CalculateInterestForm.Designer.cs">
+      <DependentUpon>CalculateInterestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="IntuitExport\ExportEngine.cs" />
     <Compile Include="IntuitExport\ExportForm.cs">
       <SubType>Form</SubType>
@@ -76,6 +82,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CalculateInterest\CalculateInterestForm.resx">
+      <DependentUpon>CalculateInterestForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="IntuitExport\ExportForm.resx">
       <DependentUpon>ExportForm.cs</DependentUpon>
     </EmbeddedResource>

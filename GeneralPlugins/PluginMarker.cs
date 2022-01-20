@@ -22,9 +22,10 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             setup.ToolMenu.Add(new MenuElementAction("Intuit Export (IIF Format)", 102, IntuitExportClickHandler));
             setup.ToolMenu.Add(new MenuElementRegister(HostUI, "Renumber Checks", 103, RenumberChecksClickHandler));
             setup.ToolMenu.Add(new MenuElementRegister(HostUI, "Find Missing Checks", 104, MissingChecksClickHandler));
+            setup.ToolMenu.Add(new MenuElementRegister(HostUI, "Calculate Interest", 105, CalculateInterestClickHandler));
             setup.ReportMenu.Add(new MenuElementAction("Summarize All Accounts", 210, SummarizeAllClickHandler));
 
-            MetadataInternal = new PluginMetadata("External Tools", "Willow Creek Software",
+            MetadataInternal = new PluginMetadata("Miscellaneous Tools", "Willow Creek Software",
                 System.Reflection.Assembly.GetExecutingAssembly(), null,
                 "Miscellaneous tools provided by plugin distributed with the software.", null);
         }
@@ -92,6 +93,21 @@ namespace Willowsoft.CheckBook.GeneralPlugins
             try
             {
                 using (SummarizeAllAccountsForm frm = new SummarizeAllAccountsForm())
+                {
+                    frm.ShowDialog(HostUI);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorHandling.TopException(ex);
+            }
+        }
+
+        private void CalculateInterestClickHandler(object sender, EventArgs e)
+        {
+            try
+            {
+                using (CalculateInterestForm frm = new CalculateInterestForm())
                 {
                     frm.ShowDialog(HostUI);
                 }
