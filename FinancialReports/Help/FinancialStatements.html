@@ -163,7 +163,7 @@
     </p>
     <h2>Accounts Receivable</h2>
     <p>
-        The "Accounts Receivable" button will produce an accounts receivable statement
+        The "A/R Age Summary" button will produce an accounts receivable statement
         as of the end date at the top of the form, with aging, using the aging date from the
         top of the form to compute the age of each amount.
     </p>
@@ -184,13 +184,24 @@
         asset account, with the appropriate account type chosen by you on the "Account Properties" form.
     </p>
     <p>
-        This report uses a "balance forward" style of aging, meaning each payment is applied to the
-        oldest unpaid invoice. There is no matching of payments to invoices on invoice number.
+        The "A/R Unpaid Invoices" button will produce a report similar to the "A/R Age Summary"
+        report, but listing the unpaid invoices by vendor in addition to aging.
+    </p>
+    <p>
+        These reports use "open item" payment allocation when possible, and fall back to "balance forward"
+        payment allocation on payments that cannot be applied to a specific invoice number for any reason.
+        This means that when the invoice and payment have matching payee names and matching
+        invoice numbers, and some part of the invoice is still unpaid, that payment is applied to that
+        invoice up to the amount still owing on the invoice. All other payments, including unused
+        parts of payments that contain an invoice number but could not be applied using the "open item" method,
+        are applied to the oldest unpaid invoice. All possible "open item" allocations are done before
+        using the "balance forward" method.
     </p>
     <h2>Accounts Payable</h2>
     <p>
-        The "Accounts Payable" button produces a statement equivalent to the "Accounts Receivable"
-        statement, but for transactions in your "Accounts Payable" account.
+        The "A/P Age Summary" and "A/P Unpaid Invoices" buttons produce statements equivalent
+        to the "A/R Age Summary" and "A/R Unpaid Invoices" 
+        statements, but for transactions in your "Accounts Payable" account.
     </p>
 </body>
 </html>

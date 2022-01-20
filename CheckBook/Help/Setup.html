@@ -64,6 +64,7 @@
         Equity accounts are for things invested in the business, like money invested,
         and profits earned by the business ("retained earnings").
     </p>
+    <h2>Mixing Personal and Business Use Of An Account</h2>
     <p>
         The last account type class, "personal", is quite different.
         It is used to designate accounts containing non-business information in
@@ -80,6 +81,16 @@
         not follow strict rules. In Willow Creek Checkbook, personal accounts are
         ignored for purposes of preparing financial reports.
     </p>
+    <p>
+        Some features of the software need to know which "personal" account is
+        associated with a "business" account (asset or liability). For example,
+        determining the combined balance of those two accounts, or dividing up
+        a transaction which has both personal and business splits. These features
+        all use the "Related Account #1" setting of the business account as the
+        personal account. You can see this (or change it) by opening the "Registers
+        and Accounts" form from the main menu, selecting the business account, and
+        clicking "Account Properties".
+    </p>
     <h2>Creating Categories</h2>
     <p>
         When the software creates a company it automatically creates a default
@@ -93,7 +104,7 @@
     <p>
         Category names consist of at least two sub parts, separated by ":". The first
         part is always "I", "E", or "C", indicating the category is an income category,
-        an expense category, or a personal category respectively. 
+        an expense category, or a personal category respectively.
     </p>
     <p>
         Personal categories may not be used for transactions in non-personal accounts,
@@ -119,7 +130,7 @@
         You can use a memorized transaction to create a new transaction, or update
         information in an existing transaction. This will change existing information
         in the transaction you are updating, if that information was supplied in
-        the memorized transaction. 
+        the memorized transaction.
     </p>
     <p>
         The other major use of memorized transactions is to translate payee names on transactions
@@ -139,8 +150,8 @@
         multiple budgets - each for a separate and non-overlapping range of dates.
         For example, you may have a budget type of "entertainment", with a separate
         budget of this type for each month. And that budget amount may be different
-        for different months. 
-    </P>
+        for different months.
+    </p>
     <p>
         These specific budget date ranges and amounts are
         represented by budget transactions in your registers. Amounts are used
@@ -171,7 +182,7 @@
         set certain transaction numbers like "card" for particular prefixes.
     </p>
     <p>
-        "Transaction import types" let you specify prefix (or ending) strings that you want to 
+        "Transaction import types" let you specify prefix (or ending) strings that you want to
         remove from downloaded transaction descriptions, and any transaction number you want
         to use when these codes are encountered. To enter and manage transaction import types,
         click "Setup" on the main menu and then "Transaction Import Types".
