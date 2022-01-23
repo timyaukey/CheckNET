@@ -53,6 +53,8 @@
     <Compile Include="CalculateInterest\CalculateInterestForm.Designer.cs">
       <DependentUpon>CalculateInterestForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CalculateInterest\IInterestCalculator.cs" />
+    <Compile Include="CalculateInterest\InterestComputeDaily.cs" />
     <Compile Include="IntuitExport\ExportEngine.cs" />
     <Compile Include="IntuitExport\ExportForm.cs">
       <SubType>Form</SubType>

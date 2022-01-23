@@ -112,17 +112,20 @@ namespace Willowsoft.CheckBook.GeneralPlugins
         {
             balance = 0M;
             anyFake = false;
-            RegIterator<BankTrx> scanner = new RegDateRange<BankTrx>(reg, new DateTime(1800, 1, 1), endDate);
-            foreach(BankTrx bankTrx in scanner)
+            RegIterator<BaseTrx> scanner = new RegDateRange<BaseTrx>(reg, new DateTime(1800, 1, 1), endDate);
+            foreach (BaseTrx baseTrx in scanner)
             {
-                if (bankTrx.IsFake)
+                if ((baseTrx is BankTrx) || (baseTrx is ReplicaTrx))
                 {
-                    anyFake = true;
-                    if (includeFake)
-                        balance += bankTrx.Amount;
+                    if (baseTrx.IsFake)
+                    {
+                        anyFake = true;
+                        if (includeFake)
+                            balance += baseTrx.Amount;
+                    }
+                    else
+                        balance += baseTrx.Amount;
                 }
-                else
-                    balance += bankTrx.Amount;
             }
         }
 

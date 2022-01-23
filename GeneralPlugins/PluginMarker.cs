@@ -5,6 +5,7 @@ using System.Text;
 
 using Willowsoft.CheckBook.Lib;
 using Willowsoft.CheckBook.PluginCore;
+using Willowsoft.CheckBook.GeneralPlugins.CalculateInterest;
 
 [assembly: PluginAssembly()]
 
