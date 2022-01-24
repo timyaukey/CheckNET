@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("")>
 <Assembly: AssemblyProduct("Willow Creek Checkbook Financial Reports")>
-<Assembly: AssemblyCopyright("Copyright © 2018-2021 Willow Creek Software")>
+<Assembly: AssemblyCopyright("Copyright © 2018-2022 Willow Creek Software")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>

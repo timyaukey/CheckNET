@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Core types for plugin development.")>
 <Assembly: AssemblyCompany("Willow Creek Software")>
 <Assembly: AssemblyProduct("PluginCore")>
-<Assembly: AssemblyCopyright("Copyright © 2005-2021 Willow Creek Software")>
+<Assembly: AssemblyCopyright("Copyright © 2005-2022 Willow Creek Software")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>

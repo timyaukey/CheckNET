@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Willow Creek Software")]
 [assembly: AssemblyProduct("BudgetDashboard")]
-[assembly: AssemblyCopyright("Copyright ©  2018-2021 Willow Creek Software")]
+[assembly: AssemblyCopyright("Copyright ©  2018-2022 Willow Creek Software")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
