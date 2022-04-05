@@ -1,7 +1,7 @@
 Option Strict On
 Option Explicit On
 
-Friend Class StartupForm
+Public Class StartupForm
     Inherits System.Windows.Forms.Form
 
     Public WithEvents mobjAccount As Account
@@ -11,10 +11,17 @@ Friend Class StartupForm
         mobjHostUI = objHostUI
         lblTitle.Text = mobjHostUI.SoftwareName
         lblUserLicenseStatement.Text = strUserLicenseStatement
+        Me.Left = CInt(Screen.PrimaryScreen.Bounds.Size.Width / 2) - CInt(Me.Width / 2)
+        Me.Top = CInt(Screen.PrimaryScreen.Bounds.Size.Height / 2) - CInt(Me.Height / 2) - 120
         Dim strSplash As String = mobjHostUI.SplashImagePath
         Dim objImage As Image = Image.FromFile(strSplash)
         'Image will be stretched to aspect ratio 4:3 (width:height)
         picSplash.BackgroundImage = objImage
+    End Sub
+
+    Public Sub PositionBelow(ByVal frmOther As Form)
+        frmOther.Top = Me.Top + Me.Height + 6
+        frmOther.Left = Me.Left + CInt(Me.Width / 2) - CInt(frmOther.Width / 2)
     End Sub
 
     Public Sub Configure(ByVal objAccount As Account)

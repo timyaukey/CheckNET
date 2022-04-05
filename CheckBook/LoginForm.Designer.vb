@@ -39,13 +39,13 @@
         '
         'cmdCancel
         '
-        Me.cmdCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmdCancel.BackColor = System.Drawing.SystemColors.Control
         Me.cmdCancel.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.cmdCancel.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdCancel.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdCancel.Location = New System.Drawing.Point(154, 70)
+        Me.cmdCancel.Location = New System.Drawing.Point(183, 70)
         Me.cmdCancel.Name = "cmdCancel"
         Me.cmdCancel.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdCancel.Size = New System.Drawing.Size(65, 25)
@@ -55,12 +55,12 @@
         '
         'cmdOkay
         '
-        Me.cmdOkay.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdOkay.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmdOkay.BackColor = System.Drawing.SystemColors.Control
         Me.cmdOkay.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdOkay.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdOkay.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdOkay.Location = New System.Drawing.Point(86, 70)
+        Me.cmdOkay.Location = New System.Drawing.Point(115, 70)
         Me.cmdOkay.Name = "cmdOkay"
         Me.cmdOkay.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdOkay.Size = New System.Drawing.Size(65, 25)
@@ -82,7 +82,7 @@
         Me.txtPassword.Name = "txtPassword"
         Me.txtPassword.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
         Me.txtPassword.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtPassword.Size = New System.Drawing.Size(133, 23)
+        Me.txtPassword.Size = New System.Drawing.Size(162, 20)
         Me.txtPassword.TabIndex = 3
         '
         'txtLogin
@@ -97,7 +97,7 @@
         Me.txtLogin.MaxLength = 0
         Me.txtLogin.Name = "txtLogin"
         Me.txtLogin.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtLogin.Size = New System.Drawing.Size(133, 23)
+        Me.txtLogin.Size = New System.Drawing.Size(162, 20)
         Me.txtLogin.TabIndex = 1
         '
         'lblPassword
@@ -133,8 +133,7 @@
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.CancelButton = Me.cmdCancel
-        Me.ClientSize = New System.Drawing.Size(232, 108)
-        Me.ControlBox = False
+        Me.ClientSize = New System.Drawing.Size(261, 108)
         Me.Controls.Add(Me.cmdCancel)
         Me.Controls.Add(Me.cmdOkay)
         Me.Controls.Add(Me.txtPassword)
@@ -143,16 +142,17 @@
         Me.Controls.Add(Me.lblLogin)
         Me.Cursor = System.Windows.Forms.Cursors.Default
         Me.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Location = New System.Drawing.Point(3, 23)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "LoginForm"
         Me.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "Enter Login Name and Password"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 #End Region

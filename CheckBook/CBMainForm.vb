@@ -57,7 +57,7 @@ Friend Class CBMainForm
             frmStartup.ShowStatus("Initializing")
 
             Using objSelectCompanyForm As SelectCompanyForm = New SelectCompanyForm()
-                If objSelectCompanyForm.ShowCompanyDialog(mobjHostUI, AddressOf ShowCreateMessage) <> DialogResult.OK Then
+                If objSelectCompanyForm.ShowCompanyDialog(mobjHostUI, AddressOf ShowCreateMessage, frmStartup) <> DialogResult.OK Then
                     frmStartup.Close()
                     Me.Close()
                     Exit Sub
@@ -138,7 +138,7 @@ Friend Class CBMainForm
             Dim strPassword As String = ""
 
             Using frmLogin As LoginForm = New LoginForm
-                If Not frmLogin.blnGetCredentials(strLogin, strPassword) Then
+                If Not frmLogin.blnGetCredentials(strLogin, strPassword, frmStartup) Then
                     Return New CompanyLoadCanceled()
                 End If
             End Using

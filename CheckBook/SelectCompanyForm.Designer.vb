@@ -33,7 +33,7 @@ Partial Class SelectCompanyForm
         'btnBrowse
         '
         Me.btnBrowse.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnBrowse.Location = New System.Drawing.Point(12, 160)
+        Me.btnBrowse.Location = New System.Drawing.Point(12, 128)
         Me.btnBrowse.Name = "btnBrowse"
         Me.btnBrowse.Size = New System.Drawing.Size(75, 23)
         Me.btnBrowse.TabIndex = 0
@@ -43,7 +43,7 @@ Partial Class SelectCompanyForm
         'btnNew
         '
         Me.btnNew.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnNew.Location = New System.Drawing.Point(93, 160)
+        Me.btnNew.Location = New System.Drawing.Point(93, 128)
         Me.btnNew.Name = "btnNew"
         Me.btnNew.Size = New System.Drawing.Size(75, 23)
         Me.btnNew.TabIndex = 1
@@ -54,7 +54,7 @@ Partial Class SelectCompanyForm
         '
         Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnCancel.Location = New System.Drawing.Point(449, 160)
+        Me.btnCancel.Location = New System.Drawing.Point(407, 128)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(75, 23)
         Me.btnCancel.TabIndex = 2
@@ -64,7 +64,7 @@ Partial Class SelectCompanyForm
         'btnOpen
         '
         Me.btnOpen.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnOpen.Location = New System.Drawing.Point(368, 160)
+        Me.btnOpen.Location = New System.Drawing.Point(326, 128)
         Me.btnOpen.Name = "btnOpen"
         Me.btnOpen.Size = New System.Drawing.Size(75, 23)
         Me.btnOpen.TabIndex = 3
@@ -85,14 +85,14 @@ Partial Class SelectCompanyForm
         Me.lstHistory.IntegralHeight = False
         Me.lstHistory.Location = New System.Drawing.Point(12, 12)
         Me.lstHistory.Name = "lstHistory"
-        Me.lstHistory.Size = New System.Drawing.Size(512, 142)
+        Me.lstHistory.Size = New System.Drawing.Size(470, 110)
         Me.lstHistory.TabIndex = 4
         '
         'SelectCompanyForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(536, 195)
+        Me.ClientSize = New System.Drawing.Size(494, 163)
         Me.Controls.Add(Me.lstHistory)
         Me.Controls.Add(Me.btnOpen)
         Me.Controls.Add(Me.btnCancel)
@@ -102,7 +102,8 @@ Partial Class SelectCompanyForm
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "SelectCompanyForm"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.ShowInTaskbar = False
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "Select Company Folder"
         Me.ResumeLayout(False)
 

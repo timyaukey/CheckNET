@@ -9,7 +9,8 @@ Public Class SelectCompanyForm
     Private mobjHostUI As IHostUI
     Private mobjShowMessage As Action(Of String)
 
-    Public Function ShowCompanyDialog(ByVal objHostUI As IHostUI, ByVal objShowMessage As Action(Of String)) As DialogResult
+    Public Function ShowCompanyDialog(ByVal objHostUI As IHostUI, ByVal objShowMessage As Action(Of String),
+                                      ByVal frmSplash As StartupForm) As DialogResult
         mobjHostUI = objHostUI
         mobjShowMessage = objShowMessage
         mstrDefaultRootFolder = Company.DefaultRootFolder(mobjHostUI.SoftwareName)
@@ -17,6 +18,7 @@ Public Class SelectCompanyForm
         If My.Settings.CompanyList Is Nothing Then
             My.Settings.CompanyList = New Specialized.StringCollection()
         End If
+        frmSplash.PositionBelow(Me)
         ShowHistoryList()
         Return ShowDialog()
     End Function
