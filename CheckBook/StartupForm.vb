@@ -20,7 +20,8 @@ Public Class StartupForm
     End Sub
 
     Public Sub PositionBelow(ByVal frmOther As Form)
-        frmOther.Top = Me.Top + Me.Height + 6
+        frmOther.Top = Me.Top + Me.Height + 2
+        frmOther.Width = Me.Width
         frmOther.Left = Me.Left + CInt(Me.Width / 2) - CInt(frmOther.Width / 2)
     End Sub
 

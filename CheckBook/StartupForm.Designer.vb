@@ -33,14 +33,14 @@
         '
         Me.lblMessage.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblMessage.BackColor = System.Drawing.SystemColors.Control
+        Me.lblMessage.BackColor = System.Drawing.SystemColors.ControlLight
         Me.lblMessage.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblMessage.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblMessage.ForeColor = System.Drawing.SystemColors.ControlText
         Me.lblMessage.Location = New System.Drawing.Point(9, 350)
         Me.lblMessage.Name = "lblMessage"
         Me.lblMessage.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblMessage.Size = New System.Drawing.Size(400, 19)
+        Me.lblMessage.Size = New System.Drawing.Size(396, 19)
         Me.lblMessage.TabIndex = 0
         Me.lblMessage.Text = "-"
         Me.lblMessage.TextAlign = System.Drawing.ContentAlignment.TopCenter
@@ -51,7 +51,7 @@
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblCopyright.Location = New System.Drawing.Point(12, 388)
         Me.lblCopyright.Name = "lblCopyright"
-        Me.lblCopyright.Size = New System.Drawing.Size(400, 20)
+        Me.lblCopyright.Size = New System.Drawing.Size(396, 20)
         Me.lblCopyright.TabIndex = 1
         Me.lblCopyright.Text = "Copyright..."
         Me.lblCopyright.TextAlign = System.Drawing.ContentAlignment.TopCenter
@@ -63,7 +63,7 @@
         Me.lblTitle.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblTitle.Location = New System.Drawing.Point(12, 15)
         Me.lblTitle.Name = "lblTitle"
-        Me.lblTitle.Size = New System.Drawing.Size(400, 26)
+        Me.lblTitle.Size = New System.Drawing.Size(396, 26)
         Me.lblTitle.TabIndex = 2
         Me.lblTitle.Text = "zzz"
         Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter
@@ -75,7 +75,7 @@
         Me.picSplash.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.picSplash.Location = New System.Drawing.Point(12, 44)
         Me.picSplash.Name = "picSplash"
-        Me.picSplash.Size = New System.Drawing.Size(400, 300)
+        Me.picSplash.Size = New System.Drawing.Size(396, 300)
         Me.picSplash.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
         Me.picSplash.TabIndex = 3
         Me.picSplash.TabStop = False
@@ -84,14 +84,14 @@
         '
         Me.lblUserLicenseStatement.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblUserLicenseStatement.BackColor = System.Drawing.SystemColors.Control
+        Me.lblUserLicenseStatement.BackColor = System.Drawing.SystemColors.ControlLight
         Me.lblUserLicenseStatement.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblUserLicenseStatement.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblUserLicenseStatement.ForeColor = System.Drawing.SystemColors.ControlText
         Me.lblUserLicenseStatement.Location = New System.Drawing.Point(9, 369)
         Me.lblUserLicenseStatement.Name = "lblUserLicenseStatement"
         Me.lblUserLicenseStatement.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblUserLicenseStatement.Size = New System.Drawing.Size(400, 19)
+        Me.lblUserLicenseStatement.Size = New System.Drawing.Size(396, 19)
         Me.lblUserLicenseStatement.TabIndex = 4
         Me.lblUserLicenseStatement.Text = "User license statement..."
         Me.lblUserLicenseStatement.TextAlign = System.Drawing.ContentAlignment.TopCenter
@@ -100,9 +100,9 @@
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.SystemColors.Control
+        Me.BackColor = System.Drawing.SystemColors.ControlLight
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.ClientSize = New System.Drawing.Size(424, 415)
+        Me.ClientSize = New System.Drawing.Size(420, 411)
         Me.ControlBox = False
         Me.Controls.Add(Me.lblUserLicenseStatement)
         Me.Controls.Add(Me.picSplash)
@@ -111,12 +111,13 @@
         Me.Controls.Add(Me.lblMessage)
         Me.Cursor = System.Windows.Forms.Cursors.Default
         Me.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Location = New System.Drawing.Point(3, 23)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "StartupForm"
         Me.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         CType(Me.picSplash, System.ComponentModel.ISupportInitialize).EndInit()
