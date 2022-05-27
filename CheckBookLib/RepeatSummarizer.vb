@@ -37,34 +37,26 @@ Public Class RepeatSummarizer
     Public Function BuildStringTranslator() As SimpleStringTranslator
         Dim trans As SimpleStringTranslator = New SimpleStringTranslator()
         Dim keySum As KeySummary
-        Dim names As Dictionary(Of String, NameSummary)
-        Dim nameSum As NameSummary = Nothing
         Dim sortedByName As List(Of KeySummary)
-
-        names = New Dictionary(Of String, NameSummary)
-        For Each keySum In mKeys.Values
-            If Not names.TryGetValue(keySum.Name, nameSum) Then
-                nameSum = New NameSummary()
-                names.Add(keySum.Name, nameSum)
-            End If
-            nameSum.UseCount = nameSum.UseCount + 1
-            keySum.NameSum = nameSum
-            keySum.NameIndex = nameSum.UseCount
-        Next
+        Dim seqNum As Integer
 
         sortedByName = New List(Of KeySummary)(mKeys.Values)
         sortedByName.Sort(AddressOf SortKeySumByName)
         For Each keySum In sortedByName
-            Dim repeatName As String
-            If keySum.NameSum.UseCount > 1 Then
-                repeatName = keySum.Name + " #" + keySum.NameIndex.ToString()
-            Else
-                repeatName = keySum.Name
-            End If
+            Dim repeatName As String = keySum.Name
             If Not keySum.FromGenerator Then
                 repeatName += " (old)"
             End If
-            trans.Add(New StringTransElement(trans, keySum.Key, repeatName, repeatName))
+            seqNum = 1
+            Dim qualifiedName As String = repeatName
+            Do
+                If trans.FindIndexOfValue1(qualifiedName) = 0 Then
+                    trans.Add(New StringTransElement(trans, keySum.Key, qualifiedName, qualifiedName))
+                    Exit Do
+                End If
+                seqNum += 1
+                qualifiedName = repeatName + " #" + seqNum.ToString()
+            Loop
         Next
         BuildStringTranslator = trans
     End Function
