@@ -18,6 +18,7 @@ Public Class SelectCompanyForm
         If My.Settings.CompanyList Is Nothing Then
             My.Settings.CompanyList = New Specialized.StringCollection()
         End If
+        Me.Width = frmSplash.Width
         frmSplash.PositionBelow(Me)
         ShowHistoryList()
         Return ShowDialog()
