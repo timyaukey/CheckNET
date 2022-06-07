@@ -159,3 +159,4 @@ $RECYCLE.BIN/
 /.vs/CheckNET/v16/Server/sqlite3
 *.nupkg
 /InstallImages
+*.testlog
