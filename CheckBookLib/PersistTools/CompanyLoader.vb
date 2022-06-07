@@ -153,15 +153,7 @@ Public Class CompanyLoader
             datCutoff = objCompany.LastReconciledDate().AddDays(1D)
             LoadCategories(objCompany)
 
-            'Load generated transactions for all of them.
-            For Each objLoader In colLoaders
-                showAccount(objLoader.Account)
-                objLoader.LoadGenerated(datCutoff)
-                showAccount(Nothing)
-            Next
-
-            'This will merge the generated trx into the sort order.
-            'The individual trx should already be sorted, but this will ensure it.
+            'This will merge the fake trx into the sort order.
             'This has to happen before objLoader.LoadApply(), or budgets won't be
             'applied properly.
             SortAllRegisters(colLoaders)

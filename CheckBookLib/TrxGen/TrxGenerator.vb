@@ -12,7 +12,8 @@ Public Module TrxGenerator
     '$Param objReg The Register to generate BaseTrx in.
     '$Param datRptEndMax Latest date to create BaseTrx for.
 
-    Public Sub CreateAllGeneratedTrx(ByVal objAccount As Account, ByVal objReg As Register, ByVal datRptEndMax As Date, ByVal datCutoff As Date)
+    Public Sub CreateAllGeneratedTrx(ByVal objAccount As Account, ByVal objReg As Register, ByVal datRptEndMax As Date,
+                                     ByVal datCutoff As Date, ByRef blnAccountChanged As Boolean)
 
         Dim colGenerators As ICollection(Of ITrxGenerator)
         Dim objGenerator As ITrxGenerator
@@ -32,6 +33,7 @@ Public Module TrxGenerator
         colGenerators = CreateTrxGenerators(objAccount, objReg)
         For Each objGenerator In colGenerators
             If objGenerator.IsEnabled Then
+                blnAccountChanged = True
                 objAccount.RaiseLoadStatus("Generate " + objGenerator.Description)
                 objAccount.RepeatSummarizer.Define(objGenerator.RepeatKey, objGenerator.Description, True)
                 If objGenerator.MaxDaysOld.HasValue Then
