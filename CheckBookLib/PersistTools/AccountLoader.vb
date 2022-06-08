@@ -156,24 +156,6 @@ Public Class AccountLoader
         Throw New Exception("Invalid related account key")
     End Function
 
-    Public Sub LoadGenerated(ByVal datCutoff As Date)
-        Dim objReg As Register
-
-        Try
-            Dim datRegisterEndDate As Date = DateAdd(Microsoft.VisualBasic.DateInterval.Day, 45, Today)
-            'Create generated BaseTrx.
-            'Have to generate for all registers before computing
-            'balances or doing any post processing for any of them,
-            'because generating a transfer adds BaseTrx to two registers.
-            mobjAccount.RaiseLoadStatus("Generate for " + mobjAccount.Title)
-            For Each objReg In mobjAccount.Registers
-                CreateAllGeneratedTrx(mobjAccount, objReg, datRegisterEndDate, datCutoff)
-            Next objReg
-        Catch ex As Exception
-            Throw New Exception("Error in Account.LoadGenerated(" & mobjAccount.FileNameRoot & ")", ex)
-        End Try
-    End Sub
-
     Public Sub LoadApply()
         Try
             mobjAccount.RaiseLoadStatus("Apply for " + mobjAccount.Title)
@@ -229,10 +211,11 @@ Public Class AccountLoader
 
     Public Sub RecreateGeneratedTrx(ByVal datRegisterEndDate As Date, ByVal datCutoff As Date)
         Dim objReg As Register
+        Dim blnAccountChanged As Boolean = False
 
         'Purge generated BaseTrx and clear all budget allocations for each register.
         For Each objReg In mobjAccount.Registers
-            objReg.PurgeGenerated()
+            objReg.PurgeGenerated(blnAccountChanged)
         Next objReg
 
         'Generate all BaseTrx.
@@ -243,7 +226,7 @@ Public Class AccountLoader
         'in this routine. The rest is divided fairly evenly between
         'LoadPostProcessing() and FireRedisplayTrx().
         For Each objReg In mobjAccount.Registers
-            CreateAllGeneratedTrx(mobjAccount, objReg, datRegisterEndDate, datCutoff)
+            CreateAllGeneratedTrx(mobjAccount, objReg, datRegisterEndDate, datCutoff, blnAccountChanged)
         Next objReg
 
         'In case trx generators have been edited.
@@ -253,6 +236,10 @@ Public Class AccountLoader
         For Each objReg In mobjAccount.Registers
             objReg.LoadApply()
         Next objReg
+
+        If blnAccountChanged Then
+            mobjAccount.SetChanged()
+        End If
 
     End Sub
 
