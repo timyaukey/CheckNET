@@ -400,7 +400,7 @@ Public Class BankTrx
         If Not Register.Account Is Nothing Then
             Dim objCompany As Company = Register.Account.Company
             For Each objSplit As TrxSplit In mcolSplits
-                objSplit.CreateReplicaTrx(objCompany, Me, blnLoading)
+                objSplit.CreateReplicaTrx(objCompany)
             Next
         End If
     End Sub

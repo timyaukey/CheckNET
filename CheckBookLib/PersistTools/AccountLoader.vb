@@ -32,7 +32,7 @@ Public Class AccountLoader
     '   Must always be called immediately after Init().
     '$Param strAcctFile Name of account file, without path.
 
-    Public Sub LoadStart(ByVal strAcctFile As String)
+    Friend Sub LoadStart(ByVal strAcctFile As String)
 
         mobjAccount.RaiseLoadStatus("Loading " & strAcctFile)
         mobjAccount.FileNameRoot = strAcctFile
@@ -156,7 +156,7 @@ Public Class AccountLoader
         Throw New Exception("Invalid related account key")
     End Function
 
-    Public Sub LoadApply()
+    Friend Sub LoadApply()
         Try
             mobjAccount.RaiseLoadStatus("Apply for " + mobjAccount.Title)
             For Each objReg As Register In mobjAccount.Registers
@@ -165,11 +165,24 @@ Public Class AccountLoader
 
             Exit Sub
         Catch ex As Exception
-            Throw New Exception("Error in Account.LoadApply(" & mobjAccount.FileNameRoot & ")", ex)
+            Throw New Exception("Error in AccountLoader.LoadApply(" & mobjAccount.FileNameRoot & ")", ex)
         End Try
     End Sub
 
-    Public Sub LoadFinish()
+    Friend Sub MakeReplicas()
+        Try
+            mobjAccount.RaiseLoadStatus("Replicas for " + mobjAccount.Title)
+            For Each objReg As Register In mobjAccount.Registers
+                objReg.MakeReplicas()
+            Next
+
+            Exit Sub
+        Catch ex As Exception
+            Throw New Exception("Error in AccountLoader.MakeReplicas(" & mobjAccount.FileNameRoot & ")", ex)
+        End Try
+    End Sub
+
+    Friend Sub LoadFinish()
         Try
             'This has to happen after all Account objects are loaded, not when the "AR" lines are read.
             mobjAccount.RelatedAcct1 = LoadResolveRelatedAccount(mintRelatedKey1)
@@ -185,6 +198,7 @@ Public Class AccountLoader
             mobjAccount.RaiseLoadStatus("Finish " + mobjAccount.Title)
             For Each objReg As Register In mobjAccount.Registers
                 objReg.LoadFinish()
+                objReg.EndLoading()
             Next
             mobjAccount.HasUnsavedChanges = False
 
@@ -253,6 +267,7 @@ Public Class AccountLoader
         If objReg Is Nothing Then
             RaiseErrorMsg("Register key " & strSearchRegKey & " not found in " & Left(strLine, 2) & " line")
         Else
+            objReg.BeginLoading()
             mobjLoader = New RegisterLoader
             mobjLoader.LoadFile(mobjLoadFile, objReg, mobjAccount.RepeatSummarizer, blnFake, lngLinesRead)
             mobjLoader = Nothing

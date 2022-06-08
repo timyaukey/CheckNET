@@ -159,10 +159,18 @@ Public Class CompanyLoader
             SortAllRegisters(colLoaders)
 
             'Call BaseTrx.Apply() for all BaseTrx loaded above.
-            'This will create ReplicaTrx.
+            'This will create ReplicaRequest objects and add them to
+            'the registers where they will be executed in the next step.
             For Each objLoader In colLoaders
                 showAccount(objLoader.Account)
                 objLoader.LoadApply()
+                showAccount(Nothing)
+            Next
+
+            'Make all the ReplicaTrx objects queued up by applying BankTrx splits.
+            For Each objLoader In colLoaders
+                showAccount(objLoader.Account)
+                objLoader.MakeReplicas()
                 showAccount(Nothing)
             Next
 

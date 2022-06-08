@@ -32,8 +32,8 @@ Public Class TrxSplit
     Private mobjParent As BankTrx
     'Possible reference to BudgetTrx for this TrxSplit.
     Private mobjBudget As BudgetTrx
-    'Possible reference to ReplicaTrxManager for this TrxSplit.
-    Private mobjReplicaManager As ReplicaTrxManager
+    'Possible reference to ReplicaRequest for this TrxSplit.
+    Private mobjRepReq As ReplicaRequest
 
     '$Description Initialize a new Split object.
 
@@ -229,31 +229,17 @@ Public Class TrxSplit
         End If
     End Sub
 
-    Friend Sub CreateReplicaTrx(ByVal objCompany_ As Company, ByVal objNormalTrx As BankTrx, ByVal blnLoading As Boolean)
+    Friend Sub CreateReplicaTrx(ByVal objCompany_ As Company)
         Dim intDotOffset As Integer = mstrCategoryKey.IndexOf("."c)
         If intDotOffset > 0 Then
             Dim intAccountKey As Integer = Integer.Parse(mstrCategoryKey.Substring(0, intDotOffset))
             For Each objAccount In objCompany_.Accounts
                 If objAccount.AccountKey = intAccountKey Then
                     Dim strRegKey As String = mstrCategoryKey.Substring(intDotOffset + 1)
-                    For Each objReg In objAccount.Registers
-                        If objReg.RegisterKey = strRegKey Then
-                            Dim objReplicaTrx As ReplicaTrx = New ReplicaTrx(objReg)
-                            Dim strCatKey As String = objNormalTrx.Register.Account.AccountKey.ToString() + "." + objNormalTrx.Register.RegisterKey
-                            Dim strReplDescr As String
-                            If Not String.IsNullOrEmpty(mstrMemo) Then
-                                strReplDescr = mstrMemo
-                            Else
-                                strReplDescr = objNormalTrx.Description
-                            End If
-                            objReplicaTrx.NewStartReplica(True, objNormalTrx.TrxDate, strReplDescr,
-                                strCatKey, mstrPONumber, mstrInvoiceNum, -mcurAmount, objNormalTrx.IsFake)
-                            If blnLoading Then
-                                objReg.NewLoadEnd(objReplicaTrx)
-                            Else
-                                objReg.NewAddEnd(objReplicaTrx, New LogAddNull(), "", blnSetChanged:=False)
-                            End If
-                            mobjReplicaManager = New ReplicaTrxManager(objReplicaTrx)
+                    For Each objTargetReg In objAccount.Registers
+                        If objTargetReg.RegisterKey = strRegKey Then
+                            mobjRepReq = New ReplicaRequest(Me, objTargetReg)
+                            objTargetReg.AddReplica(mobjRepReq)
                         End If
                     Next
                 End If
@@ -262,15 +248,14 @@ Public Class TrxSplit
     End Sub
 
     Friend Sub DeleteReplicaTrx()
-        If Not mobjReplicaManager Is Nothing Then
-            mobjReplicaManager.Trx.Delete(New LogDeleteNull(), "", blnSetChanged:=False)
-            mobjReplicaManager = Nothing
+        If Not mobjRepReq Is Nothing Then
+            mobjRepReq.TargetReg.DeleteReplica(mobjRepReq)
         End If
     End Sub
 
     Public ReadOnly Property HasReplicaTrx() As Boolean
         Get
-            Return (Not mobjReplicaManager Is Nothing)
+            Return (Not mobjRepReq Is Nothing)
         End Get
     End Property
 End Class

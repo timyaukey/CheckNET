@@ -45,6 +45,16 @@ Public Class Register
     Private mblnInCriticalOperation As Boolean
     'True iff a critical operation failed.
     Private mblnCriticalOperationFailed As Boolean
+    'List of ReplicaRequest objects added to Register by loading other registers and accounts.
+    Private mcolRepReq As List(Of ReplicaRequest)
+    'What stage of Register loading is this Register in?
+    Private mintRegLoadState As RegLoadState
+
+    Public Enum RegLoadState
+        Initialized = 0
+        Loading = 1
+        Loaded = 2
+    End Enum
 
     'Fired by NewAddEnd() when it adds a BaseTrx to the register.
     'Intended to allow the UI to update itself.
@@ -109,9 +119,19 @@ Public Class Register
         ClearFirstAffected()
         mblnInCriticalOperation = False
         mblnCriticalOperationFailed = False
+        mintRegLoadState = RegLoadState.Initialized
+        mcolRepReq = New List(Of ReplicaRequest)
         mobjLog = New EventLog
         mobjLog.Init(Me, mobjAccount.Company.SecData.LoginName)
 
+    End Sub
+
+    Friend Sub BeginLoading()
+        mintRegLoadState = RegLoadState.Loading
+    End Sub
+
+    Friend Sub EndLoading()
+        mintRegLoadState = RegLoadState.Loaded
     End Sub
 
     ''' <summary>
@@ -546,6 +566,28 @@ Public Class Register
             objTrx.Balance = curBalance
         Next
         EndCriticalOperation()
+    End Sub
+
+    Friend Sub AddReplica(ByVal objRepReq As ReplicaRequest)
+        If mintRegLoadState <> RegLoadState.Loaded Then
+            mcolRepReq.Add(objRepReq)
+        Else
+            objRepReq.Add(False)
+        End If
+    End Sub
+
+    Friend Sub DeleteReplica(ByVal objRepReq As ReplicaRequest)
+        If mintRegLoadState <> RegLoadState.Loaded Then
+            mcolRepReq.Remove(objRepReq)
+        Else
+            objRepReq.Delete()
+        End If
+    End Sub
+
+    Friend Sub MakeReplicas()
+        For Each objRepReq As ReplicaRequest In mcolRepReq
+            objRepReq.Add(True)
+        Next
     End Sub
 
     '$Description Remove all generated BaseTrx from the Register, and clear

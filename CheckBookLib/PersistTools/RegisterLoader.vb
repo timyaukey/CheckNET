@@ -56,18 +56,14 @@ Public Class RegisterLoader
 
     Public Sub LoadFile(ByVal objLoadFile As TextReader, ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer,
             ByVal blnFake As Boolean, ByRef lngLinesRead As Integer)
-
         Try
-
             LoadInit(objReg, objRepeatSummarizer, blnFake, lngLinesRead)
-
             Do
                 mstrLine = objLoadFile.ReadLine()
                 If LoadLine(lngLinesRead) Then
                     Exit Sub
                 End If
             Loop
-
             Exit Sub
         Catch ex As Exception
             NestedException(ex)
@@ -75,7 +71,6 @@ Public Class RegisterLoader
     End Sub
 
     Private Sub LoadInit(ByVal objReg As Register, ByVal objRepeatSummarizer As RepeatSummarizer, ByVal blnFake As Boolean, ByRef lngLinesRead As Integer)
-
         mobjReg = objReg
         mobjRepeatSummarizer = objRepeatSummarizer
         mblnFake = blnFake
