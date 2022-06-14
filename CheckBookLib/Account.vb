@@ -253,6 +253,12 @@ Public Class Account
         End Get
     End Property
 
+    Public Sub SortAllRegisters()
+        For Each objReg As Register In Me.Registers
+            objReg.Sort()
+        Next
+    End Sub
+
     Public ReadOnly Property Repeats() As SimpleStringTranslator
         Get
             Return mobjRepeats

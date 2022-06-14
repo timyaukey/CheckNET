@@ -125,7 +125,6 @@ Public Class CompanyLoader
             'Find all ".act" files.
             Dim strFile As String = Dir(objCompany.AccountsFolderPath() & "\*.act")
             Dim intFiles As Integer = 0
-            Dim datCutoff As Date
             Dim astrFiles() As String = Nothing
 
             While strFile <> ""
@@ -143,20 +142,13 @@ Public Class CompanyLoader
                 colLoaders.Add(objLoader)
                 showAccount(objAccount)
                 objLoader.LoadStart(strFile)
+                'This will merge the fake trx into the sort order.
+                'This has to happen before objLoader.LoadApply(), or budgets won't be
+                'applied properly.
+                objAccount.SortAllRegisters()
                 objCompany.Accounts.Add(objAccount)
                 showAccount(Nothing)
             Next strFile
-
-            objCompany.Accounts.Sort(AddressOf AccountComparer)
-
-            'With all Account objects loaded we can add them to the category list.
-            datCutoff = objCompany.LastReconciledDate().AddDays(1D)
-            LoadCategories(objCompany)
-
-            'This will merge the fake trx into the sort order.
-            'This has to happen before objLoader.LoadApply(), or budgets won't be
-            'applied properly.
-            SortAllRegisters(colLoaders)
 
             'Call BaseTrx.Apply() for all BaseTrx loaded above.
             'This will create ReplicaRequest objects and add them to
@@ -171,11 +163,17 @@ Public Class CompanyLoader
             For Each objLoader In colLoaders
                 showAccount(objLoader.Account)
                 objLoader.MakeReplicas()
+                'This will merge the ReplicaTrx into the sort order.
+                objLoader.Account.SortAllRegisters()
+                'Sets internal date used to decide if budget amount is zero.
+                objLoader.Account.SetLastReconciledDate()
                 showAccount(Nothing)
             Next
 
-            'This will merge the ReplicaTrx created by objLoader.LoadApply() into the sort order.
-            SortAllRegisters(colLoaders)
+            objCompany.Accounts.Sort(AddressOf AccountComparer)
+
+            'With all Account objects loaded we can add them to the category list.
+            LoadCategories(objCompany)
 
             'Perform final steps after all BaseTrx exist, including computing running balances.
             For Each objLoader In colLoaders
@@ -230,14 +228,6 @@ Public Class CompanyLoader
         Next
         objCompany.FireAfterExpensiveOperation()
 
-    End Sub
-
-    Private Shared Sub SortAllRegisters(ByVal colLoaders As List(Of AccountLoader))
-        For Each objLoader In colLoaders
-            For Each objReg In objLoader.Account.Registers
-                objReg.Sort()
-            Next
-        Next
     End Sub
 
 End Class

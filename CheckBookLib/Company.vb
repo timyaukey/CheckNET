@@ -210,7 +210,6 @@ Public Class Company
     Public Function LastReconciledDate() As Date
         Dim datResult As DateTime = DateTime.MinValue
         For Each act As Account In Accounts
-            act.SetLastReconciledDate()
             If act.LastReconciledDate > datResult Then
                 datResult = act.LastReconciledDate
             End If
