@@ -339,8 +339,12 @@ Public MustInherit Class BaseTrx
         RegisterInternal.Delete(Me, objDeleteLogger, strLogTitle, blnSetChanged)
     End Sub
 
-    Public MustOverride Sub UnApply()
-    Public MustOverride Sub Apply(ByVal blnLoading As Boolean)
+    Public MustOverride Sub AddApply()
+    Public MustOverride Sub UpdateUnApply()
+    Public MustOverride Sub UpdateApply()
+    Public MustOverride Sub DeleteUnApply()
+    Public MustOverride Sub LoadApply()
+    Public MustOverride Sub LoadFinish()
 
     '$Description Check for validation errors for Register.Validate().
 

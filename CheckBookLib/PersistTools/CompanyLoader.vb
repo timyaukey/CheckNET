@@ -121,52 +121,18 @@ Public Class CompanyLoader
     Public Shared Sub LoadAccountFiles(ByVal objCompany As Company, ByVal showAccount As Action(Of Account))
         Dim objLoader As AccountLoader
         Dim colLoaders As List(Of AccountLoader) = New List(Of AccountLoader)
+
         Try
             'Find all ".act" files.
-            Dim strFile As String = Dir(objCompany.AccountsFolderPath() & "\*.act")
-            Dim intFiles As Integer = 0
-            Dim astrFiles() As String = Nothing
-
-            While strFile <> ""
-                intFiles = intFiles + 1
-                ReDim Preserve astrFiles(intFiles - 1)
-                astrFiles(intFiles - 1) = strFile
-                strFile = Dir()
-            End While
-
-            'Load real trx, and non-generated fake trx, for all of them.
-            For Each strFile In astrFiles
+            Dim objDir As DirectoryInfo = New DirectoryInfo(objCompany.AccountsFolderPath())
+            For Each objFile In objDir.GetFiles("*.act")
                 Dim objAccount As Account = New Account
                 objAccount.Init(objCompany)
                 objLoader = New AccountLoader(objAccount)
                 colLoaders.Add(objLoader)
                 showAccount(objAccount)
-                objLoader.LoadStart(strFile)
-                'This will merge the fake trx into the sort order.
-                'This has to happen before objLoader.LoadApply(), or budgets won't be
-                'applied properly.
-                objAccount.SortAllRegisters()
+                objLoader.LoadStart(objFile.Name)
                 objCompany.Accounts.Add(objAccount)
-                showAccount(Nothing)
-            Next strFile
-
-            'Call BaseTrx.Apply() for all BaseTrx loaded above.
-            'This will create ReplicaRequest objects and add them to
-            'the registers where they will be executed in the next step.
-            For Each objLoader In colLoaders
-                showAccount(objLoader.Account)
-                objLoader.LoadApply()
-                showAccount(Nothing)
-            Next
-
-            'Make all the ReplicaTrx objects queued up by applying BankTrx splits.
-            For Each objLoader In colLoaders
-                showAccount(objLoader.Account)
-                objLoader.MakeReplicas()
-                'This will merge the ReplicaTrx into the sort order.
-                objLoader.Account.SortAllRegisters()
-                'Sets internal date used to decide if budget amount is zero.
-                objLoader.Account.SetLastReconciledDate()
                 showAccount(Nothing)
             Next
 
@@ -174,6 +140,36 @@ Public Class CompanyLoader
 
             'With all Account objects loaded we can add them to the category list.
             LoadCategories(objCompany)
+
+            'TO DO: Change List(Of AccountLoader) to List(Of Account) and make the
+            'AccountLoader a member of Account. Then take the rest of this routine
+            'and turn it into a method taking an IEnumerable(Of Account). This method
+            'can be called for all Account objects now, but later can be used for
+            'any subset to implement delayed loading. It is important to do the following
+            'three loops in this order, to make sure all ReplicaRequest are created
+            'before calling MakeReplicas() for any account, and all ReplicaTrx are
+            'created before merging them in to the sort order. Might be able to combine
+            'the last two loops, because once ReplicaTrx are created for any Account
+            'we have everything we need to finish that Account.
+
+            'Load all register contents, which includes creating
+            'ReplicaRequest objects for all ReplicaTrx.
+            For Each objLoader In colLoaders
+                showAccount(objLoader.Account)
+                objLoader.LoadRegisters()
+                showAccount(Nothing)
+            Next
+
+            'Make all the ReplicaTrx objects queued up by applying BankTrx splits.
+            For Each objLoader In colLoaders
+                showAccount(objLoader.Account)
+                objLoader.MakeReplicas()
+                'This will merge the fake and ReplicaTrx into the sort order.
+                objLoader.Account.SortAllRegisters()
+                'Sets internal date used to decide if budget amount is zero.
+                objLoader.Account.SetLastReconciledDate()
+                showAccount(Nothing)
+            Next
 
             'Perform final steps after all BaseTrx exist, including computing running balances.
             For Each objLoader In colLoaders

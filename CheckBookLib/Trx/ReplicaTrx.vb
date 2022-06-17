@@ -55,11 +55,27 @@ Public Class ReplicaTrx
 
     End Sub
 
-    Public Overrides Sub UnApply()
+    Public Overrides Sub AddApply()
         'Do nothing for ReplicaTrx
     End Sub
 
-    Public Overrides Sub Apply(ByVal blnLoading As Boolean)
+    Public Overrides Sub UpdateUnApply()
+        'Do nothing for ReplicaTrx
+    End Sub
+
+    Public Overrides Sub UpdateApply()
+        'Do nothing for ReplicaTrx
+    End Sub
+
+    Public Overrides Sub DeleteUnApply()
+        'Do nothing for ReplicaTrx
+    End Sub
+
+    Public Overrides Sub LoadApply()
+        'Do nothing for ReplicaTrx
+    End Sub
+
+    Public Overrides Sub LoadFinish()
         'Do nothing for ReplicaTrx
     End Sub
 

@@ -97,11 +97,27 @@ Public Class TransferTrx
         End Get
     End Property
 
-    Public Overrides Sub UnApply()
+    Public Overrides Sub AddApply()
         'Do nothing for TransferTrx
     End Sub
 
-    Public Overrides Sub Apply(ByVal blnLoading As Boolean)
+    Public Overrides Sub UpdateUnApply()
+        'Do nothing for TransferTrx
+    End Sub
+
+    Public Overrides Sub UpdateApply()
+        'Do nothing for TransferTrx
+    End Sub
+
+    Public Overrides Sub DeleteUnApply()
+        'Do nothing for TransferTrx
+    End Sub
+
+    Public Overrides Sub LoadApply()
+        'Do nothing for TransferTrx
+    End Sub
+
+    Public Overrides Sub LoadFinish()
         'Do nothing for TransferTrx
     End Sub
 

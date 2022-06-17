@@ -28,19 +28,14 @@ Public Class AccountLoader
         End Get
     End Property
 
-    '$Description Load a new instance from an account file.
+    '$Description Load a new instance from an account file,
+    '   up until the contents of the first register.
+    '   Followed by a call to LoadRegisters() to load the registers.
     '   Must always be called immediately after Init().
     '$Param strAcctFile Name of account file, without path.
 
     Friend Sub LoadStart(ByVal strAcctFile As String)
 
-        mobjAccount.RaiseLoadStatus("Loading " & strAcctFile)
-        mobjAccount.FileNameRoot = strAcctFile
-        LoadIndividual()
-        'LoadGenerated()
-    End Sub
-
-    Private Sub LoadIndividual()
         Dim strLine As String
         Dim lngLinesRead As Integer
         Dim strRegKey As String = ""
@@ -49,6 +44,8 @@ Public Class AccountLoader
         Dim blnAccountPropertiesValidated As Boolean
 
         Try
+            mobjAccount.FileNameRoot = strAcctFile
+            mobjAccount.RaiseLoadStatus("Initializing " & mobjAccount.FileNameRoot)
             mobjLoadFile = New StreamReader(mobjCompany.AccountsFolderPath() & "\" & mobjAccount.FileNameRoot)
 
             strLine = mobjLoadFile.ReadLine()
@@ -125,6 +122,67 @@ Public Class AccountLoader
                         strRegKey = ""
                         strRegTitle = ""
                         blnRegShow = False
+                    Case "RL"
+                        'Load individual non-fake BaseTrx into Register.
+                        'Handled by LoadRegisters().
+                        Exit Do
+                    Case "RF"
+                        'Load individual fake BaseTrx into Register.
+                        'Handled by LoadRegisters().
+                        Exit Do
+                    Case "RR"
+                        'Was the repeating register
+                        'Handled by LoadRegisters().
+                        Exit Do
+                    Case ".A"
+                        Exit Do
+                    Case Else
+                        RaiseErrorMsg("Unrecognized line in account file: " & strLine)
+                End Select
+            Loop
+        Catch ex As Exception
+            Throw New Exception("Error in Account.LoadIndividual(" & mobjAccount.FileNameRoot & ";" & lngLinesRead & ")", ex)
+        Finally
+            mobjLoadFile.Close()
+            mobjLoadFile = Nothing
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Load the register contents of an ACT file. Must recognize and skip
+    ''' the lines previously loaded by LoadStart().
+    ''' </summary>
+    Friend Sub LoadRegisters()
+        Dim strLine As String
+        Dim lngLinesRead As Integer
+
+        Try
+            mobjAccount.RaiseLoadStatus("Loading " & mobjAccount.FileNameRoot)
+            mobjLoadFile = New StreamReader(mobjCompany.AccountsFolderPath() & "\" & mobjAccount.FileNameRoot)
+
+            strLine = mobjLoadFile.ReadLine()
+            lngLinesRead = lngLinesRead + 1
+            'The difference between FHCKBK1 and FHCKBK2 is that FHCKBK2 is hardcoded
+            'to use a specific budget file name and category file name, and repeat group
+            'file (acctfilename).rep instead of getting the file names from FC, FB and FR
+            'lines in the .act file.
+            If strLine <> "FHCKBK2" Then
+                RaiseErrorMsg("Invalid header line")
+            End If
+
+            Do
+                strLine = mobjLoadFile.ReadLine()
+                lngLinesRead = lngLinesRead + 1
+                Select Case Left(strLine, 2)
+                    Case "AT"
+                    Case "AK"
+                    Case "AY"
+                    Case "AR"
+                    Case "RK"
+                    Case "RT"
+                    Case "RS"
+                    Case "RN"
+                    Case "RI"
                     Case "RL"
                         'Load individual non-fake BaseTrx into Register.
                         LoadRegister(strLine, False, lngLinesRead)

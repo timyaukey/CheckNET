@@ -371,15 +371,32 @@ Public Class BankTrx
 
     End Sub
 
-    Public Overrides Sub UnApply()
-        'Regenerating generated BaseTrx must cause this and Apply() to be called.
+    Public Overrides Sub AddApply()
+        ApplyToBudgets()
+        CreateReplicaTrx(False)
+    End Sub
+
+    Public Overrides Sub UpdateUnApply()
         UnApplyFromBudgets()
         DeleteReplicaTrx()
     End Sub
 
-    Public Overrides Sub Apply(ByVal blnLoading As Boolean)
+    Public Overrides Sub UpdateApply()
         ApplyToBudgets()
-        CreateReplicaTrx(blnLoading)
+        CreateReplicaTrx(False)
+    End Sub
+
+    Public Overrides Sub DeleteUnApply()
+        UnApplyFromBudgets()
+        DeleteReplicaTrx()
+    End Sub
+
+    Public Overrides Sub LoadApply()
+        CreateReplicaTrx(True)
+    End Sub
+
+    Public Overrides Sub LoadFinish()
+        ApplyToBudgets()
     End Sub
 
     '$Description Apply the Split objects in this BaseTrx to any matching budgets.

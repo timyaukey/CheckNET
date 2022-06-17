@@ -58,6 +58,7 @@ Public Class UTRegister
         objNewReg.Init(objNewAcct, "title", strRegisterKey, False, 3)
         objNewReg.OldestBudgetEndAllowed = DateTime.Parse("1/1/1980")
         objNewAcct.Registers.Add(objNewReg)
+        objNewReg.EndLoading()
         Return objNewAcct
     End Function
 

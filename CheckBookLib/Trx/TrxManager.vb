@@ -43,7 +43,7 @@ Public MustInherit Class TrxManager(Of TTrx As BaseTrx)
         'you must finish by calling UpdateEnd() to keep the Register in good condition.
         'I wish we could delay these steps until UpdateEnd(), but ClearRepeatTrx() requires
         'the original BaseTrx object whose contents may have been changed by then.
-        Trx.UnApply()
+        Trx.UpdateUnApply()
         Trx.ClearRepeatTrx()
         HasUpdateStarted = True
     End Sub

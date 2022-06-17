@@ -206,7 +206,32 @@ Public Class BudgetTrx
         End If
     End Sub
 
-    Public Overrides Sub UnApply()
+    Public Overrides Sub AddApply()
+        ApplySplits(False)
+    End Sub
+
+    Public Overrides Sub UpdateUnApply()
+        UnApplySplits()
+    End Sub
+
+    Public Overrides Sub UpdateApply()
+        ApplySplits(False)
+    End Sub
+
+    Public Overrides Sub DeleteUnApply()
+        UnApplySplits()
+    End Sub
+
+    Public Overrides Sub LoadApply()
+
+    End Sub
+
+    Public Overrides Sub LoadFinish()
+        ApplySplits(True)
+        SetAmountForBudget()
+    End Sub
+
+    Private Sub UnApplySplits()
         For Each objSplit As TrxSplit In mcolAppliedSplits
             objSplit.Budget = Nothing
         Next objSplit
@@ -216,7 +241,7 @@ Public Class BudgetTrx
         RegisterInternal.FireBudgetChanged(Me)
     End Sub
 
-    Public Overrides Sub Apply(ByVal blnLoading As Boolean)
+    Private Sub ApplySplits(ByVal blnLoading As Boolean)
         Dim blnAnyApplied As Boolean = False
         For Each objScanTrx As BaseTrx In New RegForwardFrom(Of BaseTrx)(RegisterInternal, EarliestPossibleApplied())
             If objScanTrx.TrxDate > mdatBudgetEnds Then

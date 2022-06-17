@@ -44,5 +44,9 @@ Public Class ReplicaRequest
             mobjRepMgr = Nothing
         End If
     End Sub
+
+    Public Overrides Function ToString() As String
+        Return mobjTargetReg.Title + ": " + mobjSplit.Parent.TrxDate.ToShortDateString() + " " + mobjSplit.Amount.ToString()
+    End Function
 End Class
 
