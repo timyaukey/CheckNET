@@ -509,7 +509,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.Lib, Version=2.15.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.Lib, Version=2.16.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_11FFE77AA87A54B31EC3778216A98D19"
@@ -540,7 +540,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.ImportPlugins, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.ImportPlugins, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_2000E7DEBBF32B05B2E68554986A7B9C"
@@ -633,7 +633,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.RegFormLib, Version=1.0.2.0, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.RegFormLib, Version=1.1.0.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_46CF0CF5099999552C3DC52E48DFBFF8"
@@ -695,7 +695,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.SearchFormLib, Version=1.0.2.0, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.SearchFormLib, Version=1.1.0.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_8D25BD4EEB000CE7A283174AD809BDB9"
@@ -757,7 +757,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.TrxFormLib, Version=1.0.2.0, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.TrxFormLib, Version=1.1.0.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_AE04C0D0587D4BE5E146675A74BF55AE"
@@ -788,7 +788,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.GeneralPlugins, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.GeneralPlugins, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_D9510EAFDF0D9D311640A018A7F7B77F"
@@ -819,7 +819,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.BudgetDashboard, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.BudgetDashboard, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_E165052A518E0F8AFA0EC42C25677191"
@@ -881,7 +881,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.PluginCore, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.PluginCore, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_EB368C77F4405E92D39636B01A428B3A"
@@ -912,7 +912,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.FinancialReports, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.FinancialReports, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_F86CC279AF596DAA1B608C5CBEA68B63"
@@ -943,7 +943,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.MainUILib, Version=1.0.1.0, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:Willowsoft.CheckBook.MainUILib, Version=1.1.0.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_FAF489795C20F47EF0A409E58F32BF62"
@@ -1026,15 +1026,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Willow Creek Checkbook"
-        "ProductCode" = "8:{97FBAC8B-A4EB-4C0F-95D8-4CA002B9AC20}"
-        "PackageCode" = "8:{3D30B0BA-ECD1-4904-BA0C-938C2D8FCBA0}"
+        "ProductCode" = "8:{FFDAB283-9304-4023-BCAE-58BCD01E97D4}"
+        "PackageCode" = "8:{9792A7F5-6782-4C16-BA30-0C49D6F140D7}"
         "UpgradeCode" = "8:{4B1A022A-7B68-44D6-AB9F-9EE0B336EEF0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.17.0"
+        "ProductVersion" = "8:2.18.0"
         "Manufacturer" = "8:Willow Creek Software"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
