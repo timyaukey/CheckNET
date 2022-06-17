@@ -121,9 +121,6 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\AllReports.css" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CheckBookLib\CheckBookLib.vbproj">
       <Project>{73a968c7-281a-45dc-8360-2e44b3c9510b}</Project>
       <Name>CheckBookLib</Name>
